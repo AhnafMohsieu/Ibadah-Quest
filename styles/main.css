@@ -238,6 +238,58 @@ body {
 .shop-list { display: flex; flex-direction: column; gap: 12px; }
 .shop-cost { font-weight: 600; color: var(--gold); font-size: 0.88rem; }
 
+/* Rewards Shop */
+.reward-xp-banner {
+  text-align: center; padding: 14px; margin-bottom: 16px;
+  background: linear-gradient(135deg, rgba(212,175,55,0.1), rgba(212,175,55,0.05));
+  border: 1px solid rgba(212,175,55,0.3); border-radius: var(--radius);
+  color: var(--gold); font-size: 1rem;
+}
+.reward-xp-banner strong { font-size: 1.2rem; }
+
+.reward-grid {
+  display: grid; grid-template-columns: 1fr; gap: 10px;
+}
+@media (min-width: 500px) { .reward-grid { grid-template-columns: repeat(2, 1fr); } }
+
+.reward-card {
+  display: flex; align-items: center; gap: 12px; padding: 14px;
+  background: var(--card2); border: 1px solid var(--border); border-radius: var(--radius);
+  cursor: pointer; transition: all 0.3s;
+}
+.reward-card:hover:not(.disabled):not(.owned) {
+  transform: translateY(-2px); border-color: rgba(212,175,55,0.4);
+  box-shadow: 0 4px 15px rgba(212,175,55,0.1);
+}
+.reward-card.owned {
+  border-color: rgba(16,185,129,0.3); background: rgba(16,185,129,0.05);
+  cursor: default;
+}
+.reward-card.disabled {
+  opacity: 0.5; cursor: not-allowed;
+}
+
+.reward-icon { font-size: 1.8rem; }
+.reward-info { flex: 1; }
+.reward-name { font-weight: 600; font-size: 0.9rem; }
+.reward-desc { font-size: 0.7rem; color: var(--text2); margin-top: 2px; }
+
+.reward-badge {
+  font-size: 0.75rem; padding: 4px 10px; border-radius: 12px;
+  background: rgba(212,175,55,0.1); color: var(--gold); white-space: nowrap;
+}
+.reward-card.owned .reward-badge {
+  background: rgba(16,185,129,0.15); color: #10b981;
+}
+
+/* Purchase flash animation */
+@keyframes purchaseFlash {
+  0% { box-shadow: 0 0 0 rgba(212,175,55,0); }
+  50% { box-shadow: 0 0 20px rgba(212,175,55,0.4); }
+  100% { box-shadow: 0 0 0 rgba(212,175,55,0); }
+}
+.reward-card.just-bought { animation: purchaseFlash 0.6s ease; }
+
 /* ── Stats ── */
 .stat-card { background: var(--card); border-radius: var(--radius); padding: 24px; text-align: center; border: 1px solid var(--border); box-shadow: var(--shadow); }
 .stat-num { font-family: var(--font-heading); font-size: 2.4rem; font-weight: 700; color: var(--gold); line-height: 1; margin-bottom: 8px; }

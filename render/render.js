@@ -1242,7 +1242,29 @@
 
     document.getElementById('calArea').innerHTML = cal;
   }
-  function renderShop() { document.getElementById('shopArea').innerHTML=SHOP.map(r=>{ const o=!!S.ur[r.id]; return `<div class="shop-card" onclick="${o?'':'App.buy(\''+r.id+'\')'}"><span style="font-size:1.8rem">${r.icon}</span><div style="flex:1"><strong>${r.name}</strong></div><span class="shop-cost">${o?'✅ Owned':'💎 '+r.cost+' XP'}</span></div>`; }).join(''); }
+  function renderShop() {
+    let h = '<div class="section-title">🎁 Rewards Shop</div>';
+
+    h += `<div class="reward-xp-banner">💰 <strong>${S.xp}</strong> XP Available</div>`;
+
+    h += '<div class="reward-grid">';
+    h += SHOP.map(r => {
+      const owned = !!S.ur[r.id];
+      const canAfford = S.xp >= r.cost;
+      const cls = owned ? 'owned' : (canAfford ? '' : 'disabled');
+      return `<div class="reward-card ${cls}" onclick="${owned ? '' : 'App.buy(\'' + r.id + '\')'}">
+        <span class="reward-icon">${r.icon}</span>
+        <div class="reward-info">
+          <div class="reward-name">${r.name}</div>
+          <div class="reward-desc">${r.desc || ''}</div>
+        </div>
+        <div class="reward-badge">${owned ? '✅ Owned' : '💎 ' + r.cost + ' XP'}</div>
+      </div>`;
+    }).join('');
+    h += '</div>';
+
+    document.getElementById('shopArea').innerHTML = h;
+  }
   function renderProfile() {
     const achCnt = Object.keys(S.ua).length;
     const avatar = S.avatar || '👳';
