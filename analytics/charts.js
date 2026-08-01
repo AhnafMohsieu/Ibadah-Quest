@@ -16,7 +16,7 @@
   const instances = {};
 
   function destroy(id) {
-    if (instances[id]) { instances[id].destroy(); delete instances[id]; }
+    if (instances[id]) { if (instances[id].destroy) instances[id].destroy(); delete instances[id]; }
   }
 
   function baseOptions(title) {
@@ -98,17 +98,14 @@
     const canvas = document.getElementById(canvasId);
     if (!canvas) return;
 
-    // Build a lookup: date string -> value (0-5)
     const map = {};
     data.forEach(d => { map[d.date] = d.value; });
 
-    // Get the date range (last 365 days)
     const today = new Date();
     const endDate = new Date(today);
     const startDate = new Date(today);
     startDate.setDate(startDate.getDate() - 364);
 
-    // Build weeks array
     const weeks = [];
     let currentWeek = new Array(7).fill(null);
     const d = new Date(startDate);
@@ -127,15 +124,14 @@
       weeks.push(currentWeek);
     }
 
-    // Make responsive: calculate cell size based on container width
     const container = canvas.parentElement;
     const containerWidth = container ? container.clientWidth - 32 : 600;
-    const labelWidth = 30;
-    const topPadding = 20;
-    const cellGap = 2;
-    const cellSize = Math.max(8, Math.min(14, Math.floor((containerWidth - labelWidth) / weeks.length) - cellGap));
-    const totalWidth = labelWidth + weeks.length * (cellSize + cellGap) + 10;
-    const totalHeight = topPadding + 7 * (cellSize + cellGap) + 6;
+    const labelWidth = 32;
+    const topPadding = 22;
+    const cellGap = 4;
+    const cellSize = Math.max(10, Math.min(16, Math.floor((containerWidth - labelWidth) / weeks.length) - cellGap));
+    const totalWidth = labelWidth + weeks.length * (cellSize + cellGap) + 16;
+    const totalHeight = topPadding + 7 * (cellSize + cellGap) + 8;
 
     const ctx = canvas.getContext('2d');
     const dpr = window.devicePixelRatio || 1;
@@ -147,36 +143,22 @@
     ctx.clearRect(0, 0, totalWidth, totalHeight);
 
     const getColor = (val) => {
-      if (val === 0) return '#1a1a2e';
-      return ['#2d1b4e', '#6b3fa0', '#a855f7', '#d946ef', '#f472b6'][Math.min(val, 5) - 1];
+      if (val === 0) return '#1a1f2e';
+      if (val === 1) return '#14532d';
+      if (val === 2) return '#166534';
+      if (val === 3) return '#16a34a';
+      if (val === 4) return '#22c55e';
+      return '#4ade80';
     };
 
-    // Day labels
     ctx.fillStyle = '#94a3b8';
-    ctx.font = '9px sans-serif';
+    ctx.font = '10px sans-serif';
     ctx.textAlign = 'right';
     ctx.textBaseline = 'middle';
     [1, 3, 5].forEach(i => {
-      ctx.fillText(['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'][i], labelWidth - 4, topPadding + i * (cellSize + cellGap) + cellSize / 2);
+      ctx.fillText(['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'][i], labelWidth - 6, topPadding + i * (cellSize + cellGap) + cellSize / 2);
     });
 
-    // Month labels
-    const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-    ctx.textAlign = 'left';
-    ctx.textBaseline = 'bottom';
-    let lastMonth = -1;
-    weeks.forEach((week, wi) => {
-      const firstDay = week.find(w => w !== null);
-      if (firstDay && firstDay.date) {
-        const m = new Date(firstDay.date).getMonth();
-        if (m !== lastMonth) {
-          ctx.fillText(monthNames[m], labelWidth + wi * (cellSize + cellGap), topPadding - 4);
-          lastMonth = m;
-        }
-      }
-    });
-
-    // Draw cells
     weeks.forEach((week, wi) => {
       week.forEach((day, di) => {
         if (!day) return;
@@ -184,12 +166,25 @@
         const y = topPadding + di * (cellSize + cellGap);
         ctx.fillStyle = getColor(day.value);
         ctx.beginPath();
-        ctx.roundRect(x, y, cellSize, cellSize, 2);
+        const r = Math.floor(cellSize * 0.3);
+        if (ctx.roundRect) {
+          ctx.roundRect(x, y, cellSize, cellSize, r);
+        } else {
+          ctx.moveTo(x + r, y);
+          ctx.lineTo(x + cellSize - r, y);
+          ctx.quadraticCurveTo(x + cellSize, y, x + cellSize, y + r);
+          ctx.lineTo(x + cellSize, y + cellSize - r);
+          ctx.quadraticCurveTo(x + cellSize, y + cellSize, x + cellSize - r, y + cellSize);
+          ctx.lineTo(x + r, y + cellSize);
+          ctx.quadraticCurveTo(x, y + cellSize, x, y + cellSize - r);
+          ctx.lineTo(x, y + r);
+          ctx.quadraticCurveTo(x, y, x + r, y);
+          ctx.closePath();
+        }
         ctx.fill();
       });
     });
 
-    // Tooltip
     canvas.title = '';
     canvas.onmousemove = (e) => {
       const rect = canvas.getBoundingClientRect();
