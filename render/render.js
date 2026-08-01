@@ -930,7 +930,7 @@
       if(!w) { S.xp+=xp; window.playSound('pop'); }
       else S.xp=Math.max(0, S.xp-xp);
       S.lv=lvFrom(S.xp);
-      if(S.lv>oldLv){ const t=lvTitle(S.lv); window.toast('⬆️','Level Up!<br>Level '+S.lv+' — '+t,true,3500); }
+      if(S.lv>oldLv){ const t=lvTitle(S.lv); window.levelUpToast(S.lv, t); }
     }
     saveState(); renderAll(); 
   }
@@ -968,7 +968,7 @@
       if(!w) { S.xp+=xp; window.playSound('pop'); }
       else S.xp=Math.max(0, S.xp-xp);
       S.lv=lvFrom(S.xp);
-      if(S.lv>oldLv){ const t=lvTitle(S.lv); window.toast('⬆️','Level Up!<br>Level '+S.lv+' — '+t,true,3500); }
+      if(S.lv>oldLv){ const t=lvTitle(S.lv); window.levelUpToast(S.lv, t); }
     }
     saveState(); renderAll(); 
   }
@@ -1143,7 +1143,7 @@
     if (isChecked) { S.xp+=xp; toast('⚔️','Challenge done! +'+xp+' XP'); }
     else { S.xp=Math.max(0,S.xp-xp); }
     S.lv=lvFrom(S.xp);
-    if(S.lv>oldLv){ const t=lvTitle(S.lv); toast('⬆️','Level Up!<br>Level '+S.lv+' — '+t,true,3500); }
+    if(S.lv>oldLv){ const t=lvTitle(S.lv); levelUpToast(S.lv, t); }
     saveState(); renderAll();
   }
   function renderAch() { const cnt=Object.keys(S.ua).length; document.getElementById('achArea').innerHTML=`<div style="grid-column:1/-1;text-align:center;margin-bottom:10px;color:var(--text2);">🏆 Unlocked: <strong style="color:var(--gold)">${cnt}</strong> / ${ACHS.length}</div>`+ACHS.map(a=>{ const u=!!S.ua[a.id]; return `<div class="ach-card${u?' unlocked':' locked'}"><div class="ach-icon">${u?a.icon:'🔒'}</div><div style="font-weight:600;font-size:0.8rem;">${a.name}</div><div style="font-size:0.65rem;color:var(--text2);">${a.desc}</div><span style="font-size:0.6rem;background:rgba(255,255,255,0.08);padding:2px 8px;border-radius:10px;">${a.tier}</span></div>`; }).join(''); }
