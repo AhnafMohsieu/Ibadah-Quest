@@ -369,6 +369,65 @@ body {
   transition: transform 0.6s ease-out, opacity 0.6s ease-out;
 }
 
+/* ── Analytics Dashboard ── */
+.insights-dashboard { padding: 10px 0; }
+.insights-cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 16px; }
+.insight-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 16px;
+  text-align: center;
+  transition: transform 0.2s, border-color 0.2s;
+}
+.insight-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(212,175,55,0.3);
+}
+.insight-card-num {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--gold);
+  font-variant-numeric: tabular-nums;
+}
+.insight-card-label {
+  font-size: 0.85rem;
+  color: var(--text2);
+  margin-top: 4px;
+}
+.insight-card-sub {
+  font-size: 0.75rem;
+  color: rgba(148,163,184,0.6);
+  margin-top: 2px;
+}
+.insight-card-icon {
+  font-size: 1.4rem;
+  margin-bottom: 6px;
+}
+.insight-progress {
+  height: 4px;
+  background: rgba(255,255,255,0.06);
+  border-radius: 4px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+.insight-progress-bar {
+  height: 100%;
+  background: var(--gold);
+  border-radius: 4px;
+  transition: width 0.4s ease;
+}
+.insights-filter { display: flex; gap: 8px; justify-content: center; margin-bottom: 16px; }
+.filter-btn { background: rgba(15,23,42,0.6); border: 1px solid rgba(22,163,74,0.3); color: var(--text2); padding: 6px 16px; border-radius: 20px; cursor: pointer; font-size: 0.8rem; transition: all 0.2s; }
+.filter-btn.active, .filter-btn:hover { background: rgba(22,163,74,0.2); color: #fff; border-color: var(--gold); }
+.insights-charts { display: flex; flex-direction: column; gap: 16px; }
+.insight-chart-wrap { background: rgba(15,23,42,0.4); border: 1px solid rgba(22,163,74,0.15); border-radius: 12px; padding: 16px; overflow-x: auto; }
+.insight-chart-wrap canvas { display: block; margin: 0 auto; background: #0d1117; border-radius: 8px; }
+.chart-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.chart-half { background: rgba(15,23,42,0.4); border: 1px solid rgba(22,163,74,0.15); border-radius: 12px; padding: 16px; }
+.chart-half canvas { width: 100% !important; height: 250px !important; }
+@media (max-width: 600px) { .chart-row { grid-template-columns: 1fr; } .insights-cards { grid-template-columns: repeat(2, 1fr); } }
+
 /* ── Fireflies ── */
 .firefly {
   position: fixed; width: 4px; height: 4px; border-radius: 50%;
