@@ -7,8 +7,8 @@
   ],
   fiqh: [
     { id: 'purification', icon: '💧', label: 'Purification' }, { id: 'salahrules', icon: '🕌', label: 'Salah' }, { id: 'zakatrules', icon: '🪙', label: 'Zakat' }, { id: 'sawmrules', icon: '🌙', label: 'Sawm' },
-    { id: 'hajjrules', icon: '🕋', label: 'Hajj' }, { id: 'trade', icon: '⚖️', label: 'Trade' }, { id: 'marriagelaws', icon: '💍', label: 'Marriage' }, { id: 'inheritance', icon: '📜', label: 'Inheritance' },
-    { id: 'halaldiet', icon: '🍽️', label: 'Halal Diet' }, { id: 'oaths', icon: '✋', label: 'Oaths' }
+    { id: 'hajjrules', icon: '🕋', label: 'Hajj' }, { id: 'trade', icon: '⚖️', label: 'Trade' }, { id: 'inheritance', icon: '📜', label: 'Inheritance' },
+    { id: 'oaths', icon: '✋', label: 'Oaths' }
   ],
   spirit: [
     { id: 'sufism', icon: '🤍', label: 'Sufism' }, { id: 'tazkiyah', icon: '✨', label: 'Tazkiyah' }, { id: 'fear', icon: '😨', label: 'Fear of Allah' },
