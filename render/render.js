@@ -1035,30 +1035,10 @@
 
     const chDaily = [
       { id:'c1', icon: '🕌', d:'Pray all 5 prayers on time today', xp:60 },
-      { id:'c2', icon: '📖', d:'Read Surah Al-Kahf (Friday special)', xp:50, f: isFri },
+      { id:'c2', icon: '📖', d:'Read 1 Juz of the Quran', xp:100 },
       { id:'c3', icon: '🤲', d:'Give charity in secret', xp:40 },
-      { id:'c4', icon: '🌙', d:'Fast today (Mon/Thu)', xp:50, f: ()=>[1,4].includes(new Date().getDay()) },
-      { id:'c5', icon: '💚', d:'Recite 100x Salawat on the Prophet ﷺ', xp:30 },
-      { id:'c6', icon: '🌌', d:'Pray 12 Rakat of Sunnah today', xp:70 },
-      { id:'c7', icon: '📗', d:'Read 1 Juz of the Quran', xp:100 },
-      { id:'c8', icon: '🤝', d:'Forgive someone who wronged you', xp:80 },
-      { id:'c9', icon: '🍽️', d:'Feed a fasting person at Iftar', xp:60, f: ()=>[1,4].includes(new Date().getDay()) },
-      { id:'c10', icon: '🧠', d:'Memorize a new Ayah', xp:45 },
-      { id:'c11', icon: '👨‍👩‍👧‍👦', d:'Help a family member with a chore', xp:35 },
-      { id:'c12', icon: '🌌', d:'Wake up for Tahajjud tonight', xp:80 },
-      { id:'c13', icon: '🎧', d:'Listen to an Islamic lecture or khutbah', xp:40 },
-      { id:'c14', icon: '😊', d:'Smile at a stranger (Sunnah)', xp:20 },
-      { id:'c15', icon: '💯', d:"Learn a new Name of Allah and its meaning", xp:30 },
-      { id:'c16', icon: '🌞', d:'Perform complete morning adhkar', xp:35 },
-      { id:'c17', icon: '🌆', d:'Complete evening adhkar', xp:35 },
-      { id:'c18', icon: '🤲', d:'Make 10 minutes of du\'a today', xp:45 },
-      { id:'c19', icon: '📞', d:'Call a relative you haven\'t spoken to in a while', xp:40 },
-      { id:'c20', icon: '🏡', d:'Do something kind for a neighbor', xp:35 },
-      { id:'c21', icon: '📖', d:'Read the meaning of 5 new Ayahs', xp:30 },
-      { id:'c22', icon: '💧', d:'Maintain Wudu throughout the entire day', xp:60 },
-      { id:'c23', icon: '📵', d:'Avoid social media for 4 hours to focus on Ibadah', xp:50 },
-      { id:'c24', icon: '👅', d:'Refrain completely from backbiting today', xp:80 },
-      { id:'c25', icon: '📿', d:'Do 33x SubhanAllah, 33x Alhamdulillah, 34x AllahuAkbar after every fard salah', xp:100 }
+      { id:'c4', icon: '💚', d:'Recite 100x Salawat on the Prophet ﷺ', xp:30 },
+      { id:'c5', icon: '🌙', d:'Fast today (Mon/Thu)', xp:50, f: ()=>[1,4].includes(new Date().getDay()) }
     ].filter(c => !c.f || c.f());
 
     const chWeekly = [
@@ -1150,6 +1130,7 @@
   const cnt = Object.keys(S.ua).length;
   const total = ACHS.length;
   const pct = total > 0 ? Math.round((cnt / total) * 100) : 0;
+  const unlockedAchs = ACHS.filter(a => !!S.ua[a.id]);
 
   let h = '<div class="ach-header">';
   h += `<div class="section-title">🏆 Trophy Cabinet</div>`;
@@ -1157,6 +1138,23 @@
   h += `<div class="ach-progress-text">${cnt} / ${total} Unlocked</div>`;
   h += '</div>';
 
+  // Trophy cabinet display shelf
+  const shelfSize = 8;
+  h += '<div class="ach-cabinet">';
+  h += '<div class="ach-cabinet-title">✨ Display Shelf ✨</div>';
+  h += '<div class="ach-cabinet-shelf">';
+  for (let i = 0; i < shelfSize; i++) {
+    if (i < unlockedAchs.length) {
+      h += `<div class="ach-cabinet-item has-trophy" title="${unlockedAchs[i].name}">${unlockedAchs[i].icon}</div>`;
+    } else {
+      h += '<div class="ach-cabinet-item empty">—</div>';
+    }
+  }
+  h += '</div>';
+  h += `<div class="ach-cabinet-label">Latest ${Math.min(cnt, shelfSize)} of ${cnt} trophies earned</div>`;
+  h += '</div>';
+
+  // Full trophy grid
   h += '<div class="ach-grid">';
   h += ACHS.map(a => {
     const u = !!S.ua[a.id];
@@ -1305,7 +1303,7 @@
     h += '<div class="section-title">⚙️ Settings</div>';
     h += '<div class="profile-settings">';
     h += '<div style="display:flex;gap:8px;margin-bottom:10px;"><input class="profile-input" id="usernameInput" placeholder="Switch user" style="margin-bottom:0;"><button class="shop-card" onclick="App.switchUser()" style="padding:10px 14px;border-radius:var(--radius-sm);">💾</button></div>';
-    h += '<button class="shop-card" style="width:100%;justify-content:center;margin-bottom:10px;" onclick="App.logout()">🔓 Logout</button>';
+    h += '<button class="shop-card" style="width:100%;justify-content:center;margin-bottom:10px;font-weight:700;font-size:1rem;color:var(--gold);letter-spacing:0.5px;" onclick="App.logout()">🔓 Logout</button>';
     h += '</div>';
 
     // Danger zone
