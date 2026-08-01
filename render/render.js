@@ -909,7 +909,7 @@
     MORNING_DHIKR.forEach((item, idx) => { 
         const done = !!S.morningDone[dt][idx]; 
         h += `<label class="vol-card${done?' done':''}">
-            <input type="checkbox" class="quest-check" style="display:none;" ${done?'checked':''} onchange="App.toggleMorning(${idx}, ${item.xp})">
+            <input type="checkbox" class="quest-check" style="opacity:0;position:absolute;width:0;height:0;" ${done?'checked':''} onchange="App.toggleMorning(${idx}, ${item.xp})">
             <div class="prayer-check" style="font-size:1.2rem;">${done?'✓':'🌅'}</div>
             <div class="prayer-info">
                 <div style="font-family:'Amiri',serif;font-size:1.3rem;margin-bottom:2px;color:var(--gold);line-height:1.4;">${item.arabic}</div>
@@ -946,7 +946,7 @@
     EVENING_DHIKR.forEach((item, idx) => { 
         const done = !!S.eveningDone[dt][idx]; 
         h += `<label class="vol-card${done?' done':''}">
-            <input type="checkbox" class="quest-check" style="display:none;" ${done?'checked':''} onchange="App.toggleEvening(${idx}, ${item.xp})">
+            <input type="checkbox" class="quest-check" style="opacity:0;position:absolute;width:0;height:0;" ${done?'checked':''} onchange="App.toggleEvening(${idx}, ${item.xp})">
             <div class="prayer-check" style="font-size:1.2rem;">${done?'✓':'🌆'}</div>
             <div class="prayer-info">
                 <div style="font-family:'Amiri',serif;font-size:1.3rem;margin-bottom:2px;color:var(--gold);line-height:1.4;">${item.arabic}</div>
@@ -995,7 +995,7 @@
         if (t.includes('memorize')) icon = '🧠';
         
         return `<label class="vol-card${d?' done':''}">
-          <input type="checkbox" class="quest-check" style="display:none;" ${d?'checked':''} onchange="App.toggleQuest('${q.id}','${type}',${q.xp})">
+          <input type="checkbox" class="quest-check" style="opacity:0;position:absolute;width:0;height:0;" ${d?'checked':''} onchange="App.toggleQuest('${q.id}','${type}',${q.xp})">
           <div class="prayer-check">${d?'✓':icon}</div>
           <div class="prayer-info"><div class="prayer-name">${q.d}</div></div>
           <div class="prayer-xp">+${q.xp} XP</div>
@@ -1106,7 +1106,7 @@
       html += challenges.map(c => {
         const d = !!stateDict[c.id];
         return `<label class="vol-card${d?' done':''}">
-          <input type="checkbox" class="quest-check" style="display:none;" ${d?'checked':''} onchange="App.completeChallenge('${c.id}',${c.xp},this.checked,'${type}')">
+          <input type="checkbox" class="quest-check" style="opacity:0;position:absolute;width:0;height:0;" ${d?'checked':''} onchange="App.completeChallenge('${c.id}',${c.xp},this.checked,'${type}')">
           <div class="prayer-check">${d?'✓':c.icon}</div>
           <div class="prayer-info"><div class="prayer-name">${c.d}</div></div>
           <div class="prayer-xp">+${c.xp} XP</div>
