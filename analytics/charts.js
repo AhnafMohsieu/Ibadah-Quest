@@ -25,7 +25,7 @@
       maintainAspectRatio: false,
       plugins: {
         legend: { display: false },
-        title: { display: !!title, text: title, color: COLORS.white, font: { size: 14, weight: '600' } }
+        title: { display: !!title, text: title, color: '#D4AF37', font: { family: "'Cinzel', serif", size: 14, weight: '600' } }
       },
       scales: {
         x: { ticks: { color: COLORS.text, font: { size: 10 } }, grid: { color: COLORS.grid } },
@@ -86,7 +86,7 @@
         maintainAspectRatio: false,
         plugins: {
           legend: { display: true, position: 'right', labels: { color: COLORS.text, font: { size: 11 }, padding: 8 } },
-          title: { display: !!title, text: title, color: COLORS.white, font: { size: 14, weight: '600' } }
+          title: { display: !!title, text: title, color: '#D4AF37', font: { family: "'Cinzel', serif", size: 14, weight: '600' } }
         }
       }
     });
