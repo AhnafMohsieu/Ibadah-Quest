@@ -1177,7 +1177,18 @@
   document.getElementById('achArea').innerHTML = h;
 }
   function renderProg() {
-    document.getElementById('statArea').innerHTML=`<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px"><div class="stat-card"><div class="stat-num">${S.tp}</div><div>Prayers</div></div><div class="stat-card"><div class="stat-num">${S.pd}</div><div>Perfect Days</div></div><div class="stat-card"><div class="stat-num">${S.bs}</div><div>Best Streak</div></div><div class="stat-card"><div class="stat-num">${S.lv}</div><div>Level</div></div><div class="stat-card"><div class="stat-num">${S.tq||0}</div><div>Quests Done</div></div><div class="stat-card"><div class="stat-num">${Object.values(S.td).reduce((a,b)=>a+b,0)}</div><div>Extra Deeds</div></div></div>`;
+    const stats = [
+      { icon: '🕌', value: S.tp, label: 'Prayers' },
+      { icon: '📅', value: S.pd, label: 'Perfect Days' },
+      { icon: '🔥', value: S.bs, label: 'Best Streak' },
+      { icon: '⭐', value: S.lv, label: 'Level' },
+      { icon: '📋', value: S.tq || 0, label: 'Quests Done' },
+      { icon: '✋', value: Object.values(S.td).reduce((a, b) => a + b, 0), label: 'Extra Deeds' }
+    ];
+
+    document.getElementById('statArea').innerHTML = `<div class="prog-stats">
+      ${stats.map(s => `<div class="stat-card"><div class="stat-icon">${s.icon}</div><div class="stat-num">${s.value}</div><div class="stat-label">${s.label}</div></div>`).join('')}
+    </div>`;
 
     const now = new Date();
     const tk = today();
