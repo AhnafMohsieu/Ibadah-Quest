@@ -50,9 +50,9 @@
   function renderCharts() {
     Charts.destroyAll();
 
-    // 1. Prayer Heatmap
-    const heatData = Analytics.getHeatmapData(currentRange || 90);
-    Charts.createHeatmap('chart-heatmap', heatData, 'Prayer Heatmap');
+    // 1. Prayer Heatmap (always show last 365 days)
+    const heatData = Analytics.getHeatmapData(365);
+    Charts.createHeatmap('chart-heatmap', heatData, 'Activity History');
 
     // 2. Prayer Consistency Line
     const prayer = Analytics.getPrayerStats(currentRange);
@@ -107,7 +107,7 @@
         ${summaryCards()}
         ${dateFilter()}
         <div class="insights-charts">
-          ${chartHTML('chart-heatmap', 'Prayer Heatmap', 180)}
+          ${chartHTML('chart-heatmap', 'Activity History', 140)}
           ${chartHTML('chart-prayer-line', 'Prayer Consistency', 220)}
           <div class="chart-row">
             <div class="chart-half">${chartHTML('chart-deeds', 'Deed Distribution', 250)}</div>

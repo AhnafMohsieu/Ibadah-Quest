@@ -95,44 +95,143 @@
 
   function createHeatmap(canvasId, data, title) {
     destroy(canvasId);
-    const ctx = document.getElementById(canvasId);
-    if (!ctx) return;
-    const maxVal = 5;
-    instances[canvasId] = new Chart(ctx, {
-      type: 'matrix',
-      data: {
-        datasets: [{
-          label: 'Prayers',
-          data: data.map(d => ({ x: d.date, y: d.date.slice(0, 3) === 'Sun' ? 0 : d.date.slice(0, 3) === 'Mon' ? 1 : d.date.slice(0, 3) === 'Tue' ? 2 : d.date.slice(0, 3) === 'Wed' ? 3 : d.date.slice(0, 3) === 'Thu' ? 4 : d.date.slice(0, 3) === 'Fri' ? 5 : 6, v: d.value })),
-          backgroundColor(ctx) {
-            const v = ctx.dataset.data[ctx.dataIndex];
-            if (!v || !v.v) return 'rgba(255,255,255,0.03)';
-            const alpha = 0.2 + (v.v / maxVal) * 0.8;
-            return `rgba(22,163,74,${alpha})`;
-          },
-          width: ({ chart }) => (chart.chartArea || {}).width / 14 - 2,
-          height: ({ chart }) => (chart.chartArea || {}).height / 7 - 2
-        }]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-          legend: { display: false },
-          title: { display: !!title, text: title, color: COLORS.white, font: { size: 14, weight: '600' } },
-          tooltip: {
-            callbacks: {
-              title: (items) => items[0]?.raw?.x || '',
-              label: (item) => `${item.raw.v} prayers`
-            }
-          }
-        },
-        scales: {
-          x: { type: 'category', labels: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'], ticks: { color: COLORS.text }, grid: { display: false } },
-          y: { type: 'category', display: false }
+    const canvas = document.getElementById(canvasId);
+    if (!canvas) return;
+
+    // Build a lookup: date string -> value (0-5)
+    const map = {};
+    data.forEach(d => { map[d.date] = d.value; });
+
+    // Get the date range (last 365 days or whatever data covers)
+    const today = new Date();
+    const endDate = new Date(today);
+    const startDate = new Date(today);
+    startDate.setDate(startDate.getDate() - 364); // ~52 weeks
+
+    // Build weeks array: each week is an array of 7 days [Sun..Sat]
+    const weeks = [];
+    let currentWeek = new Array(7).fill(null);
+    const d = new Date(startDate);
+
+    // Pad start to align to Sunday
+    const startDay = d.getDay();
+    for (let i = 0; i < startDay; i++) currentWeek[i] = { date: '', value: 0 };
+
+    while (d <= endDate) {
+      const dow = d.getDay();
+      const dateStr = d.toISOString().slice(0, 10);
+      const val = map[dateStr] || 0;
+      currentWeek[dow] = { date: dateStr, value: val };
+
+      if (dow === 6) { // Saturday = end of week
+        weeks.push(currentWeek);
+        currentWeek = new Array(7).fill(null);
+      }
+      d.setDate(d.getDate() + 1);
+    }
+    // Push remaining week
+    if (currentWeek.some(w => w !== null)) {
+      while (currentWeek.length < 7) currentWeek.push(null);
+      weeks.push(currentWeek);
+    }
+
+    // Now render on canvas
+    const ctx = canvas.getContext('2d');
+    const cellSize = 14;
+    const cellGap = 3;
+    const labelWidth = 36;
+    const topPadding = 24;
+    const bottomPadding = 8;
+
+    const totalWidth = labelWidth + weeks.length * (cellSize + cellGap) + 20;
+    const totalHeight = topPadding + 7 * (cellSize + cellGap) + bottomPadding;
+
+    // Set canvas size
+    canvas.width = totalWidth;
+    canvas.height = totalHeight;
+    canvas.style.width = totalWidth + 'px';
+    canvas.style.height = totalHeight + 'px';
+
+    // Clear
+    ctx.clearRect(0, 0, totalWidth, totalHeight);
+
+    // Color scale (purple/pink like the image)
+    const getColor = (val) => {
+      if (val === 0) return '#1a1a2e';
+      const colors = [
+        '#2d1b4e',  // 1 - dark purple
+        '#6b3fa0',  // 2 - medium purple
+        '#a855f7',  // 3 - purple
+        '#d946ef',  // 4 - pink
+        '#f472b6'   // 5 - light pink
+      ];
+      return colors[Math.min(val, 5) - 1];
+    };
+
+    // Draw day labels
+    const dayLabels = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    ctx.fillStyle = '#94a3b8';
+    ctx.font = '10px sans-serif';
+    ctx.textAlign = 'right';
+    ctx.textBaseline = 'middle';
+    [1, 3, 5].forEach(i => { // Mon, Wed, Fri
+      ctx.fillText(dayLabels[i], labelWidth - 6, topPadding + i * (cellSize + cellGap) + cellSize / 2);
+    });
+
+    // Draw month labels
+    const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    ctx.textAlign = 'left';
+    ctx.textBaseline = 'bottom';
+    let lastMonth = -1;
+    weeks.forEach((week, wi) => {
+      const firstDay = week.find(w => w !== null);
+      if (firstDay && firstDay.date) {
+        const m = new Date(firstDay.date).getMonth();
+        if (m !== lastMonth) {
+          ctx.fillText(monthNames[m], labelWidth + wi * (cellSize + cellGap), topPadding - 4);
+          lastMonth = m;
         }
       }
     });
+
+    // Draw cells
+    weeks.forEach((week, wi) => {
+      week.forEach((day, di) => {
+        if (day === null) return;
+        const x = labelWidth + wi * (cellSize + cellGap);
+        const y = topPadding + di * (cellSize + cellGap);
+
+        ctx.fillStyle = getColor(day.value);
+        ctx.beginPath();
+        ctx.roundRect(x, y, cellSize, cellSize, 3);
+        ctx.fill();
+      });
+    });
+
+    // Store for tooltip
+    instances[canvasId] = { weeks, cellSize, cellGap, labelWidth, topPadding, canvas };
+
+    // Tooltip on hover
+    canvas.onmousemove = (e) => {
+      const rect = canvas.getBoundingClientRect();
+      const mx = e.clientX - rect.left;
+      const my = e.clientY - rect.top;
+
+      let found = null;
+      weeks.forEach((week, wi) => {
+        week.forEach((day, di) => {
+          if (!day || !day.date) return;
+          const x = labelWidth + wi * (cellSize + cellGap);
+          const y = topPadding + di * (cellSize + cellGap);
+          if (mx >= x && mx <= x + cellSize && my >= y && my <= y + cellSize) {
+            found = day;
+          }
+        });
+      });
+
+      canvas.title = found && found.date ? `${found.date}: ${found.value} prayers` : '';
+    };
+
     return instances[canvasId];
   }
 
