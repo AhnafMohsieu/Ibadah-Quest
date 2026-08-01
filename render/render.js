@@ -590,70 +590,56 @@
   function renderSunnahs() { poolRender('sunnahArea','☀️ Daily Sunnahs',SUNNAH_POOL,'sunnahIdx'); }
   function renderDhikr() { poolRender('dhikrArea','📿 Dhikr Collection',DHIKR_POOL,'dhikrIdx'); }
   function renderStories() { poolRender('storiesArea','📚 Inspiring Stories',STORIES,'storiesIdx'); }
-  let hadithCurrentCollection = null;
-
-  const HADITH_COLLECTIONS = [
-    { id: 'bukhari', name: 'Sahih al-Bukhari', icon: '📗', desc: 'The most authentic collection, compiled by Imam al-Bukhari (810-870 CE)', count: 0 },
-    { id: 'muslim', name: 'Sahih Muslim', icon: '📘', desc: 'Second most authentic, compiled by Imam Muslim (821-875 CE)', count: 0 },
-    { id: 'abudawud', name: 'Sunan Abu Dawud', icon: '📙', desc: 'Compiled by Imam Abu Dawud (817-889 CE)', count: 0 },
-    { id: 'tirmidhi', name: 'Sunan al-Tirmidhi', icon: '📕', desc: 'Compiled by Imam al-Tirmidhi (824-892 CE)', count: 0 },
-    { id: 'ibnmajah', name: 'Sunan Ibn Majah', icon: '📓', desc: 'Compiled by Imam Ibn Majah (824-887 CE)', count: 0 },
-    { id: 'nasai', name: "Sunan an-Nasa'i", icon: '📔', desc: "Compiled by Imam an-Nasa'i (829-915 CE)", count: 0 },
-    { id: 'kubra', name: 'Sunan al-Kubra', icon: '📒', desc: "Compiled by Imam al-Bayhaqi (994-1066 CE)", count: 0 }
-  ];
-
-  function categorizeHadith() {
-    const cats = {};
-    HADITH_COLLECTIONS.forEach(c => { cats[c.id] = []; });
-    const allHadiths = [...HADITHS];
-    allHadiths.forEach(h => {
-      const src = (h.source || '').toLowerCase();
-      if (src.includes('bukhari')) cats.bukhari.push(h);
-      else if (src.includes('muslim') && !src.includes('abu dawud')) cats.muslim.push(h);
-      else if (src.includes('abu dawud') || src.includes('abi dawud')) cats.abudawud.push(h);
-      else if (src.includes('tirmidhi')) cats.tirmidhi.push(h);
-      else if (src.includes('ibn majah')) cats.ibnmajah.push(h);
-      else if (src.includes('nasai') || src.includes("nasa'i")) cats.nasai.push(h);
-      else if (src.includes('kubra') || src.includes('bayhaqi')) cats.kubra.push(h);
-      else if (src.includes('muwatta')) cats.kubra.push(h);
-      else if (src.includes('musnad')) cats.kubra.push(h);
-      else cats.bukhari.push(h);
-    });
-    HADITH_COLLECTIONS.forEach(c => { c.count = cats[c.id].length; });
-    return cats;
-  }
+  let hadithView = { level: 'collections', collectionId: null, bookId: null };
 
   function renderHadith() {
     const el = document.getElementById('hadithArea');
-    if (!el) return;
-    const cats = categorizeHadith();
+    if (!el || typeof HADITH_COLLECTIONS_DATA === 'undefined') return;
+    const data = HADITH_COLLECTIONS_DATA;
 
-    if (hadithCurrentCollection) {
-      const col = HADITH_COLLECTIONS.find(c => c.id === hadithCurrentCollection);
-      const hadiths = cats[hadithCurrentCollection] || [];
-      let html = `<button class="quran-back-btn" onclick="App.hadithBack()">← Back to Collections</button>`;
-      html += `<div class="quran-header"><h2>${col.icon} ${col.name}</h2><div class="quran-sub">${hadiths.length} hadiths</div></div>`;
-      hadiths.forEach((h, i) => {
-        const src = h.source || '';
+    if (hadithView.level === 'hadiths') {
+      const col = data.find(c => c.id === hadithView.collectionId);
+      const book = col && col.books.find(b => b.id === hadithView.bookId);
+      if (!col || !book) { hadithView = { level: 'collections', collectionId: null, bookId: null }; renderHadith(); return; }
+      let html = `<button class="quran-back-btn" onclick="App.hadithBack()">← Back to ${col.name}</button>`;
+      html += `<div class="quran-header"><h2>${col.icon} ${book.name}</h2><div class="quran-sub">${book.hadiths.length} hadiths</div></div>`;
+      book.hadiths.forEach(h => {
         html += `<div class="verse-card">
-          <div class="verse-num">${i + 1}</div>
-          <div class="verse-english">${h.text || h.desc || ''}</div>
-          ${h.arabic ? `<div class="verse-arabic">${h.arabic}</div>` : ''}
-          ${h.roman ? `<div style="font-size:0.85rem;color:var(--text2);font-style:italic;margin-top:6px;">${h.roman}</div>` : ''}
-          <div class="content-source">📜 ${src}${src ? `<a class="verify-btn" href="${getSourceLink(src)}" target="_blank" rel="noopener noreferrer" title="Verify this source">Verify ↗</a>` : ''}</div>
+          <div class="verse-num">${h.n}</div>
+          <div class="verse-english">${h.t}</div>
+          <div class="content-source">📜 ${col.name} ${h.b}:${h.h}<a class="verify-btn" href="https://sunnah.com/${col.id}/${h.b}#${h.n}" target="_blank" rel="noopener noreferrer" title="Verify on sunnah.com">Verify ↗</a></div>
         </div>`;
       });
       el.innerHTML = html;
       return;
     }
 
+    if (hadithView.level === 'books') {
+      const col = data.find(c => c.id === hadithView.collectionId);
+      if (!col) { hadithView = { level: 'collections', collectionId: null, bookId: null }; renderHadith(); return; }
+      let html = `<button class="quran-back-btn" onclick="App.hadithBack()">← Back to Collections</button>`;
+      html += `<div class="quran-header"><h2>${col.icon} ${col.name}</h2><div class="quran-sub">${col.books.length} books · ${col.books.reduce((s, b) => s + b.hadiths.length, 0)} hadiths</div></div>`;
+      html += '<div class="surah-grid">';
+      col.books.forEach(book => {
+        html += `<div class="surah-card" onclick="App.openHadithBook('${col.id}',${book.id})">
+          <div class="surah-num">📖 ${book.id}</div>
+          <div class="surah-name-en">${book.name}</div>
+          <div class="surah-meta">${book.hadiths.length} hadiths</div>
+        </div>`;
+      });
+      html += '</div>';
+      el.innerHTML = html;
+      return;
+    }
+
     let html = '<div class="quran-header"><h2>💭 The Hadith Collections</h2><div class="quran-sub">Authentic narrations of the Prophet Muhammad ﷺ</div></div>';
     html += '<div class="surah-grid">';
-    HADITH_COLLECTIONS.forEach(c => {
+    data.forEach(c => {
+      const total = c.books.reduce((s, b) => s + b.hadiths.length, 0);
       html += `<div class="surah-card" onclick="App.openHadithCollection('${c.id}')">
         <div class="surah-num">${c.icon}</div>
         <div class="surah-name-en">${c.name}</div>
-        <div class="surah-meta">${c.count} hadiths</div>
+        <div class="surah-meta">${c.books.length} books · ${total} hadiths</div>
         <div style="font-size:0.72rem;color:var(--text2);margin-top:4px;line-height:1.4;">${c.desc}</div>
       </div>`;
     });
@@ -661,8 +647,13 @@
     el.innerHTML = html;
   }
 
-  function openHadithCollection(id) { hadithCurrentCollection = id; renderHadith(); }
-  function hadithBack() { hadithCurrentCollection = null; renderHadith(); }
+  function openHadithCollection(id) { hadithView = { level: 'books', collectionId: id, bookId: null }; renderHadith(); }
+  function openHadithBook(colId, bookId) { hadithView = { level: 'hadiths', collectionId: colId, bookId }; renderHadith(); }
+  function hadithBack() {
+    if (hadithView.level === 'hadiths') { hadithView.level = 'books'; hadithView.bookId = null; }
+    else { hadithView = { level: 'collections', collectionId: null, bookId: null }; }
+    renderHadith();
+  }
   function renderNames() { poolRender('namesArea','💯 99 Names of Allah',NAMES,'namesIdx', true); }
   function renderSins() { poolRender('sinsArea','🚫 Major Sins to Avoid',SINS_POOL,'sinsIdx'); }
   function renderPunishments() { poolRender('punishmentsArea','⚖️ Islamic Justice',PUNISHMENTS_POOL,'punishmentsIdx'); }
@@ -1455,6 +1446,7 @@
   window.quranBack = quranBack;
   window.openQuranJuz = openQuranJuz;
   window.openHadithCollection = openHadithCollection;
+  window.openHadithBook = openHadithBook;
   window.hadithBack = hadithBack;
   window.addGratitude = addGratitude;
   window.toggleFasting = toggleFasting;

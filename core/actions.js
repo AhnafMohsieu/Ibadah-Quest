@@ -2159,7 +2159,7 @@ Object.keys(NEW_POOLS).forEach(k => {
       manualRefresh: manualRefreshContent, switchCategory, activateTab,
       claimBonus, tapDhikr, resetDhikr, nextDhikr,
       setQuranView, quranSearchFilter, openQuranSurah, quranBack, openQuranJuz,
-      openHadithCollection, hadithBack,
+      openHadithCollection, openHadithBook, hadithBack,
       playQuranVerse, playSurah, stopSurah, setQuranReciter,
       globalSearch, executeSearch, renderDailyWidget,
       calPrevMonth, calNextMonth, calGoToday, selectAvatar, toggleAvatarPicker
