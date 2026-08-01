@@ -30,11 +30,7 @@
     { id: 'literature', icon: '📚', label: 'Literature' }, { id: 'nasheeds', icon: '🎵', label: 'Nasheeds' }, { id: 'illumination', icon: '✨', label: 'Illumination' }, { id: 'textiles', icon: '🧵', label: 'Textiles' },
     { id: 'ceramics', icon: '🏺', label: 'Ceramics' }, { id: 'woodwork', icon: '🪵', label: 'Woodwork' }
   ],
-  scholars2: [
-    { id: 'abuhanifa', icon: '🧠', label: 'Abu Hanifa' }, { id: 'malik', icon: '🧠', label: 'Malik' }, { id: 'shafii', icon: '🧠', label: 'Shafi\'i' }, { id: 'ahmad', icon: '🧠', label: 'Ahmad' },
-    { id: 'alghazali', icon: '🧠', label: 'Al-Ghazali' }, { id: 'ibntaymiyyah', icon: '🧠', label: 'Ibn Taymiyyah' }, { id: 'ibnkhaldun', icon: '🧠', label: 'Ibn Khaldun' }, { id: 'ibnrushd', icon: '🧠', label: 'Ibn Rushd' },
-    { id: 'ibnsina', icon: '🧠', label: 'Ibn Sina' }, { id: 'alkhwarizmi', icon: '🧠', label: 'Al-Khwarizmi' }
-  ],
+
   lang: [
     { id: 'arabicgrammar', icon: '📖', label: 'Grammar' }, { id: 'vocab', icon: '🔤', label: 'Vocab' }, { id: 'rhetoric', icon: '🗣️', label: 'Rhetoric' }, { id: 'morphology', icon: '🧩', label: 'Morphology' },
     { id: 'pronunciation', icon: '🎙️', label: 'Tajweed' }, { id: 'poetry', icon: '📜', label: 'Poetry' }, { id: 'proverbs', icon: '💡', label: 'Proverbs' }, { id: 'etymology', icon: '🔍', label: 'Etymology' },
