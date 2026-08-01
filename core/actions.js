@@ -2112,8 +2112,8 @@ Object.keys(NEW_POOLS).forEach(k => {
 
 
   TAB_GROUPS.history = (TAB_GROUPS.history || []).concat(TAB_GROUPS.geo || []).concat(TAB_GROUPS.arts || []);
-  TAB_GROUPS.ilm = (TAB_GROUPS.ilm || []).concat(TAB_GROUPS.fiqh || []).concat(TAB_GROUPS.lang || []).concat(TAB_GROUPS.philosophy || []);
-  TAB_GROUPS.qalb = (TAB_GROUPS.qalb || []).concat(TAB_GROUPS.spirit || []);
+  TAB_GROUPS.ilm = (TAB_GROUPS.ilm || []).concat(TAB_GROUPS.fiqh || []).concat(TAB_GROUPS.lang || []).concat(TAB_GROUPS.philosophy || []).concat(TAB_GROUPS.scholars2 || []);
+  TAB_GROUPS.qalb = (TAB_GROUPS.qalb || []).concat((TAB_GROUPS.spirit || []).filter(t => t.id !== 'sincerity'));
   TAB_GROUPS.hayat = (TAB_GROUPS.hayat || []).concat(TAB_GROUPS.modern || []);
   TAB_GROUPS.muamalat = (TAB_GROUPS.muamalat || []).concat(TAB_GROUPS.society || []);
 
