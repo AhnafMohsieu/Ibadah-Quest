@@ -286,7 +286,7 @@
       const o = pool[i % pool.length];
       if (!o) return '';
       
-      const numBadge = `<span style="display:inline-block; background:rgba(212,175,55,0.15); color:var(--gold-light); border:1px solid rgba(212,175,55,0.4); border-radius:12px; padding:0 8px; font-size:0.75rem; margin-right:8px; font-weight:800; height:22px; line-height:20px; white-space:nowrap; font-family:var(--font);">#${i + 1}</span>`;
+      const numBadge = `<span style="display:inline-block; background:rgba(212,175,55,0.15); color:var(--gold-light); border:1px solid rgba(212,175,55,0.4); border-radius:12px; padding:0 8px; font-size:0.75rem; margin-right:8px; font-weight:800; height:22px; line-height:20px; white-space:nowrap; font-family:var(--font);">#${mapIdx + 1}</span>`;
 
       if (typeof o === 'string') return `<div class="content-card"><div style="display:flex;align-items:flex-start;gap:10px;"><div style="margin-top:2px;">${numBadge}</div><div class="content-english" style="flex:1;">${o}</div></div></div>`;
       
@@ -924,11 +924,13 @@
   function toggleMorning(idx, xp) { 
     const dt=today(); if(!S.morningDone[dt]) S.morningDone[dt]={}; 
     const w = !!S.morningDone[dt][idx];
+    const oldLv=S.lv;
     S.morningDone[dt][idx] = !w; 
     if(xp){
       if(!w) { S.xp+=xp; window.playSound('pop'); }
       else S.xp=Math.max(0, S.xp-xp);
       S.lv=lvFrom(S.xp);
+      if(S.lv>oldLv){ const t=lvTitle(S.lv); window.toast('⬆️','Level Up!<br>Level '+S.lv+' — '+t,true,3500); }
     }
     saveState(); renderAll(); 
   }
@@ -960,11 +962,13 @@
   function toggleEvening(idx, xp) { 
     const dt=today(); if(!S.eveningDone[dt]) S.eveningDone[dt]={}; 
     const w = !!S.eveningDone[dt][idx];
+    const oldLv=S.lv;
     S.eveningDone[dt][idx] = !w; 
     if(xp){
       if(!w) { S.xp+=xp; window.playSound('pop'); }
       else S.xp=Math.max(0, S.xp-xp);
       S.lv=lvFrom(S.xp);
+      if(S.lv>oldLv){ const t=lvTitle(S.lv); window.toast('⬆️','Level Up!<br>Level '+S.lv+' — '+t,true,3500); }
     }
     saveState(); renderAll(); 
   }
@@ -1135,9 +1139,12 @@
     else if (type === 'lifetime') S.chl = d;
     else S.chd = d;
 
+    const oldLv=S.lv;
     if (isChecked) { S.xp+=xp; toast('⚔️','Challenge done! +'+xp+' XP'); }
     else { S.xp=Math.max(0,S.xp-xp); }
-    S.lv=lvFrom(S.xp); saveState(); renderAll();
+    S.lv=lvFrom(S.xp);
+    if(S.lv>oldLv){ const t=lvTitle(S.lv); toast('⬆️','Level Up!<br>Level '+S.lv+' — '+t,true,3500); }
+    saveState(); renderAll();
   }
   function renderAch() { const cnt=Object.keys(S.ua).length; document.getElementById('achArea').innerHTML=`<div style="grid-column:1/-1;text-align:center;margin-bottom:10px;color:var(--text2);">🏆 Unlocked: <strong style="color:var(--gold)">${cnt}</strong> / ${ACHS.length}</div>`+ACHS.map(a=>{ const u=!!S.ua[a.id]; return `<div class="ach-card${u?' unlocked':' locked'}"><div class="ach-icon">${u?a.icon:'🔒'}</div><div style="font-weight:600;font-size:0.8rem;">${a.name}</div><div style="font-size:0.65rem;color:var(--text2);">${a.desc}</div><span style="font-size:0.6rem;background:rgba(255,255,255,0.08);padding:2px 8px;border-radius:10px;">${a.tier}</span></div>`; }).join(''); }
   function renderProg() {

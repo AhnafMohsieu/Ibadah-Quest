@@ -1,9 +1,10 @@
 ﻿(function() {
   // ═══════════════════════════════════════════════════════
-  function toggleP(id) { const l=tlog(); const w=!!l.p[id]; l.p[id]=!w; const pr=PRAYERS.find(x=>x.id===id); if(!pr) return; let xp=pr.xp; if(isFri()&&id==='dhuhr'&&pr.fri) xp=pr.fri.xp; if(S.ab&&S.ab.exp>=today()) xp*=2; if(!w){ S.tp++; S.xp+=xp; if(isFri()&&id==='dhuhr') S.tj=(S.tj||0)+1; playSound('pop'); } else { S.tp=Math.max(0,S.tp-1); S.xp=Math.max(0,S.xp-xp); if(isFri()&&id==='dhuhr') S.tj=Math.max(0,(S.tj||0)-1); } S.lv=lvFrom(S.xp); recalc(); checkQ(); checkA(); saveState(); renderDynamic(); }
-  function toggleV(id) { const l=tlog(); if(!l.v) l.v={}; const w=!!l.v[id]; l.v[id]=!w; const vp=VOLUNTARY.find(x=>x.id===id); if(!vp) return; let xp=vp.xp; if(S.ab&&S.ab.exp>=today()) xp*=2; if(!w){ S.vc[id]=(S.vc[id]||0)+1; S.xp+=xp; playSound('pop'); } else { S.vc[id]=Math.max(0,(S.vc[id]||0)-1); S.xp=Math.max(0,S.xp-xp); } S.lv=lvFrom(S.xp); checkQ(); checkA(); saveState(); renderDynamic(); }
-  function toggleD(id) { const l=tlog(); const w=!!l.d[id]; l.d[id]=!w; const de=DEEDS.find(x=>x.id===id); if(!de) return; let xp=de.xp; if(S.ab&&S.ab.exp>=today()) xp*=2; if(!w){ S.td[id]=(S.td[id]||0)+1; S.xp+=xp; playSound('pop'); } else { S.td[id]=Math.max(0,(S.td[id]||0)-1); S.xp=Math.max(0,S.xp-xp); } S.lv=lvFrom(S.xp); recalc(); checkQ(); checkA(); saveState(); renderDynamic(); }
-  function buy(id) { const r=SHOP.find(x=>x.id===id); if(!r||S.ur[id]) return; if(S.xp<r.cost){ toast('😔','Not enough XP'); return; } S.xp-=r.cost; S.ur[id]=true; if(r.t==='boost') S.ab={exp:today(new Date(Date.now()+86400000))}; if(r.t==='freeze') S.sfu=true; if(r.t==='xp') S.xp+=r.v||0; if(r.t==='reroll'){ genDQ(); toast('🎲','Quests rerolled!'); } else toast('🎁','Purchased!'); S.lv=lvFrom(S.xp); saveState(); renderAll(); checkA(); }
+  function checkLevelUp(oldLv) { if (S.lv > oldLv) { const t = lvTitle(S.lv); toast('⬆️', 'Level Up!<br>Level ' + S.lv + ' — ' + t, true, 3500); } }
+  function toggleP(id) { const l=tlog(); const w=!!l.p[id]; const oldLv=S.lv; l.p[id]=!w; const pr=PRAYERS.find(x=>x.id===id); if(!pr) return; let xp=pr.xp; if(isFri()&&id==='dhuhr'&&pr.fri) xp=pr.fri.xp; if(S.ab&&S.ab.exp>=today()) xp*=2; if(!w){ S.tp++; S.xp+=xp; if(isFri()&&id==='dhuhr') S.tj=(S.tj||0)+1; playSound('pop'); } else { S.tp=Math.max(0,S.tp-1); S.xp=Math.max(0,S.xp-xp); if(isFri()&&id==='dhuhr') S.tj=Math.max(0,(S.tj||0)-1); } S.lv=lvFrom(S.xp); checkLevelUp(oldLv); recalc(); checkQ(); checkA(); saveState(); renderDynamic(); }
+  function toggleV(id) { const l=tlog(); if(!l.v) l.v={}; const w=!!l.v[id]; const oldLv=S.lv; l.v[id]=!w; const vp=VOLUNTARY.find(x=>x.id===id); if(!vp) return; let xp=vp.xp; if(S.ab&&S.ab.exp>=today()) xp*=2; if(!w){ S.vc[id]=(S.vc[id]||0)+1; S.xp+=xp; playSound('pop'); } else { S.vc[id]=Math.max(0,(S.vc[id]||0)-1); S.xp=Math.max(0,S.xp-xp); } S.lv=lvFrom(S.xp); checkLevelUp(oldLv); checkQ(); checkA(); saveState(); renderDynamic(); }
+  function toggleD(id) { const l=tlog(); const w=!!l.d[id]; const oldLv=S.lv; l.d[id]=!w; const de=DEEDS.find(x=>x.id===id); if(!de) return; let xp=de.xp; if(S.ab&&S.ab.exp>=today()) xp*=2; if(!w){ S.td[id]=(S.td[id]||0)+1; S.xp+=xp; playSound('pop'); } else { S.td[id]=Math.max(0,(S.td[id]||0)-1); S.xp=Math.max(0,S.xp-xp); } S.lv=lvFrom(S.xp); checkLevelUp(oldLv); recalc(); checkQ(); checkA(); saveState(); renderDynamic(); }
+  function buy(id) { const r=SHOP.find(x=>x.id===id); if(!r||S.ur[id]) return; if(S.xp<r.cost){ toast('😔','Not enough XP'); return; } const oldLv=S.lv; S.xp-=r.cost; S.ur[id]=true; if(r.t==='boost') S.ab={exp:today(new Date(Date.now()+86400000))}; if(r.t==='freeze') S.sfu=true; if(r.t==='xp') S.xp+=r.v||0; if(r.t==='reroll'){ genDQ(); toast('🎲','Quests rerolled!'); } else toast('🎁','Purchased!'); S.lv=lvFrom(S.xp); checkLevelUp(oldLv); saveState(); renderAll(); checkA(); }
   function checkA() { 
     const nu=[]; 
     for(const a of ACHS) if(!S.ua[a.id]&&a.c(S)){ S.ua[a.id]=today(); nu.push(a); } 
@@ -36,15 +37,15 @@
   function genYQ() { const y=ys(); if(S.yqd===y&&S.yq.length) return; S.yq=[...YQUESTS].sort(()=>Math.random()-0.5).slice(0,3).map(q=>{ const o=YQUESTS.find(x=>x.id===q.id); return {...q, done:!!(o&&o.c(S))}; }); S.yqd=y; }
   function genLQ() { if(!S.lq) S.lq=[]; const existing=new Set(S.lq.map(q=>q.id)); for(const q of LQUESTS) if(!existing.has(q.id)) S.lq.push({...q, done:!!q.c(S)}); S.lqd='set'; }
   function checkQ() {
-    let u=false; const l=tlog();
+    let u=false; const l=tlog(); const oldLv=S.lv;
     for(const q of S.dq){ const o=DQUESTS.find(x=>x.id===q.id); if(o&&!q.done&&o.c(S,l)){ q.done=true; S.xp+=q.xp; S.tq++; u=true; } }
     for(const q of S.wq){ const o=WQUESTS.find(x=>x.id===q.id); if(o&&!q.done&&o.c(S)){ q.done=true; S.xp+=q.xp; S.tq++; u=true; } }
     for(const q of S.mq){ const o=MQUESTS.find(x=>x.id===q.id); if(o&&!q.done&&o.c(S)){ q.done=true; S.xp+=q.xp; S.tq++; u=true; } }
     for(const q of S.yq){ const o=YQUESTS.find(x=>x.id===q.id); if(o&&!q.done&&o.c(S)){ q.done=true; S.xp+=q.xp; S.tq++; u=true; } }
     for(const q of S.lq){ const o=LQUESTS.find(x=>x.id===q.id); if(o&&!q.done&&o.c(S)){ q.done=true; S.xp+=q.xp; S.tq++; u=true; } }
-    if(u){ S.lv=lvFrom(S.xp); checkA(); saveState(); }
+    if(u){ S.lv=lvFrom(S.xp); checkLevelUp(oldLv); checkA(); saveState(); }
   }
-  function toggleQuest(id,type,xp){ let arr; if(type==='daily') arr=S.dq; else if(type==='weekly') arr=S.wq; else if(type==='monthly') arr=S.mq; else if(type==='yearly') arr=S.yq; else if(type==='lifetime') arr=S.lq; else return; const q=arr.find(x=>x.id===id); if(!q) return; q.done=!q.done; const xpVal=xp||q.xp; if(q.done){ S.xp+=xpVal; S.tq++; } else { S.xp=Math.max(0,S.xp-xpVal); S.tq=Math.max(0,S.tq-1); } S.lv=lvFrom(S.xp); saveState(); renderQ(); renderDynamic(); }
+  function toggleQuest(id,type,xp){ let arr; if(type==='daily') arr=S.dq; else if(type==='weekly') arr=S.wq; else if(type==='monthly') arr=S.mq; else if(type==='yearly') arr=S.yq; else if(type==='lifetime') arr=S.lq; else return; const q=arr.find(x=>x.id===id); if(!q) return; const oldLv=S.lv; q.done=!q.done; const xpVal=xp||q.xp; if(q.done){ S.xp+=xpVal; S.tq++; } else { S.xp=Math.max(0,S.xp-xpVal); S.tq=Math.max(0,S.tq-1); } S.lv=lvFrom(S.xp); checkLevelUp(oldLv); saveState(); renderQ(); renderDynamic(); }
   function recalc() { const all=Object.keys(S.log).filter(d=>Object.values(S.log[d].p||{}).filter(v=>v).length>=5).sort(); let best=0,run=0,prev=null; for(const d of all){ if(prev){ const p=new Date(prev+'T00:00:00'); const c=new Date(d+'T00:00:00'); const diffDays=Math.round((c-p)/86400000); if(diffDays===1) run++; else run=1; } else { run=1; } best=Math.max(best,run); prev=d; } S.bs=best; const tc=Object.values(tlog().p||{}).filter(v=>v).length>=5; if(tc){ let s=1,ck=new Date(); while(true){ ck.setDate(ck.getDate()-1); const dk=today(ck); if(S.log[dk]&&Object.values(S.log[dk].p||{}).filter(v=>v).length>=5) s++; else break; } S.cs=s; } else { const yd=today(new Date(Date.now()-86400000)); S.cs=(S.log[yd]&&Object.values(S.log[yd].p||{}).filter(v=>v).length>=5)?1:0; } S.pd=all.length; if(S.cs>S.bs) S.bs=S.cs; }
   function refreshContent() {
     const t = today(); const isNewDay = (S.contentDate !== t); const rng = (len) => fastRng(len);
@@ -93,7 +94,7 @@
     saveState();
     renderAll();
   }
-  function claimBonus() { const t=today(); if(S.lbd===t) return; const b=S.cs>=7?75:30; S.xp+=b; S.lbd=t; S.lv=lvFrom(S.xp); saveState(); renderDynamic(); toast('🎁','Daily Bonus: +'+b+' XP!'); }
+  function claimBonus() { const t=today(); if(S.lbd===t) return; const oldLv=S.lv; const b=S.cs>=7?75:30; S.xp+=b; S.lbd=t; S.lv=lvFrom(S.xp); checkLevelUp(oldLv); saveState(); renderDynamic(); toast('🎁','Daily Bonus: +'+b+' XP!'); }
   function tapDhikr() {
     if (!S.dhikrCounters) S.dhikrCounters = {};
     const idx = S.dhikrCounters._active || 0;
