@@ -232,6 +232,58 @@ body {
 .profile-input { width: 100%; padding: 14px 20px; border-radius: 16px; border: 1px solid var(--border); background: rgba(0,0,0,0.2); color: var(--text); font-family: var(--font); font-size: 0.95rem; margin-bottom: 16px; outline: none; transition: border-color 0.3s; }
 .profile-input:focus { border-color: var(--gold); }
 
+/* Profile Identity Card */
+.profile-identity {
+  display: flex; align-items: center; gap: 16px; margin-bottom: 18px;
+  background: var(--card2); padding: 20px; border-radius: var(--radius);
+  border: 1px solid var(--gold); box-shadow: 0 4px 20px rgba(212,175,55,0.1);
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+.profile-identity:hover { border-color: rgba(212,175,55,0.5); box-shadow: 0 4px 25px rgba(212,175,55,0.15); }
+
+.profile-avatar-wrap {
+  position: relative; cursor: pointer; transition: transform 0.2s;
+}
+.profile-avatar-wrap:hover { transform: scale(1.05); }
+.profile-avatar { font-size: 3.5rem; display: block; }
+.profile-avatar-edit {
+  position: absolute; bottom: -2px; right: -2px; font-size: 0.9rem;
+  background: var(--card); border-radius: 50%; padding: 2px 4px;
+  border: 1px solid var(--gold);
+}
+
+.profile-info { flex: 1; }
+.profile-name { margin: 0 0 4px; color: var(--gold-light); font-size: 1.3rem; }
+.profile-level { font-size: 0.85rem; color: var(--text2); margin-bottom: 2px; }
+.profile-join { font-size: 0.75rem; color: rgba(148,163,184,0.6); }
+
+/* Avatar Picker */
+.avatar-picker {
+  margin-bottom: 18px; padding: 12px; background: var(--card2);
+  border: 1px solid var(--border); border-radius: var(--radius);
+}
+.avatar-grid {
+  display: grid; grid-template-columns: repeat(8, 1fr); gap: 6px;
+}
+.avatar-option {
+  font-size: 1.5rem; text-align: center; padding: 8px; cursor: pointer;
+  border-radius: 8px; border: 2px solid transparent; transition: all 0.2s;
+}
+.avatar-option:hover { background: rgba(212,175,55,0.1); border-color: rgba(212,175,55,0.3); }
+.avatar-option.selected { border-color: var(--gold); background: rgba(212,175,55,0.15); }
+
+/* Profile Stats Row */
+.profile-stats {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 18px;
+}
+.profile-stats .stat-card { padding: 16px 12px; }
+.profile-stats .stat-icon { font-size: 1.2rem; margin-bottom: 4px; }
+.profile-stats .stat-num { font-weight: 700; color: var(--gold); font-size: 1.3rem; }
+.profile-stats .stat-label { font-size: 0.7rem; color: var(--text2); margin-top: 2px; }
+
+/* Profile Settings */
+.profile-settings { margin-bottom: 16px; }
+
 /* ── Daily Bonus & Tips ── */
 .daily-bonus { background: rgba(212,175,55,0.1); border: 1px solid rgba(212,175,55,0.3); border-radius: var(--radius-sm); padding: 18px; margin-bottom: 24px; font-size: 0.92rem; text-align: center; color: var(--gold); font-weight: 600; cursor: pointer; transition: all 0.3s; letter-spacing: 0.3px; }
 .daily-bonus:hover { background: rgba(212,175,55,0.15); }

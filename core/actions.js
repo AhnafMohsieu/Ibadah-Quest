@@ -115,6 +115,15 @@
   }
   function resetDhikr() { if (!S.dhikrCounters) S.dhikrCounters={}; const idx=S.dhikrCounters._active||0; S.dhikrCounters[idx]=0; saveState(); renderDhikrCounter(); }
   function nextDhikr() { if (!S.dhikrCounters) S.dhikrCounters={}; S.dhikrCounters._active=((S.dhikrCounters._active||0)+1)%DHIKR_COUNTER_DATA.length; saveState(); renderDhikrCounter(); }
+  function selectAvatar(emoji) {
+    S.avatar = emoji;
+    saveState();
+    renderProfile();
+  }
+  function toggleAvatarPicker() {
+    const picker = document.getElementById('avatarPicker');
+    if (picker) picker.style.display = picker.style.display === 'none' ? 'block' : 'none';
+  }
 
   const NEW_POOLS = {
   "umayyads": [
@@ -2153,7 +2162,7 @@ Object.keys(NEW_POOLS).forEach(k => {
       openHadithCollection, hadithBack,
       playQuranVerse, playSurah, stopSurah, setQuranReciter,
       globalSearch, executeSearch, renderDailyWidget,
-      calPrevMonth, calNextMonth, calGoToday
+      calPrevMonth, calNextMonth, calGoToday, selectAvatar, toggleAvatarPicker
     };
     window.checkA = checkA;
     window.playSound = playSound;

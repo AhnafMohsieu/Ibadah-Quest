@@ -1205,17 +1205,50 @@
   function renderShop() { document.getElementById('shopArea').innerHTML=SHOP.map(r=>{ const o=!!S.ur[r.id]; return `<div class="shop-card" onclick="${o?'':'App.buy(\''+r.id+'\')'}"><span style="font-size:1.8rem">${r.icon}</span><div style="flex:1"><strong>${r.name}</strong></div><span class="shop-cost">${o?'✅ Owned':'💎 '+r.cost+' XP'}</span></div>`; }).join(''); }
   function renderProfile() {
     const achCnt = Object.keys(S.ua).length;
+    const avatar = S.avatar || '👳';
+    const joinDate = S.joinDate ? new Date(S.joinDate).toLocaleDateString('en', { month: 'long', year: 'numeric' }) : null;
+
     let h = '<div class="section-title">👤 Profile</div>';
-    h += `<div style="display:flex;align-items:center;gap:14px;margin-bottom:18px;background:var(--card2);padding:16px;border-radius:var(--radius);border:1px solid var(--gold);"><div style="font-size:3rem;">👳</div><div><h2 style="margin-bottom:4px;color:var(--gold-light);">${currentUser==='default'?'Guest':currentUser}</h2><p style="font-size:0.85rem;color:var(--text2);">Level ${S.lv} · ${lvTitle(S.lv)}</p></div></div>`;
-    h += '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:18px;">';
-    h += `<div class="stat-card"><div style="font-weight:bold;color:var(--gold);font-size:1.4rem;">${S.xp}</div><div style="font-size:0.75rem;">Total XP</div></div>`;
-    h += `<div class="stat-card"><div style="font-weight:bold;color:var(--gold);font-size:1.4rem;">${S.tp}</div><div style="font-size:0.75rem;">Prayers</div></div>`;
-    h += `<div class="stat-card"><div style="font-weight:bold;color:var(--gold);font-size:1.4rem;">${S.cs}🔥</div><div style="font-size:0.75rem;">Streak</div></div>`;
+
+    // Identity card
+    h += `<div class="profile-identity">
+      <div class="profile-avatar-wrap" onclick="App.toggleAvatarPicker()">
+        <span class="profile-avatar">${avatar}</span>
+        <span class="profile-avatar-edit">✏️</span>
+      </div>
+      <div class="profile-info">
+        <h2 class="profile-name">${currentUser === 'default' ? 'Guest' : currentUser}</h2>
+        <div class="profile-level">Level ${S.lv} · ${lvTitle(S.lv)}</div>
+        ${joinDate ? `<div class="profile-join">Member since ${joinDate}</div>` : ''}
+      </div>
+    </div>`;
+
+    // Avatar picker (hidden by default)
+    const emojis = ['👳','🕋','🕌','📿','⭐','🕊️','📖','🌙','🤲','📕','🧎'];
+    h += `<div class="avatar-picker" id="avatarPicker" style="display:none;">
+      <div class="avatar-grid">
+        ${emojis.map(e => `<div class="avatar-option${e === avatar ? ' selected' : ''}" onclick="App.selectAvatar('${e}')">${e}</div>`).join('')}
+      </div>
+    </div>`;
+
+    // Stats row (4 cards)
+    h += '<div class="profile-stats">';
+    h += `<div class="stat-card"><div class="stat-icon">⭐</div><div class="stat-num">${S.xp}</div><div class="stat-label">Total XP</div></div>`;
+    h += `<div class="stat-card"><div class="stat-icon">🕌</div><div class="stat-num">${S.tp}</div><div class="stat-label">Prayers</div></div>`;
+    h += `<div class="stat-card"><div class="stat-icon">🔥</div><div class="stat-num">${S.cs}</div><div class="stat-label">Streak</div></div>`;
+    h += `<div class="stat-card"><div class="stat-icon">🏆</div><div class="stat-num">${achCnt}</div><div class="stat-label">Achievements</div></div>`;
     h += '</div>';
+
+    // Settings
     h += '<div class="section-title">⚙️ Settings</div>';
+    h += '<div class="profile-settings">';
     h += '<div style="display:flex;gap:8px;margin-bottom:10px;"><input class="profile-input" id="usernameInput" placeholder="Switch user" style="margin-bottom:0;"><button class="shop-card" onclick="App.switchUser()" style="padding:10px 14px;border-radius:var(--radius-sm);">💾</button></div>';
     h += '<button class="shop-card" style="width:100%;justify-content:center;margin-bottom:10px;" onclick="App.logout()">🔓 Logout</button>';
+    h += '</div>';
+
+    // Danger zone
     h += '<div class="danger-zone"><h3 style="color:var(--red)">⚠️ Danger Zone</h3><p style="font-size:0.8rem;color:var(--text2);margin-bottom:10px;">Reset permanently deletes all your progress.</p><button class="danger-btn" onclick="App.resetAll()">🔄 Reset All Data</button></div>';
+
     document.getElementById('profileArea').innerHTML = h;
   }
   function renderStats() {
