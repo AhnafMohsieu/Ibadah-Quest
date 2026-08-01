@@ -418,8 +418,8 @@ body {
   transition: width 0.4s ease;
 }
 .insights-filter { display: flex; gap: 8px; justify-content: center; margin-bottom: 16px; }
-.filter-btn { background: rgba(15,23,42,0.6); border: 1px solid rgba(22,163,74,0.3); color: var(--text2); padding: 6px 16px; border-radius: 20px; cursor: pointer; font-size: 0.8rem; transition: all 0.2s; }
-.filter-btn.active, .filter-btn:hover { background: rgba(22,163,74,0.2); color: #fff; border-color: var(--gold); }
+.filter-btn { background: rgba(15,23,42,0.6); border: 1px solid var(--border); color: var(--text2); padding: 6px 16px; border-radius: 20px; cursor: pointer; font-size: 0.8rem; transition: all 0.2s; }
+.filter-btn.active, .filter-btn:hover { background: rgba(212,175,55,0.15); color: #fff; border-color: var(--gold); }
 .insights-charts { display: flex; flex-direction: column; gap: 16px; }
 .insight-chart-wrap {
   background: var(--card2);
