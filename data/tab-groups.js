@@ -72,7 +72,6 @@
     { id: 'aqeedah',    icon: '🛡️', label: 'Creed' },
     { id: 'fiqh',       icon: '⚖️', label: 'Jurisprudence' },
     { id: 'arabic',     icon: '🔤', label: 'Arabic' },
-    { id: 'names',      icon: '💯', label: '99 Names' },
     { id: 'scholars',   icon: '🖋️', label: 'Scholars' },
     { id: 'knowledge',  icon: '🧠', label: 'Seeking Knowledge' },
     { id: 'memorization', icon: '📗', label: 'Memorization' }
