@@ -1146,7 +1146,36 @@
     if(S.lv>oldLv){ const t=lvTitle(S.lv); levelUpToast(S.lv, t); }
     saveState(); renderAll();
   }
-  function renderAch() { const cnt=Object.keys(S.ua).length; document.getElementById('achArea').innerHTML=`<div style="grid-column:1/-1;text-align:center;margin-bottom:10px;color:var(--text2);">🏆 Unlocked: <strong style="color:var(--gold)">${cnt}</strong> / ${ACHS.length}</div>`+ACHS.map(a=>{ const u=!!S.ua[a.id]; return `<div class="ach-card${u?' unlocked':' locked'}"><div class="ach-icon">${u?a.icon:'🔒'}</div><div style="font-weight:600;font-size:0.8rem;">${a.name}</div><div style="font-size:0.65rem;color:var(--text2);">${a.desc}</div><span style="font-size:0.6rem;background:rgba(255,255,255,0.08);padding:2px 8px;border-radius:10px;">${a.tier}</span></div>`; }).join(''); }
+  function renderAch() {
+  const cnt = Object.keys(S.ua).length;
+  const total = ACHS.length;
+  const pct = total > 0 ? Math.round((cnt / total) * 100) : 0;
+
+  let h = '<div class="ach-header">';
+  h += `<div class="section-title">🏆 Trophy Cabinet</div>`;
+  h += `<div class="ach-progress"><span class="ach-progress-bar" style="width:${pct}%"></span></div>`;
+  h += `<div class="ach-progress-text">${cnt} / ${total} Unlocked</div>`;
+  h += '</div>';
+
+  h += '<div class="ach-grid">';
+  h += ACHS.map(a => {
+    const u = !!S.ua[a.id];
+    const tierStars = a.tier === 'legendary' ? '⭐⭐⭐' : a.tier === 'diamond' || a.tier === 'platinum' ? '⭐⭐' : '⭐';
+    return `<div class="ach-card${u ? ' unlocked' : ' locked'}">
+      <div class="ach-tier">${tierStars}</div>
+      <div class="ach-icon">${u ? a.icon : '🔒'}</div>
+      <div class="ach-name">${a.name}</div>
+      <div class="ach-desc">${a.desc}</div>
+    </div>`;
+  }).join('');
+  h += '</div>';
+
+  if (cnt === 0) {
+    h += '<div class="ach-empty">No trophies yet. Start completing deeds to earn your first!</div>';
+  }
+
+  document.getElementById('achArea').innerHTML = h;
+}
   function renderProg() {
     document.getElementById('statArea').innerHTML=`<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px"><div class="stat-card"><div class="stat-num">${S.tp}</div><div>Prayers</div></div><div class="stat-card"><div class="stat-num">${S.pd}</div><div>Perfect Days</div></div><div class="stat-card"><div class="stat-num">${S.bs}</div><div>Best Streak</div></div><div class="stat-card"><div class="stat-num">${S.lv}</div><div>Level</div></div><div class="stat-card"><div class="stat-num">${S.tq||0}</div><div>Quests Done</div></div><div class="stat-card"><div class="stat-num">${Object.values(S.td).reduce((a,b)=>a+b,0)}</div><div>Extra Deeds</div></div></div>`;
 
