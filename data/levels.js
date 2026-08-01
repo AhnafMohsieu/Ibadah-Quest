@@ -331,5 +331,5 @@ const LEVELS = [
   { m:988, t:'Nur of Light 988' },  { m:989, t:'Nur of Light 989' },  { m:990, t:'Nur of Light 990' },
   { m:991, t:'Nur of Light 991' },  { m:992, t:'Nur of Light 992' },  { m:993, t:'Nur of Light 993' },
   { m:994, t:'Nur of Light 994' },  { m:995, t:'Nur of Light 995' },  { m:996, t:'Nur of Light 996' },
-  { m:997, t:'Nur of Light 997' },  { m:998, t:'Nur of Light 998' },  { m:999, t:'Jannatul Firdaws al-A'la' }
+  { m:997, t:'Nur of Light 997' },  { m:998, t:'Nur of Light 998' },  { m:999, t:'Jannatul Firdaws al-A\u2019la' }
 ];
