@@ -2,7 +2,6 @@
   'use strict';
 
   let currentRange = 30;
-  let rendered = false;
 
   const CAT_COLORS = ['#16a34a', '#22c55e', '#f59e0b', '#ef4444', '#3b82f6', '#8b5cf6', '#ec4899', '#06b6d4'];
 
@@ -10,28 +9,33 @@
     const prayers = Analytics.getPrayerStats();
     const streak = Analytics.getStreakStats();
     const xp = Analytics.getXPStats();
-    const totalDeeds = Object.values(S.td || {}).reduce((a, b) => a + b, 0);
     return `
       <div class="insights-cards">
         <div class="insight-card">
+          <div class="insight-card-icon">🕌</div>
           <div class="insight-card-num">${prayers.total}</div>
           <div class="insight-card-label">Total Prayers</div>
           <div class="insight-card-sub">${prayers.rate}% completion</div>
+          <div class="insight-progress"><div class="insight-progress-bar" style="width:${prayers.rate}%"></div></div>
         </div>
         <div class="insight-card">
+          <div class="insight-card-icon">🔥</div>
           <div class="insight-card-num">${streak.current}</div>
           <div class="insight-card-label">Current Streak</div>
           <div class="insight-card-sub">Best: ${streak.best}</div>
         </div>
         <div class="insight-card">
+          <div class="insight-card-icon">⭐</div>
           <div class="insight-card-num">${S.pd || 0}</div>
           <div class="insight-card-label">Perfect Days</div>
           <div class="insight-card-sub">${prayers.possible ? Math.round((S.pd || 0) / (prayers.possible / 5) * 100) : 0}% rate</div>
         </div>
         <div class="insight-card">
+          <div class="insight-card-icon">📊</div>
           <div class="insight-card-num">Lv ${xp.level}</div>
           <div class="insight-card-label">${xp.title}</div>
           <div class="insight-card-sub">${xp.progress}% to next</div>
+          <div class="insight-progress"><div class="insight-progress-bar" style="width:${xp.progress}%"></div></div>
         </div>
       </div>`;
   }
@@ -53,14 +57,16 @@
   function renderCharts() {
     Charts.destroyAll();
 
-    // 1. Prayer Heatmap (always show last 365 days)
-    const heatData = Analytics.getHeatmapData(365);
-    Charts.createHeatmap('chart-heatmap', heatData, 'Activity History');
+    // 1. Prayer Heatmap
+    const heatDays = currentRange || 365;
+    const heatData = Analytics.getHeatmapData(heatDays);
+    if (document.getElementById('chart-heatmap')) {
+      Charts.createHeatmap('chart-heatmap', heatData, 'Activity History');
+    }
 
     // 2. Prayer Consistency Line
     const prayer = Analytics.getPrayerStats(currentRange);
-    const hasPrayerData = prayer.daily.length > 0;
-    if (hasPrayerData) {
+    if (prayer.daily.length > 0 && document.getElementById('chart-prayer-line')) {
       const labels = prayer.daily.map(d => d.date.slice(5));
       Charts.createLine('chart-prayer-line', labels, [
         { label: 'All Prayers', data: prayer.daily.map(d => Math.round(d.count / 5 * 100)), borderColor: Charts.COLORS.primary, backgroundColor: Charts.COLORS.bg },
@@ -70,19 +76,19 @@
 
     // 3. Deed Distribution Doughnut
     const deeds = Analytics.getDeedStats(currentRange);
-    if (deeds.byCategory.length > 0) {
+    if (deeds.byCategory.length > 0 && document.getElementById('chart-deeds')) {
       Charts.createDoughnut('chart-deeds', deeds.byCategory.map(c => c.category), deeds.byCategory.map(c => c.count), CAT_COLORS.slice(0, deeds.byCategory.length), 'Deed Distribution');
     }
 
     // 4. Streak Timeline
     const streak = Analytics.getStreakTimeline(currentRange);
-    if (streak.length > 0) {
+    if (streak.length > 0 && document.getElementById('chart-streak')) {
       Charts.createBar('chart-streak', streak.map(s => s.month), streak.map(s => s.perfectDays), Charts.COLORS.primary, 'Perfect Days by Month');
     }
 
     // 5. XP Progression
     const xp = Analytics.getXPStats(currentRange);
-    if (xp.daily.length > 0) {
+    if (xp.daily.length > 0 && document.getElementById('chart-xp')) {
       Charts.createLine('chart-xp', xp.daily.map(d => d.date.slice(5)), [
         { label: 'Cumulative XP', data: xp.daily.map(d => d.cumulative), borderColor: Charts.COLORS.accent, backgroundColor: 'rgba(245,158,11,0.1)' }
       ], 'XP Progression');
@@ -90,11 +96,10 @@
 
     // 6. Content Engagement
     const content = Analytics.getContentStats();
-    if (content.length > 0) {
+    if (content.length > 0 && document.getElementById('chart-content')) {
       Charts.createHorizontalBar('chart-content', content.map(c => c.name), content.map(c => c.consumed), Charts.COLORS.secondary, 'Content Consumed');
     }
 
-    rendered = true;
   }
 
   function renderInsights() {
