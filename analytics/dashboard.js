@@ -43,7 +43,10 @@
     </div>`;
   }
 
-  function chartHTML(id, title, height) {
+  function chartHTML(id, title, height, noData) {
+    if (noData) {
+      return `<div class="insight-chart-wrap"><div style="height:${height || 200}px;display:flex;align-items:center;justify-content:center;color:var(--text2);font-size:0.85rem;">No data for this period</div></div>`;
+    }
     return `<div class="insight-chart-wrap"><canvas id="${id}" style="width:100%;height:${height || 200}px;"></canvas></div>`;
   }
 
@@ -56,7 +59,8 @@
 
     // 2. Prayer Consistency Line
     const prayer = Analytics.getPrayerStats(currentRange);
-    if (prayer.daily.length > 0) {
+    const hasPrayerData = prayer.daily.length > 0;
+    if (hasPrayerData) {
       const labels = prayer.daily.map(d => d.date.slice(5));
       Charts.createLine('chart-prayer-line', labels, [
         { label: 'All Prayers', data: prayer.daily.map(d => Math.round(d.count / 5 * 100)), borderColor: Charts.COLORS.primary, backgroundColor: Charts.COLORS.bg },
@@ -102,19 +106,25 @@
       return;
     }
 
+    const prayer = Analytics.getPrayerStats(currentRange);
+    const deeds = Analytics.getDeedStats(currentRange);
+    const streak = Analytics.getStreakTimeline(currentRange);
+    const xp = Analytics.getXPStats(currentRange);
+    const content = Analytics.getContentStats();
+
     el.innerHTML = `
       <div class="insights-dashboard">
         ${summaryCards()}
         ${dateFilter()}
         <div class="insights-charts">
-          ${chartHTML('chart-heatmap', 'Activity History', 140)}
-          ${chartHTML('chart-prayer-line', 'Prayer Consistency', 220)}
+          ${chartHTML('chart-heatmap', 'Activity History', 140, false)}
+          ${chartHTML('chart-prayer-line', 'Prayer Consistency', 220, prayer.daily.length === 0)}
           <div class="chart-row">
-            <div class="chart-half">${chartHTML('chart-deeds', 'Deed Distribution', 250)}</div>
-            <div class="chart-half">${chartHTML('chart-streak', 'Streak Timeline', 250)}</div>
+            <div class="chart-half">${chartHTML('chart-deeds', 'Deed Distribution', 250, deeds.byCategory.length === 0)}</div>
+            <div class="chart-half">${chartHTML('chart-streak', 'Streak Timeline', 250, streak.length === 0)}</div>
           </div>
-          ${chartHTML('chart-xp', 'XP Progression', 220)}
-          ${chartHTML('chart-content', 'Content Engagement', 220)}
+          ${chartHTML('chart-xp', 'XP Progression', 220, xp.daily.length === 0)}
+          ${chartHTML('chart-content', 'Content Engagement', 220, content.length === 0)}
         </div>
       </div>`;
 

@@ -102,83 +102,65 @@
     const map = {};
     data.forEach(d => { map[d.date] = d.value; });
 
-    // Get the date range (last 365 days or whatever data covers)
+    // Get the date range (last 365 days)
     const today = new Date();
     const endDate = new Date(today);
     const startDate = new Date(today);
-    startDate.setDate(startDate.getDate() - 364); // ~52 weeks
+    startDate.setDate(startDate.getDate() - 364);
 
-    // Build weeks array: each week is an array of 7 days [Sun..Sat]
+    // Build weeks array
     const weeks = [];
     let currentWeek = new Array(7).fill(null);
     const d = new Date(startDate);
-
-    // Pad start to align to Sunday
     const startDay = d.getDay();
     for (let i = 0; i < startDay; i++) currentWeek[i] = { date: '', value: 0 };
 
     while (d <= endDate) {
       const dow = d.getDay();
       const dateStr = d.toISOString().slice(0, 10);
-      const val = map[dateStr] || 0;
-      currentWeek[dow] = { date: dateStr, value: val };
-
-      if (dow === 6) { // Saturday = end of week
-        weeks.push(currentWeek);
-        currentWeek = new Array(7).fill(null);
-      }
+      currentWeek[dow] = { date: dateStr, value: map[dateStr] || 0 };
+      if (dow === 6) { weeks.push(currentWeek); currentWeek = new Array(7).fill(null); }
       d.setDate(d.getDate() + 1);
     }
-    // Push remaining week
     if (currentWeek.some(w => w !== null)) {
       while (currentWeek.length < 7) currentWeek.push(null);
       weeks.push(currentWeek);
     }
 
-    // Now render on canvas
+    // Make responsive: calculate cell size based on container width
+    const container = canvas.parentElement;
+    const containerWidth = container ? container.clientWidth - 32 : 600;
+    const labelWidth = 30;
+    const topPadding = 20;
+    const cellGap = 2;
+    const cellSize = Math.max(8, Math.min(14, Math.floor((containerWidth - labelWidth) / weeks.length) - cellGap));
+    const totalWidth = labelWidth + weeks.length * (cellSize + cellGap) + 10;
+    const totalHeight = topPadding + 7 * (cellSize + cellGap) + 6;
+
     const ctx = canvas.getContext('2d');
-    const cellSize = 14;
-    const cellGap = 3;
-    const labelWidth = 36;
-    const topPadding = 24;
-    const bottomPadding = 8;
-
-    const totalWidth = labelWidth + weeks.length * (cellSize + cellGap) + 20;
-    const totalHeight = topPadding + 7 * (cellSize + cellGap) + bottomPadding;
-
-    // Set canvas size
-    canvas.width = totalWidth;
-    canvas.height = totalHeight;
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width = totalWidth * dpr;
+    canvas.height = totalHeight * dpr;
     canvas.style.width = totalWidth + 'px';
     canvas.style.height = totalHeight + 'px';
-
-    // Clear
+    ctx.scale(dpr, dpr);
     ctx.clearRect(0, 0, totalWidth, totalHeight);
 
-    // Color scale (purple/pink like the image)
     const getColor = (val) => {
       if (val === 0) return '#1a1a2e';
-      const colors = [
-        '#2d1b4e',  // 1 - dark purple
-        '#6b3fa0',  // 2 - medium purple
-        '#a855f7',  // 3 - purple
-        '#d946ef',  // 4 - pink
-        '#f472b6'   // 5 - light pink
-      ];
-      return colors[Math.min(val, 5) - 1];
+      return ['#2d1b4e', '#6b3fa0', '#a855f7', '#d946ef', '#f472b6'][Math.min(val, 5) - 1];
     };
 
-    // Draw day labels
-    const dayLabels = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    // Day labels
     ctx.fillStyle = '#94a3b8';
-    ctx.font = '10px sans-serif';
+    ctx.font = '9px sans-serif';
     ctx.textAlign = 'right';
     ctx.textBaseline = 'middle';
-    [1, 3, 5].forEach(i => { // Mon, Wed, Fri
-      ctx.fillText(dayLabels[i], labelWidth - 6, topPadding + i * (cellSize + cellGap) + cellSize / 2);
+    [1, 3, 5].forEach(i => {
+      ctx.fillText(['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'][i], labelWidth - 4, topPadding + i * (cellSize + cellGap) + cellSize / 2);
     });
 
-    // Draw month labels
+    // Month labels
     const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
     ctx.textAlign = 'left';
     ctx.textBaseline = 'bottom';
@@ -197,41 +179,35 @@
     // Draw cells
     weeks.forEach((week, wi) => {
       week.forEach((day, di) => {
-        if (day === null) return;
+        if (!day) return;
         const x = labelWidth + wi * (cellSize + cellGap);
         const y = topPadding + di * (cellSize + cellGap);
-
         ctx.fillStyle = getColor(day.value);
         ctx.beginPath();
-        ctx.roundRect(x, y, cellSize, cellSize, 3);
+        ctx.roundRect(x, y, cellSize, cellSize, 2);
         ctx.fill();
       });
     });
 
-    // Store for tooltip
-    instances[canvasId] = { weeks, cellSize, cellGap, labelWidth, topPadding, canvas };
-
-    // Tooltip on hover
+    // Tooltip
+    canvas.title = '';
     canvas.onmousemove = (e) => {
       const rect = canvas.getBoundingClientRect();
       const mx = e.clientX - rect.left;
       const my = e.clientY - rect.top;
-
       let found = null;
       weeks.forEach((week, wi) => {
         week.forEach((day, di) => {
           if (!day || !day.date) return;
           const x = labelWidth + wi * (cellSize + cellGap);
           const y = topPadding + di * (cellSize + cellGap);
-          if (mx >= x && mx <= x + cellSize && my >= y && my <= y + cellSize) {
-            found = day;
-          }
+          if (mx >= x && mx <= x + cellSize && my >= y && my <= y + cellSize) found = day;
         });
       });
-
       canvas.title = found && found.date ? `${found.date}: ${found.value} prayers` : '';
     };
 
+    instances[canvasId] = { weeks };
     return instances[canvasId];
   }
 

@@ -908,8 +908,7 @@
     </div><div style="display:flex;flex-direction:column;gap:12px;">`;
     MORNING_DHIKR.forEach((item, idx) => { 
         const done = !!S.morningDone[dt][idx]; 
-        h += `<label class="vol-card${done?' done':''}">
-            <input type="checkbox" class="quest-check" style="opacity:0;position:absolute;width:0;height:0;" ${done?'checked':''} onchange="App.toggleMorning(${idx}, ${item.xp})">
+        h += `<div class="vol-card${done?' done':''}" onclick="App.toggleMorning(${idx}, ${item.xp})" style="cursor:pointer;">
             <div class="prayer-check" style="font-size:1.2rem;">${done?'✓':'🌅'}</div>
             <div class="prayer-info">
                 <div style="font-family:'Amiri',serif;font-size:1.3rem;margin-bottom:2px;color:var(--gold);line-height:1.4;">${item.arabic}</div>
@@ -918,7 +917,7 @@
                 <div style="font-size:0.8rem;color:var(--text2);margin-top:4px;">${item.reward}</div>
             </div>
             <div class="prayer-xp">+${item.xp} XP</div>
-        </label>`; 
+        </div>`; 
     });
     document.getElementById('morningArea').innerHTML = h + '</div>';
   }
@@ -945,8 +944,7 @@
     </div><div style="display:flex;flex-direction:column;gap:12px;">`;
     EVENING_DHIKR.forEach((item, idx) => { 
         const done = !!S.eveningDone[dt][idx]; 
-        h += `<label class="vol-card${done?' done':''}">
-            <input type="checkbox" class="quest-check" style="opacity:0;position:absolute;width:0;height:0;" ${done?'checked':''} onchange="App.toggleEvening(${idx}, ${item.xp})">
+        h += `<div class="vol-card${done?' done':''}" onclick="App.toggleEvening(${idx}, ${item.xp})" style="cursor:pointer;">
             <div class="prayer-check" style="font-size:1.2rem;">${done?'✓':'🌆'}</div>
             <div class="prayer-info">
                 <div style="font-family:'Amiri',serif;font-size:1.3rem;margin-bottom:2px;color:var(--gold);line-height:1.4;">${item.arabic}</div>
@@ -955,7 +953,7 @@
                 <div style="font-size:0.8rem;color:var(--text2);margin-top:4px;">${item.reward}</div>
             </div>
             <div class="prayer-xp">+${item.xp} XP</div>
-        </label>`; 
+        </div>`; 
     });
     document.getElementById('eveningArea').innerHTML = h + '</div>';
   }
@@ -994,12 +992,11 @@
         if (t.includes('dhikr') || t.includes('adhkar') || t.includes('istighfar')) icon = '📿';
         if (t.includes('memorize')) icon = '🧠';
         
-        return `<label class="vol-card${d?' done':''}">
-          <input type="checkbox" class="quest-check" style="opacity:0;position:absolute;width:0;height:0;" ${d?'checked':''} onchange="App.toggleQuest('${q.id}','${type}',${q.xp})">
+        return `<div class="vol-card${d?' done':''}" onclick="App.toggleQuest('${q.id}','${type}',${q.xp})" style="cursor:pointer;">
           <div class="prayer-check">${d?'✓':icon}</div>
           <div class="prayer-info"><div class="prayer-name">${q.d}</div></div>
           <div class="prayer-xp">+${q.xp} XP</div>
-        </label>`;
+        </div>`;
       }).join('');
       return html + '</div></details>';
     };
@@ -1105,12 +1102,11 @@
       
       html += challenges.map(c => {
         const d = !!stateDict[c.id];
-        return `<label class="vol-card${d?' done':''}">
-          <input type="checkbox" class="quest-check" style="opacity:0;position:absolute;width:0;height:0;" ${d?'checked':''} onchange="App.completeChallenge('${c.id}',${c.xp},this.checked,'${type}')">
+        return `<div class="vol-card${d?' done':''}" onclick="App.completeChallenge('${c.id}',${c.xp},${!d},'${type}')" style="cursor:pointer;">
           <div class="prayer-check">${d?'✓':c.icon}</div>
           <div class="prayer-info"><div class="prayer-name">${c.d}</div></div>
           <div class="prayer-xp">+${c.xp} XP</div>
-        </label>`;
+        </div>`;
       }).join('') + '</div></details>';
       return html;
     };
