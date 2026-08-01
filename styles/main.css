@@ -461,6 +461,24 @@ body {
 }
 @media (max-width: 600px) { .chart-row { grid-template-columns: 1fr; } .insights-cards { grid-template-columns: repeat(2, 1fr); } }
 
+/* ── Analytics Animations ── */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.insights-cards .insight-card {
+  animation: fadeInUp 0.4s ease both;
+}
+.insights-cards .insight-card:nth-child(1) { animation-delay: 0ms; }
+.insights-cards .insight-card:nth-child(2) { animation-delay: 80ms; }
+.insights-cards .insight-card:nth-child(3) { animation-delay: 160ms; }
+.insights-cards .insight-card:nth-child(4) { animation-delay: 240ms; }
+.insights-charts .insight-chart-wrap,
+.insights-charts .chart-half {
+  animation: fadeInUp 0.4s ease both;
+  animation-delay: 300ms;
+}
+
 /* ── Fireflies ── */
 .firefly {
   position: fixed; width: 4px; height: 4px; border-radius: 50%;
