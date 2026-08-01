@@ -20,7 +20,7 @@ Redesign the Profile tab (5 sub-tabs: Profile, Trophies, Progress, Analytics, Re
 - **Avatar:** Clickable emoji picker — grid of 20-30 preset Islamic-themed emojis (🕋, 🕌, 📿, ⭐, 🕊️, 📖, etc.). Default: 👳. Stored in `S.avatar` (emoji string).
 - **Display name:** Editable via input field or inline edit. Stored in `currentUser`.
 - **Level title:** Gold badge styling with `lvTitle(S.lv)` output
-- **Join date:** "Member since [Month Year]" — derived from first save date or stored in `S.joinDate`
+- **Join date:** "Member since [Month Year]" — stored in `S.joinDate` (set on first save if not present, for backward compatibility)
 
 ### Personal Stats Row
 - 4 compact cards below identity: Total XP · Prayers · Streak · Achievements count
