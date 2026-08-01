@@ -1,0 +1,22 @@
+const VOLUNTARY = [
+  { id:'tahajjud',      name:'Tahajjud (Night Prayer)',       icon:'🌌', xp:80, cat:'Night Prayers' },
+  { id:'witr',          name:'Witr',                          icon:'🌙', xp:45, cat:'Night Prayers' },
+  { id:'tarawih',       name:'Tarawih (Ramadan)',             icon:'🌙', xp:100, cat:'Night Prayers' },
+  { id:'istikhara',     name:'Salatul Istikhara',            icon:'🧭', xp:60, cat:'Occasional Prayers' },
+  { id:'tawbah',        name:'Salatul Tawbah',               icon:'🤲', xp:60, cat:'Occasional Prayers' },
+  { id:'hajah',         name:'Salatul Hajah',                icon:'🙏', xp:50, cat:'Occasional Prayers' },
+  { id:'safar',         name:'Salatul Safar',                icon:'✈️', xp:40, cat:'Occasional Prayers' },
+  { id:'shukr',         name:'Salatul Shukr',                icon:'❤️', xp:45, cat:'Occasional Prayers' },
+  { id:'duha',          name:'Duha (Forenoon)',              icon:'☀️', xp:50, cat:'Other Daily Prayers' },
+  { id:'ishraq',        name:'Ishraq (Sunrise)',             icon:'🌅', xp:55, cat:'Other Daily Prayers' },
+  { id:'awwabin',       name:'Awwabin (Maghrib–Isha)',        icon:'🌆', xp:40, cat:'Other Daily Prayers' },
+  { id:'tasbih',        name:'Salatul Tasbih',               icon:'✨', xp:70, cat:'Other Daily Prayers' },
+  { id:'tahiyatul_masjid', name:'Tahiyatul Masjid',          icon:'🕌', xp:45, cat:'Other Daily Prayers' },
+  { id:'tahiyatul_wudu',   name:'Tahiyatul Wudu',            icon:'💧', xp:40, cat:'Other Daily Prayers' },
+  { id:'janazah',       name:'Janazah (Funeral)',            icon:'🪦', xp:80, cat:'Special Events' },
+  { id:'kusoof',        name:'Kusoof (Solar Eclipse)',       icon:'🌞', xp:70, cat:'Special Events' },
+  { id:'khusoof',       name:'Khusoof (Lunar Eclipse)',      icon:'🌝', xp:70, cat:'Special Events' },
+  { id:'istisqa',       name:'Istisqa (Rain Prayer)',        icon:'🌧️', xp:70, cat:'Special Events' },
+  { id:'eid_fitr',      name:'Eid al-Fitr Prayer',          icon:'🎊', xp:100, cat:'Special Events' },
+  { id:'eid_adha',      name:'Eid al-Adha Prayer',          icon:'🐑', xp:100, cat:'Special Events' }
+];

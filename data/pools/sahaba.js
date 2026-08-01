@@ -1,0 +1,20 @@
+﻿const SAHABA_POOL = [
+  { title:"Abu Bakr as-Siddiq (RA)", desc:"The closest companion and first Caliph. The Prophet ﷺ said: 'If I were to take a khaleel (intimate friend), I would have taken Abu Bakr.'" },
+  { title:"Umar ibn al-Khattab (RA)", desc:"The second Caliph. His conversion strengthened Islam. Known for his justice and firm adherence to truth." },
+  { title:"Uthman ibn Affan (RA)", desc:"The third Caliph. His modesty and generosity were unmatched. He financed the army of hardship and bought the well of Ruma." },
+  { title:"Ali ibn Abi Talib (RA)", desc:"The fourth Caliph, cousin and son-in-law of the Prophet ﷺ. A gate of knowledge, whose bravery was legendary." },
+  { title:"Bilal ibn Rabah (RA)", desc:"The first muezzin of Islam. Endured brutal torture but never abandoned 'Ahad! Ahad!' (One! One!) under Umayyah ibn Khalaf." },
+  { title:"Khadijah bint Khuwaylid (RA)", desc:"The first believer and greatest supporter of the Prophet ﷺ. She comforted him after the first revelation." },
+  { title:"Fatimah az-Zahra (RA)", desc:"The beloved daughter of the Prophet ﷺ and Leader of the Women of Paradise." },
+  { title:"Aisha bint Abi Bakr (RA)", desc:"A profound scholar who narrated thousands of hadiths. The most knowledgeable woman of the Ummah." },
+  { title:"Hamza ibn Abd al-Muttalib (RA)", desc:"The Lion of Allah and Sayyid al-Shuhada (Master of Martyrs). Martyred at Uhud after serving as Islam's greatest warrior." },
+  { title:"Khalid ibn al-Walid (RA)", desc:"The Sword of Allah. Never lost a single battle. Won over 100 battles after accepting Islam." },
+  { title:"Sa'd ibn Abi Waqqas (RA)", desc:"One of the ten promised Paradise. His dua was never rejected by Allah — a distinction given to few." },
+  { title:"Abd ar-Rahman ibn Awf (RA)", desc:"One of the ten promised Paradise. A brilliant merchant who gave his wealth generously for Islam." },
+  { title:"Abu Hurayrah (RA)", desc:"Narrated the most hadiths (~5374). He memorized everything the Prophet ﷺ said due to his extraordinary memory." },
+  { title:"Abdullah ibn Masud (RA)", desc:"The first to recite Quran publicly in Makkah. The Prophet ﷺ said whoever wants to recite it fresh should recite like Ibn Masud." },
+  { title:"Anas ibn Malik (RA)", desc:"Served the Prophet ﷺ for 10 years and never once heard him say 'Why did you do that' or 'Why didn't you do that'." },
+  { title:"Salman al-Farsi (RA)", desc:"Traveled from Persia to Arabia in his search for truth. The Prophet ﷺ said 'Salman is from us, the People of the House'." },
+  { title:"Abu Darda (RA)", desc:"Known for his asceticism, wisdom, and deep insight. A companion who combined deep learning with sincere piety." },
+  { title:"Mu'adh ibn Jabal (RA)", desc:"The Prophet ﷺ said: 'The most knowledgeable in halal and haram is Mu'adh ibn Jabal.' Sent to Yemen as a teacher and judge." }
+];

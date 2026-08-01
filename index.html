@@ -1,0 +1,377 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+  <title>Ibadah Quest</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Amiri:ital,wght@0,400;0,700;1,400&family=Noto+Naskh+Arabic:wght@400;500;600;700&family=Sora:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+
+<!-- INTRO OVERLAY -->
+<div id="introOverlay" style="position:fixed;top:0;left:0;width:100%;height:100%;background:#030712;z-index:99999;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;">
+    <canvas id="introCanvas" style="position:absolute;top:0;left:0;width:100%;height:100%;z-index:0;"></canvas>
+    <div id="introBismillah" style="font-family:'Noto Naskh Arabic','Amiri',serif; font-size:3.5rem; color:#D4AF37; text-shadow:0 0 30px rgba(212,175,55,0.6), 0 0 60px rgba(212,175,55,0.3); letter-spacing:2px; text-align:center; line-height:1.8; animation:bismillahGlow 3s ease-in-out infinite, introFadeUp 1.4s ease-out forwards; opacity:0; position:relative; z-index:1;">بِسْمِ ٱللَّهِ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ</div>
+    <div id="introSub" style="font-family:'Cinzel',serif; font-size:1.2rem; color:#F8FAFC; letter-spacing:4px; text-transform:uppercase; margin-top:20px; opacity:0; position:relative; z-index:1; animation:introFadeUp 1s ease-out 0.6s forwards;">In the Name of Allah, the Most Merciful</div>
+    <button id="introBtn" onclick="window.startJourney()" style="margin-top:50px; padding:15px 40px; font-size:1.1rem; font-family:'Sora',sans-serif; font-weight:700; background:linear-gradient(135deg,#D4AF37,#A16207); color:#000; border:none; border-radius:30px; cursor:pointer; box-shadow:0 10px 30px rgba(212,175,55,0.4); letter-spacing:1px; transition:all 0.3s; opacity:0; position:relative; z-index:1; animation:introFadeUp 1s ease-out 1.2s forwards, btnPulse 2.5s ease-in-out 2.2s infinite;">Begin Journey</button>
+</div>
+
+<div class="toast-overlay" id="toastOverlay" style="display:none;"></div>
+<div class="app">
+  <div class="header">
+    <div class="header-crescent">🌙</div>
+    <h1>Ibadah Quest</h1>
+    <div class="subtitle">Prayer · Deeds · Knowledge · Growth</div>
+    <div class="header-deco"><span>✦&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Submission. Grow. Earn. Ascend.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✦</span></div>
+  </div>
+
+  <div class="level-row">
+    <div class="level-badge">
+      <span class="lv-num" id="lvNum">1</span>
+      <span class="lv-title" id="lvTitle">Seeker</span>
+    </div>
+    <div class="xp-wrap" id="xpWrap">
+      <div class="xp-outer"><div class="xp-inner" id="xpBar" style="width:0%"></div></div>
+      <div class="xp-label" id="xpLabel">0 / 100 XP</div>
+    </div>
+  </div>
+  <div id="bonusArea"></div>
+  <div class="streak-bar">
+    <span class="streak-fire">🔥</span>
+    <div class="streak-info"><h3 id="strDays">0 Day Streak</h3><p id="strMsg">Keep it up!</p></div>
+    <div class="streak-best"><div class="best-num" id="bestStr">0</div><div class="best-label">BEST</div></div>
+  </div>
+
+  <div class="global-search-wrap">
+    <span class="global-search-icon">🔍</span>
+    <input class="global-search" placeholder="Search anything... Quran, Hadith, Scholars, Topics..." oninput="App.globalSearch(this.value)" onfocus="App.globalSearch(this.value)">
+    <div class="global-search-results" id="globalSearchResults"></div>
+  </div>
+
+  <div class="tier-nav-container">
+    <div class="tier1-tabs">
+      <button class="t1-btn active" data-cat="ibadah" onclick="App.switchCategory('ibadah', this)">🕌 Daily</button>
+      <button class="t1-btn" data-cat="ilm" onclick="App.switchCategory('ilm', this)">📚 Knowledge</button>
+      <button class="t1-btn" data-cat="qalb" onclick="App.switchCategory('qalb', this)">🤍 Heart</button>
+      <button class="t1-btn" data-cat="muamalat" onclick="App.switchCategory('muamalat', this)">🌍 Dealings</button>
+      <button class="t1-btn" data-cat="hayat" onclick="App.switchCategory('hayat', this)">🌱 Life</button>
+      <button class="t1-btn" data-cat="tarikh" onclick="App.switchCategory('tarikh', this)">📜 History</button>
+      <button class="t1-btn" data-cat="akhira" onclick="App.switchCategory('akhira', this)">🌌 Hereafter</button>
+      <button class="t1-btn" data-cat="history" onclick="App.switchCategory('history', this)">🏛️ Civilization</button>
+      <button class="t1-btn" data-cat="names_main" onclick="App.switchCategory('names_main', this)">💯 Names</button>
+      <button class="t1-btn" data-cat="profile_main" onclick="App.switchCategory('profile_main', this)">👤 Profile</button>
+    </div>
+    <div class="tier2-scroll"><div class="tier2-tabs" id="tier2Tabs"></div></div>
+  </div>
+
+  <!-- ═══════════════ ALL TAB PANELS ═══════════════ -->
+  <!-- IBADAH GROUP -->
+  <div class="tab-panel active" id="panel-today">
+    <div id="dailyWidgetArea"></div>
+    <div id="tipArea"></div>
+    <div id="prayerArea"></div>
+    <div class="section-title">🌙 Voluntary Prayers</div>
+    <div id="volArea"></div>
+    <div class="section-title">🌟 Extra Good Deeds</div>
+    <div id="deedArea" style="display:flex;flex-direction:column;gap:8px;"></div>
+  </div>
+  <div class="tab-panel" id="panel-timer">
+    <div class="section-title">⏳ Next Prayer Countdown</div>
+    <div id="timerArea" style="text-align:center;font-size:3rem;font-weight:bold;color:var(--gold);margin:30px 0;text-shadow:0 0 20px rgba(201,168,76,0.5);font-family:var(--font-heading);letter-spacing:2px;"></div>
+    <div id="prayerNamesArea" style="text-align:center;color:var(--text2);font-size:1rem;letter-spacing:0.5px;"></div>
+    <div class="section-title">🕐 Prayer Times</div>
+    <div id="prayerTimesArea"></div>
+  </div>
+  <div class="tab-panel" id="panel-quests"><div id="questArea"></div></div>
+  <div class="tab-panel" id="panel-challenges"><div id="challengeArea"></div></div>
+  <div class="tab-panel" id="panel-morning"><div id="morningArea"></div></div>
+  <div class="tab-panel" id="panel-evening"><div id="eveningArea"></div></div>
+  <div class="tab-panel" id="panel-dhikr"><div id="dhikrCounterArea"></div><div id="dhikrArea"></div></div>
+  <div class="tab-panel" id="panel-duas"><div id="duaArea"></div></div>
+  <div class="tab-panel" id="panel-quran"><div id="quranArea"></div></div>
+  <div class="tab-panel" id="panel-wudu"><div id="wuduArea"></div></div>
+  <div class="tab-panel" id="panel-jumuah"><div id="jumuahArea"></div></div>
+  <div class="tab-panel" id="panel-salah"><div id="salahArea"></div></div>
+  <div class="tab-panel" id="panel-fasting"><div id="fastingArea"></div></div>
+
+  <!-- ILM GROUP -->
+  <div class="tab-panel" id="panel-sunnahs"><div id="sunnahArea"></div></div>
+  <div class="tab-panel" id="panel-hadith"><div id="hadithArea"></div></div>
+  <div class="tab-panel" id="panel-tafsir"><div id="tafsirArea"></div></div>
+  <div class="tab-panel" id="panel-names"><div id="namesArea"></div></div>
+  <div class="tab-panel" id="panel-aqeedah"><div id="aqeedahArea"></div></div>
+  <div class="tab-panel" id="panel-arabic"><div id="arabicArea"></div></div>
+  <div class="tab-panel" id="panel-knowledge"><div id="knowledgeArea"></div></div>
+  <div class="tab-panel" id="panel-scholars"><div id="scholarsArea"></div></div>
+  <div class="tab-panel" id="panel-fiqh"><div id="fiqhArea"></div></div>
+  <div class="tab-panel" id="panel-memorization"><div id="memorizationArea"></div></div>
+
+  <!-- QALB GROUP -->
+  <div class="tab-panel" id="panel-heart"><div id="heartArea"></div></div>
+  <div class="tab-panel" id="panel-sins"><div id="sinsArea"></div></div>
+  <div class="tab-panel" id="panel-repentance"><div id="repentanceArea"></div></div>
+  <div class="tab-panel" id="panel-tawakkul"><div id="tawakkulArea"></div></div>
+  <div class="tab-panel" id="panel-ikhlas"><div id="ikhlasArea"></div></div>
+  <div class="tab-panel" id="panel-gratitude"><div id="gratitudeArea"></div></div>
+  <div class="tab-panel" id="panel-patience"><div id="patienceArea"></div></div>
+  <div class="tab-panel" id="panel-manners"><div id="mannersArea"></div></div>
+  <div class="tab-panel" id="panel-zuhd"><div id="zuhdArea"></div></div>
+  <div class="tab-panel" id="panel-inspirations"><div id="inspireArea"></div></div>
+
+  <!-- MU'AMALAT GROUP -->
+  <div class="tab-panel" id="panel-family"><div id="familyArea"></div></div>
+  <div class="tab-panel" id="panel-marriage"><div id="marriageArea"></div></div>
+  <div class="tab-panel" id="panel-charity"><div id="charityArea"></div></div>
+  <div class="tab-panel" id="panel-finance"><div id="financeArea"></div></div>
+  <div class="tab-panel" id="panel-work"><div id="workArea"></div></div>
+  <div class="tab-panel" id="panel-neighbors"><div id="neighborsArea"></div></div>
+  <div class="tab-panel" id="panel-community"><div id="communityArea"></div></div>
+  <div class="tab-panel" id="panel-ummah"><div id="ummahArea"></div></div>
+  <div class="tab-panel" id="panel-punishments"><div id="punishmentsArea"></div></div>
+  <div class="tab-panel" id="panel-dawah"><div id="dawahArea"></div></div>
+
+  <!-- TARIKH GROUP -->
+  <div class="tab-panel" id="panel-seerah"><div id="seerahArea"></div></div>
+  <div class="tab-panel" id="panel-sahaba"><div id="sahabaArea"></div></div>
+  <div class="tab-panel" id="panel-prophets"><div id="prophetsArea"></div></div>
+  <div class="tab-panel" id="panel-women"><div id="womenArea"></div></div>
+  <div class="tab-panel" id="panel-stories"><div id="storiesArea"></div></div>
+  <div class="tab-panel" id="panel-civilisation"><div id="civilisationArea"></div></div>
+  <div class="tab-panel" id="panel-science"><div id="scienceArea"></div></div>
+  <div class="tab-panel" id="panel-battles"><div id="battlesArea"></div></div>
+
+  <!-- AKHIRA GROUP -->
+  <div class="tab-panel" id="panel-akhirah"><div id="akhirahArea"></div></div>
+  <div class="tab-panel" id="panel-jannah"><div id="jannahArea"></div></div>
+  <div class="tab-panel" id="panel-jahannam"><div id="jahannamArea"></div></div>
+  <div class="tab-panel" id="panel-grave"><div id="graveArea"></div></div>
+  <div class="tab-panel" id="panel-signs"><div id="signsArea"></div></div>
+  <div class="tab-panel" id="panel-hajj"><div id="hajjArea"></div></div>
+  <div class="tab-panel" id="panel-dreams"><div id="dreamsArea"></div></div>
+
+  <!-- AMAL / PROFILE GROUP -->
+  <div class="tab-panel" id="panel-trophies">
+    <div class="section-title">🏆 Trophy Cabinet</div>
+    <div class="ach-grid" id="achArea"></div>
+  </div>
+  <div class="tab-panel" id="panel-progress">
+    <div id="statArea"></div>
+    <div class="section-title">📅 Monthly Calendar</div>
+    <div id="calArea"></div>
+  </div>
+  <div class="tab-panel" id="panel-rewards">
+    <div class="section-title">🎁 Rewards Shop</div>
+    <div class="shop-list" id="shopArea"></div>
+  </div>
+  <div class="tab-panel" id="panel-profile"><div id="profileArea"></div></div>
+  <div class="tab-panel" id="panel-leaderboard">
+    <div class="section-title">🏅 Global Leaderboard</div>
+    <div id="leaderboardArea" style="background:var(--card2);border-radius:12px;padding:20px;text-align:center;color:var(--text2);font-size:0.9rem;"><p>Coming Soon...</p></div>
+  </div>
+  <div class="tab-panel" id="panel-stats">
+    <div class="section-title">📈 Advanced Analytics</div>
+    <div id="statsArea"></div>
+  </div>
+
+  <!-- HAYAT GROUP -->
+  <div class="tab-panel" id="panel-health"><div id="healthArea"></div></div>
+  <div class="tab-panel" id="panel-environment"><div id="environmentArea"></div></div>
+  <div class="tab-panel" id="panel-travel"><div id="travelArea"></div></div>
+  <div class="tab-panel" id="panel-parenting"><div id="parentingArea"></div></div>
+  <div class="tab-panel" id="panel-food"><div id="foodArea"></div></div>
+  <div class="tab-panel" id="panel-tibb"><div id="tibbArea"></div></div>
+  <div class="tab-panel" id="panel-youth"><div id="youthArea"></div></div>
+  <div class="tab-panel" id="panel-tech"><div id="techArea"></div></div>
+  <div class="tab-panel" id="panel-education"><div id="educationArea"></div></div>
+
+  <!-- DYNAMIC PANELS (generated from TAB_GROUPS: history, fiqh, spirit, modern, geo, arts, scholars2, lang, society, philosophy) -->
+  <div class="tab-panel" id="panel-umayyads"><div id="umayyadsArea"></div></div>
+  <div class="tab-panel" id="panel-abbasids"><div id="abbasidsArea"></div></div>
+  <div class="tab-panel" id="panel-andalus"><div id="andalusArea"></div></div>
+  <div class="tab-panel" id="panel-ottomans"><div id="ottomansArea"></div></div>
+  <div class="tab-panel" id="panel-mamluks"><div id="mamluksArea"></div></div>
+  <div class="tab-panel" id="panel-seljuks"><div id="seljuksArea"></div></div>
+  <div class="tab-panel" id="panel-fatimids"><div id="fatimidsArea"></div></div>
+  <div class="tab-panel" id="panel-ayyubids"><div id="ayyubidsArea"></div></div>
+  <div class="tab-panel" id="panel-modernhist"><div id="modernhistArea"></div></div>
+  <div class="tab-panel" id="panel-ancientprophets"><div id="ancientprophetsArea"></div></div>
+  <div class="tab-panel" id="panel-purification"><div id="purificationArea"></div></div>
+  <div class="tab-panel" id="panel-salahrules"><div id="salahrulesArea"></div></div>
+  <div class="tab-panel" id="panel-zakatrules"><div id="zakatrulesArea"></div></div>
+  <div class="tab-panel" id="panel-sawmrules"><div id="sawmrulesArea"></div></div>
+  <div class="tab-panel" id="panel-hajjrules"><div id="hajjrulesArea"></div></div>
+  <div class="tab-panel" id="panel-trade"><div id="tradeArea"></div></div>
+  <div class="tab-panel" id="panel-marriagelaws"><div id="marriagelawsArea"></div></div>
+  <div class="tab-panel" id="panel-inheritance"><div id="inheritanceArea"></div></div>
+  <div class="tab-panel" id="panel-halaldiet"><div id="halaldietArea"></div></div>
+  <div class="tab-panel" id="panel-oaths"><div id="oathsArea"></div></div>
+  <div class="tab-panel" id="panel-sufism"><div id="sufismArea"></div></div>
+  <div class="tab-panel" id="panel-tazkiyah"><div id="tazkiyahArea"></div></div>
+  <div class="tab-panel" id="panel-asceticism"><div id="asceticismArea"></div></div>
+  <div class="tab-panel" id="panel-fear"><div id="fearArea"></div></div>
+  <div class="tab-panel" id="panel-hope"><div id="hopeArea"></div></div>
+  <div class="tab-panel" id="panel-loveofallah"><div id="loveofallahArea"></div></div>
+  <div class="tab-panel" id="panel-sincerity"><div id="sincerityArea"></div></div>
+  <div class="tab-panel" id="panel-contentment"><div id="contentmentArea"></div></div>
+  <div class="tab-panel" id="panel-reflection"><div id="reflectionArea"></div></div>
+  <div class="tab-panel" id="panel-technology"><div id="technologyArea"></div></div>
+  <div class="tab-panel" id="panel-socialmedia"><div id="socialmediaArea"></div></div>
+  <div class="tab-panel" id="panel-ethics"><div id="ethicsArea"></div></div>
+  <div class="tab-panel" id="panel-bioethics"><div id="bioethicsArea"></div></div>
+  <div class="tab-panel" id="panel-modfinance"><div id="modfinanceArea"></div></div>
+  <div class="tab-panel" id="panel-politics"><div id="politicsArea"></div></div>
+  <div class="tab-panel" id="panel-green"><div id="greenArea"></div></div>
+  <div class="tab-panel" id="panel-mentalhealth"><div id="mentalhealthArea"></div></div>
+  <div class="tab-panel" id="panel-mecca"><div id="meccaArea"></div></div>
+  <div class="tab-panel" id="panel-medina"><div id="medinaArea"></div></div>
+  <div class="tab-panel" id="panel-jerusalem"><div id="jerusalemArea"></div></div>
+  <div class="tab-panel" id="panel-damascus"><div id="damascusArea"></div></div>
+  <div class="tab-panel" id="panel-baghdad"><div id="baghdadArea"></div></div>
+  <div class="tab-panel" id="panel-cairo"><div id="cairoArea"></div></div>
+  <div class="tab-panel" id="panel-cordoba"><div id="cordobaArea"></div></div>
+  <div class="tab-panel" id="panel-istanbul"><div id="istanbulArea"></div></div>
+  <div class="tab-panel" id="panel-bukhara"><div id="bukharaArea"></div></div>
+  <div class="tab-panel" id="panel-samarkand"><div id="samarkandArea"></div></div>
+  <div class="tab-panel" id="panel-calligraphy"><div id="calligraphyArea"></div></div>
+  <div class="tab-panel" id="panel-architecture"><div id="architectureArea"></div></div>
+  <div class="tab-panel" id="panel-geometry"><div id="geometryArea"></div></div>
+  <div class="tab-panel" id="panel-poetryart"><div id="poetryartArea"></div></div>
+  <div class="tab-panel" id="panel-literature"><div id="literatureArea"></div></div>
+  <div class="tab-panel" id="panel-nasheeds"><div id="nasheedsArea"></div></div>
+  <div class="tab-panel" id="panel-illumination"><div id="illuminationArea"></div></div>
+  <div class="tab-panel" id="panel-textiles"><div id="textilesArea"></div></div>
+  <div class="tab-panel" id="panel-ceramics"><div id="ceramicsArea"></div></div>
+  <div class="tab-panel" id="panel-woodwork"><div id="woodworkArea"></div></div>
+  <div class="tab-panel" id="panel-abuhanifa"><div id="abuhanifaArea"></div></div>
+  <div class="tab-panel" id="panel-malik"><div id="malikArea"></div></div>
+  <div class="tab-panel" id="panel-shafii"><div id="shafiiArea"></div></div>
+  <div class="tab-panel" id="panel-ahmad"><div id="ahmadArea"></div></div>
+  <div class="tab-panel" id="panel-alghazali"><div id="alghazaliArea"></div></div>
+  <div class="tab-panel" id="panel-ibntaymiyyah"><div id="ibntaymiyyahArea"></div></div>
+  <div class="tab-panel" id="panel-ibnkhaldun"><div id="ibnkhaldunArea"></div></div>
+  <div class="tab-panel" id="panel-ibnrushd"><div id="ibnrushdArea"></div></div>
+  <div class="tab-panel" id="panel-ibnsina"><div id="ibnsinaArea"></div></div>
+  <div class="tab-panel" id="panel-alkhwarizmi"><div id="alkhwarizmiArea"></div></div>
+  <div class="tab-panel" id="panel-arabicgrammar"><div id="arabicgrammarArea"></div></div>
+  <div class="tab-panel" id="panel-vocab"><div id="vocabArea"></div></div>
+  <div class="tab-panel" id="panel-rhetoric"><div id="rhetoricArea"></div></div>
+  <div class="tab-panel" id="panel-morphology"><div id="morphologyArea"></div></div>
+  <div class="tab-panel" id="panel-pronunciation"><div id="pronunciationArea"></div></div>
+  <div class="tab-panel" id="panel-poetry"><div id="poetryArea"></div></div>
+  <div class="tab-panel" id="panel-proverbs"><div id="proverbsArea"></div></div>
+  <div class="tab-panel" id="panel-etymology"><div id="etymologyArea"></div></div>
+  <div class="tab-panel" id="panel-dialects"><div id="dialectsArea"></div></div>
+  <div class="tab-panel" id="panel-scripts"><div id="scriptsArea"></div></div>
+  <div class="tab-panel" id="panel-brotherhood"><div id="brotherhoodArea"></div></div>
+  <div class="tab-panel" id="panel-sisterhood"><div id="sisterhoodArea"></div></div>
+  <div class="tab-panel" id="panel-neighbors2"><div id="neighbors2Area"></div></div>
+  <div class="tab-panel" id="panel-orphans2"><div id="orphans2Area"></div></div>
+  <div class="tab-panel" id="panel-elderly"><div id="elderlyArea"></div></div>
+  <div class="tab-panel" id="panel-disabled"><div id="disabledArea"></div></div>
+  <div class="tab-panel" id="panel-antiracism"><div id="antiracismArea"></div></div>
+  <div class="tab-panel" id="panel-poverty"><div id="povertyArea"></div></div>
+  <div class="tab-panel" id="panel-charityproj"><div id="charityprojArea"></div></div>
+  <div class="tab-panel" id="panel-volunteering"><div id="volunteeringArea"></div></div>
+  <div class="tab-panel" id="panel-epistemology"><div id="epistemologyArea"></div></div>
+  <div class="tab-panel" id="panel-ontology"><div id="ontologyArea"></div></div>
+  <div class="tab-panel" id="panel-ethicsphil"><div id="ethicsphilArea"></div></div>
+  <div class="tab-panel" id="panel-logic"><div id="logicArea"></div></div>
+  <div class="tab-panel" id="panel-kalam"><div id="kalamArea"></div></div>
+  <div class="tab-panel" id="panel-reason"><div id="reasonArea"></div></div>
+  <div class="tab-panel" id="panel-freewill"><div id="freewillArea"></div></div>
+  <div class="tab-panel" id="panel-problemofevil"><div id="problemofevilArea"></div></div>
+  <div class="tab-panel" id="panel-prophethood"><div id="prophethoodArea"></div></div>
+  <div class="tab-panel" id="panel-existence"><div id="existenceArea"></div></div>
+</div>
+
+<div style="text-align:center; padding:30px 20px 10px; color:var(--text2); font-size:0.75rem; letter-spacing:0.5px; opacity:0.6;">
+  Copyright &copy; 2026 Md. Mahin Ahmed. All rights reserved.
+</div>
+
+<!-- Core Data Files (must load in dependency order) -->
+<script src="data/prayers.js?v=3"></script>
+<script src="data/voluntary.js?v=3"></script>
+<script src="data/deeds.js?v=3"></script>
+<script src="data/tips-details.js?v=3"></script>
+<script src="data/shop.js?v=3"></script>
+<script src="data/levels.js?v=3"></script>
+<script src="data/streak-msgs.js?v=3"></script>
+<script src="data/quests.js?v=3"></script>
+<script src="data/achievements.js?v=3"></script>
+<script src="data/morning-evening.js?v=3"></script>
+<script src="data/dhikr-pool.js?v=3"></script>
+<script src="data/tab-groups.js?v=3"></script>
+
+<!-- Content Pools (extracted from content-pools.js) -->
+<script src="data/pools/quran-meta.js?v=3"></script>
+<script src="data/pools/quran-verses.js?v=3"></script>
+<script src="data/pools/helpers.js?v=3"></script>
+<script src="data/pools/dua.js?v=3"></script>
+<script src="data/pools/sunnah.js?v=3"></script>
+<script src="data/pools/dhikr.js?v=3"></script>
+<script src="data/pools/stories.js?v=3"></script>
+<script src="data/pools/inspirations.js?v=3"></script>
+<script src="data/pools/names.js?v=3"></script>
+<script src="data/pools/sins.js?v=3"></script>
+<script src="data/pools/punishments.js?v=3"></script>
+<script src="data/pools/repentance.js?v=3"></script>
+<script src="data/pools/sahaba.js?v=3"></script>
+<script src="data/pools/seerah.js?v=3"></script>
+<script src="data/pools/tafsir.js?v=3"></script>
+<script src="data/pools/manners.js?v=3"></script>
+<script src="data/pools/aqeedah.js?v=3"></script>
+<script src="data/pools/family.js?v=3"></script>
+<script src="data/pools/health.js?v=3"></script>
+<script src="data/pools/finance.js?v=3"></script>
+<script src="data/pools/ummah.js?v=3"></script>
+<script src="data/pools/hajj.js?v=3"></script>
+<script src="data/pools/akhirah.js?v=3"></script>
+<script src="data/pools/prophets.js?v=3"></script>
+<script src="data/pools/women.js?v=3"></script>
+<script src="data/pools/knowledge.js?v=3"></script>
+<script src="data/pools/heart.js?v=3"></script>
+<script src="data/pools/jumuah.js?v=3"></script>
+<script src="data/pools/marriage.js?v=3"></script>
+<script src="data/pools/science.js?v=3"></script>
+<script src="data/pools/wudu.js?v=3"></script>
+<script src="data/pools/scholars.js?v=3"></script>
+<script src="data/pools/patience.js?v=3"></script>
+<script src="data/pools/work.js?v=3"></script>
+<script src="data/pools/community.js?v=3"></script>
+<script src="data/pools/environment.js?v=3"></script>
+<script src="data/pools/travel.js?v=3"></script>
+<script src="data/pools/fiqh.js?v=3"></script>
+<script src="data/pools/arabic.js?v=3"></script>
+<script src="data/pools/tawakkul.js?v=3"></script>
+<script src="data/pools/ikhlas.js?v=3"></script>
+<script src="data/pools/zuhd.js?v=3"></script>
+<script src="data/pools/dawah.js?v=3"></script>
+<script src="data/pools/civilisation.js?v=3"></script>
+<script src="data/pools/battles.js?v=3"></script>
+<script src="data/pools/jannah.js?v=3"></script>
+<script src="data/pools/jahannam.js?v=3"></script>
+<script src="data/pools/grave.js?v=3"></script>
+<script src="data/pools/signs.js?v=3"></script>
+<script src="data/pools/dreams.js?v=3"></script>
+<script src="data/pools/parenting.js?v=3"></script>
+<script src="data/pools/food.js?v=3"></script>
+<script src="data/pools/tibb.js?v=3"></script>
+<script src="data/pools/youth.js?v=3"></script>
+<script src="data/pools/tech.js?v=3"></script>
+<script src="data/pools/hadiths.js?v=3"></script>
+<script src="data/pools/neighbors.js?v=3"></script>
+
+<!-- State -->
+<script src="state/state.js?v=2"></script>
+
+<!-- Render engine -->
+<script src="render/render.js?v=2"></script>
+
+<!-- Actions (core logic, navigation, init, window.App) -->
+<script src="core/actions.js?v=3"></script>
+
+</body>
+</html>
