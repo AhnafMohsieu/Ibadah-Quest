@@ -927,7 +927,7 @@
     const w = !!S.morningDone[dt][idx];
     S.morningDone[dt][idx] = !w; 
     if(xp){
-      if(!w) { S.xp+=xp; playSound('pop'); }
+      if(!w) { S.xp+=xp; window.playSound('pop'); }
       else S.xp=Math.max(0, S.xp-xp);
       S.lv=lvFrom(S.xp);
     }
@@ -964,7 +964,7 @@
     const w = !!S.eveningDone[dt][idx];
     S.eveningDone[dt][idx] = !w; 
     if(xp){
-      if(!w) { S.xp+=xp; playSound('pop'); }
+      if(!w) { S.xp+=xp; window.playSound('pop'); }
       else S.xp=Math.max(0, S.xp-xp);
       S.lv=lvFrom(S.xp);
     }
@@ -1381,16 +1381,6 @@
   window.playSurah = playSurah;
   window.stopSurah = stopSurah;
   window.setQuranReciter = setQuranReciter;
-  window.renderDynamic = renderDynamic;
-  window.renderAll = renderAll;
-  window.renderQ = renderQ;
-  window.renderTip = renderTip;
-  window.renderDhikrCounter = renderDhikrCounter;
-  window.renderDailyWidget = renderDailyWidget;
-  window.initCalView = initCalView;
-  window.calPrevMonth = calPrevMonth;
-  window.calNextMonth = calNextMonth;
-  window.calGoToday = calGoToday;
   window.globalSearch = globalSearch;
   window.executeSearch = executeSearch;
 

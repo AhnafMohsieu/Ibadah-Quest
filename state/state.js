@@ -50,7 +50,7 @@
   function today(d = new Date()) { return d.getFullYear() + '-' + (d.getMonth()+1).toString().padStart(2,'0') + '-' + d.getDate().toString().padStart(2,'0'); }
   function tlog() { const t = today(); if (!S.log[t]) S.log[t] = {p:{},d:{},v:{}}; return S.log[t]; }
   function isFri() { return new Date().getDay() === 5; }
-  function xpFor(lv) { if (lv <= 1) return 0; return Math.floor(450 * (Math.pow(1.30, lv-1) - 1)); }
+  function xpFor(lv) { if (lv <= 1) return 0; return Math.floor(100 * Math.pow(lv, 1.5)); }
   function lvFrom(xp) { let lv = 1; while (xp >= xpFor(lv+1)) lv++; return lv; }
   function lvTitle(lv) { for (const lt of LEVELS) if (lv <= lt.m) return lt.t; return 'Legend'; }
   function ws(d = new Date()) { const day = d.getDay(); const diff = d.getDate() - day + (day===0?-6:1); const m = new Date(d); m.setDate(diff); return today(m); }

@@ -1,7 +1,7 @@
 ﻿(function() {
   // ═══════════════════════════════════════════════════════
   function toggleP(id) { const l=tlog(); const w=!!l.p[id]; l.p[id]=!w; const pr=PRAYERS.find(x=>x.id===id); if(!pr) return; let xp=pr.xp; if(isFri()&&id==='dhuhr'&&pr.fri) xp=pr.fri.xp; if(S.ab&&S.ab.exp>=today()) xp*=2; if(!w){ S.tp++; S.xp+=xp; if(isFri()&&id==='dhuhr') S.tj=(S.tj||0)+1; playSound('pop'); } else { S.tp=Math.max(0,S.tp-1); S.xp=Math.max(0,S.xp-xp); if(isFri()&&id==='dhuhr') S.tj=Math.max(0,(S.tj||0)-1); } S.lv=lvFrom(S.xp); recalc(); checkQ(); checkA(); saveState(); renderDynamic(); }
-  function toggleV(id) { const l=tlog(); if(!l.v) l.v={}; const w=!!l.v[id]; l.v[id]=!w; const vp=VOLUNTARY.find(x=>x.id===id); let xp=vp.xp; if(S.ab&&S.ab.exp>=today()) xp*=2; if(!w){ S.vc[id]=(S.vc[id]||0)+1; S.xp+=xp; playSound('pop'); } else { S.vc[id]=Math.max(0,(S.vc[id]||0)-1); S.xp=Math.max(0,S.xp-xp); } S.lv=lvFrom(S.xp); checkQ(); checkA(); saveState(); renderDynamic(); }
+  function toggleV(id) { const l=tlog(); if(!l.v) l.v={}; const w=!!l.v[id]; l.v[id]=!w; const vp=VOLUNTARY.find(x=>x.id===id); if(!vp) return; let xp=vp.xp; if(S.ab&&S.ab.exp>=today()) xp*=2; if(!w){ S.vc[id]=(S.vc[id]||0)+1; S.xp+=xp; playSound('pop'); } else { S.vc[id]=Math.max(0,(S.vc[id]||0)-1); S.xp=Math.max(0,S.xp-xp); } S.lv=lvFrom(S.xp); checkQ(); checkA(); saveState(); renderDynamic(); }
   function toggleD(id) { const l=tlog(); const w=!!l.d[id]; l.d[id]=!w; const de=DEEDS.find(x=>x.id===id); if(!de) return; let xp=de.xp; if(S.ab&&S.ab.exp>=today()) xp*=2; if(!w){ S.td[id]=(S.td[id]||0)+1; S.xp+=xp; playSound('pop'); } else { S.td[id]=Math.max(0,(S.td[id]||0)-1); S.xp=Math.max(0,S.xp-xp); } S.lv=lvFrom(S.xp); recalc(); checkQ(); checkA(); saveState(); renderDynamic(); }
   function buy(id) { const r=SHOP.find(x=>x.id===id); if(!r||S.ur[id]) return; if(S.xp<r.cost){ toast('😔','Not enough XP'); return; } S.xp-=r.cost; S.ur[id]=true; if(r.t==='boost') S.ab={exp:today(new Date(Date.now()+86400000))}; if(r.t==='freeze') S.sfu=true; if(r.t==='xp') S.xp+=r.v||0; if(r.t==='reroll'){ genDQ(); toast('🎲','Quests rerolled!'); } else toast('🎁','Purchased!'); S.lv=lvFrom(S.xp); saveState(); renderAll(); checkA(); }
   function checkA() { 
@@ -26,8 +26,9 @@
     if(ms>0) ov._t=setTimeout(()=>{ ov.classList.remove('show'); setTimeout(()=>{ ov.style.display='none'; ov.innerHTML=''; },300); ov.style.pointerEvents='none'; },ms);
     ov.onclick=()=>{ ov.classList.remove('show'); setTimeout(()=>{ ov.style.display='none'; ov.innerHTML=''; },300); ov.style.pointerEvents='none'; if(ov._t) clearTimeout(ov._t); };
   }
+  let _audioCtx = null;
   function playSound(type) {
-    try { const AC=window.AudioContext||window.webkitAudioContext; if(!AC) return; const ctx=new AC(); const osc=ctx.createOscillator(); const gain=ctx.createGain(); osc.connect(gain); gain.connect(ctx.destination); if(type==='pop'){ osc.type='sine'; osc.frequency.setValueAtTime(880,ctx.currentTime); osc.frequency.exponentialRampToValueAtTime(110,ctx.currentTime+0.1); gain.gain.setValueAtTime(0.5,ctx.currentTime); gain.gain.exponentialRampToValueAtTime(0.01,ctx.currentTime+0.1); osc.start(ctx.currentTime); osc.stop(ctx.currentTime+0.1); } else if(type==='chime'){ osc.type='triangle'; osc.frequency.setValueAtTime(523.25,ctx.currentTime); osc.frequency.exponentialRampToValueAtTime(1046.50,ctx.currentTime+0.3); gain.gain.setValueAtTime(0.3,ctx.currentTime); gain.gain.exponentialRampToValueAtTime(0.01,ctx.currentTime+0.8); osc.start(ctx.currentTime); osc.stop(ctx.currentTime+0.8); } } catch(e){}
+    try { const AC=window.AudioContext||window.webkitAudioContext; if(!AC) return; if(!_audioCtx) _audioCtx=new AC(); const ctx=_audioCtx; const osc=ctx.createOscillator(); const gain=ctx.createGain(); osc.connect(gain); gain.connect(ctx.destination); if(type==='pop'){ osc.type='sine'; osc.frequency.setValueAtTime(880,ctx.currentTime); osc.frequency.exponentialRampToValueAtTime(110,ctx.currentTime+0.1); gain.gain.setValueAtTime(0.5,ctx.currentTime); gain.gain.exponentialRampToValueAtTime(0.01,ctx.currentTime+0.1); osc.start(ctx.currentTime); osc.stop(ctx.currentTime+0.1); } else if(type==='chime'){ osc.type='triangle'; osc.frequency.setValueAtTime(523.25,ctx.currentTime); osc.frequency.exponentialRampToValueAtTime(1046.50,ctx.currentTime+0.3); gain.gain.setValueAtTime(0.3,ctx.currentTime); gain.gain.exponentialRampToValueAtTime(0.01,ctx.currentTime+0.8); osc.start(ctx.currentTime); osc.stop(ctx.currentTime+0.8); } } catch(e){}
   }
   function genDQ() { const t=today(); if(S.qd===t&&S.dq.length) return; const l=tlog(); S.dq=[...DQUESTS].sort(()=>Math.random()-0.5).slice(0,4).map(q=>{ const o=DQUESTS.find(x=>x.id===q.id); return {...q, done:!!(o&&o.c(S,l))}; }); S.qd=t; }
   function genWQ() { const w=ws(); if(S.wqd===w&&S.wq.length) return; S.wq=[...WQUESTS].sort(()=>Math.random()-0.5).slice(0,3).map(q=>{ const o=WQUESTS.find(x=>x.id===q.id); return {...q, done:!!(o&&o.c(S))}; }); S.wqd=w; }
@@ -2144,6 +2145,7 @@ Object.keys(NEW_POOLS).forEach(k => {
       calPrevMonth, calNextMonth, calGoToday
     };
     window.checkA = checkA;
+    window.playSound = playSound;
     console.log('✅ Ibadah Quest initialized. window.App is set.');
   }
 
