@@ -137,12 +137,12 @@ body {
 .card-grid .card-item.done .card-icon { opacity: 0.7; }
 
 /* ── Shared Card Styles ── */
-.prayer-card, .vol-card, .deed-card, .content-card, .quest-row, .ach-card, .shop-card {
+.vol-card, .deed-card, .content-card, .quest-row, .ach-card, .shop-card {
   background: var(--card2); border-radius: var(--radius-sm); padding: 20px 22px; display: flex; align-items: center; gap: 16px;
   border: 1px solid var(--border); transition: all 0.3s; cursor: pointer; margin-bottom: 12px;
 }
-.prayer-card:hover, .vol-card:hover, .quest-row:hover, .shop-card:hover { transform: translateY(-2px); border-color: rgba(255,255,255,0.15); box-shadow: var(--shadow); background: #1b272f; }
-.prayer-card.done, .vol-card.done, .deed-card.done { border-color: rgba(16, 185, 129, 0.3); background: rgba(16,185,129,0.05); }
+.vol-card:hover, .quest-row:hover, .shop-card:hover { transform: translateY(-2px); border-color: rgba(255,255,255,0.15); box-shadow: var(--shadow); background: #1b272f; }
+.vol-card.done, .deed-card.done { border-color: rgba(16, 185, 129, 0.3); background: rgba(16,185,129,0.05); }
 
 .prayer-check { width: 42px; height: 42px; border-radius: 50%; border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 1.1rem; transition: all 0.3s; background: rgba(0,0,0,0.2); flex-shrink: 0; }
 .prayer-card.done .prayer-check, .vol-card.done .prayer-check { background: var(--green); border-color: var(--green); color: white; }
@@ -161,7 +161,6 @@ body {
 
 /* ── Content Cards ── */
 .content-card { flex-direction: column; align-items: flex-start; gap: 14px; cursor: default; padding: 22px; }
-.content-category { font-size: 0.68rem; color: var(--teal); text-transform: uppercase; letter-spacing: 2px; font-weight: 600; }
 .content-arabic { font-family: var(--font-arabic); font-size: 1.7rem; line-height: 2.2; color: #FFF; direction: rtl; text-align: right; width: 100%; opacity: 0.9; }
 .content-english { font-size: 0.95rem; line-height: 1.7; color: var(--text2); font-weight: 400; }
 
@@ -258,25 +257,6 @@ body {
 .cat-details[open] summary::before { transform: rotate(90deg); }
 .cat-details[open] summary { border-bottom: 1px solid var(--border); background: rgba(0,0,0,0.1); }
 
-/* ── Category Badges ── */
-.cat-badge { display: inline-block; padding: 4px 10px; border-radius: 10px; font-size: 0.62rem; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; margin-right: 8px; border: 1px solid transparent; }
-.cat-badge.teal { background: rgba(6,182,212,0.1); color: var(--teal); border-color: rgba(6,182,212,0.2); }
-.cat-badge.gold { background: rgba(212,175,55,0.1); color: var(--gold); border-color: rgba(212,175,55,0.2); }
-.cat-badge.green { background: rgba(16,185,129,0.1); color: var(--green); border-color: rgba(16,185,129,0.2); }
-.cat-badge.purple { background: rgba(139,92,246,0.1); color: var(--purple); border-color: rgba(139,92,246,0.2); }
-
-/* ── Progress Ring ── */
-.prog-ring { display: inline-flex; align-items: center; justify-content: center; width: 60px; height: 60px; border-radius: 50%; background: conic-gradient(var(--gold) var(--pct,0%), var(--border) 0%); }
-.prog-ring-inner { width: 50px; height: 50px; background: var(--card2); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.72rem; font-weight: 600; color: #FFF; }
-
-/* ── Panel Tabs ── */
-.panel-tabs { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
-.panel-tab-btn { background: transparent; border: 1px solid var(--border); color: var(--text2); padding: 8px 16px; border-radius: 14px; font-size: 0.78rem; font-weight: 500; cursor: pointer; transition: all 0.2s; letter-spacing: 0.2px; }
-.panel-tab-btn:hover { background: rgba(255,255,255,0.03); color: var(--text); }
-.panel-tab-btn.active { background: rgba(212,175,55,0.1); color: var(--gold); border-color: rgba(212,175,55,0.3); }
-.panel-tab-content { display: none; animation: fadeIn 0.3s ease; }
-.panel-tab-content.active { display: block; }
-
 /* ── Dhikr Counter ── */
 .dhikr-counter-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 32px; text-align: center; margin-bottom: 16px; box-shadow: var(--shadow); }
 .dhikr-counter-arabic { font-family: var(--font-arabic); font-size: 2.2rem; color: #FFF; margin-bottom: 12px; opacity: 0.9; }
@@ -366,12 +346,6 @@ body {
 .daily-widget-title { font-family:'Noto Naskh Arabic','Amiri',serif; font-size:1.05rem; color:var(--gold-light); margin-bottom:10px; font-weight:700; letter-spacing:0.3px; }
 .daily-widget-body { font-size:0.88rem; color:var(--text); line-height:1.65; }
 .daily-widget-sub { font-size:0.75rem; color:var(--text2); margin-top:8px; font-style:italic; }
-
-/* ── Onboarding Tips ── */
-.onboard-tip { background:rgba(212,175,55,0.06); border:1px solid rgba(212,175,55,0.15); border-radius:12px; padding:14px 16px; margin-bottom:12px; display:flex; align-items:flex-start; gap:10px; }
-.onboard-tip-icon { font-size:1.3rem; flex-shrink:0; margin-top:2px; }
-.onboard-tip-text { font-size:0.82rem; color:var(--text); line-height:1.55; }
-.onboard-tip-text strong { color:var(--gold-light); }
 
 /* ── Intro Overlay ── */
 @keyframes introFadeUp {
