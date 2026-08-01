@@ -1216,23 +1216,13 @@
     document.getElementById('profileArea').innerHTML = h;
   }
   function renderStats() {
-    const el = document.getElementById('statsArea');
-    if (!el) return;
-    const total_deeds = Object.values(S.td).reduce((a,b)=>a+b,0);
-    const vol_prayers = Object.values(S.vc||{}).reduce((a,b)=>a+b,0);
-    el.innerHTML = `
-      <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px;">
-        <div class="stat-card"><div class="stat-num">${S.tp}</div><div>Total Prayers</div></div>
-        <div class="stat-card"><div class="stat-num">${S.pd}</div><div>Perfect Days</div></div>
-        <div class="stat-card"><div class="stat-num">${S.bs}</div><div>Best Streak</div></div>
-        <div class="stat-card"><div class="stat-num">${S.tq||0}</div><div>Quests Done</div></div>
-        <div class="stat-card"><div class="stat-num">${total_deeds}</div><div>Total Deeds</div></div>
-        <div class="stat-card"><div class="stat-num">${vol_prayers}</div><div>Vol. Prayers</div></div>
-        <div class="stat-card"><div class="stat-num">${Object.values(S.gratitudeLog||{}).flat().length}</div><div>Gratitude Entries</div></div>
-        <div class="stat-card"><div class="stat-num">${S.memorized}</div><div>Surahs Memorized</div></div>
-        <div class="stat-card"><div class="stat-num">${Object.keys(S.fastingDays||{}).filter(d=>S.fastingDays[d]).length}</div><div>Total Fasting Days</div></div>
-        <div class="stat-card"><div class="stat-num">${Object.keys(S.ua||{}).length}</div><div>Trophies</div></div>
-      </div>`;
+    if (window.Dashboard && typeof Dashboard.renderInsights === 'function') {
+      Dashboard.renderInsights();
+    } else {
+      const el = document.getElementById('statsArea');
+      if (!el) return;
+      el.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text2);">Loading analytics...</div>';
+    }
   }
   function renderTimer() {
     if (window.timerInt) clearInterval(window.timerInt);
