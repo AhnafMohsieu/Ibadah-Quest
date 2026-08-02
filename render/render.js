@@ -1595,6 +1595,8 @@
   window.playQuranVerse = playQuranVerse;
   window.playSurah = playSurah;
   window.stopSurah = stopSurah;
+  window.playJuz = playJuz;
+  window.updateJuzButton = updateJuzButton;
   window.setQuranReciter = setQuranReciter;
   window.globalSearch = globalSearch;
   window.executeSearch = executeSearch;
