@@ -340,7 +340,36 @@ Keep `data/pools/quran-meta.js?v=3`.
 - [ ] **Step 3: Verify removal + no dangling references**
 
 Run: `Select-String -Path index.html -Pattern "quran-verses|data/pools/hadiths|hadith-collections"`
-Expected: only `data/hadith-collections` references remaining are in `core/actions.js` loader + `render/render.js` guard + `helpers.js`/`analytics.js` typeof guards (all safe). Confirm no other file does an eager top-level `QURAN_POOL.filter`/`.forEach` outside guarded functions: `Select-String -Path render\render.js,core\actions.js,data\pools\helpers.js,analytics\*.js -Pattern "QURAN_POOL|HADITHS\b"` — every hit must be inside a function or guarded by `typeof`/try-catch (refreshContent now `(pool||[])`-guarded, renderStatic try/catch, helpers/analytics typeof-guarded).
+Expected: only `data/hadith-collections` references remaining are in `core/actions.js` loader + `render/render.js` guard + `helpers.js`/`analytics.js` typeof guards (all safe). Confirm no other file does an eager top-level `QURAN_POOL.filter`/`.forEach` outside guarded functions: `Select-String -Path render\render.js,core\actions.js,data\pools\helpers.js,analytics\*.js -Pattern "QURAN_POOL|HADITHS\b"` — every hit must be inside a function or guarded by `typeof`/try-catch.
+
+- [ ] **Step 4: Guard the array literals that reference the removed pools**
+
+With the script tags gone, `QURAN_POOL` and `HADITHS` are truly undeclared identifiers. Any bare reference throws `ReferenceError` at evaluation time — including array literals. Two sites in `core/actions.js` must be guarded (the Task 2 `(pool||[])` loop guard does NOT protect the literal itself):
+
+1. In `refreshContent()` (~line 63-64), change the two entries in the `pools` array:
+
+```js
+['quranIdx', (typeof QURAN_POOL !== 'undefined') ? QURAN_POOL : null],
+```
+and
+```js
+['hadithIdx', (typeof HADITHS !== 'undefined') ? HADITHS : null],
+```
+
+2. In `manualRefreshContent()` (~line 88), in the `allPools` array, change the `QURAN_POOL` and `HADITHS` elements to the same `(typeof X !== 'undefined') ? X : null` form. (`allPools[i]?.length||5` already tolerates null/undefined.)
+
+- [ ] **Step 5: Strengthen the Task 2 stub test to catch undeclared identifiers**
+
+In `C:\Users\Mahin\AppData\Local\Temp\opencode\test-refresh-guard.js`, change the stub loop so `QURAN_POOL` and `HADITHS` are NOT defined as globals at all (truly undeclared, simulating the browser post-removal state):
+
+```js
+for (const n of names) {
+  if (n === 'QURAN_POOL' || n === 'HADITHS') continue; // leave truly undeclared
+  global[n] = [0, 1, 2, 3, 4, 5];
+}
+```
+
+Run: `node C:\Users\Mahin\AppData\Local\Temp\opencode\test-refresh-guard.js` — must still print `PASS - refreshContent ran without throwing; S.quranIdx = 0 , S.hadithIdx = 0`. (Before Step 4's fix this throws `ReferenceError: QURAN_POOL is not defined`.)
 
 ---
 
