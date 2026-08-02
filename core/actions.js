@@ -57,11 +57,29 @@
   }
   function toggleQuest(id,type,xp){ let arr; if(type==='daily') arr=S.dq; else if(type==='weekly') arr=S.wq; else if(type==='monthly') arr=S.mq; else if(type==='yearly') arr=S.yq; else if(type==='lifetime') arr=S.lq; else return; const q=arr.find(x=>x.id===id); if(!q) return; const oldLv=S.lv; q.done=!q.done; const xpVal=xp||q.xp; if(q.done){ S.xp+=xpVal; S.tq++; } else { S.xp=Math.max(0,S.xp-xpVal); S.tq=Math.max(0,S.tq-1); } S.lv=lvFrom(S.xp); checkLevelUp(oldLv); saveState(); renderQ(); renderDynamic(); }
   function recalc() { const all=Object.keys(S.log).filter(d=>Object.values(S.log[d].p||{}).filter(v=>v).length>=5).sort(); let best=0,run=0,prev=null; for(const d of all){ if(prev){ const p=new Date(prev+'T00:00:00'); const c=new Date(d+'T00:00:00'); const diffDays=Math.round((c-p)/86400000); if(diffDays===1) run++; else run=1; } else { run=1; } best=Math.max(best,run); prev=d; } S.bs=best; const tc=Object.values(tlog().p||{}).filter(v=>v).length>=5; if(tc){ let s=1,ck=new Date(); while(true){ ck.setDate(ck.getDate()-1); const dk=today(ck); if(S.log[dk]&&Object.values(S.log[dk].p||{}).filter(v=>v).length>=5) s++; else break; } S.cs=s; } else { const yd=today(new Date(Date.now()-86400000)); S.cs=(S.log[yd]&&Object.values(S.log[yd].p||{}).filter(v=>v).length>=5)?1:0; } S.pd=all.length; if(S.cs>S.bs) S.bs=S.cs; }
+  const _loadedScripts = new Set();
+  function loadScript(srcUrl) {
+    return new Promise((resolve, reject) => {
+      if (_loadedScripts.has(srcUrl)) { resolve(); return; }
+      const s = document.createElement('script');
+      s.src = srcUrl + '?v=3';
+      s.onload = () => { _loadedScripts.add(srcUrl); resolve(); };
+      s.onerror = () => { console.warn('Failed to load ' + srcUrl); reject(new Error(srcUrl)); };
+      document.head.appendChild(s);
+    });
+  }
+  function ensureQuranLoaded() { return loadScript('data/pools/quran-verses.js'); }
+  function ensureHadithLoaded() {
+    return Promise.all([
+      loadScript('data/pools/hadiths.js'),
+      loadScript('data/hadith-collections.js')
+    ]);
+  }
   function refreshContent() {
     const t = today(); const isNewDay = (S.contentDate !== t); const rng = (len) => fastRng(len);
     const pools = [
-      ['duaIdx',DUA_POOL],['quranIdx',QURAN_POOL],['sunnahIdx',SUNNAH_POOL],['dhikrIdx',DHIKR_POOL],
-      ['storiesIdx',STORIES],['hadithIdx',HADITHS],['namesIdx',NAMES],['sinsIdx',SINS_POOL],
+      ['duaIdx',DUA_POOL],['quranIdx', (typeof QURAN_POOL !== 'undefined') ? QURAN_POOL : null],['sunnahIdx',SUNNAH_POOL],['dhikrIdx',DHIKR_POOL],
+      ['storiesIdx',STORIES],['hadithIdx', (typeof HADITHS !== 'undefined') ? HADITHS : null],['namesIdx',NAMES],['sinsIdx',SINS_POOL],
       ['punishmentsIdx',PUNISHMENTS_POOL],['repentanceIdx',REPENTANCE_POOL],['sahabaIdx',SAHABA_POOL],
       ['seerahIdx',SEERAH_POOL],['tafsirIdx',TAFSIR_POOL],['mannersIdx',MANNERS_POOL],
       ['inspireIdx',INSPIRATIONS_POOL],['aqeedahIdx',AQEEDAH_POOL],['familyIdx',FAMILY_POOL],
@@ -79,13 +97,13 @@
       ['foodIdx',FOOD_POOL],['tibbIdx',TIBB_POOL],['youthIdx',YOUTH_POOL],['techIdx',TECH_POOL],
       ['neighborsIdx',NEIGHBORS_POOL]
     ].concat(Object.keys(NEW_POOLS).map(k => [k + "Idx", NEW_POOLS[k]]));
-    for (const [key,pool] of pools) { if (isNewDay || !S[key]?.length) S[key] = rng(pool.length); }
+    for (const [key,pool] of pools) { if (isNewDay || !S[key]?.length) S[key] = rng((pool||[]).length); }
     S.contentDate = t;
   }
   function manualRefreshContent() {
     const rng = (len) => fastRng(len);
     const keys = ['duaIdx','quranIdx','sunnahIdx','dhikrIdx','storiesIdx','hadithIdx','namesIdx','sinsIdx','punishmentsIdx','repentanceIdx','sahabaIdx','seerahIdx','tafsirIdx','mannersIdx','inspireIdx','aqeedahIdx','familyIdx','healthIdx','financeIdx','ummahIdx','hajjIdx','akhirahIdx','prophetsIdx','womenIdx','knowledgeIdx','heartIdx','jumuahIdx','marriageIdx','scienceIdx','wuduIdx','scholarsIdx','patienceIdx','workIdx','communityIdx','environmentIdx','travelIdx','fiqhIdx','arabicIdx','tawakkulIdx','ikhlasIdx','zuhdIdx','dawahIdx','civilisationIdx','battlesIdx','jannahIdx','jahannamIdx','graveIdx','signsIdx','dreamsIdx','parentingIdx','foodIdx','tibbIdx','youthIdx','techIdx','neighborsIdx'].concat(Object.keys(NEW_POOLS).map(k => k + "Idx"));
-    const allPools = [DUA_POOL,QURAN_POOL,SUNNAH_POOL,DHIKR_POOL,STORIES,HADITHS,NAMES,SINS_POOL,PUNISHMENTS_POOL,REPENTANCE_POOL,SAHABA_POOL,SEERAH_POOL,TAFSIR_POOL,MANNERS_POOL,INSPIRATIONS_POOL,AQEEDAH_POOL,FAMILY_POOL,HEALTH_POOL,FINANCE_POOL,UMMAH_POOL,HAJJ_POOL,AKHIRAH_POOL,PROPHETS_POOL,WOMEN_POOL,KNOWLEDGE_POOL,HEART_POOL,JUMUAH_POOL,MARRIAGE_POOL,SCIENCE_POOL,WUDU_POOL,SCHOLARS_POOL,PATIENCE_POOL,WORK_POOL,COMMUNITY_POOL,ENVIRONMENT_POOL,TRAVEL_POOL,FIQH_POOL,ARABIC_POOL,TAWAKKUL_POOL,IKHLAS_POOL,ZUHD_POOL,DAWAH_POOL,CIVILISATION_POOL,BATTLES_POOL,JANNAH_POOL,JAHANNAM_POOL,GRAVE_POOL,SIGNS_POOL,DREAMS_POOL,PARENTING_POOL,FOOD_POOL,TIBB_POOL,YOUTH_POOL,TECH_POOL,NEIGHBORS_POOL].concat(Object.keys(NEW_POOLS).map(k => NEW_POOLS[k]));
+    const allPools = [DUA_POOL,(typeof QURAN_POOL !== 'undefined') ? QURAN_POOL : null,SUNNAH_POOL,DHIKR_POOL,STORIES,(typeof HADITHS !== 'undefined') ? HADITHS : null,NAMES,SINS_POOL,PUNISHMENTS_POOL,REPENTANCE_POOL,SAHABA_POOL,SEERAH_POOL,TAFSIR_POOL,MANNERS_POOL,INSPIRATIONS_POOL,AQEEDAH_POOL,FAMILY_POOL,HEALTH_POOL,FINANCE_POOL,UMMAH_POOL,HAJJ_POOL,AKHIRAH_POOL,PROPHETS_POOL,WOMEN_POOL,KNOWLEDGE_POOL,HEART_POOL,JUMUAH_POOL,MARRIAGE_POOL,SCIENCE_POOL,WUDU_POOL,SCHOLARS_POOL,PATIENCE_POOL,WORK_POOL,COMMUNITY_POOL,ENVIRONMENT_POOL,TRAVEL_POOL,FIQH_POOL,ARABIC_POOL,TAWAKKUL_POOL,IKHLAS_POOL,ZUHD_POOL,DAWAH_POOL,CIVILISATION_POOL,BATTLES_POOL,JANNAH_POOL,JAHANNAM_POOL,GRAVE_POOL,SIGNS_POOL,DREAMS_POOL,PARENTING_POOL,FOOD_POOL,TIBB_POOL,YOUTH_POOL,TECH_POOL,NEIGHBORS_POOL].concat(Object.keys(NEW_POOLS).map(k => NEW_POOLS[k]));
     keys.forEach((k,i) => { S[k] = rng(allPools[i]?.length||5); });
     saveState(); renderAll(); toast('🔄','Content refreshed!',false,1500);
   }
@@ -2049,6 +2067,9 @@ Object.keys(NEW_POOLS).forEach(k => {
     document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
     const panel = document.getElementById('panel-' + tabId);
     if (panel) panel.classList.add('active');
+    if (tabId === 'hadith' && typeof HADITH_COLLECTIONS_DATA === 'undefined') {
+      ensureHadithLoaded().then(() => { if (window.renderHadith) window.renderHadith(); }).catch(() => {});
+    }
   }
 
   function initApp() {
@@ -2117,7 +2138,7 @@ Object.keys(NEW_POOLS).forEach(k => {
       dismissTip: () => { S.tdismiss=true; saveState(); renderTip(); },
       toggleQuest, completeChallenge: window.completeChallenge, addGratitude, toggleFasting, setCharityGoals,
       addMemorization, toggleMorning, toggleEvening, switchUser, logout, resetAll,
-      manualRefresh: manualRefreshContent, switchCategory, selectCategory, activateTab,
+      manualRefresh: manualRefreshContent, ensureQuranLoaded, ensureHadithLoaded, switchCategory, selectCategory, activateTab,
       claimBonus, tapDhikr, resetDhikr, nextDhikr,
       setQuranView, quranSearchFilter, openQuranSurah, quranBack, openQuranJuz,
       openHadithCollection, openHadithBook, hadithBack,

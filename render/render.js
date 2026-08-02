@@ -379,6 +379,10 @@
   }
 
   function playSurah(surahNum) {
+    if (typeof QURAN_POOL === 'undefined') {
+      window.App.ensureQuranLoaded().then(() => playSurah(surahNum)).catch(() => {});
+      return;
+    }
     if (quranSurahMode && quranSurahQueue.length > 0 && quranSurahQueue[0].surah === surahNum && quranSurahPaused) {
       quranSurahPaused = false;
       if (quranAudio) quranAudio.play().catch(()=>{});
@@ -532,6 +536,13 @@
   }
 
   function renderQuranSurah(el, surahNum) {
+    if (typeof QURAN_POOL === 'undefined') {
+      el.innerHTML = '<div class="quran-loading">Loading verses…</div>';
+      window.App.ensureQuranLoaded()
+        .then(() => renderQuranSurah(el, surahNum))
+        .catch(() => { el.innerHTML = '<div class="quran-loading">Couldn\'t load verses — check your connection and retry.</div>'; });
+      return;
+    }
     const s = QURAN_SURAHS.find(x => x.n === surahNum);
     if (!s) { quranCurrentSurah = null; renderQuran(); return; }
     let html = '<button class="quran-back-btn" onclick="App.quranBack()">← Back to Surahs</button>';
