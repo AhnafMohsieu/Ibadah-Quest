@@ -125,6 +125,11 @@ const _poolTabMap = {
 let _fullIndex = null;
 let _fullIndexBuilding = false;
 
+function invalidateSearchIndex() {
+  _fullIndex = null;
+  _fullIndexBuilding = false;
+}
+
 function _buildFullIndex() {
   if (_fullIndex || _fullIndexBuilding) return;
   _fullIndexBuilding = true;
@@ -346,3 +351,5 @@ function renderDailyWidget() {
   if (!d) return '';
   return '<div class="daily-widget"><div class="daily-widget-title">\uD83D\uDCFF ' + d.title + '</div><div class="daily-widget-body">' + d.body + '</div><div class="daily-widget-sub">' + d.sub + '</div></div>';
 }
+
+window.invalidateSearchIndex = invalidateSearchIndex;

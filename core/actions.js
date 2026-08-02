@@ -68,12 +68,12 @@
       document.head.appendChild(s);
     });
   }
-  function ensureQuranLoaded() { return loadScript('data/pools/quran-verses.js'); }
+  function ensureQuranLoaded() { return loadScript('data/pools/quran-verses.js').then(() => { if (window.invalidateSearchIndex) window.invalidateSearchIndex(); }); }
   function ensureHadithLoaded() {
     return Promise.all([
       loadScript('data/pools/hadiths.js'),
       loadScript('data/hadith-collections.js')
-    ]);
+    ]).then(() => { if (window.invalidateSearchIndex) window.invalidateSearchIndex(); });
   }
   function refreshContent() {
     const t = today(); const isNewDay = (S.contentDate !== t); const rng = (len) => fastRng(len);
