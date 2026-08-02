@@ -37,7 +37,7 @@
     { id: 'dialects', icon: '🌍', label: 'Dialects' }, { id: 'scripts', icon: '✍️', label: 'Scripts' }
   ],
   society: [
-    { id: 'brotherhood', icon: '🤝', label: 'Brotherhood' }, { id: 'sisterhood', icon: '🌸', label: 'Sisterhood' }, { id: 'neighbors2', icon: '🏡', label: 'Neighbors' }, { id: 'orphans2', icon: '🧸', label: 'Orphans' },
+    { id: 'brotherhood', icon: '🤝', label: 'Brotherhood' }, { id: 'sisterhood', icon: '🌸', label: 'Sisterhood' }, { id: 'orphans2', icon: '🧸', label: 'Orphans' },
     { id: 'elderly', icon: '🧓', label: 'Elderly' }, { id: 'disabled', icon: '♿', label: 'Disabled' }, { id: 'antiracism', icon: '🌍', label: 'Anti-Racism' }, { id: 'poverty', icon: '🍞', label: 'Poverty' },
     { id: 'charityproj', icon: '🪙', label: 'Charity' }, { id: 'volunteering', icon: '✋', label: 'Volunteering' }
   ],

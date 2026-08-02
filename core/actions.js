@@ -1730,18 +1730,6 @@
       "source": "Quran 9:71"
     },
   ],
-  "neighbors2": [
-    {
-      "title": "The Rights of the Neighbor",
-      "desc": "Jibreel emphasized the rights of the neighbor to the Prophet so much that he thought a neighbor might be given a share of inheritance.",
-      "source": "Sahih al-Bukhari"
-    },
-    {
-      "title": "Universal Kindness",
-      "desc": "Neighbors hold rights regardless of their religion. Cooking extra food to share with neighbors is an established Prophetic Sunnah.",
-      "source": "Hadith Collections"
-    },
-  ],
   "orphans2": [
     {
       "title": "The Ultimate Guarantee",
@@ -2030,7 +2018,6 @@ const NEW_POOL_TITLES = {
   scripts:       '✍️ Arabic Scripts',
   brotherhood:   '🤝 Brotherhood in Islam',
   sisterhood:    '🌸 Sisterhood in Islam',
-  neighbors2:    '🏡 Rights of Neighbors',
   orphans2:      '🧸 Care for Orphans',
   elderly:       '🧓 Respecting the Elderly',
   disabled:      '♿ Inclusion & Disability',

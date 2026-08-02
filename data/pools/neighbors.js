@@ -8,5 +8,6 @@ const NEIGHBORS_POOL = [
   { title: "Feeding Neighbors", desc: "Abu Talha, a companion of the Prophet (ﷺ), used to feed his neighbors regularly. When revealed that his neighbor was a Jew, the Prophet told him it was the best deed.", source: "Sahih al-Bukhari 61" },
   { title: "Harming Neighbors", desc: "Whoever believes in Allah and the Last Day should not harm his neighbor. This includes physical harm, noise, bad smells, or any form of nuisance.", source: "Sahih al-Bukhari 6013" },
   { title: "The Poor Neighbor", desc: "The Prophet (ﷺ) said: 'The poor (Miskeen) is not the one who goes from door to door begging, but the one who has enough to live on and others are unaware of his poverty.'", source: "Sahih al-Bukhari 1479" },
-  { title: "Gifting Food", desc: "It is Sunnah to share food with neighbors. The Prophet (ﷺ) said: 'He is not a believer whose stomach is filled while his neighbor goes hungry.'", source: "Kitab al-Iman" }
+  { title: "Gifting Food", desc: "It is Sunnah to share food with neighbors. The Prophet (ﷺ) said: 'He is not a believer whose stomach is filled while his neighbor goes hungry.'", source: "Kitab al-Iman" },
+  { title: "Universal Kindness", desc: "Neighbors hold rights regardless of their religion. Cooking extra food to share with neighbors is an established Prophetic Sunnah.", source: "Hadith Collections" }
 ];
