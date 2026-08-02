@@ -38,8 +38,8 @@
   ],
   society: [
     { id: 'brotherhood', icon: '🤝', label: 'Brotherhood' }, { id: 'sisterhood', icon: '🌸', label: 'Sisterhood' }, { id: 'orphans2', icon: '🧸', label: 'Orphans' },
-    { id: 'elderly', icon: '🧓', label: 'Elderly' }, { id: 'disabled', icon: '♿', label: 'Disabled' }, { id: 'antiracism', icon: '🌍', label: 'Anti-Racism' }, { id: 'poverty', icon: '🍞', label: 'Poverty' },
-    { id: 'charityproj', icon: '🪙', label: 'Charity' }, { id: 'volunteering', icon: '✋', label: 'Volunteering' }
+    { id: 'elderly', icon: '🧓', label: 'Elderly' }, { id: 'disabled', icon: '♿', label: 'Disabled' }, { id: 'antiracism', icon: '🌍', label: 'Anti-Racism' },     { id: 'poverty', icon: '🍞', label: 'Poverty' },
+    { id: 'volunteering', icon: '✋', label: 'Volunteering' }
   ],
   philosophy: [
     { id: 'epistemology', icon: '🧠', label: 'Epistemology' }, { id: 'ontology', icon: '🌌', label: 'Ontology' }, { id: 'ethicsphil', icon: '⚖️', label: 'Ethics' }, { id: 'logic', icon: '🧩', label: 'Logic' },

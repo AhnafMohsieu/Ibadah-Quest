@@ -1790,18 +1790,6 @@
       "source": "Quran 2:264"
     },
   ],
-  "charityproj": [
-    {
-      "title": "Waqf (Endowments)",
-      "desc": "The Islamic institution of Waqf allows individuals to dedicate land or assets permanently for public benefit. Awqaf historically funded hospitals, schools, and water fountains.",
-      "source": "Islamic History"
-    },
-    {
-      "title": "Sadaqah Jariyah",
-      "desc": "Continuous charity. If you build a well, plant a tree, or write a useful book, you continue to receive reward even after death as long as people benefit from it.",
-      "source": "Sahih Muslim"
-    },
-  ],
   "volunteering": [
     {
       "title": "Khidmah (Service)",
@@ -2023,7 +2011,6 @@ const NEW_POOL_TITLES = {
   disabled:      '♿ Inclusion & Disability',
   antiracism:    '🌍 Anti-Racism in Islam',
   poverty:       '🫂 Poverty & Social Justice',
-  charityproj:   '🪙 Charity Projects',
   volunteering:  '🙋 Volunteering in Islam',
   epistemology:  '🧠 Islamic Epistemology',
   ontology:      '🌌 Islamic Ontology',
