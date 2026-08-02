@@ -329,7 +329,7 @@
   let quranAudio = null;
   let quranPlayingVerse = null;
   let quranPlayingSurah = null;
-  let quranSurahMode = false;
+  let quranPlayMode = 'none';
   let quranSurahPaused = false;
   let quranSurahQueue = [];
   let quranSurahIdx = 0;
@@ -350,23 +350,24 @@
     if (quranAudio && quranPlayingVerse === verse && quranPlayingSurah === surah) {
       if (quranAudio.paused) {
         quranAudio.play();
-        if (quranSurahMode) quranSurahPaused = false;
+        if (quranPlayMode !== 'none') quranSurahPaused = false;
       } else {
         quranAudio.pause();
-        if (quranSurahMode) quranSurahPaused = true;
+        if (quranPlayMode !== 'none') quranSurahPaused = true;
       }
       updateAudioButtons();
       updateSurahButton();
       return;
     }
-    if (quranSurahMode) {
-      quranSurahMode = false;
+    if (quranPlayMode !== 'none') {
+      quranPlayMode = 'none';
       quranSurahPaused = false;
       if (quranAudio) { quranAudio.pause(); quranAudio = null; }
       quranPlayingVerse = null;
       quranPlayingSurah = null;
       updateAudioButtons();
       updateSurahButton();
+      updateJuzButton();
     }
     const reciterId = S.quranAudioReciter || 7;
     const url = getQuranAudioUrl(reciterId, surah, verse);
@@ -384,14 +385,14 @@
       window.App.ensureQuranLoaded().then(() => playSurah(surahNum)).catch(() => {});
       return;
     }
-    if (quranSurahMode && quranSurahQueue.length > 0 && quranSurahQueue[0].surah === surahNum && quranSurahPaused) {
+    if (quranPlayMode === 'surah' && quranSurahQueue.length > 0 && quranSurahQueue[0].surah === surahNum && quranSurahPaused) {
       quranSurahPaused = false;
       if (quranAudio) quranAudio.play().catch(()=>{});
       updateSurahButton();
       updateAudioButtons();
       return;
     }
-    if (quranSurahMode && quranSurahQueue.length > 0 && quranSurahQueue[0].surah === surahNum) {
+    if (quranPlayMode === 'surah' && quranSurahQueue.length > 0 && quranSurahQueue[0].surah === surahNum) {
       quranSurahPaused = true;
       if (quranAudio) quranAudio.pause();
       updateSurahButton();
@@ -406,16 +407,57 @@
       if (m && parseInt(m[1]) === surahNum) verses.push({ surah: surahNum, verse: parseInt(m[2]) });
     });
     if (verses.length === 0) return;
-    quranSurahMode = true;
+    quranPlayMode = 'surah';
     quranSurahPaused = false;
     quranSurahQueue = verses;
     quranSurahIdx = 0;
-    _playSurahVerse();
+    _playQueueItem();
     updateSurahButton();
   }
 
-  function _playSurahVerse() {
-    if (!quranSurahMode || quranSurahIdx >= quranSurahQueue.length) { stopSurah(); return; }
+  function playJuz(juzNum) {
+    if (typeof QURAN_POOL === 'undefined') {
+      window.App.ensureQuranLoaded().then(() => playJuz(juzNum)).catch(() => {});
+      return;
+    }
+    if (quranPlayMode === 'juz' && quranSurahQueue.length > 0 && quranSurahQueue[0].juz === juzNum && quranSurahPaused) {
+      quranSurahPaused = false;
+      if (quranAudio) quranAudio.play().catch(()=>{});
+      updateJuzButton(); updateAudioButtons();
+      return;
+    }
+    if (quranPlayMode === 'juz' && quranSurahQueue.length > 0 && quranSurahQueue[0].juz === juzNum) {
+      quranSurahPaused = true;
+      if (quranAudio) quranAudio.pause();
+      updateJuzButton(); updateAudioButtons();
+      return;
+    }
+    if (quranAudio) { quranAudio.pause(); quranAudio = null; }
+
+    const startG = juzBegin(juzNum), endG = juzEnd(juzNum);
+    if (startG === null || endG === null) return;
+    const verses = [];
+    QURAN_POOL.forEach(v => {
+      if (!v.source) return;
+      const m = v.source.match(/(\d+):(\d+)/);
+      if (!m) return;
+      const surah = +m[1], ayah = +m[2];
+      const g = globalAyahOf(surah, ayah);
+      if (g >= startG && g <= endG) verses.push({ juz: juzNum, surah: parseInt(m[1]), verse: parseInt(m[2]) });
+    });
+    verses.sort((a,b)=> (a.surah - b.surah) || (a.verse - b.verse) || 0);
+    if (verses.length === 0) return;
+
+    quranPlayMode = 'juz';
+    quranSurahPaused = false;
+    quranSurahQueue = verses;
+    quranSurahIdx = 0;
+    _playQueueItem();
+    updateJuzButton();
+  }
+
+  function _playQueueItem() {
+    if (quranPlayMode === 'none' || quranSurahIdx >= quranSurahQueue.length) { stopSurah(); return; }
     if (quranAudio) { quranAudio.pause(); quranAudio = null; }
     const sv = quranSurahQueue[quranSurahIdx];
     const reciterId = S.quranAudioReciter || 7;
@@ -428,19 +470,20 @@
     quranAudio.onended = () => {
       quranSurahIdx++;
       if (quranSurahIdx < quranSurahQueue.length) {
-        _playSurahVerse();
+        _playQueueItem();
       } else {
         stopSurah();
       }
     };
     updateAudioButtons();
     updateSurahButton();
+    updateJuzButton();
     _scrollToVerse();
   }
 
   function stopSurah() {
     if (quranAudio) { quranAudio.pause(); quranAudio = null; }
-    quranSurahMode = false;
+    quranPlayMode = 'none';
     quranSurahPaused = false;
     quranSurahQueue = [];
     quranSurahIdx = 0;
@@ -448,6 +491,7 @@
     quranPlayingSurah = null;
     updateAudioButtons();
     updateSurahButton();
+    updateJuzButton();
   }
 
   function _scrollToVerse() {
@@ -464,14 +508,29 @@
   function updateSurahButton() {
     const btn = document.getElementById('surahPlayBtn');
     if (!btn) return;
-    if (quranSurahMode && !quranSurahPaused) {
+    if (quranPlayMode === 'surah' && !quranSurahPaused) {
       btn.textContent = '⏸ Pause Surah';
       btn.classList.add('playing');
-    } else if (quranSurahMode && quranSurahPaused) {
+    } else if (quranPlayMode === 'surah' && quranSurahPaused) {
       btn.textContent = '▶ Resume Surah';
       btn.classList.add('playing');
     } else {
       btn.textContent = '▶ Play Surah';
+      btn.classList.remove('playing');
+    }
+  }
+
+  function updateJuzButton() {
+    const btn = document.getElementById('juzPlayBtn');
+    if (!btn) return;
+    if (quranPlayMode === 'juz' && !quranSurahPaused) {
+      btn.textContent = '⏸ Pause Juz';
+      btn.classList.add('playing');
+    } else if (quranPlayMode === 'juz' && quranSurahPaused) {
+      btn.textContent = '▶ Resume Juz';
+      btn.classList.add('playing');
+    } else {
+      btn.textContent = '▶ Play Juz';
       btn.classList.remove('playing');
     }
   }
