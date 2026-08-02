@@ -42,7 +42,7 @@
     { id: 'volunteering', icon: '✋', label: 'Volunteering' }
   ],
   philosophy: [
-    { id: 'epistemology', icon: '🧠', label: 'Epistemology' }, { id: 'ontology', icon: '🌌', label: 'Ontology' }, { id: 'ethicsphil', icon: '⚖️', label: 'Ethics' }, { id: 'logic', icon: '🧩', label: 'Logic' },
+    { id: 'epistemology', icon: '🧠', label: 'Epistemology' }, { id: 'ontology', icon: '🌌', label: 'Ontology' }, { id: 'logic', icon: '🧩', label: 'Logic' },
     { id: 'kalam', icon: '🗣️', label: 'Kalam' }, { id: 'reason', icon: '💡', label: 'Reason' }, { id: 'freewill', icon: '⚖️', label: 'Free Will' }, { id: 'problemofevil', icon: '🌑', label: 'Prob of Evil' },
     { id: 'prophethood', icon: '📜', label: 'Prophethood' }, { id: 'existence', icon: '✨', label: 'Existence' }
   ],

@@ -1005,6 +1005,16 @@
       "title": "Keeping Promises",
       "desc": "Fulfilling covenants is a hallmark of a believer. Breaking agreements, even with non-Muslims or in warfare, is strictly forbidden.",
       "source": "Quranic Ethics"
+    },
+    {
+      "title": "Divine Command Theory",
+      "desc": "In Islamic ethics, ultimate moral truths are defined by God. What God commands is good, and what He forbids is evil, combining divine command with human intuition (Fitrah).",
+      "source": "Theological Ethics"
+    },
+    {
+      "title": "Maqasid al-Shariah",
+      "desc": "The higher objectives of Islamic law are designed to protect five things: Religion, Life, Intellect, Lineage, and Property. Ethical rulings revolve around protecting these.",
+      "source": "Usul al-Fiqh"
     }
   ],
   "bioethics": [
@@ -1826,18 +1836,6 @@
       "source": "Quran 2:3"
     },
   ],
-  "ethicsphil": [
-    {
-      "title": "Divine Command Theory",
-      "desc": "In Islamic ethics, ultimate moral truths are defined by God. What God commands is good, and what He forbids is evil, combining divine command with human intuition (Fitrah).",
-      "source": "Theological Ethics"
-    },
-    {
-      "title": "Maqasid al-Shariah",
-      "desc": "The higher objectives of Islamic law are designed to protect five things: Religion, Life, Intellect, Lineage, and Property. Ethical rulings revolve around protecting these.",
-      "source": "Usul al-Fiqh"
-    },
-  ],
   "logic": [
     {
       "title": "Mantiq (Logic)",
@@ -2014,7 +2012,6 @@ const NEW_POOL_TITLES = {
   volunteering:  '🙋 Volunteering in Islam',
   epistemology:  '🧠 Islamic Epistemology',
   ontology:      '🌌 Islamic Ontology',
-  ethicsphil:    '⚖️ Ethics in Islamic Philosophy',
   logic:         '🧩 Logic in Islamic Thought',
   kalam:         '🗣️ Ilm al-Kalam (Theology)',
   reason:        '💡 Reason & Revelation',
