@@ -590,6 +590,20 @@
     renderQuran();
   }
 
+  function globalAyahOf(surah, ayah) {
+    let cum = 0;
+    for (let i = 0; i < surah - 1; i++) cum += QURAN_SURAHS[i].ay;
+    return cum + ayah;
+  }
+  function juzBegin(juzNum) {
+    const j = QURAN_JUZ.find(x => x.n === juzNum);
+    return j ? j.start : null;
+  }
+  function juzEnd(juzNum) {
+    if (juzNum === 30) return 6236;
+    const next = QURAN_JUZ.find(x => x.n === juzNum + 1);
+    return next ? next.start - 1 : null;
+  }
   function findSurahByAyah(ayahNum) {
     let cumulative = 0;
     for (const s of QURAN_SURAHS) {
