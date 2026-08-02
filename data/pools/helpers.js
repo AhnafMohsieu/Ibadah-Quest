@@ -25,33 +25,33 @@ const SEARCH_INDEX = [
   {cat:"Ibadah",title:"Gratitude",desc:"Gratitude journal",action:"switchCategory",args:["ibadah","gratitude"]},
   {cat:"Ibadah",title:"Quests",desc:"Daily and weekly quests",action:"switchCategory",args:["ibadah","quests"]},
   {cat:"Ibadah",title:"Challenges",desc:"Daily challenges",action:"switchCategory",args:["ibadah","challenges"]},
-  {cat:"Knowledge",title:"Hadith",desc:"Hadith collections",action:"switchCategory",args:["ilm","hadith"]},
-  {cat:"Knowledge",title:"Sunnahs",desc:"Daily sunnahs",action:"switchCategory",args:["ilm","sunnahs"]},
-  {cat:"Knowledge",title:"99 Names of Allah",desc:"Al-Asma ul-Husna",action:"switchCategory",args:["ilm","names"]},
-  {cat:"Knowledge",title:"Tafsir",desc:"Quran interpretation",action:"switchCategory",args:["ilm","tafsir"]},
-  {cat:"Knowledge",title:"Scholars",desc:"Great Islamic scholars",action:"switchCategory",args:["ilm","scholars"]},
-  {cat:"Knowledge",title:"Arabic",desc:"Learn Arabic",action:"switchCategory",args:["ilm","arabic"]},
-  {cat:"Knowledge",title:"Fiqh",desc:"Islamic jurisprudence",action:"switchCategory",args:["ilm","fiqh"]},
-  {cat:"Heart",title:"Sins",desc:"Major sins to avoid",action:"switchCategory",args:["qalb","sins"]},
-  {cat:"Heart",title:"Repentance",desc:"Seeking forgiveness",action:"switchCategory",args:["qalb","repentance"]},
-  {cat:"Heart",title:"Patience",desc:"Sabr and Shukr",action:"switchCategory",args:["qalb","patience"]},
-  {cat:"Heart",title:"Tawakkul",desc:"Trust in Allah",action:"switchCategory",args:["qalb","tawakkul"]},
-  {cat:"Heart",title:"Manners",desc:"Islamic adab",action:"switchCategory",args:["qalb","manners"]},
-  {cat:"Dealings",title:"Family",desc:"Family and kinship",action:"switchCategory",args:["muamalat","family"]},
-  {cat:"Dealings",title:"Marriage",desc:"Islamic marriage",action:"switchCategory",args:["muamalat","marriage"]},
-  {cat:"Dealings",title:"Charity",desc:"Zakat and Sadaqah",action:"switchCategory",args:["muamalat","charity"]},
-  {cat:"Dealings",title:"Finance",desc:"Halal finance",action:"switchCategory",args:["muamalat","finance"]},
-  {cat:"Life",title:"Health",desc:"Islamic wellness",action:"switchCategory",args:["hayat","health"]},
-  {cat:"Life",title:"Food",desc:"Halal dietary laws",action:"switchCategory",args:["hayat","food"]},
-  {cat:"Life",title:"Youth",desc:"Islam and youth",action:"switchCategory",args:["hayat","youth"]},
-  {cat:"History",title:"Seerah",desc:"Prophet's biography",action:"switchCategory",args:["tarikh","seerah"]},
-  {cat:"History",title:"Sahaba",desc:"The companions",action:"switchCategory",args:["tarikh","sahaba"]},
-  {cat:"History",title:"Prophets",desc:"Stories of prophets",action:"switchCategory",args:["tarikh","prophets"]},
-  {cat:"History",title:"Civilisation",desc:"Islamic golden age",action:"switchCategory",args:["tarikh","civilisation"]},
-  {cat:"Hereafter",title:"Jannah",desc:"Paradise",action:"switchCategory",args:["akhira","jannah"]},
-  {cat:"Hereafter",title:"Jahannam",desc:"Hellfire",action:"switchCategory",args:["akhira","jahannam"]},
-  {cat:"Hereafter",title:"Signs of Qiyamah",desc:"End times",action:"switchCategory",args:["akhira","signs"]},
-  {cat:"Hereafter",title:"Hajj",desc:"Pilgrimage",action:"switchCategory",args:["akhira","hajj"]},
+  {cat:"Knowledge",title:"Hadith",desc:"Hadith collections",action:"switchCategory",args:["knowledge","hadith"]},
+  {cat:"Knowledge",title:"Sunnahs",desc:"Daily sunnahs",action:"switchCategory",args:["knowledge","sunnahs"]},
+  {cat:"Knowledge",title:"99 Names of Allah",desc:"Al-Asma ul-Husna",action:"switchCategory",args:["names_main","allah_names"]},
+  {cat:"Knowledge",title:"Tafsir",desc:"Quran interpretation",action:"switchCategory",args:["knowledge","tafsir"]},
+  {cat:"Knowledge",title:"Scholars",desc:"Great Islamic scholars",action:"switchCategory",args:["names_main","scholars_names"]},
+  {cat:"Knowledge",title:"Arabic",desc:"Learn Arabic",action:"switchCategory",args:["knowledge","arabic"]},
+  {cat:"Knowledge",title:"Fiqh",desc:"Islamic jurisprudence",action:"switchCategory",args:["knowledge","fiqh"]},
+  {cat:"Heart",title:"Sins",desc:"Major sins to avoid",action:"switchCategory",args:["knowledge","sins"]},
+  {cat:"Heart",title:"Repentance",desc:"Seeking forgiveness",action:"switchCategory",args:["knowledge","repentance"]},
+  {cat:"Heart",title:"Patience",desc:"Sabr and Shukr",action:"switchCategory",args:["knowledge","patience"]},
+  {cat:"Heart",title:"Tawakkul",desc:"Trust in Allah",action:"switchCategory",args:["knowledge","tawakkul"]},
+  {cat:"Heart",title:"Manners",desc:"Islamic adab",action:"switchCategory",args:["knowledge","manners"]},
+  {cat:"Dealings",title:"Family",desc:"Family and kinship",action:"switchCategory",args:["knowledge","family"]},
+  {cat:"Dealings",title:"Marriage",desc:"Islamic marriage",action:"switchCategory",args:["knowledge","marriage"]},
+  {cat:"Dealings",title:"Charity",desc:"Zakat and Sadaqah",action:"switchCategory",args:["knowledge","charity"]},
+  {cat:"Dealings",title:"Finance",desc:"Halal finance",action:"switchCategory",args:["knowledge","finance"]},
+  {cat:"Life",title:"Health",desc:"Islamic wellness",action:"switchCategory",args:["knowledge","health"]},
+  {cat:"Life",title:"Food",desc:"Halal dietary laws",action:"switchCategory",args:["knowledge","food"]},
+  {cat:"Life",title:"Youth",desc:"Islam and youth",action:"switchCategory",args:["knowledge","youth"]},
+  {cat:"History",title:"Seerah",desc:"Prophet's biography",action:"switchCategory",args:["knowledge","seerah"]},
+  {cat:"History",title:"Sahaba",desc:"The companions",action:"switchCategory",args:["knowledge","sahaba"]},
+  {cat:"History",title:"Prophets",desc:"Stories of prophets",action:"switchCategory",args:["knowledge","prophets"]},
+  {cat:"History",title:"Civilisation",desc:"Islamic golden age",action:"switchCategory",args:["knowledge","civilisation"]},
+  {cat:"Hereafter",title:"Jannah",desc:"Paradise",action:"switchCategory",args:["knowledge","jannah"]},
+  {cat:"Hereafter",title:"Jahannam",desc:"Hellfire",action:"switchCategory",args:["knowledge","jahannam"]},
+  {cat:"Hereafter",title:"Signs of Qiyamah",desc:"End times",action:"switchCategory",args:["knowledge","signs"]},
+  {cat:"Hereafter",title:"Hajj",desc:"Pilgrimage",action:"switchCategory",args:["knowledge","hajj"]},
   {cat:"Profile",title:"Profile",desc:"Your stats",action:"switchCategory",args:["profile_main","profile"]},
   {cat:"Profile",title:"Trophies",desc:"Achievements",action:"switchCategory",args:["profile_main","trophies"]},
   {cat:"Profile",title:"Rewards",desc:"Shop",action:"switchCategory",args:["profile_main","rewards"]},
@@ -92,33 +92,33 @@ const DAILY_ISLAMIC = [
 
 // ── Pool-to-tab mapping ──
 const _poolTabMap = {
-  DUA_POOL:{cat:'ibadah',tab:'duas'}, SUNNAH_POOL:{cat:'ilm',tab:'sunnahs'},
-  DHIKR_POOL:{cat:'ibadah',tab:'dhikr'}, STORIES:{cat:'tarikh',tab:'stories'},
-  HADITHS:{cat:'ilm',tab:'hadith'}, NAMES:{cat:'ilm',tab:'names'},
-  SINS_POOL:{cat:'qalb',tab:'sins'}, PUNISHMENTS_POOL:{cat:'muamalat',tab:'punishments'},
-  REPENTANCE_POOL:{cat:'qalb',tab:'repentance'}, SAHABA_POOL:{cat:'tarikh',tab:'sahaba'},
-  SEERAH_POOL:{cat:'tarikh',tab:'seerah'}, TAFSIR_POOL:{cat:'ilm',tab:'tafsir'},
-  MANNERS_POOL:{cat:'qalb',tab:'manners'}, AQEEDAH_POOL:{cat:'ilm',tab:'aqeedah'},
-  FAMILY_POOL:{cat:'muamalat',tab:'family'}, HEALTH_POOL:{cat:'hayat',tab:'health'},
-  FINANCE_POOL:{cat:'muamalat',tab:'finance'}, UMMAH_POOL:{cat:'muamalat',tab:'ummah'},
-  HAJJ_POOL:{cat:'akhira',tab:'hajj'}, AKHIRAH_POOL:{cat:'akhira',tab:'akhirah'},
-  PROPHETS_POOL:{cat:'tarikh',tab:'prophets'}, WOMEN_POOL:{cat:'tarikh',tab:'women'},
-  KNOWLEDGE_POOL:{cat:'ilm',tab:'knowledge'}, HEART_POOL:{cat:'qalb',tab:'heart'},
-  JUMUAH_POOL:{cat:'ibadah',tab:'jumuah'}, MARRIAGE_POOL:{cat:'muamalat',tab:'marriage'},
-  SCIENCE_POOL:{cat:'tarikh',tab:'science'}, WUDU_POOL:{cat:'ibadah',tab:'wudu'},
-  SCHOLARS_POOL:{cat:'ilm',tab:'scholars'}, PATIENCE_POOL:{cat:'qalb',tab:'patience'},
-  WORK_POOL:{cat:'muamalat',tab:'work'}, COMMUNITY_POOL:{cat:'muamalat',tab:'community'},
-  ENVIRONMENT_POOL:{cat:'hayat',tab:'environment'}, TRAVEL_POOL:{cat:'hayat',tab:'travel'},
-  FIQH_POOL:{cat:'ilm',tab:'fiqh'}, ARABIC_POOL:{cat:'ilm',tab:'arabic'},
-  TAWAKKUL_POOL:{cat:'qalb',tab:'tawakkul'}, IKHLAS_POOL:{cat:'qalb',tab:'ikhlas'},
-  ZUHD_POOL:{cat:'qalb',tab:'zuhd'}, DAWAH_POOL:{cat:'muamalat',tab:'dawah'},
-  CIVILISATION_POOL:{cat:'tarikh',tab:'civilisation'}, BATTLES_POOL:{cat:'tarikh',tab:'battles'},
-  JANNAH_POOL:{cat:'akhira',tab:'jannah'}, JAHANNAM_POOL:{cat:'akhira',tab:'jahannam'},
-  GRAVE_POOL:{cat:'akhira',tab:'grave'}, SIGNS_POOL:{cat:'akhira',tab:'signs'},
-  DREAMS_POOL:{cat:'akhira',tab:'dreams'}, PARENTING_POOL:{cat:'hayat',tab:'parenting'},
-  FOOD_POOL:{cat:'hayat',tab:'food'}, TIBB_POOL:{cat:'hayat',tab:'tibb'},
-  YOUTH_POOL:{cat:'hayat',tab:'youth'}, TECH_POOL:{cat:'hayat',tab:'tech'},
-  INSPIRATIONS_POOL:{cat:'qalb',tab:'inspirations'}
+  DUA_POOL:{cat:'ibadah',tab:'duas'}, SUNNAH_POOL:{cat:'knowledge',tab:'sunnahs'},
+  DHIKR_POOL:{cat:'ibadah',tab:'dhikr'}, STORIES:{cat:'knowledge',tab:'stories'},
+  HADITHS:{cat:'knowledge',tab:'hadith'}, NAMES:{cat:'names_main',tab:'allah_names'},
+  SINS_POOL:{cat:'knowledge',tab:'sins'}, PUNISHMENTS_POOL:{cat:'knowledge',tab:'punishments'},
+  REPENTANCE_POOL:{cat:'knowledge',tab:'repentance'}, SAHABA_POOL:{cat:'knowledge',tab:'sahaba'},
+  SEERAH_POOL:{cat:'knowledge',tab:'seerah'}, TAFSIR_POOL:{cat:'knowledge',tab:'tafsir'},
+  MANNERS_POOL:{cat:'knowledge',tab:'manners'}, AQEEDAH_POOL:{cat:'knowledge',tab:'aqeedah'},
+  FAMILY_POOL:{cat:'knowledge',tab:'family'}, HEALTH_POOL:{cat:'knowledge',tab:'health'},
+  FINANCE_POOL:{cat:'knowledge',tab:'finance'}, UMMAH_POOL:{cat:'knowledge',tab:'ummah'},
+  HAJJ_POOL:{cat:'knowledge',tab:'hajj'}, AKHIRAH_POOL:{cat:'knowledge',tab:'akhirah'},
+  PROPHETS_POOL:{cat:'knowledge',tab:'prophets'}, WOMEN_POOL:{cat:'knowledge',tab:'women'},
+  KNOWLEDGE_POOL:{cat:'knowledge',tab:'knowledge'}, HEART_POOL:{cat:'knowledge',tab:'heart'},
+  JUMUAH_POOL:{cat:'ibadah',tab:'jumuah'}, MARRIAGE_POOL:{cat:'knowledge',tab:'marriage'},
+  SCIENCE_POOL:{cat:'knowledge',tab:'science'}, WUDU_POOL:{cat:'ibadah',tab:'wudu'},
+  SCHOLARS_POOL:{cat:'names_main',tab:'scholars_names'}, PATIENCE_POOL:{cat:'knowledge',tab:'patience'},
+  WORK_POOL:{cat:'knowledge',tab:'work'}, COMMUNITY_POOL:{cat:'knowledge',tab:'community'},
+  ENVIRONMENT_POOL:{cat:'knowledge',tab:'environment'}, TRAVEL_POOL:{cat:'knowledge',tab:'travel'},
+  FIQH_POOL:{cat:'knowledge',tab:'fiqh'}, ARABIC_POOL:{cat:'knowledge',tab:'arabic'},
+  TAWAKKUL_POOL:{cat:'knowledge',tab:'tawakkul'}, IKHLAS_POOL:{cat:'knowledge',tab:'ikhlas'},
+  ZUHD_POOL:{cat:'knowledge',tab:'zuhd'}, DAWAH_POOL:{cat:'knowledge',tab:'dawah'},
+  CIVILISATION_POOL:{cat:'knowledge',tab:'civilisation'}, BATTLES_POOL:{cat:'knowledge',tab:'battles'},
+  JANNAH_POOL:{cat:'knowledge',tab:'jannah'}, JAHANNAM_POOL:{cat:'knowledge',tab:'jahannam'},
+  GRAVE_POOL:{cat:'knowledge',tab:'grave'}, SIGNS_POOL:{cat:'knowledge',tab:'signs'},
+  DREAMS_POOL:{cat:'knowledge',tab:'dreams'}, PARENTING_POOL:{cat:'knowledge',tab:'parenting'},
+  FOOD_POOL:{cat:'knowledge',tab:'food'}, TIBB_POOL:{cat:'knowledge',tab:'tibb'},
+  YOUTH_POOL:{cat:'knowledge',tab:'youth'}, TECH_POOL:{cat:'knowledge',tab:'tech'},
+  INSPIRATIONS_POOL:{cat:'knowledge',tab:'inspirations'}
 };
 
 // ── Lazy full-content search index ──
@@ -239,7 +239,22 @@ function _buildFullIndex() {
 // ── Safe action lookup ──
 const _searchActions = {
   openQuranSurah: function(args) { if (typeof openQuranSurah === 'function') openQuranSurah(args[0]); },
-  switchCategory: function(args) { if (typeof switchCategory === 'function') switchCategory(args[0], null); },
+  switchCategory: function(args) {
+    if (typeof switchCategory !== 'function') return;
+    switchCategory(args[0], null);
+    if (args[1] && typeof selectCategory === 'function') {
+      const group = TAB_GROUPS[args[0]] || [];
+      if (group.length > 0 && Array.isArray(group[0].tabs)) {
+        const cat = group.find(c => c.tabs.some(t => t.id === args[1]));
+        if (cat) {
+          const chip = document.querySelector(`.cat-chip[onclick*="${cat.id}"]`);
+          selectCategory(cat.id, chip);
+          const tabBtn = document.querySelector(`#tier3Tabs .t2-btn[onclick*="${args[1]}"]`);
+          if (tabBtn && typeof activateTab === 'function') activateTab(args[1], tabBtn);
+        }
+      }
+    }
+  },
 };
 
 // ── Main search function ──

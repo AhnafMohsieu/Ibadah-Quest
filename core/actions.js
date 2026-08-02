@@ -2005,13 +2005,43 @@ Object.keys(NEW_POOLS).forEach(k => {
   }
 });
 
+  let _activeCategoryId = null;
+
   function switchCategory(catId, btn) {
     document.querySelectorAll('.t1-btn').forEach(el => el.classList.remove('active'));
     if (btn) btn.classList.add('active');
-    const pills = TAB_GROUPS[catId] || [];
+    const group = TAB_GROUPS[catId] || [];
     const container = document.getElementById('tier2Tabs');
-    container.innerHTML = pills.map((p, i) => `<button class="t2-btn ${i===0?'active':''}" onclick="App.activateTab('${p.id}', this)"><span>${p.icon}</span> ${p.label}</button>`).join('');
-    if (pills.length > 0) activateTab(pills[0].id, container.firstElementChild);
+    const tier3Wrap = document.getElementById('tier3Wrap');
+    const isCategorized = group.length > 0 && Array.isArray(group[0].tabs);
+    if (isCategorized) {
+      _activeCategoryId = null;
+      container.classList.add('cat-chips');
+      container.innerHTML = group.map((c, i) => `<button class="cat-chip ${i===0?'active':''}" onclick="App.selectCategory('${c.id}', this)"><span>${c.icon}</span> ${c.label}</button>`).join('');
+      if (tier3Wrap) tier3Wrap.style.display = '';
+      const firstCat = group[0];
+      _activeCategoryId = firstCat.id;
+      renderCategoryTabs(firstCat);
+    } else {
+      container.classList.remove('cat-chips');
+      container.innerHTML = group.map((p, i) => `<button class="t2-btn ${i===0?'active':''}" onclick="App.activateTab('${p.id}', this)"><span>${p.icon}</span> ${p.label}</button>`).join('');
+      if (tier3Wrap) tier3Wrap.style.display = 'none';
+      if (group.length > 0) activateTab(group[0].id, container.firstElementChild);
+    }
+  }
+  function selectCategory(catId, btn) {
+    document.querySelectorAll('.cat-chip').forEach(el => el.classList.remove('active'));
+    if (btn) btn.classList.add('active');
+    _activeCategoryId = catId;
+    const group = Object.values(TAB_GROUPS).find(g => Array.isArray(g[0]?.tabs) && g.some(c => c.id === catId)) || [];
+    const cat = group.find(c => c.id === catId);
+    if (cat) renderCategoryTabs(cat);
+  }
+  function renderCategoryTabs(cat) {
+    const grid = document.getElementById('tier3Tabs');
+    if (!grid) return;
+    grid.innerHTML = cat.tabs.map((p, i) => `<button class="t2-btn ${i===0?'active':''}" onclick="App.activateTab('${p.id}', this)"><span>${p.icon}</span> ${p.label}</button>`).join('');
+    if (cat.tabs.length > 0) activateTab(cat.tabs[0].id, grid.firstElementChild);
   }
   function activateTab(tabId, btn) {
     document.querySelectorAll('.t2-btn').forEach(b => b.classList.remove('active'));
@@ -2058,23 +2088,6 @@ Object.keys(NEW_POOLS).forEach(k => {
       `);
   }
 
-
-  TAB_GROUPS.history = (TAB_GROUPS.history || []).concat(TAB_GROUPS.geo || []).concat(TAB_GROUPS.arts || []);
-  TAB_GROUPS.ilm = (TAB_GROUPS.ilm || []).concat(TAB_GROUPS.fiqh || []).concat(TAB_GROUPS.lang || []).concat(TAB_GROUPS.philosophy || []);
-  TAB_GROUPS.qalb = (TAB_GROUPS.qalb || []).concat(TAB_GROUPS.spirit || []);
-  TAB_GROUPS.hayat = (TAB_GROUPS.hayat || []).concat(TAB_GROUPS.modern || []);
-  TAB_GROUPS.muamalat = (TAB_GROUPS.muamalat || []).concat(TAB_GROUPS.society || []);
-
-  delete TAB_GROUPS.geo;
-  delete TAB_GROUPS.arts;
-  delete TAB_GROUPS.fiqh;
-  delete TAB_GROUPS.scholars2;
-  delete TAB_GROUPS.lang;
-  delete TAB_GROUPS.philosophy;
-  delete TAB_GROUPS.spirit;
-  delete TAB_GROUPS.modern;
-  delete TAB_GROUPS.society;
-
     const t = today();
     if (S.lad !== t) { S.lad=t; if(S.ab&&S.ab.exp<t) S.ab=null; recalc(); saveState(); }
     genDQ(); genWQ(); genMQ(); genYQ(); genLQ(); refreshContent(); recalc(); checkQ(); checkA(); S.lv=lvFrom(S.xp); saveState(); initCalView(); renderAll();
@@ -2104,7 +2117,7 @@ Object.keys(NEW_POOLS).forEach(k => {
       dismissTip: () => { S.tdismiss=true; saveState(); renderTip(); },
       toggleQuest, completeChallenge: window.completeChallenge, addGratitude, toggleFasting, setCharityGoals,
       addMemorization, toggleMorning, toggleEvening, switchUser, logout, resetAll,
-      manualRefresh: manualRefreshContent, switchCategory, activateTab,
+      manualRefresh: manualRefreshContent, switchCategory, selectCategory, activateTab,
       claimBonus, tapDhikr, resetDhikr, nextDhikr,
       setQuranView, quranSearchFilter, openQuranSurah, quranBack, openQuranJuz,
       openHadithCollection, openHadithBook, hadithBack,
