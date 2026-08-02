@@ -12,7 +12,7 @@
   ],
   spirit: [
     { id: 'sufism', icon: '🤍', label: 'Sufism' }, { id: 'tazkiyah', icon: '✨', label: 'Tazkiyah' }, { id: 'fear', icon: '😨', label: 'Fear of Allah' },
-    { id: 'hope', icon: '🕊️', label: 'Hope' }, { id: 'loveofallah', icon: '❤️', label: 'Love of Allah' }, { id: 'sincerity', icon: '💎', label: 'Sincerity' },
+    { id: 'hope', icon: '🕊️', label: 'Hope' }, { id: 'loveofallah', icon: '❤️', label: 'Love of Allah' },
     { id: 'contentment', icon: '😌', label: 'Contentment' }, { id: 'reflection', icon: '🪞', label: 'Reflection' }
   ],
   modern: [

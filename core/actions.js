@@ -850,28 +850,6 @@
       "source": "Imam Ali"
     }
   ],
-  "sincerity": [
-    {
-      "title": "Ikhlas",
-      "desc": "Ikhlas is the foundation of accepted deeds. A deed done for people's praise is rejected. The heart must be single-minded in seeking only Allah's pleasure.",
-      "source": "Quran 39:2"
-    },
-    {
-      "title": "The Hidden Shirk",
-      "desc": "The Prophet peace be upon him warned against 'Riya' (showing off), calling it the hidden shirk. It is as subtle as a black ant crawling on a black rock in the dead of night.",
-      "source": "Musnad Ahmad"
-    },
-    {
-      "title": "Secret Charity",
-      "desc": "Spiritual masters advised hiding one's good deeds (like charity or night prayers) just as carefully as one hides their sins, to preserve pure sincerity.",
-      "source": "Salaf Tradition"
-    },
-    {
-      "title": "The First Three Judged",
-      "desc": "On Judgment Day, a scholar, a martyr, and a philanthropist will be condemned because their deeds were done for human fame, not for Allah.",
-      "source": "Sahih Muslim"
-    }
-  ],
   "contentment": [
     {
       "title": "Rida (Contentment)",
@@ -1949,7 +1927,6 @@ const NEW_POOL_TITLES = {
   fear:          '😨 Fear of Allah (Khawf)',
   hope:          '🕊️ Hope in Allah (Raja)',
   loveofallah:   '❤️ Love of Allah',
-  sincerity:     '💎 Sincerity (Ikhlas)',
   contentment:   '😌 Contentment (Qana\'ah)',
   reflection:    '🪞 Reflection & Contemplation',
   technology:    '📱 Technology & Islam',
@@ -2084,7 +2061,7 @@ Object.keys(NEW_POOLS).forEach(k => {
 
   TAB_GROUPS.history = (TAB_GROUPS.history || []).concat(TAB_GROUPS.geo || []).concat(TAB_GROUPS.arts || []);
   TAB_GROUPS.ilm = (TAB_GROUPS.ilm || []).concat(TAB_GROUPS.fiqh || []).concat(TAB_GROUPS.lang || []).concat(TAB_GROUPS.philosophy || []);
-  TAB_GROUPS.qalb = (TAB_GROUPS.qalb || []).concat((TAB_GROUPS.spirit || []).filter(t => t.id !== 'sincerity'));
+  TAB_GROUPS.qalb = (TAB_GROUPS.qalb || []).concat(TAB_GROUPS.spirit || []);
   TAB_GROUPS.hayat = (TAB_GROUPS.hayat || []).concat(TAB_GROUPS.modern || []);
   TAB_GROUPS.muamalat = (TAB_GROUPS.muamalat || []).concat(TAB_GROUPS.society || []);
 

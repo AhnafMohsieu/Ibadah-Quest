@@ -8,5 +8,6 @@
   { title:"The Hidden Deeds", desc:"The Salaf (pious predecessors) would hide their good deeds just as they would hide their sins, to protect their Ikhlas." },
   { title:"Ikhlas in Seeking Knowledge", desc:"'Whoever seeks knowledge to compete with scholars or show off to the ignorant will enter the Fire.' (Tirmidhi)" },
   { title:"Renewing the Intention", desc:"Even mundane tasks like eating or working can become acts of worship if the intention is to gain strength to obey Allah." },
-  { title:"The Dangers of Praise", desc:"Praise can destroy Ikhlas. When praised, say: 'O Allah, forgive me for what they do not know, and make me better than what they think.'" }
+  { title:"The Dangers of Praise", desc:"Praise can destroy Ikhlas. When praised, say: 'O Allah, forgive me for what they do not know, and make me better than what they think.'" },
+  { title:"The First Three Judged", desc:"On Judgment Day, a scholar, a martyr, and a philanthropist will be condemned because their deeds were done for human fame, not for Allah. (Sahih Muslim)" }
 ];
