@@ -357,6 +357,7 @@
       }
       updateAudioButtons();
       updateSurahButton();
+      updateJuzButton();
       return;
     }
     if (quranPlayMode !== 'none') {
@@ -655,7 +656,7 @@
     const lastLocal = endG - globalAyahOf(endS.n, 1) + 1;
     const verseCount = endG - startG + 1;
 
-    let html = '<button class="quran-back-btn" onclick="App.quranBack()">← Back to Juz</button>';
+    let html = '<button class="quran-back-btn" onclick="App.quranBack()">← Back to Juzes</button>';
     html += `<div class="quran-header"><h2>Juz ${juzNum} — ${j ? j.name : ''}</h2><div style="font-family:'Amiri',serif;font-size:1.2rem;color:var(--gold);margin:4px 0;">${startS.en} → ${endS.en}</div><div class="quran-sub">${startS.n}:${firstLocal} – ${endS.n}:${lastLocal} · ${verseCount} verses</div></div>`;
     html += `<div style="text-align:center;margin:8px 0 12px;"><button id="juzPlayBtn" class="surah-play-btn" onclick="App.playJuz(${juzNum})">▶ Play Juz</button></div>`;
     if (startS.n !== 1) { html += `<div style="text-align:center;font-size:1.6rem;color:var(--gold);font-family:'Amiri',serif;margin:16px 0;">بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ</div>`; }
