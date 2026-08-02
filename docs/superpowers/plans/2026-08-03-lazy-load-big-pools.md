@@ -30,38 +30,21 @@
 
 - [ ] **Step 1: Write the failing stub test**
 
-Create `C:\Users\Mahin\AppData\Local\Temp\opencode\test-loader.js`:
+Create `C:\Users\Mahin\AppData\Local\Temp\opencode\test-loader.js` (extracts and evals the REAL loader block from actions.js, so it fails pre-implementation and tests actual code post-implementation):
 
 ```js
 const fs = require('fs');
 const src = fs.readFileSync('core/actions.js', 'utf8');
+const loaderMatch = src.match(/const _loadedScripts = new Set\(\);[\s\S]*?function ensureHadithLoaded\(\) \{[\s\S]*?\n  \}/);
+if (!loaderMatch) { console.error('FAIL - loader block not found (not implemented yet)'); process.exit(1); }
 
-// Extract the loader block (exists only after implementation)
-const loaderMatch = src.match(/const _loadedScripts = new Set\(\);[\s\S]*?\n  \}/);
-if (!loaderMatch) { console.error('FAIL - loader block not found'); process.exit(1); }
-
-// Fake DOM
 const created = [];
-const head = { appendChild() {} };
 global.document = {
   createElement(tag) { const el = { tag, onload: null, onerror: null }; created.push(el); return el; },
-  head,
+  head: { appendChild(el) { if (typeof el.onload === 'function') el.onload(); } },
 };
-const _loadedScripts = new Set();
-const _tracked = new Set();
-const loadScript = (srcUrl) => new Promise((resolve, reject) => {
-  if (_loadedScripts.has(srcUrl)) { _tracked.add('dedupe:' + srcUrl); resolve(); return; }
-  const s = document.createElement('script');
-  s.src = srcUrl + '?v=3';
-  s.onload = () => { _loadedScripts.add(srcUrl); resolve(); };
-  s.onerror = () => reject(new Error(srcUrl));
-  document.head.appendChild(s);
-});
-const ensureQuranLoaded = () => loadScript('data/pools/quran-verses.js');
-const ensureHadithLoaded = () => Promise.all([
-  loadScript('data/pools/hadiths.js'),
-  loadScript('data/hadith-collections.js')
-]);
+eval(loaderMatch[0] + '\n;global.__test = { loadScript, ensureQuranLoaded, ensureHadithLoaded };');
+const { loadScript, ensureQuranLoaded, ensureHadithLoaded } = global.__test;
 
 (async () => {
   let failures = 0;
@@ -69,17 +52,22 @@ const ensureHadithLoaded = () => Promise.all([
 
   await ensureQuranLoaded();
   check('quran script created once', created.length === 1 && created[0].src === 'data/pools/quran-verses.js?v=3');
-  check('quran onload fires', _loadedScripts.has('data/pools/quran-verses.js'));
 
   await ensureQuranLoaded();
-  check('second quran call dedupes (no new script)', created.length === 1 && _tracked.has('dedupe:data/pools/quran-verses.js'));
+  check('second quran call dedupes (no new script)', created.length === 1);
 
   await ensureHadithLoaded();
-  check('hadith pair created', created.length === 3);
+  check('hadith pair created (2 scripts)', created.length === 3);
+  check('hadith urls correct', created[1].src === 'data/pools/hadiths.js?v=3' && created[2].src === 'data/hadith-collections.js?v=3');
 
   const before = created.length;
   await ensureHadithLoaded();
   check('hadith pair dedupes', created.length === before);
+
+  let rejected = false;
+  await ensureHadithLoaded().catch(() => { rejected = true; });
+  created.forEach(el => { if (el.onerror) el.onerror(new Error('x')); });
+  check('every created script has onerror handler', created.every(el => typeof el.onerror === 'function'));
 
   console.log(failures ? failures + ' FAILURES' : 'ALL CHECKS PASSED');
   process.exit(failures ? 1 : 0);
@@ -140,46 +128,36 @@ Expected: ALL CHECKS PASSED. Then `node --check core/actions.js` → no output (
 
 - [ ] **Step 1: Write the failing stub test**
 
-Create `C:\Users\Mahin\AppData\Local\Temp\opencode\test-refresh-guard.js`:
+Create `C:\Users\Mahin\AppData\Local\Temp\opencode\test-refresh-guard.js` (extracts `refreshContent` from actions.js, stubs every pool global it references — with `QURAN_POOL` and `HADITHS` undefined — and asserts the function completes; pre-implementation it crashes, post-implementation it passes):
 
 ```js
 const fs = require('fs');
 const src = fs.readFileSync('core/actions.js', 'utf8');
 const fnMatch = src.match(/function refreshContent\(\) \{[\s\S]*?\n  \}/);
 if (!fnMatch) { console.error('FAIL - refreshContent not found'); process.exit(1); }
-eval(fnMatch[0]);
 
-let rngCalls = [];
-const fastRng = (len) => { rngCalls.push(len); return 0; };
+// Identify every pool identifier referenced in the pools array + NEW_POOLS
+const poolText = src.match(/const pools = \[([\s\S]*?)\];/)[1];
+const names = new Set([...poolText.matchAll(/'([A-Z_]+)'/g)].map(m => m[1]));
+for (const n of names) {
+  if (n === 'QURAN_POOL' || n === 'HADITHS') global[n] = undefined;
+  else global[n] = [0, 1, 2, 3, 4, 5];
+}
+global.NEW_POOLS = {};
+
+const fastRng = (len) => { if (!Number.isInteger(len) || len < 0) throw new Error('rng got bad len: ' + len); return 0; };
 const today = () => '2026-08-03';
 const S = {};
-// Reproduce the pools array with QURAN_POOL and HADITHS undefined
-const pools = [
-  ['duaIdx', [1,2,3]],
-  ['quranIdx', undefined],
-  ['sunnahIdx', [4,5]],
-  ['hadithIdx', undefined]
-];
 const isNewDay = true;
-const rng = (len) => fastRng(len);
-const poolExpr = src.match(/const pools = \[[\s\S]*?\];/); // not needed; we eval manually below
-global.DUA_POOL = [1,2,3]; global.SUNNAH_POOL = [4,5];
-// Run the body with the real pools list via a wrapper that stubs the pool array
-try {
-  eval(src.match(/function refreshContent\(\) \{[\s\S]*?\n  \}/)[0].replace('const pools = [', 'const pools = ' + JSON.stringify([['duaIdx','DUA_POOL'],['quranIdx','QURAN_POOL'],['sunnahIdx','SUNNAH_POOL'],['hadithIdx','HADITHS']]).replace(/"/g, "'").replace(/'DUA_POOL'/g, 'DUA_POOL').replace(/'SUNNAH_POOL'/g, 'SUNNAH_POOL').replace(/'QURAN_POOL'/g, 'QURAN_POOL').replace(/'HADITHS'/g, 'HADITHS').slice(1,-1) + ', '));
-  console.log('FAIL - refreshContent should have thrown when QURAN_POOL undefined');
-  process.exit(1);
-} catch (e) {
-  console.log('PASS - crashes without guard (expected pre-implementation):', e.message.slice(0, 40));
-}
+eval(fnMatch[0]);
+console.log('PASS - refreshContent ran without throwing; S.quranIdx =', S.quranIdx, ', S.hadithIdx =', S.hadithIdx);
+process.exit(0);
 ```
 
-Note: this stub is brittle by design (regex + eval). After implementation the same script's second half must assert no crash — see Step 4 for the post-implementation check.
-
-- [ ] **Step 2: Run stub test**
+- [ ] **Step 2: Run stub test to verify it fails**
 
 Run: `node C:\Users\Mahin\AppData\Local\Temp\opencode\test-refresh-guard.js`
-Expected: FAIL line (crash confirmed).
+Expected: FAIL — crash on `pool.length` of undefined (or exit 0 only after guard exists).
 
 - [ ] **Step 3: Implement the guard**
 
@@ -195,12 +173,10 @@ to:
     for (const [key,pool] of pools) { if (isNewDay || !S[key]?.length) S[key] = rng((pool||[]).length); }
 ```
 
-- [ ] **Step 4: Verify guard holds**
+- [ ] **Step 4: Run stub test to verify it passes**
 
-Create `C:\Users\Mahin\AppData\Local\Temp\opencode\test-refresh-guard2.js` — same extraction, but now assert the body completes without throwing with `QURAN_POOL`/`HADITHS` undefined (use `global.QURAN_POOL = undefined; global.HADITHS = undefined;` and expect `S.quranIdx === 0`).
-
-Run: `node C:\Users\Mahin\AppData\Local\Temp\opencode\test-refresh-guard2.js`
-Expected: PASS (no throw, `S.quranIdx` set).
+Run: `node C:\Users\Mahin\AppData\Local\Temp\opencode\test-refresh-guard.js`
+Expected: PASS — `refreshContent ran without throwing; S.quranIdx = 0 , S.hadithIdx = 0`.
 
 ---
 
@@ -215,7 +191,7 @@ Expected: PASS (no throw, `S.quranIdx` set).
 
 - [ ] **Step 1: Write the failing stub test**
 
-Create `C:\Users\Mahin\AppData\Local\Temp\opencode\test-quran-trigger.js`:
+Create `C:\Users\Mahin\AppData\Local\Temp\opencode\test-quran-trigger.js` (stubs `ensureQuranLoaded` to actually define `QURAN_POOL` so the guard's recursive re-render terminates):
 
 ```js
 const fs = require('fs');
@@ -223,16 +199,25 @@ const src = fs.readFileSync('render/render.js', 'utf8');
 const fnMatch = src.match(/function renderQuranSurah\(el, surahNum\) \{[\s\S]*?\n  \}/);
 if (!fnMatch) { console.error('FAIL - renderQuranSurah not found'); process.exit(1); }
 let loaded = false;
-global.window = { App: { ensureQuranLoaded: () => { loaded = true; return Promise.resolve(); } } };
+global.window = {
+  App: { ensureQuranLoaded: () => {
+    loaded = true;
+    global.QURAN_POOL = [{ source: '1:1', arabic: 'x', english: 'y' }];
+    return Promise.resolve();
+  } },
+};
 global.QURAN_POOL = undefined;
 global.QURAN_SURAHS = [{ n: 1, ar: 'x', en: 'y', ay: 7, type: 'Meccan' }];
 const el = { innerHTML: '' };
 eval(fnMatch[0]);
-renderQuranSurah(el, 1).catch ? null : renderQuranSurah(el, 1);
+renderQuranSurah(el, 1);
+const loadingShown = el.innerHTML.includes('Loading verses');
 setTimeout(() => {
   console.log((loaded ? 'PASS' : 'FAIL') + ' - ensureQuranLoaded triggered when pool undefined');
-  console.log((el.innerHTML.includes('Loading verses') ? 'PASS' : 'FAIL') + ' - loading note shown');
-  process.exit(loaded && el.innerHTML.includes('Loading verses') ? 0 : 1);
+  console.log((loadingShown ? 'PASS' : 'FAIL') + ' - loading note shown before load');
+  console.log((el.innerHTML.includes('verse-card') ? 'PASS' : 'FAIL') + ' - re-rendered after load');
+  const all = loaded && loadingShown && el.innerHTML.includes('verse-card');
+  process.exit(all ? 0 : 1);
 }, 50);
 ```
 
@@ -370,7 +355,7 @@ Expected: no output (clean).
 
 Run each and expect ALL CHECKS PASSED:
 - `node C:\Users\Mahin\AppData\Local\Temp\opencode\test-loader.js`
-- `node C:\Users\Mahin\AppData\Local\Temp\opencode\test-refresh-guard2.js`
+- `node C:\Users\Mahin\AppData\Local\Temp\opencode\test-refresh-guard.js`
 - `node C:\Users\Mahin\AppData\Local\Temp\opencode\test-quran-trigger.js`
 - `node C:\Users\Mahin\AppData\Local\Temp\opencode\test-hadith-hook.js`
 
