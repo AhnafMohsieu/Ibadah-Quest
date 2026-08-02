@@ -334,6 +334,7 @@
   let quranSurahQueue = [];
   let quranSurahIdx = 0;
   let quranCurrentSurah = null;
+  let quranCurrentJuz = null;
   let quranViewMode = 'surah';
   let quranSearchTerm = '';
 
@@ -505,6 +506,10 @@
       renderQuranSurah(el, quranCurrentSurah);
       return;
     }
+    if (quranCurrentJuz !== null) {
+      renderQuranJuz(el, quranCurrentJuz);
+      return;
+    }
 
     let html = '<div class="quran-header"><h2>📖 The Noble Quran</h2><div class="quran-sub">114 Surahs - Tap a surah to read</div></div>';
     html += '<div class="tab-bar-quran">';
@@ -574,19 +579,64 @@
     el.innerHTML = html;
   }
 
+  function renderQuranJuz(el, juzNum) {
+    if (typeof QURAN_POOL === 'undefined') {
+      el.innerHTML = '<div class="quran-loading">Loading verses…</div>';
+      window.App.ensureQuranLoaded()
+        .then(() => renderQuranJuz(el, juzNum))
+        .catch(() => { el.innerHTML = '<div class="quran-loading">Couldn\'t load verses — check your connection and retry.</div>'; });
+      return;
+    }
+    const startG = juzBegin(juzNum), endG = juzEnd(juzNum);
+    if (startG === null || endG === null) { quranCurrentJuz = null; renderQuran(); return; }
+    const startS = findSurahByAyah(startG);
+    const endS = findSurahByAyah(endG);
+    const j = QURAN_JUZ.find(x => x.n === juzNum);
+    const firstLocal = startG - globalAyahOf(startS.n, 1) + 1;
+    const lastLocal = endG - globalAyahOf(endS.n, 1) + 1;
+    const verseCount = endG - startG + 1;
+
+    let html = '<button class="quran-back-btn" onclick="App.quranBack()">← Back to Juz</button>';
+    html += `<div class="quran-header"><h2>Juz ${juzNum} — ${j ? j.name : ''}</h2><div style="font-family:'Amiri',serif;font-size:1.2rem;color:var(--gold);margin:4px 0;">${startS.en} → ${endS.en}</div><div class="quran-sub">${startS.n}:${firstLocal} – ${endS.n}:${lastLocal} · ${verseCount} verses</div></div>`;
+    html += `<div style="text-align:center;margin:8px 0 12px;"><button id="juzPlayBtn" class="surah-play-btn" onclick="App.playJuz(${juzNum})">▶ Play Juz</button></div>`;
+    if (startS.n !== 1) { html += `<div style="text-align:center;font-size:1.6rem;color:var(--gold);font-family:'Amiri',serif;margin:16px 0;">بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ</div>`; }
+
+    const verses = [];
+    QURAN_POOL.forEach(v => {
+      if (!v.source) return;
+      const m = v.source.match(/(\d+):(\d+)/);
+      if (!m) return;
+      const surah = parseInt(m[1]), ayah = parseInt(m[2]);
+      const g = globalAyahOf(surah, ayah);
+      if (g >= startG && g <= endG) verses.push({ v, surah, ayah });
+    });
+    verses.sort((a, b) => (globalAyahOf(a.surah, a.ayah) - globalAyahOf(b.surah, b.ayah)));
+
+    if (verses.length === 0) {
+      html += `<div class="quran-loading">No local verses available for Juz ${juzNum}.</div>`;
+    } else {
+      verses.forEach(({ v, surah, ayah }) => {
+        html += `<div class="verse-card">
+          <div class="verse-num">${surah}:${ayah}</div>
+          <div class="verse-arabic">${v.arabic}</div>
+          ${v.roman ? `<div style="font-size:0.85rem;color:var(--text2);font-style:italic;margin:6px 0;line-height:1.5;">${v.roman}</div>` : ''}
+          <div class="verse-english">${v.english || ''}</div>
+          <button class="verse-play-btn" data-surah="${surah}" data-verse="${ayah}" onclick="App.playQuranVerse(${surah},${ayah})">▶</button>
+        </div>`;
+      });
+    }
+    el.innerHTML = html;
+    updateAudioButtons();
+    updateJuzButton();
+  }
+
   function setQuranView(mode) { quranViewMode = mode; quranSearchTerm = ''; renderQuran(); }
   function quranSearchFilter(term) { quranSearchTerm = term; renderQuran(); }
-  function openQuranSurah(num) { quranCurrentSurah = num; renderQuran(); }
-  function quranBack() { quranCurrentSurah = null; renderQuran(); }
+  function openQuranSurah(num) { quranCurrentSurah = num; quranCurrentJuz = null; renderQuran(); }
+  function quranBack() { quranCurrentSurah = null; quranCurrentJuz = null; renderQuran(); }
   function openQuranJuz(juzNum) {
-    const j = QURAN_JUZ.find(x => x.n === juzNum);
-    if (!j) return;
-    const nextJuz = QURAN_JUZ.find(x => x.n === juzNum + 1);
-    const endAyah = nextJuz ? nextJuz.start - 1 : 6236;
-    const startSurah = findSurahByAyah(j.start);
-    const endSurah = findSurahByAyah(endAyah);
-    if (!startSurah) return;
-    quranCurrentSurah = startSurah.n;
+    quranCurrentJuz = juzNum;
+    quranCurrentSurah = null;
     renderQuran();
   }
 
