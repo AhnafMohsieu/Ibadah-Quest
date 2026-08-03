@@ -29,7 +29,10 @@
     const xpPct = s.xpNext ? Math.min(1, Math.max(0, (xp - s.xp) / (s.xpNext - s.xp))) : 1;
     return { stage: idx + 1, name: s.name, icon: s.icon, next: s.next, xpMin: s.xp, xpNext: s.xpNext, strMin: s.str, strNext: s.strNext, xpPct: Math.round(xpPct * 1000) / 1000 };
   }
-  function flowerCount(streak) { return Math.max(1, Math.min(7, Math.floor((streak - 30) / 5) + 1)); }
+  function flowerCount(streak) {
+    if (streak < 30) return 0;
+    return Math.min(7, Math.floor((streak - 30) / 5) + 1);
+  }
   function caption() {
     const d = new Date();
     return CAPTIONS[Math.floor(d.getTime() / 86400000) % CAPTIONS.length];
@@ -49,6 +52,7 @@
     if (stage === 4) return `<svg class="garden-svg" viewBox="0 0 200 220"><ellipse cx="100" cy="206" rx="70" ry="9" fill="#163024"/><path d="M96 206 L88 120 L112 120 L104 206 Z" fill="#5C3D21"/><path d="M100 160 L58 128" stroke="#5C3D21" stroke-width="9" stroke-linecap="round"/><path d="M100 146 L146 112" stroke="#5C3D21" stroke-width="9" stroke-linecap="round"/><path d="M100 132 L74 88" stroke="#5C3D21" stroke-width="8" stroke-linecap="round"/><path d="M100 132 L128 84" stroke="#5C3D21" stroke-width="8" stroke-linecap="round"/><circle cx="58" cy="122" r="20" fill="#2E6B3F"/><circle cx="148" cy="106" r="18" fill="#2E6B3F"/><circle cx="72" cy="82" r="20" fill="#3E7C4F"/><circle cx="130" cy="78" r="20" fill="#3E7C4F"/><circle cx="100" cy="92" r="26" fill="#3E9B63"/><circle cx="100" cy="82" r="24" fill="#4CAF7A"/></svg>`;
     return `<svg class="garden-svg" viewBox="0 0 200 220"><ellipse cx="100" cy="206" rx="70" ry="9" fill="#163024"/><path d="M96 206 L88 120 L112 120 L104 206 Z" fill="#5C3D21"/><path d="M100 160 L58 128" stroke="#5C3D21" stroke-width="9" stroke-linecap="round"/><path d="M100 146 L146 112" stroke="#5C3D21" stroke-width="9" stroke-linecap="round"/><path d="M100 132 L74 88" stroke="#5C3D21" stroke-width="8" stroke-linecap="round"/><path d="M100 132 L128 84" stroke="#5C3D21" stroke-width="8" stroke-linecap="round"/><circle cx="58" cy="122" r="20" fill="#2E6B3F"/><circle cx="148" cy="106" r="18" fill="#2E6B3F"/><circle cx="72" cy="82" r="20" fill="#3E7C4F"/><circle cx="130" cy="78" r="20" fill="#3E7C4F"/><circle cx="100" cy="92" r="26" fill="#3E9B63"/><circle cx="100" cy="82" r="24" fill="#4CAF7A"/>${flowersSVG}</svg>`;
   }
+  let lastTree = null;
   function renderGarden() {
     try {
       const el = document.getElementById('gardenArea');
@@ -60,15 +64,25 @@
       const progress = g.next
         ? `${S.xp}/${g.xpNext} XP to ${g.next}`
         : 'Your tree is in full bloom — keep nourishing it.';
-      el.innerHTML = `<div class="garden-card">
-        <div class="garden-tree" style="transform:scale(${scale})">${treeSVG(g.stage, flowers)}</div>
-        <div class="garden-info">
-          <div class="garden-stage-name">${g.icon} ${g.name}</div>
-          <div class="garden-progress">${progress}</div>
-          ${g.next ? `<div class="garden-progress-sub">Streak ${streak}/${g.strNext} for ${g.next}</div>` : ''}
-          <div class="garden-caption">${caption()}</div>
-        </div>
-      </div>`;
+      const key = g.stage + ':' + flowers;
+      if (lastTree !== key) {
+        el.innerHTML = `<div class="garden-card">
+          <div class="garden-tree" style="transform:scale(${scale})">${treeSVG(g.stage, flowers)}</div>
+          <div class="garden-info">
+            <div class="garden-stage-name">${g.icon} ${g.name}</div>
+            <div class="garden-progress">${progress}</div>
+            ${g.next ? `<div class="garden-progress-sub">Streak ${streak}/${g.strNext} for ${g.next}</div>` : ''}
+            <div class="garden-caption">${caption()}</div>
+          </div>
+        </div>`;
+        lastTree = key;
+      }
+      const tree = el.querySelector('.garden-tree');
+      if (!tree) return;
+      tree.style.transform = 'scale(' + scale + ')';
+      el.querySelector('.garden-progress').textContent = progress;
+      if (g.next) el.querySelector('.garden-progress-sub').textContent = `Streak ${streak}/${g.strNext} for ${g.next}`;
+      el.querySelector('.garden-caption').textContent = caption();
     } catch (e) { console.warn('Render Garden failed:', e.message); }
   }
   window.gardenStage = gardenStage;

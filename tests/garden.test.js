@@ -32,3 +32,19 @@ test('flowers grow with streak beyond 30, capped at 7', () => {
   assert.strictEqual(w.flowerCount(45), 4);
   assert.strictEqual(w.flowerCount(80), 7);
 });
+
+test('flowerCount returns 0 before the bloom stage', () => {
+  assert.strictEqual(w.flowerCount(10), 0);
+  assert.strictEqual(w.flowerCount(29), 0);
+});
+
+test('stage boundary at exactly 500 XP rolls to Sapling', () => {
+  assert.strictEqual(w.gardenStage(499, 7).stage, 2);
+  assert.strictEqual(w.gardenStage(500, 7).stage, 3);
+});
+
+test('xpPct clamps to [0, 1] within the stage range', () => {
+  assert.strictEqual(w.gardenStage(0, 0).xpPct, 0);
+  assert.strictEqual(w.gardenStage(800, 3).xpPct, 1);
+  assert.strictEqual(w.gardenStage(5000, 30).xpPct, 1);
+});
