@@ -732,3 +732,13 @@ body {
   75%  { transform: translate(-50px, -100px) scale(1.2); opacity: 0.9; }
   100% { transform: translate(0, 0) scale(1); opacity: 0.2; }
 }
+
+/* ── Spiritual Garden ── */
+.garden-card { display:flex; gap:18px; align-items:center; background:linear-gradient(180deg, rgba(62,124,79,0.12), rgba(11,17,20,0.2)); border:1px solid rgba(62,124,79,0.35); border-radius:var(--radius); padding:18px 20px; margin-bottom:20px; }
+.garden-svg { width:120px; height:132px; display:block; }
+.garden-tree { transition: transform 1.2s ease; transform-origin: bottom center; flex-shrink:0; }
+.garden-info { flex:1; }
+.garden-stage-name { font-family:var(--font-heading); font-size:1.15rem; font-weight:700; color:var(--gold-light); letter-spacing:0.5px; margin-bottom:6px; }
+.garden-progress { font-size:0.82rem; color:var(--text2); }
+.garden-progress-sub { font-size:0.75rem; color:var(--text2); opacity:0.8; margin-top:3px; }
+.garden-caption { font-size:0.75rem; color:var(--gold); opacity:0.85; margin-top:8px; font-style:italic; }
