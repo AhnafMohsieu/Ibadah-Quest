@@ -68,7 +68,7 @@
       }
       let fresh;
       try { fresh = await fetch(req); } catch (e) { fresh = undefined; }
-      if (fresh && fresh.ok) cache.put(key, fresh.clone());
+      try { if (fresh && fresh.ok) cache.put(key, fresh.clone()); } catch (e) {}
       if (fresh) return fresh;
       if (req.mode === 'navigate') {
         const shell = await caches.match('/');
