@@ -51,3 +51,21 @@ test('muhasabahHTML renders the gentle suggestion when one is given', () => {
   const html = w.muhasabahHTML({ prayers: 3, daysPrayed: 2, deeds: 2 }, { icon: '🤲', label: 'Charity' }, 6);
   assert.ok(html.includes('Perhaps next week, try dedicating a moment to 🤲 Charity.'));
 });
+
+test('computeDeedCounts window excludes deeds older than the trailing 14 days', () => {
+  const log2 = {
+    '2026-08-06': { p: {}, d: { charity: true } },
+    '2026-08-07': { p: {}, d: { charity: true } },
+    '2026-08-20': { p: {}, d: { fasting: true } }
+  };
+  const counts = w.computeDeedCounts(log2, ['charity', 'fasting'], '2026-08-20', 14);
+  assert.deepEqual(counts, [
+    { id: 'charity', count: 1 },
+    { id: 'fasting', count: 1 }
+  ]);
+});
+
+test('pickSuggestion returns the first pool deed when every count is zero', () => {
+  const counts = w.computeDeedCounts({}, ['charity', 'fasting', 'istighfar'], '2026-08-05', 14);
+  assert.deepEqual(w.pickSuggestion(counts), { id: 'charity', count: 0 });
+});

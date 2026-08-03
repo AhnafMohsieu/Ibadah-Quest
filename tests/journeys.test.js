@@ -38,3 +38,11 @@ test('journeyStart sets the start date once and never overwrites', () => {
   const s2 = w.journeyStart(s1, 'fajr40', '2026-09-01');
   assert.strictEqual(s2.journeys.fajr40, '2026-08-03');
 });
+
+test('journeyProgress ignores days after the end date', () => {
+  const extended = Object.assign({}, log, {
+    '2026-08-08': { p: { Fajr: true }, d: { istighfar: true } }
+  });
+  assert.strictEqual(w.journeyProgress(extended, fajrJourney, '2026-08-03', '2026-08-07'), 3);
+  assert.strictEqual(w.journeyProgress(extended, istighfarJourney, '2026-08-03', '2026-08-07'), 3);
+});
