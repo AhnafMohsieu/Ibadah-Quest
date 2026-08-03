@@ -21,7 +21,7 @@
       graveIdx:[], signsIdx:[], dreamsIdx:[], parentingIdx:[], foodIdx:[], tibbIdx:[],
       youthIdx:[], techIdx:[], neighborsIdx:[],
       inspireIdx:[], dhikrCounters:{},
-      challenges:[], gratitudeLog:{}, fastingDays:{}, memorized:0, memorizationList:[],
+      challenges:[], muhWeek:'', journeys:{}, gratitudeLog:{}, fastingDays:{}, memorized:0, memorizationList:[],
       morningDone:{}, eveningDone:{}, charity:{daily:0,monthly:0,given:0,monthStart:''},
       quranAudioReciter:7,
       avatar:'👳', joinDate:null

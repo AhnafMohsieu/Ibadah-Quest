@@ -1,0 +1,35 @@
+'use strict';
+const { test } = require('node:test');
+const assert = require('node:assert');
+const fs = require('fs');
+const path = require('path');
+
+const root = path.join(__dirname, '..');
+const html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
+const tabs = fs.readFileSync(path.join(root, 'data', 'tab-groups.js'), 'utf8');
+
+test('index.html has the three feature containers', () => {
+  assert.ok(html.includes('id="gardenArea"'));
+  assert.ok(html.includes('id="muhasabahEntry"'));
+  assert.ok(html.includes('id="muhasabahModal"'));
+  assert.ok(html.includes('id="panel-journeys"'));
+  assert.ok(html.includes('id="journeyArea"'));
+});
+
+test('index.html loads the feature scripts in order', () => {
+  const i1 = html.indexOf('data/journeys.js');
+  const i2 = html.indexOf('features/garden.js');
+  const i3 = html.indexOf('features/muhasabah.js');
+  const i4 = html.indexOf('features/journeys.js');
+  assert.ok(i1 > -1 && i2 > -1 && i3 > -1 && i4 > -1);
+  assert.ok(i1 < i2 && i2 < i3 && i3 < i4);
+  assert.ok(i4 < html.indexOf('core/actions.js'));
+});
+
+test('leaderboard panel is removed', () => {
+  assert.ok(!html.includes('panel-leaderboard'));
+});
+
+test('Journeys tab is wired into the ibadah group', () => {
+  assert.ok(tabs.includes("id: 'journeys'"));
+});

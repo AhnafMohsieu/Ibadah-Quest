@@ -6,6 +6,7 @@
     { id: 'timer',      icon: '⏳', label: 'Prayer Times' },
     { id: 'quests',     icon: '🎯', label: 'Quests' },
     { id: 'challenges', icon: '⚔️', label: 'Challenges' },
+    { id: 'journeys', icon: '🌱', label: 'Journeys' },
     { id: 'morning',    icon: '🌞', label: 'Morning' },
     { id: 'evening',    icon: '🌆', label: 'Evening' },
     { id: 'dhikr',      icon: '📿', label: 'Remembrance' },

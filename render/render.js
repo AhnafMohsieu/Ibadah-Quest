@@ -15,7 +15,7 @@
     const challengeScroll = challengeArea ? challengeArea.scrollTop : 0;
 
     const safe = (fn, name) => { try { fn(); } catch(e) { console.warn('Render ' + name + ' failed:', e.message); } };
-    safe(renderLv, 'Lv'); safe(renderStr, 'Str'); safe(renderToday, 'Today'); safe(renderQ, 'Q'); safe(renderChallenges, 'Challenges'); safe(renderAch, 'Ach'); safe(renderProg, 'Prog'); safe(renderShop, 'Shop'); safe(renderProfile, 'Profile'); safe(renderTimer, 'Timer'); safe(renderStats, 'Stats');
+    safe(renderLv, 'Lv'); safe(renderStr, 'Str'); safe(renderToday, 'Today'); safe(renderQ, 'Q'); safe(renderChallenges, 'Challenges'); safe(renderAch, 'Ach'); safe(renderProg, 'Prog'); safe(renderShop, 'Shop'); safe(renderProfile, 'Profile'); safe(renderTimer, 'Timer'); safe(renderStats, 'Stats'); safe(() => window.renderGarden && window.renderGarden(), 'Garden'); safe(() => window.renderMuhasabahEntry && window.renderMuhasabahEntry(), 'MuhEntry'); safe(() => window.renderJourneys && window.renderJourneys(), 'Journeys');
 
     if (volArea) volArea.scrollTop = volScroll;
     if (deedArea) deedArea.scrollTop = deedScroll;

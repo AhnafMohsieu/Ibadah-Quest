@@ -20,6 +20,7 @@
 </div>
 
 <div class="toast-overlay" id="toastOverlay" style="display:none;"></div>
+<div id="muhasabahModal"></div>
 <div class="app">
   <div class="header">
     <div class="header-crescent">🌙</div>
@@ -66,6 +67,8 @@
   <!-- ═══════════════ ALL TAB PANELS ═══════════════ -->
   <!-- IBADAH GROUP -->
   <div class="tab-panel active" id="panel-today">
+    <div id="gardenArea"></div>
+    <div id="muhasabahEntry"></div>
     <div id="dailyWidgetArea"></div>
     <div id="tipArea"></div>
     <div id="prayerArea"></div>
@@ -83,6 +86,7 @@
   </div>
   <div class="tab-panel" id="panel-quests"><div id="questArea"></div></div>
   <div class="tab-panel" id="panel-challenges"><div id="challengeArea"></div></div>
+  <div class="tab-panel" id="panel-journeys"><div id="journeyArea"></div></div>
   <div class="tab-panel" id="panel-morning"><div id="morningArea"></div></div>
   <div class="tab-panel" id="panel-evening"><div id="eveningArea"></div></div>
   <div class="tab-panel" id="panel-dhikr"><div id="dhikrCounterArea"></div><div id="dhikrArea"></div></div>
@@ -158,10 +162,6 @@
     <div class="shop-list" id="shopArea"></div>
   </div>
   <div class="tab-panel" id="panel-profile"><div id="profileArea"></div></div>
-  <div class="tab-panel" id="panel-leaderboard">
-    <div class="section-title">🏅 Global Leaderboard</div>
-    <div id="leaderboardArea" style="background:var(--card2);border-radius:12px;padding:20px;text-align:center;color:var(--text2);font-size:0.9rem;"><p>Coming Soon...</p></div>
-  </div>
   <div class="tab-panel" id="panel-stats">
     <div class="section-title">📈 Advanced Analytics</div>
     <div id="statsArea"></div>
@@ -351,6 +351,12 @@
 <script src="analytics/analytics.js"></script>
 <script src="analytics/charts.js"></script>
 <script src="analytics/dashboard.js"></script>
+
+<!-- Spiritual Growth Features -->
+<script src="data/journeys.js?v=1"></script>
+<script src="features/garden.js?v=1"></script>
+<script src="features/muhasabah.js?v=1"></script>
+<script src="features/journeys.js?v=1"></script>
 
 <!-- Actions (core logic, navigation, init, window.App) -->
 <script src="core/actions.js?v=3"></script>

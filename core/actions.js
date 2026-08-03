@@ -2112,6 +2112,7 @@ Object.keys(NEW_POOLS).forEach(k => {
     const t = today();
     if (S.lad !== t) { S.lad=t; if(S.ab&&S.ab.exp<t) S.ab=null; recalc(); saveState(); }
     genDQ(); genWQ(); genMQ(); genYQ(); genLQ(); refreshContent(); recalc(); checkQ(); checkA(); S.lv=lvFrom(S.xp); saveState(); initCalView(); renderAll();
+    try { if (window.maybeShowMuhasabah) window.maybeShowMuhasabah(); } catch(e) { console.warn('Muhasabah trigger failed:', e.message); }
   }
 
   function init() {
@@ -2138,6 +2139,9 @@ Object.keys(NEW_POOLS).forEach(k => {
       dismissTip: () => { S.tdismiss=true; saveState(); renderTip(); },
       toggleQuest, completeChallenge: window.completeChallenge, addGratitude, toggleFasting, setCharityGoals,
       addMemorization, toggleMorning, toggleEvening, switchUser, logout, resetAll,
+      openMuhasabah: typeof window.openMuhasabah === 'function' ? window.openMuhasabah : () => {},
+      dismissMuhasabah: typeof window.dismissMuhasabah === 'function' ? window.dismissMuhasabah : () => {},
+      joinJourney: typeof window.joinJourney === 'function' ? window.joinJourney : () => {},
       manualRefresh: manualRefreshContent, ensureQuranLoaded, ensureHadithLoaded, switchCategory, selectCategory, activateTab,
       claimBonus, tapDhikr, resetDhikr, nextDhikr,
       setQuranView, quranSearchFilter, openQuranSurah, quranBack, openQuranJuz,
