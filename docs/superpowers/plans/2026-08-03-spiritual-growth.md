@@ -13,7 +13,7 @@
 - Vanilla JS/HTML/CSS only in the app. **No new runtime dependencies.** Node test runner / `node:vm` are dev-only and ship no files into the app.
 - No leaderboards, competition, or comparison-to-others copy anywhere in the new features. All copy is gratitude-first and anti-anxiety ("at your own pace, no rush").
 - New state is limited to `muhWeek` and `journeys` in `freshState()` (state/state.js). Journey progress is **derived** from `S.log` — never stored.
-- All test commands: `node --test tests/` (run from project root `C:\Users\Mahin\Desktop\IQ`).
+- All test commands: `node --test tests/*.test.js` (run from project root `C:\Users\Mahin\Desktop\IQ`; the directory form `node --test tests/` fails with MODULE_NOT_FOUND on Windows/Node v24 — node's built-in glob expansion handles `*.test.js`).
 - One commit per task (project rule: never bundle multiple changes into one commit).
 - Existing files are large; only apply the exact edits listed. Do not reformat or refactor anything else.
 
@@ -155,7 +155,7 @@ test('Journeys tab is wired into the ibadah group', () => {
 
 - [ ] **Step 4: Run tests to verify they fail**
 
-Run: `node --test tests/`
+Run: `node --test tests/*.test.js`
 Expected: FAIL — `state.test.js` (freshState has no `muhWeek`), `html.test.js` (missing containers/scripts, leaderboard still present).
 
 - [ ] **Step 5: Add state fields**
@@ -293,7 +293,7 @@ New:
 
 - [ ] **Step 10: Run tests to verify they pass**
 
-Run: `node --test tests/`
+Run: `node --test tests/*.test.js`
 Expected: PASS — all 6 tests (2 state + 4 html).
 
 - [ ] **Step 11: Commit**
@@ -898,7 +898,7 @@ Expected: PASS — all 4 tests.
 
 - [ ] **Step 7: Run the full suite**
 
-Run: `node --test tests/`
+Run: `node --test tests/*.test.js`
 Expected: PASS — all 21 tests (2 state + 4 html + 5 garden + 6 muhasabah + 4 journeys).
 
 - [ ] **Step 8: Commit**
