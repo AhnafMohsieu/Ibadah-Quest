@@ -52,7 +52,7 @@
   function joinJourney(id) {
     try {
       if (S.journeys[id]) return;
-      S.journeys[id] = today();
+      Object.assign(S, journeyStart(S, id, today()));
       saveState();
       renderJourneys();
     } catch (e) { console.warn('Join journey failed:', e.message); }
