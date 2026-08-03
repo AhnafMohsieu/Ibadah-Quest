@@ -36,12 +36,7 @@
     renderDynamic();
     renderStatic();
   }
-  function renderToday() { renderDailyWidgetArea(); renderBonus(); renderTip(); renderPrayers(); renderVol(); renderDeeds(); }
-  function renderDailyWidgetArea() {
-    const el = document.getElementById('dailyWidgetArea');
-    if (!el) return;
-    el.innerHTML = renderDailyWidget();
-  }
+  function renderToday() { renderBonus(); renderTip(); renderPrayers(); renderVol(); renderDeeds(); }
 
   // Hijri Calendar Conversion (Tabular Islamic Calendar algorithm)
   const HIJRI_MONTHS = ['Muharram','Safar','Rabi al-Awwal','Rabi al-Thani','Jumada al-Ula','Jumada al-Thani','Rajab','Sha\'ban','Ramadan','Shawwal','Dhul Qi\'dah','Dhul Hijjah'];
@@ -1491,8 +1486,6 @@
   window.renderPrayers = renderPrayers;
   window.renderVol = renderVol;
   window.renderDeeds = renderDeeds;
-  window.renderDailyWidgetArea = renderDailyWidgetArea;
-  window.renderDailyWidget = renderDailyWidget;
   window.fetchPrayerTimes = fetchPrayerTimes;
   window.gregorianToHijri = gregorianToHijri;
   window.hijriToGregorian = hijriToGregorian;

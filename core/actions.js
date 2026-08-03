@@ -2147,7 +2147,7 @@ Object.keys(NEW_POOLS).forEach(k => {
       setQuranView, quranSearchFilter, openQuranSurah, quranBack, openQuranJuz,
       openHadithCollection, openHadithBook, hadithBack,
       playQuranVerse, playSurah, stopSurah, setQuranReciter, playJuz, updateJuzButton,
-      globalSearch, executeSearch, renderDailyWidget,
+      globalSearch, executeSearch,
       calPrevMonth, calNextMonth, calGoToday, selectAvatar, toggleAvatarPicker
     };
     window.checkA = checkA;

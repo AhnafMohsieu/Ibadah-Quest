@@ -580,12 +580,6 @@ body {
 .global-search-item .gs-title { font-size:0.88rem; color:var(--text); }
 .global-search-item .gs-desc { font-size:0.75rem; color:var(--text2); margin-top:2px; }
 
-/* ── Daily Widget ── */
-.daily-widget { background:linear-gradient(135deg, rgba(212,175,55,0.08), rgba(212,175,55,0.02)); border:1px solid rgba(212,175,55,0.2); border-radius:16px; padding:20px; margin-bottom:18px; }
-.daily-widget-title { font-family:'Noto Naskh Arabic','Amiri',serif; font-size:1.05rem; color:var(--gold-light); margin-bottom:10px; font-weight:700; letter-spacing:0.3px; }
-.daily-widget-body { font-size:0.88rem; color:var(--text); line-height:1.65; }
-.daily-widget-sub { font-size:0.75rem; color:var(--text2); margin-top:8px; font-style:italic; }
-
 /* ── Intro Overlay ── */
 @keyframes introFadeUp {
   from { opacity:0; transform:translateY(24px) scale(0.97); }

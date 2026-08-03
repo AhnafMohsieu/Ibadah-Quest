@@ -57,39 +57,6 @@ const SEARCH_INDEX = [
   {cat:"Profile",title:"Rewards",desc:"Shop",action:"switchCategory",args:["profile_main","rewards"]},
 ];
 
-const DAILY_ISLAMIC = [
-  {title:"Prophetic Hadith",body:"The Prophet \uFDFC said: 'The best of you are those who are best to their wives.'",sub:"\u2014 Sunan al-Tirmidhi"},
-  {title:"Daily Verse",body:"'And whoever relies upon Allah - then He is sufficient for him.'",sub:"\u2014 Quran 65:3"},
-  {title:"Prophetic Advice",body:"The Prophet \uFDFC said: 'Do not be angry.' He repeated this three times.",sub:"\u2014 Sahih al-Bukhari"},
-  {title:"Daily Reminder",body:"'Verily, with hardship comes ease.'",sub:"\u2014 Quran 94:6"},
-  {title:"Prophetic Sunnah",body:"The Prophet \uFDFC never used to sleep on his stomach.",sub:"\u2014 Sahih Muslim"},
-  {title:"Daily Verse",body:"'Indeed, Allah is with the patient.'",sub:"\u2014 Quran 2:153"},
-  {title:"Prophetic Advice",body:"The Prophet \uFDFC said: 'Whoever believes in Allah and the Last Day, let him speak good or remain silent.'",sub:"\u2014 Sahih al-Bukhari"},
-  {title:"Daily Reminder",body:"'And it is He who created the heavens and earth in truth.'",sub:"\u2014 Quran 6:73"},
-  {title:"Prophetic Hadith",body:"The Prophet \uFDFC said: 'The Muslim is the one from whose tongue and hands the Muslims are safe.'",sub:"\u2014 Sahih al-Bukhari"},
-  {title:"Daily Verse",body:"'So remember Me; I will remember you.'",sub:"\u2014 Quran 2:152"},
-  {title:"Prophetic Sunnah",body:"The Prophet \uFDFC would start with the right side in everything.",sub:"\u2014 Sahih al-Bukhari"},
-  {title:"Daily Reminder",body:"'And my success is not but through Allah.'",sub:"\u2014 Quran 11:88"},
-  {title:"Prophetic Advice",body:"The Prophet \uFDFC said: 'He who does not thank people does not thank Allah.'",sub:"\u2014 Sunan Abu Dawud"},
-  {title:"Daily Verse",body:"'And whoever does good deeds, male or female, while being a believer - those will enter Paradise.'",sub:"\u2014 Quran 4:124"},
-  {title:"Prophetic Hadith",body:"The Prophet \uFDFC said: 'Cleanliness is half of faith.'",sub:"\u2014 Sahih Muslim"},
-  {title:"Daily Reminder",body:"'Allah does not burden a soul beyond that it can bear.'",sub:"\u2014 Quran 2:286"},
-  {title:"Prophetic Sunnah",body:"The Prophet \uFDFC used to pray 8 rak'ahs of voluntary prayer at night, plus Witr.",sub:"\u2014 Sahih Muslim"},
-  {title:"Daily Verse",body:"'And put your trust in Allah, and sufficient is Allah as Disposer of affairs.'",sub:"\u2014 Quran 33:3"},
-  {title:"Prophetic Advice",body:"The Prophet \uFDFC said: 'Whoever fasts Ramadan out of sincere faith, all past sins will be forgiven.'",sub:"\u2014 Sahih al-Bukhari"},
-  {title:"Daily Reminder",body:"'So exalted is Allah, the True King!'",sub:"\u2014 Quran 23:116"},
-  {title:"Prophetic Hadith",body:"The Prophet \uFDFC said: 'The strong person is not the one who can wrestle, but the one who controls himself when angry.'",sub:"\u2014 Sahih al-Bukhari"},
-  {title:"Daily Verse",body:"'And Allah guides whom He wills to a straight path.'",sub:"\u2014 Quran 2:213"},
-  {title:"Prophetic Sunnah",body:"The Prophet \uFDFC used to say 'Bismillah' before eating and 'Alhamdulillah' after.",sub:"\u2014 Abu Dawud"},
-  {title:"Daily Reminder",body:"'Indeed, Allah will not change the condition of a people until they change what is in themselves.'",sub:"\u2014 Quran 13:11"},
-  {title:"Prophetic Advice",body:"The Prophet \uFDFC said: 'Seek knowledge from the cradle to the grave.'",sub:"\u2014 Hadith"},
-  {title:"Daily Verse",body:"'And We have certainly made the Quran easy to remember.'",sub:"\u2014 Quran 54:17"},
-  {title:"Prophetic Hadith",body:"The Prophet \uFDFC said: 'Whoever takes a path seeking knowledge, Allah will make easy for him a path to Paradise.'",sub:"\u2014 Sahih Muslim"},
-  {title:"Daily Reminder",body:"'Is he who is devoutly obedient during periods of the night, prostrating and standing?'",sub:"\u2014 Quran 39:9"},
-  {title:"Prophetic Sunnah",body:"The Prophet \uFDFC never took revenge for himself, but only when Allah's limits were transgressed.",sub:"\u2014 Sahih al-Bukhari"},
-  {title:"Daily Verse",body:"'And whoever puts their trust in Allah, He will be enough for them.'",sub:"\u2014 Quran 65:3"}
-];
-
 // ── Pool-to-tab mapping ──
 const _poolTabMap = {
   DUA_POOL:{cat:'ibadah',tab:'duas'}, SUNNAH_POOL:{cat:'knowledge',tab:'sunnahs'},
@@ -222,22 +189,6 @@ function _buildFullIndex() {
     );
   }
 
-  // Add DAILY_ISLAMIC entries
-  if (typeof DAILY_ISLAMIC !== 'undefined') {
-    for (let i = 0; i < DAILY_ISLAMIC.length; i++) {
-      const d = DAILY_ISLAMIC[i];
-      _fullIndex.push({
-        title: d.title,
-        desc: d.body,
-        cat: 'Daily',
-        pool: 'DAILY_ISLAMIC',
-        action: 'switchCategory',
-        args: ['ibadah', 'today'],
-        itemIdx: i
-      });
-    }
-  }
-
   _fullIndexBuilding = false;
 }
 
@@ -338,18 +289,6 @@ function executeSearch(action) {
   if (action && _searchActions[action]) {
     try { _searchActions[action]([]); } catch(e) { console.error('Search action error:', e); }
   }
-}
-
-function getDailyIslamic() {
-  const today = new Date();
-  const dayOfYear = Math.floor((today - new Date(today.getFullYear(), 0, 0)) / 86400000);
-  return DAILY_ISLAMIC[dayOfYear % DAILY_ISLAMIC.length];
-}
-
-function renderDailyWidget() {
-  const d = getDailyIslamic();
-  if (!d) return '';
-  return '<div class="daily-widget"><div class="daily-widget-title">\uD83D\uDCFF ' + d.title + '</div><div class="daily-widget-body">' + d.body + '</div><div class="daily-widget-sub">' + d.sub + '</div></div>';
 }
 
 window.invalidateSearchIndex = invalidateSearchIndex;
