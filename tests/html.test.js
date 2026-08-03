@@ -39,3 +39,9 @@ test('index.html declares the PWA manifest and theme color', () => {
   assert.ok(html.includes('<meta name="theme-color" content="#0b1114">'));
   assert.ok(html.includes('rel="apple-touch-icon"'));
 });
+
+test('index.html registers the service worker and update banner', () => {
+  assert.ok(html.includes("navigator.serviceWorker.register('sw.js')"));
+  assert.ok(html.includes("'SKIP_WAITING'"));
+  assert.ok(html.includes('swUpdateBanner'));
+});
