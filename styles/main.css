@@ -742,3 +742,16 @@ body {
 .garden-progress { font-size:0.82rem; color:var(--text2); }
 .garden-progress-sub { font-size:0.75rem; color:var(--text2); opacity:0.8; margin-top:3px; }
 .garden-caption { font-size:0.75rem; color:var(--gold); opacity:0.85; margin-top:8px; font-style:italic; }
+/* ── Muhasabah ── */
+.muh-entry { width:100%; background:rgba(212,175,55,0.08); border:1px solid rgba(212,175,55,0.25); color:var(--gold-light); padding:12px; border-radius:var(--radius-sm); font-weight:700; font-size:0.85rem; letter-spacing:0.5px; cursor:pointer; margin-bottom:20px; transition:all .2s; }
+.muh-entry:hover { background:rgba(212,175,55,0.15); }
+.muh-overlay { position:fixed; inset:0; background:rgba(3,7,18,0.88); display:flex; align-items:center; justify-content:center; z-index:100000; padding:20px; }
+.muh-card { background:var(--card2); border:1px solid var(--gold); border-radius:var(--radius); padding:28px 24px; max-width:430px; width:100%; box-shadow:0 20px 60px rgba(0,0,0,0.5); }
+.muh-title { font-family:var(--font-heading); font-size:1.05rem; font-weight:700; color:var(--gold); text-align:center; letter-spacing:1px; margin-bottom:16px; }
+.muh-hero { font-size:0.95rem; color:var(--text2); line-height:1.6; text-align:center; margin-bottom:16px; }
+.muh-hero b { color:var(--gold-light); }
+.muh-list { display:flex; flex-direction:column; gap:8px; margin-bottom:16px; }
+.muh-row { display:flex; justify-content:space-between; font-size:0.85rem; color:var(--text2); background:rgba(0,0,0,0.2); padding:10px 14px; border-radius:10px; }
+.muh-row b { color:var(--gold-light); }
+.muh-suggestion { font-size:0.85rem; color:var(--gold); background:rgba(212,175,55,0.08); border:1px dashed rgba(212,175,55,0.3); padding:12px 14px; border-radius:10px; line-height:1.55; margin-bottom:18px; }
+.muh-dismiss { width:100%; background:linear-gradient(135deg,#D4AF37,#A16207); color:#000; border:none; padding:13px; border-radius:30px; font-weight:800; font-size:0.95rem; cursor:pointer; letter-spacing:0.5px; }
