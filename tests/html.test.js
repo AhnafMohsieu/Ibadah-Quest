@@ -33,3 +33,9 @@ test('leaderboard panel is removed', () => {
 test('Journeys tab is wired into the ibadah group', () => {
   assert.ok(tabs.includes("id: 'journeys'"));
 });
+
+test('index.html declares the PWA manifest and theme color', () => {
+  assert.ok(html.includes('<link rel="manifest" href="manifest.json">'));
+  assert.ok(html.includes('<meta name="theme-color" content="#0b1114">'));
+  assert.ok(html.includes('rel="apple-touch-icon"'));
+});
