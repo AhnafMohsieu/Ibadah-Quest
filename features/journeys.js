@@ -63,7 +63,7 @@
       <div><div class="journey-name">${j.name}</div><div class="journey-desc">${j.desc}</div></div></div>`;
     if (!start) {
       return `<div class="journey-card">${head}
-        <button class="journey-start" onclick="App.joinJourney('${j.id}')">Begin 40-Day Journey</button></div>`;
+        <button class="journey-start" onclick="App.joinJourney('${j.id}')">Begin ${j.target}-Day Journey</button></div>`;
     }
     const completed = journeyProgress(S.log, j, start, t);
     checkJourneyMilestone(j, completed);
@@ -77,7 +77,7 @@
       <div class="journey-summary">${summary}</div>${streakText}${gridHTML(completed, j.target)}</div>`;
   }
   function checkJourneyMilestone(journey, completed) {
-    const milestones = [10, 20, 30, 40];
+    const milestones = [0.25, 0.5, 0.75].map(p => Math.round(journey.target * p)).filter(m => m < journey.target);
     for (const m of milestones) {
       if (completed === m) {
         toast('🎯', `Journey Milestone: ${m} days complete!`);
@@ -89,6 +89,10 @@
       return true;
     }
     return false;
+  }
+  function getAvailableJourneys() {
+    const unlockedTiers = S.journeyStats?.unlockedTiers || ['7day'];
+    return JOURNEYS.filter(j => unlockedTiers.includes(j.tier));
   }
   function renderJourneyDashboard() {
     const analytics = getJourneyAnalytics();
@@ -121,11 +125,11 @@
       const el = document.getElementById('journeyArea');
       if (!el) return;
       const t = today();
-      const defs = (typeof JOURNEYS !== 'undefined') ? JOURNEYS : [];
+      const defs = getAvailableJourneys();
       el.innerHTML = renderJourneyDashboard() +
         renderJourneyInsights() +
-        '<div class="section-title">🌱 40-Day Habit Journeys</div>' +
-        '<div class="journey-intro">Choose one journey and go at your own pace. A missed day is not a reset — every day you return, your grid keeps growing.</div>' +
+        '<div class="section-title">🌱 Habit Journeys</div>' +
+        '<div class="journey-intro">Choose a journey and go at your own pace. A missed day is not a reset — every day you return, your grid keeps growing.</div>' +
         defs.map(j => journeyCard(j, t)).join('');
     } catch (e) { console.warn('Render Journeys failed:', e.message); }
   }
@@ -231,4 +235,5 @@
   window.getJourneyAnalytics = getJourneyAnalytics;
   window.recordJourneyCompletion = recordJourneyCompletion;
   window.autoTrackJourneyProgress = autoTrackJourneyProgress;
+  window.getAvailableJourneys = getAvailableJourneys;
 })();
