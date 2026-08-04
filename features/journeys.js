@@ -109,6 +109,22 @@
       renderJourneys();
     } catch (e) { console.warn('Join journey failed:', e.message); }
   }
+  function getJourneyAnalytics() {
+    const stats = S.journeyStats || {};
+    return {
+      totalCompleted: stats.totalCompleted || 0,
+      activeJourneys: Object.keys(S.journeys || {}).length,
+      bestStreak: Math.max(...Object.values(stats.bestStreaks || {}), 0),
+      history: stats.history || []
+    };
+  }
+  function recordJourneyCompletion(id, startDate, endDate, completedDays, target) {
+    if (!S.journeyStats) S.journeyStats = { completed: [], currentStreaks: {}, bestStreaks: {}, totalCompleted: 0, unlockedTiers: ['7day'], history: [] };
+    S.journeyStats.completed.push(id);
+    S.journeyStats.totalCompleted++;
+    S.journeyStats.history.push({ id, startDate, endDate, completedDays, target });
+    saveState();
+  }
   window.journeyProgress = journeyProgress;
   window.journeyStart = journeyStart;
   window.gridHTML = gridHTML;
@@ -116,4 +132,6 @@
   window.renderJourneys = renderJourneys;
   window.joinJourney = joinJourney;
   window.checkJourneyMilestone = checkJourneyMilestone;
+  window.getJourneyAnalytics = getJourneyAnalytics;
+  window.recordJourneyCompletion = recordJourneyCompletion;
 })();
