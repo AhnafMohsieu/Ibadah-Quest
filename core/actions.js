@@ -129,6 +129,13 @@
     S.dhikrCounters[idx] = (S.dhikrCounters[idx] || 0) + 1;
     const d = DHIKR_COUNTER_DATA[idx % DHIKR_COUNTER_DATA.length];
     if (S.dhikrCounters[idx] === d.target) { toast('✨', 'Target reached! SubhanAllah!', false, 2000); }
+    if (!S.dhikrSessions) S.dhikrSessions = [];
+    S.dhikrSessions.push({ date: today(), dhikrId: idx, count: S.dhikrCounters[idx], timestamp: Date.now() });
+    if (!S.dhikrStats) S.dhikrStats = { total: {}, daily: {}, streak: 0, bestStreak: 0, lastSessionDate: null, badges: [], achievements: [] };
+    S.dhikrStats.total[idx] = (S.dhikrStats.total[idx] || 0) + 1;
+    const t = today();
+    if (!S.dhikrStats.daily[t]) S.dhikrStats.daily[t] = {};
+    S.dhikrStats.daily[t][idx] = (S.dhikrStats.daily[t][idx] || 0) + 1;
     saveState(); renderDhikrCounter();
   }
   function resetDhikr() { if (!S.dhikrCounters) S.dhikrCounters={}; const idx=S.dhikrCounters._active||0; S.dhikrCounters[idx]=0; saveState(); renderDhikrCounter(); }

@@ -20,7 +20,7 @@
       dawahIdx:[], civilisationIdx:[], battlesIdx:[], jannahIdx:[], jahannamIdx:[],
       graveIdx:[], signsIdx:[], dreamsIdx:[], parentingIdx:[], foodIdx:[], tibbIdx:[],
       youthIdx:[], techIdx:[], neighborsIdx:[],
-      inspireIdx:[], dhikrCounters:{},
+      inspireIdx:[], dhikrCounters:{}, dhikrSessions:[], dhikrStats:{total:{},daily:{},streak:0,bestStreak:0,lastSessionDate:null,badges:[],achievements:[]},
       muhWeek:'', journeys:{}, journeyStats:{completed:[],currentStreaks:{},bestStreaks:{},totalCompleted:0,unlockedTiers:['7day'],history:[]}, gratitudeLog:{}, fastingDays:{}, memorized:0, memorizationList:[],
       morningDone:{}, eveningDone:{}, charity:{daily:0,monthly:0,given:0,monthStart:''},
       quranAudioReciter:7,
