@@ -123,6 +123,7 @@
       const t = today();
       const defs = (typeof JOURNEYS !== 'undefined') ? JOURNEYS : [];
       el.innerHTML = renderJourneyDashboard() +
+        renderJourneyInsights() +
         '<div class="section-title">🌱 40-Day Habit Journeys</div>' +
         '<div class="journey-intro">Choose one journey and go at your own pace. A missed day is not a reset — every day you return, your grid keeps growing.</div>' +
         defs.map(j => journeyCard(j, t)).join('');
@@ -135,6 +136,41 @@
       saveState();
       renderJourneys();
     } catch (e) { console.warn('Join journey failed:', e.message); }
+  }
+  function renderJourneyInsights() {
+    const activeJourneys = Object.keys(S.journeys || {});
+    if (activeJourneys.length === 0) return '';
+    
+    const insights = activeJourneys.map(id => {
+      const journey = JOURNEYS.find(j => j.id === id);
+      if (!journey) return null;
+      
+      const startDate = S.journeys[id];
+      const completed = journeyProgress(S.log, journey, startDate, today());
+      const remaining = journey.target - completed;
+      const daysSinceStart = Math.max(1, Math.ceil((Date.now() - new Date(startDate).getTime()) / 86400000));
+      const pace = Math.round((completed / daysSinceStart) * 100);
+      
+      return `
+        <div class="journey-insight-card">
+          <div class="journey-insight-icon">${journey.icon}</div>
+          <div class="journey-insight-info">
+            <div class="journey-insight-name">${journey.name}</div>
+            <div class="journey-insight-progress">${remaining > 0 ? `${remaining} days remaining` : 'Complete!'}</div>
+            <div class="journey-insight-pace">${pace}% daily pace</div>
+          </div>
+        </div>
+      `;
+    }).filter(Boolean);
+    
+    if (insights.length === 0) return '';
+    
+    return `
+      <div class="journey-insights">
+        <div class="section-title">📈 Active Journey Progress</div>
+        ${insights.join('')}
+      </div>
+    `;
   }
   function getJourneyAnalytics() {
     const stats = S.journeyStats || {};

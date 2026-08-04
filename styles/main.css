@@ -825,3 +825,9 @@ body {
   color: var(--text2);
   margin-top: 4px;
 }
+.journey-insights { margin-bottom: 20px; }
+.journey-insight-card { display:flex; align-items:center; gap:12px; padding:12px; background:var(--card2); border-radius:12px; margin-bottom:8px; }
+.journey-insight-icon { font-size:1.5rem; }
+.journey-insight-name { font-weight:600; color:var(--text); font-size:0.9rem; }
+.journey-insight-progress { font-size:0.8rem; color:var(--text2); }
+.journey-insight-pace { font-size:0.75rem; color:var(--gold); }
