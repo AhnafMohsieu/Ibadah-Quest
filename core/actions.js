@@ -123,6 +123,35 @@
     renderAll();
   }
   function claimBonus() { const t=today(); if(S.lbd===t) return; const oldLv=S.lv; const b=S.cs>=7?75:30; S.xp+=b; S.lbd=t; S.lv=lvFrom(S.xp); checkLevelUp(oldLv); saveState(); renderDynamic(); toast('🎁','Daily Bonus: +'+b+' XP!'); }
+  function updateDhikrStreak() {
+    const t = today();
+    if (!S.dhikrStats) S.dhikrStats = { total: {}, daily: {}, streak: 0, bestStreak: 0, lastSessionDate: null, badges: [], achievements: [] };
+
+    const todaySessions = S.dhikrStats.daily[t] || {};
+    const hasDhikrToday = Object.keys(todaySessions).length > 0;
+
+    if (hasDhikrToday) {
+      if (S.dhikrStats.lastSessionDate === t) return;
+
+      const yesterday = new Date();
+      yesterday.setDate(yesterday.getDate() - 1);
+      const yesterdayStr = yesterday.getFullYear() + '-' + (yesterday.getMonth()+1).toString().padStart(2,'0') + '-' + yesterday.getDate().toString().padStart(2,'0');
+
+      if (S.dhikrStats.lastSessionDate === yesterdayStr) {
+        S.dhikrStats.streak++;
+      } else {
+        S.dhikrStats.streak = 1;
+      }
+
+      S.dhikrStats.lastSessionDate = t;
+
+      if (S.dhikrStats.streak > S.dhikrStats.bestStreak) {
+        S.dhikrStats.bestStreak = S.dhikrStats.streak;
+      }
+
+      saveState();
+    }
+  }
   function tapDhikr() {
     if (!S.dhikrCounters) S.dhikrCounters = {};
     const idx = S.dhikrCounters._active || 0;
@@ -140,10 +169,40 @@
     const t = today();
     if (!S.dhikrStats.daily[t]) S.dhikrStats.daily[t] = {};
     S.dhikrStats.daily[t][idx] = (S.dhikrStats.daily[t][idx] || 0) + 1;
+    updateDhikrStreak();
     saveState(); renderDhikrCounter();
   }
   function resetDhikr() { if (!S.dhikrCounters) S.dhikrCounters={}; const idx=S.dhikrCounters._active||0; S.dhikrCounters[idx]=0; saveState(); renderDhikrCounter(); }
   function nextDhikr() { if (!S.dhikrCounters) S.dhikrCounters={}; S.dhikrCounters._active=((S.dhikrCounters._active||0)+1)%DHIKR_COUNTER_DATA.length; saveState(); renderDhikrCounter(); }
+  function addCustomDhikr(arabic, roman, english, target) {
+    if (!S.dhikrCustom) S.dhikrCustom = [];
+    S.dhikrCustom.push({
+      id: 'custom_' + Date.now(),
+      arabic,
+      transliteration: roman,
+      english,
+      target: target || 33,
+      color: '#D4AF37'
+    });
+    saveState();
+    renderDhikrCounter();
+  }
+  function removeCustomDhikr(id) {
+    if (!S.dhikrCustom) return;
+    S.dhikrCustom = S.dhikrCustom.filter(d => d.id !== id);
+    saveState();
+    renderDhikrCounter();
+  }
+  function toggleDhikrFavorite(id) {
+    if (!S.dhikrFavorites) S.dhikrFavorites = [];
+    const idx = S.dhikrFavorites.indexOf(id);
+    if (idx === -1) {
+      S.dhikrFavorites.push(id);
+    } else {
+      S.dhikrFavorites.splice(idx, 1);
+    }
+    saveState();
+  }
   function selectAvatar(emoji) {
     S.avatar = emoji;
     saveState();
@@ -2154,7 +2213,7 @@ Object.keys(NEW_POOLS).forEach(k => {
       dismissMuhasabah: typeof window.dismissMuhasabah === 'function' ? window.dismissMuhasabah : () => {},
       joinJourney: typeof window.joinJourney === 'function' ? window.joinJourney : () => {},
       manualRefresh: manualRefreshContent, ensureQuranLoaded, ensureHadithLoaded, switchCategory, selectCategory, activateTab,
-      claimBonus, tapDhikr, resetDhikr, nextDhikr,
+      claimBonus, tapDhikr, resetDhikr, nextDhikr, addCustomDhikr, removeCustomDhikr, toggleDhikrFavorite,
       setQuranView, quranSearchFilter, openQuranSurah, quranBack, openQuranJuz,
       openHadithCollection, openHadithBook, hadithBack,
       playQuranVerse, playSurah, stopSurah, setQuranReciter, playJuz, updateJuzButton,
