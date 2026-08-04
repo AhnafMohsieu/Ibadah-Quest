@@ -145,6 +145,36 @@
       history: stats.history || []
     };
   }
+  function autoTrackJourneyProgress() {
+    const t = today();
+    const defs = (typeof JOURNEYS !== 'undefined') ? JOURNEYS : [];
+    
+    defs.forEach(j => {
+      if (!S.journeys[j.id]) return;
+      
+      const startDate = S.journeys[j.id];
+      const dayLog = S.log[t];
+      if (!dayLog) return;
+      
+      const completed = dayLog[j.kind] && dayLog[j.kind][j.key];
+      if (!completed) return;
+      
+      if (!S.journeyStats) S.journeyStats = {};
+      if (!S.journeyStats.currentStreaks) S.journeyStats.currentStreaks = {};
+      
+      const currentStreak = S.journeyStats.currentStreaks[j.id] || 0;
+      S.journeyStats.currentStreaks[j.id] = currentStreak + 1;
+      
+      if (!S.journeyStats.bestStreaks) S.journeyStats.bestStreaks = {};
+      if (S.journeyStats.currentStreaks[j.id] > (S.journeyStats.bestStreaks[j.id] || 0)) {
+        S.journeyStats.bestStreaks[j.id] = S.journeyStats.currentStreaks[j.id];
+      }
+      
+      checkJourneyMilestone(j, S.journeyStats.currentStreaks[j.id]);
+      
+      saveState();
+    });
+  }
   function recordJourneyCompletion(id, startDate, endDate, completedDays, target) {
     if (!S.journeyStats) S.journeyStats = { completed: [], currentStreaks: {}, bestStreaks: {}, totalCompleted: 0, unlockedTiers: ['7day'], history: [] };
     S.journeyStats.completed.push(id);
@@ -161,4 +191,5 @@
   window.checkJourneyMilestone = checkJourneyMilestone;
   window.getJourneyAnalytics = getJourneyAnalytics;
   window.recordJourneyCompletion = recordJourneyCompletion;
+  window.autoTrackJourneyProgress = autoTrackJourneyProgress;
 })();
