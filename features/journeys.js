@@ -22,6 +22,24 @@
     }
     return h + '</div>';
   }
+  function renderProgressRing(completed, target, color) {
+    const radius = 52;
+    const circumference = 2 * Math.PI * radius;
+    const progress = Math.min(completed / target, 1);
+    const offset = circumference * (1 - progress);
+    const pct = Math.round(progress * 100);
+
+    return `
+      <div class="journey-ring-container">
+        <svg width="120" height="120" viewBox="0 0 120 120">
+          <circle class="journey-ring-bg" cx="60" cy="60" r="${radius}"/>
+          <circle class="journey-ring-progress" cx="60" cy="60" r="${radius}"
+            stroke="${color}" stroke-dasharray="${circumference}" stroke-dashoffset="${offset}"/>
+        </svg>
+        <div class="journey-ring-text">${pct}%</div>
+      </div>
+    `;
+  }
   function journeyCard(j, t) {
     const start = S.journeys ? S.journeys[j.id] : undefined;
     const head = `<div class="journey-head"><span class="journey-icon">${j.icon}</span>
@@ -60,6 +78,7 @@
   window.journeyProgress = journeyProgress;
   window.journeyStart = journeyStart;
   window.gridHTML = gridHTML;
+  window.renderProgressRing = renderProgressRing;
   window.renderJourneys = renderJourneys;
   window.joinJourney = joinJourney;
 })();
