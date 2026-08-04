@@ -24,7 +24,6 @@ const SEARCH_INDEX = [
   {cat:"Ibadah",title:"Fasting",desc:"Sawm tracker",action:"switchCategory",args:["ibadah","fasting"]},
   {cat:"Ibadah",title:"Gratitude",desc:"Gratitude journal",action:"switchCategory",args:["ibadah","gratitude"]},
   {cat:"Ibadah",title:"Quests",desc:"Daily and weekly quests",action:"switchCategory",args:["ibadah","quests"]},
-  {cat:"Ibadah",title:"Challenges",desc:"Daily challenges",action:"switchCategory",args:["ibadah","challenges"]},
   {cat:"Knowledge",title:"Hadith",desc:"Hadith collections",action:"switchCategory",args:["knowledge","hadith"]},
   {cat:"Knowledge",title:"Sunnahs",desc:"Daily sunnahs",action:"switchCategory",args:["knowledge","sunnahs"]},
   {cat:"Knowledge",title:"99 Names of Allah",desc:"Al-Asma ul-Husna",action:"switchCategory",args:["names_main","allah_names"]},
