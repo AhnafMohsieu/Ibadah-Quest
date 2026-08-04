@@ -90,6 +90,32 @@
     }
     return false;
   }
+  function checkTierUnlocking() {
+    if (!S.journeyStats) return;
+    const completed = S.journeyStats.completed || [];
+    const unlocked = S.journeyStats.unlockedTiers || ['7day'];
+    
+    const counts = { '7day': 0, '21day': 0, '40day': 0, '90day': 0 };
+    completed.forEach(id => {
+      const journey = JOURNEYS.find(j => j.id === id);
+      if (journey && counts.hasOwnProperty(journey.tier)) {
+        counts[journey.tier]++;
+      }
+    });
+    
+    const unlockOrder = ['7day', '21day', '40day', '90day', '365day'];
+    for (let i = 0; i < unlockOrder.length - 1; i++) {
+      const currentTier = unlockOrder[i];
+      const nextTier = unlockOrder[i + 1];
+      if (counts[currentTier] >= 3 && !unlocked.includes(nextTier)) {
+        unlocked.push(nextTier);
+        toast('🔓', `New journeys unlocked: ${nextTier}!`);
+      }
+    }
+    
+    S.journeyStats.unlockedTiers = unlocked;
+    saveState();
+  }
   function getAvailableJourneys() {
     const unlockedTiers = S.journeyStats?.unlockedTiers || ['7day'];
     return JOURNEYS.filter(j => unlockedTiers.includes(j.tier));
@@ -224,6 +250,7 @@
     S.journeyStats.totalCompleted++;
     S.journeyStats.history.push({ id, startDate, endDate, completedDays, target });
     saveState();
+    checkTierUnlocking();
   }
   window.journeyProgress = journeyProgress;
   window.journeyStart = journeyStart;
@@ -236,4 +263,5 @@
   window.recordJourneyCompletion = recordJourneyCompletion;
   window.autoTrackJourneyProgress = autoTrackJourneyProgress;
   window.getAvailableJourneys = getAvailableJourneys;
+  window.checkTierUnlocking = checkTierUnlocking;
 })();
