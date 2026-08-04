@@ -7,20 +7,17 @@
     const volArea = document.getElementById('volArea');
     const deedArea = document.getElementById('deedArea');
     const questArea = document.getElementById('questArea');
-    const challengeArea = document.getElementById('challengeArea');
     
     const volScroll = volArea ? volArea.scrollTop : 0;
     const deedScroll = deedArea ? deedArea.scrollTop : 0;
     const questScroll = questArea ? questArea.scrollTop : 0;
-    const challengeScroll = challengeArea ? challengeArea.scrollTop : 0;
 
     const safe = (fn, name) => { try { fn(); } catch(e) { console.warn('Render ' + name + ' failed:', e.message); } };
-    safe(renderLv, 'Lv'); safe(renderStr, 'Str'); safe(renderToday, 'Today'); safe(renderQ, 'Q'); safe(renderChallenges, 'Challenges'); safe(renderAch, 'Ach'); safe(renderProg, 'Prog'); safe(renderShop, 'Shop'); safe(renderProfile, 'Profile'); safe(renderTimer, 'Timer'); safe(renderStats, 'Stats'); safe(() => window.renderGarden && window.renderGarden(), 'Garden'); safe(() => window.renderMuhasabahEntry && window.renderMuhasabahEntry(), 'MuhEntry'); safe(() => window.renderJourneys && window.renderJourneys(), 'Journeys');
+    safe(renderLv, 'Lv'); safe(renderStr, 'Str'); safe(renderToday, 'Today'); safe(renderQ, 'Q'); safe(renderAch, 'Ach'); safe(renderProg, 'Prog'); safe(renderShop, 'Shop'); safe(renderProfile, 'Profile'); safe(renderTimer, 'Timer'); safe(renderStats, 'Stats'); safe(() => window.renderGarden && window.renderGarden(), 'Garden'); safe(() => window.renderMuhasabahEntry && window.renderMuhasabahEntry(), 'MuhEntry'); safe(() => window.renderJourneys && window.renderJourneys(), 'Journeys');
 
     if (volArea) volArea.scrollTop = volScroll;
     if (deedArea) deedArea.scrollTop = deedScroll;
     if (questArea) questArea.scrollTop = questScroll;
-    if (challengeArea) challengeArea.scrollTop = challengeScroll;
     window.scrollTo(0, pageScroll);
   }
 
@@ -1138,118 +1135,6 @@
     
     if(questArea) questArea.innerHTML = h;
   }
-  function renderChallenges() {
-    const t = today();
-    if (S.cd !== t) { S.cd = t; S.chd = {}; }
-    if (!S.chd) S.chd = {};
-    
-    const w = ws();
-    if (S.cwd !== w) { S.cwd = w; S.chw = {}; }
-    if (!S.chw) S.chw = {};
-
-    const m = ms();
-    if (S.cmd !== m) { S.cmd = m; S.chm = {}; }
-    if (!S.chm) S.chm = {};
-
-    const y = ys();
-    if (S.cyd !== y) { S.cyd = y; S.chy = {}; }
-    if (!S.chy) S.chy = {};
-
-    if (!S.chl) S.chl = {};
-
-    const chDaily = [
-      { id:'c1', icon: '🕌', d:'Pray all 5 prayers on time today', xp:60 },
-      { id:'c2', icon: '📖', d:'Read 1 Juz of the Quran', xp:100 },
-      { id:'c3', icon: '🤲', d:'Give charity in secret', xp:40 },
-      { id:'c4', icon: '💚', d:'Recite 100x Salawat on the Prophet ﷺ', xp:30 },
-      { id:'c5', icon: '🌙', d:'Fast today (Mon/Thu)', xp:50, f: ()=>[1,4].includes(new Date().getDay()) }
-    ].filter(c => !c.f || c.f());
-
-    const chWeekly = [
-      { id:'cw1', icon: '📖', d:'Complete reading 1 full Juz this week', xp:150 },
-      { id:'cw2', icon: '🕌', d:'Attend Jumuah prayer early and listen to Khutbah attentively', xp:120 },
-      { id:'cw3', icon: '🌙', d:'Fast at least 2 days (Monday & Thursday)', xp:200 },
-      { id:'cw4', icon: '🍽️', d:'Provide a meal for a needy person or family', xp:150 },
-      { id:'cw5', icon: '🌌', d:'Pray Tahajjud on 3 different nights', xp:250 }
-    ];
-
-    const chMonthly = [
-      { id:'cm1', icon: '📖', d:'Complete the recitation of the entire Quran', xp:1000 },
-      { id:'cm2', icon: '🌙', d:'Fast the 3 white days (13th, 14th, 15th)', xp:500 },
-      { id:'cm3', icon: '🤲', d:'Donate a significant portion of income to charity (Zakat/Sadaqah)', xp:400 },
-      { id:'cm4', icon: '🧠', d:'Memorize a complete new Surah', xp:600 },
-      { id:'cm5', icon: '📚', d:'Read an entire Islamic book (Seerah, Tafsir, etc.)', xp:700 }
-    ];
-
-    const chYearly = [
-      { id:'cy1', icon: '🕋', d:'Perform I\'tikaf in the last 10 days of Ramadan', xp:3000 },
-      { id:'cy2', icon: '📖', d:'Read the entire Quran with Translation and Tafsir', xp:5000 },
-      { id:'cy3', icon: '🤝', d:'Sponsor an orphan for the year', xp:4000 },
-      { id:'cy4', icon: '🧠', d:'Memorize one of the long Surahs (e.g. Al-Baqarah, Al-Imran)', xp:6000 },
-      { id:'cy5', icon: '🕌', d:'Pray 1000 Congregational prayers in the Masjid', xp:4500 }
-    ];
-
-    const chLifetime = [
-      { id:'cl1', icon: '🕋', d:'Perform Hajj (The major pilgrimage)', xp:50000 },
-      { id:'cl2', icon: '🕋', d:'Perform Umrah', xp:20000 },
-      { id:'cl3', icon: '🕌', d:'Build or heavily contribute to building a Masjid', xp:40000 },
-      { id:'cl4', icon: '📖', d:'Memorize the entire Quran (Hafiz)', xp:100000 },
-      { id:'cl5', icon: '🌳', d:'Plant a tree or dig a well as continuous charity (Sadaqah Jariyah)', xp:30000 }
-    ];
-
-    const challengeArea = document.getElementById('challengeArea');
-    const openStates = challengeArea ? Array.from(challengeArea.querySelectorAll('details.cat-details')).map(d => d.open) : [true, false, false, false, false];
-
-    const renderChallengeGroup = (title, challenges, type, isOpen, stateDict) => {
-      const total = challenges.length;
-      let completed = 0;
-      challenges.forEach(c => { if(stateDict[c.id]) completed++; });
-      const openAttr = isOpen ? ' open' : '';
-      
-      let html = `<details class="cat-details"${openAttr}><summary><div style="display:flex;justify-content:space-between;align-items:center;flex:1;"><span>${title}</span><span style="font-size:0.75rem;background:rgba(201,168,76,0.15);padding:3px 10px;border-radius:12px;color:var(--gold-light);font-weight:700;">${completed} / ${total}</span></div></summary><div style="padding:0 12px 12px;display:flex;flex-direction:column;gap:8px;margin-top:8px;">`;
-      
-      html += challenges.map(c => {
-        const d = !!stateDict[c.id];
-        return `<div class="vol-card${d?' done':''}" onclick="App.completeChallenge('${c.id}',${c.xp},${!d},'${type}')" style="cursor:pointer;">
-          <div class="prayer-check">${d?'✓':c.icon}</div>
-          <div class="prayer-info"><div class="prayer-name">${c.d}</div></div>
-          <div class="prayer-xp">+${c.xp} XP</div>
-        </div>`;
-      }).join('') + '</div></details>';
-      return html;
-    };
-
-    let html = renderChallengeGroup('⚔️ Daily Challenges', chDaily, 'daily', openStates[0], S.chd);
-    html += renderChallengeGroup('🛡️ Weekly Challenges', chWeekly, 'weekly', openStates[1], S.chw);
-    html += renderChallengeGroup('🗡️ Monthly Challenges', chMonthly, 'monthly', openStates[2], S.chm);
-    html += renderChallengeGroup('🏰 Yearly Challenges', chYearly, 'yearly', openStates[3], S.chy);
-    html += renderChallengeGroup('👑 Lifetime Challenges', chLifetime, 'lifetime', openStates[4], S.chl);
-    
-    if(challengeArea) challengeArea.innerHTML = html;
-  }
-  function completeChallenge(id, xp, isChecked, type) {
-    let d = S.chd;
-    if (type === 'weekly') d = S.chw;
-    if (type === 'monthly') d = S.chm;
-    if (type === 'yearly') d = S.chy;
-    if (type === 'lifetime') d = S.chl;
-    
-    if (!d) d = {};
-    d[id] = isChecked;
-    
-    if (type === 'weekly') S.chw = d;
-    else if (type === 'monthly') S.chm = d;
-    else if (type === 'yearly') S.chy = d;
-    else if (type === 'lifetime') S.chl = d;
-    else S.chd = d;
-
-    const oldLv=S.lv;
-    if (isChecked) { S.xp+=xp; toast('⚔️','Challenge done! +'+xp+' XP'); }
-    else { S.xp=Math.max(0,S.xp-xp); }
-    S.lv=lvFrom(S.xp);
-    if(S.lv>oldLv){ const t=lvTitle(S.lv); levelUpToast(S.lv, t); }
-    saveState(); renderAll();
-  }
   function renderAch() {
   const cnt = Object.keys(S.ua).length;
   const total = ACHS.length;
@@ -1564,7 +1449,6 @@
   window.renderMorning = renderMorning;
   window.renderEvening = renderEvening;
   window.renderQ = renderQ;
-  window.renderChallenges = renderChallenges;
   window.renderAch = renderAch;
   window.renderProg = renderProg;
   window.renderShop = renderShop;
@@ -1585,7 +1469,6 @@
   window.addMemorization = addMemorization;
   window.toggleMorning = toggleMorning;
   window.toggleEvening = toggleEvening;
-  window.completeChallenge = completeChallenge;
   window.playQuranVerse = playQuranVerse;
   window.playSurah = playSurah;
   window.stopSurah = stopSurah;
