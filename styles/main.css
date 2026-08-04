@@ -794,3 +794,4 @@ body {
   font-weight: 700;
   color: var(--gold);
 }
+.journey-streak { font-size:0.8rem; color:#FF6B35; font-weight:600; margin-top:4px; }

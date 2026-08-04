@@ -40,6 +40,23 @@
       </div>
     `;
   }
+  function calculateStreak(log, journey, startDate) {
+    let streak = 0;
+    let currentDate = today();
+    
+    while (currentDate >= startDate) {
+      const dayLog = log[currentDate];
+      if (dayLog && dayLog[journey.kind] && dayLog[journey.kind][journey.key]) {
+        streak++;
+      } else {
+        break;
+      }
+      const d = new Date(currentDate);
+      d.setDate(d.getDate() - 1);
+      currentDate = d.getFullYear() + '-' + (d.getMonth()+1).toString().padStart(2,'0') + '-' + d.getDate().toString().padStart(2,'0');
+    }
+    return streak;
+  }
   function journeyCard(j, t) {
     const start = S.journeys ? S.journeys[j.id] : undefined;
     const head = `<div class="journey-head"><span class="journey-icon">${j.icon}</span>
@@ -53,8 +70,10 @@
     const summary = done
       ? 'Alhamdulillah, journey complete 🎉'
       : `Day ${completed} of ${j.target} — at your own pace, no rush.`;
+    const streak = calculateStreak(S.log, j, start);
+    const streakText = streak > 0 ? `<div class="journey-streak">🔥 ${streak} day streak</div>` : '';
     return `<div class="journey-card">${head}
-      <div class="journey-summary">${summary}</div>${gridHTML(completed, j.target)}</div>`;
+      <div class="journey-summary">${summary}</div>${streakText}${gridHTML(completed, j.target)}</div>`;
   }
   function renderJourneys() {
     try {
