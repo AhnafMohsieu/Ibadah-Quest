@@ -2137,7 +2137,7 @@ Object.keys(NEW_POOLS).forEach(k => {
       detail: (id) => toast('ℹ️', DETAILS[id]||'Voluntary Prayer', false, 4000),
       tip: (id) => toast('💡', TIPS[id]||'A beautiful deed!', false, 4000),
       dismissTip: () => { S.tdismiss=true; saveState(); renderTip(); },
-      toggleQuest, completeChallenge: window.completeChallenge, addGratitude, toggleFasting, setCharityGoals,
+      toggleQuest, addGratitude, toggleFasting, setCharityGoals,
       addMemorization, toggleMorning, toggleEvening, switchUser, logout, resetAll,
       openMuhasabah: typeof window.openMuhasabah === 'function' ? window.openMuhasabah : () => {},
       dismissMuhasabah: typeof window.dismissMuhasabah === 'function' ? window.dismissMuhasabah : () => {},
