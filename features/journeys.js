@@ -188,7 +188,6 @@
     defs.forEach(j => {
       if (!S.journeys[j.id]) return;
       
-      const startDate = S.journeys[j.id];
       const dayLog = S.log[t];
       if (!dayLog) return;
       
@@ -196,10 +195,14 @@
       if (!completed) return;
       
       if (!S.journeyStats) S.journeyStats = {};
+      if (!S.journeyStats.lastTracked) S.journeyStats.lastTracked = {};
+      if (S.journeyStats.lastTracked[j.id] === t) return;
+      
       if (!S.journeyStats.currentStreaks) S.journeyStats.currentStreaks = {};
       
       const currentStreak = S.journeyStats.currentStreaks[j.id] || 0;
       S.journeyStats.currentStreaks[j.id] = currentStreak + 1;
+      S.journeyStats.lastTracked[j.id] = t;
       
       if (!S.journeyStats.bestStreaks) S.journeyStats.bestStreaks = {};
       if (S.journeyStats.currentStreaks[j.id] > (S.journeyStats.bestStreaks[j.id] || 0)) {
