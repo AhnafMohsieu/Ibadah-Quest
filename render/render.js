@@ -986,7 +986,7 @@
         <div style="background:rgba(0,0,0,0.3);border-radius:30px;height:8px;overflow:hidden;margin:8px 0 16px;">
           <div style="height:100%;width:${pct}%;background:${d.color};border-radius:30px;transition:width 0.3s;"></div>
         </div>
-        <button class="dhikr-tap-btn" onclick="App.tapDhikr()">+1</button>
+        <button class="dhikr-tap-btn" onclick="this.classList.add('tap'); setTimeout(() => this.classList.remove('tap'), 400); App.tapDhikr();">+1</button>
         <div style="margin-top:12px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
           <button class="dhikr-reset-btn" onclick="App.resetDhikr()">↺ Reset</button>
           <button class="dhikr-reset-btn" onclick="App.nextDhikr()">Next ▶</button>

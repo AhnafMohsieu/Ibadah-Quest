@@ -505,6 +505,18 @@ body {
 .dhikr-tap-btn { background: rgba(212,175,55,0.1); color: var(--gold); border: 1px solid rgba(212,175,55,0.3); width: 88px; height: 88px; border-radius: 50%; font-size: 1.8rem; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; transition: all 0.2s; }
 .dhikr-tap-btn:hover { background: rgba(212,175,55,0.15); transform: scale(1.05); }
 .dhikr-tap-btn:active { transform: scale(0.95); }
+@keyframes dhikrPulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+@keyframes dhikrRipple {
+  0% { box-shadow: 0 0 0 0 rgba(212,175,55,0.4); }
+  100% { box-shadow: 0 0 0 20px rgba(212,175,55,0); }
+}
+.dhikr-tap-btn.tap {
+  animation: dhikrRipple 0.4s ease-out;
+}
 .dhikr-reset-btn { background: transparent; border: 1px solid var(--border); color: var(--text2); padding: 8px 16px; border-radius: 14px; font-size: 0.78rem; cursor: pointer; margin-top: 20px; transition: all 0.2s; }
 .dhikr-reset-btn:hover { color: var(--red); border-color: rgba(239,68,68,0.3); background: rgba(239,68,68,0.05); }
 
