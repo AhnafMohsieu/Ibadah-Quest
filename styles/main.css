@@ -831,3 +831,30 @@ body {
 .journey-insight-name { font-weight:600; color:var(--text); font-size:0.9rem; }
 .journey-insight-progress { font-size:0.8rem; color:var(--text2); }
 .journey-insight-pace { font-size:0.75rem; color:var(--gold); }
+
+/* ── Dhikr Analytics ── */
+.dhikr-analytics {
+  background: var(--card);
+  border-radius: var(--radius);
+  padding: 16px;
+  margin-bottom: 20px;
+  border: 1px solid var(--border);
+}
+.dhikr-stats-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+.dhikr-stat-item {
+  text-align: center;
+  flex: 1;
+}
+.dhikr-stat-num {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--gold);
+}
+.dhikr-stat-label {
+  font-size: 0.7rem;
+  color: var(--text2);
+}

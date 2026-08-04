@@ -940,6 +940,33 @@
     });
   }
 
+  function renderDhikrAnalytics() {
+    const stats = S.dhikrStats || { total: {}, daily: {}, streak: 0 };
+    const totalDhikr = Object.values(stats.total).reduce((a, b) => a + b, 0);
+    const todaySessions = stats.daily[today()] || {};
+    const todayCount = Object.values(todaySessions).reduce((a, b) => a + b, 0);
+    
+    return `
+      <div class="dhikr-analytics">
+        <div class="section-title">📊 Dhikr Statistics</div>
+        <div class="dhikr-stats-row">
+          <div class="dhikr-stat-item">
+            <div class="dhikr-stat-num">${totalDhikr}</div>
+            <div class="dhikr-stat-label">Total Dhikr</div>
+          </div>
+          <div class="dhikr-stat-item">
+            <div class="dhikr-stat-num">${todayCount}</div>
+            <div class="dhikr-stat-label">Today</div>
+          </div>
+          <div class="dhikr-stat-item">
+            <div class="dhikr-stat-num">${stats.streak}</div>
+            <div class="dhikr-stat-label">Streak</div>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
   function renderDhikrCounter() {
     const el = document.getElementById('dhikrCounterArea');
     if (!el) return;
@@ -948,7 +975,7 @@
     const d = DHIKR_COUNTER_DATA[current % DHIKR_COUNTER_DATA.length];
     const cnt = S.dhikrCounters[current] || 0;
     const pct = Math.min(100, Math.round((cnt / d.target) * 100));
-    el.innerHTML = `
+    el.innerHTML = renderDhikrAnalytics() + `
       <div class="dhikr-counter-card">
         <div style="font-size:0.75rem;color:var(--text2);margin-bottom:8px;">${current+1} / ${DHIKR_COUNTER_DATA.length}</div>
         <div class="dhikr-counter-arabic" style="color:${d.color}">${d.arabic}</div>
