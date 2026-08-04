@@ -66,6 +66,7 @@
         <button class="journey-start" onclick="App.joinJourney('${j.id}')">Begin 40-Day Journey</button></div>`;
     }
     const completed = journeyProgress(S.log, j, start, t);
+    checkJourneyMilestone(j, completed);
     const done = completed >= j.target;
     const summary = done
       ? 'Alhamdulillah, journey complete 🎉'
@@ -74,6 +75,20 @@
     const streakText = streak > 0 ? `<div class="journey-streak">🔥 ${streak} day streak</div>` : '';
     return `<div class="journey-card">${head}
       <div class="journey-summary">${summary}</div>${streakText}${gridHTML(completed, j.target)}</div>`;
+  }
+  function checkJourneyMilestone(journey, completed) {
+    const milestones = [10, 20, 30, 40];
+    for (const m of milestones) {
+      if (completed === m) {
+        toast('🎯', `Journey Milestone: ${m} days complete!`);
+        return true;
+      }
+    }
+    if (completed >= journey.target) {
+      toast('🎉', 'Journey Complete! Alhamdulillah!', false, 3000);
+      return true;
+    }
+    return false;
   }
   function renderJourneys() {
     try {
@@ -100,4 +115,5 @@
   window.renderProgressRing = renderProgressRing;
   window.renderJourneys = renderJourneys;
   window.joinJourney = joinJourney;
+  window.checkJourneyMilestone = checkJourneyMilestone;
 })();
