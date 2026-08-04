@@ -90,13 +90,40 @@
     }
     return false;
   }
+  function renderJourneyDashboard() {
+    const analytics = getJourneyAnalytics();
+    return `
+      <div class="journey-dashboard">
+        <div class="section-title">📊 Journey Statistics</div>
+        <div class="journey-stats-grid">
+          <div class="journey-stat-item">
+            <div class="journey-stat-num">${analytics.totalCompleted}</div>
+            <div class="journey-stat-label">Completed</div>
+          </div>
+          <div class="journey-stat-item">
+            <div class="journey-stat-num">${analytics.activeJourneys}</div>
+            <div class="journey-stat-label">Active</div>
+          </div>
+          <div class="journey-stat-item">
+            <div class="journey-stat-num">${analytics.bestStreak}</div>
+            <div class="journey-stat-label">Best Streak</div>
+          </div>
+          <div class="journey-stat-item">
+            <div class="journey-stat-num">${analytics.history.length}</div>
+            <div class="journey-stat-label">Total Attempts</div>
+          </div>
+        </div>
+      </div>
+    `;
+  }
   function renderJourneys() {
     try {
       const el = document.getElementById('journeyArea');
       if (!el) return;
       const t = today();
       const defs = (typeof JOURNEYS !== 'undefined') ? JOURNEYS : [];
-      el.innerHTML = '<div class="section-title">🌱 40-Day Habit Journeys</div>' +
+      el.innerHTML = renderJourneyDashboard() +
+        '<div class="section-title">🌱 40-Day Habit Journeys</div>' +
         '<div class="journey-intro">Choose one journey and go at your own pace. A missed day is not a reset — every day you return, your grid keeps growing.</div>' +
         defs.map(j => journeyCard(j, t)).join('');
     } catch (e) { console.warn('Render Journeys failed:', e.message); }
