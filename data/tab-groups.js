@@ -80,7 +80,6 @@
         { id: 'marriage',    icon: '<i class="fa-solid fa-ring"></i>', label: 'Marriage' },
         { id: 'parenting',   icon: '<i class="fa-solid fa-baby"></i>', label: 'Parenting' },
         { id: 'charity',     icon: '<i class="fa-solid fa-hand-holding-heart"></i>', label: 'Charity' },
-        { id: 'finance',     icon: '<i class="fa-solid fa-coins"></i>', label: 'Finance' },
         { id: 'work',        icon: '<i class="fa-solid fa-briefcase"></i>', label: 'Career' },
         { id: 'neighbors',   icon: '<i class="fa-solid fa-house"></i>', label: 'Neighbors' },
         { id: 'community',   icon: '<i class="fa-solid fa-people-roof"></i>', label: 'Community' },
