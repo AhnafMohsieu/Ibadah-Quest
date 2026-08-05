@@ -942,3 +942,27 @@ body {
 .finance-item-icon { font-size: 1.3rem; margin-bottom: 4px; }
 .finance-item-label { font-size: 0.7rem; color: var(--text1); font-weight: 600; }
 .finance-item-amount { font-size: 0.65rem; color: var(--text2); margin-top: 2px; }
+
+/* Mood */
+.mood-streak { text-align: center; margin-bottom: 16px; }
+.mood-streak-num { font-size: 2rem; font-weight: 700; color: var(--gold); }
+.mood-streak-label { font-size: 0.8rem; color: var(--text2); }
+.mood-select { margin-bottom: 16px; }
+.mood-select-label { font-size: 0.85rem; color: var(--text2); margin-bottom: 8px; text-align: center; }
+.mood-options { display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; }
+.mood-btn { display: flex; flex-direction: column; align-items: center; padding: 10px; border: 2px solid var(--border); border-radius: var(--radius); cursor: pointer; transition: all 0.2s; min-width: 55px; background: var(--card); }
+.mood-btn:hover { border-color: var(--gold); }
+.mood-btn.active { border-color: var(--gold); background: rgba(212,175,55,0.1); }
+.mood-btn-label { font-size: 0.65rem; color: var(--text2); margin-top: 4px; }
+.reflection-grid { display: grid; gap: 10px; }
+.reflection-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 10px; }
+.reflection-header { font-size: 0.85rem; font-weight: 600; color: var(--text1); margin-bottom: 4px; }
+.reflection-desc { font-size: 0.7rem; color: var(--text2); margin-bottom: 6px; }
+.reflection-input { width: 100%; padding: 8px; border: 1px solid var(--border); border-radius: 6px; background: var(--card2); color: var(--text1); font-size: 0.8rem; resize: vertical; min-height: 50px; font-family: inherit; }
+.gratitude-list { margin-bottom: 10px; }
+.gratitude-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 10px; background: var(--card); border: 1px solid var(--border); border-radius: 6px; margin-bottom: 4px; font-size: 0.8rem; color: var(--text1); }
+.gratitude-remove { color: var(--text2); cursor: pointer; padding: 0 4px; }
+.gratitude-empty { text-align: center; color: var(--text2); font-size: 0.8rem; padding: 12px; }
+.gratitude-add { display: flex; gap: 8px; }
+.gratitude-textarea { flex: 1; padding: 8px; border: 1px solid var(--border); border-radius: 6px; background: var(--card2); color: var(--text1); font-size: 0.8rem; resize: none; height: 40px; font-family: inherit; }
+.gratitude-btn { padding: 8px 16px; background: var(--gold); color: #000; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; font-size: 0.8rem; }
