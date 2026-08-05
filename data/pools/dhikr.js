@@ -21,3 +21,13 @@ const DHIKR_COUNTER_DATA = [
   { arabic:"سُبْحَانَ اللَّهِ وَبِحَمْدِهِ", transliteration:"SubhanAllahi wa bihamdihi", english:"Glory and praise be to Allah", target:100, color:"#22c55e" },
   { arabic:"لَا حَوْلَ وَلَا قُوَّةَ إِلَّا بِاللَّه", transliteration:"La hawla wa la quwwata illa billah", english:"No power except with Allah", target:33, color:"#f97316" }
 ];
+
+const DHIKR_BADGES = [
+  { id: 'first_dhikr', name: 'First Dhikr', check: (S) => Object.keys(S.dhikrStats?.daily || {}).length > 0 },
+  { id: 'first_target', name: 'Target Reached', check: (S) => Object.values(S.dhikrStats?.total || {}).some(c => c >= 33) },
+  { id: 'streak_3', name: '3-Day Streak', check: (S) => (S.dhikrStats?.streak || 0) >= 3 },
+  { id: 'streak_7', name: '7-Day Streak', check: (S) => (S.dhikrStats?.streak || 0) >= 7 },
+  { id: 'streak_30', name: '30-Day Streak', check: (S) => (S.dhikrStats?.streak || 0) >= 30 },
+  { id: 'total_100', name: '100 Total Dhikrs', check: (S) => Object.values(S.dhikrStats?.total || {}).reduce((a, b) => a + b, 0) >= 100 },
+  { id: 'total_1000', name: '1000 Total Dhikrs', check: (S) => Object.values(S.dhikrStats?.total || {}).reduce((a, b) => a + b, 0) >= 1000 }
+];
