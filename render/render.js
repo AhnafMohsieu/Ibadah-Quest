@@ -40,6 +40,7 @@
   const HIJRI_MONTHS_AR = ['مُحَرَّم','صَفَر','رَبِيع الأَوَّل','رَبِيع الثَّانِي','جُمَادَى الأُولَى','جُمَادَى الثَّانِيَة','رَجَب','شَعْبَان','رَمَضَان','شَوَّال','ذُو القِعْدَة','ذُو الحِجَّة'];
   const WEEKDAYS_EN = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
   const WEEKDAYS_AR = ['الأحد','الإثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
+  const WEEKDAYS_ROM = ['Ahad','Ithnayn','Thulatha','Arbi\'a','Khamis','Jumu\'ah','Sabt'];
 
   function gregorianToHijri(gY, gM, gD) {
     // Tabular Islamic Calendar algorithm
@@ -1225,10 +1226,10 @@
     if (!isCurrentMonth) cal += ' <button class="cal-today-btn" onclick="App.calGoToday()">Today</button>';
     cal += '</div></div>';
 
-    // Weekday headers - English + Arabic
+    // Weekday headers - English + Arabic + Romanization
     cal += '<div class="cal-grid">';
     for (let i = 0; i < 7; i++) {
-      cal += `<div class="cal-weekday">${WEEKDAYS_EN[i]}<br><span class="cal-weekday ar">${WEEKDAYS_AR[i]}</span></div>`;
+      cal += `<div class="cal-weekday">${WEEKDAYS_EN[i]}<br><span class="cal-weekday ar">${WEEKDAYS_AR[i]}</span><br><span class="cal-weekday rom">${WEEKDAYS_ROM[i]}</span></div>`;
     }
 
     // Empty cells before month starts
