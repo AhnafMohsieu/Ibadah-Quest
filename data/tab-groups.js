@@ -13,7 +13,8 @@
     { id: 'wudu',       icon: '💧', label: 'Ablution' },
     { id: 'salah',      icon: '🛐', label: 'Prayer Guide' },
     { id: 'jumuah',     icon: '🕌', label: 'Friday Prayer' },
-    { id: 'fasting',    icon: '🌙', label: 'Fasting' }
+    { id: 'fasting',    icon: '🌙', label: 'Fasting' },
+    { id: 'healthlog',   icon: '💪', label: 'Health' }
   ],
 
   // ── KNOWLEDGE (categorized — religious learning) ──
