@@ -9,7 +9,6 @@
     { id: 'morning',    icon: '<i class="fa-solid fa-sun"></i>', label: 'Morning' },
     { id: 'evening',    icon: '<i class="fa-solid fa-moon"></i>', label: 'Evening' },
     { id: 'dhikr',      icon: '<i class="fa-solid fa-hands-praying"></i>', label: 'Remembrance' },
-    { id: 'duas',       icon: '<i class="fa-solid fa-hands-praying"></i>', label: 'Supplications' },
     { id: 'wudu',       icon: '<i class="fa-solid fa-droplet"></i>', label: 'Ablution' },
     { id: 'salah',      icon: '<i class="fa-solid fa-person-praying"></i>', label: 'Prayer Guide' },
     { id: 'fasting',    icon: '<i class="fa-solid fa-moon"></i>', label: 'Fasting' },
