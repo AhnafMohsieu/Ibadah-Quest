@@ -947,7 +947,7 @@
   function renderEnvironment() { poolRender('environmentArea','🌱 Nature & Environment',ENVIRONMENT_POOL,'environmentIdx'); }
   function renderTravel() { poolRender('travelArea','✈️ Travel & Safar',TRAVEL_POOL,'travelIdx'); }
   function renderFiqh() { poolRender('fiqhArea','⚖️ Islamic Jurisprudence (Fiqh)',FIQH_POOL,'fiqhIdx'); }
-  function renderArabic() { poolRender('arabicArea','🔤 Learn Arabic',ARABIC_POOL,'arabicIdx'); }
+  function renderArabic() { poolRender('arabicArea','Learn Arabic',ARABIC_POOL,'arabicIdx',true); }
   function renderTawakkul() { poolRender('tawakkulArea','🌿 Tawakkul — Trust in Allah',TAWAKKUL_POOL,'tawakkulIdx'); }
   function renderIkhlas() { poolRender('ikhlasArea','✨ Ikhlas — Sincerity',IKHLAS_POOL,'ikhlasIdx'); }
   function renderZuhd() { poolRender('zuhdArea','🌾 Zuhd — Asceticism',ZUHD_POOL,'zuhdIdx'); }
