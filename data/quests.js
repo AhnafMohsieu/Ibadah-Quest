@@ -1,19 +1,19 @@
 const DQUESTS = [
-  { id:'dq1', d:'Complete Fajr & Isha',          c: (s,l) => l.p?.fajr && l.p?.isha, xp:40 },
-  { id:'dq2', d:'Do 3 extra deeds',               c: (s,l) => Object.values(l.d||{}).filter(v=>v).length>=3, xp:35 },
-  { id:'dq3', d:'Read Quran today',               c: (s,l) => l.d?.quran, xp:25 },
-  { id:'dq4', d:'Give Charity',                   c: (s,l) => l.d?.charity, xp:30 },
-  { id:'dq5', d:'Pray any voluntary prayer',      c: (s,l) => Object.values(l.v||{}).some(v=>v), xp:35 },
-  { id:'dq6', d:'Pray all 5 daily prayers',       c: (s,l) => Object.values(l.p||{}).filter(v=>v).length>=5, xp:50 },
-  { id:'dq7', d:'Pray Dhuhr & Asr',               c: (s,l) => l.p?.dhuhr && l.p?.asr, xp:40 },
-  { id:'dq8', d:'Morning & Evening Adhkar',       c: (s,l) => l.d?.morning && l.d?.evening, xp:45 },
-  { id:'dq9', d:'Dhikr and Istighfar',            c: (s,l) => l.d?.dhikr && l.d?.istighfar, xp:35 },
-  { id:'dq10',d:'Pray Tahajjud',                  c: (s,l) => l.v?.tahajjud, xp:50 },
-  { id:'dq11',d:'Pray Duha/Ishraq prayer',         c: (s,l) => l.v?.duha || l.v?.ishraq, xp:40 },
-  { id:'dq12',d:'Smile (Sunnah)',                 c: (s,l) => l.d?.smile, xp:20 },
-  { id:'dq13',d:'Help parents/family',            c: (s,l) => l.d?.family, xp:30 },
-  { id:'dq14',d:'Avoid useless talk',             c: (s,l) => l.d?.silence, xp:40 },
-  { id:'dq15',d:'Make specific dua for others',   c: (s,l) => l.d?.dua, xp:35 }
+  { id:'dq1', d:'Complete Fajr & Isha',          c: (s,l) => l.p?.fajr && l.p?.isha, xp:55 },
+  { id:'dq2', d:'Do 3 extra deeds',               c: (s,l) => Object.values(l.d||{}).filter(v=>v).length>=3, xp:50 },
+  { id:'dq3', d:'Read Quran today',               c: (s,l) => l.d?.quran, xp:35 },
+  { id:'dq4', d:'Give Charity',                   c: (s,l) => l.d?.charity, xp:45 },
+  { id:'dq5', d:'Pray any voluntary prayer',      c: (s,l) => Object.values(l.v||{}).some(v=>v), xp:50 },
+  { id:'dq6', d:'Pray all 5 daily prayers',       c: (s,l) => Object.values(l.p||{}).filter(v=>v).length>=5, xp:70 },
+  { id:'dq7', d:'Pray Dhuhr & Asr',               c: (s,l) => l.p?.dhuhr && l.p?.asr, xp:55 },
+  { id:'dq8', d:'Morning & Evening Adhkar',       c: (s,l) => l.d?.morning && l.d?.evening, xp:65 },
+  { id:'dq9', d:'Dhikr and Istighfar',            c: (s,l) => l.d?.dhikr && l.d?.istighfar, xp:50 },
+  { id:'dq10',d:'Pray Tahajjud',                  c: (s,l) => l.v?.tahajjud, xp:70 },
+  { id:'dq11',d:'Pray Duha/Ishraq prayer',         c: (s,l) => l.v?.duha || l.v?.ishraq, xp:55 },
+  { id:'dq12',d:'Smile (Sunnah)',                 c: (s,l) => l.d?.smile, xp:25 },
+  { id:'dq13',d:'Help parents/family',            c: (s,l) => l.d?.family, xp:40 },
+  { id:'dq14',d:'Avoid useless talk',             c: (s,l) => l.d?.silence, xp:55 },
+  { id:'dq15',d:'Make specific dua for others',   c: (s,l) => l.d?.dua, xp:50 }
 ];
 
 const WQUESTS = [
