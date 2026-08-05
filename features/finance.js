@@ -98,6 +98,6 @@
     el.innerHTML = h;
   }
 
-  window.financeTracker = { logIncome, logExpense, logCharity, removeCharity, renderFinanceTab };
+  window.financeTracker = { logIncome, logExpense, logCharity, removeCharity, addCharity: logCharity, addExpense: logExpense, renderFinanceTab };
   window.renderFinanceTab = renderFinanceTab;
 })();
