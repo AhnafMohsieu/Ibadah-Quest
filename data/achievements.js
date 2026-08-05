@@ -204,3 +204,11 @@
     { id:'a202', name:'Jummah Regular 1500', desc:'Pray 1500 Jummahs', icon:'🕌', tier:'legendary', c: s => (s.tj||0)>=1500 },
     { id:'a203', name:'Jummah Regular 2000', desc:'Pray 2000 Jummahs', icon:'🕌', tier:'legendary', c: s => (s.tj||0)>=2000 }
   ];
+
+  const DHIKR_BADGES = [
+    { id: 'dhikr_first', name: 'First Step', icon: '🌱', desc: 'Complete first dhikr session', check: (s) => (s.dhikrStats?.streak || 0) >= 1 },
+    { id: 'dhikr_week', name: 'Week Warrior', icon: '🔥', desc: '7-day dhikr streak', check: (s) => (s.dhikrStats?.streak || 0) >= 7 },
+    { id: 'dhikr_month', name: 'Month Master', icon: '⭐', desc: '30-day dhikr streak', check: (s) => (s.dhikrStats?.streak || 0) >= 30 },
+    { id: 'dhikr_100', name: 'Dhikr Novice', icon: '📿', desc: '100 total dhikr', check: (s) => Object.values(s.dhikrStats?.total || {}).reduce((a,b) => a+b, 0) >= 100 },
+    { id: 'dhikr_1000', name: 'Dhikr Adept', icon: '🕌', desc: '1,000 total dhikr', check: (s) => Object.values(s.dhikrStats?.total || {}).reduce((a,b) => a+b, 0) >= 1000 },
+  ];

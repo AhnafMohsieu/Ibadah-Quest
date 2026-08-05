@@ -170,7 +170,20 @@
     if (!S.dhikrStats.daily[t]) S.dhikrStats.daily[t] = {};
     S.dhikrStats.daily[t][idx] = (S.dhikrStats.daily[t][idx] || 0) + 1;
     updateDhikrStreak();
+    checkDhikrBadges();
     saveState(); renderDhikrCounter();
+  }
+  function checkDhikrBadges() {
+    if (!S.dhikrStats) return;
+    const badges = S.dhikrStats.badges || [];
+    DHIKR_BADGES.forEach(badge => {
+      if (!badges.includes(badge.id) && badge.check(S)) {
+        badges.push(badge.id);
+        toast('🏆', `Badge unlocked: ${badge.name}!`);
+        S.xp += 25;
+      }
+    });
+    S.dhikrStats.badges = badges;
   }
   function resetDhikr() { if (!S.dhikrCounters) S.dhikrCounters={}; const idx=S.dhikrCounters._active||0; S.dhikrCounters[idx]=0; saveState(); renderDhikrCounter(); }
   function nextDhikr() { if (!S.dhikrCounters) S.dhikrCounters={}; S.dhikrCounters._active=((S.dhikrCounters._active||0)+1)%DHIKR_COUNTER_DATA.length; saveState(); renderDhikrCounter(); }
