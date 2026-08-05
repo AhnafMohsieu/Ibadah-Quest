@@ -101,9 +101,9 @@
     const map = {};
     data.forEach(d => { map[d.date] = d.value; });
 
-    const today = new Date();
-    const endDate = new Date(today);
-    const startDate = new Date(today);
+    const now = new Date();
+    const endDate = new Date(now);
+    const startDate = new Date(now);
     startDate.setDate(startDate.getDate() - 364);
 
     const weeks = [];
@@ -114,7 +114,7 @@
 
     while (d <= endDate) {
       const dow = d.getDay();
-      const dateStr = d.toISOString().slice(0, 10);
+      const dateStr = today(d);
       currentWeek[dow] = { date: dateStr, value: map[dateStr] || 0 };
       if (dow === 6) { weeks.push(currentWeek); currentWeek = new Array(7).fill(null); }
       d.setDate(d.getDate() + 1);

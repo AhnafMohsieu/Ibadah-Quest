@@ -52,7 +52,7 @@
     const d = new Date(range ? range.start : new Date());
     const end = range ? range.end : new Date();
     while (d <= end) {
-      const key = d.toISOString().slice(0, 10);
+      const key = today(d);
       result.push({ date: key, value: map[key] || 0 });
       d.setDate(d.getDate() + 1);
     }
