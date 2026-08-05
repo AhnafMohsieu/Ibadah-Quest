@@ -7,6 +7,7 @@ const path = require('path');
 const root = path.join(__dirname, '..');
 const html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
 const tabs = fs.readFileSync(path.join(root, 'data', 'tab-groups.js'), 'utf8');
+const css = fs.readFileSync(path.join(root, 'styles', 'main.css'), 'utf8');
 
 test('index.html has the three feature containers', () => {
   assert.ok(html.includes('id="gardenArea"'));
@@ -47,6 +48,12 @@ test('index.html loads Font Awesome and Tailwind CDN', () => {
 
 test('index.html theme-color uses emerald ink', () => {
   assert.ok(html.includes('content="#0b1513"'));
+});
+
+test('main.css uses emerald/gold tokens', () => {
+  assert.ok(css.includes('--emerald'));
+  assert.ok(css.includes('--gold'));
+  assert.ok(css.includes('--bg: #0b1513'));
 });
 
 test('index.html registers the service worker and update banner', () => {

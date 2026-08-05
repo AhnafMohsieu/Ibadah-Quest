@@ -3,29 +3,32 @@
    ═══════════════════════════════════════════════════════ */
 
 :root {
-  --bg: #0b1114;
-  --bg-accent: #111a1e;
-  --card: #151e23;
-  --card2: #19242a;
+  --bg: #0b1513;
+  --bg-accent: #0f1f1b;
+  --card: #11251f;
+  --card2: #16312a;
+  --emerald: #10b981;
+  --emerald-deep: #059669;
   --gold: #D4AF37;
   --gold-light: #FCE694;
-  --gold-dark: #A8812D;
+  --gold-dark: #A8872A;
   --teal: #14b8a6;
-  --text: #F1F5F9;
-  --text2: #94A3B8;
+  --text: #F5F1E1;
+  --text2: #9db8ab;
   --green: #10b981;
   --orange: #f59e0b;
   --red: #ef4444;
   --purple: #8b5cf6;
-  --border: rgba(255, 255, 255, 0.06);
-  --shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+  --border: rgba(212, 175, 55, 0.16);
+  --shadow: 0 12px 32px -12px rgba(0, 0, 0, 0.55);
   --radius: 20px;
   --radius-sm: 14px;
   --font: 'Sora', system-ui, -apple-system, 'Segoe UI Emoji', 'Apple Color Emoji', 'Noto Color Emoji', 'Twemoji Mozilla', 'EmojiOne Color', 'Android Emoji', sans-serif;
-  --font-display: 'Cinzel', 'Playfair Display', serif;
+  --font-display: 'Cormorant Garamond', 'Cinzel', 'Playfair Display', serif;
   --font-arabic: 'Noto Naskh Arabic', 'Amiri', serif;
-  --font-heading: 'Cinzel', serif;
+  --font-heading: 'Cormorant Garamond', 'Cinzel', serif;
   --font-emoji: 'Noto Color Emoji', 'Noto Emoji', 'Apple Color Emoji', 'Segoe UI Emoji', 'Twemoji Mozilla', 'EmojiOne Color', 'Android Emoji';
+  --pattern-star: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 40 40'><g fill='none' stroke='%23D4AF37' stroke-opacity='0.06'><rect x='20' y='0' width='20' height='20'/><rect x='0' y='20' width='20' height='20'/></g><path d='M20 8l3 3-3 3-3-3z' fill='%2310b981' opacity='0.12'/></svg>");
 }
 
 /* ── Reset & Base ── */
