@@ -152,7 +152,7 @@ function getFeatureProgress(featureName) {
 
 const FEATURE_ICONS = {
   garden: '<i class="fa-solid fa-seedling"></i>',
-  lantern: '<i class="fa-solid fa-lamp"></i>',
+  lantern: '<i class="fa-solid fa-lightbulb"></i>',
   keys: '<i class="fa-solid fa-key"></i>',
   mosque: '<i class="fa-solid fa-mosque"></i>',
   boat: '<i class="fa-solid fa-sailboat"></i>',
@@ -161,7 +161,7 @@ const FEATURE_ICONS = {
   armor: '<i class="fa-solid fa-shield-halved"></i>',
   constellation: '<i class="fa-solid fa-star"></i>',
   well: '<i class="fa-solid fa-water"></i>',
-  desert: '<i class="fa-solid fa-tree-palm"></i>',
+  desert: '<i class="fa-solid fa-pagelines"></i>',
   ramadan: '<i class="fa-solid fa-moon"></i>',
   laylat: '<i class="fa-solid fa-star"></i>'
 };

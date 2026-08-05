@@ -6,8 +6,8 @@
     { id: 'timer',      icon: '<i class="fa-solid fa-stopwatch"></i>', label: 'Prayer Times' },
     { id: 'quests',     icon: '<i class="fa-solid fa-bullseye"></i>', label: 'Quests' },
     { id: 'journeys', icon: '<i class="fa-solid fa-seedling"></i>', label: 'Journeys' },
-    { id: 'morning',    icon: '<i class="fa-solid fa-sunrise"></i>', label: 'Morning' },
-    { id: 'evening',    icon: '<i class="fa-solid fa-sunset"></i>', label: 'Evening' },
+    { id: 'morning',    icon: '<i class="fa-solid fa-sun"></i>', label: 'Morning' },
+    { id: 'evening',    icon: '<i class="fa-solid fa-moon"></i>', label: 'Evening' },
     { id: 'dhikr',      icon: '<i class="fa-solid fa-hands-praying"></i>', label: 'Remembrance' },
     { id: 'duas',       icon: '<i class="fa-solid fa-hands-praying"></i>', label: 'Supplications' },
     { id: 'wudu',       icon: '<i class="fa-solid fa-droplet"></i>', label: 'Ablution' },
@@ -56,7 +56,7 @@
       id: 'heart', icon: '<i class="fa-solid fa-heart"></i>', label: 'Heart & Soul',
       tabs: [
         { id: 'heart',       icon: '<i class="fa-solid fa-heart"></i>', label: 'Heart Diseases' },
-        { id: 'ikhlas',      icon: '<i class="fa-solid fa-sparkles"></i>', label: 'Sincerity' },
+        { id: 'ikhlas',      icon: '<i class="fa-solid fa-star"></i>', label: 'Sincerity' },
         { id: 'tawakkul',    icon: '<i class="fa-solid fa-leaf"></i>', label: 'Reliance' },
         { id: 'manners',     icon: '<i class="fa-solid fa-handshake"></i>', label: 'Manners' },
         { id: 'patience',    icon: '<i class="fa-solid fa-mountain"></i>', label: 'Patience & Gratitude' },
@@ -66,7 +66,7 @@
         { id: 'zuhd',        icon: '<i class="fa-solid fa-wheat-awn"></i>', label: 'Asceticism' },
         { id: 'inspirations', icon: '<i class="fa-solid fa-comment"></i>', label: 'Inspirations' },
         { id: 'sufism',      icon: '<i class="fa-solid fa-heart"></i>', label: 'Sufism' },
-        { id: 'tazkiyah',    icon: '<i class="fa-solid fa-sparkles"></i>', label: 'Tazkiyah' },
+        { id: 'tazkiyah',    icon: '<i class="fa-solid fa-star"></i>', label: 'Tazkiyah' },
         { id: 'fear',        icon: '<i class="fa-solid fa-triangle-exclamation"></i>', label: 'Fear of Allah' },
         { id: 'hope',        icon: '<i class="fa-solid fa-dove"></i>', label: 'Hope' },
         { id: 'loveofallah', icon: '<i class="fa-solid fa-heart"></i>', label: 'Love of Allah' },
@@ -90,7 +90,7 @@
         { id: 'punishments', icon: '<i class="fa-solid fa-scale-balanced"></i>', label: 'Justice' },
         { id: 'brotherhood', icon: '<i class="fa-solid fa-handshake"></i>', label: 'Brotherhood' },
         { id: 'sisterhood',  icon: '<i class="fa-solid fa-venus"></i>', label: 'Sisterhood' },
-        { id: 'orphans2',    icon: '<i class="fa-solid fa-teddy-bear"></i>', label: 'Orphans' },
+        { id: 'orphans2',    icon: '<i class="fa-solid fa-face-smile"></i>', label: 'Orphans' },
         { id: 'elderly',     icon: '<i class="fa-solid fa-person-cane"></i>', label: 'Elderly' },
         { id: 'disabled',    icon: '<i class="fa-solid fa-wheelchair"></i>', label: 'Disabled' },
         { id: 'antiracism',  icon: '<i class="fa-solid fa-people-group"></i>', label: 'Anti-Racism' },
@@ -122,21 +122,21 @@
     {
       id: 'history', icon: '<i class="fa-solid fa-scroll"></i>', label: 'History & Seerah',
       tabs: [
-        { id: 'seerah',       icon: '<i class="fa-solid fa-camel"></i>', label: 'Biography' },
+        { id: 'seerah',       icon: '<i class="fa-solid fa-horse"></i>', label: 'Biography' },
         { id: 'sahaba',       icon: '<i class="fa-solid fa-star"></i>', label: 'Companions' },
         { id: 'prophets',     icon: '<i class="fa-solid fa-scroll"></i>', label: 'Prophets' },
         { id: 'women',        icon: '<i class="fa-solid fa-person-dress"></i>', label: 'Great Women' },
         { id: 'stories',      icon: '<i class="fa-solid fa-book-open"></i>', label: 'Stories' },
-        { id: 'battles',      icon: '<i class="fa-solid fa-crossed-swords"></i>', label: 'Battles' },
+        { id: 'battles',      icon: '<i class="fa-solid fa-shield-halved"></i>', label: 'Battles' },
         { id: 'civilisation', icon: '<i class="fa-solid fa-landmark"></i>', label: 'Civilization' },
-        { id: 'science',      icon: '<i class="fa-solid fa-telescope"></i>', label: 'Science' }
+        { id: 'science',      icon: '<i class="fa-solid fa-star"></i>', label: 'Science' }
       ]
     },
     {
       id: 'hereafter', icon: '<i class="fa-solid fa-star"></i>', label: 'Hereafter',
       tabs: [
         { id: 'akhirah',  icon: '<i class="fa-solid fa-star"></i>', label: 'Hereafter' },
-        { id: 'jannah',   icon: '<i class="fa-solid fa-tree-palm"></i>', label: 'Paradise' },
+        { id: 'jannah',   icon: '<i class="fa-solid fa-pagelines"></i>', label: 'Paradise' },
         { id: 'jahannam', icon: '<i class="fa-solid fa-fire"></i>', label: 'Hellfire' },
         { id: 'grave',    icon: '<i class="fa-solid fa-archway"></i>', label: 'The Grave' },
         { id: 'signs',    icon: '<i class="fa-solid fa-clock"></i>', label: 'Signs of Qiyamah' },
@@ -151,8 +151,8 @@
     {
       id: 'dynasties', icon: '<i class="fa-solid fa-landmark"></i>', label: 'Dynasties',
       tabs: [
-        { id: 'umayyads', icon: '<i class="fa-solid fa-landmark"></i>', label: 'Umayyads' }, { id: 'abbasids', icon: '<i class="fa-solid fa-scroll"></i>', label: 'Abbasids' }, { id: 'andalus', icon: '<i class="fa-solid fa-castle"></i>', label: 'Andalus' }, { id: 'ottomans', icon: '<i class="fa-solid fa-mosque"></i>', label: 'Ottomans' },
-        { id: 'mamluks', icon: '<i class="fa-solid fa-crossed-swords"></i>', label: 'Mamluks' }, { id: 'seljuks', icon: '<i class="fa-solid fa-horse"></i>', label: 'Seljuks' }, { id: 'fatimids', icon: '<i class="fa-solid fa-moon"></i>', label: 'Fatimids' }, { id: 'ayyubids', icon: '<i class="fa-solid fa-shield-halved"></i>', label: 'Ayyubids' },
+        { id: 'umayyads', icon: '<i class="fa-solid fa-landmark"></i>', label: 'Umayyads' }, { id: 'abbasids', icon: '<i class="fa-solid fa-scroll"></i>', label: 'Abbasids' }, { id: 'andalus', icon: '<i class="fa-solid fa-landmark"></i>', label: 'Andalus' }, { id: 'ottomans', icon: '<i class="fa-solid fa-mosque"></i>', label: 'Ottomans' },
+        { id: 'mamluks', icon: '<i class="fa-solid fa-shield-halved"></i>', label: 'Mamluks' }, { id: 'seljuks', icon: '<i class="fa-solid fa-horse"></i>', label: 'Seljuks' }, { id: 'fatimids', icon: '<i class="fa-solid fa-moon"></i>', label: 'Fatimids' }, { id: 'ayyubids', icon: '<i class="fa-solid fa-shield-halved"></i>', label: 'Ayyubids' },
         { id: 'modernhist', icon: '<i class="fa-solid fa-globe"></i>', label: 'Modern Hist.' }, { id: 'ancientprophets', icon: '<i class="fa-solid fa-hourglass"></i>', label: 'Ancient' }
       ]
     },
@@ -160,7 +160,7 @@
       id: 'cities', icon: '<i class="fa-solid fa-map"></i>', label: 'Cities & Lands',
       tabs: [
         { id: 'mecca', icon: '<i class="fa-solid fa-mosque"></i>', label: 'Mecca' }, { id: 'medina', icon: '<i class="fa-solid fa-mosque"></i>', label: 'Medina' }, { id: 'jerusalem', icon: '<i class="fa-solid fa-mosque"></i>', label: 'Jerusalem' }, { id: 'damascus', icon: '<i class="fa-solid fa-landmark"></i>', label: 'Damascus' },
-        { id: 'baghdad', icon: '<i class="fa-solid fa-scroll"></i>', label: 'Baghdad' }, { id: 'cairo', icon: '<i class="fa-solid fa-landmark"></i>', label: 'Cairo' }, { id: 'cordoba', icon: '<i class="fa-solid fa-castle"></i>', label: 'Cordoba' }, { id: 'istanbul', icon: '<i class="fa-solid fa-mosque"></i>', label: 'Istanbul' },
+        { id: 'baghdad', icon: '<i class="fa-solid fa-scroll"></i>', label: 'Baghdad' }, { id: 'cairo', icon: '<i class="fa-solid fa-landmark"></i>', label: 'Cairo' }, { id: 'cordoba', icon: '<i class="fa-solid fa-landmark"></i>', label: 'Cordoba' }, { id: 'istanbul', icon: '<i class="fa-solid fa-mosque"></i>', label: 'Istanbul' },
         { id: 'bukhara', icon: '<i class="fa-solid fa-mosque"></i>', label: 'Bukhara' }, { id: 'samarkand', icon: '<i class="fa-solid fa-map"></i>', label: 'Samarkand' }
       ]
     },
@@ -168,7 +168,7 @@
       id: 'arts', icon: '<i class="fa-solid fa-palette"></i>', label: 'Arts & Crafts',
       tabs: [
         { id: 'calligraphy', icon: '<i class="fa-solid fa-pen-nib"></i>', label: 'Calligraphy' }, { id: 'architecture', icon: '<i class="fa-solid fa-landmark"></i>', label: 'Architecture' }, { id: 'geometry', icon: '<i class="fa-solid fa-shapes"></i>', label: 'Geometry' }, { id: 'poetryart', icon: '<i class="fa-solid fa-feather"></i>', label: 'Poetry' },
-        { id: 'literature', icon: '<i class="fa-solid fa-book-open"></i>', label: 'Literature' }, { id: 'nasheeds', icon: '<i class="fa-solid fa-music"></i>', label: 'Nasheeds' }, { id: 'illumination', icon: '<i class="fa-solid fa-sparkles"></i>', label: 'Illumination' }, { id: 'textiles', icon: '<i class="fa-solid fa-shirt"></i>', label: 'Textiles' },
+        { id: 'literature', icon: '<i class="fa-solid fa-book-open"></i>', label: 'Literature' }, { id: 'nasheeds', icon: '<i class="fa-solid fa-music"></i>', label: 'Nasheeds' }, { id: 'illumination', icon: '<i class="fa-solid fa-star"></i>', label: 'Illumination' }, { id: 'textiles', icon: '<i class="fa-solid fa-shirt"></i>', label: 'Textiles' },
         { id: 'ceramics', icon: '<i class="fa-solid fa-jar"></i>', label: 'Ceramics' }, { id: 'woodwork', icon: '<i class="fa-solid fa-tree"></i>', label: 'Woodwork' }
       ]
     },
@@ -185,7 +185,7 @@
       tabs: [
         { id: 'epistemology', icon: '<i class="fa-solid fa-brain"></i>', label: 'Epistemology' }, { id: 'ontology', icon: '<i class="fa-solid fa-atom"></i>', label: 'Ontology' }, { id: 'logic', icon: '<i class="fa-solid fa-puzzle-piece"></i>', label: 'Logic' }, { id: 'kalam', icon: '<i class="fa-solid fa-comment"></i>', label: 'Kalam' },
         { id: 'reason', icon: '<i class="fa-solid fa-lightbulb"></i>', label: 'Reason' }, { id: 'freewill', icon: '<i class="fa-solid fa-scale-balanced"></i>', label: 'Free Will' }, { id: 'problemofevil', icon: '<i class="fa-solid fa-cloud"></i>', label: 'Prob of Evil' },
-        { id: 'prophethood', icon: '<i class="fa-solid fa-scroll"></i>', label: 'Prophethood' }, { id: 'existence', icon: '<i class="fa-solid fa-sparkles"></i>', label: 'Existence' }
+        { id: 'prophethood', icon: '<i class="fa-solid fa-scroll"></i>', label: 'Prophethood' }, { id: 'existence', icon: '<i class="fa-solid fa-star"></i>', label: 'Existence' }
       ]
     }
   ]

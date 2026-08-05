@@ -2160,18 +2160,18 @@ Object.keys(NEW_POOLS).forEach(k => {
 
   // Setup names_main subtabs
   TAB_GROUPS.names_main = [
-    { id: 'allah_names', icon: '✨', label: '99 Names of Allah' },
-    { id: 'prophet_names', icon: '🕌', label: '25 Prophets' },
-    { id: 'scholars_names', icon: '🖋️', label: 'Scholars' }
+    { id: 'allah_names', icon: '<i class="fa-solid fa-star"></i>', label: '99 Names of Allah' },
+    { id: 'prophet_names', icon: '<i class="fa-solid fa-mosque"></i>', label: '25 Prophets' },
+    { id: 'scholars_names', icon: '<i class="fa-solid fa-pen-nib"></i>', label: 'Scholars' }
   ];
 
   // Profile as main tab
   TAB_GROUPS.profile_main = [
-    { id: 'profile', icon: '👤', label: 'Profile' },
-    { id: 'trophies', icon: '🏆', label: 'Trophies' },
-    { id: 'progress', icon: '📊', label: 'Progress' },
-    { id: 'stats', icon: '📈', label: 'Analytics' },
-    { id: 'rewards', icon: '🎁', label: 'Rewards' }
+    { id: 'profile', icon: '<i class="fa-solid fa-user"></i>', label: 'Profile' },
+    { id: 'trophies', icon: '<i class="fa-solid fa-trophy"></i>', label: 'Trophies' },
+    { id: 'progress', icon: '<i class="fa-solid fa-chart-column"></i>', label: 'Progress' },
+    { id: 'stats', icon: '<i class="fa-solid fa-chart-line"></i>', label: 'Analytics' },
+    { id: 'rewards', icon: '<i class="fa-solid fa-gift"></i>', label: 'Rewards' }
   ];
 
   if (!document.getElementById('panel-allah_names')) {

@@ -7,8 +7,8 @@
   const FA_GLYPH = {
     '🕌': '<i class="fa-solid fa-mosque"></i>',
     '🌙': '<i class="fa-solid fa-moon"></i>',
-    '🌅': '<i class="fa-solid fa-sunrise"></i>',
-    '🌆': '<i class="fa-solid fa-sunset"></i>',
+    '🌅': '<i class="fa-solid fa-sun"></i>',
+    '🌆': '<i class="fa-solid fa-moon"></i>',
     '☀️': '<i class="fa-solid fa-sun"></i>',
     '🌞': '<i class="fa-solid fa-sun"></i>',
     '🌤️': '<i class="fa-solid fa-cloud-sun"></i>',
@@ -28,7 +28,7 @@
     '🤍': '<i class="fa-solid fa-heart"></i>',
     '💞': '<i class="fa-solid fa-heart"></i>',
     '❤️\u200d🩹': '<i class="fa-solid fa-heart-crack"></i>',
-    '✨': '<i class="fa-solid fa-sparkles"></i>',
+    '✨': '<i class="fa-solid fa-star"></i>',
     '💧': '<i class="fa-solid fa-droplet"></i>',
     '🪦': '<i class="fa-solid fa-archway"></i>',
     '🎊': '<i class="fa-solid fa-gift"></i>',
@@ -47,12 +47,12 @@
     '🧹': '<i class="fa-solid fa-broom"></i>',
     '🍲': '<i class="fa-solid fa-utensils"></i>',
     '🥛': '<i class="fa-solid fa-glass-water"></i>',
-    '🧸': '<i class="fa-solid fa-teddy-bear"></i>',
+    '🧸': '<i class="fa-solid fa-face-smile"></i>',
     '🍽️': '<i class="fa-solid fa-utensils"></i>',
     '🌱': '<i class="fa-solid fa-seedling"></i>',
     '🌳': '<i class="fa-solid fa-tree"></i>',
-    '🌹': '<i class="fa-solid fa-rose"></i>',
-    '🌴': '<i class="fa-solid fa-tree-palm"></i>',
+    '🌹': '<i class="fa-solid fa-spa"></i>',
+    '🌴': '<i class="fa-solid fa-pagelines"></i>',
     '🪨': '<i class="fa-solid fa-mountain"></i>',
     '🕊️': '<i class="fa-solid fa-dove"></i>',
     '🐈': '<i class="fa-solid fa-paw"></i>',
@@ -103,7 +103,7 @@
     '🛒': '<i class="fa-solid fa-cart-shopping"></i>',
     '📝': '<i class="fa-solid fa-pen"></i>',
     '🛍️': '<i class="fa-solid fa-bag-shopping"></i>',
-    '🎒': '<i class="fa-solid fa-backpack"></i>',
+    '🎒': '<i class="fa-solid fa-briefcase"></i>',
     '💨': '<i class="fa-solid fa-wind"></i>',
     '✂️': '<i class="fa-solid fa-scissors"></i>',
     '🍯': '<i class="fa-solid fa-jar"></i>',
@@ -114,7 +114,28 @@
     '🍛': '<i class="fa-solid fa-bowl-food"></i>',
     '🎭': '<i class="fa-solid fa-masks-theater"></i>',
     '🔄': '<i class="fa-solid fa-arrows-rotate"></i>',
-    '🙅': '<i class="fa-solid fa-ban"></i>'
+    '🙅': '<i class="fa-solid fa-ban"></i>',
+    '🤐': '<i class="fa-solid fa-comment-slash"></i>',
+    '👴': '<i class="fa-solid fa-person-cane"></i>',
+    '👵': '<i class="fa-solid fa-person-dress"></i>',
+    '🎓': '<i class="fa-solid fa-graduation-cap"></i>',
+    '🛏️': '<i class="fa-solid fa-bed"></i>',
+    '🤧': '<i class="fa-solid fa-virus"></i>',
+    '🛋️': '<i class="fa-solid fa-couch"></i>',
+    '🗑️': '<i class="fa-solid fa-trash-can"></i>',
+    '🤥': '<i class="fa-solid fa-face-meh"></i>',
+    '🥘': '<i class="fa-solid fa-bowl-food"></i>',
+    '🌬️': '<i class="fa-solid fa-wind"></i>',
+    '🧎': '<i class="fa-solid fa-person"></i>',
+    '👨': '<i class="fa-solid fa-person"></i>',
+    '🌸': '<i class="fa-solid fa-spa"></i>',
+    '🤫': '<i class="fa-solid fa-volume-xmark"></i>',
+    '🍵': '<i class="fa-solid fa-mug-hot"></i>',
+    '🛣️': '<i class="fa-solid fa-road"></i>',
+    '🌾': '<i class="fa-solid fa-wheat-awn"></i>',
+    '✋': '<i class="fa-solid fa-hand"></i>',
+    '🦯': '<i class="fa-solid fa-person-walking-with-cane"></i>',
+    '💌': '<i class="fa-solid fa-envelope"></i>'
   };
   function faIcon(e) { return FA_GLYPH[e] || e; }
   function renderDynamic() {
@@ -1173,7 +1194,7 @@
     MORNING_DHIKR.forEach((item, idx) => { 
         const done = !!S.morningDone[dt][idx]; 
         h += `<div class="vol-card${done?' done':''}" onclick="App.toggleMorning(${idx}, ${item.xp})" style="cursor:pointer;">
-            <div class="prayer-check" style="font-size:1.2rem;">${done?'✓':'<i class="fa-solid fa-sunrise"></i>'}</div>
+            <div class="prayer-check" style="font-size:1.2rem;">${done?'✓':'<i class="fa-solid fa-sun"></i>'}</div>
             <div class="prayer-info">
                 <div style="font-family:'Amiri',serif;font-size:1.3rem;margin-bottom:2px;color:var(--gold);line-height:1.4;">${item.arabic}</div>
                 ${item.roman ? `<div style="font-size:0.85rem;color:var(--text1);font-style:italic;margin-bottom:6px;opacity:0.9;">"${item.roman}"</div>` : ''}
@@ -1211,7 +1232,7 @@
     EVENING_DHIKR.forEach((item, idx) => { 
         const done = !!S.eveningDone[dt][idx]; 
         h += `<div class="vol-card${done?' done':''}" onclick="App.toggleEvening(${idx}, ${item.xp})" style="cursor:pointer;">
-            <div class="prayer-check" style="font-size:1.2rem;">${done?'✓':'<i class="fa-solid fa-sunset"></i>'}</div>
+            <div class="prayer-check" style="font-size:1.2rem;">${done?'✓':'<i class="fa-solid fa-moon"></i>'}</div>
             <div class="prayer-info">
                 <div style="font-family:'Amiri',serif;font-size:1.3rem;margin-bottom:2px;color:var(--gold);line-height:1.4;">${item.arabic}</div>
                 ${item.roman ? `<div style="font-size:0.85rem;color:var(--text1);font-style:italic;margin-bottom:6px;opacity:0.9;">"${item.roman}"</div>` : ''}
