@@ -853,7 +853,7 @@
   }
   function renderSunnahs() { poolRender('sunnahArea','☀️ Daily Sunnahs',SUNNAH_POOL,'sunnahIdx'); }
   function renderDhikr() { poolRender('dhikrArea','📿 Dhikr Collection',DHIKR_POOL,'dhikrIdx'); }
-  function renderStories() { poolRender('storiesArea','📚 Inspiring Stories',STORIES,'storiesIdx'); }
+  function renderStories() { poolRender('storiesArea','📚 Inspiring Stories',STORIES,'storiesIdx',true); }
   let hadithView = { level: 'collections', collectionId: null, bookId: null };
 
   function renderHadith() {
@@ -922,7 +922,7 @@
   function renderSins() { poolRender('sinsArea','🚫 Major Sins to Avoid',SINS_POOL,'sinsIdx'); }
   function renderPunishments() { poolRender('punishmentsArea','⚖️ Islamic Justice',PUNISHMENTS_POOL,'punishmentsIdx'); }
   function renderRepentance() { poolRender('repentanceArea','💧 Repentance & Tawbah',REPENTANCE_POOL,'repentanceIdx'); }
-  function renderSeerah() { poolRender('seerahArea','🐪 Life of the Prophet ﷺ',SEERAH_POOL,'seerahIdx'); }
+  function renderSeerah() { poolRender('seerahArea','🐪 Life of the Prophet ﷺ',SEERAH_POOL,'seerahIdx',true); }
   function renderTafsir() { poolRender('tafsirArea','📜 Quranic Tafsir',TAFSIR_POOL,'tafsirIdx'); }
   function renderManners() { poolRender('mannersArea','🤝 Islamic Manners (Adab)',MANNERS_POOL,'mannersIdx'); }
   function renderAqeedah() { poolRender('aqeedahArea','🛡️ Islamic Aqeedah',AQEEDAH_POOL,'aqeedahIdx'); }
@@ -932,13 +932,13 @@
   function renderUmmah() { poolRender('ummahArea','🌍 The Muslim Ummah',UMMAH_POOL,'ummahIdx'); }
   function renderHajj() { poolRender('hajjArea','🕋 Hajj & Umrah',HAJJ_POOL,'hajjIdx'); }
   function renderAkhirah() { poolRender('akhirahArea','🌌 The Hereafter',AKHIRAH_POOL,'akhirahIdx'); }
-  function renderProphets() { poolRender('prophetsArea','📜 Stories of the Prophets',PROPHETS_POOL,'prophetsIdx'); }
-  function renderWomen() { poolRender('womenArea','🧕 Great Muslim Women',WOMEN_POOL,'womenIdx'); }
+  function renderProphets() { poolRender('prophetsArea','📜 Stories of the Prophets',PROPHETS_POOL,'prophetsIdx',true); }
+  function renderWomen() { poolRender('womenArea','🧕 Great Muslim Women',WOMEN_POOL,'womenIdx',true); }
   function renderKnowledge() { poolRender('knowledgeArea','🧠 Seeking Knowledge',KNOWLEDGE_POOL,'knowledgeIdx'); }
   function renderHeart() { poolRender('heartArea','🤍 Diseases of the Heart',HEART_POOL,'heartIdx'); }
   function renderJumuah() { poolRender('jumuahArea','🕌 Friday (Jumuah) Virtues',JUMUAH_POOL,'jumuahIdx', true); }
   function renderMarriage() { poolRender('marriageArea','💍 Marriage & Halal Love',MARRIAGE_POOL,'marriageIdx'); }
-  function renderScience() { poolRender('scienceArea','🔭 Islam & Science',SCIENCE_POOL,'scienceIdx'); }
+  function renderScience() { poolRender('scienceArea','🔭 Islam & Science',SCIENCE_POOL,'scienceIdx',true); }
   function renderWudu() { poolRender('wuduArea','💧 Wudu & Taharah',WUDU_POOL,'wuduIdx', true); }
   function renderScholars() { poolRender('scholarsArea','🖋️ Great Islamic Scholars',SCHOLARS_POOL,'scholarsIdx'); }
   function renderPatience() { poolRender('patienceArea','🏔️ Sabr & Shukr',PATIENCE_POOL,'patienceIdx'); }
@@ -953,7 +953,7 @@
   function renderZuhd() { poolRender('zuhdArea','🌾 Zuhd — Asceticism',ZUHD_POOL,'zuhdIdx'); }
   function renderDawah() { poolRender('dawahArea',"📢 Da'wah — Inviting to Islam",DAWAH_POOL,'dawahIdx'); }
   function renderCivilisation() { poolRender('civilisationArea','🏛️ Islamic Civilisation',CIVILISATION_POOL,'civilisationIdx'); }
-  function renderBattles() { poolRender('battlesArea','🗡️ Battles of Islam',BATTLES_POOL,'battlesIdx'); }
+  function renderBattles() { poolRender('battlesArea','🗡️ Battles of Islam',BATTLES_POOL,'battlesIdx',true); }
   function renderJannah() { poolRender('jannahArea','🌴 Jannah — Paradise',JANNAH_POOL,'jannahIdx'); }
   function renderJahannam() { poolRender('jahannamArea','🔥 Jahannam — Hellfire',JAHANNAM_POOL,'jahannamIdx'); }
   function renderGrave() { poolRender('graveArea','⚰️ The Grave & Life After Death',GRAVE_POOL,'graveIdx'); }

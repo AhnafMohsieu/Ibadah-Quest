@@ -8,6 +8,13 @@
   { title:"Umm Salama (RA)", desc:"A wise Mother of the Believers who gave the Prophet ﷺ critical advice at Hudaybiyyah that resolved a tense situation." },
   { title:"Sumayyah bint Khayyat (RA)", desc:"The very first martyr in Islam — killed for refusing to abandon her faith. A pioneer of sacrifice." },
   { title:"Asma bint Abi Bakr (RA)", desc:"'She of the Two Belts' — the heroic woman who brought food to the Prophet ﷺ and her father during the Hijrah." },
-  { title:"Nusaybah bint Ka'ab (RA)", desc:"A brave warrior who physically defended the Prophet ﷺ at Uhud when others fled, receiving multiple wounds." },
-  { title:"Hafsa bint Umar (RA)", desc:"Mother of the Believers entrusted with keeping the first compiled manuscript of the Quran under Umar (RA)." }
+  { title:"Nusaybah bint Ka'ab / Umm Umarah (RA)", desc:"A brave warrior who physically defended the Prophet ﷺ at Uhud when others fled, receiving multiple wounds." },
+  { title:"Hafsa bint Umar (RA)", desc:"Mother of the Believers entrusted with keeping the first compiled manuscript of the Quran under Umar (RA)." },
+  { title:"Zaynab bint Ali (RA)", desc:"The scholar of the Ahl al-Bayt after Karbala. Her eloquent words in the court of Yazid preserved the truth of Ashura for history." },
+  { title:"Safiyyah bint Abdul-Muttalib (RA)", desc:"Aunt of the Prophet ﷺ who killed a Jewish spy who tried to attack the women's camp during Khaybar." },
+  { title:"Rufayda al-Aslamiyyah (RA)", desc:"The first female nurse in Islam — treated the wounded at Badr and Uhud; pioneer of Islamic medical care." },
+  { title:"Khawla bint al-Azwar (RA)", desc:"Legendary warrior-poet of the early Islamic conquests; sister of Dirar, she fought alongside Khalid ibn al-Walid (RA) and rescued captives." },
+  { title:"Rabi'a al-Adawiyya (R)", desc:"Ascetic of Basra who taught love (Mahabbah) of Allah for Allah's sake alone — not for fear of Hell nor hope of Paradise." },
+  { title:"Bilqis, Queen of Sheba", desc:"Ruler of Saba' mentioned in the Quran who embraced the truth revealed to Sulayman (AS) — a wise leader who sought knowledge." },
+  { title:"Fatimah al-Fihri (RA)", desc:"Founded the al-Qarawiyyin Mosque/University in 859 CE in Fez — recognized as the world's oldest continuously operating university." }
 ];

@@ -8,5 +8,13 @@
   { title:"Iron Sent Down", desc:"'We sent down iron in which there is great military might and benefits for people.' (57:25) — iron comes from ancient supernovae." },
   { title:"Orbits in the Quran", desc:"'And it is He who created the night and the day and the sun and the moon; all [heavenly bodies] in an orbit are swimming.' (21:33)" },
   { title:"Deep Ocean Darkness", desc:"The Quran describes layers of darkness in the deep ocean, topped by waves — only confirmed in the 20th century with submarines." },
-  { title:"Pain Receptors in Skin", desc:"'Those who disbelieve in Our verses — We will drive them into a Fire...every time their skins are roasted, We will replace them.' (4:56) — pain receptors are in skin." }
+  { title:"Pain Receptors in Skin", desc:"'Those who disbelieve in Our verses — We will drive them into a Fire...every time their skins are roasted, We will replace them.' (4:56) — pain receptors are in skin." },
+  { title:"Al-Khwarizmi & Algebra", desc:"Muhammad ibn Musa al-Khwarizmi (d. 850) founded algebra — the word 'algorithm' is a Latinization of his name." },
+  { title:"Ibn al-Haytham & Optics", desc:"'Father of modern optics' — his Book of Optics (Codex) established that vision works by light entering the eye, not rays leaving it." },
+  { title:"Ibn Sina (Avicenna) — Medicine", desc:"His Canon of Medicine was the standard medical textbook in European universities for 600+ years." },
+  { title:"Al-Battani — Astronomy", desc:"Refined measurements of the solar year and the Earth's axial tilt, and proved the apogee of the Sun varies." },
+  { title:"Jabir ibn Hayyan — Chemistry", desc:"The 'father of chemistry' introduced systematic experimental methodology and described distillation, crystallization, and acids." },
+  { title:"Al-Razi (Rhazes) — Medicine", desc:"First to differentiate smallpox from measles and first to use alcohol for medical treatment." },
+  { title:"Ibn al-Nafis — Circulation", desc:"Described the pulmonary circulation of blood ~300 years before William Harvey in Europe." },
+  { title:"Ottoman Astronomy", desc:"Taqi al-Din's observatory in Istanbul (1577) rivaled Tycho Brahe's and produced some of the most precise pre-telescopic astronomical tables." }
 ];
