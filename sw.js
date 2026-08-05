@@ -3,7 +3,7 @@
 // Cache versioning: bump CACHE_NAME to force a full purge.
 // ═══════════════════════════════════════════════════════
 (function() {
-  const CACHE_NAME = 'iq-cache-v2';
+  const CACHE_NAME = 'iq-cache-v3';
   const CORE = ['/', 'index.html', 'styles/main.css'];
 
   // Pure helpers — exposed for tests and kept side-effect free.
