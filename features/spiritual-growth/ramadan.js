@@ -36,7 +36,7 @@
     el.innerHTML = `<div class="spiritual-card">
       <div class="spiritual-svg-wrap">${ramadanSVG(progress.stage)}</div>
       <div class="spiritual-info">
-        <div class="spiritual-stage-name">${progress.icon} Ramadan Tracker <span class="spiritual-stage-num">Stage ${progress.stage}/7</span></div>
+        <div class="spiritual-stage-name">${SpiritualGrowth.FEATURE_ICONS.ramadan} Ramadan Tracker <span class="spiritual-stage-num">Stage ${progress.stage}/7</span></div>
         <div class="spiritual-progress">${progressText}</div>
         <div class="spiritual-progress-bar">
           <div class="spiritual-progress-fill" style="width:${Math.round(progress.progress * 100)}%"></div>

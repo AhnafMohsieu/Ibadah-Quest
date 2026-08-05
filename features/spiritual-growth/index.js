@@ -44,11 +44,13 @@
       const visible = settings.visible.includes(f);
       const stages = FEATURE_STAGES[f];
       const progress = SpiritualGrowth.getProgress(f);
-      
+      const icon = SpiritualGrowth.FEATURE_ICONS[f] || progress.icon;
+      const label = SpiritualGrowth.FEATURE_LABELS[f] || f;
+
       h += `<div class="growth-setting-item ${visible ? 'active' : ''}" onclick="SpiritualGrowth.toggle('${f}')">
-        <div class="growth-setting-icon">${progress.icon}</div>
+        <div class="growth-setting-icon">${icon}</div>
         <div class="growth-setting-info">
-          <div class="growth-setting-name">${f.charAt(0).toUpperCase() + f.slice(1)}</div>
+          <div class="growth-setting-name">${label}</div>
           <div class="growth-setting-stage">${progress.name} (${progress.stage}/${progress.totalStages})</div>
         </div>
         <div class="growth-setting-toggle">${visible ? '👁️' : '🙈'}</div>

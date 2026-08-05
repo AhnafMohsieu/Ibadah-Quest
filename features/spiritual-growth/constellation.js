@@ -15,8 +15,8 @@
     for (let i = 0; i < n; i++) {
       const x = 12 + ((i * 37 + 19) % 96);
       const y = 10 + ((i * 53 + 7) % 110);
-      const r = 0.8 + ((i * 7) % 3) * 0.6;
-      stars += `<circle cx="${x}" cy="${y}" r="${r}" fill="#FFF" opacity="${0.5 + ((i * 3) % 5) * 0.1}"/>`;
+      const r = 1.5 + ((i * 7) % 3) * 0.8;
+      stars += `<circle cx="${x}" cy="${y}" r="${r}" fill="#FFF" opacity="${0.6 + ((i * 3) % 4) * 0.1}"/>`;
     }
     if (stage >= 6) {
       const pairs = Math.min(8, Math.floor(n / 2));
@@ -51,7 +51,7 @@
     el.innerHTML = `<div class="spiritual-card">
       <div class="spiritual-svg-wrap">${constellationSVG(progress.stage)}</div>
       <div class="spiritual-info">
-        <div class="spiritual-stage-name">${progress.icon} Star Constellation <span class="spiritual-stage-num">Stage ${progress.stage}/7</span></div>
+        <div class="spiritual-stage-name">${SpiritualGrowth.FEATURE_ICONS.constellation} Star Constellation <span class="spiritual-stage-num">Stage ${progress.stage}/7</span></div>
         <div class="spiritual-progress">${progressText}</div>
         <div class="spiritual-progress-bar">
           <div class="spiritual-progress-fill" style="width:${Math.round(progress.progress * 100)}%"></div>

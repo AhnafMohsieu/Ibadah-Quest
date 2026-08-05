@@ -132,7 +132,7 @@
     el.innerHTML = `<div class="spiritual-card">
       <div class="spiritual-svg-wrap">${keysSVG(progress.stage, progress.progress)}</div>
       <div class="spiritual-info">
-        <div class="spiritual-stage-name">${progress.icon} Paradise Keys <span class="spiritual-stage-num">Stage ${progress.stage}/7</span></div>
+        <div class="spiritual-stage-name">${SpiritualGrowth.FEATURE_ICONS.keys} Paradise Keys <span class="spiritual-stage-num">Stage ${progress.stage}/7</span></div>
         <div class="spiritual-progress">${progressText}</div>
         <div class="spiritual-progress-bar">
           <div class="spiritual-progress-fill" style="width:${pct}%"></div>

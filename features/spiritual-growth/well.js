@@ -8,7 +8,7 @@
     return CAPTIONS[Math.floor(d.getTime() / 86400000) % CAPTIONS.length];
   }
   function wellSVG(progress) {
-    const waterH = progress * 55;
+    const waterH = Math.max(3, progress * 55);
     return `<svg class="spiritual-svg" viewBox="0 0 120 160">
       <rect width="120" height="160" fill="#0b1114" rx="10"/>
       <rect x="30" y="40" width="60" height="80" fill="#8B4513" rx="5"/>
@@ -34,7 +34,7 @@
     el.innerHTML = `<div class="spiritual-card">
       <div class="spiritual-svg-wrap">${wellSVG(progress.progress)}</div>
       <div class="spiritual-info">
-        <div class="spiritual-stage-name">${progress.icon} Water Well <span class="spiritual-stage-num">Stage ${progress.stage}/7</span></div>
+        <div class="spiritual-stage-name">${SpiritualGrowth.FEATURE_ICONS.well} Water Well <span class="spiritual-stage-num">Stage ${progress.stage}/7</span></div>
         <div class="spiritual-progress">${progressText}</div>
         <div class="spiritual-progress-bar">
           <div class="spiritual-progress-fill" style="width:${Math.round(progress.progress * 100)}%"></div>

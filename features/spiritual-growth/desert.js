@@ -56,7 +56,7 @@
     el.innerHTML = `<div class="spiritual-card">
       <div class="spiritual-svg-wrap">${desertSVG(progress.stage)}</div>
       <div class="spiritual-info">
-        <div class="spiritual-stage-name">${progress.icon} Desert Garden <span class="spiritual-stage-num">Stage ${progress.stage}/7</span></div>
+        <div class="spiritual-stage-name">${SpiritualGrowth.FEATURE_ICONS.desert} Desert Garden <span class="spiritual-stage-num">Stage ${progress.stage}/7</span></div>
         <div class="spiritual-progress">${progressText}</div>
         <div class="spiritual-progress-bar">
           <div class="spiritual-progress-fill" style="width:${Math.round(progress.progress * 100)}%"></div>

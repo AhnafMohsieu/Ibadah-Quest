@@ -25,26 +25,26 @@
     // Stage 1: Dim — barely visible flicker
     if (stage === 1) {
       inner = `
-        <circle cx="${cx}" cy="${cy}" r="18" fill="rgba(212,175,55,0.08)"/>
-        <rect x="${bodyX}" y="${bodyY}" width="${bodyW}" height="${bodyH}" rx="4" fill="${gold}" opacity="0.25"/>
-        <rect x="${bodyX + 4}" y="${bodyY + 4}" width="${bodyW - 8}" height="${bodyH - 8}" rx="3" fill="${warm}" opacity="0.1"/>
-        <ellipse cx="${cx}" cy="${cy + 10}" rx="5" ry="6" fill="${warm}" opacity="0.15"/>`;
+        <circle cx="${cx}" cy="${cy}" r="18" fill="rgba(212,175,55,0.15)"/>
+        <rect x="${bodyX}" y="${bodyY}" width="${bodyW}" height="${bodyH}" rx="4" fill="${gold}" opacity="0.5"/>
+        <rect x="${bodyX + 4}" y="${bodyY + 4}" width="${bodyW - 8}" height="${bodyH - 8}" rx="3" fill="${warm}" opacity="0.2"/>
+        <ellipse cx="${cx}" cy="${cy + 10}" rx="5" ry="6" fill="${warm}" opacity="0.25"/>`;
     }
     // Stage 2: Flickering — slight glow
     else if (stage === 2) {
       inner = `
-        <circle cx="${cx}" cy="${cy}" r="24" fill="rgba(212,175,55,0.15)"/>
-        <rect x="${bodyX}" y="${bodyY}" width="${bodyW}" height="${bodyH}" rx="4" fill="${gold}" opacity="0.4"/>
-        <rect x="${bodyX + 4}" y="${bodyY + 4}" width="${bodyW - 8}" height="${bodyH - 8}" rx="3" fill="${warm}" opacity="0.2"/>
-        <ellipse cx="${cx}" cy="${cy + 10}" rx="7" ry="8" fill="${warm}" opacity="0.25"/>`;
+        <circle cx="${cx}" cy="${cy}" r="24" fill="rgba(212,175,55,0.25)"/>
+        <rect x="${bodyX}" y="${bodyY}" width="${bodyW}" height="${bodyH}" rx="4" fill="${gold}" opacity="0.65"/>
+        <rect x="${bodyX + 4}" y="${bodyY + 4}" width="${bodyW - 8}" height="${bodyH - 8}" rx="3" fill="${warm}" opacity="0.35"/>
+        <ellipse cx="${cx}" cy="${cy + 10}" rx="7" ry="8" fill="${warm}" opacity="0.4"/>`;
     }
     // Stage 3: Steady — warm glow
     else if (stage === 3) {
       inner = `
-        <circle cx="${cx}" cy="${cy}" r="30" fill="rgba(212,175,55,0.22)"/>
-        <rect x="${bodyX}" y="${bodyY}" width="${bodyW}" height="${bodyH}" rx="4" fill="${gold}" opacity="0.55"/>
-        <rect x="${bodyX + 4}" y="${bodyY + 4}" width="${bodyW - 8}" height="${bodyH - 8}" rx="3" fill="${warm}" opacity="0.35"/>
-        <ellipse cx="${cx}" cy="${cy + 10}" rx="9" ry="10" fill="${warm}" opacity="0.4"/>`;
+        <circle cx="${cx}" cy="${cy}" r="30" fill="rgba(212,175,55,0.35)"/>
+        <rect x="${bodyX}" y="${bodyY}" width="${bodyW}" height="${bodyH}" rx="4" fill="${gold}" opacity="0.75"/>
+        <rect x="${bodyX + 4}" y="${bodyY + 4}" width="${bodyW - 8}" height="${bodyH - 8}" rx="3" fill="${warm}" opacity="0.5"/>
+        <ellipse cx="${cx}" cy="${cy + 10}" rx="9" ry="10" fill="${warm}" opacity="0.55"/>`;
     }
     // Stage 4: Glowing — bright glow
     else if (stage === 4) {
@@ -134,7 +134,7 @@
     el.innerHTML = `<div class="spiritual-card">
       <div class="spiritual-svg-wrap">${lanternSVG(progress.stage, progress.progress)}</div>
       <div class="spiritual-info">
-        <div class="spiritual-stage-name">${progress.icon} Nur Lantern <span class="spiritual-stage-num">Stage ${progress.stage}/7</span></div>
+        <div class="spiritual-stage-name">${SpiritualGrowth.FEATURE_ICONS.lantern} Nur Lantern <span class="spiritual-stage-num">Stage ${progress.stage}/7</span></div>
         <div class="spiritual-progress">${progressText}</div>
         <div class="spiritual-progress-bar">
           <div class="spiritual-progress-fill" style="width:${pct}%"></div>

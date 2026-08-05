@@ -159,6 +159,42 @@ function getFeatureProgress(featureName) {
   };
 }
 
+const FEATURE_ICONS = {
+  garden: '🌱',
+  lantern: '🏮',
+  keys: '🗝️',
+  daynight: '🌅',
+  mosque: '🕌',
+  boat: '⛵',
+  mountain: '⛰️',
+  heart: '❤️',
+  armor: '🛡️',
+  constellation: '🌌',
+  well: '🪙',
+  desert: '🌴',
+  ramadan: '🌙',
+  laylat: '✨'
+};
+
+const FEATURE_LABELS = {
+  garden: 'Garden',
+  lantern: 'Nur Lantern',
+  keys: 'Paradise Keys',
+  daynight: 'Day/Night Cycle',
+  mosque: 'Mosque Builder',
+  boat: 'Journey Boat',
+  mountain: 'Mount Nur Climber',
+  heart: 'Heart Refinement',
+  armor: 'Spiritual Armor',
+  constellation: 'Star Constellation',
+  well: 'Water Well',
+  desert: 'Desert Garden',
+  ramadan: 'Ramadan Tracker',
+  laylat: 'Laylat al-Qadr Meter'
+};
+
 window.SpiritualGrowth = window.SpiritualGrowth || {};
 window.SpiritualGrowth.getProgress = getFeatureProgress;
 window.SpiritualGrowth.STAGES = FEATURE_STAGES;
+window.SpiritualGrowth.FEATURE_ICONS = FEATURE_ICONS;
+window.SpiritualGrowth.FEATURE_LABELS = FEATURE_LABELS;
