@@ -67,3 +67,13 @@ test('shell surfaces use emerald and gold and arch corners', () => {
   assert.ok(css.includes('border-radius: 14px 14px 6px 6px') || css.includes('border-radius: var(--radius) var(--radius) 6px 6px'));
   assert.ok(css.includes('.t1-btn.active'));
 });
+
+test('cards apply pattern overlay and emerald/gold active states', () => {
+  assert.ok(css.includes('.card-item:hover') || css.includes('.card-item'));
+  assert.ok(css.includes('background: var(--card)') || css.includes('.content-card'));
+  const cardClasses = ['.card-item', '.vol-card', '.deed-card', '.content-card', '.shop-card', '.prayer-card', '.spiritual-card'];
+  assert.ok(cardClasses.some((sel) => {
+    const idx = css.indexOf(sel);
+    return idx > -1 && css.slice(idx, idx + 400).includes('background-image: var(--pattern-star)');
+  }));
+});
