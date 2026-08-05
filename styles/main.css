@@ -196,19 +196,19 @@ body {
 .quest-reward { font-weight: 600; color: var(--gold); font-size: 0.85rem; }
 
 /* ── Trophy Cabinet ── */
-.ach-header { margin-bottom: 16px; text-align: center; display: flex; flex-direction: column; align-items: center; }
-.ach-header .section-title { justify-content: center; display: block; margin: 0 0 8px; }
+.ach-header { margin-bottom: 20px; text-align: center; display: flex; flex-direction: column; align-items: center; width: 100%; }
+.ach-header .section-title { justify-content: center; display: block; margin: 0 0 10px; font-size: 1.3rem; }
 .ach-header .section-title::after { display: none; }
 .ach-progress {
-  width: 100%; max-width: 300px; height: 8px; background: rgba(255,255,255,0.08); border-radius: 4px;
-  overflow: hidden; margin-bottom: 6px;
+  width: 100%; max-width: 320px; height: 8px; background: rgba(255,255,255,0.08); border-radius: 4px;
+  overflow: hidden; margin-bottom: 8px;
 }
 .ach-progress-bar {
   height: 100%; background: linear-gradient(90deg, var(--gold), var(--gold-light));
   border-radius: 4px; transition: width 0.5s ease;
 }
 .ach-progress-text {
-  font-size: 0.85rem; color: var(--text2);
+  font-size: 0.9rem; color: var(--text2);
 }
 
 /* Trophy Grid */
@@ -221,9 +221,9 @@ body {
 
 .ach-card {
   position: relative; display: flex; flex-direction: column; align-items: center;
-  text-align: center; padding: 12px 6px; gap: 4px; cursor: default;
+  text-align: center; padding: 14px 8px; gap: 5px; cursor: default;
   background: var(--card2); border: 1px solid var(--border); border-radius: var(--radius);
-  transition: all 0.3s; font-size: 0.75rem; min-height: 100px; justify-content: center;
+  transition: all 0.3s; font-size: 0.75rem; min-height: 110px; justify-content: center;
 }
 .ach-card.unlocked {
   border-color: rgba(212,175,55,0.4);
@@ -247,9 +247,9 @@ body {
   background: rgba(212,175,55,0.15); padding: 1px 4px; border-radius: 6px;
   color: var(--gold);
 }
-.ach-card .ach-icon { font-size: 1.5rem; }
-.ach-name { font-weight: 600; font-size: 0.65rem; line-height: 1.2; }
-.ach-desc { font-size: 0.5rem; color: var(--text2); line-height: 1.2; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.ach-card .ach-icon { font-size: 1.7rem; }
+.ach-name { font-weight: 600; font-size: 0.7rem; line-height: 1.2; }
+.ach-desc { font-size: 0.55rem; color: var(--text2); line-height: 1.2; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 
 .ach-empty {
   text-align: center; padding: 40px 20px; color: var(--text2);
