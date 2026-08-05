@@ -196,7 +196,9 @@ body {
 .quest-reward { font-weight: 600; color: var(--gold); font-size: 0.85rem; }
 
 /* ── Trophy Cabinet ── */
-.ach-header { margin-bottom: 16px; }
+.ach-header { margin-bottom: 16px; text-align: center; }
+.ach-header .section-title { justify-content: center; }
+.ach-header .section-title::after { display: none; }
 .ach-progress {
   height: 6px; background: rgba(255,255,255,0.08); border-radius: 3px;
   overflow: hidden; margin-bottom: 6px;
