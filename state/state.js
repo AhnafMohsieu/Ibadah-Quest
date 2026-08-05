@@ -26,7 +26,8 @@
       morningDone:{}, eveningDone:{}, charity:{daily:0,monthly:0,given:0,monthStart:''},
       quranAudioReciter:7,
       avatar:'👳', joinDate:null,
-      healthLog:{}, financeLog:{}, moodLog:{}
+      healthLog:{}, financeLog:{}, moodLog:{},
+      growthSettings:{visible:['garden','lantern','keys','daynight']}
     };
   }
   let S = null;

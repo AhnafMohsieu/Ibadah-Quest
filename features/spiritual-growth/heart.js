@@ -1,0 +1,51 @@
+// features/spiritual-growth/heart.js
+// Heart Refinement — Transform your heart from stone to light
+
+(function() {
+  const HEART_COLORS = {
+    1: '#696969', 2: '#CD853F', 3: '#B87333',
+    4: '#4A4A4A', 5: '#C0C0C0', 6: '#FFD700', 7: '#FFF'
+  };
+
+  function heartSVG(stage) {
+    const color = HEART_COLORS[stage];
+    let svg = '';
+    if (stage === 7) {
+      svg += `<defs>
+        <filter id="heartGlow7" x="-50%" y="-50%" width="200%" height="200%">
+          <feGaussianBlur stdDeviation="6" result="blur"/>
+          <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+      </defs>`;
+    }
+    svg += `<path d="M60 135 L18 78 Q0 58 18 38 Q36 18 60 48 Q84 18 102 38 Q120 58 102 78 Z"
+      fill="${color}" ${stage===7?'filter="url(#heartGlow7)"':''} opacity="0.9"/>`;
+    if (stage === 7) svg += `<circle cx="60" cy="80" r="18" fill="#FFF" opacity="0.4"/>`;
+    return `<svg class="spiritual-svg" viewBox="0 0 120 160">${svg}</svg>`;
+  }
+
+  function renderHeart() {
+    const el = document.getElementById('heartRefineArea');
+    if (!el || !SpiritualGrowth.isVisible('heart')) {
+      if (el) el.innerHTML = '';
+      return;
+    }
+    const progress = SpiritualGrowth.getProgress('heart');
+    const progressText = progress.xpForNext
+      ? `${progress.xp}/${progress.xpForNext} XP to ${progress.name}`
+      : 'Your heart is pure light — a reflection of faith.';
+    el.innerHTML = `<div class="spiritual-card">
+      <div class="spiritual-svg-wrap">${heartSVG(progress.stage)}</div>
+      <div class="spiritual-info">
+        <div class="spiritual-stage-name">${progress.icon} Heart Refinement</div>
+        <div class="spiritual-stage-level">${progress.name} (${progress.stage}/${progress.totalStages})</div>
+        <div class="spiritual-progress">${progressText}</div>
+        <div class="spiritual-progress-bar">
+          <div class="spiritual-progress-fill" style="width:${Math.round(progress.progress * 100)}%"></div>
+        </div>
+      </div>
+    </div>`;
+  }
+
+  window.renderHeartRefine = renderHeart;
+})();

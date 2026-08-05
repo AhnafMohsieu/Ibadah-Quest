@@ -976,3 +976,61 @@ body {
 .gratitude-add { display: flex; gap: 8px; }
 .gratitude-textarea { flex: 1; padding: 8px; border: 1px solid var(--border); border-radius: 6px; background: var(--card2); color: var(--text1); font-size: 0.8rem; resize: none; height: 40px; font-family: inherit; }
 .gratitude-btn { padding: 8px 16px; background: var(--gold); color: #000; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; font-size: 0.8rem; }
+
+/* ── Spiritual Growth Features ── */
+.spiritual-card {
+  display: flex;
+  gap: 18px;
+  align-items: center;
+  background: linear-gradient(180deg, rgba(62,124,79,0.12), rgba(11,17,20,0.2));
+  border: 1px solid rgba(62,124,79,0.35);
+  border-radius: var(--radius);
+  padding: 18px 20px;
+  margin-bottom: 20px;
+}
+.spiritual-svg-wrap { width: 120px; height: 132px; flex-shrink: 0; }
+.spiritual-svg { width: 100%; height: 100%; }
+.spiritual-info { flex: 1; }
+.spiritual-stage-name {
+  font-family: var(--font-heading);
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--gold-light);
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+}
+.spiritual-stage-level { font-size: 0.82rem; color: var(--text2); margin-bottom: 8px; }
+.spiritual-progress { font-size: 0.82rem; color: var(--text2); margin-bottom: 8px; }
+.spiritual-progress-bar { height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px; overflow: hidden; }
+.spiritual-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--gold), var(--gold-light));
+  border-radius: 3px;
+  transition: width 0.5s ease;
+}
+
+/* Growth Settings */
+.growth-settings { display: flex; flex-direction: column; gap: 8px; }
+.growth-setting-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  background: var(--card2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.growth-setting-item:hover { border-color: rgba(212,175,55,0.3); }
+.growth-setting-item.active { border-color: rgba(212,175,55,0.5); background: rgba(212,175,55,0.05); }
+.growth-setting-icon { font-size: 1.5rem; }
+.growth-setting-info { flex: 1; }
+.growth-setting-name { font-weight: 600; color: var(--text); font-size: 0.9rem; }
+.growth-setting-stage { font-size: 0.75rem; color: var(--text2); }
+.growth-setting-toggle { font-size: 1.2rem; }
+
+@media (max-width: 600px) {
+  .spiritual-card { flex-direction: column; text-align: center; }
+  .spiritual-svg-wrap { width: 100px; height: 110px; }
+}
