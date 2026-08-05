@@ -91,3 +91,9 @@ test('cards apply pattern overlay and emerald/gold active states', () => {
     return idx > -1 && css.slice(idx, idx + 400).includes('background-image: var(--pattern-star)');
   }));
 });
+
+test('redesign keeps core markers and PWA meta intact', () => {
+  assert.ok(html.includes('rel="manifest"'));
+  assert.ok(html.includes('gardenArea'));
+  assert.ok(tabs.includes("id: 'journeys'"));
+});
