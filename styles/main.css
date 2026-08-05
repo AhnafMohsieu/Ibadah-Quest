@@ -1030,6 +1030,25 @@ select.profile-input option { background: var(--bg); color: var(--text); }
 
 /* Growth Settings */
 .growth-settings { display: flex; flex-direction: column; gap: 8px; }
+
+/* Spiritual Growth Tab */
+.growth-tab-intro { color: var(--text2); font-size: 0.85rem; margin-bottom: 18px; line-height: 1.5; opacity: 0.9; }
+.growth-tab-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 14px; }
+.growth-tab-card { background: var(--card2); border: 1px solid var(--border); border-radius: 16px; padding: 16px; display: flex; flex-direction: column; gap: 8px; transition: border-color 0.25s, transform 0.25s; }
+.growth-tab-card:hover { border-color: rgba(212,175,55,0.45); transform: translateY(-2px); }
+.growth-tab-card.disabled { opacity: 0.45; filter: grayscale(0.6); }
+.growth-tab-card-head { display: flex; align-items: center; gap: 10px; }
+.growth-tab-icon { color: var(--gold); font-size: 1.25rem; }
+.growth-tab-label { font-family: var(--font-heading); font-weight: 700; color: var(--gold-light); font-size: 0.98rem; flex: 1; letter-spacing: 0.3px; }
+.growth-tab-stage-emoji { font-size: 1.4rem; }
+.growth-tab-stage { font-size: 0.8rem; color: var(--text1); font-weight: 500; }
+.growth-tab-bar { width: 100%; height: 7px; background: rgba(255,255,255,0.08); border-radius: 4px; overflow: hidden; }
+.growth-tab-fill { height: 100%; background: linear-gradient(90deg, var(--green), var(--gold)); border-radius: 4px; transition: width 0.6s ease; }
+.growth-tab-xp { font-size: 0.72rem; color: var(--text2); }
+.growth-tab-toggle { margin-top: 4px; align-self: flex-start; background: rgba(16,185,129,0.1); color: var(--green); border: 1px solid rgba(16,185,129,0.3); padding: 5px 14px; border-radius: 12px; font-size: 0.72rem; font-weight: 700; cursor: pointer; transition: all 0.2s; }
+.growth-tab-toggle:hover { background: rgba(16,185,129,0.2); }
+.growth-tab-card.disabled .growth-tab-toggle { background: rgba(148,163,184,0.1); color: var(--text2); border-color: var(--border); }
+
 .growth-setting-item {
   display: flex;
   align-items: center;
