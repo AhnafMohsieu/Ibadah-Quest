@@ -61,3 +61,9 @@ test('index.html registers the service worker and update banner', () => {
   assert.ok(html.includes("'SKIP_WAITING'"));
   assert.ok(html.includes('swUpdateBanner'));
 });
+
+test('shell surfaces use emerald and gold and arch corners', () => {
+  assert.ok(css.includes('--pattern-star'));
+  assert.ok(css.includes('border-radius: 14px 14px 6px 6px') || css.includes('border-radius: var(--radius) var(--radius) 6px 6px'));
+  assert.ok(css.includes('.t1-btn.active'));
+});
