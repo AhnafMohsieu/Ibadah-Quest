@@ -10,7 +10,7 @@
   
   function saveSettings(settings) {
     S.growthSettings = settings;
-    save();
+    saveState();
   }
   
   function isVisible(featureName) {

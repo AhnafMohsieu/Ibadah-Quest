@@ -37,17 +37,6 @@ body {
   color: var(--text);
   min-height: 100vh;
   background-image: radial-gradient(circle at 50% 0%, rgba(212, 175, 55, 0.05) 0%, transparent 60%);
-}
-
-/* Force emoji-capable font for all emoji glyphs to prevent "??" rendering */
-* { font-variant-emoji: emoji; }
-
-/* Ensure emoji characters render with an emoji font fallback */
-.emoji, .section-title, .vol-card, .deed-card, .content-card, .quest-row,
-.spiritual-card, .ach-card, .reward-card, .card-item, .cat-chip,
-.prayer-card, .pt-card, .vol-card .prayer-name, .deed-name {
-  font-family: var(--font-emoji), var(--font), sans-serif;
-}
   overflow-x: hidden;
   user-select: none;
   -webkit-tap-highlight-color: transparent;
@@ -55,6 +44,9 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+/* Emoji fallback is handled by the emoji fonts appended to --font below Sora.
+   Emoji glyphs fall back automatically; regular text and numbers stay in Sora. */
 
 .app { position: relative; z-index: 1; max-width: 880px; margin: 0 auto; padding: 0 24px 80px; }
 

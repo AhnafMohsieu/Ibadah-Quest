@@ -27,7 +27,7 @@
       quranAudioReciter:7,
       avatar:'👳', joinDate:null,
       healthLog:{}, financeLog:{}, moodLog:{},
-      growthSettings:{visible:['garden','lantern','keys','daynight']}
+      growthSettings:{visible:['garden','lantern','keys']}
     };
   }
   let S = null;
