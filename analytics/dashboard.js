@@ -37,6 +37,12 @@
           <div class="insight-card-sub">${xp.progress}% to next</div>
           <div class="insight-progress"><div class="insight-progress-bar" style="width:${xp.progress}%"></div></div>
         </div>
+        <div class="insight-card">
+          <div class="insight-card-icon">🎯</div>
+          <div class="insight-card-num">${xp.questXP ? (xp.questXP.daily + xp.questXP.weekly + xp.questXP.monthly + xp.questXP.yearly) : 0} XP</div>
+          <div class="insight-card-label">Quest XP</div>
+          <div class="insight-card-sub">D:${xp.questXP?.daily||0} W:${xp.questXP?.weekly||0} M:${xp.questXP?.monthly||0} Y:${xp.questXP?.yearly||0}</div>
+        </div>
       </div>`;
   }
 
