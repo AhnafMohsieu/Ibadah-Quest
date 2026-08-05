@@ -209,15 +209,6 @@ body {
   font-size: 0.8rem; color: var(--text2); text-align: center;
 }
 
-/* Trophy Cabinet Display */
-.ach-cabinet { background: var(--card); border-radius: var(--radius); padding: 16px; margin-bottom: 20px; border: 1px solid var(--border); text-align: center; }
-.ach-cabinet-title { font-size: 0.85rem; color: var(--text2); margin-bottom: 12px; }
-.ach-cabinet-shelf { display: flex; gap: 8px; justify-content: center; align-items: center; padding: 8px 0; }
-.ach-cabinet-item { width: 60px; height: 60px; display: flex; align-items: center; justify-content: center; border-radius: 12px; font-size: 1.5rem; background: var(--card2); border: 2px solid var(--border); transition: all 0.3s; flex-shrink: 0; }
-.ach-cabinet-item.has-trophy { border-color: var(--gold); box-shadow: 0 0 10px rgba(212,175,55,0.3); }
-.ach-cabinet-item.empty { opacity: 0.3; font-size: 1rem; color: var(--text2); }
-.ach-cabinet-label { font-size: 0.75rem; color: var(--text2); margin-top: 8px; }
-
 /* Trophy Grid */
 .ach-grid {
   display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;

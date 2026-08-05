@@ -1174,22 +1174,6 @@
   h += `<div class="ach-progress-text">${cnt} / ${total} Unlocked</div>`;
   h += '</div>';
 
-  // Trophy cabinet display shelf
-  const shelfSize = 8;
-  h += '<div class="ach-cabinet">';
-  h += '<div class="ach-cabinet-title">✨ Display Shelf ✨</div>';
-  h += '<div class="ach-cabinet-shelf">';
-  for (let i = 0; i < shelfSize; i++) {
-    if (i < unlockedAchs.length) {
-      h += `<div class="ach-cabinet-item has-trophy" title="${unlockedAchs[i].name}">${unlockedAchs[i].icon}</div>`;
-    } else {
-      h += '<div class="ach-cabinet-item empty">—</div>';
-    }
-  }
-  h += '</div>';
-  h += `<div class="ach-cabinet-label">Latest ${Math.min(cnt, shelfSize)} of ${cnt} trophies earned</div>`;
-  h += '</div>';
-
   // Full trophy grid
   h += '<div class="ach-grid">';
   h += ACHS.map(a => {
