@@ -44,11 +44,9 @@
       ]
     },
     {
-      id: 'creed', icon: '<i class="fa-solid fa-shield-halved"></i>', label: 'Creed & Arabic',
+      id: 'creed', icon: '<i class="fa-solid fa-font"></i>', label: 'Arabic',
       tabs: [
-        { id: 'aqeedah',     icon: '<i class="fa-solid fa-shield-halved"></i>', label: 'Creed' },
-        { id: 'arabic',      icon: '<i class="fa-solid fa-font"></i>', label: 'Arabic' },
-        { id: 'knowledge',   icon: '<i class="fa-solid fa-brain"></i>', label: 'Seeking Knowledge' }
+        { id: 'arabic',      icon: '<i class="fa-solid fa-font"></i>', label: 'Arabic' }
       ]
     },
     {
