@@ -2,6 +2,121 @@
   // ═══════════════════════════════════════════════════════
   // RENDERING
   // ═══════════════════════════════════════════════════════
+
+  // Font Awesome glyph lookup for card deco icons (falls back to raw emoji)
+  const FA_GLYPH = {
+    '🕌': '<i class="fa-solid fa-mosque"></i>',
+    '🌙': '<i class="fa-solid fa-moon"></i>',
+    '🌅': '<i class="fa-solid fa-sunrise"></i>',
+    '🌆': '<i class="fa-solid fa-sunset"></i>',
+    '☀️': '<i class="fa-solid fa-sun"></i>',
+    '🌞': '<i class="fa-solid fa-sun"></i>',
+    '🌤️': '<i class="fa-solid fa-cloud-sun"></i>',
+    '🌇': '<i class="fa-solid fa-city"></i>',
+    '🌃': '<i class="fa-solid fa-city"></i>',
+    '🌌': '<i class="fa-solid fa-star"></i>',
+    '🌝': '<i class="fa-solid fa-moon"></i>',
+    '🌕': '<i class="fa-solid fa-moon"></i>',
+    '🌒': '<i class="fa-solid fa-moon"></i>',
+    '🌧️': '<i class="fa-solid fa-cloud-rain"></i>',
+    '🧭': '<i class="fa-solid fa-compass"></i>',
+    '🤲': '<i class="fa-solid fa-hands-praying"></i>',
+    '🙏': '<i class="fa-solid fa-hands-praying"></i>',
+    '✈️': '<i class="fa-solid fa-plane"></i>',
+    '❤️': '<i class="fa-solid fa-heart"></i>',
+    '💚': '<i class="fa-solid fa-heart"></i>',
+    '🤍': '<i class="fa-solid fa-heart"></i>',
+    '💞': '<i class="fa-solid fa-heart"></i>',
+    '❤️\u200d🩹': '<i class="fa-solid fa-heart-crack"></i>',
+    '✨': '<i class="fa-solid fa-sparkles"></i>',
+    '💧': '<i class="fa-solid fa-droplet"></i>',
+    '🪦': '<i class="fa-solid fa-archway"></i>',
+    '🎊': '<i class="fa-solid fa-gift"></i>',
+    '🐑': '<i class="fa-solid fa-otter"></i>',
+    '📖': '<i class="fa-solid fa-book-open"></i>',
+    '📚': '<i class="fa-solid fa-book-open"></i>',
+    '📿': '<i class="fa-solid fa-hands-praying"></i>',
+    '😊': '<i class="fa-solid fa-face-smile"></i>',
+    '😄': '<i class="fa-solid fa-face-smile"></i>',
+    '🏥': '<i class="fa-solid fa-hospital"></i>',
+    '👨\u200d👩\u200d👧': '<i class="fa-solid fa-people-roof"></i>',
+    '👨\u200d👩\u200d👦': '<i class="fa-solid fa-people-roof"></i>',
+    '👨\u200d👦': '<i class="fa-solid fa-people-roof"></i>',
+    '👪': '<i class="fa-solid fa-people-roof"></i>',
+    '🤝': '<i class="fa-solid fa-handshake"></i>',
+    '🧹': '<i class="fa-solid fa-broom"></i>',
+    '🍲': '<i class="fa-solid fa-utensils"></i>',
+    '🥛': '<i class="fa-solid fa-glass-water"></i>',
+    '🧸': '<i class="fa-solid fa-teddy-bear"></i>',
+    '🍽️': '<i class="fa-solid fa-utensils"></i>',
+    '🌱': '<i class="fa-solid fa-seedling"></i>',
+    '🌳': '<i class="fa-solid fa-tree"></i>',
+    '🌹': '<i class="fa-solid fa-rose"></i>',
+    '🌴': '<i class="fa-solid fa-tree-palm"></i>',
+    '🪨': '<i class="fa-solid fa-mountain"></i>',
+    '🕊️': '<i class="fa-solid fa-dove"></i>',
+    '🐈': '<i class="fa-solid fa-paw"></i>',
+    '🐦': '<i class="fa-solid fa-dove"></i>',
+    '🗣️': '<i class="fa-solid fa-comment"></i>',
+    '👁️': '<i class="fa-solid fa-eye"></i>',
+    '👨\u200d🏫': '<i class="fa-solid fa-chalkboard-user"></i>',
+    '⏳': '<i class="fa-solid fa-hourglass"></i>',
+    '🏡': '<i class="fa-solid fa-house"></i>',
+    '🙇': '<i class="fa-solid fa-person-praying"></i>',
+    '🛐': '<i class="fa-solid fa-person-praying"></i>',
+    '👕': '<i class="fa-solid fa-shirt"></i>',
+    '🎧': '<i class="fa-solid fa-headphones"></i>',
+    '🧺': '<i class="fa-solid fa-basket-shopping"></i>',
+    '🎁': '<i class="fa-solid fa-gift"></i>',
+    '💰': '<i class="fa-solid fa-coins"></i>',
+    '💵': '<i class="fa-solid fa-money-bill"></i>',
+    '💸': '<i class="fa-solid fa-money-bill-wave"></i>',
+    '💭': '<i class="fa-solid fa-comment-dots"></i>',
+    '🛡️': '<i class="fa-solid fa-shield-halved"></i>',
+    '🚶': '<i class="fa-solid fa-person-walking"></i>',
+    '🪥': '<i class="fa-solid fa-soap"></i>',
+    '🕋': '<i class="fa-solid fa-mosque"></i>',
+    '👋': '<i class="fa-solid fa-hand"></i>',
+    '🛌': '<i class="fa-solid fa-bed"></i>',
+    '🪑': '<i class="fa-solid fa-chair"></i>',
+    '📢': '<i class="fa-solid fa-bullhorn"></i>',
+    '🛑': '<i class="fa-solid fa-circle-stop"></i>',
+    '🥇': '<i class="fa-solid fa-medal"></i>',
+    '📜': '<i class="fa-solid fa-scroll"></i>',
+    '🪙': '<i class="fa-solid fa-coins"></i>',
+    '🪣': '<i class="fa-solid fa-bucket"></i>',
+    '🧠': '<i class="fa-solid fa-brain"></i>',
+    '🚿': '<i class="fa-solid fa-shower"></i>',
+    '🏃': '<i class="fa-solid fa-person-running"></i>',
+    '👂': '<i class="fa-solid fa-ear-listen"></i>',
+    '🚗': '<i class="fa-solid fa-car"></i>',
+    '🧓': '<i class="fa-solid fa-person-cane"></i>',
+    '🧒': '<i class="fa-solid fa-child"></i>',
+    '👦': '<i class="fa-solid fa-child"></i>',
+    '💬': '<i class="fa-solid fa-comment"></i>',
+    '🙈': '<i class="fa-solid fa-eye-slash"></i>',
+    '🫱': '<i class="fa-solid fa-hand"></i>',
+    '🔍': '<i class="fa-solid fa-magnifying-glass"></i>',
+    '💡': '<i class="fa-solid fa-lightbulb"></i>',
+    '👥': '<i class="fa-solid fa-users"></i>',
+    '🧾': '<i class="fa-solid fa-receipt"></i>',
+    '🛒': '<i class="fa-solid fa-cart-shopping"></i>',
+    '📝': '<i class="fa-solid fa-pen"></i>',
+    '🛍️': '<i class="fa-solid fa-bag-shopping"></i>',
+    '🎒': '<i class="fa-solid fa-backpack"></i>',
+    '💨': '<i class="fa-solid fa-wind"></i>',
+    '✂️': '<i class="fa-solid fa-scissors"></i>',
+    '🍯': '<i class="fa-solid fa-jar"></i>',
+    '🚪': '<i class="fa-solid fa-door-open"></i>',
+    '🚽': '<i class="fa-solid fa-toilet"></i>',
+    '🥱': '<i class="fa-solid fa-face-tired"></i>',
+    '💍': '<i class="fa-solid fa-ring"></i>',
+    '🍛': '<i class="fa-solid fa-bowl-food"></i>',
+    '🎭': '<i class="fa-solid fa-masks-theater"></i>',
+    '🔄': '<i class="fa-solid fa-arrows-rotate"></i>',
+    '🙅': '<i class="fa-solid fa-ban"></i>'
+  };
+  function faIcon(e) { return FA_GLYPH[e] || e; }
   function renderDynamic() {
     const pageScroll = window.scrollY;
     const volArea = document.getElementById('volArea');
@@ -141,7 +256,7 @@
       const d = !!l.p[p.id]; let nm=p.name, ic=p.icon, xp=p.xp;
       if (f && p.id==='dhuhr') { nm=p.fri.name; ic=p.fri.icon; xp=p.fri.xp; }
       if (S.ab && S.ab.exp >= today()) xp *= 2;
-      return `<div class="card-item${d?' done':''}" onclick="App.toggleP('${p.id}')"><div class="card-icon">${ic}</div><div class="card-name">${nm}</div><div class="card-sub">${p.time}</div><div class="card-xp">+${xp} XP</div>${d?'<div class="card-check">✓</div>':''}<div class="card-info-btn" onclick="event.stopPropagation();App.detail('${p.id}')">ℹ️</div></div>`;
+      return `<div class="card-item${d?' done':''}" onclick="App.toggleP('${p.id}')"><div class="card-icon">${faIcon(ic)}</div><div class="card-name">${nm}</div><div class="card-sub">${p.time}</div><div class="card-xp">+${xp} XP</div>${d?'<div class="card-check">✓</div>':''}<div class="card-info-btn" onclick="event.stopPropagation();App.detail('${p.id}')">ℹ️</div></div>`;
     }).join('');
     document.getElementById('prayerArea').innerHTML = '<div class="section-title">🕌 Daily Prayers</div><div class="card-grid">' + cards + '</div>';
   }
@@ -169,7 +284,7 @@
       const isOpen = catIdx < openStates.length ? openStates[catIdx] : false;
       html += `<details class="cat-details"${isOpen ? ' open' : ''}><summary><div style="display:flex;justify-content:space-between;align-items:center;flex:1;"><span>${catIcon} ${cat}</span><span style="font-size:0.75rem;background:rgba(201,168,76,0.15);padding:3px 10px;border-radius:12px;color:var(--gold-light);font-weight:700;">${completedInCat} / ${totalInCat}</span></div></summary><div style="padding:8px 4px;">`;
       html += '<div class="card-grid">';
-      html += byCat[cat].map(v => { const d=!!l[v.id]; let xp=v.xp; if(S.ab&&S.ab.exp>=today()) xp*=2; return `<div class="card-item${d?' done':''}" onclick="App.toggleV('${v.id}')"><div class="card-icon">${v.icon}</div><div class="card-name">${v.name}</div><div class="card-xp">+${xp} XP</div>${d?'<div class="card-check">✓</div>':''}<div class="card-info-btn" onclick="event.stopPropagation();App.detail('${v.id}')">ℹ️</div></div>`; }).join('');
+      html += byCat[cat].map(v => { const d=!!l[v.id]; let xp=v.xp; if(S.ab&&S.ab.exp>=today()) xp*=2; return `<div class="card-item${d?' done':''}" onclick="App.toggleV('${v.id}')"><div class="card-icon">${faIcon(v.icon)}</div><div class="card-name">${v.name}</div><div class="card-xp">+${xp} XP</div>${d?'<div class="card-check">✓</div>':''}<div class="card-info-btn" onclick="event.stopPropagation();App.detail('${v.id}')">ℹ️</div></div>`; }).join('');
       html += '</div></div></details>';
       catIdx++;
     }
@@ -240,7 +355,7 @@
       const isOpen = catIdx < openStates.length ? openStates[catIdx] : false;
       html += `<details class="cat-details"${isOpen ? ' open' : ''}><summary><div style="display:flex;justify-content:space-between;align-items:center;flex:1;"><span>${cat}</span><span style="font-size:0.75rem;background:rgba(201,168,76,0.15);padding:3px 10px;border-radius:12px;color:var(--gold-light);font-weight:700;">${completedInCat} / ${totalInCat}</span></div></summary><div style="padding:8px 4px;">`;
       html += '<div class="card-grid">';
-      html += items.map(d => { const done=!!l[d.id]; const tot=S.td[d.id]||0; let xp=d.xp; if(S.ab&&S.ab.exp>=today()) xp*=2; return `<div class="card-item${done?' done':''}" onclick="App.toggleD('${d.id}')"><div class="card-icon">${d.icon}</div><div class="card-name">${d.name}</div><div class="card-xp">+${xp} XP</div>${done?'<div class="card-check">✓</div>':''}${tot?`<div class="card-sub">${tot}×</div>`:''}<div class="card-info-btn" onclick="event.stopPropagation();App.tip('${d.id}')">💡</div></div>`; }).join('');
+      html += items.map(d => { const done=!!l[d.id]; const tot=S.td[d.id]||0; let xp=d.xp; if(S.ab&&S.ab.exp>=today()) xp*=2; return `<div class="card-item${done?' done':''}" onclick="App.toggleD('${d.id}')"><div class="card-icon">${faIcon(d.icon)}</div><div class="card-name">${d.name}</div><div class="card-xp">+${xp} XP</div>${done?'<div class="card-check">✓</div>':''}${tot?`<div class="card-sub">${tot}×</div>`:''}<div class="card-info-btn" onclick="event.stopPropagation();App.tip('${d.id}')">💡</div></div>`; }).join('');
       html += '</div></div></details>';
       catIdx++;
     }
@@ -1058,7 +1173,7 @@
     MORNING_DHIKR.forEach((item, idx) => { 
         const done = !!S.morningDone[dt][idx]; 
         h += `<div class="vol-card${done?' done':''}" onclick="App.toggleMorning(${idx}, ${item.xp})" style="cursor:pointer;">
-            <div class="prayer-check" style="font-size:1.2rem;">${done?'✓':'🌅'}</div>
+            <div class="prayer-check" style="font-size:1.2rem;">${done?'✓':'<i class="fa-solid fa-sunrise"></i>'}</div>
             <div class="prayer-info">
                 <div style="font-family:'Amiri',serif;font-size:1.3rem;margin-bottom:2px;color:var(--gold);line-height:1.4;">${item.arabic}</div>
                 ${item.roman ? `<div style="font-size:0.85rem;color:var(--text1);font-style:italic;margin-bottom:6px;opacity:0.9;">"${item.roman}"</div>` : ''}
@@ -1096,7 +1211,7 @@
     EVENING_DHIKR.forEach((item, idx) => { 
         const done = !!S.eveningDone[dt][idx]; 
         h += `<div class="vol-card${done?' done':''}" onclick="App.toggleEvening(${idx}, ${item.xp})" style="cursor:pointer;">
-            <div class="prayer-check" style="font-size:1.2rem;">${done?'✓':'🌆'}</div>
+            <div class="prayer-check" style="font-size:1.2rem;">${done?'✓':'<i class="fa-solid fa-sunset"></i>'}</div>
             <div class="prayer-info">
                 <div style="font-family:'Amiri',serif;font-size:1.3rem;margin-bottom:2px;color:var(--gold);line-height:1.4;">${item.arabic}</div>
                 ${item.roman ? `<div style="font-size:0.85rem;color:var(--text1);font-style:italic;margin-bottom:6px;opacity:0.9;">"${item.roman}"</div>` : ''}
@@ -1134,16 +1249,16 @@
       let html = `<details class="cat-details"${openAttr}><summary><div style="display:flex;justify-content:space-between;align-items:center;flex:1;"><span>${title}</span><span style="font-size:0.75rem;background:rgba(201,168,76,0.15);padding:3px 10px;border-radius:12px;color:var(--gold-light);font-weight:700;">${completed} / ${total}</span></div></summary><div style="padding:0 12px 12px;display:flex;flex-direction:column;gap:8px;margin-top:8px;">`;
       html += quests.map(q => {
         const d = q.done;
-        let icon = '🎯';
+        let icon = '<i class="fa-solid fa-bullseye"></i>';
         const t = q.d.toLowerCase();
-        if (t.includes('pray') || t.includes('prayer')) icon = '🕌';
-        if (t.includes('quran')) icon = '📖';
-        if (t.includes('charity')) icon = '🤲';
-        if (t.includes('fast')) icon = '🌙';
-        if (t.includes('deed')) icon = '🌟';
-        if (t.includes('streak') || t.includes('day')) icon = '🔥';
-        if (t.includes('dhikr') || t.includes('adhkar') || t.includes('istighfar')) icon = '📿';
-        if (t.includes('memorize')) icon = '🧠';
+        if (t.includes('pray') || t.includes('prayer')) icon = '<i class="fa-solid fa-mosque"></i>';
+        if (t.includes('quran')) icon = '<i class="fa-solid fa-book-open"></i>';
+        if (t.includes('charity')) icon = '<i class="fa-solid fa-hands-praying"></i>';
+        if (t.includes('fast')) icon = '<i class="fa-solid fa-moon"></i>';
+        if (t.includes('deed')) icon = '<i class="fa-solid fa-star"></i>';
+        if (t.includes('streak') || t.includes('day')) icon = '<i class="fa-solid fa-fire"></i>';
+        if (t.includes('dhikr') || t.includes('adhkar') || t.includes('istighfar')) icon = '<i class="fa-solid fa-hands-praying"></i>';
+        if (t.includes('memorize')) icon = '<i class="fa-solid fa-brain"></i>';
         
         return `<div class="vol-card${d?' done':''}" onclick="App.toggleQuest('${q.id}','${type}',${q.xp})" style="cursor:pointer;">
           <div class="prayer-check">${d?'✓':icon}</div>

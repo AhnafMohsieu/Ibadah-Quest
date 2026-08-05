@@ -63,7 +63,7 @@
   
   // Add to Profile tab
   if (TAB_GROUPS.profile_main) {
-    TAB_GROUPS.profile_main.push({ id: 'growth-settings', icon: '⚙️', label: 'Growth' });
+    TAB_GROUPS.profile_main.push({ id: 'growth-settings', icon: '<i class="fa-solid fa-gear"></i>', label: 'Growth' });
   }
   
   window.SpiritualGrowth = window.SpiritualGrowth || {};

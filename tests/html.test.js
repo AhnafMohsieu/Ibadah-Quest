@@ -8,6 +8,8 @@ const root = path.join(__dirname, '..');
 const html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
 const tabs = fs.readFileSync(path.join(root, 'data', 'tab-groups.js'), 'utf8');
 const css = fs.readFileSync(path.join(root, 'styles', 'main.css'), 'utf8');
+const render = fs.readFileSync(path.join(root, 'render', 'render.js'), 'utf8');
+const spiritual = fs.readFileSync(path.join(root, 'features', 'spiritual-growth', 'data.js'), 'utf8');
 
 test('index.html has the three feature containers', () => {
   assert.ok(html.includes('id="gardenArea"'));
@@ -66,6 +68,18 @@ test('shell surfaces use emerald and gold and arch corners', () => {
   assert.ok(css.includes('--pattern-star'));
   assert.ok(css.includes('border-radius: 14px 14px 6px 6px') || css.includes('border-radius: var(--radius) var(--radius) 6px 6px'));
   assert.ok(css.includes('.t1-btn.active'));
+});
+
+test('tab-groups icons render Font Awesome i-tags', () => {
+  assert.ok(tabs.includes('fa-solid') || tabs.includes('fa fa-'));
+});
+
+test('spiritual growth icon map uses FA glyphs', () => {
+  assert.ok(spiritual.includes('fa-solid'));
+});
+
+test('render shell cards use Font Awesome glyphs', () => {
+  assert.ok(render.includes('fa-solid'));
 });
 
 test('cards apply pattern overlay and emerald/gold active states', () => {

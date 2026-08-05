@@ -151,19 +151,19 @@ function getFeatureProgress(featureName) {
 }
 
 const FEATURE_ICONS = {
-  garden: '🌱',
-  lantern: '🏮',
-  keys: '🗝️',
-  mosque: '🕌',
-  boat: '⛵',
-  mountain: '⛰️',
-  heart: '❤️',
-  armor: '🛡️',
-  constellation: '🌌',
-  well: '⛲',
-  desert: '🌴',
-  ramadan: '🌙',
-  laylat: '✨'
+  garden: '<i class="fa-solid fa-seedling"></i>',
+  lantern: '<i class="fa-solid fa-lamp"></i>',
+  keys: '<i class="fa-solid fa-key"></i>',
+  mosque: '<i class="fa-solid fa-mosque"></i>',
+  boat: '<i class="fa-solid fa-sailboat"></i>',
+  mountain: '<i class="fa-solid fa-mountain"></i>',
+  heart: '<i class="fa-solid fa-heart"></i>',
+  armor: '<i class="fa-solid fa-shield-halved"></i>',
+  constellation: '<i class="fa-solid fa-star"></i>',
+  well: '<i class="fa-solid fa-water"></i>',
+  desert: '<i class="fa-solid fa-tree-palm"></i>',
+  ramadan: '<i class="fa-solid fa-moon"></i>',
+  laylat: '<i class="fa-solid fa-star"></i>'
 };
 
 const FEATURE_LABELS = {
