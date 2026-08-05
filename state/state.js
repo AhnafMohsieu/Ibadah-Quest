@@ -27,7 +27,7 @@
       quranAudioReciter:7,
       avatar:'👳', joinDate:null,
       healthLog:{}, financeLog:{}, moodLog:{},
-      growthSettings:{visible:['garden','lantern','keys']}
+      growthSettings:{visible:['garden','lantern','keys','mosque','boat','mountain','heart','armor','constellation','well','desert','ramadan','laylat']}
     };
   }
   let S = null;
@@ -39,6 +39,11 @@
         const p = JSON.parse(raw);
         const d = freshState();
         for (const k of Object.keys(d)) if (!(k in p)) p[k] = d[k];
+        if (p.growthSettings && Array.isArray(p.growthSettings.visible)) {
+          for (const f of d.growthSettings.visible) {
+            if (!p.growthSettings.visible.includes(f)) p.growthSettings.visible.push(f);
+          }
+        }
         if (typeof p.log !== 'object' || typeof p.td !== 'object') return p;
         for (const dk in p.log) {
           const e = p.log[dk];

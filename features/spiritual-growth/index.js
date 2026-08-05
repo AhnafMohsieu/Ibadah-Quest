@@ -2,7 +2,7 @@
 // Main controller for spiritual growth features
 
 (function() {
-  const DEFAULT_VISIBLE = ['garden', 'lantern', 'keys'];
+  const DEFAULT_VISIBLE = Object.keys(FEATURE_STAGES);
   
   function getSettings() {
     return S.growthSettings || { visible: [...DEFAULT_VISIBLE] };
