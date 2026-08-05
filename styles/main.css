@@ -518,15 +518,15 @@ select.profile-input option { background: var(--bg); color: var(--text); }
 /* ── Content Source & Verify ── */
 .content-source { font-size: 0.75rem; color: var(--text2); margin-top: 8px; opacity: 0.8; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; width: 100%; justify-content: space-between; }
 .verify-btn {
-  display: inline-flex; align-items: center; gap: 5px;
-  background: rgba(20,184,166,0.1); color: var(--teal);
-  border: 1px solid rgba(20,184,166,0.25); border-radius: 10px;
-  padding: 4px 12px; font-size: 0.7rem; font-weight: 600;
+  display: inline-flex; align-items: center; gap: 6px;
+  background: rgba(212,175,55,0.06); color: var(--gold);
+  border: 1px solid rgba(212,175,55,0.25); border-radius: 14px;
+  padding: 5px 14px; font-size: 0.72rem; font-weight: 600;
   cursor: pointer; transition: all 0.25s; text-decoration: none;
-  letter-spacing: 0.5px; flex-shrink: 0;
+  letter-spacing: 0.3px; flex-shrink: 0;
 }
-.verify-btn:hover { background: rgba(20,184,166,0.2); border-color: rgba(20,184,166,0.5); transform: translateY(-1px); }
-.verify-btn svg { width: 12px; height: 12px; fill: currentColor; }
+.verify-btn:hover { background: rgba(212,175,55,0.14); border-color: rgba(212,175,55,0.45); transform: translateY(-1px); }
+.verify-btn::after { content: ''; display: inline-block; width: 12px; height: 12px; background: currentColor; mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M19 19H5V5h7V3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z'/%3E%3C/svg%3E") center/contain no-repeat; -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M19 19H5v5h2v-2H5V5h2v-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.6l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z'/%3E%3C/svg%3E") center/contain no-repeat; }
 
 /* ── Profile Button ── */
 .profile-main-btn {
