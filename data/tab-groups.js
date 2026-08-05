@@ -126,7 +126,6 @@
         { id: 'women',        icon: '<i class="fa-solid fa-person-dress"></i>', label: 'Great Women' },
         { id: 'stories',      icon: '<i class="fa-solid fa-book-open"></i>', label: 'Stories' },
         { id: 'battles',      icon: '<i class="fa-solid fa-shield-halved"></i>', label: 'Battles' },
-        { id: 'civilisation', icon: '<i class="fa-solid fa-landmark"></i>', label: 'Civilization' },
         { id: 'science',      icon: '<i class="fa-solid fa-star"></i>', label: 'Science' }
       ]
     },

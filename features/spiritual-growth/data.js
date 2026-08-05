@@ -83,15 +83,6 @@ const FEATURE_STAGES = {
     { name: '9 Keys', icon: '🔐', xp: 32000 },
     { name: '10 Keys', icon: '🚪', xp: 80000 }
   ],
-  well: [
-    { name: 'Empty', icon: '🪣', xp: 0 },
-    { name: '15%', icon: '💧', xp: 600 },
-    { name: '30%', icon: '💧💧', xp: 2000 },
-    { name: '50%', icon: '💧💧💧', xp: 5500 },
-    { name: '70%', icon: '🌊', xp: 15000 },
-    { name: '85%', icon: '🌊', xp: 38000 },
-    { name: 'Full', icon: '⛲', xp: 95000 }
-  ],
   desert: [
     { name: 'Sand', icon: '🏜️', xp: 0 },
     { name: 'Pebbles', icon: '🪨', xp: 700 },
@@ -160,7 +151,6 @@ const FEATURE_ICONS = {
   heart: '<i class="fa-solid fa-heart"></i>',
   armor: '<i class="fa-solid fa-shield-halved"></i>',
   constellation: '<i class="fa-solid fa-star"></i>',
-  well: '<i class="fa-solid fa-water"></i>',
   desert: '<i class="fa-solid fa-pagelines"></i>',
   ramadan: '<i class="fa-solid fa-moon"></i>',
   laylat: '<i class="fa-solid fa-star"></i>'
@@ -176,7 +166,6 @@ const FEATURE_LABELS = {
   heart: 'Heart Refinement',
   armor: 'Spiritual Armor',
   constellation: 'Star Constellation',
-  well: 'Water Well',
   desert: 'Desert Garden',
   ramadan: 'Ramadan Tracker',
   laylat: 'Laylat al-Qadr Meter'
