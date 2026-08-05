@@ -170,7 +170,7 @@ const FEATURE_ICONS = {
   heart: '❤️',
   armor: '🛡️',
   constellation: '🌌',
-  well: '🪙',
+  well: '⛲',
   desert: '🌴',
   ramadan: '🌙',
   laylat: '✨'
