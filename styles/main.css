@@ -929,3 +929,16 @@ body {
   font-size: 0.9rem;
   color: var(--text1);
 }
+
+/* Finance */
+.finance-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-bottom: 16px; }
+.finance-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 12px; }
+.finance-card-header { font-size: 0.85rem; color: var(--text2); margin-bottom: 8px; font-weight: 600; }
+.finance-stat { font-size: 0.8rem; color: var(--text1); margin-bottom: 4px; }
+.finance-amount { color: var(--gold); font-weight: 700; }
+.finance-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 8px; }
+.finance-item { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 10px 8px; text-align: center; cursor: pointer; transition: all 0.2s; }
+.finance-item:hover { border-color: var(--gold); transform: translateY(-1px); }
+.finance-item-icon { font-size: 1.3rem; margin-bottom: 4px; }
+.finance-item-label { font-size: 0.7rem; color: var(--text1); font-weight: 600; }
+.finance-item-amount { font-size: 0.65rem; color: var(--text2); margin-top: 2px; }

@@ -14,7 +14,8 @@
     { id: 'salah',      icon: '🛐', label: 'Prayer Guide' },
     { id: 'jumuah',     icon: '🕌', label: 'Friday Prayer' },
     { id: 'fasting',    icon: '🌙', label: 'Fasting' },
-    { id: 'healthlog',   icon: '💪', label: 'Health' }
+    { id: 'healthlog', icon: '💪', label: 'Health' },
+    { id: 'finance',   icon: '💰', label: 'Finance' }
   ],
 
   // ── KNOWLEDGE (categorized — religious learning) ──
