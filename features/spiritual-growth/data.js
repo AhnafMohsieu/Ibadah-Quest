@@ -101,15 +101,6 @@ const FEATURE_STAGES = {
     { name: 'Flowers', icon: '🌸', xp: 40000 },
     { name: 'Oasis', icon: '🏝️', xp: 100000 }
   ],
-  daynight: [
-    { name: 'Dawn', icon: '🌅', xp: 0 },
-    { name: 'Morning', icon: '☀️', xp: 750 },
-    { name: 'Midday', icon: '🌞', xp: 2400 },
-    { name: 'Afternoon', icon: '🌤️', xp: 6500 },
-    { name: 'Sunset', icon: '🌇', xp: 17000 },
-    { name: 'Night', icon: '🌙', xp: 42000 },
-    { name: 'Dawn', icon: '🌅', xp: 105000 }
-  ],
   ramadan: [
     { name: 'Day 1', icon: '🌙', xp: 0 },
     { name: 'Day 7', icon: '🌙', xp: 800 },
@@ -163,7 +154,6 @@ const FEATURE_ICONS = {
   garden: '🌱',
   lantern: '🏮',
   keys: '🗝️',
-  daynight: '🌅',
   mosque: '🕌',
   boat: '⛵',
   mountain: '⛰️',
@@ -180,7 +170,6 @@ const FEATURE_LABELS = {
   garden: 'Garden',
   lantern: 'Nur Lantern',
   keys: 'Paradise Keys',
-  daynight: 'Day/Night Cycle',
   mosque: 'Mosque Builder',
   boat: 'Journey Boat',
   mountain: 'Mount Nur Climber',
