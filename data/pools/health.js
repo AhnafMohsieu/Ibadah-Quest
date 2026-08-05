@@ -12,3 +12,21 @@
   { title:"Oral Hygiene (Siwak)", desc:"The Siwak purifies the mouth, pleases the Lord, and was the Prophet's ﷺ most frequent sunnah." },
   { title:"Avoiding Harmful Substances", desc:"Intoxicants, smoking, and harmful foods are forbidden to protect the mind, body, and wealth." }
 ];
+
+const HEALTH_PROMPTS = [
+  { id:'water', label:'Water Intake', icon:'💧', unit:'glasses', target:8 },
+  { id:'sleep', label:'Sleep Hours', icon:'😴', unit:'hours', target:8 },
+  { id:'steps', label:'Steps/Walking', icon:'🚶', unit:'steps', target:10000 },
+  { id:'exercise', label:'Exercise', icon:'🏃', unit:'minutes', target:30 },
+  { id:'fasting', label:'Voluntary Fasting', icon:'🌙', unit:'days', target:1 }
+];
+
+const EXERCISE_TYPES = [
+  { id:'walking', label:'Walking', icon:'🚶', xp:5 },
+  { id:'running', label:'Running', icon:'🏃', xp:8 },
+  { id:'swimming', label:'Swimming', icon:'🏊', xp:8 },
+  { id:'cycling', label:'Cycling', icon:'🚴', xp:7 },
+  { id:'yoga', label:'Stretching/Yoga', icon:'🧘', xp:5 },
+  { id:'strength', label:'Strength Training', icon:'💪', xp:8 },
+  { id:'sports', label:'Sports', icon:'⚽', xp:7 }
+];
