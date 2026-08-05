@@ -27,7 +27,7 @@
       quranAudioReciter:7,
       avatar:'👳', joinDate:null,
       healthLog:{}, financeLog:{}, moodLog:{},
-      growthSettings:{visible:['garden','lantern','keys','mosque','boat','mountain','heart','armor','constellation','well','desert','ramadan','laylat']}
+      growthSettings:{visible:['garden','lantern','keys','mosque','boat','mountain','heart','armor','desert','ramadan','laylat']}
     };
   }
   let S = null;

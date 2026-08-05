@@ -65,15 +65,6 @@ const FEATURE_STAGES = {
     { name: 'Sword', icon: '⚔️', xp: 25000 },
     { name: 'Full Set', icon: '🛡️', xp: 60000 }
   ],
-  constellation: [
-    { name: '1 Star', icon: '⭐', xp: 0 },
-    { name: '3 Stars', icon: '⭐⭐⭐', xp: 500 },
-    { name: '5 Stars', icon: '⭐⭐⭐⭐⭐', xp: 1600 },
-    { name: '7 Stars', icon: '✨', xp: 4200 },
-    { name: '10 Stars', icon: '🌟', xp: 11000 },
-    { name: 'Full Constellation', icon: '🌌', xp: 28000 },
-    { name: 'Galaxy', icon: '🌀', xp: 70000 }
-  ],
   keys: [
     { name: '1 Key', icon: '🗝️', xp: 0 },
     { name: '2 Keys', icon: '🗝️🗝️', xp: 550 },
@@ -150,7 +141,6 @@ const FEATURE_ICONS = {
   mountain: '<i class="fa-solid fa-mountain"></i>',
   heart: '<i class="fa-solid fa-heart"></i>',
   armor: '<i class="fa-solid fa-shield-halved"></i>',
-  constellation: '<i class="fa-solid fa-star"></i>',
   desert: '<i class="fa-solid fa-pagelines"></i>',
   ramadan: '<i class="fa-solid fa-moon"></i>',
   laylat: '<i class="fa-solid fa-star"></i>'
@@ -165,7 +155,6 @@ const FEATURE_LABELS = {
   mountain: 'Mount Nur Climber',
   heart: 'Heart Refinement',
   armor: 'Spiritual Armor',
-  constellation: 'Star Constellation',
   desert: 'Desert Garden',
   ramadan: 'Ramadan Tracker',
   laylat: 'Laylat al-Qadr Meter'
