@@ -1195,7 +1195,7 @@
   h += ACHS.map(a => {
     const u = !!S.ua[a.id];
     const tierStars = a.tier === 'legendary' ? '⭐⭐⭐' : a.tier === 'diamond' || a.tier === 'platinum' ? '⭐⭐' : '⭐';
-    return `<div class="ach-card${u ? ' unlocked' : ' locked'}">
+    return `<div class="ach-card${u ? ' unlocked' : ' locked'} tier-${a.tier}">
       <div class="ach-tier">${tierStars}</div>
       <div class="ach-icon">${u ? a.icon : '🔒'}</div>
       <div class="ach-name">${a.name}</div>

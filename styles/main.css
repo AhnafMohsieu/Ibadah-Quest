@@ -241,6 +241,12 @@ body {
   box-shadow: 0 0 18px rgba(212,175,55,0.2);
 }
 .ach-card.locked { opacity: 0.45; filter: grayscale(1); }
+.ach-card.tier-bronze.unlocked { border-color: #cd7f32; background: rgba(205,127,50,0.08); box-shadow: 0 0 12px rgba(205,127,50,0.15); }
+.ach-card.tier-silver.unlocked { border-color: #c0c0c0; background: rgba(192,192,192,0.08); box-shadow: 0 0 12px rgba(192,192,192,0.15); }
+.ach-card.tier-gold.unlocked { border-color: var(--gold); background: rgba(212,175,55,0.08); box-shadow: 0 0 12px rgba(212,175,55,0.15); }
+.ach-card.tier-platinum.unlocked { border-color: #e5e4e2; background: rgba(229,228,226,0.08); box-shadow: 0 0 12px rgba(229,228,226,0.15); }
+.ach-card.tier-diamond.unlocked { border-color: #b9f2ff; background: rgba(185,242,255,0.08); box-shadow: 0 0 12px rgba(185,242,255,0.15); }
+.ach-card.tier-legendary.unlocked { border-color: #ff6b6b; background: rgba(255,107,107,0.08); box-shadow: 0 0 12px rgba(255,107,107,0.15); }
 
 .ach-tier {
   position: absolute; top: 4px; right: 4px; font-size: 0.5rem;
