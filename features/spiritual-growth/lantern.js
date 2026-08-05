@@ -2,6 +2,11 @@
 // Nur Lantern — A glowing lantern that brightens with each deed
 
 (function() {
+  const CAPTIONS = ["A flicker of light against the darkness.","May Allah guide you with this light.","Your lantern steadies — keep going.","Light dispels darkness — persist.","A radiant soul shines for others.","Your light inspires those around you.","The divine light surrounds you."];
+  function caption() {
+    const d = new Date();
+    return CAPTIONS[Math.floor(d.getTime() / 86400000) % CAPTIONS.length];
+  }
   function lanternSVG(stage, progress) {
     const glow = Math.max(0.05, progress * 0.85);
     const gold = '#D4AF37';
@@ -122,19 +127,19 @@
 
     const progress = SpiritualGrowth.getProgress('lantern');
     const progressText = progress.xpForNext
-      ? `${progress.xp} / ${progress.xpForNext} XP`
+      ? `${progress.xp}/${progress.xpForNext} XP`
       : 'Your lantern shines with divine light.';
     const pct = Math.round(progress.progress * 100);
 
     el.innerHTML = `<div class="spiritual-card">
       <div class="spiritual-svg-wrap">${lanternSVG(progress.stage, progress.progress)}</div>
       <div class="spiritual-info">
-        <div class="spiritual-stage-name">${progress.icon} Nur Lantern</div>
-        <div class="spiritual-stage-level">${progress.name} (${progress.stage}/${progress.totalStages})</div>
+        <div class="spiritual-stage-name">${progress.icon} Nur Lantern <span class="spiritual-stage-num">Stage ${progress.stage}/7</span></div>
         <div class="spiritual-progress">${progressText}</div>
         <div class="spiritual-progress-bar">
           <div class="spiritual-progress-fill" style="width:${pct}%"></div>
         </div>
+        <div class="spiritual-caption">${caption()}</div>
       </div>
     </div>`;
   }

@@ -2,6 +2,11 @@
 // Water Well — Fill the well with your deeds
 
 (function() {
+  const CAPTIONS = ["The well awaits its first drop.","Every deed fills the well.","Water rises with each prayer.","The well is half full — persist.","Patience fills the well.","Nearly overflowing — keep going.","The well overflows with blessings."];
+  function caption() {
+    const d = new Date();
+    return CAPTIONS[Math.floor(d.getTime() / 86400000) % CAPTIONS.length];
+  }
   function wellSVG(progress) {
     const waterH = progress * 55;
     return `<svg class="spiritual-svg" viewBox="0 0 120 160">
@@ -29,12 +34,12 @@
     el.innerHTML = `<div class="spiritual-card">
       <div class="spiritual-svg-wrap">${wellSVG(progress.progress)}</div>
       <div class="spiritual-info">
-        <div class="spiritual-stage-name">${progress.icon} Water Well</div>
-        <div class="spiritual-stage-level">${progress.name} (${progress.stage}/${progress.totalStages})</div>
+        <div class="spiritual-stage-name">${progress.icon} Water Well <span class="spiritual-stage-num">Stage ${progress.stage}/7</span></div>
         <div class="spiritual-progress">${progressText}</div>
         <div class="spiritual-progress-bar">
           <div class="spiritual-progress-fill" style="width:${Math.round(progress.progress * 100)}%"></div>
         </div>
+        <div class="spiritual-caption">${caption()}</div>
       </div>
     </div>`;
   }

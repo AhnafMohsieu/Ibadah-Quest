@@ -2,6 +2,11 @@
 // Mosque Builder — Construct a mosque piece by piece
 
 (function() {
+  const CAPTIONS = ["Lay the foundation with Bismillah.","Build your walls with prayer.","Raise the roof with dhikr.","The dome forms with charity.","The minaret stands tall with knowledge.","The interior fills with sincerity.","Your mosque is complete — pray within."];
+  function caption() {
+    const d = new Date();
+    return CAPTIONS[Math.floor(d.getTime() / 86400000) % CAPTIONS.length];
+  }
   function mosqueSVG(stage, progress) {
     let parts = '';
     parts += `<rect x="20" y="120" width="80" height="15" fill="#8B4513" rx="3"/>`;
@@ -43,12 +48,12 @@
     el.innerHTML = `<div class="spiritual-card">
       <div class="spiritual-svg-wrap">${mosqueSVG(progress.stage, progress.progress)}</div>
       <div class="spiritual-info">
-        <div class="spiritual-stage-name">${progress.icon} Mosque Builder</div>
-        <div class="spiritual-stage-level">${progress.name} (${progress.stage}/${progress.totalStages})</div>
+        <div class="spiritual-stage-name">${progress.icon} Mosque Builder <span class="spiritual-stage-num">Stage ${progress.stage}/7</span></div>
         <div class="spiritual-progress">${progressText}</div>
         <div class="spiritual-progress-bar">
           <div class="spiritual-progress-fill" style="width:${Math.round(progress.progress * 100)}%"></div>
         </div>
+        <div class="spiritual-caption">${caption()}</div>
       </div>
     </div>`;
   }

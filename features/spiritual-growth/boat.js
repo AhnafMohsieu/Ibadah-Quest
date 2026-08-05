@@ -2,6 +2,11 @@
 // Journey Boat — Sail across the ocean to Jannah
 
 (function() {
+  const CAPTIONS = ["The journey begins at the dock.","Set sail with Bismillah.","The open sea stretches before you.","Storms test the steadfast.","Calm waters reward patience.","Paradise Island appears ahead.","You have reached Jannah."];
+  function caption() {
+    const d = new Date();
+    return CAPTIONS[Math.floor(d.getTime() / 86400000) % CAPTIONS.length];
+  }
   function boatSVG(stage, progress) {
     const waterY = 100;
     const boatX = 15 + Math.min(progress, 1) * 75;
@@ -43,12 +48,12 @@
     el.innerHTML = `<div class="spiritual-card">
       <div class="spiritual-svg-wrap">${boatSVG(progress.stage, progress.progress)}</div>
       <div class="spiritual-info">
-        <div class="spiritual-stage-name">${progress.icon} Journey Boat</div>
-        <div class="spiritual-stage-level">${progress.name} (${progress.stage}/${progress.totalStages})</div>
+        <div class="spiritual-stage-name">${progress.icon} Journey Boat <span class="spiritual-stage-num">Stage ${progress.stage}/7</span></div>
         <div class="spiritual-progress">${progressText}</div>
         <div class="spiritual-progress-bar">
           <div class="spiritual-progress-fill" style="width:${Math.round(progress.progress * 100)}%"></div>
         </div>
+        <div class="spiritual-caption">${caption()}</div>
       </div>
     </div>`;
   }

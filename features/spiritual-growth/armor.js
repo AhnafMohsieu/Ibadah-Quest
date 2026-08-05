@@ -2,6 +2,11 @@
 // Spiritual Armor — Collect pieces of protection
 
 (function() {
+  const CAPTIONS = ["Truth is the first piece of armor.","Stand firm on the path.","Guard your thoughts and intentions.","Patience shields against trials.","Faith deflects doubts.","Knowledge is your sharpest weapon.","You are fully armored with taqwa."];
+  function caption() {
+    const d = new Date();
+    return CAPTIONS[Math.floor(d.getTime() / 86400000) % CAPTIONS.length];
+  }
   function armorSVG(stage) {
     let parts = '';
     if (stage >= 1) {
@@ -49,12 +54,12 @@
     el.innerHTML = `<div class="spiritual-card">
       <div class="spiritual-svg-wrap">${armorSVG(progress.stage)}</div>
       <div class="spiritual-info">
-        <div class="spiritual-stage-name">${progress.icon} Spiritual Armor</div>
-        <div class="spiritual-stage-level">${progress.name} (${progress.stage}/${progress.totalStages})</div>
+        <div class="spiritual-stage-name">${progress.icon} Spiritual Armor <span class="spiritual-stage-num">Stage ${progress.stage}/7</span></div>
         <div class="spiritual-progress">${progressText}</div>
         <div class="spiritual-progress-bar">
           <div class="spiritual-progress-fill" style="width:${Math.round(progress.progress * 100)}%"></div>
         </div>
+        <div class="spiritual-caption">${caption()}</div>
       </div>
     </div>`;
   }

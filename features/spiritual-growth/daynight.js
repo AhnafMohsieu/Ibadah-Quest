@@ -2,6 +2,11 @@
 // Day/Night Cycle — Ambient background based on deeds
 
 (function() {
+  const CAPTIONS = ["A new dawn brings new chances.","The morning light calls to prayer.","Midday — pause and remember Allah.","The afternoon sun warms your deeds.","As the sun sets, reflect on your day.","In the night, seek forgiveness.","The cycle completes — eternal dawn."];
+  function caption() {
+    const d = new Date();
+    return CAPTIONS[Math.floor(d.getTime() / 86400000) % CAPTIONS.length];
+  }
   const SKY_COLORS = {
     1: ['#FFB347', '#FF6B6B'],
     2: ['#87CEEB', '#FFD700'],
@@ -64,12 +69,12 @@
     el.innerHTML = `<div class="spiritual-card">
       <div class="spiritual-svg-wrap">${daynightSVG(progress.stage, progress.progress)}</div>
       <div class="spiritual-info">
-        <div class="spiritual-stage-name">${progress.icon} Day/Night Cycle</div>
-        <div class="spiritual-stage-level">${progress.name} (${progress.stage}/${progress.totalStages})</div>
+        <div class="spiritual-stage-name">${progress.icon} Day/Night Cycle <span class="spiritual-stage-num">Stage ${progress.stage}/7</span></div>
         <div class="spiritual-progress">${progressText}</div>
         <div class="spiritual-progress-bar">
           <div class="spiritual-progress-fill" style="width:${Math.round(progress.progress * 100)}%"></div>
         </div>
+        <div class="spiritual-caption">${caption()}</div>
       </div>
     </div>`;
   }

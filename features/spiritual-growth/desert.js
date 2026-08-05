@@ -2,6 +2,11 @@
 // Desert Garden — Transform desert into oasis
 
 (function() {
+  const CAPTIONS = ["Every oasis begins as sand.","Small stones mark the path.","Life emerges in the desert.","Shrubs take root with patience.","Trees grow from sincere deeds.","Flowers bloom with gratitude.","A paradise oasis appears."];
+  function caption() {
+    const d = new Date();
+    return CAPTIONS[Math.floor(d.getTime() / 86400000) % CAPTIONS.length];
+  }
   function desertSVG(stage) {
     let el = '';
     el += `<rect y="120" width="120" height="40" fill="#F4A460" rx="5"/>`;
@@ -51,12 +56,12 @@
     el.innerHTML = `<div class="spiritual-card">
       <div class="spiritual-svg-wrap">${desertSVG(progress.stage)}</div>
       <div class="spiritual-info">
-        <div class="spiritual-stage-name">${progress.icon} Desert Garden</div>
-        <div class="spiritual-stage-level">${progress.name} (${progress.stage}/${progress.totalStages})</div>
+        <div class="spiritual-stage-name">${progress.icon} Desert Garden <span class="spiritual-stage-num">Stage ${progress.stage}/7</span></div>
         <div class="spiritual-progress">${progressText}</div>
         <div class="spiritual-progress-bar">
           <div class="spiritual-progress-fill" style="width:${Math.round(progress.progress * 100)}%"></div>
         </div>
+        <div class="spiritual-caption">${caption()}</div>
       </div>
     </div>`;
   }

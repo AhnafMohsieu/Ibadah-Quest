@@ -2,6 +2,11 @@
 // Paradise Keys — Collect keys to open gates of Jannah
 
 (function() {
+  const CAPTIONS = ["Each deed is a key to Paradise.","May Allah open the gates for you.","The keys multiply with sincerity.","Your collection grows — keep seeking.","Nearing the gates — persist.","The final keys — almost there.","You hold all the keys to Jannah."];
+  function caption() {
+    const d = new Date();
+    return CAPTIONS[Math.floor(d.getTime() / 86400000) % CAPTIONS.length];
+  }
   const gold = '#D4AF37';
   const silver = '#C0C0C0';
   const lightGold = '#FFE97D';
@@ -120,19 +125,19 @@
 
     const progress = SpiritualGrowth.getProgress('keys');
     const progressText = progress.xpForNext
-      ? `${progress.xp} / ${progress.xpForNext} XP`
+      ? `${progress.xp}/${progress.xpForNext} XP`
       : 'All gates of Jannah are open to you.';
     const pct = Math.round(progress.progress * 100);
 
     el.innerHTML = `<div class="spiritual-card">
       <div class="spiritual-svg-wrap">${keysSVG(progress.stage, progress.progress)}</div>
       <div class="spiritual-info">
-        <div class="spiritual-stage-name">${progress.icon} Paradise Keys</div>
-        <div class="spiritual-stage-level">${progress.name} (${progress.stage}/${progress.totalStages})</div>
+        <div class="spiritual-stage-name">${progress.icon} Paradise Keys <span class="spiritual-stage-num">Stage ${progress.stage}/7</span></div>
         <div class="spiritual-progress">${progressText}</div>
         <div class="spiritual-progress-bar">
           <div class="spiritual-progress-fill" style="width:${pct}%"></div>
         </div>
+        <div class="spiritual-caption">${caption()}</div>
       </div>
     </div>`;
   }

@@ -2,6 +2,11 @@
 // Laylat al-Qadr Meter — Track the Night of Power
 
 (function() {
+  const CAPTIONS = ["Seek this night with sincerity.","The odd nights are blessed.","Increase your worship tonight.","The Night of Power is near.","Stand in prayer this night.","The 27th night — most blessed.","The 29th night — final chance."];
+  function caption() {
+    const d = new Date();
+    return CAPTIONS[Math.floor(d.getTime() / 86400000) % CAPTIONS.length];
+  }
   const STAR_COUNTS = [1, 3, 5, 8, 12, 20, 35];
 
   function laylatSVG(stage) {
@@ -36,12 +41,12 @@
     el.innerHTML = `<div class="spiritual-card">
       <div class="spiritual-svg-wrap">${laylatSVG(progress.stage)}</div>
       <div class="spiritual-info">
-        <div class="spiritual-stage-name">${progress.icon} Laylat al-Qadr Meter</div>
-        <div class="spiritual-stage-level">${progress.name} (${progress.stage}/${progress.totalStages})</div>
+        <div class="spiritual-stage-name">${progress.icon} Laylat al-Qadr Meter <span class="spiritual-stage-num">Stage ${progress.stage}/7</span></div>
         <div class="spiritual-progress">${progressText}</div>
         <div class="spiritual-progress-bar">
           <div class="spiritual-progress-fill" style="width:${Math.round(progress.progress * 100)}%"></div>
         </div>
+        <div class="spiritual-caption">${caption()}</div>
       </div>
     </div>`;
   }

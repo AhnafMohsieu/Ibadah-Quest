@@ -2,6 +2,11 @@
 // Star Constellation — Light up the night sky
 
 (function() {
+  const CAPTIONS = ["A single star lights the sky.","Each deed adds another star.","Your constellation grows brighter.","Stars multiply with gratitude.","A constellation forms — beautiful.","The night sky reflects your faith.","Your light reaches the galaxies."];
+  function caption() {
+    const d = new Date();
+    return CAPTIONS[Math.floor(d.getTime() / 86400000) % CAPTIONS.length];
+  }
   const STAR_COUNTS = [1, 3, 5, 7, 10, 18, 30];
 
   function constellationSVG(stage) {
@@ -46,12 +51,12 @@
     el.innerHTML = `<div class="spiritual-card">
       <div class="spiritual-svg-wrap">${constellationSVG(progress.stage)}</div>
       <div class="spiritual-info">
-        <div class="spiritual-stage-name">${progress.icon} Star Constellation</div>
-        <div class="spiritual-stage-level">${progress.name} (${progress.stage}/${progress.totalStages})</div>
+        <div class="spiritual-stage-name">${progress.icon} Star Constellation <span class="spiritual-stage-num">Stage ${progress.stage}/7</span></div>
         <div class="spiritual-progress">${progressText}</div>
         <div class="spiritual-progress-bar">
           <div class="spiritual-progress-fill" style="width:${Math.round(progress.progress * 100)}%"></div>
         </div>
+        <div class="spiritual-caption">${caption()}</div>
       </div>
     </div>`;
   }

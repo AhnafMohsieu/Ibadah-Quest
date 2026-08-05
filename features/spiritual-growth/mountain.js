@@ -2,6 +2,11 @@
 // Mount Nur Climber — Climb the mountain of knowledge
 
 (function() {
+  const CAPTIONS = ["Every journey begins with a step.","The foothill is within reach.","Follow the trail of the prophets.","The cliff requires perseverance.","The summit is near — keep climbing.","Enter the Cave of reflection.","Divine light awaits at the peak."];
+  function caption() {
+    const d = new Date();
+    return CAPTIONS[Math.floor(d.getTime() / 86400000) % CAPTIONS.length];
+  }
   function mountainSVG(stage, progress) {
     const climberY = 130 - progress * 95;
     let scene = '';
@@ -35,12 +40,12 @@
     el.innerHTML = `<div class="spiritual-card">
       <div class="spiritual-svg-wrap">${mountainSVG(progress.stage, progress.progress)}</div>
       <div class="spiritual-info">
-        <div class="spiritual-stage-name">${progress.icon} Mount Nur Climber</div>
-        <div class="spiritual-stage-level">${progress.name} (${progress.stage}/${progress.totalStages})</div>
+        <div class="spiritual-stage-name">${progress.icon} Mount Nur Climber <span class="spiritual-stage-num">Stage ${progress.stage}/7</span></div>
         <div class="spiritual-progress">${progressText}</div>
         <div class="spiritual-progress-bar">
           <div class="spiritual-progress-fill" style="width:${Math.round(progress.progress * 100)}%"></div>
         </div>
+        <div class="spiritual-caption">${caption()}</div>
       </div>
     </div>`;
   }

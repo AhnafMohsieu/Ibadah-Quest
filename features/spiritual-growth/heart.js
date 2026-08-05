@@ -2,6 +2,11 @@
 // Heart Refinement — Transform your heart from stone to light
 
 (function() {
+  const CAPTIONS = ["The heart begins its transformation.","Sincerity softens the hardest stone.","Each deed polishes the heart.","The heart grows strong with iman.","Purity reflects like silver.","The heart shines like gold.","Your heart is pure light."];
+  function caption() {
+    const d = new Date();
+    return CAPTIONS[Math.floor(d.getTime() / 86400000) % CAPTIONS.length];
+  }
   const HEART_COLORS = {
     1: '#696969', 2: '#CD853F', 3: '#B87333',
     4: '#4A4A4A', 5: '#C0C0C0', 6: '#FFD700', 7: '#FFF'
@@ -37,12 +42,12 @@
     el.innerHTML = `<div class="spiritual-card">
       <div class="spiritual-svg-wrap">${heartSVG(progress.stage)}</div>
       <div class="spiritual-info">
-        <div class="spiritual-stage-name">${progress.icon} Heart Refinement</div>
-        <div class="spiritual-stage-level">${progress.name} (${progress.stage}/${progress.totalStages})</div>
+        <div class="spiritual-stage-name">${progress.icon} Heart Refinement <span class="spiritual-stage-num">Stage ${progress.stage}/7</span></div>
         <div class="spiritual-progress">${progressText}</div>
         <div class="spiritual-progress-bar">
           <div class="spiritual-progress-fill" style="width:${Math.round(progress.progress * 100)}%"></div>
         </div>
+        <div class="spiritual-caption">${caption()}</div>
       </div>
     </div>`;
   }
