@@ -13,6 +13,7 @@
       storiesIdx:[], hadithIdx:[], namesIdx:[], sinsIdx:[], punishmentsIdx:[],
       repentanceIdx:[], seerahIdx:[], tafsirIdx:[], mannersIdx:[],
       aqeedahIdx:[], familyIdx:[], healthIdx:[], financeIdx:[], ummahIdx:[], hajjIdx:[],
+      questXP:{daily:0,weekly:0,monthly:0,yearly:0,lifetime:0},
       akhirahIdx:[], prophetsIdx:[], womenIdx:[], knowledgeIdx:[], heartIdx:[],
       jumuahIdx:[], marriageIdx:[], scienceIdx:[], wuduIdx:[], scholarsIdx:[],
       patienceIdx:[], workIdx:[], communityIdx:[], environmentIdx:[], travelIdx:[],

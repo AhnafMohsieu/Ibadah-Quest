@@ -140,7 +140,8 @@
       currentXP: curXP,
       nextLevelXP: nextXP,
       currentLevelXP: curLevelXP,
-      progress: nextXP > curLevelXP ? Math.round((curXP - curLevelXP) / (nextXP - curLevelXP) * 100) : 100
+      progress: nextXP > curLevelXP ? Math.round((curXP - curLevelXP) / (nextXP - curLevelXP) * 100) : 100,
+      questXP: S.questXP || {daily:0,weekly:0,monthly:0,yearly:0,lifetime:0}
     };
   }
 
