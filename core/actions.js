@@ -1,13 +1,17 @@
 ﻿(function() {
   // ═══════════════════════════════════════════════════════
   const THEME_KEY = 'iqTheme';
+  function updateMeta() {
+    try { const bg = getComputedStyle(document.documentElement).getPropertyValue('--bg').trim(); if (bg) document.querySelector('meta[name="theme-color"]').setAttribute('content', bg); } catch (e) {}
+  }
   function applyTheme() {
-    try { const t = localStorage.getItem(THEME_KEY) || 'light'; if (t === 'light') document.documentElement.removeAttribute('data-theme'); else document.documentElement.setAttribute('data-theme', t); } catch (e) {}
+    try { const t = localStorage.getItem(THEME_KEY) || 'light'; if (t === 'light') document.documentElement.removeAttribute('data-theme'); else document.documentElement.setAttribute('data-theme', t); updateMeta(); } catch (e) {}
   }
   function setTheme(name) {
     try { localStorage.setItem(THEME_KEY, name || 'light'); } catch (e) {}
     if (!name || name === 'light') document.documentElement.removeAttribute('data-theme');
     else document.documentElement.setAttribute('data-theme', name);
+    updateMeta();
     window.renderAll();
   }
   function checkLevelUp(oldLv) { if (S.lv > oldLv) { const t = lvTitle(S.lv); levelUpToast(S.lv, t); } }

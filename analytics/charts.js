@@ -1,16 +1,42 @@
 (function() {
   'use strict';
 
+  function cssVar(name, fallback) {
+    if (typeof document === 'undefined') return fallback;
+    try {
+      const v = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+      return v || fallback;
+    } catch (e) { return fallback; }
+  }
+
+  function hexToRgb(hex) {
+    if (!hex) return null;
+    hex = hex.replace('#', '');
+    if (hex.length === 3) hex = hex.split('').map(c => c + c).join('');
+    const n = parseInt(hex, 16);
+    if (isNaN(n)) return null;
+    return { r: (n >> 16) & 255, g: (n >> 8) & 255, b: n & 255 };
+  }
+
+  function mix(fgHex, bgHex, t) {
+    const f = hexToRgb(fgHex), b = hexToRgb(bgHex);
+    if (!f || !b) return fgHex;
+    const r = Math.round(f.r * t + b.r * (1 - t));
+    const g = Math.round(f.g * t + b.g * (1 - t));
+    const bl = Math.round(f.b * t + b.b * (1 - t));
+    return '#' + [r, g, bl].map(c => c.toString(16).padStart(2, '0')).join('');
+  }
+
   const COLORS = {
-    primary: '#16a34a',
-    secondary: '#fb7185',
-    light: '#fda4af',
-    accent: '#f43f5e',
-    red: '#dc2626',
-    bg: 'rgba(251,113,133,0.15)',
-    grid: 'rgba(31,41,55,0.08)',
-    text: '#6b7280',
-    white: '#334155'
+    get primary() { return cssVar('--gold-dark', '#e11d48'); },
+    get secondary() { return cssVar('--gold', '#f43f5e'); },
+    get light() { return cssVar('--gold-light', '#fb7185'); },
+    get accent() { return cssVar('--gold', '#f43f5e'); },
+    get red() { return cssVar('--red', '#dc2626'); },
+    get bg() { try {const h=cssVar('--gold-light','#fb7185');const p=hexToRgb(h);if(p)return`rgba(${p.r},${p.g},${p.b},0.12)`;}catch(e){} return'rgba(251,113,133,0.15)'; },
+    get grid() { return cssVar('--border', 'rgba(31,41,55,0.08)'); },
+    get text() { return cssVar('--text2', '#6b7280'); },
+    get white() { return cssVar('--text', '#1f2937'); }
   };
 
   const instances = {};
@@ -25,7 +51,7 @@
       maintainAspectRatio: false,
       plugins: {
         legend: { display: false },
-        title: { display: !!title, text: title, color: '#f43f5e', font: { family: "'Sora', sans-serif", size: 14, weight: '600' } }
+        title: { display: !!title, text: title, color: COLORS.accent, font: { family: "'Sora', sans-serif", size: 14, weight: '600' } }
       },
       scales: {
         x: { ticks: { color: COLORS.text, font: { size: 10 } }, grid: { color: COLORS.grid } },
@@ -86,7 +112,7 @@
         maintainAspectRatio: false,
         plugins: {
           legend: { display: true, position: 'right', labels: { color: COLORS.text, font: { size: 11 }, padding: 8 } },
-          title: { display: !!title, text: title, color: '#f43f5e', font: { family: "'Sora', sans-serif", size: 14, weight: '600' } }
+          title: { display: !!title, text: title, color: COLORS.accent, font: { family: "'Sora', sans-serif", size: 14, weight: '600' } }
         }
       }
     });
@@ -142,13 +168,16 @@
     ctx.scale(dpr, dpr);
     ctx.clearRect(0, 0, totalWidth, totalHeight);
 
+    const iramp = [cssVar('--gold-dark','#e11d48'),cssVar('--gold','#f43f5e'),cssVar('--gold-light','#fb7185')];
+    const ramp = [mix(iramp[2],cssVar('--bg','#faf7f5'),0.12),mix(iramp[2],cssVar('--bg','#faf7f5'),0.28),mix(iramp[1],cssVar('--bg','#faf7f5'),0.46),mix(iramp[0],cssVar('--bg','#faf7f5'),0.66),iramp[1],iramp[0]];
+
     const getColor = (val) => {
-      if (val <= 0) return '#fdecf0';
-      if (val === 1) return '#fbcfe0';
-      if (val === 2) return '#fda4af';
-      if (val === 3) return '#fb7185';
-      if (val === 4) return '#f43f5e';
-      return '#e11d48';
+      if (val <= 0) return ramp[0];
+      if (val === 1) return ramp[1];
+      if (val === 2) return ramp[2];
+      if (val === 3) return ramp[3];
+      if (val === 4) return ramp[4];
+      return ramp[5];
     };
 
     ctx.fillStyle = COLORS.text;
