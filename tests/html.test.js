@@ -52,10 +52,10 @@ test('index.html theme-color uses emerald ink', () => {
   assert.ok(html.includes('content="#0b1513"'));
 });
 
-test('main.css uses emerald/gold tokens', () => {
+test('main.css uses modern light tokens', () => {
   assert.ok(css.includes('--emerald'));
   assert.ok(css.includes('--gold'));
-  assert.ok(css.includes('--bg: #0b1513'));
+  assert.ok(css.includes('--bg: #faf7f5'));
 });
 
 test('index.html registers the service worker and update banner', () => {
@@ -64,8 +64,8 @@ test('index.html registers the service worker and update banner', () => {
   assert.ok(html.includes('swUpdateBanner'));
 });
 
-test('shell surfaces use emerald and gold and arch corners', () => {
-  assert.ok(css.includes('--pattern-star'));
+test('shell surfaces use glass and arch corners', () => {
+  assert.ok(css.includes('backdrop-filter'));
   assert.ok(css.includes('border-radius: 14px 14px 6px 6px') || css.includes('border-radius: var(--radius) var(--radius) 6px 6px'));
   assert.ok(css.includes('.t1-btn.active'));
 });
@@ -82,13 +82,13 @@ test('render shell cards use Font Awesome glyphs', () => {
   assert.ok(render.includes('fa-solid'));
 });
 
-test('cards apply pattern overlay and emerald/gold active states', () => {
+test('cards apply glass surfaces with rose active states', () => {
   assert.ok(css.includes('.card-item:hover') || css.includes('.card-item'));
   assert.ok(css.includes('background: var(--card)') || css.includes('.content-card'));
   const cardClasses = ['.card-item', '.vol-card', '.deed-card', '.content-card', '.shop-card', '.prayer-card', '.spiritual-card'];
   assert.ok(cardClasses.some((sel) => {
     const idx = css.indexOf(sel);
-    return idx > -1 && css.slice(idx, idx + 400).includes('background-image: var(--pattern-star)');
+    return idx > -1 && css.slice(idx, idx + 400).includes('backdrop-filter');
   }));
 });
 
