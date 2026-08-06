@@ -110,3 +110,20 @@ test('modern light theme: old emerald/gold dark backgrounds are removed', () => 
   assert.ok(!css.includes('--emerald: #10b981'));
   assert.ok(!css.includes('--gold: #D4AF37'));
 });
+
+test('dark theme: CSS maps the dark palette under the html[data-theme=dark] selector', () => {
+  assert.ok(css.includes('html[data-theme="dark"]'));
+  assert.ok(css.includes('--bg: #0d1216'));
+  assert.ok(css.includes('backdrop-filter'));
+});
+
+test('dark theme: index.html applies saved theme before first paint (no-flash)', () => {
+  assert.ok(html.includes("localStorage.getItem('iqTheme')"));
+  assert.ok(html.includes("setAttribute('data-theme'"));
+  assert.ok(html.includes('styles/main.css?v=3'));
+});
+
+test('dark theme: profile renders a themed Mode switch', () => {
+  assert.ok(render.includes('Dark Mode'));
+  assert.ok(render.includes('App.toggleTheme()'));
+});
