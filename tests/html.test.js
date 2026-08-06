@@ -111,24 +111,19 @@ test('modern light theme: old emerald/gold dark backgrounds are removed', () => 
   assert.ok(!css.includes('--gold: #D4AF37'));
 });
 
-test('dark theme: CSS maps the dark palette under the html[data-theme=dark] selector', () => {
-  assert.ok(css.includes('html[data-theme="dark"]'));
-  assert.ok(css.includes('--bg: #0d1216'));
-  assert.ok(css.includes('backdrop-filter'));
+test('theme: five light-family palette blocks exist in main.css', () => {
+  for (const key of ['serene','royal','sand','midnight']) {
+    assert.ok(css.includes(`html[data-theme="${key}"]`), `missing palette block for ${key}`);
+  }
+  assert.ok(css.includes('--bg: #faf7f5'));   // light (default) :root block present
+  assert.ok(!css.includes('html[data-theme="dark"]'), 'dark palette block must be removed');
+  assert.ok(!css.includes('html[data-theme="serene-dark"]'), 'serene-dark palette block must be removed');
 });
 
-test('dark theme: index.html applies saved theme before first paint (no-flash)', () => {
+test('theme: index.html pre-paint script sets data-theme from localStorage', () => {
   assert.ok(html.includes("localStorage.getItem('iqTheme')"));
   assert.ok(html.includes("setAttribute('data-theme'"));
   assert.ok(html.includes('styles/main.css?v=5'));
-});
-
-test('theme: five families have both light and dark blocks in main.css', () => {
-  for (const key of ['serene','serene-dark','royal','royal-dark','sand','sand-dark','midnight','midnight-dark']) {
-    assert.ok(css.includes(`html[data-theme="${key}"]`), `missing palette block for ${key}`);
-  }
-  assert.ok(css.includes('html[data-theme="dark"]'));
-  assert.ok(css.includes('--bg: #faf7f5'));   // light (default) block present
 });
 
 test('theme: picker references metadata and setTheme wiring', () => {
