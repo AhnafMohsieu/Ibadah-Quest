@@ -39,7 +39,7 @@ test('Journeys tab is wired into the ibadah group', () => {
 
 test('index.html declares the PWA manifest and theme color', () => {
   assert.ok(html.includes('<link rel="manifest" href="manifest.json">'));
-  assert.ok(html.includes('<meta name="theme-color" content="#0b1513">'));
+  assert.ok(html.includes('<meta name="theme-color" content="#faf7f5">'));
   assert.ok(html.includes('rel="apple-touch-icon"'));
 });
 
@@ -48,8 +48,8 @@ test('index.html loads Font Awesome and Tailwind CDN', () => {
   assert.ok(html.includes('tailwindcss'));
 });
 
-test('index.html theme-color uses emerald ink', () => {
-  assert.ok(html.includes('content="#0b1513"'));
+test('index.html theme-color uses light base', () => {
+  assert.ok(html.includes('content="#faf7f5"'));
 });
 
 test('main.css uses modern light tokens', () => {
