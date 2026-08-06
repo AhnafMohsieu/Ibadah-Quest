@@ -12,9 +12,9 @@
 ];
 
 const DHIKR_COUNTER_DATA = [
-  { arabic:"سُبْحَانَ اللَّهِ", transliteration:"SubhanAllah", english:"Glory be to Allah", target:33, color:"#10b981" },
+  { arabic:"سُبْحَانَ اللَّهِ", transliteration:"SubhanAllah", english:"Glory be to Allah", target:33, color:"#16a34a" },
   { arabic:"الْحَمْدُ لِلَّهِ", transliteration:"Alhamdulillah", english:"All praise is for Allah", target:33, color:"#f59e0b" },
-  { arabic:"اللَّهُ أَكْبَرُ", transliteration:"Allahu Akbar", english:"Allah is the Greatest", target:34, color:"#D4AF37" },
+  { arabic:"اللَّهُ أَكْبَرُ", transliteration:"Allahu Akbar", english:"Allah is the Greatest", target:34, color:"#f43f5e" },
   { arabic:"أَسْتَغْفِرُ اللَّه", transliteration:"Astaghfirullah", english:"I seek forgiveness from Allah", target:100, color:"#8b5cf6" },
   { arabic:"لَا إِلَهَ إِلَّا اللَّه", transliteration:"La ilaha illallah", english:"There is no god but Allah", target:100, color:"#06b6d4" },
   { arabic:"اللَّهُمَّ صَلِّ عَلَى مُحَمَّد", transliteration:"Allahumma salli ala Muhammad", english:"O Allah, send blessings upon Muhammad", target:100, color:"#ec4899" },
