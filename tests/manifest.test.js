@@ -16,9 +16,9 @@ test('manifest declares the app identity', () => {
   assert.strictEqual(manifest.scope, './');
 });
 
-test('manifest uses the app theme colors', () => {
-  assert.strictEqual(manifest.theme_color, '#0b1114');
-  assert.strictEqual(manifest.background_color, '#0b1114');
+test('manifest uses the light base theme colors', () => {
+  assert.strictEqual(manifest.theme_color, '#faf7f5');
+  assert.strictEqual(manifest.background_color, '#faf7f5');
 });
 
 test('manifest lists three icons and the files exist', () => {
