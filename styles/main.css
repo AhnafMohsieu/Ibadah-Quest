@@ -380,6 +380,9 @@ body {
 select.profile-input { appearance: none; -webkit-appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23D4AF37'%3E%3Cpath d='M12 15.5L5.5 9h13z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 18px center; background-size: 14px; padding-right: 46px; cursor: pointer; }
 select.profile-input option { background: var(--bg); color: var(--text); }
 
+/* Flat SVG icon set */
+.iq-icon { width: 1.15em; height: 1.15em; display: inline-block; vertical-align: -0.2em; flex-shrink: 0; }
+
 /* Profile Identity Card */
 .profile-identity {
   display: flex; align-items: center; gap: 16px; margin-bottom: 18px;
