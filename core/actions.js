@@ -196,7 +196,7 @@
       transliteration: roman,
       english,
       target: target || 33,
-      color: '#D4AF37'
+      color: '#f43f5e'
     });
     saveState();
     renderDhikrCounter();
@@ -2178,10 +2178,10 @@ Object.keys(NEW_POOLS).forEach(k => {
       const cw = document.querySelector('.app') || document.body;
       
       const genCards = (arr, isScholars) => arr.map((n, idx) => `
-          <div style="position: relative; padding: 25px 20px; text-align: center; margin-bottom: 20px; background: rgba(15,23,42,0.6); border-radius: 16px; border: 1px solid rgba(212,175,55,0.2); box-shadow: 0 5px 15px rgba(0,0,0,0.3);">
-              <div style="position: absolute; top: 15px; left: 20px; font-size: 1.1rem; color: rgba(212,175,55,0.8); font-weight: bold; font-family: 'Outfit', sans-serif;">#${idx + 1}</div>
-              ${n.arabic ? `<div style="font-size: 3.5rem; color: var(--gold); font-family: 'Amiri', serif; margin-bottom: 10px; text-shadow: 0 0 10px rgba(212,175,55,0.3); line-height: 1;">${n.arabic}</div>` : ''}
-              <div style="font-size: 1.6rem; font-weight: 700; color: ${isScholars ? 'var(--gold)' : '#fff'}; margin-bottom: 8px; letter-spacing: 0.5px;">${n.name || n.title}</div>
+          <div style="position: relative; padding: 25px 20px; text-align: center; margin-bottom: 20px; background: rgba(255,255,255,0.62); border-radius: 16px; border: 1px solid rgba(244,63,94,0.2); box-shadow: 0 5px 15px rgba(0,0,0,0.3);">
+              <div style="position: absolute; top: 15px; left: 20px; font-size: 1.1rem; color: rgba(244,63,94,0.8); font-weight: bold; font-family: 'Outfit', sans-serif;">#${idx + 1}</div>
+              ${n.arabic ? `<div style="font-size: 3.5rem; color: var(--gold); font-family: 'Amiri', serif; margin-bottom: 10px; text-shadow: 0 0 10px rgba(244,63,94,0.3); line-height: 1;">${n.arabic}</div>` : ''}
+              <div style="font-size: 1.6rem; font-weight: 700; color: ${isScholars ? 'var(--gold)' : 'var(--text)'}; margin-bottom: 8px; letter-spacing: 0.5px;">${n.name || n.title}</div>
               <div style="font-size: 1.05rem; color: var(--text2); max-width: 650px; margin: 0 auto; line-height: 1.5;">${n.desc}</div>
           </div>
       `).join('');

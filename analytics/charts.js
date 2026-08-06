@@ -3,14 +3,14 @@
 
   const COLORS = {
     primary: '#16a34a',
-    secondary: '#22c55e',
-    light: '#86efac',
-    accent: '#f59e0b',
-    red: '#ef4444',
-    bg: 'rgba(22,163,74,0.15)',
-    grid: 'rgba(255,255,255,0.08)',
-    text: '#94a3b8',
-    white: '#e2e8f0'
+    secondary: '#fb7185',
+    light: '#fda4af',
+    accent: '#f43f5e',
+    red: '#dc2626',
+    bg: 'rgba(251,113,133,0.15)',
+    grid: 'rgba(31,41,55,0.08)',
+    text: '#6b7280',
+    white: '#334155'
   };
 
   const instances = {};
@@ -25,7 +25,7 @@
       maintainAspectRatio: false,
       plugins: {
         legend: { display: false },
-        title: { display: !!title, text: title, color: '#D4AF37', font: { family: "'Cinzel', serif", size: 14, weight: '600' } }
+        title: { display: !!title, text: title, color: '#f43f5e', font: { family: "'Sora', sans-serif", size: 14, weight: '600' } }
       },
       scales: {
         x: { ticks: { color: COLORS.text, font: { size: 10 } }, grid: { color: COLORS.grid } },
@@ -86,7 +86,7 @@
         maintainAspectRatio: false,
         plugins: {
           legend: { display: true, position: 'right', labels: { color: COLORS.text, font: { size: 11 }, padding: 8 } },
-          title: { display: !!title, text: title, color: '#D4AF37', font: { family: "'Cinzel', serif", size: 14, weight: '600' } }
+          title: { display: !!title, text: title, color: '#f43f5e', font: { family: "'Sora', sans-serif", size: 14, weight: '600' } }
         }
       }
     });

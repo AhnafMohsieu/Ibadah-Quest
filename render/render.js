@@ -415,7 +415,7 @@
       const o = pool[i % pool.length];
       if (!o) return '';
       
-      const numBadge = `<span style="display:inline-block; background:rgba(212,175,55,0.15); color:var(--gold-light); border:1px solid rgba(212,175,55,0.4); border-radius:12px; padding:0 8px; font-size:0.75rem; margin-right:8px; font-weight:800; height:22px; line-height:20px; white-space:nowrap; font-family:var(--font);">#${mapIdx + 1}</span>`;
+      const numBadge = `<span style="display:inline-block; background:rgba(244,63,94,0.12); color:var(--gold-light); border:1px solid rgba(244,63,94,0.4); border-radius:12px; padding:0 8px; font-size:0.75rem; margin-right:8px; font-weight:800; height:22px; line-height:20px; white-space:nowrap; font-family:var(--font);">#${mapIdx + 1}</span>`;
 
       if (typeof o === 'string') return `<div class="content-card"><div style="display:flex;align-items:flex-start;gap:10px;"><div style="margin-top:2px;">${numBadge}</div><div class="content-english" style="flex:1;">${o}</div></div></div>`;
       
@@ -980,7 +980,7 @@
       { name:'Tashahud', desc:'Sit between rakats reciting At-Tahiyyatu lillahi... and send Salawat on the Prophet ﷺ.' },
       { name:'Tasleem', desc:'End prayer by turning head right then left saying As-Salamu Alaykum wa rahmatullah.' }
     ].map((s, i) => {
-      const numBadge = `<span style="display:inline-block; background:rgba(212,175,55,0.15); color:var(--gold-light); border:1px solid rgba(212,175,55,0.4); border-radius:12px; padding:0 8px; font-size:0.75rem; margin-right:8px; font-weight:800; height:22px; line-height:20px; white-space:nowrap; font-family:var(--font);">#${i + 1}</span>`;
+      const numBadge = `<span style="display:inline-block; background:rgba(244,63,94,0.12); color:var(--gold-light); border:1px solid rgba(244,63,94,0.4); border-radius:12px; padding:0 8px; font-size:0.75rem; margin-right:8px; font-weight:800; height:22px; line-height:20px; white-space:nowrap; font-family:var(--font);">#${i + 1}</span>`;
       return `<div class="content-card" style="flex-direction:row;align-items:flex-start;"><div style="margin-top:2px;">${numBadge}</div><div style="flex:1;"><div style="font-weight:700;color:var(--gold-light);margin-bottom:6px;">${s.name}</div><div class="content-english">${s.desc}</div></div></div>`;
     }).join('');
   }
@@ -1389,10 +1389,10 @@
 
     // Legend
     cal += '<div class="cal-legend">';
-    cal += '<div class="cal-legend-item"><div class="cal-legend-dot" style="background:rgba(16,185,129,0.5);"></div>5 prayers</div>';
+    cal += '<div class="cal-legend-item"><div class="cal-legend-dot" style="background:rgba(22,163,74,0.5);"></div>5 prayers</div>';
     cal += '<div class="cal-legend-item"><div class="cal-legend-dot" style="background:rgba(245,158,11,0.5);"></div>Some prayers</div>';
     cal += '<div class="cal-legend-item"><div class="cal-legend-dot" style="background:rgba(239,68,68,0.5);"></div>Missed</div>';
-    cal += '<div class="cal-legend-item"><div class="cal-legend-dot" style="background:rgba(212,175,55,0.5);"></div>Today</div>';
+    cal += '<div class="cal-legend-item"><div class="cal-legend-dot" style="background:rgba(244,63,94,0.5);"></div>Today</div>';
     cal += '</div>';
 
     document.getElementById('calArea').innerHTML = cal;
