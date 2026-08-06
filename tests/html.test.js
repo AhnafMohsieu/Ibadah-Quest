@@ -120,7 +120,7 @@ test('dark theme: CSS maps the dark palette under the html[data-theme=dark] sele
 test('dark theme: index.html applies saved theme before first paint (no-flash)', () => {
   assert.ok(html.includes("localStorage.getItem('iqTheme')"));
   assert.ok(html.includes("setAttribute('data-theme'"));
-  assert.ok(html.includes('styles/main.css?v=3'));
+  assert.ok(html.includes('styles/main.css?v=5'));
 });
 
 test('theme: five families have both light and dark blocks in main.css', () => {

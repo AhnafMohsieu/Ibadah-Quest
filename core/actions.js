@@ -1,5 +1,15 @@
 ﻿(function() {
   // ═══════════════════════════════════════════════════════
+  const THEME_KEY = 'iqTheme';
+  function applyTheme() {
+    try { const t = localStorage.getItem(THEME_KEY) || 'light'; if (t === 'light') document.documentElement.removeAttribute('data-theme'); else document.documentElement.setAttribute('data-theme', t); } catch (e) {}
+  }
+  function setTheme(name) {
+    try { localStorage.setItem(THEME_KEY, name || 'light'); } catch (e) {}
+    if (!name || name === 'light') document.documentElement.removeAttribute('data-theme');
+    else document.documentElement.setAttribute('data-theme', name);
+    window.renderAll();
+  }
   function checkLevelUp(oldLv) { if (S.lv > oldLv) { const t = lvTitle(S.lv); levelUpToast(S.lv, t); } }
   function toggleP(id) { const l=tlog(); const w=!!l.p[id]; const oldLv=S.lv; l.p[id]=!w; const pr=PRAYERS.find(x=>x.id===id); if(!pr) return; let xp=pr.xp; if(isFri()&&id==='dhuhr'&&pr.fri) xp=pr.fri.xp; if(S.ab&&S.ab.exp>=today()) xp*=2; if(!w){ S.tp++; S.xp+=xp; if(isFri()&&id==='dhuhr') S.tj=(S.tj||0)+1; playSound('pop'); } else { S.tp=Math.max(0,S.tp-1); S.xp=Math.max(0,S.xp-xp); if(isFri()&&id==='dhuhr') S.tj=Math.max(0,(S.tj||0)-1); } S.lv=lvFrom(S.xp); checkLevelUp(oldLv); recalc(); checkQ(); checkA(); saveState(); renderDynamic(); }
   function toggleV(id) { const l=tlog(); if(!l.v) l.v={}; const w=!!l.v[id]; const oldLv=S.lv; l.v[id]=!w; const vp=VOLUNTARY.find(x=>x.id===id); if(!vp) return; let xp=vp.xp; if(S.ab&&S.ab.exp>=today()) xp*=2; if(!w){ S.vc[id]=(S.vc[id]||0)+1; S.xp+=xp; playSound('pop'); } else { S.vc[id]=Math.max(0,(S.vc[id]||0)-1); S.xp=Math.max(0,S.xp-xp); } S.lv=lvFrom(S.xp); checkLevelUp(oldLv); checkQ(); checkA(); saveState(); renderDynamic(); }
@@ -2202,14 +2212,15 @@ Object.keys(NEW_POOLS).forEach(k => {
   function init() {
     try { localStorage.setItem(USER_KEY, currentUser); } catch(e) { console.error('Step 1 failed:', e); }
     try { S = loadState(); } catch(e) { console.error('Step 2 loadState failed:', e); }
-    try { initApp(); } catch(e) { console.error('Step 3 initApp failed:', e); }
-    try { switchCategory('ibadah', document.querySelector('.t1-btn.active')); } catch(e) { console.error('Step 4 switchCategory failed:', e); }
+    try { applyTheme(); } catch(e) { console.error('Step 3 applyTheme failed:', e); }
+    try { initApp(); } catch(e) { console.error('Step 4 initApp failed:', e); }
+    try { switchCategory('ibadah', document.querySelector('.t1-btn.active')); } catch(e) { console.error('Step 5 switchCategory failed:', e); }
     try {
       document.getElementById('xpWrap').addEventListener('click', () => {
         const lv=S.lv, xp=S.xp, cur=xpFor(lv), nxt=xpFor(lv+1);
         toast('⭐', `Level ${lv}: ${xp-cur} / ${nxt-cur} XP to next`);
       });
-    } catch(e) { console.error('Step 5 xpWrap failed:', e); }
+    } catch(e) { console.error('Step 6 xpWrap failed:', e); }
     try {
       document.addEventListener('click', (e) => {
         const sr = document.getElementById('globalSearchResults');
@@ -2236,7 +2247,8 @@ Object.keys(NEW_POOLS).forEach(k => {
       openHadithCollection, openHadithBook, hadithBack,
       playQuranVerse, playSurah, stopSurah, setQuranReciter, playJuz, updateJuzButton,
       globalSearch, executeSearch,
-      calPrevMonth, calNextMonth, calGoToday, selectAvatar, toggleAvatarPicker
+      calPrevMonth, calNextMonth, calGoToday, selectAvatar, toggleAvatarPicker,
+      setTheme
     };
     window.checkA = checkA;
     window.playSound = playSound;
