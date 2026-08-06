@@ -137,14 +137,7 @@
     '🦯': '<i class="fa-solid fa-person-walking-with-cane"></i>',
     '💌': '<i class="fa-solid fa-envelope"></i>'
   };
-  function faIcon(e) {
-    const fa = FA_GLYPH[e];
-    if (fa) {
-      const m = fa.match(/fa-solid fa-([\w-]+)/);
-      if (m && window.iqIcon) { const s = window.iqIcon('fa-solid fa-' + m[1]); if (s) return s; }
-    }
-    return e;
-  }
+  function faIcon(e) { return FA_GLYPH[e] || e; }
   function renderDynamic() {
     const pageScroll = window.scrollY;
     const volArea = document.getElementById('volArea');

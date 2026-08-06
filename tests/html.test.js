@@ -43,9 +43,8 @@ test('index.html declares the PWA manifest and theme color', () => {
   assert.ok(html.includes('rel="apple-touch-icon"'));
 });
 
-test('index.html loads Tailwind CDN and the flat SVG icon set', () => {
-  assert.ok(!html.includes('cdnjs.cloudflare.com/ajax/libs/font-awesome'));
-  assert.ok(html.includes('data/icons.js'));
+test('index.html loads Font Awesome and Tailwind CDN', () => {
+  assert.ok(html.includes('cdnjs.cloudflare.com/ajax/libs/font-awesome'));
   assert.ok(html.includes('tailwindcss'));
 });
 
