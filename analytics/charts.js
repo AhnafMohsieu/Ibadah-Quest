@@ -143,15 +143,15 @@
     ctx.clearRect(0, 0, totalWidth, totalHeight);
 
     const getColor = (val) => {
-      if (val === 0) return '#1a1f2e';
-      if (val === 1) return '#14532d';
-      if (val === 2) return '#166534';
-      if (val === 3) return '#16a34a';
-      if (val === 4) return '#22c55e';
-      return '#4ade80';
+      if (val <= 0) return '#fdecf0';
+      if (val === 1) return '#fbcfe0';
+      if (val === 2) return '#fda4af';
+      if (val === 3) return '#fb7185';
+      if (val === 4) return '#f43f5e';
+      return '#e11d48';
     };
 
-    ctx.fillStyle = '#94a3b8';
+    ctx.fillStyle = COLORS.text;
     ctx.font = '10px sans-serif';
     ctx.textAlign = 'right';
     ctx.textBaseline = 'middle';
