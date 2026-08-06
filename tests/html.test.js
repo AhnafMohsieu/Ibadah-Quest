@@ -97,3 +97,16 @@ test('redesign keeps core markers and PWA meta intact', () => {
   assert.ok(html.includes('gardenArea'));
   assert.ok(tabs.includes("id: 'journeys'"));
 });
+
+test('modern light glass theme: uses the new bg and glass accents', () => {
+  assert.ok(css.includes('--bg: #faf7f5'));
+  assert.ok(css.includes('rgba(255,255,255,0.62)'));
+  assert.ok(css.includes('--gold: #f43f5e'));
+  assert.ok(css.includes('backdrop-filter'));
+});
+
+test('modern light theme: old emerald/gold dark backgrounds are removed', () => {
+  assert.ok(!css.includes('--bg: #0b1513'));
+  assert.ok(!css.includes('--emerald: #10b981'));
+  assert.ok(!css.includes('--gold: #D4AF37'));
+});
