@@ -123,7 +123,16 @@ test('dark theme: index.html applies saved theme before first paint (no-flash)',
   assert.ok(html.includes('styles/main.css?v=3'));
 });
 
-test('dark theme: profile renders a themed Mode switch', () => {
-  assert.ok(render.includes('Dark Mode'));
-  assert.ok(render.includes('App.toggleTheme()'));
+test('theme: five families have both light and dark blocks in main.css', () => {
+  for (const key of ['serene','serene-dark','royal','royal-dark','sand','sand-dark','midnight','midnight-dark']) {
+    assert.ok(css.includes(`html[data-theme="${key}"]`), `missing palette block for ${key}`);
+  }
+  assert.ok(css.includes('html[data-theme="dark"]'));
+  assert.ok(css.includes('--bg: #faf7f5'));   // light (default) block present
+});
+
+test('theme: picker references metadata and setTheme wiring', () => {
+  assert.ok(render.includes('Theme'));
+  assert.ok(render.includes('window.Themes'));
+  assert.ok(render.includes('App.setTheme('));
 });
