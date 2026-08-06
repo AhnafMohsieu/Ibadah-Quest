@@ -9,15 +9,15 @@
   }
   function lanternSVG(stage, progress) {
     const glow = Math.max(0.05, progress * 0.85);
-    const gold = '#D4AF37';
-    const warm = '#FFE97D';
+    const gold = '#f43f5e';
+    const warm = '#fb7185';
     const bodyX = 45, bodyY = 35, bodyW = 30, bodyH = 80;
     const cx = 60, cy = 75;
 
     const gradStops = [
-      `<stop offset="0%" style="stop-color:rgba(212,175,55,${glow})"/>`,
-      `<stop offset="60%" style="stop-color:rgba(212,175,55,${glow * 0.4})"/>`,
-      `<stop offset="100%" style="stop-color:rgba(212,175,55,0)"/>`
+      `<stop offset="0%" style="stop-color:rgba(244,63,94,${glow})"/>`,
+      `<stop offset="60%" style="stop-color:rgba(244,63,94,${glow * 0.4})"/>`,
+      `<stop offset="100%" style="stop-color:rgba(244,63,94,0)"/>`
     ].join('');
 
     let inner = '';
@@ -25,7 +25,7 @@
     // Stage 1: Dim — barely visible flicker
     if (stage === 1) {
       inner = `
-        <circle cx="${cx}" cy="${cy}" r="18" fill="rgba(212,175,55,0.15)"/>
+        <circle cx="${cx}" cy="${cy}" r="18" fill="rgba(244,63,94,0.15)"/>
         <rect x="${bodyX}" y="${bodyY}" width="${bodyW}" height="${bodyH}" rx="4" fill="${gold}" opacity="0.5"/>
         <rect x="${bodyX + 4}" y="${bodyY + 4}" width="${bodyW - 8}" height="${bodyH - 8}" rx="3" fill="${warm}" opacity="0.2"/>
         <ellipse cx="${cx}" cy="${cy + 10}" rx="5" ry="6" fill="${warm}" opacity="0.25"/>`;
@@ -33,7 +33,7 @@
     // Stage 2: Flickering — slight glow
     else if (stage === 2) {
       inner = `
-        <circle cx="${cx}" cy="${cy}" r="24" fill="rgba(212,175,55,0.25)"/>
+        <circle cx="${cx}" cy="${cy}" r="24" fill="rgba(244,63,94,0.25)"/>
         <rect x="${bodyX}" y="${bodyY}" width="${bodyW}" height="${bodyH}" rx="4" fill="${gold}" opacity="0.65"/>
         <rect x="${bodyX + 4}" y="${bodyY + 4}" width="${bodyW - 8}" height="${bodyH - 8}" rx="3" fill="${warm}" opacity="0.35"/>
         <ellipse cx="${cx}" cy="${cy + 10}" rx="7" ry="8" fill="${warm}" opacity="0.4"/>`;
@@ -41,7 +41,7 @@
     // Stage 3: Steady — warm glow
     else if (stage === 3) {
       inner = `
-        <circle cx="${cx}" cy="${cy}" r="30" fill="rgba(212,175,55,0.35)"/>
+        <circle cx="${cx}" cy="${cy}" r="30" fill="rgba(244,63,94,0.35)"/>
         <rect x="${bodyX}" y="${bodyY}" width="${bodyW}" height="${bodyH}" rx="4" fill="${gold}" opacity="0.75"/>
         <rect x="${bodyX + 4}" y="${bodyY + 4}" width="${bodyW - 8}" height="${bodyH - 8}" rx="3" fill="${warm}" opacity="0.5"/>
         <ellipse cx="${cx}" cy="${cy + 10}" rx="9" ry="10" fill="${warm}" opacity="0.55"/>`;
@@ -49,7 +49,7 @@
     // Stage 4: Glowing — bright glow
     else if (stage === 4) {
       inner = `
-        <circle cx="${cx}" cy="${cy}" r="38" fill="rgba(212,175,55,0.32)"/>
+        <circle cx="${cx}" cy="${cy}" r="38" fill="rgba(244,63,94,0.32)"/>
         <rect x="${bodyX}" y="${bodyY}" width="${bodyW}" height="${bodyH}" rx="4" fill="${gold}" opacity="0.7"/>
         <rect x="${bodyX + 4}" y="${bodyY + 4}" width="${bodyW - 8}" height="${bodyH - 8}" rx="3" fill="${warm}" opacity="0.5"/>
         <ellipse cx="${cx}" cy="${cy + 10}" rx="11" ry="12" fill="${warm}" opacity="0.55"/>
@@ -58,7 +58,7 @@
     // Stage 5: Radiant — very bright glow
     else if (stage === 5) {
       inner = `
-        <circle cx="${cx}" cy="${cy}" r="46" fill="rgba(212,175,55,0.42)"/>
+        <circle cx="${cx}" cy="${cy}" r="46" fill="rgba(244,63,94,0.42)"/>
         <circle cx="${cx}" cy="${cy}" r="28" fill="rgba(255,233,125,0.15)"/>
         <rect x="${bodyX}" y="${bodyY}" width="${bodyW}" height="${bodyH}" rx="4" fill="${gold}" opacity="0.82"/>
         <rect x="${bodyX + 4}" y="${bodyY + 4}" width="${bodyW - 8}" height="${bodyH - 8}" rx="3" fill="${warm}" opacity="0.65"/>
@@ -68,7 +68,7 @@
     // Stage 6: Brilliant — intense glow with aura
     else if (stage === 6) {
       inner = `
-        <circle cx="${cx}" cy="${cy}" r="55" fill="rgba(212,175,55,0.5)"/>
+        <circle cx="${cx}" cy="${cy}" r="55" fill="rgba(244,63,94,0.5)"/>
         <circle cx="${cx}" cy="${cy}" r="36" fill="rgba(255,233,125,0.2)"/>
         <circle cx="${cx}" cy="${cy}" r="22" fill="rgba(255,255,255,0.08)"/>
         <rect x="${bodyX}" y="${bodyY}" width="${bodyW}" height="${bodyH}" rx="4" fill="${gold}" opacity="0.92"/>
@@ -82,7 +82,7 @@
     // Stage 7: Divine Light — maximum glow with light rays
     else {
       inner = `
-        <circle cx="${cx}" cy="${cy}" r="65" fill="rgba(212,175,55,0.6)"/>
+        <circle cx="${cx}" cy="${cy}" r="65" fill="rgba(244,63,94,0.6)"/>
         <circle cx="${cx}" cy="${cy}" r="44" fill="rgba(255,233,125,0.28)"/>
         <circle cx="${cx}" cy="${cy}" r="28" fill="rgba(255,255,255,0.12)"/>
         <rect x="${bodyX}" y="${bodyY}" width="${bodyW}" height="${bodyH}" rx="4" fill="${gold}"/>

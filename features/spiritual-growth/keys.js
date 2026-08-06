@@ -7,9 +7,9 @@
     const d = new Date();
     return CAPTIONS[Math.floor(d.getTime() / 86400000) % CAPTIONS.length];
   }
-  const gold = '#D4AF37';
+  const gold = '#f43f5e';
   const silver = '#C0C0C0';
-  const lightGold = '#FFE97D';
+  const lightGold = '#fb7185';
 
   // Key counts per stage: 1, 2, 3, 5, 7, 9, 10
   const KEY_COUNTS = [1, 2, 3, 5, 7, 9, 10];
@@ -100,7 +100,7 @@
     let glow = '';
     if (isMaxStage) {
       glow = `
-        <circle cx="${cx}" cy="${ringY + 30}" r="50" fill="rgba(212,175,55,0.12)"/>
+        <circle cx="${cx}" cy="${ringY + 30}" r="50" fill="rgba(244,63,94,0.12)"/>
         <circle cx="${cx}" cy="${ringY + 30}" r="35" fill="rgba(255,233,125,0.08)"/>
         <circle cx="${cx}" cy="${ringY + 30}" r="20" fill="rgba(255,255,255,0.05)"/>`;
     }

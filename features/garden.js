@@ -31,7 +31,7 @@
     if (stage >= 6) {
       for (let i = 0; i < Math.min(flowers, FLOWER_POS.length); i++) {
         const f = FLOWER_POS[i];
-        flowersSVG += `<g transform="translate(${f[0]},${f[1]})"><circle r="7" fill="#E89BB0"/><circle r="3" fill="#FCE694"/></g>`;
+        flowersSVG += `<g transform="translate(${f[0]},${f[1]})"><circle r="7" fill="#E89BB0"/><circle r="3" fill="#fb7185"/></g>`;
       }
     }
     if (stage === 1) return `<svg class="garden-svg" viewBox="0 0 200 220"><ellipse cx="100" cy="204" rx="60" ry="8" fill="#163024"/><path d="M100 200 Q100 168 100 152" stroke="#2E7D4F" stroke-width="4" fill="none" stroke-linecap="round"/><path d="M100 162 Q78 150 72 160 Q86 170 100 162" fill="#3E9B63"/><path d="M100 156 Q122 144 128 154 Q114 164 100 156" fill="#3E9B63"/></svg>`;
