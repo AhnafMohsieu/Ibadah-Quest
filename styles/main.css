@@ -29,6 +29,35 @@
   --font-emoji: 'Noto Color Emoji', 'Noto Emoji', 'Apple Color Emoji', 'Segoe UI Emoji', 'Twemoji Mozilla', 'EmojiOne Color', 'Android Emoji';
 }
 
+html[data-theme="dark"] {
+  --bg: #0d1216;
+  --bg-accent: #11181e;
+  --card: rgba(22,30,38,0.7);
+  --card2: rgba(26,35,44,0.72);
+  --emerald: #f472b6;
+  --emerald-deep: #f43f5e;
+  --gold: #fb7185;
+  --gold-light: #fda4af;
+  --gold-dark: #f43f5e;
+  --teal: #f472b6;
+  --text: #f1f5f9;
+  --text2: #94a3b8;
+  --green: #4ade80;
+  --orange: #fbbf24;
+  --red: #f87171;
+  --purple: #c084fc;
+  --border: rgba(255,255,255,0.1);
+  --shadow: 0 8px 32px rgba(0,0,0,0.45);
+  --glass: rgba(22,30,38,0.7);
+  --glass-blur: 16px;
+}
+html[data-theme="dark"] body {
+  background-color: var(--bg);
+  background-image: radial-gradient(circle at 50% 0%, rgba(244,114,182,0.06) 0%, transparent 55%);
+}
+html[data-theme="dark"] .app::before,
+html[data-theme="dark"] .app::after { opacity: 0.35; }
+
 /* ── Reusable Shell Helpers ── */
 .pattern-surface { background: transparent; }
 .arch { border-radius: var(--radius) var(--radius) 6px 6px; }
@@ -494,6 +523,24 @@ select.profile-input option { background: var(--bg-accent); color: var(--text); 
 
 /* Profile Settings */
 .profile-settings { margin-bottom: 16px; }
+
+.profile-setting-row {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 10px; padding: 10px 4px; margin-bottom: 10px;
+}
+.profile-setting-row .theme-switch {
+  appearance: none; -webkit-appearance: none;
+  width: 48px; height: 27px; border-radius: 14px; border: none; cursor: pointer;
+  background: rgba(31,41,55,0.2); position: relative; transition: background 0.25s;
+  outline: none; flex-shrink: 0;
+}
+.profile-setting-row .theme-switch:focus-visible { box-shadow: 0 0 0 3px rgba(244,63,94,0.4); }
+.profile-setting-row .theme-switch::after {
+  content: ''; position: absolute; top: 3px; left: 3px; width: 21px; height: 21px;
+  border-radius: 50%; background: #fff; transition: transform 0.25s;
+}
+.profile-setting-row .theme-switch.on { background: var(--gold); }
+.profile-setting-row .theme-switch.on::after { transform: translateX(21px); }
 
 /* ── Daily Bonus & Tips ── */
 .daily-bonus {
