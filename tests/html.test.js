@@ -135,4 +135,5 @@ test('theme: picker references metadata and setTheme wiring', () => {
   assert.ok(render.includes('Theme'));
   assert.ok(render.includes('window.Themes'));
   assert.ok(render.includes('App.setTheme('));
+  assert.ok(render.includes('theme-chip'));
 });
