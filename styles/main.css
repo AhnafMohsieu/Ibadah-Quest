@@ -21,12 +21,28 @@
   --purple: #a855f7;
   --border: rgba(31,41,55,0.08);
   --shadow: 0 8px 32px rgba(180,90,120,0.12);
-  --radius: 16px;
-  --radius-sm: 12px;
+  --radius: 18px;
+  --radius-sm: 14px;
+  line-height: 1.6;
   --font: 'Sora', system-ui, -apple-system, 'Noto Color Emoji', 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Emoji', 'Twemoji Mozilla', sans-serif;
   --font-arabic: 'Noto Naskh Arabic', 'Amiri', serif;
   --font-heading: 'Sora', system-ui, sans-serif;
   --font-emoji: 'Noto Color Emoji', 'Noto Emoji', 'Apple Color Emoji', 'Segoe UI Emoji', 'Twemoji Mozilla', 'EmojiOne Color', 'Android Emoji';
+}
+
+/* ── Global Theme Transitions & Polish ── */
+*, *::before, *::after {
+  transition: background 300ms cubic-bezier(0.4, 0, 0.2, 1), color 300ms cubic-bezier(0.4, 0, 0.2, 1), border-color 300ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+.prayer-card, .deed-card, .quest-card, .shop-card, .ach-card {
+  transition: transform 200ms ease, box-shadow 200ms ease;
+}
+.prayer-card:active, .deed-card:active, .quest-card:active, .nav-tab:active {
+  transform: scale(0.97);
+}
+.prayer-card:hover, .deed-card:hover, .quest-card:hover {
+  transform: scale(1.02);
+  box-shadow: 0 12px 28px rgba(0,0,0,0.15);
 }
 
 html[data-theme="serene"] {
@@ -58,6 +74,41 @@ html[data-theme="midnight"] {
   --green: #16a34a; --orange: #d97706; --red: #dc2626; --purple: #6a78b8;
   --border: rgba(31,41,55,0.08); --shadow: 0 8px 32px rgba(0,0,0,0.12); --glass: rgba(255,255,255,0.62); --glass-blur: 16px;
 }
+
+/* ── Geometric Pattern Backgrounds ── */
+.geometric-bg { background-size: 80px 80px; background-repeat: repeat; }
+
+/* Rose (default) — light floral motif */
+html[data-theme="light"] .geometric-bg,
+html:not([data-theme]) .geometric-bg {
+  background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='80' height='80'><circle cx='40' cy='40' r='3' fill='%23f43f5e' opacity='0.06'/><circle cx='40' cy='40' r='18' fill='none' stroke='%23f43f5e' stroke-width='0.3' opacity='0.04'/></svg>");
+  background-size: 80px 80px;
+}
+
+/* Serene — leaf/green */
+html[data-theme="serene"] .geometric-bg {
+  background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 60'><rect x='28' y='28' width='4' height='4' fill='%234c7a4a' opacity='0.06'/></svg>");
+  background-size: 60px 60px;
+}
+
+/* Royal — diamond */
+html[data-theme="royal"] .geometric-bg {
+  background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 60'><polygon points='30,15 45,30 30,45 15,30' fill='none' stroke='%237c5cf0' stroke-width='0.5' opacity='0.06'/></svg>");
+  background-size: 60px 60px;
+}
+
+/* Sand — geometric/net */
+html[data-theme="sand"] .geometric-bg {
+  background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'><line x1='0' y1='0' x2='40' y2='40' stroke='%23c98a2e' stroke-width='0.3' opacity='0.05'/><line x1='40' y1='0' x2='0' y2='40' stroke='%23c98a2e' stroke-width='0.3' opacity='0.05'/></svg>");
+  background-size: 40px 40px;
+}
+
+/* Midnight — celestial/stars */
+html[data-theme="midnight"] .geometric-bg {
+  background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 80 80'><circle cx='20' cy='20' r='1.5' fill='%233fa7c8' opacity='0.08'/><circle cx='60' cy='40' r='0.8' fill='%233fa7c8' opacity='0.06'/><circle cx='25' cy='65' r='1.2' fill='%233fa7c8' opacity='0.07'/><circle cx='55' cy='15' r='0.6' fill='%233fa7c8' opacity='0.05'/></svg>");
+  background-size: 80px 88px;
+}
+
 /* ── Reusable Shell Helpers ── */
 .pattern-surface { background: transparent; }
 .arch { border-radius: var(--radius) var(--radius) 6px 6px; }
@@ -261,7 +312,7 @@ body {
 @keyframes fadeIn { from{opacity:0; transform:translateY(10px)} to{opacity:1; transform:translateY(0)} }
 
 /* ── Section Titles ── */
-.section-title { font-family: var(--font-heading); font-size: 1.1rem; font-weight: 600; color: var(--text); margin: 32px 0 18px; display: flex; align-items: center; gap: 12px; letter-spacing: 1.5px; text-transform: uppercase; }
+.section-title { font-family: var(--font-heading); font-size: 1.1rem; font-weight: 600; color: var(--text); margin: 32px 0 12px; display: flex; align-items: center; gap: 12px; letter-spacing: 0.5px; text-transform: uppercase; border-bottom: 2px solid var(--gold); padding-bottom: 4px; }
 .section-title::after { content: ''; flex: 1; height: 1px; background: linear-gradient(90deg, rgba(244,63,94,0.4), rgba(244,63,94,0.04)); }
 
 /* ── Card Grid ── */

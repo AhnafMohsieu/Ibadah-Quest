@@ -162,3 +162,10 @@ test('theme-accent is defined as a CSS var and used in component styles', () => 
   assert.ok(css.includes('--gold:'), '--gold CSS var not defined');
   assert.ok(css.includes('var(--gold)'), 'theme var not used anywhere in CSS');
 });
+
+test('theme families have geometric pattern and animation transitions in CSS', () => {
+  assert.ok(css.includes('transition: background 300ms'), 'crossfade transition missing');
+  assert.ok(css.includes('transition: transform 200ms'), 'card hover transition missing');
+  assert.ok(css.includes('.geometric-bg'), 'geometric pattern container missing');
+  assert.ok(css.includes('html[data-theme="serene"]') && css.includes('pattern'), 'geometric pattern for serene missing');
+});
