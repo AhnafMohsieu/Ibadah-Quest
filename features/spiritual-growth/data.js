@@ -38,16 +38,7 @@ const FEATURE_STAGES = {
     { name: 'Paradise Island', icon: '🏝️', xp: 18000 },
     { name: 'Jannah', icon: '🌴', xp: 45000 }
   ],
-  mountain: [
-    { name: 'Base', icon: '⛰️', xp: 0 },
-    { name: 'Foothill', icon: '🏔️', xp: 350 },
-    { name: 'Trail', icon: '🥾', xp: 1000 },
-    { name: 'Cliff', icon: '🧗', xp: 2800 },
-    { name: 'Summit', icon: '🏔️', xp: 8000 },
-    { name: 'Cave', icon: '🕳️', xp: 20000 },
-    { name: 'Divine Light', icon: '✨', xp: 50000 }
-  ],
-  heart: [
+  keys: [
     { name: 'Stone', icon: '🪨', xp: 0 },
     { name: 'Clay', icon: '🧱', xp: 400 },
     { name: 'Copper', icon: '🔶', xp: 1200 },
@@ -73,15 +64,6 @@ const FEATURE_STAGES = {
     { name: '7 Keys', icon: '🔐', xp: 13000 },
     { name: '9 Keys', icon: '🔐', xp: 32000 },
     { name: '10 Keys', icon: '🚪', xp: 80000 }
-  ],
-  desert: [
-    { name: 'Sand', icon: '🏜️', xp: 0 },
-    { name: 'Pebbles', icon: '🪨', xp: 700 },
-    { name: 'Cactus', icon: '🌵', xp: 2200 },
-    { name: 'Bush', icon: '🌿', xp: 6000 },
-    { name: 'Trees', icon: '🌳', xp: 16000 },
-    { name: 'Flowers', icon: '🌸', xp: 40000 },
-    { name: 'Oasis', icon: '🏝️', xp: 100000 }
   ],
   ramadan: [
     { name: 'Day 1', icon: '🌙', xp: 0 },
@@ -138,10 +120,8 @@ const FEATURE_ICONS = {
   keys: '<i class="fa-solid fa-key"></i>',
   mosque: '<i class="fa-solid fa-mosque"></i>',
   boat: '<i class="fa-solid fa-sailboat"></i>',
-  mountain: '<i class="fa-solid fa-mountain"></i>',
   heart: '<i class="fa-solid fa-heart"></i>',
   armor: '<i class="fa-solid fa-shield-halved"></i>',
-  desert: '<i class="fa-solid fa-pagelines"></i>',
   ramadan: '<i class="fa-solid fa-moon"></i>',
   laylat: '<i class="fa-solid fa-star"></i>'
 };
@@ -152,10 +132,8 @@ const FEATURE_LABELS = {
   keys: 'Paradise Keys',
   mosque: 'Mosque Builder',
   boat: 'Journey Boat',
-  mountain: 'Mount Nur Climber',
   heart: 'Heart Refinement',
   armor: 'Spiritual Armor',
-  desert: 'Desert Garden',
   ramadan: 'Ramadan Tracker',
   laylat: 'Laylat al-Qadr Meter'
 };
