@@ -151,3 +151,9 @@ test('tab controller: nav buttons dispatch switchTab', () => {
   assert.ok(actions.includes('renderTab'), 'renderTab dispatch missing');
   assert.ok(render.includes('renderTop'), 'renderTop function missing');
 });
+
+test('intro overlay uses CSS vars for theme accent', () => {
+  assert.ok(css.includes('.intro-bismillah'), 'intro-bismillah class missing');
+  assert.ok(css.includes('.intro-btn'), 'intro-btn class missing');
+  assert.ok(css.includes('var(--gold)'), 'intro must reference a theme CSS var');
+});
