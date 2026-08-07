@@ -2262,8 +2262,7 @@ Object.keys(NEW_POOLS).forEach(k => {
 
     const t = today();
     if (S.lad !== t) { S.lad=t; if(S.ab&&S.ab.exp<t) S.ab=null; recalc(); saveState(); }
-    genDQ(); genWQ(); genMQ(); genYQ(); genLQ(); refreshContent(); recalc(); checkQ(); checkA(); S.lv=lvFrom(S.xp); saveState(); initCalView(); renderTab('home'); renderTopBar();
-    try { if (window.maybeShowMuhasabah) window.maybeShowMuhasabah(); } catch(e) { console.warn('Muhasabah trigger failed:', e.message); }
+    genDQ(); genWQ(); genMQ(); genYQ(); genLQ(); refreshContent(); recalc(); checkQ(); S.lv=lvFrom(S.xp); saveState(); initCalView(); renderTab('home'); renderTopBar();
   }
 
   function init() {
