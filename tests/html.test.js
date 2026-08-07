@@ -157,3 +157,8 @@ test('intro overlay uses CSS vars for theme accent', () => {
   assert.ok(css.includes('.intro-btn'), 'intro-btn class missing');
   assert.ok(css.includes('var(--gold)'), 'intro must reference a theme CSS var');
 });
+
+test('theme-accent is defined as a CSS var and used in component styles', () => {
+  assert.ok(css.includes('--gold:'), '--gold CSS var not defined');
+  assert.ok(css.includes('var(--gold)'), 'theme var not used anywhere in CSS');
+});

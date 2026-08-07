@@ -27,7 +27,7 @@
     }
     if (stage === 7) {
       scene += `<circle cx="108" cy="${waterY-25}" r="18" fill="#FFD700" opacity="0.35"/>`;
-      scene += `<circle cx="108" cy="${waterY-25}" r="10" fill="#fb7185" opacity="0.5"/>`;
+      scene += `<circle cx="108" cy="${waterY-25}" r="10" fill="var(--gold-light)" opacity="0.5"/>`;
     }
     return `<svg class="spiritual-svg" viewBox="0 0 120 160">
       <rect width="120" height="160" fill="#87CEEB" rx="10"/>

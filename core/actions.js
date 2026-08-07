@@ -214,7 +214,7 @@
       transliteration: roman,
       english,
       target: target || 33,
-      color: '#f43f5e'
+      color: 'var(--gold)'
     });
     saveState();
     renderDhikrCounter();

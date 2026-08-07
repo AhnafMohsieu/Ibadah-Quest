@@ -392,7 +392,7 @@ body {
 .ach-card.tier-gold.unlocked { border-color: var(--gold-dark); background: rgba(244,63,94,0.1); box-shadow: 0 0 12px rgba(244,63,94,0.15); }
 .ach-card.tier-platinum.unlocked { border-color: #94a3b8; background: rgba(148,163,184,0.14); box-shadow: 0 0 12px rgba(148,163,184,0.15); }
 .ach-card.tier-diamond.unlocked { border-color: #22d3ee; background: rgba(34,211,238,0.08); box-shadow: 0 0 12px rgba(34,211,238,0.15); }
-.ach-card.tier-legendary.unlocked { border-color: #fb7185; background: rgba(251,113,133,0.1); box-shadow: 0 0 12px rgba(251,113,133,0.15); }
+.ach-card.tier-legendary.unlocked { border-color: var(--gold); background: var(--bg-accent); box-shadow: var(--shadow); }
 .ach-card.tier-mythic.unlocked { border-color: #c084fc; background: rgba(192,132,252,0.1); box-shadow: 0 0 16px rgba(192,132,252,0.18); }
 .ach-card.tier-jahannam.unlocked { border-color: #ef4444; background: rgba(239,68,68,0.1); box-shadow: 0 0 20px rgba(239,68,68,0.22); }
 .ach-card.tier-jannah.unlocked { border-color: #fbbf24; background: linear-gradient(135deg, rgba(251,191,36,0.12), rgba(244,63,94,0.08)); box-shadow: 0 0 24px rgba(251,191,36,0.25); }

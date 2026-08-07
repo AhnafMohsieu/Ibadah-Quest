@@ -9,8 +9,8 @@
   }
   function lanternSVG(stage, progress) {
     const glow = Math.max(0.05, progress * 0.85);
-    const gold = '#f43f5e';
-    const warm = '#fb7185';
+    const gold = 'var(--gold)';
+    const warm = 'var(--gold-light)';
     const bodyX = 45, bodyY = 35, bodyW = 30, bodyH = 80;
     const cx = 60, cy = 75;
 

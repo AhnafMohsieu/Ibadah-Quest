@@ -10,7 +10,7 @@
   function armorSVG(stage) {
     let parts = '';
     if (stage >= 1) {
-      parts += `<rect x="35" y="95" width="50" height="10" fill="#f43f5e" rx="2"/>`;
+      parts += `<rect x="35" y="95" width="50" height="10" fill="var(--gold)" rx="2"/>`;
       parts += `<circle cx="60" cy="100" r="5" fill="#FFD700"/>`;
     }
     if (stage >= 2) {
@@ -18,15 +18,15 @@
       parts += `<rect x="72" y="122" width="16" height="20" fill="#8B4513" rx="3"/>`;
     }
     if (stage >= 3) {
-      parts += `<ellipse cx="60" cy="30" rx="18" ry="14" fill="#f43f5e"/>`;
-      parts += `<rect x="56" y="40" width="8" height="6" fill="#f43f5e"/>`;
+      parts += `<ellipse cx="60" cy="30" rx="18" ry="14" fill="var(--gold)"/>`;
+      parts += `<rect x="56" y="40" width="8" height="6" fill="var(--gold)"/>`;
     }
     if (stage >= 4) {
-      parts += `<rect x="42" y="52" width="36" height="38" fill="#f43f5e" opacity="0.7" rx="5"/>`;
+      parts += `<rect x="42" y="52" width="36" height="38" fill="var(--gold)" opacity="0.7" rx="5"/>`;
     }
     if (stage >= 5) {
       parts += `<ellipse cx="24" cy="70" rx="14" ry="18" fill="#FFD700"/>`;
-      parts += `<ellipse cx="24" cy="70" rx="9" ry="14" fill="#f43f5e"/>`;
+      parts += `<ellipse cx="24" cy="70" rx="9" ry="14" fill="var(--gold)"/>`;
     }
     if (stage >= 6) {
       parts += `<rect x="93" y="42" width="4" height="55" fill="#C0C0C0" rx="2"/>`;

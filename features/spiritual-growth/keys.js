@@ -7,9 +7,9 @@
     const d = new Date();
     return CAPTIONS[Math.floor(d.getTime() / 86400000) % CAPTIONS.length];
   }
-  const gold = '#f43f5e';
+  const gold = 'var(--gold)';
   const silver = '#C0C0C0';
-  const lightGold = '#fb7185';
+  const lightGold = 'var(--gold-light)';
 
   // Key counts per stage: 1, 2, 3, 5, 7, 9, 10
   const KEY_COUNTS = [1, 2, 3, 5, 7, 9, 10];
