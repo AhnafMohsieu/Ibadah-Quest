@@ -12,7 +12,11 @@
     if (!name || name === 'light') document.documentElement.removeAttribute('data-theme');
     else document.documentElement.setAttribute('data-theme', name);
     updateMeta();
-    window.renderAll();
+    updateTopBar();
+    const navBtns = document.querySelectorAll('.nav-tab');
+    const active = [...navBtns].find(b => b.classList.contains('active'));
+    const tab = active ? active.getAttribute('data-tab') : 'home';
+    window.renderTab(tab);
   }
   function checkLevelUp(oldLv) { if (S.lv > oldLv) { const t = lvTitle(S.lv); levelUpToast(S.lv, t); } }
   function toggleP(id) { const l=tlog(); const w=!!l.p[id]; const oldLv=S.lv; l.p[id]=!w; const pr=PRAYERS.find(x=>x.id===id); if(!pr) return; let xp=pr.xp; if(isFri()&&id==='dhuhr'&&pr.fri) xp=pr.fri.xp; if(S.ab&&S.ab.exp>=today()) xp*=2; if(!w){ S.tp++; S.xp+=xp; if(isFri()&&id==='dhuhr') S.tj=(S.tj||0)+1; playSound('pop'); } else { S.tp=Math.max(0,S.tp-1); S.xp=Math.max(0,S.xp-xp); if(isFri()&&id==='dhuhr') S.tj=Math.max(0,(S.tj||0)-1); } S.lv=lvFrom(S.xp); checkLevelUp(oldLv); recalc(); checkQ(); checkA(); saveState(); renderDynamic(); }
@@ -2170,6 +2174,55 @@ Object.keys(NEW_POOLS).forEach(k => {
     }
   }
 
+  function switchTab(name) {
+    const navBtns = document.querySelectorAll('.nav-tab');
+    navBtns.forEach(b => b.classList.toggle('active', b.getAttribute('data-tab') === name));
+    const content = document.getElementById('tabContent');
+    if (content) { content.classList.add('fading'); setTimeout(() => content.classList.remove('fading'), 60); }
+    window.renderTab(name);
+  }
+
+  function renderTab(name) {
+    const map = {
+      home: ['profileArea'],
+      quests: ['questArea','achArea'],
+      stats: ['statsArea'],
+      growth: ['achArea'],
+      profile: ['profileArea']
+    };
+    const allIds = ['profileArea','statsArea','questArea','achArea','shopArea','volArea','debtArea','timerArea','muhasabahArea'];
+    allIds.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.style.display = (map[name] || []).includes(id) ? '' : 'none';
+    });
+    if (name === 'home') {
+      window.renderPrayers(); window.renderVol(); window.renderDeeds(); window.renderBonus(); window.renderTip();
+      window.renderTopBar();
+    } else if (name === 'quests') {
+      window.renderQ(); window.renderAch();
+    } else if (name === 'stats') {
+      if (window.Dashboard && typeof window.Dashboard.renderInsights === 'function') window.Dashboard.renderInsights();
+    } else if (name === 'growth') {
+      if (window.renderGarden) window.renderGarden();
+      if (window.renderSpiritualGrowthTab) window.renderSpiritualGrowthTab();
+      if (window.renderBoat) window.renderBoat();
+    } else if (name === 'profile') {
+      window.renderProfile();
+    }
+    updateTopBar();
+  }
+
+  function updateTopBar() {
+    const lv = document.getElementById('tbLevel');
+    const title = document.getElementById('tbTitle');
+    const xp = document.getElementById('tbXP');
+    const str = document.getElementById('tbStreak');
+    if (lv) lv.textContent = `Lv ${S.lv}`;
+    if (title) title.textContent = lvTitle(S.lv);
+    if (xp) xp.textContent = `⚡ ${(S.xp||0).toLocaleString()} XP`;
+    if (str) str.textContent = `🔥 ${S.cs||0}`;
+  }
+
   function initApp() {
 
   // Setup names_main subtabs
@@ -2209,7 +2262,7 @@ Object.keys(NEW_POOLS).forEach(k => {
 
     const t = today();
     if (S.lad !== t) { S.lad=t; if(S.ab&&S.ab.exp<t) S.ab=null; recalc(); saveState(); }
-    genDQ(); genWQ(); genMQ(); genYQ(); genLQ(); refreshContent(); recalc(); checkQ(); checkA(); S.lv=lvFrom(S.xp); saveState(); initCalView(); renderAll();
+    genDQ(); genWQ(); genMQ(); genYQ(); genLQ(); refreshContent(); recalc(); checkQ(); checkA(); S.lv=lvFrom(S.xp); saveState(); initCalView(); renderTab('home'); renderTopBar();
     try { if (window.maybeShowMuhasabah) window.maybeShowMuhasabah(); } catch(e) { console.warn('Muhasabah trigger failed:', e.message); }
   }
 
@@ -2252,11 +2305,13 @@ Object.keys(NEW_POOLS).forEach(k => {
       playQuranVerse, playSurah, stopSurah, setQuranReciter, playJuz, updateJuzButton,
       globalSearch, executeSearch,
       calPrevMonth, calNextMonth, calGoToday, selectAvatar, toggleAvatarPicker,
-      setTheme
+      setTheme,
+      switchTab
     };
     window.checkA = checkA;
     window.playSound = playSound;
     window.levelUpToast = levelUpToast;
+    App.switchTab = switchTab;
     console.log('✅ Ibadah Quest initialized. window.App is set.');
   }
 

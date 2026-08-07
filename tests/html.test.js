@@ -10,6 +10,7 @@ const tabs = fs.readFileSync(path.join(root, 'data', 'tab-groups.js'), 'utf8');
 const css = fs.readFileSync(path.join(root, 'styles', 'main.css'), 'utf8');
 const render = fs.readFileSync(path.join(root, 'render', 'render.js'), 'utf8');
 const spiritual = fs.readFileSync(path.join(root, 'features', 'spiritual-growth', 'data.js'), 'utf8');
+const actions = fs.readFileSync(path.join(root, 'core', 'actions.js'), 'utf8');
 
 test('index.html has the three feature containers', () => {
   assert.ok(html.includes('id="gardenArea"'));
@@ -141,4 +142,12 @@ test('app shell has bottom nav bar with five tabs', () => {
   assert.ok(html.includes('data-tab="growth"'), 'growth tab missing');
   assert.ok(html.includes('data-tab="profile"'), 'profile tab missing');
   assert.ok(html.includes('id="tabContent"'), 'tab content container missing');
+});
+
+test('tab controller: nav buttons dispatch switchTab', () => {
+  assert.ok(actions.includes('switchTab'), 'switchTab function missing');
+  assert.ok(actions.includes("App.switchTab"), 'App.switchTab export missing');
+  assert.ok(actions.includes("getAttribute('data-tab')"), 'nav tab handler missing');
+  assert.ok(actions.includes('renderTab'), 'renderTab dispatch missing');
+  assert.ok(render.includes('renderTop'), 'renderTop function missing');
 });

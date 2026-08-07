@@ -1516,6 +1516,18 @@
     });
   }
 
+  function renderTopBar() {
+    const lv = document.getElementById('tbLevel');
+    const title = document.getElementById('tbTitle');
+    const xp = document.getElementById('tbXP');
+    const streak = document.getElementById('tbStreak');
+    if (lv) lv.textContent = `Lv ${S.lv}`;
+    if (title) title.textContent = lvTitle(S.lv);
+    if (xp) xp.textContent = `⚡ ${(S.xp||0).toLocaleString()} XP`;
+    if (streak) streak.textContent = `🔥 ${S.cs||0}`;
+  }
+  window.renderTopBar = renderTopBar;
+
   window.renderDynamic = renderDynamic;
   window.renderStatic = renderStatic;
   window.renderAll = renderAll;

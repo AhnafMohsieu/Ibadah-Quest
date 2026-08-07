@@ -286,11 +286,11 @@
   </main>
 
   <nav class="bottom-nav">
-    <button class="nav-tab active" data-tab="home" aria-label="Home">🕌<span class="nav-label">Home</span></button>
-    <button class="nav-tab" data-tab="quests" aria-label="Quests">⚔️<span class="nav-label">Quests</span></button>
-    <button class="nav-tab" data-tab="stats" aria-label="Stats">📊<span class="nav-label">Stats</span></button>
-    <button class="nav-tab" data-tab="growth" aria-label="Growth">🌱<span class="nav-label">Growth</span></button>
-    <button class="nav-tab" data-tab="profile" aria-label="Profile">⚙️<span class="nav-label">Profile</span></button>
+    <button class="nav-tab active" data-tab="home" aria-label="Home" onclick="App.switchTab('home')">🕌<span class="nav-label">Home</span></button>
+    <button class="nav-tab" data-tab="quests" aria-label="Quests" onclick="App.switchTab('quests')">⚔️<span class="nav-label">Quests</span></button>
+    <button class="nav-tab" data-tab="stats" aria-label="Stats" onclick="App.switchTab('stats')">📊<span class="nav-label">Stats</span></button>
+    <button class="nav-tab" data-tab="growth" aria-label="Growth" onclick="App.switchTab('growth')">🌱<span class="nav-label">Growth</span></button>
+    <button class="nav-tab" data-tab="profile" aria-label="Profile" onclick="App.switchTab('profile')">⚙️<span class="nav-label">Profile</span></button>
   </nav>
 </div>
 
