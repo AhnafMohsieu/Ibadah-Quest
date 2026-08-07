@@ -2163,10 +2163,30 @@ Object.keys(NEW_POOLS).forEach(k => {
     grid.innerHTML = cat.tabs.map((p, i) => `<button class="t2-btn ${i===0?'active':''}" onclick="App.activateTab('${p.id}', this)"><span>${p.icon}</span> ${p.label}</button>`).join('');
     if (cat.tabs.length > 0) activateTab(cat.tabs[0].id, grid.firstElementChild);
   }
+  function getSectionPanels(sectionName) {
+    const sections = {
+      home: ['panel-today','panel-timer','panel-journeys','panel-morning','panel-evening','panel-dhikr','panel-duas','panel-quran','panel-wudu','panel-jumuah','panel-salah','panel-fasting','panel-healthlog','panel-finance','panel-mood'],
+      quests: ['panel-quests'],
+      stats: ['panel-stats'],
+      growth: ['panel-progress'],
+      profile: ['panel-profile','panel-trophies','panel-rewards','panel-allah_names','panel-prophet_names','panel-scholars_names']
+    };
+    return sections[sectionName] || null;
+  }
   function activateTab(tabId, btn) {
     document.querySelectorAll('.t2-btn').forEach(b => b.classList.remove('active'));
     if (btn) btn.classList.add('active');
-    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    const activeSection = document.querySelector('.nav-tab.active');
+    const sectionName = activeSection ? activeSection.getAttribute('data-tab') : null;
+    const sectionPanels = sectionName ? getSectionPanels(sectionName) : null;
+    if (sectionPanels) {
+      sectionPanels.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.classList.remove('active');
+      });
+    } else {
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    }
     const panel = document.getElementById('panel-' + tabId);
     if (panel) panel.classList.add('active');
     if (tabId === 'hadith' && typeof HADITH_COLLECTIONS_DATA === 'undefined') {
@@ -2183,18 +2203,17 @@ Object.keys(NEW_POOLS).forEach(k => {
   }
 
   function renderTab(name) {
-    const map = {
-      home: ['profileArea'],
-      quests: ['questArea','achArea'],
-      stats: ['statsArea'],
-      growth: ['achArea'],
-      profile: ['profileArea']
+    const panelMap = {
+      home: 'panel-today',
+      quests: 'panel-quests',
+      stats: 'panel-stats',
+      growth: 'panel-progress',
+      profile: 'panel-profile'
     };
-    const allIds = ['profileArea','statsArea','questArea','achArea','shopArea','volArea','debtArea','timerArea','muhasabahArea'];
-    allIds.forEach(id => {
-      const el = document.getElementById(id);
-      if (el) el.style.display = (map[name] || []).includes(id) ? '' : 'none';
-    });
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    const panelId = panelMap[name] || 'panel-today';
+    const panel = document.getElementById(panelId);
+    if (panel) panel.classList.add('active');
     if (name === 'home') {
       window.renderPrayers(); window.renderVol(); window.renderDeeds(); window.renderBonus(); window.renderTip();
       window.renderTopBar();
