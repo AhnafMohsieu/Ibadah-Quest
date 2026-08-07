@@ -16,7 +16,7 @@
     const navBtns = document.querySelectorAll('.nav-tab');
     const active = [...navBtns].find(b => b.classList.contains('active'));
     const tab = active ? active.getAttribute('data-tab') : 'home';
-    window.renderTab(tab);
+    renderTab(tab);
   }
   function checkLevelUp(oldLv) { if (S.lv > oldLv) { const t = lvTitle(S.lv); levelUpToast(S.lv, t); } }
   function toggleP(id) { const l=tlog(); const w=!!l.p[id]; const oldLv=S.lv; l.p[id]=!w; const pr=PRAYERS.find(x=>x.id===id); if(!pr) return; let xp=pr.xp; if(isFri()&&id==='dhuhr'&&pr.fri) xp=pr.fri.xp; if(S.ab&&S.ab.exp>=today()) xp*=2; if(!w){ S.tp++; S.xp+=xp; if(isFri()&&id==='dhuhr') S.tj=(S.tj||0)+1; playSound('pop'); } else { S.tp=Math.max(0,S.tp-1); S.xp=Math.max(0,S.xp-xp); if(isFri()&&id==='dhuhr') S.tj=Math.max(0,(S.tj||0)-1); } S.lv=lvFrom(S.xp); checkLevelUp(oldLv); recalc(); checkQ(); checkA(); saveState(); renderDynamic(); }
@@ -2199,7 +2199,7 @@ Object.keys(NEW_POOLS).forEach(k => {
     navBtns.forEach(b => b.classList.toggle('active', b.getAttribute('data-tab') === name));
     const content = document.getElementById('tabContent');
     if (content) { content.classList.add('fading'); setTimeout(() => content.classList.remove('fading'), 60); }
-    window.renderTab(name);
+    renderTab(name);
   }
 
   function renderTab(name) {
