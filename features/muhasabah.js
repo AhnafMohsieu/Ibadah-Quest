@@ -83,14 +83,21 @@
   }
   function maybeShowMuhasabah() {
     try {
-      if (isFri() && S.muhWeek !== ws()) openMuhasabah();
+      if (isFri() && S.muhWeek !== ws()) {
+        const el = document.getElementById('muhasabahEntry');
+        if (el) {
+          const btn = el.querySelector('.muh-entry');
+          if (btn) btn.classList.add('muh-pending');
+        }
+      }
     } catch (e) { console.warn('Muhasabah trigger failed:', e.message); }
   }
   function renderMuhasabahEntry() {
     try {
       const el = document.getElementById('muhasabahEntry');
       if (!el) return;
-      el.innerHTML = '<button class="muh-entry" onclick="App.openMuhasabah()">📝 Weekly Reflection</button>';
+      const pending = isFri() && S.muhWeek !== ws();
+      el.innerHTML = `<button class="muh-entry${pending ? ' muh-pending' : ''}" onclick="App.openMuhasabah()">📝 Weekly Reflection</button>`;
     } catch (e) { console.warn('Render Muhasabah entry failed:', e.message); }
   }
   window.muhasabahMetrics = muhasabahMetrics;
