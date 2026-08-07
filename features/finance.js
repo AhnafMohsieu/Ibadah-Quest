@@ -1,4 +1,7 @@
 (function() {
+  const AMOUNTS = [5, 10, 25, 50, 100];
+  let _pendingAction = null;
+
   function getTodayFinance() {
     const t = today();
     if (!S.financeLog) S.financeLog = {};
@@ -6,37 +9,72 @@
     return S.financeLog[t];
   }
 
-  function logIncome(amount) {
+  function logIncome(source) {
+    _pendingAction = { type: 'income', source };
+    showAmountPicker();
+  }
+
+  function logExpense(category) {
+    _pendingAction = { type: 'expense', category };
+    showAmountPicker();
+  }
+
+  function logCharity(type) {
+    _pendingAction = { type: 'charity', type: type };
+    showAmountPicker();
+  }
+
+  function pickAmount(amount) {
+    if (!_pendingAction) return;
     const f = getTodayFinance();
-    f.income = Math.max(0, amount);
+    const p = _pendingAction;
+    if (p.type === 'income') {
+      f.income = (f.income || 0) + amount;
+    } else if (p.type === 'expense') {
+      f.expenses[p.category] = (f.expenses[p.category] || 0) + amount;
+    } else if (p.type === 'charity') {
+      f.charity[p.type] = (f.charity[p.type] || 0) + amount;
+      const xp = Math.floor(amount / 10);
+      if (xp > 0) { S.xp += xp; S.lv = lvFrom(S.xp); }
+    }
+    _pendingAction = null;
+    saveState();
+    hideAmountPicker();
+    renderFinanceTab();
+  }
+
+  function removeEntry(type, key) {
+    const f = getTodayFinance();
+    if (type === 'charity') {
+      const amt = f.charity[key] || 0;
+      const xp = Math.floor(amt / 10);
+      f.charity[key] = 0;
+      if (xp > 0) { S.xp = Math.max(0, S.xp - xp); S.lv = lvFrom(S.xp); }
+    } else if (type === 'expense') {
+      f.expenses[key] = 0;
+    }
     saveState();
     renderFinanceTab();
   }
 
-  function logExpense(category, amount) {
-    const f = getTodayFinance();
-    f.expenses[category] = (f.expenses[category] || 0) + amount;
-    saveState();
-    renderFinanceTab();
+  function showAmountPicker() {
+    const ov = document.getElementById('toastOverlay');
+    if (!ov) return;
+    let h = '<div class="amount-picker-box"><div class="amount-picker-title">Choose Amount</div><div class="amount-picker-grid">';
+    AMOUNTS.forEach(a => { h += `<button class="amount-pick-btn" onclick="financeTracker.pickAmount(${a})">${a}</button>`; });
+    h += '</div><button class="amount-pick-cancel" onclick="financeTracker.cancelPick()">Cancel</button></div>';
+    ov.innerHTML = h;
+    ov.style.display = 'flex';
+    ov.classList.add('show');
+    ov.style.pointerEvents = 'auto';
   }
 
-  function logCharity(type, amount) {
-    const f = getTodayFinance();
-    f.charity[type] = (f.charity[type] || 0) + amount;
-    const xp = Math.floor(amount / 10);
-    if (xp > 0) { S.xp += xp; S.lv = lvFrom(S.xp); }
-    saveState();
-    renderFinanceTab();
+  function hideAmountPicker() {
+    const ov = document.getElementById('toastOverlay');
+    if (ov) { ov.classList.remove('show'); ov.style.display = 'none'; ov.innerHTML = ''; ov.style.pointerEvents = 'none'; }
   }
 
-  function removeCharity(type, amount) {
-    const f = getTodayFinance();
-    const xp = Math.floor(amount / 10);
-    f.charity[type] = Math.max(0, (f.charity[type] || 0) - amount);
-    if (xp > 0) { S.xp = Math.max(0, S.xp - xp); S.lv = lvFrom(S.xp); }
-    saveState();
-    renderFinanceTab();
-  }
+  function cancelPick() { _pendingAction = null; hideAmountPicker(); }
 
   function getTotalCharity() {
     let total = 0;
@@ -48,34 +86,81 @@
     return total;
   }
 
+  function getWeekData() {
+    const data = [];
+    const now = new Date();
+    for (let i = 6; i >= 0; i--) {
+      const d = new Date(now);
+      d.setDate(d.getDate() - i);
+      const key = d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+      const dayNames = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+      const entry = (S.financeLog || {})[key] || { income:0, expenses:{}, charity:{} };
+      const exp = Object.values(entry.expenses || {}).reduce((a,b)=>a+b, 0);
+      const chr = Object.values(entry.charity || {}).reduce((a,b)=>a+b, 0);
+      data.push({ day: dayNames[d.getDay()], income: entry.income || 0, expense: exp, charity: chr });
+    }
+    return data;
+  }
+
   function renderFinanceTab() {
     const el = document.getElementById('financeArea');
     if (!el) return;
     const f = getTodayFinance();
-    const charityTypes = FINANCE_PROMPTS.filter(p => p.id !== 'zakat_fitr');
-    let h = '<div class="section-title">💰 Finance & Charity</div>';
-    h += '<div class="finance-cards">';
-
-    h += '<div class="finance-card">';
-    h += '<div class="finance-card-header">Today\'s Summary</div>';
-    h += `<div class="finance-stat">Income: <span class="finance-amount">${f.income || 0}</span></div>`;
     const totalExpense = Object.values(f.expenses || {}).reduce((a, b) => a + b, 0);
-    h += `<div class="finance-stat">Expenses: <span class="finance-amount">${totalExpense}</span></div>`;
     const totalCharity = Object.values(f.charity || {}).reduce((a, b) => a + b, 0);
-    h += `<div class="finance-stat">Charity: <span class="finance-amount">${totalCharity}</span></div>`;
+    const balance = (f.income || 0) - totalExpense - totalCharity;
+
+    let h = '<div class="section-title">💰 Finance & Charity</div>';
+
+    // Balance overview card
+    h += '<div class="fin-balance-card">';
+    h += '<div class="fin-balance-label">Today\'s Balance</div>';
+    h += `<div class="fin-balance-amount ${balance >= 0 ? 'pos' : 'neg'}">${balance >= 0 ? '+' : ''}${balance}</div>`;
+    h += '<div class="fin-balance-row">';
+    h += `<div class="fin-balance-item"><span class="fin-dot income"></span>Income <b>${f.income || 0}</b></div>`;
+    h += `<div class="fin-balance-item"><span class="fin-dot expense"></span>Expenses <b>${totalExpense}</b></div>`;
+    h += `<div class="fin-balance-item"><span class="fin-dot charity"></span>Charity <b>${totalCharity}</b></div>`;
+    h += '</div></div>';
+
+    // Weekly chart
+    const week = getWeekData();
+    const maxVal = Math.max(1, ...week.map(d => Math.max(d.income, d.expense + d.charity)));
+    h += '<div class="fin-week">';
+    h += '<div class="fin-week-title">This Week</div>';
+    h += '<div class="fin-week-chart">';
+    week.forEach(d => {
+      const incH = Math.round((d.income / maxVal) * 60);
+      const expH = Math.round(((d.expense + d.charity) / maxVal) * 60);
+      h += `<div class="fin-week-col">
+        <div class="fin-week-bars">
+          <div class="fin-bar income" style="height:${incH}px"></div>
+          <div class="fin-bar expense" style="height:${expH}px"></div>
+        </div>
+        <div class="fin-week-day">${d.day}</div>
+      </div>`;
+    });
+    h += '</div>';
+    h += '<div class="fin-week-legend"><span class="fin-dot income"></span>Income <span class="fin-dot expense"></span>Spent</div>';
     h += '</div>';
 
-    h += '<div class="finance-card">';
-    h += '<div class="finance-card-header">Total Charity</div>';
-    h += `<div class="finance-stat">All time: <span class="finance-amount">${getTotalCharity()}</span></div>`;
-    h += '</div>';
+    // Income section
+    h += '<div class="section-title" style="margin-top:16px">💵 Log Income</div>';
+    h += '<div class="finance-grid">';
+    INCOME_SOURCES.forEach(s => {
+      h += `<div class="finance-item" onclick="financeTracker.logIncome('${s.id}')">
+        <div class="finance-item-icon">${s.icon}</div>
+        <div class="finance-item-label">${s.label}</div>
+      </div>`;
+    });
     h += '</div>';
 
-    h += '<div class="section-title" style="margin-top:16px">💝 Quick Charity</div>';
+    // Charity section
+    const charityTypes = FINANCE_PROMPTS.filter(p => p.id !== 'zakat_fitr');
+    h += '<div class="section-title" style="margin-top:16px">💝 Charity</div>';
     h += '<div class="finance-grid">';
     charityTypes.forEach(p => {
       const amt = f.charity[p.id] || 0;
-      h += `<div class="finance-item" onclick="financeTracker.addCharity('${p.id}',10)">
+      h += `<div class="finance-item${amt > 0 ? ' has-value' : ''}" onclick="financeTracker.logCharity('${p.id}')">
         <div class="finance-item-icon">${p.icon}</div>
         <div class="finance-item-label">${p.label}</div>
         <div class="finance-item-amount">${amt > 0 ? amt : p.desc}</div>
@@ -83,11 +168,12 @@
     });
     h += '</div>';
 
-    h += '<div class="section-title" style="margin-top:16px">📊 Expense Categories</div>';
+    // Expense section
+    h += '<div class="section-title" style="margin-top:16px">📊 Expenses</div>';
     h += '<div class="finance-grid">';
     EXPENSE_CATEGORIES.forEach(c => {
       const amt = f.expenses[c.id] || 0;
-      h += `<div class="finance-item" onclick="financeTracker.addExpense('${c.id}',5)">
+      h += `<div class="finance-item${amt > 0 ? ' has-value' : ''}" onclick="financeTracker.logExpense('${c.id}')">
         <div class="finance-item-icon">${c.icon}</div>
         <div class="finance-item-label">${c.label}</div>
         <div class="finance-item-amount">${amt > 0 ? amt : 'Tap to log'}</div>
@@ -95,9 +181,16 @@
     });
     h += '</div>';
 
+    // Lifetime stats
+    h += '<div class="fin-lifetime">';
+    h += `<div class="fin-lt-item"><div class="fin-lt-val">${getTotalCharity()}</div><div class="fin-lt-label">Total Charity</div></div>`;
+    const totalIncome = Object.values(S.financeLog || {}).reduce((a, d) => a + (d.income || 0), 0);
+    h += `<div class="fin-lt-item"><div class="fin-lt-val">${totalIncome}</div><div class="fin-lt-label">Total Income</div></div>`;
+    h += '</div>';
+
     el.innerHTML = h;
   }
 
-  window.financeTracker = { logIncome, logExpense, logCharity, removeCharity, addCharity: logCharity, addExpense: logExpense, renderFinanceTab };
+  window.financeTracker = { logIncome, logExpense, logCharity, removeEntry, pickAmount, cancelPick, renderFinanceTab };
   window.renderFinanceTab = renderFinanceTab;
 })();
