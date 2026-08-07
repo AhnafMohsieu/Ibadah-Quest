@@ -19,8 +19,8 @@
     showAmountPicker();
   }
 
-  function logCharity(type) {
-    _pendingAction = { type: 'charity', type: type };
+  function logCharity(charityType) {
+    _pendingAction = { type: 'charity', charityType };
     showAmountPicker();
   }
 
@@ -33,7 +33,7 @@
     } else if (p.type === 'expense') {
       f.expenses[p.category] = (f.expenses[p.category] || 0) + amount;
     } else if (p.type === 'charity') {
-      f.charity[p.type] = (f.charity[p.type] || 0) + amount;
+      f.charity[p.charityType] = (f.charity[p.charityType] || 0) + amount;
       const xp = Math.floor(amount / 10);
       if (xp > 0) { S.xp += xp; S.lv = lvFrom(S.xp); }
     }
