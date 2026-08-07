@@ -35,13 +35,19 @@
 <div class="toast-overlay" id="toastOverlay" style="display:none;"></div>
 <div id="muhasabahModal"></div>
 <div class="app">
-  <div class="header">
-    <div class="header-crescent">🌙</div>
-    <h1>Ibadah Quest</h1>
-    <div class="subtitle">Prayer · Deeds · Knowledge · Growth</div>
-    <div class="header-deco"><span>✦&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Submission. Grow. Earn. Ascend.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✦</span></div>
-  </div>
+  <header class="top-bar" id="topBar">
+    <div class="geometric-bg"></div>
+    <div class="tb-left">
+      <span class="tb-level" id="tbLevel">Lv 1</span>
+      <span class="tb-title" id="tbTitle">Muslim</span>
+    </div>
+    <div class="tb-right">
+      <span class="tb-stat" id="tbXP">⚡ 0 XP</span>
+      <span class="tb-stat" id="tbStreak">🔥 0</span>
+    </div>
+  </header>
 
+  <main class="tab-content" id="tabContent">
   <div class="level-row">
     <div class="level-badge">
       <span class="lv-num" id="lvNum">1</span>
@@ -277,6 +283,15 @@
 <div class="tab-panel" id="panel-growth"><div id="growthArea"></div></div>
 <div class="tab-panel" id="panel-ramadan"><div id="ramadanArea"></div></div>
 <div class="tab-panel" id="panel-laylat"><div id="laylatArea"></div></div>
+  </main>
+
+  <nav class="bottom-nav">
+    <button class="nav-tab active" data-tab="home" aria-label="Home">🕌<span class="nav-label">Home</span></button>
+    <button class="nav-tab" data-tab="quests" aria-label="Quests">⚔️<span class="nav-label">Quests</span></button>
+    <button class="nav-tab" data-tab="stats" aria-label="Stats">📊<span class="nav-label">Stats</span></button>
+    <button class="nav-tab" data-tab="growth" aria-label="Growth">🌱<span class="nav-label">Growth</span></button>
+    <button class="nav-tab" data-tab="profile" aria-label="Profile">⚙️<span class="nav-label">Profile</span></button>
+  </nav>
 </div>
 
 <div style="text-align:center; padding:30px 20px 10px; color:var(--text2); font-size:0.75rem; letter-spacing:0.5px; opacity:0.6;">

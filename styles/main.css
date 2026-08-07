@@ -124,6 +124,63 @@ body {
   50% { transform: translateY(-6px); }
 }
 
+/* ── Top Bar ── */
+.top-bar {
+  position: sticky; top: 0; z-index: 100;
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 8px 16px;
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+.top-bar .geometric-bg {
+  position: absolute; inset: 0; z-index: 0;
+  opacity: 0.08; pointer-events: none;
+}
+.tb-left { display: flex; align-items: baseline; gap: 8px; z-index: 1; }
+.tb-level { font-weight: 800; font-size: 1.1rem; color: var(--gold); }
+.tb-title { font-size: 0.75rem; color: var(--text2); letter-spacing: 0.5px; }
+.tb-right { display: flex; gap: 14px; z-index: 1; }
+.tb-stat { font-size: 0.75rem; color: var(--text2); font-weight: 600; }
+
+/* ── Tab Content ── */
+.tab-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0 12px 100px 12px;
+  transition: opacity 150ms ease, transform 150ms ease;
+}
+.tab-content.fading { opacity: 0; transform: translateY(6px); }
+
+/* ── Bottom Nav ── */
+.bottom-nav {
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: 100;
+  display: flex; justify-content: space-around; align-items: center;
+  padding: 6px 4px env(safe-area-inset-bottom,8px) 4px;
+  background: var(--card);
+  border-top: 1px solid var(--border);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+.nav-tab {
+  display: flex; flex-direction: column; align-items: center; gap: 2px;
+  border: none; background: none;
+  color: var(--text2);
+  font-size: 1.25rem; cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 10px;
+  transition: color 200ms ease, transform 100ms ease, background 200ms ease;
+}
+.nav-tab .nav-label {
+  font-size: 0.55rem; font-weight: 600; letter-spacing: 0.3px;
+}
+.nav-tab.active {
+  color: var(--gold);
+  background: var(--gold-light) linear-gradient(000deg, var(--bg), transparent);
+}
+.nav-tab:active { transform: scale(1.08); }
+
 /* ── Level & XP ── */
 .level-row { display: flex; align-items: center; justify-content: center; gap: 24px; margin: 24px auto 40px; flex-wrap: wrap; max-width: 600px; }
 .level-badge {

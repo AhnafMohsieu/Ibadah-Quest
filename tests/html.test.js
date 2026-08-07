@@ -132,3 +132,13 @@ test('theme: picker references metadata and setTheme wiring', () => {
   assert.ok(render.includes('App.setTheme('));
   assert.ok(render.includes('theme-chip'));
 });
+
+test('app shell has bottom nav bar with five tabs', () => {
+  assert.ok(html.includes('class="bottom-nav"'), 'bottom nav missing');
+  assert.ok(html.includes('data-tab="home"'), 'home tab missing');
+  assert.ok(html.includes('data-tab="quests"'), 'quests tab missing');
+  assert.ok(html.includes('data-tab="stats"'), 'stats tab missing');
+  assert.ok(html.includes('data-tab="growth"'), 'growth tab missing');
+  assert.ok(html.includes('data-tab="profile"'), 'profile tab missing');
+  assert.ok(html.includes('id="tabContent"'), 'tab content container missing');
+});
