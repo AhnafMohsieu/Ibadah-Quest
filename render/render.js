@@ -3,453 +3,6 @@
   // RENDERING
   // -------------------------------------------------------
 
-  // Font Awesome glyph lookup for card deco icons (falls back to raw emoji)
-  const FA_GLYPH = {
-    '\u{1F4D6}': '<i class="fa-solid fa-book-quran"></i>',
-    '\u{1F4FF}': '<i class="fa-solid fa-hat-wizard"></i>',
-    '\u{1F932}': '<i class="fa-solid fa-hands-praying"></i>',
-    '\u{1F319}': '<i class="fa-solid fa-moon"></i>',
-    '\u{1F64F}': '<i class="fa-solid fa-hands-praying"></i>',
-    '\u{1F4DA}': '<i class="fa-solid fa-books"></i>',
-    '\u{1F49A}': '<i class="fa-solid fa-heart"></i>',
-    '\u2764\uFE0F': '<i class="fa-solid fa-heart"></i>',
-    '\u{1F90D}': '<i class="fa-solid fa-heart"></i>',
-    '\u{1F31E}': '<i class="fa-solid fa-sun"></i>',
-    '\u{1F306}': '<i class="fa-solid fa-city-sun"></i>',
-    '\u{1F54C}': '<i class="fa-solid fa-mosque"></i>',
-    '\u{1F60A}': '<i class="fa-solid fa-face-smile"></i>',
-    '\u{1F3E5}': '<i class="fa-solid fa-hospital"></i>',
-    '\u{1F468}\u200D\u{1F469}\u200D\u{1F467}': '<i class="fa-solid fa-people-roof"></i>',
-    '\u{1F4A7}': '<i class="fa-solid fa-droplet"></i>',
-    '\u{1F91D}': '<i class="fa-solid fa-handshake"></i>',
-    '\u{1F46A}': '<i class="fa-solid fa-people-roof"></i>',
-    '\u{1F9F9}': '<i class="fa-solid fa-broom"></i>',
-    '\u{1F372}': '<i class="fa-solid fa-utensils"></i>',
-    '\u{1F95B}': '<i class="fa-solid fa-glass-water"></i>',
-    '\u{1F9F8}': '<i class="fa-solid fa-face-smile"></i>',
-    '\u{1F37D}\uFE0F': '<i class="fa-solid fa-utensils"></i>',
-    '\u{1F331}': '<i class="fa-solid fa-seedling"></i>',
-    '\u{1F910}': '<i class="fa-solid fa-face-meh"></i>',
-    '\u{1F54A}\uFE0F': '<i class="fa-solid fa-dove"></i>',
-    '\u{1F408}': '<i class="fa-solid fa-paw"></i>',
-    '\u{1F5E3}\uFE0F': '<i class="fa-solid fa-comment"></i>',
-    '\u{1F441}\uFE0F': '<i class="fa-solid fa-eye"></i>',
-    '\u{1F468}\u200D\u{1F3EB}': '<i class="fa-solid fa-chalkboard-user"></i>',
-    '\u23F3': '<i class="fa-solid fa-hourglass"></i>',
-    '\u{1F3E1}': '<i class="fa-solid fa-house"></i>',
-    '\u{1F647}': '<i class="fa-solid fa-person-praying"></i>',
-    '\u{1F455}': '<i class="fa-solid fa-shirt"></i>',
-    '\u{1F3A7}': '<i class="fa-solid fa-headphones"></i>',
-    '\u{1F9FA}': '<i class="fa-solid fa-basket-shopping"></i>',
-    '\u{1F381}': '<i class="fa-solid fa-gift"></i>',
-    '\u{1FAA6}': '<i class="fa-solid fa-headstone"></i>',
-    '\u2728': '<i class="fa-solid fa-star"></i>',
-    '\u{1F4B0}': '<i class="fa-solid fa-coins"></i>',
-    '\u{1F4B8}': '<i class="fa-solid fa-money-bill-wave"></i>',
-    '\u{1F4AD}': '<i class="fa-solid fa-comment-dots"></i>',
-    '\u{1F426}': '<i class="fa-solid fa-bird"></i>',
-    '\u{1F6E1}\uFE0F': '<i class="fa-solid fa-shield-halved"></i>',
-    '\u{1F6B6}': '<i class="fa-solid fa-person-walking"></i>',
-    '\u{1FAA5}': '<i class="fa-solid fa-tooth"></i>',
-    '\u{1F54B}': '<i class="fa-solid fa-kaaba"></i>',
-    '\u{1F44B}': '<i class="fa-solid fa-hand"></i>',
-    '\u{1F6CC}': '<i class="fa-solid fa-bed"></i>',
-    '\u{1FA91}': '<i class="fa-solid fa-chair"></i>',
-    '\u{1F4E2}': '<i class="fa-solid fa-bullhorn"></i>',
-    '\u{1F6D1}': '<i class="fa-solid fa-circle-stop"></i>',
-    '\u{1F947}': '<i class="fa-solid fa-medal"></i>',
-    '\u{1F4DC}': '<i class="fa-solid fa-scroll"></i>',
-    '\u{1FA99}': '<i class="fa-solid fa-coins"></i>',
-    '\u{1FAA3}': '<i class="fa-solid fa-bucket"></i>',
-    '\u{1F9E0}': '<i class="fa-solid fa-brain"></i>',
-    '\u{1F339}': '<i class="fa-solid fa-seedling"></i>',
-    '\u{1F6BF}': '<i class="fa-solid fa-shower"></i>',
-    '\u{1F3C3}': '<i class="fa-solid fa-person-running"></i>',
-    '\u{1F442}': '<i class="fa-solid fa-ear-listen"></i>',
-    '\u{1F303}': '<i class="fa-solid fa-moon"></i>',
-    '\u{1F327}\uFE0F': '<i class="fa-solid fa-cloud-rain"></i>',
-    '\u{1F697}': '<i class="fa-solid fa-car"></i>',
-    '\u{1F468}\u200D\u{1F469}\u200D\u{1F466}': '<i class="fa-solid fa-people-roof"></i>',
-    '\u{1F474}': '<i class="fa-solid fa-person-cane"></i>',
-    '\u{1F9D2}': '<i class="fa-solid fa-child"></i>',
-    '\u{1F475}': '<i class="fa-solid fa-person-dress"></i>',
-    '\u{1F334}': '<i class="fa-solid fa-tree"></i>',
-    '\u{1FAA8}': '<i class="fa-solid fa-mountain"></i>',
-    '\u{1F4AC}': '<i class="fa-solid fa-comment"></i>',
-    '\u{1F648}': '<i class="fa-solid fa-eye-slash"></i>',
-    '\u{1F6D0}': '<i class="fa-solid fa-person-praying"></i>',
-    '\u{1F393}': '<i class="fa-solid fa-graduation-cap"></i>',
-    '\u{1F50D}': '<i class="fa-solid fa-magnifying-glass"></i>',
-    '\u2764\uFE0F\u200D\u{1FA79}': '<i class="fa-solid fa-heart-crack"></i>',
-    '\u{1F4A1}': '<i class="fa-solid fa-lightbulb"></i>',
-    '\u{1F465}': '<i class="fa-solid fa-users"></i>',
-    '\u{1F4B5}': '<i class="fa-solid fa-money-bill"></i>',
-    '\u{1F333}': '<i class="fa-solid fa-tree"></i>',
-    '\u{1F9FE}': '<i class="fa-solid fa-receipt"></i>',
-    '\u{1F6D2}': '<i class="fa-solid fa-cart-shopping"></i>',
-    '\u{1F315}': '<i class="fa-solid fa-moon"></i>',
-    '\u{1F312}': '<i class="fa-solid fa-moon"></i>',
-    '\u{1F4DD}': '<i class="fa-solid fa-pen"></i>',
-    '\u{1F6CD}\uFE0F': '<i class="fa-solid fa-bag-shopping"></i>',
-    '\u{1F305}': '<i class="fa-solid fa-cloud-sun"></i>',
-    '\u{1F392}': '<i class="fa-solid fa-graduation-cap"></i>',
-    '\u{1F9ED}': '<i class="fa-solid fa-compass"></i>',
-    '\u{1F466}': '<i class="fa-solid fa-child"></i>',
-    '\u{1F4A8}': '<i class="fa-solid fa-wind"></i>',
-    '\u2702\uFE0F': '<i class="fa-solid fa-scissors"></i>',
-    '\u{1FAF1}': '<i class="fa-solid fa-hand"></i>',
-    '\u{1F36F}': '<i class="fa-solid fa-jar"></i>',
-    '\u{1F971}': '<i class="fa-solid fa-face-tired"></i>',
-    '\u{1F35B}': '<i class="fa-solid fa-bowl-food"></i>',
-    '\u{1F504}': '<i class="fa-solid fa-arrows-rotate"></i>',
-    '\u{1F604}': '<i class="fa-solid fa-face-laugh"></i>',
-    '\u{1F49E}': '<i class="fa-solid fa-heart"></i>',
-    '\u{1F6CB}\uFE0F': '<i class="fa-solid fa-couch"></i>',
-    '\u{1F5D1}\uFE0F': '<i class="fa-solid fa-trash-can"></i>',
-    '\u{1F468}\u200D\u{1F466}': '<i class="fa-solid fa-people-roof"></i>',
-    '\u{1F925}': '<i class="fa-solid fa-face-laugh"></i>',
-    '\u2708\uFE0F': '<i class="fa-solid fa-plane"></i>',
-    '\u{1F958}': '<i class="fa-solid fa-utensils"></i>',
-    '\u{1F32C}\uFE0F': '<i class="fa-solid fa-wind"></i>',
-    '\u{1F9CE}': '<i class="fa-solid fa-person"></i>',
-    '\u{1F468}': '<i class="fa-solid fa-person"></i>',
-    '\u{1F338}': '<i class="fa-solid fa-spa"></i>',
-    '\u{1F92B}': '<i class="fa-solid fa-comment-slash"></i>',
-    '\u{1F375}': '<i class="fa-solid fa-mug-hot"></i>',
-    '\u{1F6E3}\uFE0F': '<i class="fa-solid fa-road"></i>',
-    '\u{1F33E}': '<i class="fa-solid fa-wheat-awn"></i>',
-    '\u270B': '<i class="fa-solid fa-hand"></i>',
-    '\u{1F9AF}': '<i class="fa-solid fa-person-walking-with-cane"></i>',
-    '\u{1F48C}': '<i class="fa-solid fa-envelope"></i>',
-    '\u{1F30C}': '<i class="fa-solid fa-moon"></i>',
-    '\u{1F54C}': '<i class="fa-solid fa-mosque"></i>',
-    '\u{1F4E2}': '<i class="fa-solid fa-bullhorn"></i>',
-    '\u{1F4C4}': '<i class="fa-solid fa-file"></i>',
-    '\u{1F3AF}': '<i class="fa-solid fa-bullseye"></i>',
-    '\u{1F4CA}': '<i class="fa-solid fa-chart-bar"></i>',
-    '\u{1F4C8}': '<i class="fa-solid fa-chart-line"></i>',
-    '\u{1F4C9}': '<i class="fa-solid fa-chart-line"></i>',
-    '\u{1F4D1}': '<i class="fa-solid fa-bookmark"></i>',
-    '\u{1F4D2}': '<i class="fa-solid fa-book"></i>',
-    '\u{1F4D3}': '<i class="fa-solid fa-notebook"></i>',
-    '\u{1F4D4}': '<i class="fa-solid fa-book-open"></i>',
-    '\u{1F4D7}': '<i class="fa-solid fa-book"></i>',
-    '\u{1F4D8}': '<i class="fa-solid fa-book"></i>',
-    '\u{1F4D9}': '<i class="fa-solid fa-book"></i>',
-    '\u{1F4DA}': '<i class="fa-solid fa-books"></i>',
-    '\u{1F5DE}\uFE0F': '<i class="fa-solid fa-scroll"></i>',
-    '\u{1F4D0}': '<i class="fa-solid fa-ruler"></i>',
-    '\u2696\uFE0F': '<i class="fa-solid fa-scale-balanced"></i>',
-    '\u{1F52C}': '<i class="fa-solid fa-microscope"></i>',
-    '\u{1F52D}': '<i class="fa-solid fa-satellite-dish"></i>',
-    '\u{1F3D8}\uFE0F': '<i class="fa-solid fa-house-chimney"></i>',
-    '\u2602\uFE0F': '<i class="fa-solid fa-umbrella"></i>',
-    '\u2601\uFE0F': '<i class="fa-solid fa-cloud"></i>',
-    '\u2744\uFE0F': '<i class="fa-solid fa-snowflake"></i>',
-    '\u{1F308}': '<i class="fa-solid fa-rainbow"></i>',
-    '\u26C8\uFE0F': '<i class="fa-solid fa-cloud-bolt"></i>',
-    '\u{1F324}\uFE0F': '<i class="fa-solid fa-cloud-sun"></i>',
-    '\u{1F32A}\uFE0F': '<i class="fa-solid fa-tornado"></i>',
-    '\u{1F30B}': '<i class="fa-solid fa-volcano"></i>',
-    '\u26F0\uFE0F': '<i class="fa-solid fa-mountain"></i>',
-    '\u{1F3D4}\uFE0F': '<i class="fa-solid fa-mountain-sun"></i>',
-    '\u{1F3D6}\uFE0F': '<i class="fa-solid fa-mountain"></i>',
-    '\u{1F3DC}\uFE0F': '<i class="fa-solid fa-mountain"></i>',
-    '\u{1F3DD}\uFE0F': '<i class="fa-solid fa-mountain"></i>',
-    '\u{1F3DF}\uFE0F': '<i class="fa-solid fa-campground"></i>',
-    '\u{1F320}': '<i class="fa-solid fa-shooting-star"></i>',
-    '\u2B50': '<i class="fa-solid fa-star"></i>',
-    '\u{1F31F}': '<i class="fa-solid fa-star"></i>',
-    '\u{1F31D}': '<i class="fa-solid fa-moon"></i>',
-    '\u{1F31A}': '<i class="fa-solid fa-moon"></i>',
-    '\u{1F30D}': '<i class="fa-solid fa-earth-americas"></i>',
-    '\u{1F30E}': '<i class="fa-solid fa-earth-americas"></i>',
-    '\u{1F30F}': '<i class="fa-solid fa-earth-americas"></i>',
-    '\u{1F309}': '<i class="fa-solid fa-bridge-water"></i>',
-    '\u{1F30A}': '<i class="fa-solid fa-water"></i>',
-    '\u{1F311}': '<i class="fa-solid fa-moon"></i>',
-    '\u{1F313}': '<i class="fa-solid fa-moon"></i>',
-    '\u{1F314}': '<i class="fa-solid fa-moon"></i>',
-    '\u{1F316}': '<i class="fa-solid fa-moon"></i>',
-    '\u{1F317}': '<i class="fa-solid fa-moon"></i>',
-    '\u{1F318}': '<i class="fa-solid fa-moon"></i>',
-    '\u{1F31B}': '<i class="fa-solid fa-moon"></i>',
-    '\u{1F31C}': '<i class="fa-solid fa-moon"></i>',
-    '\u{1F31D}': '<i class="fa-solid fa-moon"></i>',
-    '\u{1F31E}': '<i class="fa-solid fa-sun"></i>',
-    '\u{1F321}\uFE0F': '<i class="fa-solid fa-temperature-half"></i>',
-    '\u231B': '<i class="fa-solid fa-hourglass"></i>',
-    '\u23F0': '<i class="fa-solid fa-clock"></i>',
-    '\u23F1\uFE0F': '<i class="fa-solid fa-stopwatch"></i>',
-    '\u23F2\uFE0F': '<i class="fa-solid fa-hourglass-half"></i>',
-    '\u{1F570}\uFE0F': '<i class="fa-solid fa-couch"></i>',
-    '\u{1F550}': '<i class="fa-solid fa-clock"></i>',
-    '\u{1F551}': '<i class="fa-solid fa-clock"></i>',
-    '\u{1F552}': '<i class="fa-solid fa-clock"></i>',
-    '\u{1F553}': '<i class="fa-solid fa-clock"></i>',
-    '\u{1F554}': '<i class="fa-solid fa-clock"></i>',
-    '\u{1F555}': '<i class="fa-solid fa-clock"></i>',
-    '\u{1F556}': '<i class="fa-solid fa-clock"></i>',
-    '\u{1F557}': '<i class="fa-solid fa-clock"></i>',
-    '\u{1F558}': '<i class="fa-solid fa-clock"></i>',
-    '\u{1F559}': '<i class="fa-solid fa-clock"></i>',
-    '\u{1F55A}': '<i class="fa-solid fa-clock"></i>',
-    '\u{1F55B}': '<i class="fa-solid fa-clock"></i>',
-    '\u{1F55C}': '<i class="fa-solid fa-clock"></i>',
-    '\u{1F55D}': '<i class="fa-solid fa-clock"></i>',
-    '\u{1F55E}': '<i class="fa-solid fa-clock"></i>',
-    '\u{1F55F}': '<i class="fa-solid fa-clock"></i>',
-    '\u{1F560}': '<i class="fa-solid fa-clock"></i>',
-    '\u{1F561}': '<i class="fa-solid fa-clock"></i>',
-    '\u{1F562}': '<i class="fa-solid fa-clock"></i>',
-    '\u{1F563}': '<i class="fa-solid fa-clock"></i>',
-    '\u{1F564}': '<i class="fa-solid fa-clock"></i>',
-    '\u{1F565}': '<i class="fa-solid fa-clock"></i>',
-    '\u{1F566}': '<i class="fa-solid fa-clock"></i>',
-    '\u{1F567}': '<i class="fa-solid fa-clock"></i>',
-    '\u{1F570}\uFE0F': '<i class="fa-solid fa-couch"></i>',
-    '\u267E\uFE0F': '<i class="fa-solid fa-infinity"></i>',
-    '\u2709\uFE0F': '<i class="fa-solid fa-envelope"></i>',
-    '\u270F\uFE0F': '<i class="fa-solid fa-pen"></i>',
-    '\u2712\uFE0F': '<i class="fa-solid fa-pen-nib"></i>',
-    '\u2714\uFE0F': '<i class="fa-solid fa-check"></i>',
-    '\u2716\uFE0F': '<i class="fa-solid fa-xmark"></i>',
-    '\u2733\uFE0F': '<i class="fa-solid fa-asterisk"></i>',
-    '\u2734\uFE0F': '<i class="fa-solid fa-asterisk"></i>',
-    '\u2747\uFE0F': '<i class="fa-solid fa-sparkle"></i>',
-    '\u274E': '<i class="fa-solid fa-xmark"></i>',
-    '\u2753': '<i class="fa-solid fa-question"></i>',
-    '\u2754': '<i class="fa-solid fa-question"></i>',
-    '\u2755': '<i class="fa-solid fa-question"></i>',
-    '\u2757': '<i class="fa-solid fa-exclamation"></i>',
-    '\u2795': '<i class="fa-solid fa-plus"></i>',
-    '\u2796': '<i class="fa-solid fa-minus"></i>',
-    '\u2797': '<i class="fa-solid fa-divide"></i>',
-    '\u27B0': '<i class="fa-solid fa-arrows-rotate"></i>',
-    '\u27BF': '<i class="fa-solid fa-arrows-rotate"></i>',
-    '\u{1F4A0}': '<i class="fa-solid fa-diamond"></i>',
-    '\u{1F4A2}': '<i class="fa-solid fa-circle-exclamation"></i>',
-    '\u{1F4A3}': '<i class="fa-solid fa-bomb"></i>',
-    '\u{1F4A4}': '<i class="fa-solid fa-cloud"></i>',
-    '\u{1F4A5}': '<i class="fa-solid fa-fire"></i>',
-    '\u{1F4A6}': '<i class="fa-solid fa-droplet"></i>',
-    '\u{1F4A8}': '<i class="fa-solid fa-wind"></i>',
-    '\u{1F4A9}': '<i class="fa-solid fa-poo"></i>',
-    '\u{1F4AA}': '<i class="fa-solid fa-dumbbell"></i>',
-    '\u{1F4AB}': '<i class="fa-solid fa-star"></i>',
-    '\u{1F4AC}': '<i class="fa-solid fa-comment"></i>',
-    '\u{1F4AE}': '<i class="fa-solid fa-flower-daisy"></i>',
-    '\u{1F4AF}': '<i class="fa-solid fa-coins"></i>',
-    '\u{1F4B1}': '<i class="fa-solid fa-dollar-sign"></i>',
-    '\u{1F4B2}': '<i class="fa-solid fa-dollar-sign"></i>',
-    '\u{1F4B3}': '<i class="fa-solid fa-coins"></i>',
-    '\u{1F4B4}': '<i class="fa-solid fa-money-bill"></i>',
-    '\u{1F4B5}': '<i class="fa-solid fa-money-bill"></i>',
-    '\u{1F4B6}': '<i class="fa-solid fa-coins"></i>',
-    '\u{1F4B7}': '<i class="fa-solid fa-money-bill"></i>',
-    '\u{1F4B9}': '<i class="fa-solid fa-chart-line"></i>',
-    '\u{1F4BA}': '<i class="fa-solid fa-chair"></i>',
-    '\u{1F4BB}': '<i class="fa-solid fa-laptop"></i>',
-    '\u{1F4BC}': '<i class="fa-solid fa-briefcase"></i>',
-    '\u{1F4BD}': '<i class="fa-solid fa-hard-drive"></i>',
-    '\u{1F4BE}': '<i class="fa-solid fa-floppy-disk"></i>',
-    '\u{1F4BF}': '<i class="fa-solid fa-compact-disc"></i>',
-    '\u{1F4C0}': '<i class="fa-solid fa-compact-disc"></i>',
-    '\u{1F4C1}': '<i class="fa-solid fa-folder"></i>',
-    '\u{1F4C2}': '<i class="fa-solid fa-folder-open"></i>',
-    '\u{1F4C3}': '<i class="fa-solid fa-file"></i>',
-    '\u{1F4C4}': '<i class="fa-solid fa-file-lines"></i>',
-    '\u{1F4C5}': '<i class="fa-solid fa-calendar"></i>',
-    '\u{1F4C6}': '<i class="fa-solid fa-calendar"></i>',
-    '\u{1F4C7}': '<i class="fa-solid fa-address-book"></i>',
-    '\u{1F4C8}': '<i class="fa-solid fa-chart-line"></i>',
-    '\u{1F4C9}': '<i class="fa-solid fa-chart-line"></i>',
-    '\u{1F4CA}': '<i class="fa-solid fa-chart-bar"></i>',
-    '\u{1F4CB}': '<i class="fa-solid fa-clipboard"></i>',
-    '\u{1F4CC}': '<i class="fa-solid fa-thumbtack"></i>',
-    '\u{1F4CD}': '<i class="fa-solid fa-location-dot"></i>',
-    '\u{1F4CE}': '<i class="fa-solid fa-paperclip"></i>',
-    '\u{1F4CF}': '<i class="fa-solid fa-ruler"></i>',
-    '\u{1F4D0}': '<i class="fa-solid fa-ruler-combined"></i>',
-    '\u{1F4D1}': '<i class="fa-solid fa-bookmark"></i>',
-    '\u{1F4D2}': '<i class="fa-solid fa-book"></i>',
-    '\u{1F4D3}': '<i class="fa-solid fa-notebook"></i>',
-    '\u{1F4D4}': '<i class="fa-solid fa-book-open"></i>',
-    '\u{1F4D5}': '<i class="fa-solid fa-book"></i>',
-    '\u{1F4D6}': '<i class="fa-solid fa-book-open"></i>',
-    '\u{1F4D7}': '<i class="fa-solid fa-book"></i>',
-    '\u{1F4D8}': '<i class="fa-solid fa-book"></i>',
-    '\u{1F4D9}': '<i class="fa-solid fa-book"></i>',
-    '\u{1F4DA}': '<i class="fa-solid fa-books"></i>',
-    '\u{1F4DC}': '<i class="fa-solid fa-scroll"></i>',
-    '\u{1F4DD}': '<i class="fa-solid fa-pen-to-square"></i>',
-    '\u{1F4DE}': '<i class="fa-solid fa-phone"></i>',
-    '\u{1F4DF}': '<i class="fa-solid fa-radio"></i>',
-    '\u{1F4E0}': '<i class="fa-solid fa-tv"></i>',
-    '\u{1F4E1}': '<i class="fa-solid fa-satellite-dish"></i>',
-    '\u{1F4E2}': '<i class="fa-solid fa-bullhorn"></i>',
-    '\u{1F4E3}': '<i class="fa-solid fa-microphone"></i>',
-    '\u{1F4E4}': '<i class="fa-solid fa-inbox"></i>',
-    '\u{1F4E5}': '<i class="fa-solid fa-inbox"></i>',
-    '\u{1F4E6}': '<i class="fa-solid fa-box"></i>',
-    '\u{1F4E7}': '<i class="fa-solid fa-envelope"></i>',
-    '\u{1F4E8}': '<i class="fa-solid fa-paper-plane"></i>',
-    '\u{1F4E9}': '<i class="fa-solid fa-paper-plane"></i>',
-    '\u{1F4EA}': '<i class="fa-solid fa-envelope"></i>',
-    '\u{1F4EB}': '<i class="fa-solid fa-envelope"></i>',
-    '\u{1F4EC}': '<i class="fa-solid fa-envelope-open"></i>',
-    '\u{1F4ED}': '<i class="fa-solid fa-mailbox"></i>',
-    '\u{1F4EE}': '<i class="fa-solid fa-box"></i>',
-    '\u{1F4EF}': '<i class="fa-solid fa-horn"></i>',
-    '\u{1F4F0}': '<i class="fa-solid fa-newspaper"></i>',
-    '\u{1F4F1}': '<i class="fa-solid fa-mobile-screen"></i>',
-    '\u{1F4F2}': '<i class="fa-solid fa-mobile-screen"></i>',
-    '\u{1F4F3}': '<i class="fa-solid fa-rotate"></i>',
-    '\u{1F4F4}': '<i class="fa-solid fa-mobile"></i>',
-    '\u{1F4F5}': '<i class="fa-solid fa-mobile"></i>',
-    '\u{1F4F6}': '<i class="fa-solid fa-signal"></i>',
-    '\u{1F4F7}': '<i class="fa-solid fa-camera"></i>',
-    '\u{1F4F9}': '<i class="fa-solid fa-video"></i>',
-    '\u{1F4FA}': '<i class="fa-solid fa-tv"></i>',
-    '\u{1F4FB}': '<i class="fa-solid fa-radio"></i>',
-    '\u{1F4FC}': '<i class="fa-solid fa-film"></i>',
-    '\u267F': '<i class="fa-solid fa-wheelchair"></i>',
-    '\u2693': '<i class="fa-solid fa-anchor"></i>',
-    '\u26AA': '<i class="fa-solid fa-circle"></i>',
-    '\u26AB': '<i class="fa-solid fa-circle"></i>',
-    '\u26BD': '<i class="fa-solid fa-futbol"></i>',
-    '\u26BE': '<i class="fa-solid fa-baseball"></i>',
-    '\u26C4': '<i class="fa-solid fa-snowman"></i>',
-    '\u26C5': '<i class="fa-solid fa-cloud-sun"></i>',
-    '\u26CE': '<i class="fa-solid fa-circle"></i>',
-    '\u26D4': '<i class="fa-solid fa-ban"></i>',
-    '\u26EA': '<i class="fa-solid fa-church"></i>',
-    '\u26F2': '<i class="fa-solid fa-fountain"></i>',
-    '\u26F3': '<i class="fa-solid fa-flag-golf"></i>',
-    '\u26F5': '<i class="fa-solid fa-sailboat"></i>',
-    '\u26FA': '<i class="fa-solid fa-tent"></i>',
-    '\u26FD': '<i class="fa-solid fa-gas-pump"></i>',
-    '\u{1F3B0}': '<i class="fa-solid fa-square-1"></i>',
-    '\u{1F3B1}': '<i class="fa-solid fa-table-tennis-paddle-ball"></i>',
-    '\u{1F3B2}': '<i class="fa-solid fa-dice"></i>',
-    '\u{1F3B3}': '<i class="fa-solid fa-bowling-ball"></i>',
-    '\u{1F3B4}': '<i class="fa-solid fa-spade"></i>',
-    '\u{1F3B5}': '<i class="fa-solid fa-music"></i>',
-    '\u{1F3B6}': '<i class="fa-solid fa-music"></i>',
-    '\u{1F3B7}': '<i class="fa-solid fa-saxophone"></i>',
-    '\u{1F3B8}': '<i class="fa-solid fa-guitar"></i>',
-    '\u{1F3B9}': '<i class="fa-solid fa-piano-keyboard"></i>',
-    '\u{1F3BA}': '<i class="fa-solid fa-trumpet"></i>',
-    '\u{1F3BB}': '<i class="fa-solid fa-violin"></i>',
-    '\u{1F3BC}': '<i class="fa-solid fa-music"></i>',
-    '\u{1F3BD}': '<i class="fa-solid fa-running"></i>',
-    '\u{1F3BE}': '<i class="fa-solid fa-tennis"></i>',
-    '\u{1F3BF}': '<i class="fa-solid fa-skiing"></i>',
-    '\u{1F3C0}': '<i class="fa-solid fa-basketball"></i>',
-    '\u{1F3C1}': '<i class="fa-solid fa-flag-checkered"></i>',
-    '\u{1F3C2}': '<i class="fa-solid fa-snowboarding"></i>',
-    '\u{1F3C3}': '<i class="fa-solid fa-person-running"></i>',
-    '\u{1F3C4}': '<i class="fa-solid fa-person-swimming"></i>',
-    '\u{1F3C6}': '<i class="fa-solid fa-trophy"></i>',
-    '\u{1F3C8}': '<i class="fa-solid fa-football"></i>',
-    '\u{1F3CA}': '<i class="fa-solid fa-person-swimming"></i>',
-    '\u{1F3CF}': '<i class="fa-solid fa-cricket-bat-ball"></i>',
-    '\u{1F3D0}': '<i class="fa-solid fa-volleyball"></i>',
-    '\u{1F3D1}': '<i class="fa-solid fa-table-tennis-paddle-ball"></i>',
-    '\u{1F3D2}': '<i class="fa-solid fa-baseball"></i>',
-    '\u{1F3D3}': '<i class="fa-solid fa-table-tennis-paddle-ball"></i>',
-    '\u{1F3D5}\uFE0F': '<i class="fa-solid fa-tent"></i>',
-    '\u{1F3D7}\uFE0F': '<i class="fa-solid fa-building"></i>',
-    '\u{1F3D8}\uFE0F': '<i class="fa-solid fa-house"></i>',
-    '\u{1F3D9}\uFE0F': '<i class="fa-solid fa-city"></i>',
-    '\u{1F3DA}\uFE0F': '<i class="fa-solid fa-house"></i>',
-    '\u{1F3DB}\uFE0F': '<i class="fa-solid fa-landmark"></i>',
-    '\u{1F3DC}\uFE0F': '<i class="fa-solid fa-mountain-sun"></i>',
-    '\u{1F3DD}\uFE0F': '<i class="fa-solid fa-mountain-sun"></i>',
-    '\u{1F3DE}\uFE0F': '<i class="fa-solid fa-mountain-sun"></i>',
-    '\u{1F3DF}\uFE0F': '<i class="fa-solid fa-campground"></i>',
-    '\u{1F3E0}': '<i class="fa-solid fa-house"></i>',
-    '\u{1F3E1}': '<i class="fa-solid fa-house-chimney"></i>',
-    '\u{1F3E2}': '<i class="fa-solid fa-building"></i>',
-    '\u{1F3E3}': '<i class="fa-solid fa-hospital"></i>',
-    '\u{1F3E4}': '<i class="fa-solid fa-hospital"></i>',
-    '\u{1F3E5}': '<i class="fa-solid fa-hospital"></i>',
-    '\u{1F3E6}': '<i class="fa-solid fa-building-columns"></i>',
-    '\u{1F3E7}': '<i class="fa-solid fa-atm"></i>',
-    '\u{1F3E8}': '<i class="fa-solid fa-hotel"></i>',
-    '\u{1F3E9}': '<i class="fa-solid fa-hotel"></i>',
-    '\u{1F3EA}': '<i class="fa-solid fa-store"></i>',
-    '\u{1F3EB}': '<i class="fa-solid fa-school"></i>',
-    '\u{1F3EC}': '<i class="fa-solid fa-store"></i>',
-    '\u{1F3ED}': '<i class="fa-solid fa-industry"></i>',
-    '\u{1F3EE}': '<i class="fa-solid fa-store"></i>',
-    '\u{1F3EF}': '<i class="fa-solid fa-building"></i>',
-    '\u{1F3F0}': '<i class="fa-solid fa-building"></i>',
-    '\u{1F480}': '<i class="fa-solid fa-skull"></i>',
-    '\u{1F483}': '<i class="fa-solid fa-person"></i>',
-    '\u{1F484}': '<i class="fa-solid fa-lips"></i>',
-    '\u{1F485}': '<i class="fa-solid fa-hand"></i>',
-    '\u{1F486}': '<i class="fa-solid fa-person"></i>',
-    '\u{1F487}': '<i class="fa-solid fa-scissors"></i>',
-    '\u{1F488}': '<i class="fa-solid fa-scissors"></i>',
-    '\u{1F489}': '<i class="fa-solid fa-syringe"></i>',
-    '\u{1F48A}': '<i class="fa-solid fa-pills"></i>',
-    '\u{1F48B}': '<i class="fa-solid fa-lips"></i>',
-    '\u{1F48C}': '<i class="fa-solid fa-envelope"></i>',
-    '\u{1F48D}': '<i class="fa-solid fa-gem"></i>',
-    '\u{1F48E}': '<i class="fa-solid fa-gem"></i>',
-    '\u{1F48F}': '<i class="fa-solid fa-kiss"></i>',
-    '\u{1F490}': '<i class="fa-solid fa-bouquet"></i>',
-    '\u{1F491}': '<i class="fa-solid fa-heart"></i>',
-    '\u{1F492}': '<i class="fa-solid fa-church"></i>',
-    '\u{1F493}': '<i class="fa-solid fa-heart"></i>',
-    '\u{1F494}': '<i class="fa-solid fa-heart"></i>',
-    '\u{1F495}': '<i class="fa-solid fa-heart"></i>',
-    '\u{1F496}': '<i class="fa-solid fa-heart"></i>',
-    '\u{1F497}': '<i class="fa-solid fa-heart"></i>',
-    '\u{1F498}': '<i class="fa-solid fa-heart"></i>',
-    '\u{1F499}': '<i class="fa-solid fa-heart"></i>',
-    '\u{1F49A}': '<i class="fa-solid fa-heart"></i>',
-    '\u{1F49B}': '<i class="fa-solid fa-heart"></i>',
-    '\u{1F49C}': '<i class="fa-solid fa-heart"></i>',
-    '\u{1F49D}': '<i class="fa-solid fa-heart"></i>',
-    '\u{1F49E}': '<i class="fa-solid fa-heart"></i>',
-    '\u{1F49F}': '<i class="fa-solid fa-heart"></i>',
-    '\u{1F4A0}': '<i class="fa-solid fa-diamond"></i>',
-    '\u{1F4A1}': '<i class="fa-solid fa-lightbulb"></i>',
-    '\u{1F4A2}': '<i class="fa-solid fa-circle-exclamation"></i>',
-    '\u{1F4A3}': '<i class="fa-solid fa-bomb"></i>',
-    '\u{1F4A4}': '<i class="fa-solid fa-cloud"></i>',
-    '\u{1F4A5}': '<i class="fa-solid fa-fire"></i>',
-    '\u{1F4A6}': '<i class="fa-solid fa-droplet"></i>',
-    '\u{1F4A7}': '<i class="fa-solid fa-droplet"></i>',
-    '\u{1F4A8}': '<i class="fa-solid fa-wind"></i>',
-    '\u{1F4A9}': '<i class="fa-solid fa-poo"></i>',
-    '\u{1F4AA}': '<i class="fa-solid fa-dumbbell"></i>',
-    '\u{1F4AB}': '<i class="fa-solid fa-star"></i>',
-    '\u{1F4AC}': '<i class="fa-solid fa-comment"></i>',
-    '\u{1F4AD}': '<i class="fa-solid fa-comment-dots"></i>',
-    '\u{1F4AE}': '<i class="fa-solid fa-flower-daisy"></i>',
-    '\u{1F4AF}': '<i class="fa-solid fa-coins"></i>',
-    '\u{1F4B0}': '<i class="fa-solid fa-coins"></i>',
-    '\u{1F4B1}': '<i class="fa-solid fa-dollar-sign"></i>',
-    '\u{1F4B2}': '<i class="fa-solid fa-dollar-sign"></i>',
-    '\u{1F4B3}': '<i class="fa-solid fa-coins"></i>',
-    '\u{1F4B4}': '<i class="fa-solid fa-money-bill"></i>',
-    '\u{1F4B5}': '<i class="fa-solid fa-money-bill"></i>',
-    '\u{1F4B6}': '<i class="fa-solid fa-coins"></i>',
-    '\u{1F4B7}': '<i class="fa-solid fa-money-bill"></i>',
-    '\u{1F4B8}': '<i class="fa-solid fa-money-bill-wave"></i>',
-    '\u{1F4B9}': '<i class="fa-solid fa-chart-line"></i>',
-    '\u{1F4BA}': '<i class="fa-solid fa-chair"></i>',
-    '\u{1F4BB}': '<i class="fa-solid fa-laptop"></i>',
-    '\u{1F4BC}': '<i class="fa-solid fa-briefcase"></i>',
-    '\u{1F4BD}': '<i class="fa-solid fa-hard-drive"></i>',
-    '\u{1F4BE}': '<i class="fa-solid fa-floppy-disk"></i>',
-    '\u{1F4BF}': '<i class="fa-solid fa-compact-disc"></i>',
-    '\u{1F4C0}': '<i class="fa-solid fa-compact-disc"></i>',
-  };
-  function faIcon(e) { return FA_GLYPH[e] || e; }
   function renderDynamic() {
     const pageScroll = window.scrollY;
     const volArea = document.getElementById('volArea');
@@ -471,7 +24,7 @@
 
   function renderStatic() {
     const safe = (fn, name) => { try { fn(); } catch(e) { console.warn('Static ' + name + ' failed:', e.message); } };
-    safe(renderQuran,'Quran'); safe(renderSunnahs,'Sunnahs'); safe(renderDhikr,'Dhikr'); safe(renderDhikrCounter,'DhikrCounter'); safe(renderStories,'Stories'); safe(renderHadith,'Hadith'); safe(renderNames,'Names'); safe(renderInspirations,'Inspirations'); safe(renderGratitude,'Gratitude'); safe(renderFasting,'Fasting'); safe(renderCharity,'Charity'); safe(renderMemorization,'Memorization'); safe(renderMorning,'Morning'); safe(renderEvening,'Evening'); safe(renderSins,'Sins'); safe(renderPunishments,'Punishments'); safe(renderRepentance,'Repentance'); safe(renderSahaba,'Sahaba'); safe(renderSeerah,'Seerah'); safe(renderTafsir,'Tafsir'); safe(renderManners,'Manners'); safe(renderFamily,'Family'); safe(renderHealth,'Health'); safe(() => window.renderHealthLog && window.renderHealthLog(), 'HealthLog'); safe(renderFinance,'Finance'); safe(() => window.renderFinanceTab && window.renderFinanceTab(), 'FinanceTab'); safe(() => window.renderMoodTab && window.renderMoodTab(), 'MoodTab'); safe(renderUmmah,'Ummah'); safe(renderHajj,'Hajj'); safe(renderAkhirah,'Akhirah'); safe(renderProphets,'Prophets'); safe(renderWomen,'Women'); safe(renderHeart,'Heart'); safe(renderMarriage,'Marriage'); safe(renderScience,'Science'); safe(renderWudu,'Wudu'); safe(renderScholars,'Scholars'); safe(renderPatience,'Patience'); safe(renderWork,'Work'); safe(renderCommunity,'Community'); safe(renderEnvironment,'Environment'); safe(renderTravel,'Travel'); safe(renderFiqh,'Fiqh'); safe(renderArabic,'Arabic'); safe(renderTawakkul,'Tawakkul'); safe(renderIkhlas,'Ikhlas'); safe(renderZuhd,'Zuhd'); safe(renderDawah,'Dawah'); safe(renderBattles,'Battles'); safe(renderJannah,'Jannah'); safe(renderJahannam,'Jahannam'); safe(renderGrave,'Grave'); safe(renderSigns,'Signs'); safe(renderDreams,'Dreams'); safe(renderParenting,'Parenting'); safe(renderFood,'Food'); safe(renderTibb,'Tibb'); safe(renderYouth,'Youth'); safe(renderTech,'Tech'); safe(renderNeighbors,'Neighbors'); safe(renderSalah,'Salah'); safe(renderPrayerTimes,'PrayerTimes'); safe(() => window.renderMosque && window.renderMosque(), 'Mosque'); safe(() => window.renderConstellation && window.renderConstellation(), 'Constellation'); safe(() => window.renderKeys && window.renderKeys(), 'Keys'); safe(() => window.renderHeartRefine && window.renderHeartRefine(), 'HeartRefine'); safe(() => window.renderArmor && window.renderArmor(), 'Armor'); safe(() => window.renderRamadan && window.renderRamadan(), 'Ramadan'); safe(() => window.renderLaylat && window.renderLaylat(), 'Laylat'); safe(() => window.SpiritualGrowth && window.SpiritualGrowth.renderSettings && window.SpiritualGrowth.renderSettings(), 'GrowthSettings');
+    safe(renderQuran,'Quran'); safe(renderSunnahs,'Sunnahs'); safe(renderDhikr,'Dhikr'); safe(renderDhikrCounter,'DhikrCounter'); safe(renderStories,'Stories'); safe(renderHadith,'Hadith'); safe(renderNames,'Names'); safe(renderInspirations,'Inspirations'); safe(renderGratitude,'Gratitude'); safe(renderFasting,'Fasting'); safe(renderCharity,'Charity'); safe(renderMemorization,'Memorization'); safe(renderMorning,'Morning'); safe(renderEvening,'Evening'); safe(renderSins,'Sins'); safe(renderPunishments,'Punishments'); safe(renderRepentance,'Repentance'); safe(renderSahaba,'Sahaba'); safe(renderSeerah,'Seerah'); safe(renderTafsir,'Tafsir'); safe(renderManners,'Manners'); safe(renderFamily,'Family'); safe(renderHealth,'Health'); safe(() => window.renderHealthLog && window.renderHealthLog(), 'HealthLog'); safe(renderFinance,'Finance'); safe(() => window.renderFinanceTab && window.renderFinanceTab(), 'FinanceTab'); safe(() => window.renderMoodTab && window.renderMoodTab(), 'MoodTab'); safe(renderUmmah,'Ummah'); safe(renderHajj,'Hajj'); safe(renderAkhirah,'Akhirah'); safe(renderProphets,'Prophets'); safe(renderWomen,'Women'); safe(renderHeart,'Heart'); safe(renderMarriage,'Marriage'); safe(renderScience,'Science'); safe(renderWudu,'Wudu'); safe(renderScholars,'Scholars'); safe(renderPatience,'Patience'); safe(renderWork,'Work'); safe(renderCommunity,'Community'); safe(renderEnvironment,'Environment'); safe(renderTravel,'Travel'); safe(renderFiqh,'Fiqh'); safe(renderArabic,'Arabic'); safe(renderTawakkul,'Tawakkul'); safe(renderIkhlas,'Ikhlas'); safe(renderZuhd,'Zuhd');     safe(renderDawah,'Dawah'); safe(renderAqeedah,'Aqeedah'); safe(renderKnowledge,'Knowledge'); safe(renderCivilisation,'Civilisation'); safe(renderJumuah,'Jumuah'); safe(renderBattles,'Battles'); safe(renderJannah,'Jannah'); safe(renderJahannam,'Jahannam'); safe(renderGrave,'Grave'); safe(renderSigns,'Signs'); safe(renderDreams,'Dreams'); safe(renderParenting,'Parenting'); safe(renderFood,'Food'); safe(renderTibb,'Tibb'); safe(renderYouth,'Youth'); safe(renderTech,'Tech'); safe(renderNeighbors,'Neighbors'); safe(renderSalah,'Salah'); safe(renderPrayerTimes,'PrayerTimes'); safe(() => window.renderMosque && window.renderMosque(), 'Mosque'); safe(() => window.renderConstellation && window.renderConstellation(), 'Constellation'); safe(() => window.renderKeys && window.renderKeys(), 'Keys'); safe(() => window.renderHeartRefine && window.renderHeartRefine(), 'HeartRefine'); safe(() => window.renderArmor && window.renderArmor(), 'Armor'); safe(() => window.renderRamadan && window.renderRamadan(), 'Ramadan'); safe(() => window.renderLaylat && window.renderLaylat(), 'Laylat'); safe(() => window.SpiritualGrowth && window.SpiritualGrowth.renderSettings && window.SpiritualGrowth.renderSettings(), 'GrowthSettings');
     if (typeof NEW_POOLS !== 'undefined') Object.keys(NEW_POOLS).forEach(k => {
       if(window['render'+k]) safe(window['render'+k], k);
     });
@@ -589,7 +142,7 @@
       const d = !!l.p[p.id]; let nm=p.name, ic=p.icon, xp=p.xp;
       if (f && p.id==='dhuhr') { nm=p.fri.name; ic=p.fri.icon; xp=p.fri.xp; }
       if (S.ab && S.ab.exp >= today()) xp *= 2;
-      return `<div class="card-item${d?' done':''}" onclick="App.toggleP('${p.id}')"><div class="card-icon">${faIcon(ic)}</div><div class="card-name">${nm}</div><div class="card-sub">${p.time}</div><div class="card-xp">+${xp} XP</div>${d?'<div class="card-check">✅</div>':''}<div class="card-info-btn" onclick="event.stopPropagation();App.detail('${p.id}')">ℹ️</div></div>`;
+      return `<div class="card-item${d?' done':''}" onclick="App.toggleP('${p.id}')"><div class="card-icon">${ic}</div><div class="card-name">${nm}</div><div class="card-sub">${p.time}</div><div class="card-xp">+${xp} XP</div>${d?'<div class="card-check">✅</div>':''}<div class="card-info-btn" onclick="event.stopPropagation();App.detail('${p.id}')">ℹ️</div></div>`;
     }).join('');
     document.getElementById('prayerArea').innerHTML = '<div class="section-title">🕌 Daily Prayers</div><div class="card-grid">' + cards + '</div>';
   }
@@ -617,7 +170,7 @@
       const isOpen = catIdx < openStates.length ? openStates[catIdx] : false;
       html += `<details class="cat-details"${isOpen ? ' open' : ''}><summary><div style="display:flex;justify-content:space-between;align-items:center;flex:1;"><span>${catIcon} ${cat}</span><span style="font-size:0.75rem;background:rgba(201,168,76,0.15);padding:3px 10px;border-radius:12px;color:var(--gold-light);font-weight:700;">${completedInCat} / ${totalInCat}</span></div></summary><div style="padding:8px 4px;">`;
       html += '<div class="card-grid">';
-      html += byCat[cat].map(v => { const d=!!l[v.id]; let xp=v.xp; if(S.ab&&S.ab.exp>=today()) xp*=2; return `<div class="card-item${d?' done':''}" onclick="App.toggleV('${v.id}')"><div class="card-icon">${faIcon(v.icon)}</div><div class="card-name">${v.name}</div><div class="card-xp">+${xp} XP</div>${d?'<div class="card-check">✅</div>':''}<div class="card-info-btn" onclick="event.stopPropagation();App.detail('${v.id}')">ℹ️</div></div>`; }).join('');
+      html += byCat[cat].map(v => { const d=!!l[v.id]; let xp=v.xp; if(S.ab&&S.ab.exp>=today()) xp*=2; return `<div class="card-item${d?' done':''}" onclick="App.toggleV('${v.id}')"><div class="card-icon">${v.icon}</div><div class="card-name">${v.name}</div><div class="card-xp">+${xp} XP</div>${d?'<div class="card-check">✅</div>':''}<div class="card-info-btn" onclick="event.stopPropagation();App.detail('${v.id}')">ℹ️</div></div>`; }).join('');
       html += '</div></div></details>';
       catIdx++;
     }
@@ -688,7 +241,7 @@
       const isOpen = catIdx < openStates.length ? openStates[catIdx] : false;
       html += `<details class="cat-details"${isOpen ? ' open' : ''}><summary><div style="display:flex;justify-content:space-between;align-items:center;flex:1;"><span>${cat}</span><span style="font-size:0.75rem;background:rgba(201,168,76,0.15);padding:3px 10px;border-radius:12px;color:var(--gold-light);font-weight:700;">${completedInCat} / ${totalInCat}</span></div></summary><div style="padding:8px 4px;">`;
       html += '<div class="card-grid">';
-      html += items.map(d => { const done=!!l[d.id]; const tot=S.td[d.id]||0; let xp=d.xp; if(S.ab&&S.ab.exp>=today()) xp*=2; return `<div class="card-item${done?' done':''}" onclick="App.toggleD('${d.id}')"><div class="card-icon">${faIcon(d.icon)}</div><div class="card-name">${d.name}</div><div class="card-xp">+${xp} XP</div>${done?'<div class="card-check">✅</div>':''}${tot?`<div class="card-sub">${tot}×</div>`:''}<div class="card-info-btn" onclick="event.stopPropagation();App.tip('${d.id}')">ℹ️</div></div>`; }).join('');
+      html += items.map(d => { const done=!!l[d.id]; const tot=S.td[d.id]||0; let xp=d.xp; if(S.ab&&S.ab.exp>=today()) xp*=2; return `<div class="card-item${done?' done':''}" onclick="App.toggleD('${d.id}')"><div class="card-icon">${d.icon}</div><div class="card-name">${d.name}</div><div class="card-xp">+${xp} XP</div>${done?'<div class="card-check">✅</div>':''}${tot?`<div class="card-sub">${tot}×</div>`:''}<div class="card-info-btn" onclick="event.stopPropagation();App.tip('${d.id}')">ℹ️</div></div>`; }).join('');
       html += '</div></div></details>';
       catIdx++;
     }
@@ -735,7 +288,7 @@
       if (o.arabic) inner += `<div class="content-arabic">${o.arabic}</div>`;
       if (o.transliteration || o.roman) inner += `<div style="font-size:0.9rem;color:var(--text1);opacity:0.9;font-style:italic;margin-bottom:6px;text-align:right;">${o.transliteration || o.roman}</div>`;
       inner += `<div class="content-english">${o.desc || o.text || o.english || ''}</div>`;
-      if (o.source) inner += `<div class="content-source">📖 ${o.source}<a class="verify-btn" href="${getSourceLink(o.source)}" target="_blank" rel="noopener noreferrer" title="Verify this source">Verify ℹ️</a></div>`;
+      if (o.source) inner += `<div class="content-source">📖 ${o.source}<a class="verify-btn" href="${getSourceLink(o.source)}" target="_blank" rel="noopener noreferrer" title="Verify this source">Verify</a></div>`;
       
       let title_line = '';
       if (o.title) {
@@ -1183,7 +736,7 @@
         html += `<div class="verse-card">
           <div class="verse-num">${h.n}</div>
           <div class="verse-english">${h.t}</div>
-          <div class="content-source">📖 ${col.name} ${h.b}:${h.h}<a class="verify-btn" href="https://sunnah.com/${col.id}/${h.b}#${h.n}" target="_blank" rel="noopener noreferrer" title="Verify on sunnah.com">Verify ℹ️</a></div>
+          <div class="content-source">📖 ${col.name} ${h.b}:${h.h}<a class="verify-btn" href="https://sunnah.com/${col.id}/${h.b}#${h.n}" target="_blank" rel="noopener noreferrer" title="Verify on sunnah.com">Verify</a></div>
         </div>`;
       });
       el.innerHTML = html;
@@ -1506,7 +1059,7 @@
     MORNING_DHIKR.forEach((item, idx) => { 
         const done = !!S.morningDone[dt][idx]; 
         h += `<div class="vol-card${done?' done':''}" onclick="App.toggleMorning(${idx}, ${item.xp})" style="cursor:pointer;">
-            <div class="prayer-check" style="font-size:1.2rem;">${done?'✅':'<i class="fa-solid fa-sun"></i>'}</div>
+            <div class="prayer-check" style="font-size:1.2rem;">${done?'✅':'☀️'}</div>
             <div class="prayer-info">
                 <div style="font-family:'Amiri',serif;font-size:1.3rem;margin-bottom:2px;color:var(--gold);line-height:1.4;">${item.arabic}</div>
                 ${item.roman ? `<div style="font-size:0.85rem;color:var(--text1);font-style:italic;margin-bottom:6px;opacity:0.9;">"${item.roman}"</div>` : ''}
@@ -1544,7 +1097,7 @@
     EVENING_DHIKR.forEach((item, idx) => { 
         const done = !!S.eveningDone[dt][idx]; 
         h += `<div class="vol-card${done?' done':''}" onclick="App.toggleEvening(${idx}, ${item.xp})" style="cursor:pointer;">
-            <div class="prayer-check" style="font-size:1.2rem;">${done?'✅':'<i class="fa-solid fa-moon"></i>'}</div>
+            <div class="prayer-check" style="font-size:1.2rem;">${done?'✅':'🌙'}</div>
             <div class="prayer-info">
                 <div style="font-family:'Amiri',serif;font-size:1.3rem;margin-bottom:2px;color:var(--gold);line-height:1.4;">${item.arabic}</div>
                 ${item.roman ? `<div style="font-size:0.85rem;color:var(--text1);font-style:italic;margin-bottom:6px;opacity:0.9;">"${item.roman}"</div>` : ''}
@@ -1582,16 +1135,16 @@
       let html = `<details class="cat-details"${openAttr}><summary><div style="display:flex;justify-content:space-between;align-items:center;flex:1;"><span>${title}</span><span style="font-size:0.75rem;background:rgba(201,168,76,0.15);padding:3px 10px;border-radius:12px;color:var(--gold-light);font-weight:700;">${completed} / ${total}</span></div></summary><div style="padding:0 12px 12px;display:flex;flex-direction:column;gap:8px;margin-top:8px;">`;
       html += quests.map(q => {
         const d = q.done;
-        let icon = '<i class="fa-solid fa-bullseye"></i>';
+        let icon = '🎯';
         const t = q.d.toLowerCase();
-        if (t.includes('pray') || t.includes('prayer')) icon = '<i class="fa-solid fa-mosque"></i>';
-        if (t.includes('quran')) icon = '<i class="fa-solid fa-book-open"></i>';
-        if (t.includes('charity')) icon = '<i class="fa-solid fa-hands-praying"></i>';
-        if (t.includes('fast')) icon = '<i class="fa-solid fa-moon"></i>';
-        if (t.includes('deed')) icon = '<i class="fa-solid fa-star"></i>';
-        if (t.includes('streak') || t.includes('day')) icon = '<i class="fa-solid fa-fire"></i>';
-        if (t.includes('dhikr') || t.includes('adhkar') || t.includes('istighfar')) icon = '<i class="fa-solid fa-hands-praying"></i>';
-        if (t.includes('memorize')) icon = '<i class="fa-solid fa-brain"></i>';
+        if (t.includes('pray') || t.includes('prayer')) icon = '🕌';
+        if (t.includes('quran')) icon = '📖';
+        if (t.includes('charity')) icon = '🤲';
+        if (t.includes('fast')) icon = '🌙';
+        if (t.includes('deed')) icon = '⭐';
+        if (t.includes('streak') || t.includes('day')) icon = '🔥';
+        if (t.includes('dhikr') || t.includes('adhkar') || t.includes('istighfar')) icon = '🤲';
+        if (t.includes('memorize')) icon = '🧠';
         
         return `<div class="vol-card${d?' done':''}" onclick="App.toggleQuest('${q.id}','${type}',${q.xp})" style="cursor:pointer;">
           <div class="prayer-check">${d?'✅':icon}</div>
@@ -1777,8 +1330,8 @@
         <span class="theme-swatch" style="background:linear-gradient(135deg,${m.swatch.bg},${m.swatch.accent});"></span>
         <span class="name">${m.label}</span>
       </button>`).join('');
-    h += '<div style="margin-bottom:10px;font-weight:700;color:var(--gold-dark);">🎨 Theme</div>';
-    h += `<div class="theme-picker">${themeChips}</div>`;
+h += '<div style="margin-bottom:10px;font-weight:700;color:var(--gold-dark);">🎨 Theme</div>';
+h += '<div class="theme-picker">' + themeChips + '</div>';
     h += '<div style="display:flex;gap:8px;margin-bottom:10px;"><input class="profile-input" id="usernameInput" placeholder="Switch user" style="margin-bottom:0;"><button class="shop-card" onclick="App.switchUser()" style="padding:10px 14px;border-radius:var(--radius-sm);">🔄</button></div>';
     h += '<button class="shop-card" style="width:100%;justify-content:center;margin-bottom:10px;font-weight:700;font-size:1rem;color:var(--gold);letter-spacing:0.5px;" onclick="App.logout()">🚪 Logout</button>';
     h += '</div>';

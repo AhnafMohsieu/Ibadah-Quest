@@ -134,20 +134,13 @@ test('theme: picker references metadata and setTheme wiring', () => {
   assert.ok(render.includes('theme-chip'));
 });
 
-test('app shell has bottom nav bar with five tabs', () => {
-  assert.ok(html.includes('class="bottom-nav"'), 'bottom nav missing');
-  assert.ok(html.includes('data-tab="home"'), 'home tab missing');
-  assert.ok(html.includes('data-tab="quests"'), 'quests tab missing');
-  assert.ok(html.includes('data-tab="stats"'), 'stats tab missing');
-  assert.ok(html.includes('data-tab="growth"'), 'growth tab missing');
-  assert.ok(html.includes('data-tab="profile"'), 'profile tab missing');
+test('app shell has tab content container', () => {
   assert.ok(html.includes('id="tabContent"'), 'tab content container missing');
 });
 
-test('tab controller: nav buttons dispatch switchTab', () => {
+test('tab controller: switchTab dispatches renderTab', () => {
   assert.ok(actions.includes('switchTab'), 'switchTab function missing');
   assert.ok(actions.includes("App.switchTab"), 'App.switchTab export missing');
-  assert.ok(actions.includes("getAttribute('data-tab')"), 'nav tab handler missing');
   assert.ok(actions.includes('renderTab'), 'renderTab dispatch missing');
   assert.ok(render.includes('renderTop'), 'renderTop function missing');
 });

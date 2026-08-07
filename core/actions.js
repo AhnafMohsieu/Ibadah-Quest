@@ -5,18 +5,29 @@
     try { const bg = getComputedStyle(document.documentElement).getPropertyValue('--bg').trim(); if (bg) document.querySelector('meta[name="theme-color"]').setAttribute('content', bg); } catch (e) {}
   }
   function applyTheme() {
-    try { const t = localStorage.getItem(THEME_KEY) || 'light'; if (t === 'light') document.documentElement.removeAttribute('data-theme'); else document.documentElement.setAttribute('data-theme', t); updateMeta(); } catch (e) {}
+    try {
+      const t = (S && S.theme) || localStorage.getItem(THEME_KEY) || 'light';
+      if (t === 'light') document.documentElement.removeAttribute('data-theme');
+      else document.documentElement.setAttribute('data-theme', t);
+      updateMeta();
+    } catch (e) {}
   }
   function setTheme(name) {
-    try { localStorage.setItem(THEME_KEY, name || 'light'); } catch (e) {}
-    if (!name || name === 'light') document.documentElement.removeAttribute('data-theme');
-    else document.documentElement.setAttribute('data-theme', name);
+    const theme = name || 'light';
+    try { localStorage.setItem(THEME_KEY, theme); } catch (e) {}
+    if (theme === 'light') document.documentElement.removeAttribute('data-theme');
+    else document.documentElement.setAttribute('data-theme', theme);
+    if (S) { S.theme = theme; saveState(); }
     updateMeta();
     updateTopBar();
-    const navBtns = document.querySelectorAll('.nav-tab');
-    const active = [...navBtns].find(b => b.classList.contains('active'));
-    const tab = active ? active.getAttribute('data-tab') : 'home';
+    const activePanel = document.querySelector('.tab-panel.active');
+    const tab = activePanel ? activePanel.id.replace('panel-', '') : 'home';
     renderTab(tab);
+  }
+  function toggleTheme() {
+    const current = localStorage.getItem(THEME_KEY) || 'light';
+    const next = current === 'dark' ? 'light' : 'dark';
+    setTheme(next);
   }
   function checkLevelUp(oldLv) { if (S.lv > oldLv) { const t = lvTitle(S.lv); levelUpToast(S.lv, t); } }
   function toggleP(id) { const l=tlog(); const w=!!l.p[id]; const oldLv=S.lv; l.p[id]=!w; const pr=PRAYERS.find(x=>x.id===id); if(!pr) return; let xp=pr.xp; if(isFri()&&id==='dhuhr'&&pr.fri) xp=pr.fri.xp; if(S.ab&&S.ab.exp>=today()) xp*=2; if(!w){ S.tp++; S.xp+=xp; if(isFri()&&id==='dhuhr') S.tj=(S.tj||0)+1; playSound('pop'); } else { S.tp=Math.max(0,S.tp-1); S.xp=Math.max(0,S.xp-xp); if(isFri()&&id==='dhuhr') S.tj=Math.max(0,(S.tj||0)-1); } S.lv=lvFrom(S.xp); checkLevelUp(oldLv); recalc(); checkQ(); checkA(); saveState(); renderDynamic(); }
@@ -2168,7 +2179,7 @@ Object.keys(NEW_POOLS).forEach(k => {
       home: ['panel-today','panel-timer','panel-journeys','panel-morning','panel-evening','panel-dhikr','panel-duas','panel-quran','panel-wudu','panel-jumuah','panel-salah','panel-fasting','panel-healthlog','panel-finance','panel-mood'],
       quests: ['panel-quests'],
       stats: ['panel-stats'],
-      growth: ['panel-progress'],
+      growth: ['panel-progress', 'panel-growth'],
       profile: ['panel-profile','panel-trophies','panel-rewards','panel-allah_names','panel-prophet_names','panel-scholars_names']
     };
     return sections[sectionName] || null;
@@ -2176,8 +2187,10 @@ Object.keys(NEW_POOLS).forEach(k => {
   function activateTab(tabId, btn) {
     document.querySelectorAll('.t2-btn').forEach(b => b.classList.remove('active'));
     if (btn) btn.classList.add('active');
-    const activeSection = document.querySelector('.nav-tab.active');
-    const sectionName = activeSection ? activeSection.getAttribute('data-tab') : null;
+    let sectionName = null;
+    for (const [sec, panels] of Object.entries({home:['panel-today','panel-timer','panel-journeys','panel-morning','panel-evening','panel-dhikr','panel-duas','panel-quran','panel-wudu','panel-jumuah','panel-salah','panel-fasting','panel-healthlog','panel-finance','panel-mood'],quests:['panel-quests'],stats:['panel-stats'],growth:['panel-progress','panel-growth'],profile:['panel-profile','panel-trophies','panel-rewards','panel-allah_names','panel-prophet_names','panel-scholars_names']})) {
+      if (panels.includes('panel-' + tabId)) { sectionName = sec; break; }
+    }
     const sectionPanels = sectionName ? getSectionPanels(sectionName) : null;
     if (sectionPanels) {
       sectionPanels.forEach(id => {
@@ -2188,15 +2201,63 @@ Object.keys(NEW_POOLS).forEach(k => {
       document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
     }
     const panel = document.getElementById('panel-' + tabId);
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
     if (panel) panel.classList.add('active');
+    const _lazyRender = {
+      quran:'renderQuran', hadith:'renderHadith', sunnahs:'renderSunnahs', dhikr:'renderDhikr',
+      stories:'renderStories', names:'renderNames', inspirations:'renderInspirations', gratitude:'renderGratitude',
+      fasting:'renderFasting', charity:'renderCharity', memorization:'renderMemorization',
+      morning:'renderMorning', evening:'renderEvening', sins:'renderSins', punishments:'renderPunishments',
+      repentance:'renderRepentance', sahaba:'renderSahaba', seerah:'renderSeerah', tafsir:'renderTafsir',
+      manners:'renderManners', family:'renderFamily', health:'renderHealth', finance:'renderFinance',
+      ummah:'renderUmmah', hajj:'renderHajj', akhirah:'renderAkhirah', prophets:'renderProphets',
+      women:'renderWomen', heart:'renderHeart', marriage:'renderMarriage', science:'renderScience',
+      wudu:'renderWudu', scholars:'renderScholars', patience:'renderPatience', work:'renderWork',
+      community:'renderCommunity', environment:'renderEnvironment', travel:'renderTravel',
+      fiqh:'renderFiqh', arabic:'renderArabic', tawakkul:'renderTawakkul', ikhlas:'renderIkhlas',
+      zuhd:'renderZuhd', dawah:'renderDawah', battles:'renderBattles', jannah:'renderJannah',
+      jahannam:'renderJahannam', grave:'renderGrave', signs:'renderSigns', dreams:'renderDreams',
+      parenting:'renderParenting', food:'renderFood', tibb:'renderTibb', youth:'renderYouth',
+      tech:'renderTech', neighbors:'renderNeighbors', salah:'renderSalah',
+      aqeedah:'renderAqeedah', knowledge:'renderKnowledge', civilisation:'renderCivilisation', jumuah:'renderJumuah',
+      purification:'renderPurification', salahrules:'renderSalahrules', zakatrules:'renderZakatrules',
+      sawmrules:'renderSawmrules', hajjrules:'renderHajjrules', trade:'renderTrade',
+      inheritance:'renderInheritance', oaths:'renderOaths', sufism:'renderSufism', tazkiyah:'renderTazkiyah',
+      fear:'renderFear', hope:'renderHope', loveofallah:'renderLoveofallah', contentment:'renderContentment',
+      reflection:'renderReflection', brotherhood:'renderBrotherhood', sisterhood:'renderSisterhood',
+      orphans2:'renderOrphans2', elderly:'renderElderly', disabled:'renderDisabled',
+      antiracism:'renderAntiracism', poverty:'renderPoverty', volunteering:'renderVolunteering',
+      technology:'renderTechnology', socialmedia:'renderSocialmedia', ethics:'renderEthics',
+      bioethics:'renderBioethics', modfinance:'renderModfinance', politics:'renderPolitics',
+      green:'renderGreen', mentalhealth:'renderMentalhealth', education:'renderEducation',
+      umayyads:'renderUmayyads', abbasids:'renderAbbasids', andalus:'renderAndalus',
+      ottomans:'renderOttomans', mamluks:'renderMamluks', seljuks:'renderSeljuks',
+      fatimids:'renderFatimids', ayyubids:'renderAyyubids', modernhist:'renderModernhist',
+      ancientprophets:'renderAncientprophets', mecca:'renderMecca', medina:'renderMedina',
+      jerusalem:'renderJerusalem', damascus:'renderDamascus', baghdad:'renderBaghdad',
+      cairo:'renderCairo', cordoba:'renderCordoba', istanbul:'renderIstanbul',
+      bukhara:'renderBukhara', samarkand:'renderSamarkand', calligraphy:'renderCalligraphy',
+      architecture:'renderArchitecture', geometry:'renderGeometry', poetryart:'renderPoetryart',
+      literature:'renderLiterature', nasheeds:'renderNasheeds', illumination:'renderIllumination',
+      textiles:'renderTextiles', ceramics:'renderCeramics', woodwork:'renderWoodwork',
+      arabicgrammar:'renderArabicgrammar', vocab:'renderVocab', rhetoric:'renderRhetoric',
+      morphology:'renderMorphology', pronunciation:'renderPronunciation', poetry:'renderPoetry',
+      proverbs:'renderProverbs', etymology:'renderEtymology', dialects:'renderDialects',
+      scripts:'renderScripts', epistemology:'renderEpistemology', ontology:'renderOntology',
+      logic:'renderLogic', kalam:'renderKalam', reason:'renderReason', freewill:'renderFreewill',
+      problemofevil:'renderProblemofevil', prophethood:'renderProphethood', existence:'renderExistence'
+    };
+    if (_lazyRender[tabId] && window[_lazyRender[tabId]]) {
+      try { window[_lazyRender[tabId]](); } catch(e) { console.warn('Lazy render ' + tabId + ' failed:', e.message); }
+    }
     if (tabId === 'hadith' && typeof HADITH_COLLECTIONS_DATA === 'undefined') {
       ensureHadithLoaded().then(() => { if (window.renderHadith) window.renderHadith(); }).catch(() => {});
     }
   }
 
   function switchTab(name) {
-    const navBtns = document.querySelectorAll('.nav-tab');
-    navBtns.forEach(b => b.classList.toggle('active', b.getAttribute('data-tab') === name));
+    if (S) S.lastTab = name;
+    if (S) saveState();
     const content = document.getElementById('tabContent');
     if (content) { content.classList.add('fading'); setTimeout(() => content.classList.remove('fading'), 60); }
     renderTab(name);
@@ -2207,7 +2268,7 @@ Object.keys(NEW_POOLS).forEach(k => {
       home: 'panel-today',
       quests: 'panel-quests',
       stats: 'panel-stats',
-      growth: 'panel-progress',
+      growth: 'panel-growth',
       profile: 'panel-profile'
     };
     document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
@@ -2222,6 +2283,7 @@ Object.keys(NEW_POOLS).forEach(k => {
     } else if (name === 'stats') {
       if (window.Dashboard && typeof window.Dashboard.renderInsights === 'function') window.Dashboard.renderInsights();
     } else if (name === 'growth') {
+      if (window.renderProg) window.renderProg();
       if (window.renderGarden) window.renderGarden();
       if (window.renderSpiritualGrowthTab) window.renderSpiritualGrowthTab();
       if (window.renderBoat) window.renderBoat();
@@ -2243,21 +2305,28 @@ Object.keys(NEW_POOLS).forEach(k => {
   }
 
   function initApp() {
+    if (S && S.introSeen) {
+      var btn = document.getElementById('introBtn');
+      var overlay = document.getElementById('introOverlay');
+      if (btn) { btn.style.opacity = '0'; btn.style.transform = 'scale(0.9)'; btn.style.pointerEvents = 'none'; }
+      if (overlay) overlay.style.display = 'none';
+    }
+  applyTheme();
 
   // Setup names_main subtabs
   TAB_GROUPS.names_main = [
-    { id: 'allah_names', icon: '<i class="fa-solid fa-star"></i>', label: '99 Names of Allah' },
-    { id: 'prophet_names', icon: '<i class="fa-solid fa-mosque"></i>', label: '25 Prophets' },
-    { id: 'scholars_names', icon: '<i class="fa-solid fa-pen-nib"></i>', label: 'Scholars' }
+    { id: 'allah_names', icon: '⭐', label: '99 Names of Allah' },
+    { id: 'prophet_names', icon: '🕌', label: '25 Prophets' },
+    { id: 'scholars_names', icon: '✒️', label: 'Scholars' }
   ];
 
   // Profile as main tab
   TAB_GROUPS.profile_main = [
-    { id: 'profile', icon: '<i class="fa-solid fa-user"></i>', label: 'Profile' },
-    { id: 'trophies', icon: '<i class="fa-solid fa-trophy"></i>', label: 'Trophies' },
-    { id: 'progress', icon: '<i class="fa-solid fa-chart-column"></i>', label: 'Progress' },
-    { id: 'stats', icon: '<i class="fa-solid fa-chart-line"></i>', label: 'Analytics' },
-    { id: 'rewards', icon: '<i class="fa-solid fa-gift"></i>', label: 'Rewards' }
+    { id: 'profile', icon: '👤', label: 'Profile' },
+    { id: 'trophies', icon: '🏆', label: 'Trophies' },
+    { id: 'progress', icon: '📊', label: 'Progress' },
+    { id: 'stats', icon: '📈', label: 'Analytics' },
+    { id: 'rewards', icon: '🎁', label: 'Rewards' }
   ];
 
   if (!document.getElementById('panel-allah_names')) {
@@ -2281,7 +2350,7 @@ Object.keys(NEW_POOLS).forEach(k => {
 
     const t = today();
     if (S.lad !== t) { S.lad=t; if(S.ab&&S.ab.exp<t) S.ab=null; recalc(); saveState(); }
-    genDQ(); genWQ(); genMQ(); genYQ(); genLQ(); refreshContent(); recalc(); checkQ(); S.lv=lvFrom(S.xp); saveState(); initCalView(); renderTab('home'); renderTopBar();
+    genDQ(); genWQ(); genMQ(); genYQ(); genLQ(); refreshContent(); recalc(); checkQ(); S.lv=lvFrom(S.xp); saveState(); initCalView(); renderTab(S.lastTab || 'home'); renderTopBar(); renderAll();
   }
 
   function init() {
@@ -2323,7 +2392,7 @@ Object.keys(NEW_POOLS).forEach(k => {
       playQuranVerse, playSurah, stopSurah, setQuranReciter, playJuz, updateJuzButton,
       globalSearch, executeSearch,
       calPrevMonth, calNextMonth, calGoToday, selectAvatar, toggleAvatarPicker,
-      setTheme,
+      setTheme, toggleTheme,
       switchTab
     };
     window.checkA = checkA;
@@ -2338,6 +2407,7 @@ Object.keys(NEW_POOLS).forEach(k => {
     var overlay = document.getElementById('introOverlay');
     if (btn) { btn.style.opacity = '0'; btn.style.transform = 'scale(0.9)'; btn.style.pointerEvents = 'none'; }
     if (overlay) { overlay.style.transition = 'opacity 1s ease-in-out, transform 1s ease-in-out'; overlay.style.opacity = '0'; overlay.style.transform = 'scale(1.05)'; setTimeout(function(){ overlay.style.display = 'none'; }, 1000); }
+    if (S) { S.introSeen = true; saveState(); }
   }
   window.startJourney = startJourney;
 

@@ -63,7 +63,7 @@
   
   // Add to Profile tab
   if (TAB_GROUPS.profile_main) {
-    TAB_GROUPS.profile_main.push({ id: 'growth', icon: '<i class="fa-solid fa-seedling"></i>', label: 'Growth' });
+    TAB_GROUPS.profile_main.push({ id: 'growth', icon: '🌱', label: 'Growth' });
   }
 
   function renderSpiritualGrowthTab() {
