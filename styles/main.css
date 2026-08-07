@@ -285,13 +285,8 @@ body {
 /* ── Header ── */
 .header {
   text-align: center;
-  padding: 28px 24px 24px;
-  background: var(--card-bg);
-  margin: 12px;
-  border-radius: 24px;
-  border: 1px solid var(--border);
-  position: relative;
-  overflow: hidden;
+  padding: 18px 20px 14px;
+  background: transparent;
 }
 .header::before {
   content: '';
@@ -327,42 +322,13 @@ body {
   z-index: 1;
 }
 .subtitle {
-  font-size: 0.7rem;
-  color: var(--gold-dark);
-  letter-spacing: 5px;
-  text-transform: uppercase;
-  font-weight: 600;
-  opacity: 0.85;
-  position: relative;
-  z-index: 1;
-}
-.header-deco {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  margin-top: 14px;
-  padding-top: 14px;
-  border-top: 1px solid rgba(var(--accent-rgb),0.15);
-  position: relative;
-  z-index: 1;
-}
-.header-deco span {
-  color: var(--gold-dark);
   font-size: 0.68rem;
-  letter-spacing: 5px;
-  font-weight: 600;
-  opacity: 0.75;
+  color: var(--gold-dark);
+  letter-spacing: 4px;
   text-transform: uppercase;
-}
-
-@keyframes moonFloat {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-5px); }
-}
-@keyframes crescentGlow {
-  0%, 100% { filter: drop-shadow(0 0 18px rgba(245,200,66,0.5)) drop-shadow(0 4px 8px rgba(0,0,0,0.2)); }
-  50% { filter: drop-shadow(0 0 28px rgba(245,200,66,0.7)) drop-shadow(0 4px 8px rgba(0,0,0,0.2)); }
+  font-weight: 600;
+  opacity: 0.8;
+  margin-top: 6px;
 }
 
 /* ── Top Bar ── */
@@ -1047,8 +1013,7 @@ select.profile-input option { background: var(--bg-accent); color: var(--text); 
   color:#f5c842; border:2px solid #f5c842; border-radius:50px; cursor:pointer;
   box-shadow:0 0 30px rgba(245,200,66,0.25), inset 0 0 20px rgba(245,200,66,0.05);
   letter-spacing:0.5px; transition:all 0.3s;
-  opacity:0; position:relative; z-index:1;
-  animation:introFadeUp 1s ease-out 1.2s forwards, btnPulse 2.5s ease-in-out 2.2s infinite;
+  position:relative; z-index:1;
 }
 .intro-btn:hover, .intro-btn:active {
   background:#f5c842; color:#030712;

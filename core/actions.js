@@ -2304,37 +2304,21 @@ Object.keys(NEW_POOLS).forEach(k => {
     if (str) str.textContent = `🔥 ${S.cs||0}`;
   }
 
-  function initApp() {
-    const isNewSession = !currentUser || currentUser === 'default';
-    const overlay = document.getElementById('introOverlay');
-    if (overlay && isNewSession) {
-      var btn = document.getElementById('introBtn');
-      if (btn) {
-        btn.style.opacity = '1';
-        btn.style.transform = 'scale(1)';
-        btn.style.pointerEvents = 'auto';
-      }
-      overlay.style.display = 'flex';
-      overlay.style.opacity = '1';
-      overlay.style.transform = 'scale(1)';
-    } else if (S && S.introSeen) {
-      var introBtn = document.getElementById('introBtn');
-      var introOverlay = document.getElementById('introOverlay');
-      if (introBtn) { introBtn.style.opacity = '0'; introBtn.style.transform = 'scale(0.9)'; introBtn.style.pointerEvents = 'none'; }
-      if (introOverlay) introOverlay.style.display = 'none';
-    } else {
-      var defaultOverlay = document.getElementById('introOverlay');
-      if (defaultOverlay) { defaultOverlay.style.display = 'none'; defaultOverlay.style.opacity = '0'; }
-    }
+ function initApp() {
+  const overlay = document.getElementById('introOverlay');
+  const isNewUser = _currentUserSource === 'default';
+  const introWasSeen = (() => { try { return localStorage.getItem(INTRO_SEEN_KEY) === '1'; } catch(e) { return false; } })();
+  if (!introWasSeen && isNewUser) {
+   var btn = document.getElementById('introBtn');
+   if (btn) { btn.style.opacity = '1'; btn.style.transform = 'scale(1)'; btn.style.pointerEvents = 'auto'; }
+   if (overlay) { overlay.style.display = 'flex'; overlay.style.opacity = '1'; overlay.style.transform = 'scale(1)'; }
+  } else {
+   var hBtn = document.getElementById('introBtn');
+   var hOverlay = document.getElementById('introOverlay');
+   if (hBtn) { hBtn.style.opacity = '0'; hBtn.style.transform = 'scale(0.9)'; hBtn.style.pointerEvents = 'none'; }
+   if (hOverlay) hOverlay.style.display = 'none';
+  }
   applyTheme();
-
-  // Setup names_main subtabs
-  TAB_GROUPS.names_main = [
-    { id: 'allah_names', icon: '⭐', label: '99 Names of Allah' },
-    { id: 'prophet_names', icon: '🕌', label: '25 Prophets' },
-    { id: 'scholars_names', icon: '✒️', label: 'Scholars' }
-  ];
-
   // Profile as main tab
   TAB_GROUPS.profile_main = [
     { id: 'profile', icon: '👤', label: 'Profile' },
@@ -2373,7 +2357,6 @@ Object.keys(NEW_POOLS).forEach(k => {
     try { S = loadState(); } catch(e) { console.error('Step 1 loadState failed:', e); }
     try { applyTheme(); } catch(e) { console.error('Step 2 applyTheme failed:', e); }
     try { initApp(); } catch(e) { console.error('Step 3 initApp failed:', e); }
-    try { switchCategory('ibadah', document.querySelector('.t1-btn.active')); } catch(e) { console.error('Step 4 switchCategory failed:', e); }
     try {
       document.getElementById('xpWrap').addEventListener('click', () => {
         const lv=S.lv, xp=S.xp, cur=xpFor(lv), nxt=xpFor(lv+1);
@@ -2422,6 +2405,7 @@ Object.keys(NEW_POOLS).forEach(k => {
     var overlay = document.getElementById('introOverlay');
     if (btn) { btn.style.opacity = '0'; btn.style.transform = 'scale(0.9)'; btn.style.pointerEvents = 'none'; }
     if (overlay) { overlay.style.transition = 'opacity 1s ease-in-out, transform 1s ease-in-out'; overlay.style.opacity = '0'; overlay.style.transform = 'scale(1.05)'; setTimeout(function(){ overlay.style.display = 'none'; }, 1000); }
+    try { localStorage.setItem(INTRO_SEEN_KEY, '1'); } catch(e) {}
     if (S) { S.introSeen = true; saveState(); }
   }
   window.startJourney = startJourney;

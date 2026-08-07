@@ -2,6 +2,7 @@
   // STATE MANAGEMENT
   // ═══════════════════════════════════════════════════════
   let currentUser = 'default';
+let _hasLoggedIn = false;
 let _currentUserSource = 'default';
 
 function resolveCurrentUser() {
@@ -9,7 +10,7 @@ function resolveCurrentUser() {
   currentUser = stored || 'default';
   _currentUserSource = stored ? 'saved' : 'default';
 }
-  const USER_KEY = 'iq9_active_user', PREFIX = 'iq9_user_';
+  const USER_KEY = 'iq9_active_user', PREFIX = 'iq9_user_', INTRO_SEEN_KEY = 'iq9_intro_seen';
   function freshState() {
     const t = today();
     return {
