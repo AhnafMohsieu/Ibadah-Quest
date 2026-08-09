@@ -192,3 +192,9 @@ test('growth renderers are wired into renderDynamic and tab render paths', () =>
   assert.ok(actions.indexOf('renderHeartRefinement') > -1, 'renderTab must call renderHeartRefinement');
   assert.ok(actions.indexOf('renderArmor') > -1, 'renderTab must call renderArmor');
 });
+
+test('spiritual and garden cards get aligned grid sizing', () => {
+  assert.ok(css.includes('.garden-tree svg'), 'garden SVG needs explicit sizing');
+  assert.ok(css.includes('min-width: 0') || css.includes('min-width:0'), 'spiritual-info needs min-width guard');
+  assert.ok(css.includes('align-items: stretch') && css.includes('.growth-tab-grid'), 'growth grid needs stretch alignment');
+});
