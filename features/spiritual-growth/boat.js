@@ -8,31 +8,31 @@
     return CAPTIONS[Math.floor(d.getTime() / 86400000) % CAPTIONS.length];
   }
   function boatSVG(stage, progress) {
-    const waterY = 100;
-    const boatX = 15 + Math.min(progress, 1) * 75;
-    let scene = '';
-    scene += `<rect y="${waterY}" width="120" height="60" fill="#1E90FF" opacity="0.55" rx="3"/>`;
-    for (let i = 0; i < 4; i++) {
-      const wy = waterY + 8 + i * 12;
-      scene += `<path d="M0 ${wy} Q30 ${wy-8} 60 ${wy} Q90 ${wy+8} 120 ${wy}" fill="none" stroke="#4A90E2" stroke-width="1.5" opacity="0.4"/>`;
+    const p = Math.max(0, Math.min(1, progress || 0));
+    let sky = 'var(--card-bg)';
+    if (stage >= 3) sky = '#5B9BD5';
+    if (stage === 4) sky = '#2E4053';
+    if (stage >= 5) sky = '#F4C27A';
+    let h = `<rect width="120" height="132" fill="${sky}" opacity="0.85" rx="10"/>`;
+    if (stage === 3) h += `<circle cx="92" cy="34" r="13" fill="var(--gold)"/>`;
+    if (stage >= 5) h += `<circle cx="92" cy="44" r="15" fill="var(--gold)"/>`;
+    if (stage === 4) {
+      h += `<path d="M20 34 Q35 20 52 32 Q62 20 76 30 Q90 22 100 34 L100 44 L20 44 Z" fill="#39464F"/>`;
+      h += `<polyline points="50 54 58 68 54 68 62 82" fill="none" stroke="var(--gold)" stroke-width="2.5"/>`;
     }
-    scene += `<g transform="translate(${boatX}, ${waterY - 18})">
-      <path d="M-14 0 L14 0 L10 14 L-10 14 Z" fill="#8B4513"/>
-      <line x1="0" y1="0" x2="0" y2="-25" stroke="#8B4513" stroke-width="2"/>
-      <polygon points="0,-25 18,-18 0,-10" fill="#FFF" opacity="0.8"/>
-    </g>`;
+    if (stage >= 7) h += `<path d="M84 18 a9 9 0 1 0 2 11 a11 11 0 1 1 -2 -11 Z" fill="var(--gold)"/>`;
     if (stage >= 6) {
-      scene += `<ellipse cx="108" cy="${waterY}" rx="16" ry="8" fill="#2E5D3A"/>`;
-      scene += `<circle cx="108" cy="${waterY-15}" r="12" fill="#3E7C4F"/>`;
+      h += `<path d="M12 108 Q24 90 36 108 Z" fill="var(--green)"/>`;
+      h += `<path d="M14 108 Q24 98 34 108" fill="none" stroke="var(--green)" stroke-width="2"/>`;
     }
-    if (stage === 7) {
-      scene += `<circle cx="108" cy="${waterY-25}" r="18" fill="#FFD700" opacity="0.35"/>`;
-      scene += `<circle cx="108" cy="${waterY-25}" r="10" fill="var(--gold-light)" opacity="0.5"/>`;
+    h += `<path d="M0 118 Q15 110 30 118 T60 118 T90 118 T120 118 V132 H0 Z" fill="${stage === 4 ? '#1B2A35' : '#3A6EA5'}"/>`;
+    h += `<path d="M44 100 Q60 112 78 100 L76 108 Q60 118 46 108 Z" fill="#8B5A2B"/>`;
+    const sailP = stage >= 3 ? 1 : stage === 2 ? (0.4 + p * 0.6) : 0;
+    if (sailP > 0) {
+      h += `<line x1="60" y1="50" x2="60" y2="100" stroke="var(--text2)" stroke-width="2"/>`;
+      h += `<path d="M60 ${(104 - 34 * sailP).toFixed(1)} L60 ${(100).toFixed(1)} L${(60 + 22 * sailP).toFixed(1)} ${(104 - 24 * sailP).toFixed(1)} Z" fill="var(--gold)" opacity="0.9"/>`;
     }
-    return `<svg class="spiritual-svg" viewBox="0 0 120 160">
-      <rect width="120" height="160" fill="#87CEEB" rx="10"/>
-      ${scene}
-    </svg>`;
+    return `<svg class="spiritual-svg" viewBox="0 0 120 132">${h}</svg>`;
   }
 
   function renderBoat() {

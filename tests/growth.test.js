@@ -43,3 +43,10 @@ test('renderMosque renders a real SVG scene', () => {
   assert.ok(el.innerHTML.includes('<svg'), 'mosque SVG missing');
   assert.ok(el.innerHTML.includes('Stage 3/7'), 'stage badge missing');
 });
+
+test('renderBoat renders a real SVG scene', () => {
+  const { sandbox, el } = loadSpiritual(feature('boat'));
+  sandbox.window.renderBoat();
+  assert.ok(el.innerHTML.includes('<svg'), 'boat SVG missing');
+  assert.ok(el.innerHTML.includes('Stage 3/7'), 'stage badge missing');
+});
