@@ -275,3 +275,12 @@ test('top-bar: orphan renderTip call is removed from renderTab', () => {
   assert.ok(!actions.includes('renderTip();'), 'renderTip reference must be gone');
   assert.ok(actions.includes('window.renderTopBar();'), 'renderTopBar still called from renderTab');
 });
+
+test('top-bar: updateTopBar delegates to renderTopBar (single writer)', () => {
+  const fnIdx = actions.indexOf('function updateTopBar');
+  assert.ok(fnIdx > -1, 'updateTopBar must exist');
+  const body = actions.slice(fnIdx, fnIdx + 220);
+  assert.ok(body.includes('window.renderTopBar'), 'updateTopBar must call renderTopBar');
+  assert.ok(!body.includes("getElementById('tbXP')"), 'updateTopBar must not write pills directly');
+  assert.ok(!body.includes("getElementById('tbStreak')"), 'updateTopBar must not write streak directly');
+});

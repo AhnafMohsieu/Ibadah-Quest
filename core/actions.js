@@ -2311,14 +2311,7 @@ Object.keys(NEW_POOLS).forEach(k => {
   }
 
   function updateTopBar() {
-    const lv = document.getElementById('tbLevel');
-    const title = document.getElementById('tbTitle');
-    const xp = document.getElementById('tbXP');
-    const str = document.getElementById('tbStreak');
-    if (lv) lv.textContent = `Lv ${S.lv}`;
-    if (title) title.textContent = lvTitle(S.lv);
-    if (xp) xp.textContent = `${(S.xp||0).toLocaleString()} XP`;
-    if (str) str.textContent = `${S.cs||0} day`;
+    if (window.renderTopBar) window.renderTopBar();
   }
 
  function initApp() {
