@@ -2289,7 +2289,7 @@ Object.keys(NEW_POOLS).forEach(k => {
     const panel = document.getElementById(panelId);
     if (panel) panel.classList.add('active');
     if (name === 'home') {
-      window.renderPrayers(); window.renderVol(); window.renderDeeds(); window.renderBonus(); window.renderTip();
+      window.renderPrayers(); window.renderVol(); window.renderDeeds(); window.renderBonus();
       window.renderTopBar();
     } else if (name === 'quests') {
       window.renderQ(); window.renderAch();

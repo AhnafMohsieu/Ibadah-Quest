@@ -269,3 +269,9 @@ test('prayer timer tab renders its countdown and times grid', () => {
   assert.ok(css.includes('.prayer-times-grid') && css.includes('.pt-card'),
     'prayer times grid styles present');
 });
+
+test('top-bar: orphan renderTip call is removed from renderTab', () => {
+  assert.ok(!actions.includes('window.renderTip()'), 'orphan renderTip() must not be called');
+  assert.ok(!actions.includes('renderTip();'), 'renderTip reference must be gone');
+  assert.ok(actions.includes('window.renderTopBar();'), 'renderTopBar still called from renderTab');
+});
