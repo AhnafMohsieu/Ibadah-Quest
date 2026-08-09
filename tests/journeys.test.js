@@ -6,8 +6,8 @@ const { loadFile } = require('./helpers/load.js');
 
 const w = loadFile(path.join(__dirname, '..', 'features', 'journeys.js')).window;
 
-const fajrJourney = { id: 'fajr40', name: '40 Days of Fajr', icon: '🕌', desc: '', kind: 'p', key: 'Fajr', target: 40 };
-const istighfarJourney = { id: 'istighfar40', name: '40 Days of Istighfar', icon: '🤍', desc: '', kind: 'd', key: 'istighfar', target: 40 };
+const fajrJourney = { id: 'fajr40', name: '40 Days of Fajr', icon: '', desc: '', kind: 'p', key: 'Fajr', target: 40 };
+const istighfarJourney = { id: 'istighfar40', name: '40 Days of Istighfar', icon: '', desc: '', kind: 'd', key: 'istighfar', target: 40 };
 
 const log = {
   '2026-08-03': { p: { Fajr: true }, d: { istighfar: true } },

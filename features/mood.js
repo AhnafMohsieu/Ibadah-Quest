@@ -62,7 +62,7 @@
     const m = getTodayMood();
     const streak = getMoodStreak();
 
-    let h = '<div class="section-title">😊 Mood & Reflection</div>';
+    let h = `<div class="section-title">${iqIcon('cloud-sun')} Mood & Reflection</div>`;
 
     h += '<div class="mood-streak">';
     h += `<div class="mood-streak-num">${streak}</div>`;
@@ -74,23 +74,23 @@
     h += '<div class="mood-options">';
     MOOD_EMOJIS.forEach(e => {
       const active = m.mood === e.id ? ' active' : '';
-      h += `<div class="mood-btn${active}" onclick="moodTracker.logMood('${e.id}')">${e.icon}<div class="mood-btn-label">${e.label}</div></div>`;
+      h += `<div class="mood-btn${active}" onclick="moodTracker.logMood('${e.id}')">${iqIcon(e.icon || e.id)}<div class="mood-btn-label">${e.label}</div></div>`;
     });
     h += '</div></div>';
 
-    h += '<div class="section-title" style="margin-top:16px">📝 Reflections</div>';
+    h += `<div class="section-title" style="margin-top:16px">${iqIcon('pencil')} Reflections</div>`;
     h += '<div class="reflection-grid">';
     REFLECTION_PROMPTS.forEach(r => {
       const val = m.reflections[r.id] || '';
       h += `<div class="reflection-card">
-        <div class="reflection-header">${r.icon} ${r.label}</div>
+        <div class="reflection-header">${iqIcon(r.icon || r.label)} ${r.label}</div>
         <div class="reflection-desc">${r.desc}</div>
         <textarea class="reflection-input" placeholder="Write here..." onchange="moodTracker.logReflection('${r.id}',this.value)">${val}</textarea>
       </div>`;
     });
     h += '</div>';
 
-    h += '<div class="section-title" style="margin-top:16px">🤲 Gratitude Journal</div>';
+    h += `<div class="section-title" style="margin-top:16px">${iqIcon('hand-heart')} Gratitude Journal</div>`;
     h += '<div class="gratitude-list">';
     if (m.gratitude && m.gratitude.length > 0) {
       m.gratitude.forEach((g, i) => {

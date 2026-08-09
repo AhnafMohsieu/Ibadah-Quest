@@ -110,7 +110,7 @@
     const totalCharity = Object.values(f.charity || {}).reduce((a, b) => a + b, 0);
     const balance = (f.income || 0) - totalExpense - totalCharity;
 
-    let h = '<div class="section-title">💰 Finance & Charity</div>';
+    let h = `<div class="section-title">${iqIcon('wallet')} Finance & Charity</div>`;
 
     // Balance overview card
     h += '<div class="fin-balance-card">';
@@ -144,11 +144,11 @@
     h += '</div>';
 
     // Income section
-    h += '<div class="section-title" style="margin-top:16px">💵 Log Income</div>';
+    h += `<div class="section-title" style="margin-top:16px">${iqIcon('dollar-sign')} Log Income</div>`;
     h += '<div class="finance-grid">';
     INCOME_SOURCES.forEach(s => {
       h += `<div class="finance-item" onclick="financeTracker.logIncome('${s.id}')">
-        <div class="finance-item-icon">${s.icon}</div>
+        <div class="finance-item-icon">${iqIcon(s.icon)}</div>
         <div class="finance-item-label">${s.label}</div>
       </div>`;
     });
@@ -156,12 +156,12 @@
 
     // Charity section
     const charityTypes = FINANCE_PROMPTS.filter(p => p.id !== 'zakat_fitr');
-    h += '<div class="section-title" style="margin-top:16px">💝 Charity</div>';
+    h += `<div class="section-title" style="margin-top:16px">${iqIcon('heart')} Charity</div>`;
     h += '<div class="finance-grid">';
     charityTypes.forEach(p => {
       const amt = f.charity[p.id] || 0;
       h += `<div class="finance-item${amt > 0 ? ' has-value' : ''}" onclick="financeTracker.logCharity('${p.id}')">
-        <div class="finance-item-icon">${p.icon}</div>
+        <div class="finance-item-icon">${iqIcon(p.icon)}</div>
         <div class="finance-item-label">${p.label}</div>
         <div class="finance-item-amount">${amt > 0 ? amt : p.desc}</div>
       </div>`;
@@ -169,12 +169,12 @@
     h += '</div>';
 
     // Expense section
-    h += '<div class="section-title" style="margin-top:16px">📊 Expenses</div>';
+    h += `<div class="section-title" style="margin-top:16px">${iqIcon('bar-chart-3')} Expenses</div>`;
     h += '<div class="finance-grid">';
     EXPENSE_CATEGORIES.forEach(c => {
       const amt = f.expenses[c.id] || 0;
       h += `<div class="finance-item${amt > 0 ? ' has-value' : ''}" onclick="financeTracker.logExpense('${c.id}')">
-        <div class="finance-item-icon">${c.icon}</div>
+        <div class="finance-item-icon">${iqIcon(c.icon)}</div>
         <div class="finance-item-label">${c.label}</div>
         <div class="finance-item-amount">${amt > 0 ? amt : 'Tap to log'}</div>
       </div>`;

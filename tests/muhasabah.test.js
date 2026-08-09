@@ -48,8 +48,8 @@ test('muhasabahHTML renders the hero line, list, and celebration fallback', () =
 });
 
 test('muhasabahHTML renders the gentle suggestion when one is given', () => {
-  const html = w.muhasabahHTML({ prayers: 3, daysPrayed: 2, deeds: 2 }, { icon: '🤲', label: 'Charity' }, 6);
-  assert.ok(html.includes('Perhaps next week, try dedicating a moment to 🤲 Charity.'));
+  const html = w.muhasabahHTML({ prayers: 3, daysPrayed: 2, deeds: 2 }, { icon: '', label: 'Charity' }, 6);
+  assert.ok(html.includes('Perhaps next week, try dedicating a moment to  Charity.'));
 });
 
 test('computeDeedCounts window excludes deeds older than the trailing 14 days', () => {

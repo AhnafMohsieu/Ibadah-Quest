@@ -59,7 +59,7 @@
   }
   function journeyCard(j, t) {
     const start = S.journeys ? S.journeys[j.id] : undefined;
-    const head = `<div class="journey-head"><span class="journey-icon">${j.icon}</span>
+    const head = `<div class="journey-head"><span class="journey-icon">${iqIcon(j.icon || j.key)}</span>
       <div><div class="journey-name">${j.name}</div><div class="journey-desc">${j.desc}</div></div></div>`;
     if (!start) {
       return `<div class="journey-card">${head}
@@ -69,10 +69,10 @@
     checkJourneyMilestone(j, completed);
     const done = completed >= j.target;
     const summary = done
-      ? 'Alhamdulillah, journey complete 🎉'
+      ? 'Alhamdulillah, journey complete ' + iqIcon('sparkles')
       : `Day ${completed} of ${j.target} — at your own pace, no rush.`;
     const streak = calculateStreak(S.log, j, start);
-    const streakText = streak > 0 ? `<div class="journey-streak">🔥 ${streak} day streak</div>` : '';
+    const streakText = streak > 0 ? `<div class="journey-streak">${iqIcon('flame')} ${streak} day streak</div>` : '';
     return `<div class="journey-card">${head}
       <div class="journey-summary">${summary}</div>${streakText}${gridHTML(completed, j.target)}</div>`;
   }
@@ -80,12 +80,12 @@
     const milestones = [0.25, 0.5, 0.75].map(p => Math.round(journey.target * p)).filter(m => m < journey.target);
     for (const m of milestones) {
       if (completed === m) {
-        toast('🎯', `Journey Milestone: ${m} days complete!`);
+        toast(iqIcon('target'), `Journey Milestone: ${m} days complete!`);
         return true;
       }
     }
     if (completed >= journey.target) {
-      toast('🎉', 'Journey Complete! Alhamdulillah!', false, 3000);
+      toast(iqIcon('sparkles'), 'Journey Complete! Alhamdulillah!', false, 3000);
       return true;
     }
     return false;
@@ -109,7 +109,7 @@
       const nextTier = unlockOrder[i + 1];
       if (counts[currentTier] >= 3 && !unlocked.includes(nextTier)) {
         unlocked.push(nextTier);
-        toast('🔓', `New journeys unlocked: ${nextTier}!`);
+        toast(iqIcon('lock'), `New journeys unlocked: ${nextTier}!`);
       }
     }
     
@@ -124,7 +124,7 @@
     const analytics = getJourneyAnalytics();
     return `
       <div class="journey-dashboard">
-        <div class="section-title">📊 Journey Statistics</div>
+        <div class="section-title">${iqIcon('bar-chart-3')} Journey Statistics</div>
         <div class="journey-stats-grid">
           <div class="journey-stat-item">
             <div class="journey-stat-num">${analytics.totalCompleted}</div>
@@ -154,7 +154,7 @@
       const defs = getAvailableJourneys();
       el.innerHTML = renderJourneyDashboard() +
         renderJourneyInsights() +
-        '<div class="section-title">🌱 Habit Journeys</div>' +
+        `<div class="section-title">${iqIcon('sprout')} Habit Journeys</div>` +
         '<div class="journey-intro">Choose a journey and go at your own pace. A missed day is not a reset — every day you return, your grid keeps growing.</div>' +
         defs.map(j => journeyCard(j, t)).join('');
     } catch (e) { console.warn('Render Journeys failed:', e.message); }
@@ -183,7 +183,7 @@
       
       return `
         <div class="journey-insight-card">
-          <div class="journey-insight-icon">${journey.icon}</div>
+          <div class="journey-insight-icon">${iqIcon(journey.icon || journey.key)}</div>
           <div class="journey-insight-info">
             <div class="journey-insight-name">${journey.name}</div>
             <div class="journey-insight-progress">${remaining > 0 ? `${remaining} days remaining` : 'Complete!'}</div>
@@ -197,7 +197,7 @@
     
     return `
       <div class="journey-insights">
-        <div class="section-title">📈 Active Journey Progress</div>
+        <div class="section-title">${iqIcon('trending-up')} Active Journey Progress</div>
         ${insights.join('')}
       </div>
     `;

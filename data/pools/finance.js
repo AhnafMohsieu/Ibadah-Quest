@@ -12,37 +12,37 @@
 ];
 
 const FINANCE_PROMPTS = [
-  { id:'sadaqah', label:'Sadaqah', icon:'💝', desc:'Voluntary charity' },
-  { id:'zakat', label:'Zakat', icon:'🕌', desc:'Obligatory 2.5% wealth' },
-  { id:'zakat_fitr', label:'Zakat al-Fitr', icon:'🌙', desc:'Pre-Eid charity' },
-  { id:'waqf', label:'Waqf', icon:'🏗️', desc:'Endowment' },
-  { id:'sponsoring', label:'Sponsoring Orphan', icon:'👶', desc:'Monthly support' },
-  { id:'qurban', label:'Qurban/Udhiyah', icon:'🐑', desc:'Sacrifice' },
-  { id:'education', label:'Islamic Education', icon:'📚', desc:'Support learning' },
-  { id:'medical', label:'Medical Aid', icon:'🏥', desc:'Healthcare support' },
-  { id:'emergency', label:'Emergency Relief', icon:'🆘', desc:'Disaster relief' },
-  { id:'mosque', label:'Mosque Building', icon:'🕌', desc:'Masjid support' }
+  { id:'sadaqah', label:'Sadaqah', desc:'Voluntary charity', icon:'hand-heart' },
+  { id:'zakat', label:'Zakat', desc:'Obligatory 2.5% wealth', icon:'wallet' },
+  { id:'zakat_fitr', label:'Zakat al-Fitr', desc:'Pre-Eid charity', icon:'star' },
+  { id:'waqf', label:'Waqf', desc:'Endowment', icon:'building' },
+  { id:'sponsoring', label:'Sponsoring Orphan', desc:'Monthly support', icon:'baby' },
+  { id:'qurban', label:'Qurban/Udhiyah', desc:'Sacrifice', icon:'heart' },
+  { id:'education', label:'Islamic Education', desc:'Support learning', icon:'school' },
+  { id:'medical', label:'Medical Aid', desc:'Healthcare support', icon:'stethoscope' },
+  { id:'emergency', label:'Emergency Relief', desc:'Disaster relief', icon:'megaphone' },
+  { id:'mosque', label:'Mosque Building', desc:'Masjid support', icon:'mosque' }
 ];
 
 const EXPENSE_CATEGORIES = [
-  { id:'food', label:'Food & Groceries', icon:'🍽️' },
-  { id:'rent', label:'Rent/Housing', icon:'🏠' },
-  { id:'utilities', label:'Utilities', icon:'💡' },
-  { id:'transport', label:'Transportation', icon:'🚗' },
-  { id:'education', label:'Education', icon:'📖' },
-  { id:'health', label:'Healthcare', icon:'🏥' },
-  { id:'clothing', label:'Clothing', icon:'👔' },
-  { id:'family', label:'Family', icon:'👨‍👩‍👧‍👦' },
-  { id:'other', label:'Other', icon:'📦' }
+  { id:'food', label:'Food & Groceries', icon:'utensils' },
+  { id:'rent', label:'Rent/Housing', icon:'home' },
+  { id:'utilities', label:'Utilities', icon:'lightbulb' },
+  { id:'transport', label:'Transportation', icon:'plane' },
+  { id:'education', label:'Education', icon:'school' },
+  { id:'health', label:'Healthcare', icon:'stethoscope' },
+  { id:'clothing', label:'Clothing', icon:'heart' },
+  { id:'family', label:'Family', icon:'family' },
+  { id:'other', label:'Other', icon:'circle' }
 ];
 
 const INCOME_SOURCES = [
-  { id:'salary', label:'Salary', icon:'💰' },
-  { id:'business', label:'Business', icon:'🏪' },
-  { id:'freelance', label:'Freelance', icon:'💻' },
-  { id:'investment', label:'Investment', icon:'📈' },
-  { id:'gift', label:'Gift/Hadiah', icon:'🎁' },
-  { id:'other', label:'Other', icon:'📦' }
+  { id:'salary', label:'Salary', icon:'briefcase' },
+  { id:'business', label:'Business', icon:'trending-up' },
+  { id:'freelance', label:'Freelance', icon:'pencil' },
+  { id:'investment', label:'Investment', icon:'dollar-sign' },
+  { id:'gift', label:'Gift/Hadiah', icon:'gift' },
+  { id:'other', label:'Other', icon:'circle' }
 ];
 
 const ZAKAT_RATE = 0.025;

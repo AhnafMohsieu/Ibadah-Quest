@@ -198,3 +198,16 @@ test('spiritual and garden cards get aligned grid sizing', () => {
   assert.ok(css.includes('min-width: 0') || css.includes('min-width:0'), 'spiritual-info needs min-width guard');
   assert.ok(css.includes('align-items: stretch') && css.includes('.growth-tab-grid'), 'growth grid needs stretch alignment');
 });
+
+test('prayer timer tab renders its countdown and times grid', () => {
+  assert.ok(html.includes('id="panel-timer"'), 'timer panel present');
+  assert.ok(html.includes('id="timerArea"'), 'countdown area present');
+  assert.ok(html.includes('id="prayerNamesArea"'), 'prayer names area present');
+  assert.ok(html.includes('id="prayerTimesArea"'), 'prayer times grid area present');
+  assert.ok(render.includes("safe(renderPrayerTimes, 'PrayerTimes')"),
+    'renderPrayerTimes must be invoked from renderDynamic');
+  assert.ok(actions.includes("timer:'renderPrayerTimes'"),
+    '_lazyRender must map timer tab to renderPrayerTimes');
+  assert.ok(css.includes('.prayer-times-grid') && css.includes('.pt-card'),
+    'prayer times grid styles present');
+});

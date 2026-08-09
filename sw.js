@@ -1,14 +1,13 @@
 // ═══════════════════════════════════════════════════════
-// SERVICE WORKER — Offline-first, stale-while-revalidate
+// SERVICE WORKER — Network-first for HTML, stale-while-revalidate for assets
 // Cache versioning: bump CACHE_NAME to force a full purge.
 // ═══════════════════════════════════════════════════════
 (function() {
-  const CACHE_NAME = 'iq-cache-v3';
-  const CORE = ['/', 'index.html', 'styles/main.css'];
+  const CACHE_NAME = 'iq-cache-v12';
 
-  // Pure helpers — exposed for tests and kept side-effect free.
   function cacheKey(urlString) {
-    return new URL(urlString, self.location.href).pathname;
+    const url = new URL(urlString, self.location.href);
+    return url.pathname + url.search;
   }
   function shouldCache(request) {
     if (!request || request.method !== 'GET') return false;
@@ -22,27 +21,12 @@
     return typeof name === 'string' && name.indexOf('iq-cache-') === 0;
   }
 
-  async function revalidate(request) {
-    const cache = await caches.open(CACHE_NAME);
-    const cached = await cache.match(cacheKey(request.url));
-    try {
-      const fresh = await fetch(request);
-      if (fresh && fresh.ok) cache.put(cacheKey(request.url), fresh.clone());
-      return fresh;
-    } catch (e) {
-      return cached;
-    }
-  }
-
   if (typeof self === 'undefined' || typeof self.addEventListener !== 'function') return;
 
   self.swHelpers = { cacheKey, shouldCache, isSameOrigin, isCoreCache };
 
   self.addEventListener('install', (event) => {
-    event.waitUntil((async () => {
-      const cache = await caches.open(CACHE_NAME);
-      await Promise.all(CORE.map((p) => cache.add(p)));
-    })());
+    self.skipWaiting();
   });
 
   self.addEventListener('activate', (event) => {
@@ -58,22 +42,59 @@
   self.addEventListener('fetch', (event) => {
     const req = event.request;
     if (!shouldCache(req) || !isSameOrigin(req.url)) return;
+
+    const isNavigation = req.mode === 'navigate';
+    const isJS = req.url.endsWith('.js') || req.url.includes('.js?');
+    const isCSS = req.url.endsWith('.css') || req.url.includes('.css?');
+
     event.respondWith((async () => {
       const key = cacheKey(req.url);
       const cache = await caches.open(CACHE_NAME);
+
+      // HTML / navigation: NETWORK FIRST
+      if (isNavigation) {
+        try {
+          const fresh = await fetch(req);
+          if (fresh && fresh.ok) {
+            cache.put(key, fresh.clone()).catch(() => {});
+          }
+          return fresh;
+        } catch (e) {
+          const cached = await cache.match(key);
+          if (cached) return cached;
+          return Response.error();
+        }
+      }
+
+      // JS/CSS: NETWORK FIRST (prevents stale code)
+      if (isJS || isCSS) {
+        try {
+          const fresh = await fetch(req);
+          if (fresh && fresh.ok) {
+            cache.put(key, fresh.clone()).catch(() => {});
+          }
+          return fresh;
+        } catch (e) {
+          const cached = await cache.match(key);
+          if (cached) return cached;
+          return Response.error();
+        }
+      }
+
+      // Other assets: stale-while-revalidate
       const cached = await cache.match(key);
       if (cached) {
-        revalidate(req).catch(() => {});
+        fetch(req).then(fresh => {
+          if (fresh && fresh.ok) cache.put(key, fresh.clone()).catch(() => {});
+        }).catch(() => {});
         return cached;
       }
+
       let fresh;
       try { fresh = await fetch(req); } catch (e) { fresh = undefined; }
       try { if (fresh && fresh.ok) cache.put(key, fresh.clone()); } catch (e) {}
       if (fresh) return fresh;
-      if (req.mode === 'navigate') {
-        const shell = await caches.match('/');
-        if (shell) return shell;
-      }
+
       return Response.error();
     })());
   });

@@ -2250,7 +2250,8 @@ Object.keys(NEW_POOLS).forEach(k => {
       scripts:'renderScripts', epistemology:'renderEpistemology', ontology:'renderOntology',
       logic:'renderLogic', kalam:'renderKalam', reason:'renderReason', freewill:'renderFreewill',
       problemofevil:'renderProblemofevil', prophethood:'renderProphethood', existence:'renderExistence',
-      keys:'renderKeys', mosque:'renderMosque', ramadan:'renderRamadan', laylat:'renderLaylat'
+      keys:'renderKeys', mosque:'renderMosque', ramadan:'renderRamadan', laylat:'renderLaylat',
+      timer:'renderPrayerTimes'
     };
     if (_lazyRender[tabId] && window[_lazyRender[tabId]]) {
       try { window[_lazyRender[tabId]](); } catch(e) { console.warn('Lazy render ' + tabId + ' failed:', e.message); }

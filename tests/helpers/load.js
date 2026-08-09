@@ -11,7 +11,8 @@ function loadFile(filePath, overrides) {
       getItem: () => null,
       setItem: () => {},
       removeItem: () => {}
-    }
+    },
+    iqIcon: () => ''
   };
   Object.assign(sandbox, overrides || {});
   vm.runInNewContext(code, sandbox, { filename: filePath });

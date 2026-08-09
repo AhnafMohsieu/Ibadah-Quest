@@ -194,17 +194,19 @@ const _searchActions = {
   switchCategory: function(args) {
     if (typeof switchCategory !== 'function') return;
     switchCategory(args[0], null);
-    if (args[1] && typeof selectCategory === 'function') {
-      const group = TAB_GROUPS[args[0]] || [];
-      if (group.length > 0 && Array.isArray(group[0].tabs)) {
-        const cat = group.find(c => c.tabs.some(t => t.id === args[1]));
-        if (cat) {
-          const chip = document.querySelector(`.cat-chip[onclick*="${cat.id}"]`);
-          selectCategory(cat.id, chip);
-          const tabBtn = document.querySelector(`#tier3Tabs .t2-btn[onclick*="${args[1]}"]`);
-          if (tabBtn && typeof activateTab === 'function') activateTab(args[1], tabBtn);
-        }
+    if (!args[1]) return;
+    const group = TAB_GROUPS[args[0]] || [];
+    if (group.length > 0 && Array.isArray(group[0].tabs)) {
+      const cat = group.find(c => c.tabs.some(t => t.id === args[1]));
+      if (cat) {
+        const chip = document.querySelector(`.cat-chip[onclick*="${cat.id}"]`);
+        selectCategory(cat.id, chip);
+        const tabBtn = document.querySelector(`#tier3Tabs .t2-btn[onclick*="${args[1]}"]`);
+        if (tabBtn && typeof activateTab === 'function') activateTab(args[1], tabBtn);
       }
+    } else {
+      const tabBtn = document.querySelector(`#tier2Tabs .t2-btn[onclick*="${args[1]}"]`);
+      if (tabBtn && typeof activateTab === 'function') activateTab(args[1], tabBtn);
     }
   },
 };

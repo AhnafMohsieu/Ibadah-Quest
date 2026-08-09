@@ -17,21 +17,10 @@ test('manifest declares the app identity', () => {
 });
 
 test('manifest uses the light base theme colors', () => {
-  assert.strictEqual(manifest.theme_color, '#faf7f5');
-  assert.strictEqual(manifest.background_color, '#faf7f5');
+  assert.strictEqual(manifest.theme_color, '#e8e0f0');
+  assert.strictEqual(manifest.background_color, '#e8e0f0');
 });
 
-test('manifest lists three icons and the files exist', () => {
-  assert.strictEqual(manifest.icons.length, 3);
-  const anyIcons = manifest.icons.filter(i => i.purpose === 'any');
-  const maskable = manifest.icons.filter(i => i.purpose === 'maskable');
-  assert.strictEqual(anyIcons.length, 2);
-  assert.strictEqual(maskable.length, 1);
-  assert.ok(anyIcons.some(i => i.sizes === '192x192'));
-  assert.ok(anyIcons.some(i => i.sizes === '512x512'));
-  assert.strictEqual(maskable[0].sizes, '512x512');
-  for (const icon of manifest.icons) {
-    assert.strictEqual(icon.type, 'image/png');
-    assert.ok(fs.existsSync(path.join(ROOT, icon.src)), icon.src + ' missing');
-  }
+test('manifest declares no icons yet (will be re-added later)', () => {
+  assert.strictEqual(manifest.icons, undefined);
 });

@@ -19,9 +19,9 @@ function loadSW() {
 
 const { helpers, listeners } = loadSW();
 
-test('cacheKey strips query strings and hashes, keeps pathname', () => {
-  assert.strictEqual(helpers.cacheKey('https://iq.test/data/deeds.js?v=3'), '/data/deeds.js');
-  assert.strictEqual(helpers.cacheKey('https://iq.test/data/deeds.js?v=4#top'), '/data/deeds.js');
+test('cacheKey keeps the versioned pathname and query, strips hashes', () => {
+  assert.strictEqual(helpers.cacheKey('https://iq.test/data/deeds.js?v=3'), '/data/deeds.js?v=3');
+  assert.strictEqual(helpers.cacheKey('https://iq.test/data/deeds.js?v=4#top'), '/data/deeds.js?v=4');
   assert.strictEqual(helpers.cacheKey('/'), '/');
 });
 

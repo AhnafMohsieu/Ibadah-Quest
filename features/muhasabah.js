@@ -41,20 +41,20 @@
   function muhasabahHTML(metrics, suggestionInfo, streak) {
     const hero = `Alhamdulillah, you prayed <b>${metrics.prayers}</b> prayers this week and kept a <b>${streak}</b>-day streak.`;
     const sug = suggestionInfo
-      ? `Perhaps next week, try dedicating a moment to ${suggestionInfo.icon} ${suggestionInfo.label}.`
+      ? `Perhaps next week, try dedicating a moment to ${iqIcon(suggestionInfo.icon)} ${suggestionInfo.label}.`
       : 'Your garden is thriving — keep nourishing it.';
     return `<div class="muh-overlay" id="muhOverlay">
       <div class="muh-card">
-        <div class="muh-title">🪞 Weekly Muhasabah · Friday Reflection</div>
+        <div class="muh-title">${iqIcon('pencil')} Weekly Muhasabah · Friday Reflection</div>
         <div class="muh-hero">${hero}</div>
         <div class="muh-list">
-          <div class="muh-row"><span>🕌 Prayers logged</span><b>${metrics.prayers}</b></div>
-          <div class="muh-row"><span>📅 Days prayed</span><b>${metrics.daysPrayed}</b></div>
-          <div class="muh-row"><span>🔥 Streak</span><b>${streak} days</b></div>
-          <div class="muh-row"><span>🌟 Extra deeds</span><b>${metrics.deeds}</b></div>
+          <div class="muh-row"><span>${iqIcon('mosque')} Prayers logged</span><b>${metrics.prayers}</b></div>
+          <div class="muh-row"><span>${iqIcon('calendar')} Days prayed</span><b>${metrics.daysPrayed}</b></div>
+          <div class="muh-row"><span>${iqIcon('flame')} Streak</span><b>${streak} days</b></div>
+          <div class="muh-row"><span>${iqIcon('star')} Extra deeds</span><b>${metrics.deeds}</b></div>
         </div>
         <div class="muh-suggestion">${sug}</div>
-        <button class="muh-dismiss" onclick="App.dismissMuhasabah()">JazakAllah khair 🤲</button>
+        <button class="muh-dismiss" onclick="App.dismissMuhasabah()">JazakAllah khair ${iqIcon('hand-heart')}</button>
       </div>
     </div>`;
   }
@@ -68,7 +68,7 @@
       let info = null;
       if (pick && typeof DEEDS !== 'undefined') {
         const de = DEEDS.find(x => x.id === pick.id);
-        if (de) info = { icon: de.icon, label: de.name };
+        if (de) info = { icon: de.icon || de.id, label: de.name };
       }
       wrap.innerHTML = muhasabahHTML(metrics, info, S.cs || 0);
     } catch (e) { console.warn('Open Muhasabah failed:', e.message); }
@@ -97,7 +97,7 @@
       const el = document.getElementById('muhasabahEntry');
       if (!el) return;
       const pending = isFri() && S.muhWeek !== ws();
-      el.innerHTML = `<button class="muh-entry${pending ? ' muh-pending' : ''}" onclick="App.openMuhasabah()">📝 Weekly Reflection</button>`;
+      el.innerHTML = `<button class="muh-entry${pending ? ' muh-pending' : ''}" onclick="App.openMuhasabah()">${iqIcon('pencil')} Weekly Reflection</button>`;
     } catch (e) { console.warn('Render Muhasabah entry failed:', e.message); }
   }
   window.muhasabahMetrics = muhasabahMetrics;

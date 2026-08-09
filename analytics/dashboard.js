@@ -12,33 +12,33 @@
     return `
       <div class="insights-cards">
         <div class="insight-card">
-          <div class="insight-card-icon">🕌</div>
+          <div class="insight-card-icon">${iqIcon('mosque')}</div>
           <div class="insight-card-num">${prayers.total}</div>
           <div class="insight-card-label">Total Prayers</div>
           <div class="insight-card-sub">${prayers.rate}% completion</div>
           <div class="insight-progress"><div class="insight-progress-bar" style="width:${prayers.rate}%"></div></div>
         </div>
         <div class="insight-card">
-          <div class="insight-card-icon">🔥</div>
+          <div class="insight-card-icon">${iqIcon('flame')}</div>
           <div class="insight-card-num">${streak.current}</div>
           <div class="insight-card-label">Current Streak</div>
           <div class="insight-card-sub">Best: ${streak.best}</div>
         </div>
         <div class="insight-card">
-          <div class="insight-card-icon">⭐</div>
+          <div class="insight-card-icon">${iqIcon('star')}</div>
           <div class="insight-card-num">${S.pd || 0}</div>
           <div class="insight-card-label">Perfect Days</div>
           <div class="insight-card-sub">${prayers.possible ? Math.round((S.pd || 0) / (prayers.possible / 5) * 100) : 0}% rate</div>
         </div>
         <div class="insight-card">
-          <div class="insight-card-icon">📊</div>
+          <div class="insight-card-icon">${iqIcon('bar-chart-3')}</div>
           <div class="insight-card-num">Lv ${xp.level}</div>
           <div class="insight-card-label">${xp.title}</div>
           <div class="insight-card-sub">${xp.progress}% to next</div>
           <div class="insight-progress"><div class="insight-progress-bar" style="width:${xp.progress}%"></div></div>
         </div>
         <div class="insight-card">
-          <div class="insight-card-icon">🎯</div>
+          <div class="insight-card-icon">${iqIcon('target')}</div>
           <div class="insight-card-num">${xp.questXP ? (xp.questXP.daily + xp.questXP.weekly + xp.questXP.monthly + xp.questXP.yearly) : 0} XP</div>
           <div class="insight-card-label">Quest XP</div>
           <div class="insight-card-sub">D:${xp.questXP?.daily||0} W:${xp.questXP?.weekly||0} M:${xp.questXP?.monthly||0} Y:${xp.questXP?.yearly||0}</div>

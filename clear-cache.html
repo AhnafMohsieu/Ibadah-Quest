@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head><meta charset="UTF-8"><title>Clear Cache</title></head>
+<body style="font-family:sans-serif;text-align:center;padding:60px;background:#0f172a;color:#f1f5f9;">
+<h2>Clearing caches...</h2>
+<script>
+(async function() {
+  try {
+    // Unregister all service workers
+    const regs = await navigator.serviceWorker.getRegistrations();
+    for (const r of regs) await r.unregister();
+    // Delete all caches
+    const keys = await caches.keys();
+    for (const k of keys) await caches.delete(k);
+    document.querySelector('h2').textContent = 'Done! All caches cleared.';
+    document.body.innerHTML += '<p style="margin-top:20px;"><a href="index.html" style="color:#fbbf24;font-size:1.2rem;">→ Open Ibadah Quest</a></p>';
+  } catch(e) {
+    document.querySelector('h2').textContent = 'Error: ' + e.message;
+  }
+})();
+</script>
+</body>
+</html>

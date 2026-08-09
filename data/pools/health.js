@@ -14,19 +14,19 @@
 ];
 
 const HEALTH_PROMPTS = [
-  { id:'water', label:'Water Intake', icon:'💧', unit:'glasses', target:8 },
-  { id:'sleep', label:'Sleep Hours', icon:'😴', unit:'hours', target:8 },
-  { id:'steps', label:'Steps/Walking', icon:'🚶', unit:'steps', target:10000 },
-  { id:'exercise', label:'Exercise', icon:'🏃', unit:'minutes', target:30 },
-  { id:'fasting', label:'Voluntary Fasting', icon:'🌙', unit:'days', target:1 }
+  { id:'water', label:'Water Intake', unit:'glasses', target:8 },
+  { id:'sleep', label:'Sleep Hours', unit:'hours', target:8 },
+  { id:'steps', label:'Steps/Walking', unit:'steps', target:10000 },
+  { id:'exercise', label:'Exercise', unit:'minutes', target:30 },
+  { id:'fasting', label:'Voluntary Fasting', unit:'days', target:1 }
 ];
 
 const EXERCISE_TYPES = [
-  { id:'walking', label:'Walking', icon:'🚶', xp:5 },
-  { id:'running', label:'Running', icon:'🏃', xp:8 },
-  { id:'swimming', label:'Swimming', icon:'🏊', xp:8 },
-  { id:'cycling', label:'Cycling', icon:'🚴', xp:7 },
-  { id:'yoga', label:'Stretching/Yoga', icon:'🧘', xp:5 },
-  { id:'strength', label:'Strength Training', icon:'💪', xp:8 },
-  { id:'sports', label:'Sports', icon:'⚽', xp:7 }
+  { id:'walking', label:'Walking', xp:5, icon:'map' },
+  { id:'running', label:'Running', xp:8, icon:'zap' },
+  { id:'swimming', label:'Swimming', xp:8, icon:'wave' },
+  { id:'cycling', label:'Cycling', xp:7, icon:'monitor' },
+  { id:'yoga', label:'Stretching/Yoga', xp:5, icon:'heart' },
+  { id:'strength', label:'Strength Training', xp:8, icon:'zap' },
+  { id:'sports', label:'Sports', xp:7, icon:'target' }
 ];

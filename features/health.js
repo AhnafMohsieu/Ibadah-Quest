@@ -54,7 +54,7 @@
     const h = getTodayHealth();
     const score = getHealthScore();
 
-    let html = '<div class="section-title">💪 Health & Wellness</div>';
+    let html = `<div class="section-title">${iqIcon('heart')} Health & Wellness</div>`;
 
     // Health Score
     html += `<div class="health-score-card">
@@ -65,42 +65,42 @@
 
     // Water Tracker
     html += `<div class="health-card">
-      <div class="health-card-header">💧 Water (${h.water}/${WATER_TARGET} glasses)</div>
+      <div class="health-card-header">${iqIcon('droplets')} Water (${h.water}/${WATER_TARGET} glasses)</div>
       <div class="water-grid">
         ${Array.from({length: WATER_TARGET}, (_, i) =>
-          `<div class="water-glass ${i < h.water ? 'filled' : ''}" onclick="App.logWater(${i + 1})">💧</div>`
+          `<div class="water-glass ${i < h.water ? 'filled' : ''}" onclick="App.logWater(${i + 1})">${iqIcon('droplets')}</div>`
         ).join('')}
       </div>
     </div>`;
 
     // Sleep Tracker
     html += `<div class="health-card">
-      <div class="health-card-header">😴 Sleep (${h.sleep}h)</div>
+      <div class="health-card-header">${iqIcon('cloud-sun')} Sleep (${h.sleep}h)</div>
       <input type="number" class="profile-input" id="sleepInput" placeholder="Hours slept" min="0" max="12" step="0.5" value="${h.sleep}">
       <button class="shop-card" onclick="App.logSleep(document.getElementById('sleepInput').value)" style="justify-content:center;width:100%;">Log Sleep</button>
     </div>`;
 
     // Exercise Tracker
     html += `<div class="health-card">
-      <div class="health-card-header">🏃 Exercise</div>
+      <div class="health-card-header">${iqIcon('target')} Exercise</div>
       <select class="profile-input" id="exerciseType">
-        ${EXERCISE_TYPES.map(e => `<option value="${e.id}">${e.icon} ${e.label}</option>`).join('')}
+        ${EXERCISE_TYPES.map(e => `<option value="${e.id}">${iqIcon(e.icon)} ${e.label}</option>`).join('')}
       </select>
       <input type="number" class="profile-input" id="exerciseDuration" placeholder="Duration (minutes)" min="1">
       <button class="shop-card" onclick="App.logExercise(document.getElementById('exerciseType').value, document.getElementById('exerciseDuration').value)" style="justify-content:center;width:100%;">Log Exercise</button>
       ${h.exercise.length > 0 ? `<div class="exercise-log">${h.exercise.map(e => {
         const type = EXERCISE_TYPES.find(t => t.id === e.type);
-        return `<div class="exercise-item">${type?.icon || '🏃'} ${type?.label || e.type} - ${e.duration}min</div>`;
+        return `<div class="exercise-item">${iqIcon(type?.icon || 'target')} ${type?.label || e.type} - ${e.duration}min</div>`;
       }).join('')}</div>` : ''}
     </div>`;
 
     // Meals Tracker
     html += `<div class="health-card">
-      <div class="health-card-header">🍽️ Meals</div>
+      <div class="health-card-header">${iqIcon('utensils')} Meals</div>
       <div class="meal-grid">
-        <div class="meal-item ${h.meals.breakfast ? 'eaten' : ''}" onclick="App.toggleMeal('breakfast')">🌅 Breakfast</div>
-        <div class="meal-item ${h.meals.lunch ? 'eaten' : ''}" onclick="App.toggleMeal('lunch')">☀️ Lunch</div>
-        <div class="meal-item ${h.meals.dinner ? 'eaten' : ''}" onclick="App.toggleMeal('dinner')">🌇 Dinner</div>
+        <div class="meal-item ${h.meals.breakfast ? 'eaten' : ''}" onclick="App.toggleMeal('breakfast')">${iqIcon('sunrise')} Breakfast</div>
+        <div class="meal-item ${h.meals.lunch ? 'eaten' : ''}" onclick="App.toggleMeal('lunch')">${iqIcon('sun')} Lunch</div>
+        <div class="meal-item ${h.meals.dinner ? 'eaten' : ''}" onclick="App.toggleMeal('dinner')">${iqIcon('sunset')} Dinner</div>
       </div>
     </div>`;
 
