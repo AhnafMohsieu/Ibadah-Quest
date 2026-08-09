@@ -199,6 +199,64 @@ test('spiritual and garden cards get aligned grid sizing', () => {
   assert.ok(css.includes('align-items: stretch') && css.includes('.growth-tab-grid'), 'growth grid needs stretch alignment');
 });
 
+test('99 Names tab renders premium golden centered name cards', () => {
+  const fnIdx = render.indexOf('function renderNames');
+  assert.ok(fnIdx > -1, 'renderNames must exist');
+  const body = render.slice(fnIdx, fnIdx + 1200);
+  assert.ok(body.includes('name-card'), 'names must use scoped name-card class');
+  assert.ok(body.includes('"content-arabic name-an"'), 'arabic must get centered golden styling');
+  assert.ok(body.includes('name-roman'), 'transliterated name must be rendered');
+  assert.ok(body.includes('content-card name-card'), 'card must combine content-card and name-card');
+});
+
+test('99 Names name-card styles exist', () => {
+  assert.ok(css.includes('.name-card'), 'name-card style missing');
+  assert.ok(css.includes('.name-an'), 'arabic name style missing');
+  assert.ok(css.includes('.name-roman'), 'transliterated name style missing');
+  const anIdx = css.indexOf('.name-card .name-an');
+  assert.ok(anIdx > -1, 'arabic golden style missing');
+  assert.ok(css.slice(anIdx, anIdx + 300).includes('var(--gold)'), 'arabic must use gold token');
+  assert.ok(css.slice(anIdx, anIdx + 300).includes('text-align: center'), 'arabic must be centered');
+});
+
+test('dhikr reset button renders icon without leaked concatenation text', () => {
+  const fnIdx = render.indexOf('function renderDhikrCounter');
+  assert.ok(fnIdx > -1, 'renderDhikrCounter must exist');
+  const body = render.slice(fnIdx, fnIdx + 2000);
+assert.ok(body.includes("App.resetDhikr()"), 'reset button must call resetDhikr');
+  assert.ok(body.includes('${iqIcon("refresh-cw")} Reset') || body.includes("${iqIcon('refresh-cw')} Reset"), 'reset icon must be interpolated via template literal');
+  assert.ok(body.includes('refresh-cw'), 'refresh icon referenced');
+});
+
+test('dhikr tap grants per-tap XP, completion bonus, and auto-resets counter', () => {
+  const fnIdx = actions.indexOf('function tapDhikr');
+  assert.ok(fnIdx > -1, 'tapDhikr must exist');
+  const body = actions.slice(fnIdx, fnIdx + 1600);
+  assert.ok(body.includes('S.xp += 1;') || body.includes('S.xp+=1;'), 'per-tap dhikr XP +1 missing');
+  assert.ok(body.includes('S.xp += 20') || body.includes('S.xp+=20'), 'dhikr completion bonus +20 missing');
+  assert.ok(body.includes('S.dhikrCounters[idx] = 0'), 'counter must auto-reset on completion');
+  assert.ok(body.includes('checkLevelUp'), 'level up must be evaluated after xp');
+  assert.ok(body.includes('S.lv = lvFrom(S.xp)'), 'level recomputed after xp');
+});
+
+test('fasting toggle grants 50 XP on day checked and revokes on uncheck', () => {
+  const fnIdx = render.indexOf('function toggleFasting');
+  assert.ok(fnIdx > -1, 'toggleFasting must exist');
+  const body = render.slice(fnIdx, fnIdx + 700);
+  assert.ok(body.includes('S.xp += 50') || body.includes('S.xp+=50'), 'fasting day must grant 50 XP');
+  assert.ok(body.includes('S.xp = Math.max(0'), 'unchecking must revoke XP without going negative');
+  assert.ok(body.includes('levelUpToast'), 'level up must be evaluated after fasting XP');
+  assert.ok(body.includes('S.lv = lvFrom(S.xp)'), 'level recomputed after fasting XP');
+});
+
+test('health logging grants 25 XP once per day per reached milestone', () => {
+  const health = fs.readFileSync(path.join(root, 'features', 'health.js'), 'utf8');
+  assert.ok(health.includes('xp += 25') || health.includes('xp+=25'), 'milestone must grant 25 XP');
+  assert.ok(health.includes('S.healthXpClaimed') || health.includes('_xp'), 'claimed milestones must be tracked to avoid repeat grants');
+  assert.ok(health.includes('saveState'), 'state saved after XP grant');
+  assert.ok(health.includes('levelUpToast'), 'level up evaluated after health XP');
+});
+
 test('prayer timer tab renders its countdown and times grid', () => {
   assert.ok(html.includes('id="panel-timer"'), 'timer panel present');
   assert.ok(html.includes('id="timerArea"'), 'countdown area present');

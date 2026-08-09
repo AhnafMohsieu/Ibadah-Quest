@@ -188,15 +188,20 @@
   function tapDhikr() {
     if (!S.dhikrCounters) S.dhikrCounters = {};
     const idx = S.dhikrCounters._active || 0;
+    const oldLv = S.lv;
     S.dhikrCounters[idx] = (S.dhikrCounters[idx] || 0) + 1;
     if (S.dhikrSettings?.haptic && navigator.vibrate) { navigator.vibrate(10); }
     const d = DHIKR_COUNTER_DATA[idx % DHIKR_COUNTER_DATA.length];
-    if (S.dhikrCounters[idx] === d.target) {
+    S.xp += 1;
+    const cycleCount = S.dhikrCounters[idx];
+    if (S.dhikrCounters[idx] >= d.target) {
       toast(iqIcon('sparkles'), 'Target reached! SubhanAllah!', false, 2000);
       if (S.dhikrSettings?.haptic && navigator.vibrate) { navigator.vibrate([50, 50, 50]); }
+      S.xp += 20;
+      S.dhikrCounters[idx] = 0;
     }
     if (!S.dhikrSessions) S.dhikrSessions = [];
-    S.dhikrSessions.push({ date: today(), dhikrId: idx, count: S.dhikrCounters[idx], timestamp: Date.now() });
+    S.dhikrSessions.push({ date: today(), dhikrId: idx, count: cycleCount, timestamp: Date.now() });
     if (!S.dhikrStats) S.dhikrStats = { total: {}, daily: {}, streak: 0, bestStreak: 0, lastSessionDate: null, badges: [], achievements: [] };
     S.dhikrStats.total[idx] = (S.dhikrStats.total[idx] || 0) + 1;
     const t = today();
@@ -204,6 +209,8 @@
     S.dhikrStats.daily[t][idx] = (S.dhikrStats.daily[t][idx] || 0) + 1;
     updateDhikrStreak();
     checkDhikrBadges();
+    S.lv = lvFrom(S.xp);
+    checkLevelUp(oldLv);
     saveState(); renderDhikrCounter();
   }
   function checkDhikrBadges() {

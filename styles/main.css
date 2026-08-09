@@ -690,6 +690,9 @@ body.loading { opacity: 0; }
 .content-card { flex-direction: column; align-items: flex-start; gap: 14px; cursor: default; padding: 22px; }
 .content-arabic { font-family: var(--font-arabic); font-size: 1.7rem; line-height: 2.2; color: var(--text); direction: rtl; text-align: right; width: 100%; opacity: 0.9; }
 .content-english { font-size: 0.95rem; line-height: 1.7; color: var(--text2); font-weight: 400; }
+.name-card { align-items: center; text-align: center; }
+.name-card .name-an { color: var(--gold); font-size: clamp(1.8rem, 4vw, 2.4rem); text-align: center; opacity: 1; margin: 6px 0 2px; }
+.name-roman { font-size: 1.05rem; font-weight: 700; color: var(--gold-light); letter-spacing: 1px; margin-bottom: 6px; text-transform: uppercase; }
 
 /* ── Prayer Times Grid ── */
 .prayer-times-grid { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 8px; }

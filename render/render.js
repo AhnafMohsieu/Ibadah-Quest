@@ -785,7 +785,23 @@ function renderAll() {
     else { hadithView = { level: 'collections', collectionId: null, bookId: null }; }
     renderHadith();
   }
-  function renderNames() { poolRender('namesArea', iqIcon('mosque') + ' 99 Names of Allah',NAMES,'namesIdx', true); }
+  function renderNames() {
+    const el = document.getElementById('namesArea');
+    if (!el) return;
+    if (!NAMES) return;
+    let html = `<div class="section-title">${iqIcon('mosque')} 99 Names of Allah</div>`;
+    html += NAMES.map((o, i) => {
+      if (!o) return '';
+      const numBadge = `<span style="display:inline-block; background:rgba(244,63,94,0.12); color:var(--gold-light); border:1px solid rgba(244,63,94,0.4); border-radius:12px; padding:0 8px; font-size:0.75rem; margin-right:8px; font-weight:800; height:22px; line-height:20px; white-space:nowrap; font-family:var(--font);">#${i + 1}</span>`;
+      return `<div class="content-card name-card">
+        <div style="align-self:flex-end; display:flex;">${numBadge}</div>
+        <div class="content-arabic name-an">${o.arabic || ''}</div>
+        <div class="name-roman">${o.name || o.roman || ''}</div>
+        <div class="content-english" style="text-align:center;">${o.desc || ''}</div>
+      </div>`;
+    }).join('');
+    el.innerHTML = html;
+  }
   function renderSins() { poolRender('sinsArea', iqIcon('alert-triangle') + ' Major Sins to Avoid',SINS_POOL,'sinsIdx'); }
   function renderPunishments() { poolRender('punishmentsArea', iqIcon('scales') + ' Islamic Justice',PUNISHMENTS_POOL,'punishmentsIdx'); }
   function renderRepentance() { poolRender('repentanceArea', iqIcon('refresh-cw') + ' Repentance & Tawbah',REPENTANCE_POOL,'repentanceIdx'); }
@@ -992,7 +1008,7 @@ function renderAll() {
         </div>
         <button class="dhikr-tap-btn" onclick="this.classList.add('tap'); setTimeout(() => this.classList.remove('tap'), 400); App.tapDhikr();">+1</button>
         <div style="margin-top:12px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
-          <button class="dhikr-reset-btn" onclick="App.resetDhikr()">' + iqIcon('refresh-cw') + ' Reset</button>
+          <button class="dhikr-reset-btn" onclick="App.resetDhikr()">${iqIcon('refresh-cw')} Reset</button>
           <button class="dhikr-reset-btn" onclick="App.nextDhikr()">Next ▶</button>
         </div>
       </div>
@@ -1026,7 +1042,7 @@ function renderAll() {
     h += `<div class="content-card"><div class="content-english">${iqIcon('calendar')} ${cnt} fasting days this month</div><div class="content-english" style="font-size:0.85rem;color:var(--text2);">Monday & Thursday are most recommended (Sunnah)</div></div>`;
     document.getElementById('fastingArea').innerHTML = h;
   }
-  function toggleFasting() { const dt=today(); S.fastingDays[dt]=!S.fastingDays[dt]; if(S.fastingDays[dt]) S.td.fasting=(S.td.fasting||0)+1; else S.td.fasting=Math.max(0,(S.td.fasting||0)-1); saveState(); renderFasting(); }
+  function toggleFasting() { const dt=today(); S.fastingDays[dt]=!S.fastingDays[dt]; const oldLv=S.lv; if(S.fastingDays[dt]) { S.td.fasting=(S.td.fasting||0)+1; S.xp += 50; window.playSound('pop'); } else { S.td.fasting=Math.max(0,(S.td.fasting||0)-1); S.xp = Math.max(0,S.xp-50); } S.lv = lvFrom(S.xp); if(S.lv>oldLv && window.levelUpToast) window.levelUpToast(S.lv, lvTitle(S.lv)); saveState(); renderFasting(); }
   function renderCharity() {
     const cm = S.charity; if (cm.monthStart !== ms()) { cm.monthStart=ms(); cm.given=0; }
     let h = '<div class="section-title">' + iqIcon('wallet') + ' Charity Tracker</div>';

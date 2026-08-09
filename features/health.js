@@ -12,6 +12,7 @@
   function logWater(glasses) {
     const h = getTodayHealth();
     h.water = Math.max(0, Math.min(WATER_TARGET + 2, glasses));
+    grantMilestoneXp();
     saveState();
     renderHealthLog();
   }
@@ -19,6 +20,7 @@
   function logSleep(hours) {
     const h = getTodayHealth();
     h.sleep = Math.max(0, Math.min(12, parseFloat(hours) || 0));
+    grantMilestoneXp();
     saveState();
     renderHealthLog();
   }
@@ -26,6 +28,7 @@
   function logExercise(type, duration) {
     const h = getTodayHealth();
     h.exercise.push({ type, duration: parseInt(duration) || 0, date: today() });
+    grantMilestoneXp();
     saveState();
     renderHealthLog();
   }
@@ -33,6 +36,7 @@
   function toggleMeal(meal) {
     const h = getTodayHealth();
     h.meals[meal] = !h.meals[meal];
+    grantMilestoneXp();
     saveState();
     renderHealthLog();
   }
@@ -46,6 +50,31 @@
     const mealsDone = Object.values(h.meals).filter(v => v).length;
     score += Math.min(25, (mealsDone / 3) * 25);
     return Math.round(score);
+  }
+
+  function grantMilestoneXp() {
+    const h = getTodayHealth();
+    const t = today();
+    if (!S.healthXpClaimed) S.healthXpClaimed = {};
+    if (!S.healthXpClaimed[t]) S.healthXpClaimed[t] = [];
+    const claimed = S.healthXpClaimed[t];
+    const oldLv = S.lv;
+    let xp = 0;
+    const grant = (key, reached) => {
+      if (reached && !claimed.includes(key)) {
+        claimed.push(key);
+        xp += 25;
+      }
+    };
+    grant('water', h.water >= WATER_TARGET);
+    grant('sleep', h.sleep >= SLEEP_TARGET);
+    grant('exercise', h.exercise.length > 0);
+    grant('meals', Object.values(h.meals).filter(v => v).length >= 3);
+    if (xp > 0) {
+      S.xp += xp;
+      S.lv = lvFrom(S.xp);
+      if (S.lv > oldLv && window.levelUpToast) window.levelUpToast(S.lv, lvTitle(S.lv));
+    }
   }
 
   function renderHealthLog() {
