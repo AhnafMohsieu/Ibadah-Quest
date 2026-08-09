@@ -10,6 +10,7 @@ const tabs = fs.readFileSync(path.join(root, 'data', 'tab-groups.js'), 'utf8');
 const css = fs.readFileSync(path.join(root, 'styles', 'main.css'), 'utf8');
 const render = fs.readFileSync(path.join(root, 'render', 'render.js'), 'utf8');
 const spiritual = fs.readFileSync(path.join(root, 'features', 'spiritual-growth', 'data.js'), 'utf8');
+const spiritualGrowth = fs.readFileSync(path.join(root, 'features', 'spiritual-growth', 'index.js'), 'utf8');
 const actions = fs.readFileSync(path.join(root, 'core', 'actions.js'), 'utf8');
 
 test('index.html has the three feature containers', () => {
@@ -163,4 +164,13 @@ test('FEATURE_STAGES includes heart with 7 stages', () => {
   const heartBlock = spiritual.slice(spiritual.indexOf('heart: ['), spiritual.indexOf('ramadan: ['));
   const names = (heartBlock.match(/name: '([^']+)'/g) || []);
   assert.strictEqual(names.length, 7);
+});
+
+test('growth tab + settings render icons through iqIcon, no mojibake separator', () => {
+  assert.ok(spiritualGrowth.indexOf('iqIcon(progress.icon') > -1,
+    'growth tab stage emoji must be wrapped in iqIcon()');
+  assert.ok(!spiritualGrowth.includes(' ? Stage'),
+    'growth tab stage label must not contain mojibake " ? "');
+  assert.ok(spiritualGrowth.indexOf('iqIcon(progress.icon || f)') > -1,
+    'growth settings icon fallback must be wrapped in iqIcon()');
 });

@@ -37,14 +37,14 @@
     const settings = getSettings();
     const features = Object.keys(FEATURE_STAGES);
     
-    let h = '<div class="section-title">🌱 Spiritual Growth Features</div>';
+    let h = '<div class="section-title">' + iqIcon('sprout') + ' Spiritual Growth Features</div>';
     h += '<div class="growth-settings">';
     
     features.forEach(f => {
       const visible = settings.visible.includes(f);
       const stages = FEATURE_STAGES[f];
       const progress = SpiritualGrowth.getProgress(f);
-      const icon = SpiritualGrowth.FEATURE_ICONS[f] || progress.icon;
+      const icon = SpiritualGrowth.FEATURE_ICONS[f] || iqIcon(progress.icon || f);
       const label = SpiritualGrowth.FEATURE_LABELS[f] || f;
 
       h += `<div class="growth-setting-item ${visible ? 'active' : ''}" onclick="SpiritualGrowth.toggle('${f}')">
@@ -53,7 +53,7 @@
           <div class="growth-setting-name">${label}</div>
           <div class="growth-setting-stage">${progress.name} (${progress.stage}/${progress.totalStages})</div>
         </div>
-        <div class="growth-setting-toggle">${visible ? '👁️' : '🙈'}</div>
+        <div class="growth-setting-toggle">${visible ? iqIcon('eye') : iqIcon('eye')}</div>
       </div>`;
     });
     
@@ -63,7 +63,7 @@
   
   // Add to Profile tab
   if (TAB_GROUPS.profile_main) {
-    TAB_GROUPS.profile_main.push({ id: 'growth', icon: '🌱', label: 'Growth' });
+    TAB_GROUPS.profile_main.push({ id: 'growth', icon: iqIcon('sprout'), label: 'Growth' });
   }
 
   function renderSpiritualGrowthTab() {
@@ -81,7 +81,7 @@
       const progress = SpiritualGrowth.getProgress(f);
       const icon = SpiritualGrowth.FEATURE_ICONS[f] || '';
       const label = SpiritualGrowth.FEATURE_LABELS[f] || f;
-      const stageEmoji = progress.icon || '';
+      const stageEmoji = iqIcon(progress.icon || f);
       const pct = Math.round(progress.progress * 100);
       const progressText = progress.xpForNext
         ? `${progress.xp.toLocaleString()} / ${progress.xpForNext.toLocaleString()} XP`
