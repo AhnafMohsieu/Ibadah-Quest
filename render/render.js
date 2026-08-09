@@ -138,8 +138,37 @@ function renderAll() {
     calViewHijriM = h.month;
     renderProg();
   }
-  function renderLv() { /* level info is in top-bar */ }
-  function renderStr() { /* streak info is in top-bar */ }
+  function renderLv() {
+    const cres = document.getElementById('headerCrescent');
+    if (cres) cres.innerHTML = iqIcon('moon');
+    const decoL = document.getElementById('decoLeft');
+    if (decoL) decoL.innerHTML = iqIcon('star');
+    const decoR = document.getElementById('decoRight');
+    if (decoR) decoR.innerHTML = iqIcon('star');
+    const lv = document.getElementById('lvNum');
+    const title = document.getElementById('lvTitle');
+    const bar = document.getElementById('xpBar');
+    const label = document.getElementById('xpLabel');
+    if (!lv || !title || !bar || !label) return;
+    const xp = S.xp || 0;
+    const cur = xpFor(S.lv), nxt = xpFor(S.lv + 1);
+    const prog = xp - cur, need = (nxt - cur) || 1;
+    lv.textContent = S.lv;
+    title.textContent = lvTitle(S.lv);
+    bar.style.width = Math.min(100, (prog / need) * 100) + '%';
+    label.textContent = prog + ' / ' + need + ' XP';
+  }
+  function renderStr() {
+    const fire = document.getElementById('streakFire');
+    if (fire) fire.innerHTML = iqIcon('flame');
+    const days = document.getElementById('strDays');
+    const best = document.getElementById('bestStr');
+    const msg = document.getElementById('strMsg');
+    if (!days || !best || !msg) return;
+    days.textContent = (S.cs || 0) + ' Day Streak';
+    best.textContent = S.bs || 0;
+    msg.textContent = (STREAK_MSGS.find(x => (S.cs || 0) >= x.m) || { t: 'Legendary!' }).t;
+  }
   function renderBonus() { const el = document.getElementById('bonusArea'); if (el) el.innerHTML=S.lbd===today()?'':'<div class="daily-bonus" onclick="App.claimBonus()">Tap to claim your Daily Bonus!</div>'; }
   // ── Prayer rendering ──
   function renderPrayers() {

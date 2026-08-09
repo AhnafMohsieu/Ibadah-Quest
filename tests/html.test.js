@@ -292,3 +292,14 @@ test('hero header markup is restored with all ids', () => {
   assert.ok(html.includes('Ibadah Quest'), 'hero title must be present');
   assert.ok(html.includes('Submission. Grow. Earn. Ascend.'), 'hero tagline must be present');
 });
+
+test('hero renderers are real and wired into renderDynamic', () => {
+  assert.ok(render.includes("getElementById('xpBar')"), 'renderLv must update xpBar');
+  assert.ok(render.includes("getElementById('lvTitle')"), 'renderLv must update lvTitle');
+  assert.ok(render.includes('STREAK_MSGS'), 'renderStr must use STREAK_MSGS');
+  assert.ok(render.includes("getElementById('bestStr')"), 'renderStr must update bestStr');
+  assert.ok(render.includes("getElementById('headerCrescent')"), 'renderLv must fill the moon');
+  assert.ok(render.includes("getElementById('streakFire')"), 'renderStr must fill the flame');
+  assert.ok(render.includes("safe(renderLv, 'Lv')"), 'renderLv wired into renderDynamic');
+  assert.ok(render.includes("safe(renderStr, 'Str')"), 'renderStr wired into renderDynamic');
+});
