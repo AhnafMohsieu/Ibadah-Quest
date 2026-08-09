@@ -2,16 +2,25 @@
 // Spiritual Armor — Collect pieces of protection
 
 (function() {
-  const CAPTIONS = ["Truth is the first piece of armor.","Stand firm on the path.","Guard your thoughts and intentions.","Patience shields against trials.","Faith deflects doubts.","Knowledge is your sharpest weapon.","You are fully armored with taqwa."];
+  const CAPTIONS = [
+    'Truth is the first piece of armor.',
+    'Stand firm on the path.',
+    'Guard your thoughts and intentions.',
+    'Patience shields against trials.',
+    'Faith deflects doubts.',
+    'Knowledge is your sharpest weapon.',
+    'You are fully armored with taqwa.'
+  ];
   function caption() {
     const d = new Date();
     return CAPTIONS[Math.floor(d.getTime() / 86400000) % CAPTIONS.length];
   }
+
   function armorSVG(stage) {
     let parts = '';
     if (stage >= 1) {
       parts += `<rect x="35" y="95" width="50" height="10" fill="var(--gold)" rx="2"/>`;
-      parts += `<circle cx="60" cy="100" r="5" fill="#FFD700"/>`;
+      parts += `<circle cx="60" cy="100" r="5" fill="var(--gold-light)"/>`;
     }
     if (stage >= 2) {
       parts += `<rect x="32" y="122" width="16" height="20" fill="#8B4513" rx="3"/>`;
@@ -25,7 +34,7 @@
       parts += `<rect x="42" y="52" width="36" height="38" fill="var(--gold)" opacity="0.7" rx="5"/>`;
     }
     if (stage >= 5) {
-      parts += `<ellipse cx="24" cy="70" rx="14" ry="18" fill="#FFD700"/>`;
+      parts += `<ellipse cx="24" cy="70" rx="14" ry="18" fill="var(--gold-light)"/>`;
       parts += `<ellipse cx="24" cy="70" rx="9" ry="14" fill="var(--gold)"/>`;
     }
     if (stage >= 6) {
@@ -33,12 +42,10 @@
       parts += `<rect x="88" y="48" width="14" height="5" fill="#8B4513" rx="1"/>`;
     }
     if (stage === 7) {
-      parts += `<circle cx="60" cy="80" r="48" fill="none" stroke="#FFD700" stroke-width="2" opacity="0.35"/>`;
+      parts += `<circle cx="60" cy="80" r="48" fill="none" stroke="var(--gold)" stroke-width="2" opacity="0.35"/>`;
+      parts += `<path d="M84 24 a9 9 0 1 0 2 11 a11 11 0 1 1 -2 -11 Z" fill="var(--gold)" opacity="0.9"/>`;
     }
-    return `<svg class="spiritual-svg" viewBox="0 0 120 160">
-      <rect width="120" height="160" fill="#0b1114" rx="10"/>
-      ${parts}
-    </svg>`;
+    return `<svg class="spiritual-svg" viewBox="0 0 120 160">${parts}</svg>`;
   }
 
   function renderArmor() {
