@@ -322,3 +322,14 @@ test('theme: picker lists the Emara theme', () => {
   assert.ok(meta.includes("key:'emara'"), 'theme-meta lists emara');
   assert.ok(meta.includes("label:'Emara'"), 'theme-meta labels emara');
 });
+
+test('hero header styles exist with clay tokens', () => {
+  assert.ok(css.includes('.header-crescent'), 'crescent style missing');
+  assert.ok(css.includes('@keyframes moonFloat'), 'moon float animation missing');
+  assert.ok(css.includes('@keyframes xpWave'), 'xp wave animation missing');
+  assert.ok(css.includes('.xp-inner'), 'xp bar style missing');
+  assert.ok(css.includes('.streak-bar'), 'streak bar style missing');
+  assert.ok(css.includes('.best-num'), 'best number style missing');
+  assert.ok(css.includes('html[data-theme="dark"] .streak-bar'), 'dark streak override missing');
+  assert.ok(css.includes('html[data-theme="emara"] .streak-bar') || css.includes('html[data-theme="emara"]') , 'emara hero override present');
+});
