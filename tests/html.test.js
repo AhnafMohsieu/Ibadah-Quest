@@ -174,3 +174,10 @@ test('growth tab + settings render icons through iqIcon, no mojibake separator',
   assert.ok(spiritualGrowth.indexOf('iqIcon(progress.icon || f)') > -1,
     'growth settings icon fallback must be wrapped in iqIcon()');
 });
+
+test('index.html declares armor/heart growth areas and loads their scripts', () => {
+  assert.ok(html.includes('id="armorArea"'), 'armorArea missing');
+  assert.ok(html.includes('id="heartArea"'), 'heartArea missing');
+  assert.ok(html.includes('features/spiritual-growth/armor.js'), 'armor script missing');
+  assert.ok(html.includes('features/spiritual-growth/heart.js'), 'heart script missing');
+});

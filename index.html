@@ -6,10 +6,10 @@
   <title>Ibadah Quest</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Noto+Color+Emoji&family=Noto+Emoji:wght@400;500;600;700&family=Noto+Naskh+Arabic:wght@400;500;600;700&family=Sora:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Noto+Naskh+Arabic:wght@400;500;600;700&family=Sora:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="styles/main.css?v=5">
+
+  <link rel="stylesheet" href="styles/main.css?v=11">
   <script>
     (function () {
       try { var t = localStorage.getItem('iqTheme'); if (t && t !== 'light') document.documentElement.setAttribute('data-theme', t); } catch (e) {}
@@ -17,19 +17,21 @@
   </script>
   <script src="data/theme-meta.js"></script>
   <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#faf7f5">
-  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <meta name="theme-color" content="#e8e0f0">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 </head>
-<body>
+<body class="loading">
 
 <!-- INTRO OVERLAY -->
-<div id="introOverlay" class="intro-overlay" style="display:none;opacity:0;">
-    <canvas id="introCanvas" style="position:absolute;top:0;left:0;width:100%;height:100%;z-index:0;"></canvas>
-    <div id="introBismillah" class="intro-bismillah">بِسْمِ ٱللَّهِ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ</div>
-    <div id="introSub" class="intro-subtitle">In the Name of Allah, the Most Merciful</div>
-    <button id="introBtn" class="intro-btn" onclick="window.startJourney()">Welcome to Ibadah Quest</button>
+<div id="introOverlay" class="intro-overlay">
+    <canvas id="introCanvas"></canvas>
+    <div class="intro-content">
+      <div class="intro-glow"></div>
+      <div id="introBismillah" class="intro-bismillah">بِسْمِ ٱللَّهِ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ</div>
+      <div id="introSub" class="intro-subtitle">In the Name of Allah, the Most Merciful</div>
+      <button id="introBtn" class="intro-btn" onclick="window.startJourney()">Begin Your Quest</button>
+    </div>
 </div>
 
 <div class="toast-overlay" id="toastOverlay" style="display:none;"></div>
@@ -42,55 +44,32 @@
       <span class="tb-title" id="tbTitle">Muslim</span>
     </div>
 <div class="tb-right">
-  <span class="tb-stat" id="tbXP">⚡ 0 XP</span>
-  <span class="tb-stat" id="tbStreak">🔥 0</span>
+  <span class="tb-stat" id="tbXP">0 XP</span>
+  <span class="tb-stat" id="tbStreak">0</span>
   <div class="theme-toggle" id="themeToggle" onclick="App.toggleTheme()">
-        <span class="theme-toggle-label" id="themeLabel">☀️</span>
         <div class="theme-toggle-track">
           <div class="theme-toggle-thumb" id="themeThumb"></div>
         </div>
-        <span class="theme-toggle-label" id="themeLabelDark">🌙</span>
       </div>
     </div>
   </header>
 
-  <div class="header">
-    <div class="header-crescent">&#x1F319;</div>
-    <h1>Ibadah Quest</h1>
-    <div class="header-deco"><span>Submission. Grow. Earn. Ascend.</span></div>
-  </div>
-
   <main class="tab-content" id="tabContent">
-  <div class="level-row">
-    <div class="level-badge">
-      <span class="lv-num" id="lvNum">1</span>
-      <span class="lv-title" id="lvTitle">Seeker</span>
-    </div>
-    <div class="xp-wrap" id="xpWrap">
-      <div class="xp-outer"><div class="xp-inner" id="xpBar" style="width:0%"></div></div>
-      <div class="xp-label" id="xpLabel">0 / 100 XP</div>
-    </div>
-  </div>
   <div id="bonusArea"></div>
-  <div class="streak-bar">
-    <span class="streak-fire">🔥</span>
-    <div class="streak-info"><h3 id="strDays">0 Day Streak</h3><p id="strMsg">Keep it up!</p></div>
-    <div class="streak-best"><div class="best-num" id="bestStr">0</div><div class="best-label">BEST</div></div>
-  </div>
 
   <div class="global-search-wrap">
-    <span class="global-search-icon">🔍</span>
-    <input class="global-search" placeholder="Search anything... Quran, Hadith, Scholars, Topics..." oninput="App.globalSearch(this.value)" onfocus="App.globalSearch(this.value)">
+    <span class="global-search-icon"></span>
+    <input class="global-search" placeholder="Search anything..." oninput="App.globalSearch(this.value)" onfocus="App.globalSearch(this.value)">
     <div class="global-search-results" id="globalSearchResults"></div>
   </div>
 
   <div class="tier-nav-container">
     <div class="tier1-tabs">
-      <button class="t1-btn active" data-cat="ibadah" onclick="App.switchCategory('ibadah', this)">🕌 Daily</button>
-      <button class="t1-btn" data-cat="knowledge" onclick="App.switchCategory('knowledge', this)">📕 Knowledge</button>
-      <button class="t1-btn" data-cat="names_main" onclick="App.switchCategory('names_main', this)">⭐ Names</button>
-      <button class="t1-btn" data-cat="library" onclick="App.switchCategory('library', this)">🏛️ Library</button>
-      <button class="t1-btn" data-cat="profile_main" onclick="App.switchCategory('profile_main', this)">👤 Profile</button>
+      <button class="t1-btn active" data-cat="ibadah" onclick="App.switchCategory('ibadah', this)"><span class="iq-inline"></span> Daily</button>
+      <button class="t1-btn" data-cat="knowledge" onclick="App.switchCategory('knowledge', this)"><span class="iq-inline"></span> Knowledge</button>
+      <button class="t1-btn" data-cat="names_main" onclick="App.switchCategory('names_main', this)"><span class="iq-inline"></span> Names</button>
+      <button class="t1-btn" data-cat="library" onclick="App.switchCategory('library', this)"><span class="iq-inline"></span> Library</button>
+      <button class="t1-btn" data-cat="profile_main" onclick="App.switchCategory('profile_main', this)"><span class="iq-inline"></span> Profile</button>
     </div>
     <div class="tier2-scroll"><div class="tier2-tabs" id="tier2Tabs"></div></div>
     <div class="tier3-scroll" id="tier3Wrap" style="display:none;"><div class="tier3-tabs" id="tier3Tabs"></div></div>
@@ -98,23 +77,22 @@
 
   <!-- ═══════════════ ALL TAB PANELS ═══════════════ -->
   <!-- IBADAH GROUP -->
-  <div class="tab-panel active" id="panel-today">
-    <div id="gardenArea"></div>
-    <div id="lanternArea"></div>
-    <div id="wellArea"></div>
-    <div id="muhasabahEntry"></div>
-    <div id="tipArea"></div>
-    <div id="prayerArea"></div>
-    <div class="section-title">🌙 Voluntary Prayers</div>
-    <div id="volArea"></div>
-    <div class="section-title">🌟 Extra Good Deeds</div>
-    <div id="deedArea" style="display:flex;flex-direction:column;gap:8px;"></div>
-  </div>
+<div class="tab-panel active" id="panel-today">
+<div id="wellArea"></div>
+<div id="muhasabahEntry"></div>
+<div id="prayerArea"></div>
+<div id="gardenArea"></div>
+<div class="section-title"> Voluntary Prayers</div>
+<div id="volArea"></div>
+<div class="section-title"> Extra Good Deeds</div>
+<div id="deedArea" style="display:flex;flex-direction:column;gap:8px;"></div>
+<div id="lanternArea"></div>
+</div>
   <div class="tab-panel" id="panel-timer">
-    <div class="section-title">⏳ Next Prayer Countdown</div>
+    <div class="section-title"> Next Prayer Countdown</div>
     <div id="timerArea" style="text-align:center;font-size:3rem;font-weight:bold;color:var(--gold);margin:30px 0;text-shadow:0 0 20px rgba(201,168,76,0.5);font-family:var(--font-heading);letter-spacing:2px;"></div>
     <div id="prayerNamesArea" style="text-align:center;color:var(--text2);font-size:1rem;letter-spacing:0.5px;"></div>
-    <div class="section-title">🕐 Prayer Times</div>
+    <div class="section-title"> Prayer Times</div>
     <div id="prayerTimesArea"></div>
   </div>
   <div class="tab-panel" id="panel-quests"><div id="questArea"></div></div>
@@ -142,8 +120,12 @@
   <div class="tab-panel" id="panel-fiqh"><div id="fiqhArea"></div></div>
   <div class="tab-panel" id="panel-memorization"><div id="memorizationArea"></div></div>
 
+  <!-- NAMES GROUP -->
+  <div class="tab-panel" id="panel-allah_names"><div id="namesArea"></div></div>
+  <div class="tab-panel" id="panel-scholars_names"><div id="scholarsArea"></div></div>
+
   <!-- QALB GROUP -->
-  <div class="tab-panel" id="panel-heart"><div id="heartArea"></div><div id="heartRefineArea"></div><div id="armorArea"></div></div>
+  <div class="tab-panel" id="panel-heart"><div id="heartArea"></div></div>
   <div class="tab-panel" id="panel-sins"><div id="sinsArea"></div></div>
   <div class="tab-panel" id="panel-repentance"><div id="repentanceArea"></div></div>
   <div class="tab-panel" id="panel-tawakkul"><div id="tawakkulArea"></div></div>
@@ -194,7 +176,7 @@
     <div id="calArea"></div>
   </div>
   <div class="tab-panel" id="panel-stats">
-    <div class="section-title">📈 Advanced Analytics</div>
+    <div class="section-title"> Advanced Analytics</div>
     <div id="statsArea"></div>
   </div>
   <div class="tab-panel" id="panel-rewards">
@@ -293,7 +275,7 @@
   <div class="tab-panel" id="panel-problemofevil"><div id="problemofevilArea"></div></div>
   <div class="tab-panel" id="panel-prophethood"><div id="prophethoodArea"></div></div>
   <div class="tab-panel" id="panel-existence"><div id="existenceArea"></div></div>
-<div class="tab-panel" id="panel-growth"><div id="statArea"></div><div id="calArea"></div><div id="growthArea"></div></div>
+<div class="tab-panel" id="panel-growth"><div id="growthStatArea"></div><div id="growthCalArea"></div><div id="growthArea"></div><div id="armorArea"></div><div id="heartArea"></div></div>
 <div class="tab-panel" id="panel-ramadan"><div id="ramadanArea"></div></div>
 <div class="tab-panel" id="panel-laylat"><div id="laylatArea"></div></div>
   </main>
@@ -303,8 +285,18 @@
 
 <!-- Core Data Files (must load in dependency order) -->
 <script src="data/prayers.js?v=3"></script>
-<script src="data/voluntary.js?v=3"></script>
-<script src="data/deeds.js?v=3"></script>
+<script src="data/icons.js?v=2"></script>
+<script>
+  if (typeof iqIcon !== 'function') { function iqIcon(){return '';} function iqEmoji(){return '';} }
+  document.querySelectorAll('.tier1-tabs .t1-btn').forEach(function (b) {
+    var s = b.querySelector('.iq-inline');
+    if (s) s.innerHTML = iqIcon(b.getAttribute('data-cat'));
+  });
+</script>
+
+
+<script src="data/voluntary.js?v=4"></script>
+<script src="data/deeds.js?v=4"></script>
 <script src="data/tips-details.js?v=3"></script>
 <script src="data/shop.js?v=3"></script>
 <script src="data/levels.js?v=3"></script>
@@ -312,11 +304,11 @@
 <script src="data/quests.js?v=3"></script>
 <script src="data/achievements.js?v=3"></script>
 <script src="data/morning-evening.js?v=3"></script>
-<script src="data/tab-groups.js?v=4"></script>
+<script src="data/tab-groups.js?v=5"></script>
 
 <!-- Content Pools (extracted from content-pools.js) -->
 <script src="data/pools/quran-meta.js?v=3"></script>
-<script src="data/pools/helpers.js?v=3"></script>
+<script src="data/pools/helpers.js?v=4"></script>
 <script src="data/pools/dua.js?v=3"></script>
 <script src="data/pools/sunnah.js?v=3"></script>
 <script src="data/pools/dhikr.js?v=3"></script>
@@ -332,9 +324,9 @@
 <script src="data/pools/manners.js?v=3"></script>
 <script src="data/pools/aqeedah.js?v=3"></script>
 <script src="data/pools/family.js?v=3"></script>
-<script src="data/pools/health.js?v=3"></script>
-<script src="data/pools/finance.js?v=3"></script>
-<script src="data/pools/mood.js?v=1"></script>
+<script src="data/pools/health.js?v=4"></script>
+<script src="data/pools/finance.js?v=4"></script>
+<script src="data/pools/mood.js?v=2"></script>
 <script src="data/pools/ummah.js?v=3"></script>
 <script src="data/pools/hajj.js?v=3"></script>
 <script src="data/pools/akhirah.js?v=3"></script>
@@ -376,7 +368,7 @@
 <script src="state/state.js?v=2"></script>
 
 <!-- Render engine -->
-<script src="render/render.js?v=3"></script>
+<script src="render/render.js?v=6"></script>
 
 <!-- Chart.js CDN -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>
@@ -388,15 +380,17 @@
 <script src="analytics/dashboard.js"></script>
 
 <!-- Spiritual Growth Features -->
-<script src="data/journeys.js?v=1"></script>
-<script src="features/garden.js?v=1"></script>
-<script src="features/muhasabah.js?v=1"></script>
-<script src="features/journeys.js?v=1"></script>
-<script src="features/health.js?v=1"></script>
-<script src="features/finance.js?v=1"></script>
-<script src="features/mood.js?v=1"></script>
+<script src="data/journeys.js?v=2"></script>
+<script src="features/garden.js?v=2"></script>
+<script src="features/muhasabah.js?v=3"></script>
+<script src="features/journeys.js?v=3"></script>
+<script src="features/health.js?v=3"></script>
+<script src="features/finance.js?v=3"></script>
+<script src="features/mood.js?v=3"></script>
 <script src="features/spiritual-growth/data.js?v=2"></script>
 <script src="features/spiritual-growth/index.js?v=2"></script>
+<script src="features/spiritual-growth/armor.js?v=1"></script>
+<script src="features/spiritual-growth/heart.js?v=1"></script>
 <script src="features/spiritual-growth/lantern.js?v=1"></script>
 <script src="features/spiritual-growth/keys.js?v=1"></script>
 <script src="features/spiritual-growth/mosque.js?v=1"></script>
@@ -405,7 +399,7 @@
 <script src="features/spiritual-growth/laylat.js?v=1"></script>
 
 <!-- Actions (core logic, navigation, init, window.App) -->
-<script src="core/actions.js?v=4"></script>
+<script src="core/actions.js?v=8"></script>
 
 <!-- PWA: Service Worker registration + update banner -->
 <script>
@@ -418,7 +412,7 @@
     var b = document.createElement('div');
     b.id = 'swUpdateBanner';
     b.className = 'sw-banner';
-    b.innerHTML = '<span style="flex:1;">🔄 New version available</span><button id="swUpdateBtn" class="sw-banner-btn">Refresh</button>';
+    b.innerHTML = '<span style="flex:1;">New version available</span><button id="swUpdateBtn" class="sw-banner-btn">Refresh</button>';
     document.body.appendChild(b);
     b.querySelector('#swUpdateBtn').addEventListener('click', function() {
       if (reg.waiting) reg.waiting.postMessage({ type: 'SKIP_WAITING' });
@@ -429,7 +423,7 @@
     });
   }
   window.addEventListener('load', function() {
-    navigator.serviceWorker.register('sw.js').then(function(reg) {
+    navigator.serviceWorker.register('sw.js?v=8').then(function(reg) {
       if (reg.waiting) { showUpdateBanner(reg); return; }
       reg.addEventListener('updatefound', function() {
         var sw = reg.installing;
@@ -444,6 +438,8 @@
   });
 })();
 </script>
+
+
 
 </body>
 </html>
