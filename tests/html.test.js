@@ -284,3 +284,11 @@ test('top-bar: updateTopBar delegates to renderTopBar (single writer)', () => {
   assert.ok(!body.includes("getElementById('tbXP')"), 'updateTopBar must not write pills directly');
   assert.ok(!body.includes("getElementById('tbStreak')"), 'updateTopBar must not write streak directly');
 });
+
+test('hero header markup is restored with all ids', () => {
+  for (const id of ['headerCrescent','lvNum','lvTitle','xpBar','xpLabel','strDays','strMsg','bestStr','streakFire']) {
+    assert.ok(html.includes(`id="${id}"`), `missing hero id ${id}`);
+  }
+  assert.ok(html.includes('Ibadah Quest'), 'hero title must be present');
+  assert.ok(html.includes('Submission. Grow. Earn. Ascend.'), 'hero tagline must be present');
+});
