@@ -303,3 +303,9 @@ test('hero renderers are real and wired into renderDynamic', () => {
   assert.ok(render.includes("safe(renderLv, 'Lv')"), 'renderLv wired into renderDynamic');
   assert.ok(render.includes("safe(renderStr, 'Str')"), 'renderStr wired into renderDynamic');
 });
+
+test('hero+topbar refresh on theme change and home tab', () => {
+  assert.ok(actions.includes('renderDynamic();'), 'setTheme must call renderDynamic');
+  const homeCall = actions.slice(actions.indexOf("name === 'home'"));
+  assert.ok(homeCall.includes('window.renderTopBar();'), 'renderTab(home) calls renderTopBar');
+});
