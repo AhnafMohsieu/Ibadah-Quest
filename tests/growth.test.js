@@ -36,3 +36,10 @@ test('renderLantern renders a real SVG scene', () => {
   assert.ok(el.innerHTML.includes('<svg'), 'lantern SVG missing');
   assert.ok(el.innerHTML.includes('spiritual-svg'), 'lantern must use spiritual-svg class');
 });
+
+test('renderMosque renders a real SVG scene', () => {
+  const { sandbox, el } = loadSpiritual(feature('mosque'));
+  sandbox.window.renderMosque();
+  assert.ok(el.innerHTML.includes('<svg'), 'mosque SVG missing');
+  assert.ok(el.innerHTML.includes('Stage 3/7'), 'stage badge missing');
+});
