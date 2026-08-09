@@ -321,6 +321,11 @@ test('theme: Emara jade-and-gold palette block exists', () => {
 test('theme: picker lists the Emara theme', () => {
   assert.ok(meta.includes("key:'emara'"), 'theme-meta lists emara');
   assert.ok(meta.includes("label:'Emara'"), 'theme-meta labels emara');
+  assert.ok(meta.includes("bg:'#123027'"), 'emara swatch uses deep jade');
+});
+
+test('theme: theme toggle cycles through Emara', () => {
+  assert.ok(actions.includes("'midnight', 'emara'") || actions.includes("'emara']"), 'toggleTheme cycle includes emara');
 });
 
 test('hero header styles exist with clay tokens', () => {
