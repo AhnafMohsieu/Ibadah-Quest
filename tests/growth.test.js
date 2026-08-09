@@ -29,3 +29,10 @@ test('garden treeSVG renders a real scene', () => {
   assert.ok(el.innerHTML.includes('class="garden-svg"'), 'garden SVG must carry garden-svg class');
   assert.ok(el.innerHTML.includes('Stage 3/7'), 'stage badge missing');
 });
+
+test('renderLantern renders a real SVG scene', () => {
+  const { sandbox, el } = loadSpiritual(feature('lantern'));
+  sandbox.window.renderLantern();
+  assert.ok(el.innerHTML.includes('<svg'), 'lantern SVG missing');
+  assert.ok(el.innerHTML.includes('spiritual-svg'), 'lantern must use spiritual-svg class');
+});
