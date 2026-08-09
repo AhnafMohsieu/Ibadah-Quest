@@ -17,8 +17,8 @@ test('manifest declares the app identity', () => {
 });
 
 test('manifest uses the light base theme colors', () => {
-  assert.strictEqual(manifest.theme_color, '#e8e0f0');
-  assert.strictEqual(manifest.background_color, '#e8e0f0');
+  assert.strictEqual(manifest.theme_color, '#ddd3ea');
+  assert.strictEqual(manifest.background_color, '#ddd3ea');
 });
 
 test('manifest declares no icons yet (will be re-added later)', () => {

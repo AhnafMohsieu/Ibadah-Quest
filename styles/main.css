@@ -3,9 +3,9 @@
    ═══════════════════════════════════════════════════════ */
 
 :root {
-  --bg: #e8e0f0;
-  --bg-accent: #f0ecf5;
-  --card-bg: #ece8f1;
+  --bg: #ddd3ea;
+  --bg-accent: #e6e0ee;
+  --card-bg: #e3dced;
   --shadow-dark: rgba(174, 174, 192, 0.4);
   --shadow-light: rgba(255, 255, 255, 0.8);
   --emerald: #f472b6;
@@ -63,8 +63,8 @@
 }
 
 html[data-theme="serene"] {
-  --bg: #dce8da; --bg-accent: #e5efe3;
-  --card-bg: #e4efe2;
+  --bg: #d2e1cf; --bg-accent: #dcead9;
+  --card-bg: #d8e7d5;
   --shadow-dark: rgba(140, 174, 138, 0.4); --shadow-light: rgba(255, 255, 255, 0.8);
   --text: #22332b; --text2: #5f7267; --gold: #4c7a4a; --gold-light: #6f9a6b; --gold-dark: #3a5c38;
   --emerald: #4c7a4a; --emerald-deep: #3a5c38; --teal: #4c7a4a;
@@ -73,8 +73,8 @@ html[data-theme="serene"] {
   --accent-rgb: 76,122,74; --shadow-rgb: 0,0,0;
 }
 html[data-theme="royal"] {
-  --bg: #e0daf0; --bg-accent: #eae5f5;
-  --card-bg: #e6e0f2;
+  --bg: #d6cfe9; --bg-accent: #e2dcef;
+  --card-bg: #dcd6ea;
   --shadow-dark: rgba(152, 140, 190, 0.4); --shadow-light: rgba(255, 255, 255, 0.8);
   --text: #241f3d; --text2: #635d86; --gold: #7c5cf0; --gold-light: #a78bfa; --gold-dark: #5b3fd8;
   --emerald: #7c5cf0; --emerald-deep: #5b3fd8; --teal: #7c5cf0;
@@ -83,8 +83,8 @@ html[data-theme="royal"] {
   --accent-rgb: 124,92,240; --shadow-rgb: 0,0,0;
 }
 html[data-theme="sand"] {
-  --bg: #efe8d8; --bg-accent: #f3edde;
-  --card-bg: #f0ead8;
+  --bg: #e8dcc6; --bg-accent: #ece3d2;
+  --card-bg: #e7ddc8;
   --shadow-dark: rgba(180, 168, 140, 0.4); --shadow-light: rgba(255, 255, 255, 0.8);
   --text: #3f321d; --text2: #8a7a5b; --gold: #c98a2e; --gold-light: #e0b05a; --gold-dark: #a5701f;
   --emerald: #c98a2e; --emerald-deep: #a5701f; --teal: #c98a2e;
@@ -93,8 +93,8 @@ html[data-theme="sand"] {
   --accent-rgb: 201,138,46; --shadow-rgb: 0,0,0;
 }
 html[data-theme="midnight"] {
-  --bg: #d8e2f0; --bg-accent: #e0eaf5;
-  --card-bg: #dfe9f4;
+  --bg: #cfdcea; --bg-accent: #d8e4f0;
+  --card-bg: #d6e2ee;
   --shadow-dark: rgba(130, 150, 180, 0.4); --shadow-light: rgba(255, 255, 255, 0.8);
   --text: #17233a; --text2: #5f6c84; --gold: #3fa7c8; --gold-light: #5cc0dd; --gold-dark: #2f7f96;
   --emerald: #3fa7c8; --emerald-deep: #2f7f96; --teal: #3fa7c8;

@@ -41,7 +41,7 @@ test('Journeys tab is wired into the ibadah group', () => {
 
 test('index.html declares the PWA manifest and theme color', () => {
   assert.ok(html.includes('<link rel="manifest" href="manifest.json">'));
-  assert.ok(html.includes('<meta name="theme-color" content="#e8e0f0">'));
+  assert.ok(html.includes('<meta name="theme-color" content="#ddd3ea">'));
 });
 
 test('index.html loads Tailwind CDN', () => {
@@ -49,13 +49,13 @@ test('index.html loads Tailwind CDN', () => {
 });
 
 test('index.html theme-color uses light base', () => {
-  assert.ok(html.includes('content="#e8e0f0"'));
+  assert.ok(html.includes('content="#ddd3ea"'));
 });
 
 test('main.css uses modern light tokens', () => {
   assert.ok(css.includes('--emerald'));
   assert.ok(css.includes('--gold'));
-  assert.ok(css.includes('--bg: #e8e0f0'));
+  assert.ok(css.includes('--bg: #ddd3ea'));
 });
 
 test('index.html registers the service worker and update banner', () => {
@@ -89,7 +89,7 @@ test('redesign keeps core markers and PWA meta intact', () => {
 });
 
 test('modern light clay theme: uses the new bg and clay accents', () => {
-  assert.ok(css.includes('--bg: #e8e0f0'));
+  assert.ok(css.includes('--bg: #ddd3ea'));
   assert.ok(css.includes('--shadow-light'));
   assert.ok(css.includes('--gold: #f43f5e'));
   assert.ok(css.includes('backdrop-filter'));
@@ -105,7 +105,7 @@ test('theme: light-family palette blocks exist in main.css', () => {
   for (const key of ['serene','royal','sand','midnight']) {
     assert.ok(css.includes(`html[data-theme="${key}"]`), `missing palette block for ${key}`);
   }
-  assert.ok(css.includes('--bg: #e8e0f0'));   // light (default) :root block present
+  assert.ok(css.includes('--bg: #ddd3ea'));   // light (default) :root block present
   assert.ok(css.includes('html[data-theme="dark"]'), 'dark palette block must exist');
   assert.ok(!css.includes('html[data-theme="serene-dark"]'), 'serene-dark palette block must be removed');
 });
