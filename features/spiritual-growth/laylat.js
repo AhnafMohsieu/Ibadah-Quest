@@ -10,22 +10,22 @@
   const STAR_COUNTS = [1, 3, 5, 8, 12, 20, 35];
 
   function laylatSVG(stage) {
-    const n = STAR_COUNTS[stage - 1] || 1;
-    let stars = '';
-    for (let i = 0; i < n; i++) {
-      const x = 10 + ((i * 41 + 23) % 100);
-      const y = 8 + ((i * 59 + 11) % 110);
-      stars += `<circle cx="${x}" cy="${y}" r="${0.6 + ((i * 7) % 3) * 0.5}" fill="#FFD700" opacity="${0.4 + ((i * 3) % 6) * 0.1}"/>`;
+    const count = STAR_COUNTS[Math.min(stage, 7) - 1];
+    let h = `<rect width="120" height="132" fill="#0B1114" rx="10"/>`;
+    h += `<ellipse cx="60" cy="40" rx="${(30 + stage * 5)}" ry="${(12 + stage * 2)}" fill="var(--gold)" opacity="${(0.05 + stage * 0.04).toFixed(2)}"/>`;
+    let seed = 7;
+    function rnd() {
+      seed = (seed * 16807) % 2147483647;
+      return seed / 2147483647;
     }
-    if (stage === 7) {
-      stars += `<circle cx="60" cy="60" r="42" fill="#FFD700" opacity="0.08"/>`;
-      stars += `<circle cx="60" cy="60" r="22" fill="#FFD700" opacity="0.15"/>`;
+    for (let i = 0; i < count; i++) {
+      const x = 10 + rnd() * 100;
+      const y = 16 + rnd() * 100;
+      h += `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${stage >= 6 ? 2.4 : 1.6}" fill="var(--gold)" opacity="${(0.5 + rnd() * 0.5).toFixed(2)}"/>`;
     }
-    return `<svg class="spiritual-svg" viewBox="0 0 120 160">
-      <rect width="120" height="160" fill="#0a0a2a" rx="10"/>
-      ${stars}
-      <text x="60" y="150" text-anchor="middle" fill="#FFD700" font-size="11" font-family="serif" opacity="0.8">لَيْلَةُ ٱلْقَدْرِ</text>
-    </svg>`;
+    const cr = 10 + stage * 1.4;
+    h += `<path d="M80 ${(58 - cr).toFixed(1)} a${cr.toFixed(1)} ${cr.toFixed(1)} 0 1 0 0 ${(cr * 2).toFixed(1)} a${(cr - 3).toFixed(1)} ${(cr - 3).toFixed(1)} 0 1 1 0 ${(-(cr * 2)).toFixed(1)} Z" fill="var(--gold)"/>`;
+    return `<svg class="spiritual-svg" viewBox="0 0 120 132">${h}</svg>`;
   }
 
   function renderLaylat() {

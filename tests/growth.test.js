@@ -64,3 +64,10 @@ test('renderRamadan renders a real SVG scene', () => {
   assert.ok(el.innerHTML.includes('<svg'), 'ramadan SVG missing');
   assert.ok(el.innerHTML.includes('Stage 3/7'), 'stage badge missing');
 });
+
+test('renderLaylat renders a real SVG scene', () => {
+  const { sandbox, el } = loadSpiritual(feature('laylat'));
+  sandbox.window.renderLaylat();
+  assert.ok(el.innerHTML.includes('<svg'), 'laylat SVG missing');
+  assert.ok(el.innerHTML.includes('Stage 3/7'), 'stage badge missing');
+});
