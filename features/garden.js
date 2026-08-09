@@ -26,21 +26,48 @@
     return CAPTIONS[Math.floor(d.getTime() / 86400000) % CAPTIONS.length];
   }
   function treeSVG(stage, flowers) {
-    const FLOWER_POS = [[68,118],[132,112],[92,96],[120,86],[78,78],[142,66],[56,60],[100,68],[148,76],[62,90],[130,98],[100,56]];
-    let flowersSVG = '';
+    let h = '';
+    h += `<rect width="120" height="132" fill="var(--card-bg)" rx="10"/>`;
+    h += `<ellipse cx="60" cy="124" rx="52" ry="9" fill="#6B5B3E" opacity="0.55"/>`;
+    if (stage >= 1) {
+      h += `<ellipse cx="60" cy="120" rx="20" ry="7" fill="#8B5A2B" opacity="0.9"/>`;
+    }
+    if (stage >= 2) {
+      h += `<path d="M60 120 Q58 104 60 94" stroke="var(--green)" stroke-width="3" fill="none"/>`;
+      h += `<path d="M60 96 Q50 88 44 93 Q53 97 60 96 Z" fill="var(--green)"/>`;
+      h += `<path d="M60 104 Q70 96 76 101 Q67 105 60 104 Z" fill="var(--green)" opacity="0.85"/>`;
+    }
+    if (stage >= 3) {
+      h += `<path d="M60 121 Q57 102 60 80" stroke="#8B5A2B" stroke-width="5" fill="none"/>`;
+      h += `<ellipse cx="60" cy="74" rx="17" ry="13" fill="var(--green)"/>`;
+    }
+    if (stage >= 4) {
+      h += `<path d="M60 122 Q56 100 60 72" stroke="#8B5A2B" stroke-width="8" fill="none"/>`;
+      h += `<ellipse cx="60" cy="62" rx="26" ry="20" fill="var(--green)"/>`;
+      h += `<ellipse cx="42" cy="74" rx="13" ry="11" fill="var(--green)" opacity="0.85"/>`;
+    }
+    if (stage >= 5) {
+      h += `<path d="M60 123 Q55 96 60 66" stroke="#8B5A2B" stroke-width="11" fill="none"/>`;
+      h += `<ellipse cx="60" cy="54" rx="36" ry="28" fill="var(--green)"/>`;
+      h += `<ellipse cx="36" cy="66" rx="15" ry="12" fill="var(--green)" opacity="0.9"/>`;
+      h += `<ellipse cx="84" cy="64" rx="15" ry="12" fill="var(--green)" opacity="0.9"/>`;
+    }
     if (stage >= 6) {
-      for (let i = 0; i < Math.min(flowers, FLOWER_POS.length); i++) {
-        const f = FLOWER_POS[i];
-        flowersSVG += `<g transform="translate(${f[0]},${f[1]})"><circle r="7" fill="var(--gold-light)"/><circle r="3" fill="var(--gold)"/></g>`;
+      h += `<path d="M60 124 Q54 94 60 58" stroke="#8B5A2B" stroke-width="13" fill="none"/>`;
+      h += `<ellipse cx="60" cy="46" rx="42" ry="34" fill="var(--green)"/>`;
+      for (let i = 0; i < flowers; i++) {
+        const a = (i / Math.max(1, flowers)) * Math.PI * 2;
+        const x = 60 + Math.cos(a) * 30;
+        const y = 46 + Math.sin(a) * 24;
+        h += `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="3.4" fill="var(--gold)"/>`;
       }
     }
-    if (stage === 1) return `<svg class="garden-svg" viewBox="0 0 200 220"><ellipse cx="100" cy="204" rx="60" ry="8" fill="#163024"/><path d="M100 200 Q100 168 100 152" stroke="#2E7D4F" stroke-width="4" fill="none" stroke-linecap="round"/><path d="M100 162 Q78 150 72 160 Q86 170 100 162" fill="#3E9B63"/><path d="M100 156 Q122 144 128 154 Q114 164 100 156" fill="#3E9B63"/></svg>`;
-    if (stage === 2) return `<svg class="garden-svg" viewBox="0 0 200 220"><ellipse cx="100" cy="204" rx="60" ry="8" fill="#163024"/><path d="M100 200 Q100 150 100 120" stroke="#2E7D4F" stroke-width="5" fill="none" stroke-linecap="round"/><path d="M100 140 Q72 124 66 136 Q82 148 100 140" fill="#3E9B63"/><path d="M100 130 Q128 114 134 126 Q118 138 100 130" fill="#3E9B63"/><path d="M100 120 Q78 104 72 116 Q86 128 100 120" fill="#4CAF7A"/><path d="M100 112 Q122 96 128 108 Q114 120 100 112" fill="#4CAF7A"/></svg>`;
-    if (stage === 3) return `<svg class="garden-svg" viewBox="0 0 200 220"><ellipse cx="100" cy="204" rx="60" ry="8" fill="#163024"/><path d="M100 204 L96 110 L104 110 Z" fill="#6B4A2B"/><path d="M100 140 L70 118" stroke="#6B4A2B" stroke-width="6" stroke-linecap="round"/><path d="M100 128 L132 104" stroke="#6B4A2B" stroke-width="6" stroke-linecap="round"/><circle cx="66" cy="108" r="16" fill="#3E7C4F"/><circle cx="136" cy="94" r="15" fill="#3E7C4F"/><circle cx="100" cy="92" r="18" fill="#4CAF7A"/><circle cx="100" cy="100" r="17" fill="#3E9B63"/></svg>`;
-    if (stage === 4) return `<svg class="garden-svg" viewBox="0 0 200 220"><ellipse cx="100" cy="206" rx="70" ry="9" fill="#163024"/><path d="M96 206 L88 120 L112 120 L104 206 Z" fill="#5C3D21"/><path d="M100 160 L58 128" stroke="#5C3D21" stroke-width="9" stroke-linecap="round"/><path d="M100 146 L146 112" stroke="#5C3D21" stroke-width="9" stroke-linecap="round"/><path d="M100 132 L74 88" stroke="#5C3D21" stroke-width="8" stroke-linecap="round"/><path d="M100 132 L128 84" stroke="#5C3D21" stroke-width="8" stroke-linecap="round"/><circle cx="58" cy="122" r="20" fill="#2E6B3F"/><circle cx="148" cy="106" r="18" fill="#2E6B3F"/><circle cx="72" cy="82" r="20" fill="#3E7C4F"/><circle cx="130" cy="78" r="20" fill="#3E7C4F"/><circle cx="100" cy="92" r="26" fill="#3E9B63"/><circle cx="100" cy="82" r="24" fill="#4CAF7A"/></svg>`;
-    if (stage === 5) return `<svg class="garden-svg" viewBox="0 0 200 220"><ellipse cx="100" cy="206" rx="70" ry="9" fill="#163024"/><path d="M96 206 L84 115 L116 115 L104 206 Z" fill="#5C3D21"/><path d="M100 168 L52 130" stroke="#5C3D21" stroke-width="10" stroke-linecap="round"/><path d="M100 152 L152 114" stroke="#5C3D21" stroke-width="10" stroke-linecap="round"/><path d="M100 136 L68 84" stroke="#5C3D21" stroke-width="9" stroke-linecap="round"/><path d="M100 136 L136 80" stroke="#5C3D21" stroke-width="9" stroke-linecap="round"/><circle cx="52" cy="124" r="22" fill="#2E6B3F"/><circle cx="154" cy="108" r="20" fill="#2E6B3F"/><circle cx="66" cy="78" r="22" fill="#3E7C4F"/><circle cx="138" cy="74" r="22" fill="#3E7C4F"/><circle cx="100" cy="84" r="30" fill="#3E9B63"/><circle cx="100" cy="72" r="28" fill="#4CAF7A"/><circle cx="100" cy="62" r="20" fill="#5CB87A"/></svg>`;
-    if (stage === 6) return `<svg class="garden-svg" viewBox="0 0 200 220"><ellipse cx="100" cy="206" rx="70" ry="9" fill="#163024"/><path d="M96 206 L82 112 L118 112 L104 206 Z" fill="#5C3D21"/><path d="M100 170 L48 128" stroke="#5C3D21" stroke-width="11" stroke-linecap="round"/><path d="M100 154 L156 112" stroke="#5C3D21" stroke-width="11" stroke-linecap="round"/><path d="M100 138 L62 80" stroke="#5C3D21" stroke-width="10" stroke-linecap="round"/><path d="M100 138 L142 76" stroke="#5C3D21" stroke-width="10" stroke-linecap="round"/><circle cx="48" cy="120" r="24" fill="#2E6B3F"/><circle cx="160" cy="104" r="22" fill="#2E6B3F"/><circle cx="60" cy="74" r="24" fill="#3E7C4F"/><circle cx="144" cy="70" r="24" fill="#3E7C4F"/><circle cx="100" cy="80" r="32" fill="#3E9B63"/><circle cx="100" cy="68" r="30" fill="#4CAF7A"/><circle cx="100" cy="56" r="22" fill="#5CB87A"/>${flowersSVG}</svg>`;
-    return `<svg class="garden-svg" viewBox="0 0 200 220"><defs><filter id="glow"><feGaussianBlur stdDeviation="3" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><ellipse cx="100" cy="206" rx="70" ry="9" fill="#163024"/><path d="M96 206 L78 108 L122 108 L104 206 Z" fill="#5C3D21"/><path d="M100 172 L42 126" stroke="#5C3D21" stroke-width="12" stroke-linecap="round"/><path d="M100 156 L162 110" stroke="#5C3D21" stroke-width="12" stroke-linecap="round"/><path d="M100 140 L56 76" stroke="#5C3D21" stroke-width="11" stroke-linecap="round"/><path d="M100 140 L150 72" stroke="#5C3D21" stroke-width="11" stroke-linecap="round"/><circle cx="42" cy="118" r="26" fill="#2E6B3F"/><circle cx="166" cy="102" r="24" fill="#2E6B3F"/><circle cx="54" cy="70" r="26" fill="#3E7C4F"/><circle cx="152" cy="66" r="26" fill="#3E7C4F"/><circle cx="100" cy="76" r="34" fill="#3E9B63"/><circle cx="100" cy="64" r="32" fill="#4CAF7A"/><circle cx="100" cy="52" r="24" fill="#5CB87A"/><circle cx="100" cy="44" r="14" fill="#6DD09A" filter="url(#glow)"/>${flowersSVG}</svg>`;
+    if (stage === 7) {
+      h += `<circle cx="60" cy="56" r="54" fill="none" stroke="var(--gold)" stroke-width="2" opacity="0.4"/>`;
+      h += `<circle cx="60" cy="46" r="44" fill="var(--gold)" opacity="0.12"/>`;
+      h += `<path d="M88 18 a9 9 0 1 0 2 11 a11 11 0 1 1 -2 -11 Z" fill="var(--gold)" opacity="0.9"/>`;
+    }
+    return `<svg class="garden-svg" viewBox="0 0 120 132">${h}</svg>`;
   }
   let lastTree = null;
   function renderGarden() {
@@ -60,7 +87,7 @@
         el.innerHTML = `<div class="garden-card">
           <div class="garden-tree" style="transform:scale(${scale})">${treeSVG(g.stage, flowers)}</div>
           <div class="garden-info">
-            <div class="garden-stage-name">${g.icon} ${g.name} <span class="garden-stage-num">Stage ${g.stage}/7</span></div>
+            <div class="garden-stage-name">${iqIcon(g.icon || g.name)} ${g.name} <span class="garden-stage-num">Stage ${g.stage}/7</span></div>
             <div class="garden-progress">${progress}</div>
             <div class="garden-progress-bar"><div class="garden-progress-fill" style="width:${pctFill}%"></div></div>
             <div class="garden-caption">${caption()}</div>

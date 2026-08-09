@@ -22,3 +22,10 @@ test('renderHeartRefinement renders a stage-gated SVG scene without clobbering r
   assert.ok(el.innerHTML.includes('<svg'), 'heart SVG missing');
   assert.ok(el.innerHTML.includes('Stage 3/7'), 'stage badge missing');
 });
+
+test('garden treeSVG renders a real scene', () => {
+  const { sandbox, el } = loadSpiritual(path.join(__dirname, '..', 'features', 'garden.js'));
+  sandbox.window.renderGarden();
+  assert.ok(el.innerHTML.includes('class="garden-svg"'), 'garden SVG must carry garden-svg class');
+  assert.ok(el.innerHTML.includes('Stage 3/7'), 'stage badge missing');
+});
