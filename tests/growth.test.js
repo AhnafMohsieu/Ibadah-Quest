@@ -13,3 +13,12 @@ test('renderArmor renders a stage-gated SVG scene', () => {
   assert.ok(el.innerHTML.includes('Stage 3/7'), 'stage badge missing');
   assert.ok(el.innerHTML.includes('spiritual-card'), 'card wrapper missing');
 });
+
+test('renderHeartRefinement renders a stage-gated SVG scene without clobbering renderHeart', () => {
+  const { sandbox, el } = loadSpiritual(feature('heart'));
+  assert.strictEqual(typeof sandbox.window.renderHeartRefinement, 'function', 'renderHeartRefinement not exported');
+  assert.strictEqual(sandbox.window.renderHeart, undefined, 'must not clobber knowledge-pool renderHeart');
+  sandbox.window.renderHeartRefinement();
+  assert.ok(el.innerHTML.includes('<svg'), 'heart SVG missing');
+  assert.ok(el.innerHTML.includes('Stage 3/7'), 'stage badge missing');
+});
