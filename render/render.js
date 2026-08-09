@@ -1,4 +1,7 @@
 (function() {
+  // Lucide removed — no-op stub
+  function refreshLucideIcons() {}
+
   // -------------------------------------------------------
   // RENDERING
   // -------------------------------------------------------
@@ -14,27 +17,30 @@
     const questScroll = questArea ? questArea.scrollTop : 0;
 
     const safe = (fn, name) => { try { fn(); } catch(e) { console.warn('Render ' + name + ' failed:', e.message); } };
-    safe(renderLv, 'Lv'); safe(renderStr, 'Str'); safe(renderToday, 'Today'); safe(renderQ, 'Q'); safe(renderAch, 'Ach'); safe(renderProg, 'Prog'); safe(renderShop, 'Shop'); safe(renderProfile, 'Profile'); safe(renderTimer, 'Timer'); safe(renderStats, 'Stats'); safe(() => window.renderGarden && window.renderGarden(), 'Garden'); safe(() => window.renderLantern && window.renderLantern(), 'Lantern'); safe(() => window.renderMuhasabahEntry && window.renderMuhasabahEntry(), 'MuhEntry'); safe(() => window.renderJourneys && window.renderJourneys(), 'Journeys'); safe(() => window.renderBoat && window.renderBoat(), 'Boat'); safe(() => window.renderSpiritualGrowthTab && window.renderSpiritualGrowthTab(), 'GrowthTab'); safe(() => window.autoTrackJourneyProgress && window.autoTrackJourneyProgress(), 'AutoTrackJourneys');
+    safe(renderLv, 'Lv'); safe(renderStr, 'Str'); safe(renderToday, 'Today'); safe(renderQ, 'Q'); safe(renderAch, 'Ach'); safe(renderProg, 'Prog'); safe(renderShop, 'Shop'); safe(renderProfile, 'Profile'); safe(renderTimer, 'Timer'); safe(renderStats, 'Stats'); safe(() => window.renderGarden && window.renderGarden(), 'Garden'); safe(() => window.renderLantern && window.renderLantern(), 'Lantern'); safe(() => window.renderMuhasabahEntry && window.renderMuhasabahEntry(), 'MuhEntry'); safe(() => window.renderJourneys && window.renderJourneys(), 'Journeys'); safe(() => window.renderBoat && window.renderBoat(), 'Boat'); safe(() => window.renderKeys && window.renderKeys(), 'Keys'); safe(() => window.renderMosque && window.renderMosque(), 'Mosque'); safe(() => window.renderRamadan && window.renderRamadan(), 'Ramadan'); safe(() => window.renderLaylat && window.renderLaylat(), 'Laylat'); safe(() => window.renderHeartRefinement && window.renderHeartRefinement(), 'HeartRefinement'); safe(() => window.renderArmor && window.renderArmor(), 'Armor'); safe(() => window.renderSpiritualGrowthTab && window.renderSpiritualGrowthTab(), 'GrowthTab'); safe(() => window.autoTrackJourneyProgress && window.autoTrackJourneyProgress(), 'AutoTrackJourneys');
 
     if (volArea) volArea.scrollTop = volScroll;
     if (deedArea) deedArea.scrollTop = deedScroll;
     if (questArea) questArea.scrollTop = questScroll;
     window.scrollTo(0, pageScroll);
+    refreshLucideIcons();
   }
 
   function renderStatic() {
     const safe = (fn, name) => { try { fn(); } catch(e) { console.warn('Static ' + name + ' failed:', e.message); } };
-    safe(renderQuran,'Quran'); safe(renderSunnahs,'Sunnahs'); safe(renderDhikr,'Dhikr'); safe(renderDhikrCounter,'DhikrCounter'); safe(renderStories,'Stories'); safe(renderHadith,'Hadith'); safe(renderNames,'Names'); safe(renderInspirations,'Inspirations'); safe(renderGratitude,'Gratitude'); safe(renderFasting,'Fasting'); safe(renderCharity,'Charity'); safe(renderMemorization,'Memorization'); safe(renderMorning,'Morning'); safe(renderEvening,'Evening'); safe(renderSins,'Sins'); safe(renderPunishments,'Punishments'); safe(renderRepentance,'Repentance'); safe(renderSahaba,'Sahaba'); safe(renderSeerah,'Seerah'); safe(renderTafsir,'Tafsir'); safe(renderManners,'Manners'); safe(renderFamily,'Family'); safe(renderHealth,'Health'); safe(() => window.renderHealthLog && window.renderHealthLog(), 'HealthLog'); safe(renderFinance,'Finance'); safe(() => window.renderFinanceTab && window.renderFinanceTab(), 'FinanceTab'); safe(() => window.renderMoodTab && window.renderMoodTab(), 'MoodTab'); safe(renderUmmah,'Ummah'); safe(renderHajj,'Hajj'); safe(renderAkhirah,'Akhirah'); safe(renderProphets,'Prophets'); safe(renderWomen,'Women'); safe(renderHeart,'Heart'); safe(renderMarriage,'Marriage'); safe(renderScience,'Science'); safe(renderWudu,'Wudu'); safe(renderScholars,'Scholars'); safe(renderPatience,'Patience'); safe(renderWork,'Work'); safe(renderCommunity,'Community'); safe(renderEnvironment,'Environment'); safe(renderTravel,'Travel'); safe(renderFiqh,'Fiqh'); safe(renderArabic,'Arabic'); safe(renderTawakkul,'Tawakkul'); safe(renderIkhlas,'Ikhlas'); safe(renderZuhd,'Zuhd');     safe(renderDawah,'Dawah'); safe(renderAqeedah,'Aqeedah'); safe(renderKnowledge,'Knowledge'); safe(renderCivilisation,'Civilisation'); safe(renderJumuah,'Jumuah'); safe(renderBattles,'Battles'); safe(renderJannah,'Jannah'); safe(renderJahannam,'Jahannam'); safe(renderGrave,'Grave'); safe(renderSigns,'Signs'); safe(renderDreams,'Dreams'); safe(renderParenting,'Parenting'); safe(renderFood,'Food'); safe(renderTibb,'Tibb'); safe(renderYouth,'Youth'); safe(renderTech,'Tech'); safe(renderNeighbors,'Neighbors'); safe(renderSalah,'Salah'); safe(renderPrayerTimes,'PrayerTimes'); safe(() => window.renderMosque && window.renderMosque(), 'Mosque'); safe(() => window.renderConstellation && window.renderConstellation(), 'Constellation'); safe(() => window.renderKeys && window.renderKeys(), 'Keys'); safe(() => window.renderHeartRefine && window.renderHeartRefine(), 'HeartRefine'); safe(() => window.renderArmor && window.renderArmor(), 'Armor'); safe(() => window.renderRamadan && window.renderRamadan(), 'Ramadan'); safe(() => window.renderLaylat && window.renderLaylat(), 'Laylat'); safe(() => window.SpiritualGrowth && window.SpiritualGrowth.renderSettings && window.SpiritualGrowth.renderSettings(), 'GrowthSettings');
+    safe(renderQuran,'Quran'); safe(renderSunnahs,'Sunnahs'); safe(renderDhikr,'Dhikr'); safe(renderDhikrCounter,'DhikrCounter'); safe(renderStories,'Stories'); safe(renderHadith,'Hadith'); safe(renderNames,'Names'); safe(renderInspirations,'Inspirations'); safe(renderGratitude,'Gratitude'); safe(renderFasting,'Fasting'); safe(renderCharity,'Charity'); safe(renderMemorization,'Memorization'); safe(renderMorning,'Morning'); safe(renderEvening,'Evening'); safe(renderSins,'Sins'); safe(renderPunishments,'Punishments'); safe(renderRepentance,'Repentance'); safe(renderSahaba,'Sahaba'); safe(renderSeerah,'Seerah'); safe(renderTafsir,'Tafsir'); safe(renderManners,'Manners'); safe(renderFamily,'Family'); safe(renderHealth,'Health'); safe(() => window.renderHealthLog && window.renderHealthLog(), 'HealthLog'); safe(renderFinance,'Finance'); safe(() => window.renderFinanceTab && window.renderFinanceTab(), 'FinanceTab'); safe(() => window.renderMoodTab && window.renderMoodTab(), 'MoodTab'); safe(renderUmmah,'Ummah'); safe(renderHajj,'Hajj'); safe(renderAkhirah,'Akhirah'); safe(renderProphets,'Prophets'); safe(renderWomen,'Women'); safe(renderHeart,'Heart'); safe(renderMarriage,'Marriage'); safe(renderScience,'Science'); safe(renderWudu,'Wudu'); safe(renderScholars,'Scholars'); safe(renderPatience,'Patience'); safe(renderWork,'Work'); safe(renderCommunity,'Community'); safe(renderEnvironment,'Environment'); safe(renderTravel,'Travel'); safe(renderFiqh,'Fiqh'); safe(renderArabic,'Arabic'); safe(renderTawakkul,'Tawakkul'); safe(renderIkhlas,'Ikhlas'); safe(renderZuhd,'Zuhd');     safe(renderDawah,'Dawah'); safe(renderAqeedah,'Aqeedah'); safe(renderKnowledge,'Knowledge'); safe(renderCivilisation,'Civilisation'); safe(renderJumuah,'Jumuah'); safe(renderBattles,'Battles'); safe(renderJannah,'Jannah'); safe(renderJahannam,'Jahannam'); safe(renderGrave,'Grave'); safe(renderSigns,'Signs'); safe(renderDreams,'Dreams'); safe(renderParenting,'Parenting'); safe(renderFood,'Food'); safe(renderTibb,'Tibb'); safe(renderYouth,'Youth'); safe(renderTech,'Tech'); safe(renderNeighbors,'Neighbors');
     if (typeof NEW_POOLS !== 'undefined') Object.keys(NEW_POOLS).forEach(k => {
       if(window['render'+k]) safe(window['render'+k], k);
     });
+    refreshLucideIcons();
   }
 
-  function renderAll() {
-    renderDynamic();
-    renderStatic();
-  }
-  function renderToday() { renderBonus(); renderTip(); renderPrayers(); renderVol(); renderDeeds(); }
+function renderAll() {
+  document.body.classList.remove('loading');
+  renderDynamic();
+  renderStatic();
+}
+  function renderToday() { renderBonus(); renderPrayers(); renderVol(); renderDeeds(); }
 
   // Hijri Calendar Conversion (Tabular Islamic Calendar algorithm)
   const HIJRI_MONTHS = ['Muharram','Safar','Rabi al-Awwal','Rabi al-Thani','Jumada al-Ula','Jumada al-Thani','Rajab','Sha\'ban','Ramadan','Shawwal','Dhul Qi\'dah','Dhul Hijjah'];
@@ -132,19 +138,19 @@
     calViewHijriM = h.month;
     renderProg();
   }
-  function renderLv() { const lv=S.lv, xp=S.xp, cur=xpFor(lv), nxt=xpFor(lv+1), prog=xp-cur, need=nxt-cur; document.getElementById('lvNum').textContent=lv; document.getElementById('lvTitle').textContent=lvTitle(lv); document.getElementById('xpBar').style.width=Math.min(100,(prog/need)*100)+'%'; document.getElementById('xpLabel').textContent=prog+' / '+need+' XP'; }
-  function renderStr() { document.getElementById('strDays').textContent=S.cs+' Day Streak'; document.getElementById('bestStr').textContent=S.bs; document.getElementById('strMsg').textContent=(STREAK_MSGS.find(x=>S.cs>=x.m)||{t:'Legendary!'}).t; }
-  function renderBonus() { document.getElementById('bonusArea').innerHTML=S.lbd===today()?'':'<div class="daily-bonus" onclick="App.claimBonus()">🎁 Tap to claim your Daily Bonus!</div>'; }
-  function renderTip() { document.getElementById('tipArea').innerHTML=S.tdismiss?'':'<div class="tip-box"><span>💡</span><span style="flex:1">Tap ℹ️ for details. Tap 💡 for tips. Earn XP by completing everything!</span><span style="cursor:pointer" onclick="App.dismissTip()">✕</span></div>'; }
+  function renderLv() { /* level info is in top-bar */ }
+  function renderStr() { /* streak info is in top-bar */ }
+  function renderBonus() { const el = document.getElementById('bonusArea'); if (el) el.innerHTML=S.lbd===today()?'':'<div class="daily-bonus" onclick="App.claimBonus()">Tap to claim your Daily Bonus!</div>'; }
+  // ── Prayer rendering ──
   function renderPrayers() {
     const l = tlog(), f = isFri();
     const cards = PRAYERS.map(p => {
       const d = !!l.p[p.id]; let nm=p.name, ic=p.icon, xp=p.xp;
       if (f && p.id==='dhuhr') { nm=p.fri.name; ic=p.fri.icon; xp=p.fri.xp; }
       if (S.ab && S.ab.exp >= today()) xp *= 2;
-      return `<div class="card-item${d?' done':''}" onclick="App.toggleP('${p.id}')"><div class="card-icon">${ic}</div><div class="card-name">${nm}</div><div class="card-sub">${p.time}</div><div class="card-xp">+${xp} XP</div>${d?'<div class="card-check">✅</div>':''}<div class="card-info-btn" onclick="event.stopPropagation();App.detail('${p.id}')">ℹ️</div></div>`;
+      return `<div class="card-item${d?' done':''}" onclick="App.toggleP('${p.id}')"><div class="card-icon">${iqIcon(p.id)}</div><div class="card-name">${nm}</div><div class="card-sub">${p.time}</div><div class="card-xp">+${xp} XP</div>${d?'<div class="card-check">'+iqIcon('check')+'</div>':''}<div class="card-info-btn" onclick="event.stopPropagation();App.detail('${p.id}')">ℹ</div></div>`;
     }).join('');
-    document.getElementById('prayerArea').innerHTML = '<div class="section-title">🕌 Daily Prayers</div><div class="card-grid">' + cards + '</div>';
+    document.getElementById('prayerArea').innerHTML = '<div class="section-title">Daily Prayers</div><div class="card-grid">' + cards + '</div>';
   }
   function renderVol() {
     const volArea = document.getElementById('volArea');
@@ -154,23 +160,23 @@
     VOLUNTARY.forEach(v => { if (!v.name || v.name.trim()==='') return; const cat = v.cat || 'General'; if (!byCat[cat]) byCat[cat]=[]; byCat[cat].push(v); });
     
     const catIcons = {
-      'Night Prayers': '🌙',
-      'Occasional Prayers': '🤲',
-      'Other Daily Prayers': '📿',
-      'Special Events': '✨',
-      'General': '🕌'
+      'Night Prayers': iqIcon('moon'),
+      'Occasional Prayers': iqIcon('hand-heart'),
+      'Other Daily Prayers': iqIcon('beads'),
+      'Special Events': iqIcon('sparkles'),
+      'General': iqIcon('mosque')
     };
 
     let html = '';
     let catIdx = 0;
     for (const cat in byCat) {
-      const catIcon = catIcons[cat] || '🕌';
+      const catIcon = catIcons[cat] || iqIcon('mosque');
       const totalInCat = byCat[cat].length;
       const completedInCat = byCat[cat].filter(v => !!l[v.id]).length;
       const isOpen = catIdx < openStates.length ? openStates[catIdx] : false;
       html += `<details class="cat-details"${isOpen ? ' open' : ''}><summary><div style="display:flex;justify-content:space-between;align-items:center;flex:1;"><span>${catIcon} ${cat}</span><span style="font-size:0.75rem;background:rgba(201,168,76,0.15);padding:3px 10px;border-radius:12px;color:var(--gold-light);font-weight:700;">${completedInCat} / ${totalInCat}</span></div></summary><div style="padding:8px 4px;">`;
       html += '<div class="card-grid">';
-      html += byCat[cat].map(v => { const d=!!l[v.id]; let xp=v.xp; if(S.ab&&S.ab.exp>=today()) xp*=2; return `<div class="card-item${d?' done':''}" onclick="App.toggleV('${v.id}')"><div class="card-icon">${v.icon}</div><div class="card-name">${v.name}</div><div class="card-xp">+${xp} XP</div>${d?'<div class="card-check">✅</div>':''}<div class="card-info-btn" onclick="event.stopPropagation();App.detail('${v.id}')">ℹ️</div></div>`; }).join('');
+      html += byCat[cat].map(v => { const d=!!l[v.id]; let xp=v.xp; if(S.ab&&S.ab.exp>=today()) xp*=2; return `<div class="card-item${d?' done':''}" onclick="App.toggleV('${v.id}')"><div class="card-icon">${iqIcon(v.icon || v.id)}</div><div class="card-name">${v.name}</div><div class="card-xp">+${xp} XP</div>${d?'<div class="card-check">' + iqIcon('check') + '</div>':''}<div class="card-info-btn" onclick="event.stopPropagation();App.detail('${v.id}')">${iqIcon('info')}</div></div>`; }).join('');
       html += '</div></div></details>';
       catIdx++;
     }
@@ -182,43 +188,39 @@
 
     // -- 7-category normaliser ----------------------------------------------
     const CAT_MAP = {
-      // Worship & Prayer
-      'Worship & Prayer':            '🕌 Worship & Prayer',
-      'Faith, Intention & Worship':  '🕌 Worship & Prayer',
-      "Qur'an, Dhikr & Dua":        '🕌 Worship & Prayer',
-      // Quran & Remembrance ? merged into Worship
-      // Charity & Giving
-      'Charity & Social':            '💰 Charity & Giving',
-      'Charity & Helping Others':    '💰 Charity & Giving',
-      'Neighbors & Community':       '💰 Charity & Giving',
-      'Animals & Environment':       '💰 Charity & Giving',
-      'Unique Small Deeds':          '💰 Charity & Giving',
-      // Character & Ethics
-      'Character & Ethics':          '💎 Character & Ethics',
-      'Character & Self-Control':    '💎 Character & Ethics',
-      'Avoiding Harm & Positive Intentions': '💎 Character & Ethics',
-      // Knowledge & Learning
-      'Knowledge & Learning':        '📖 Knowledge & Learning',
-      'Knowledge & Teaching':        '📖 Knowledge & Learning',
-      // Family & Relations
-      'Family & Relatives':          '👨‍👩‍👧‍👦 Family & Relations',
-      'Parents & Family':            '👨‍👩‍👧‍👦 Family & Relations',
-      // Daily Sunnahs
-      'Daily Sunnahs':               '☀️ Daily Sunnahs',
-      'Work, Money & Daily Life':    '☀️ Daily Sunnahs',
-      // General ? catch-all
-      'General':                     '🕌 General'
+      'Ibadah & Spirituality':            'mosque|Ibadah & Spirituality',
+      'Faith, Intention & Worship':  'mosque|Ibadah & Spirituality',
+      "Qur'an, Dhikr & Dua":        'mosque|Ibadah & Spirituality',
+      'Charity & Social':            'wallet|Charity & Giving',
+      'Charity & Helping Others':    'wallet|Charity & Giving',
+      'Neighbors & Community':       'wallet|Charity & Giving',
+      'Animals & Environment':       'wallet|Charity & Giving',
+      'Unique Small Deeds':          'wallet|Charity & Giving',
+      'Character & Ethics':          'gem|Character & Ethics',
+      'Character & Self-Control':    'gem|Character & Ethics',
+      'Avoiding Harm & Positive Intentions': 'gem|Character & Ethics',
+      'Knowledge & Learning':        'book-open|Knowledge & Learning',
+      'Knowledge & Teaching':        'book-open|Knowledge & Learning',
+      'Family & Relatives':          'users|Family & Relations',
+      'Parents & Family':            'users|Family & Relations',
+      'Daily Sunnahs':               'sun|Daily Sunnahs',
+      'Work, Money & Daily Life':    'sun|Daily Sunnahs',
+      'General':                     'mosque|General'
     };
-    // Ordered display sequence
     const CAT_ORDER = [
-      '🕌 Worship & Prayer',
-      '💰 Charity & Giving',
-      '💎 Character & Ethics',
-      '📖 Knowledge & Learning',
-      '👨‍👩‍👧‍👦 Family & Relations',
-      '☀️ Daily Sunnahs',
-      '🕌 General'
+      'mosque|Ibadah & Spirituality',
+      'wallet|Charity & Giving',
+      'gem|Character & Ethics',
+      'book-open|Knowledge & Learning',
+      'users|Family & Relations',
+      'sun|Daily Sunnahs',
+      'mosque|General'
     ];
+    const catDisplayName = (c) => {
+      const parts = c.split('|');
+      if (parts.length === 2) return iqIcon(parts[0]) + ' ' + parts[1];
+      return c;
+    };
 
     const l = tlog().d || {};
     const byCat = {};
@@ -226,7 +228,7 @@
 
     DEEDS.forEach(d => {
       const rawCat = d.cat || 'General';
-      const normCat = CAT_MAP[rawCat] || '🕌 General';
+      const normCat = CAT_MAP[rawCat] || 'mosque|General';
       if (!byCat[normCat]) byCat[normCat] = [];
       byCat[normCat].push(d);
     });
@@ -239,9 +241,9 @@
       const totalInCat = items.length;
       const completedInCat = items.filter(d => !!l[d.id]).length;
       const isOpen = catIdx < openStates.length ? openStates[catIdx] : false;
-      html += `<details class="cat-details"${isOpen ? ' open' : ''}><summary><div style="display:flex;justify-content:space-between;align-items:center;flex:1;"><span>${cat}</span><span style="font-size:0.75rem;background:rgba(201,168,76,0.15);padding:3px 10px;border-radius:12px;color:var(--gold-light);font-weight:700;">${completedInCat} / ${totalInCat}</span></div></summary><div style="padding:8px 4px;">`;
+      html += `<details class="cat-details"${isOpen ? ' open' : ''}><summary><div style="display:flex;justify-content:space-between;align-items:center;flex:1;"><span>${catDisplayName(cat)}</span><span style="font-size:0.75rem;background:rgba(201,168,76,0.15);padding:3px 10px;border-radius:12px;color:var(--gold-light);font-weight:700;">${completedInCat} / ${totalInCat}</span></div></summary><div style="padding:8px 4px;">`;
       html += '<div class="card-grid">';
-      html += items.map(d => { const done=!!l[d.id]; const tot=S.td[d.id]||0; let xp=d.xp; if(S.ab&&S.ab.exp>=today()) xp*=2; return `<div class="card-item${done?' done':''}" onclick="App.toggleD('${d.id}')"><div class="card-icon">${d.icon}</div><div class="card-name">${d.name}</div><div class="card-xp">+${xp} XP</div>${done?'<div class="card-check">✅</div>':''}${tot?`<div class="card-sub">${tot}×</div>`:''}<div class="card-info-btn" onclick="event.stopPropagation();App.tip('${d.id}')">ℹ️</div></div>`; }).join('');
+      html += items.map(d => { const done=!!l[d.id]; const tot=S.td[d.id]||0; let xp=d.xp; if(S.ab&&S.ab.exp>=today()) xp*=2; return `<div class="card-item${done?' done':''}" onclick="App.toggleD('${d.id}')"><div class="card-icon">${iqIcon(d.icon || d.id)}</div><div class="card-name">${d.name}</div><div class="card-xp">+${xp} XP</div>${done?'<div class="card-check">' + iqIcon('check') + '</div>':''}${tot?`<div class="card-sub">${tot}×</div>`:''}<div class="card-info-btn" onclick="event.stopPropagation();App.tip('${d.id}')">${iqIcon('info')}</div></div>`; }).join('');
       html += '</div></div></details>';
       catIdx++;
     }
@@ -286,9 +288,9 @@
       
       let inner = '';
       if (o.arabic) inner += `<div class="content-arabic">${o.arabic}</div>`;
-      if (o.transliteration || o.roman) inner += `<div style="font-size:0.9rem;color:var(--text1);opacity:0.9;font-style:italic;margin-bottom:6px;text-align:right;">${o.transliteration || o.roman}</div>`;
+      if (o.transliteration || o.roman) inner += `<div style="font-size:0.9rem;color:var(--text2);opacity:0.9;font-style:italic;margin-bottom:6px;text-align:right;">${o.transliteration || o.roman}</div>`;
       inner += `<div class="content-english">${o.desc || o.text || o.english || ''}</div>`;
-      if (o.source) inner += `<div class="content-source">📖 ${o.source}<a class="verify-btn" href="${getSourceLink(o.source)}" target="_blank" rel="noopener noreferrer" title="Verify this source">Verify</a></div>`;
+      if (o.source) inner += `<div class="content-source">${iqIcon('book-open')} ${o.source}<a class="verify-btn" href="${getSourceLink(o.source)}" target="_blank" rel="noopener noreferrer" title="Verify this source">Verify</a></div>`;
       
       let title_line = '';
       if (o.title) {
@@ -303,7 +305,7 @@
     }).join('');
   }
 
-  function renderDuas() { poolRender('duaArea','🤲 Daily Duas',DUA_POOL,'duaIdx'); }
+  function renderDuas() { poolRender('duaArea', iqIcon('hand-heart') + ' Daily Duas',DUA_POOL,'duaIdx'); }
 
   const QURAN_RECITERS = [
     {id:7, name:'Mishari Rashid al-Afasy', folder:'Alafasy'},
@@ -565,12 +567,12 @@
       return;
     }
 
-    let html = '<div class="quran-header"><h2>📖 The Noble Quran</h2><div class="quran-sub">114 Surahs - Tap a surah to read</div></div>';
+    let html = '<div class="quran-header"><h2>' + iqIcon('book-open') + ' The Noble Quran</h2><div class="quran-sub">114 Surahs - Tap a surah to read</div></div>';
     html += '<div class="tab-bar-quran">';
     html += `<button class="${quranViewMode==='surah'?'active':''}" onclick="App.setQuranView('surah')">Surahs</button>`;
     html += `<button class="${quranViewMode==='juz'?'active':''}" onclick="App.setQuranView('juz')">Juz</button>`;
     html += '</div>';
-    html += '<input class="quran-search" placeholder="🔍 Search surah name..." oninput="App.quranSearchFilter(this.value)">';
+    html += '<input class="quran-search" placeholder="' + iqEmoji('search') + ' Search surah name..." oninput="App.quranSearchFilter(this.value)">';
 
     if (quranViewMode === 'juz') {
       html += '<div class="juz-grid">';
@@ -716,9 +718,9 @@
     }
     return QURAN_SURAHS[QURAN_SURAHS.length - 1];
   }
-  function renderSunnahs() { poolRender('sunnahArea','☀️ Daily Sunnahs',SUNNAH_POOL,'sunnahIdx'); }
-  function renderDhikr() { poolRender('dhikrArea','📿 Dhikr Collection',DHIKR_POOL,'dhikrIdx'); }
-  function renderStories() { poolRender('storiesArea','📖 Inspiring Stories',STORIES,'storiesIdx',true); }
+  function renderSunnahs() { poolRender('sunnahArea', iqIcon('sun') + ' Daily Sunnahs',SUNNAH_POOL,'sunnahIdx'); }
+  function renderDhikr() { poolRender('dhikrArea', iqIcon('beads') + ' Dhikr Collection',DHIKR_POOL,'dhikrIdx'); }
+  function renderStories() { poolRender('storiesArea', iqIcon('book-open') + ' Inspiring Stories',STORIES,'storiesIdx',true); }
   let hadithView = { level: 'collections', collectionId: null, bookId: null };
 
   function renderHadith() {
@@ -731,12 +733,12 @@
       const book = col && col.books.find(b => b.id === hadithView.bookId);
       if (!col || !book) { hadithView = { level: 'collections', collectionId: null, bookId: null }; renderHadith(); return; }
       let html = `<button class="quran-back-btn" onclick="App.hadithBack()">◀ Back to ${col.name}</button>`;
-      html += `<div class="quran-header"><h2>${col.icon} ${book.name}</h2><div class="quran-sub">${book.hadiths.length} hadiths</div></div>`;
+      html += `<div class="quran-header"><h2>${iqIcon(col.icon || col.id)} ${book.name}</h2><div class="quran-sub">${book.hadiths.length} hadiths</div></div>`;
       book.hadiths.forEach(h => {
         html += `<div class="verse-card">
           <div class="verse-num">${h.n}</div>
           <div class="verse-english">${h.t}</div>
-          <div class="content-source">📖 ${col.name} ${h.b}:${h.h}<a class="verify-btn" href="https://sunnah.com/${col.id}/${h.b}#${h.n}" target="_blank" rel="noopener noreferrer" title="Verify on sunnah.com">Verify</a></div>
+          <div class="content-source">${iqIcon('book-open')} ${col.name} ${h.b}:${h.h}<a class="verify-btn" href="https://sunnah.com/${col.id}/${h.b}#${h.n}" target="_blank" rel="noopener noreferrer" title="Verify on sunnah.com">Verify</a></div>
         </div>`;
       });
       el.innerHTML = html;
@@ -747,11 +749,11 @@
       const col = data.find(c => c.id === hadithView.collectionId);
       if (!col) { hadithView = { level: 'collections', collectionId: null, bookId: null }; renderHadith(); return; }
       let html = `<button class="quran-back-btn" onclick="App.hadithBack()">◀ Back to Collections</button>`;
-      html += `<div class="quran-header"><h2>${col.icon} ${col.name}</h2><div class="quran-sub">${col.books.length} books · ${col.books.reduce((s, b) => s + b.hadiths.length, 0)} hadiths</div></div>`;
+      html += `<div class="quran-header"><h2>${iqIcon(col.icon || col.id)} ${col.name}</h2><div class="quran-sub">${col.books.length} books · ${col.books.reduce((s, b) => s + b.hadiths.length, 0)} hadiths</div></div>`;
       html += '<div class="surah-grid">';
       col.books.forEach(book => {
         html += `<div class="surah-card" onclick="App.openHadithBook('${col.id}',${book.id})">
-          <div class="surah-num">📖 ${book.id}</div>
+          <div class="surah-num">${iqIcon('book-open')} ${book.id}</div>
           <div class="surah-name-en">${book.name}</div>
           <div class="surah-meta">${book.hadiths.length} hadiths</div>
         </div>`;
@@ -761,12 +763,12 @@
       return;
     }
 
-    let html = '<div class="quran-header"><h2>📚 The Hadith Collections</h2><div class="quran-sub">Authentic narrations of the Prophet Muhammad ﷺ</div></div>';
+    let html = '<div class="quran-header"><h2>' + iqIcon('book') + ' The Hadith Collections</h2><div class="quran-sub">Authentic narrations of the Prophet Muhammad ﷺ</div></div>';
     html += '<div class="surah-grid">';
     data.forEach(c => {
       const total = c.books.reduce((s, b) => s + b.hadiths.length, 0);
       html += `<div class="surah-card" onclick="App.openHadithCollection('${c.id}')">
-        <div class="surah-num">${c.icon}</div>
+        <div class="surah-num">${iqIcon(c.icon || c.id)}</div>
         <div class="surah-name-en">${c.name}</div>
         <div class="surah-meta">${c.books.length} books · ${total} hadiths</div>
         <div style="font-size:0.72rem;color:var(--text2);margin-top:4px;line-height:1.4;">${c.desc}</div>
@@ -783,57 +785,57 @@
     else { hadithView = { level: 'collections', collectionId: null, bookId: null }; }
     renderHadith();
   }
-  function renderNames() { poolRender('namesArea','🕌 99 Names of Allah',NAMES,'namesIdx', true); }
-  function renderSins() { poolRender('sinsArea','⛔ Major Sins to Avoid',SINS_POOL,'sinsIdx'); }
-  function renderPunishments() { poolRender('punishmentsArea','⚖️ Islamic Justice',PUNISHMENTS_POOL,'punishmentsIdx'); }
-  function renderRepentance() { poolRender('repentanceArea','🔄 Repentance & Tawbah',REPENTANCE_POOL,'repentanceIdx'); }
-  function renderSeerah() { poolRender('seerahArea','📖 Life of the Prophet ﷺ',SEERAH_POOL,'seerahIdx',true); }
-  function renderTafsir() { poolRender('tafsirArea','📖 Quranic Tafsir',TAFSIR_POOL,'tafsirIdx'); }
-  function renderManners() { poolRender('mannersArea','🤝 Islamic Manners (Adab)',MANNERS_POOL,'mannersIdx'); }
-  function renderAqeedah() { poolRender('aqeedahArea','🕌 Islamic Aqeedah',AQEEDAH_POOL,'aqeedahIdx'); }
-  function renderFamily() { poolRender('familyArea','👨‍👩‍👧‍👦 Family & Kinship',FAMILY_POOL,'familyIdx'); }
-  function renderHealth() { poolRender('healthArea','💚 Health & Well-being',HEALTH_POOL,'healthIdx'); }
-  function renderFinance() { poolRender('financeArea','💰 Halal Finance',FINANCE_POOL,'financeIdx'); }
-  function renderUmmah() { poolRender('ummahArea','🌍 The Muslim Ummah',UMMAH_POOL,'ummahIdx'); }
-  function renderHajj() { poolRender('hajjArea','🕋 Hajj & Umrah',HAJJ_POOL,'hajjIdx'); }
-  function renderAkhirah() { poolRender('akhirahArea','🌍 The Hereafter',AKHIRAH_POOL,'akhirahIdx'); }
-  function renderProphets() { poolRender('prophetsArea','📖 Stories of the Prophets',PROPHETS_POOL,'prophetsIdx',true); }
-  function renderWomen() { poolRender('womenArea','👩 Great Muslim Women',WOMEN_POOL,'womenIdx',true); }
-  function renderKnowledge() { poolRender('knowledgeArea','📚 Seeking Knowledge',KNOWLEDGE_POOL,'knowledgeIdx'); }
-  function renderHeart() { poolRender('heartArea','💔 Diseases of the Heart',HEART_POOL,'heartIdx'); }
-  function renderJumuah() { poolRender('jumuahArea','🕌 Friday (Jumuah) Virtues',JUMUAH_POOL,'jumuahIdx', true); }
-  function renderMarriage() { poolRender('marriageArea','💍 Marriage & Halal Love',MARRIAGE_POOL,'marriageIdx'); }
-  function renderScience() { poolRender('scienceArea','🔬 Islam & Science',SCIENCE_POOL,'scienceIdx',true); }
-  function renderWudu() { poolRender('wuduArea','💧 Wudu & Taharah',WUDU_POOL,'wuduIdx', true); }
-  function renderScholars() { poolRender('scholarsArea','🎓 Great Islamic Scholars',SCHOLARS_POOL,'scholarsIdx'); }
-  function renderPatience() { poolRender('patienceArea','💎 Sabr & Shukr',PATIENCE_POOL,'patienceIdx'); }
-  function renderWork() { poolRender('workArea','💼 Career & Work Ethics',WORK_POOL,'workIdx'); }
-  function renderCommunity() { poolRender('communityArea','🏘️ Community & Society',COMMUNITY_POOL,'communityIdx'); }
-  function renderEnvironment() { poolRender('environmentArea','🌿 Nature & Environment',ENVIRONMENT_POOL,'environmentIdx'); }
-  function renderTravel() { poolRender('travelArea','✈️ Travel & Safar',TRAVEL_POOL,'travelIdx'); }
-  function renderFiqh() { poolRender('fiqhArea','📖 Islamic Jurisprudence (Fiqh)',FIQH_POOL,'fiqhIdx'); }
-  function renderArabic() { poolRender('arabicArea','Learn Arabic',ARABIC_POOL,'arabicIdx',true); }
-  function renderTawakkul() { poolRender('tawakkulArea','🤝 Tawakkul · Trust in Allah',TAWAKKUL_POOL,'tawakkulIdx'); }
-  function renderIkhlas() { poolRender('ikhlasArea','💚 Ikhlas · Sincerity',IKHLAS_POOL,'ikhlasIdx'); }
-  function renderZuhd() { poolRender('zuhdArea','🕊️ Zuhd · Asceticism',ZUHD_POOL,'zuhdIdx'); }
-  function renderDawah() { poolRender('dawahArea',"📢 Da'wah · Inviting to Islam",DAWAH_POOL,'dawahIdx'); }
-  function renderCivilisation() { poolRender('civilisationArea','🏛️ Islamic Civilisation',CIVILISATION_POOL,'civilisationIdx'); }
-  function renderBattles() { poolRender('battlesArea','⚔️ Battles of Islam',BATTLES_POOL,'battlesIdx',true); }
-  function renderJannah() { poolRender('jannahArea','🌸 Jannah · Paradise',JANNAH_POOL,'jannahIdx'); }
-  function renderJahannam() { poolRender('jahannamArea','🔥 Jahannam · Hellfire',JAHANNAM_POOL,'jahannamIdx'); }
-  function renderGrave() { poolRender('graveArea','⚰️ The Grave & Life After Death',GRAVE_POOL,'graveIdx'); }
-  function renderSigns() { poolRender('signsArea','⏳ Signs of Qiyamah',SIGNS_POOL,'signsIdx'); }
-  function renderDreams() { poolRender('dreamsArea','🌙 Islamic Dreams',DREAMS_POOL,'dreamsIdx'); }
-  function renderParenting() { poolRender('parentingArea','👶 Islamic Parenting',PARENTING_POOL,'parentingIdx'); }
-  function renderFood() { poolRender('foodArea','🍖 Halal & Haram Food',FOOD_POOL,'foodIdx'); }
-  function renderTibb() { poolRender('tibbArea','🌿 Tibb Nabawi (Prophetic Medicine)',TIBB_POOL,'tibbIdx'); }
-  function renderYouth() { poolRender('youthArea','👦 Youth & Islam',YOUTH_POOL,'youthIdx'); }
-  function renderTech() { poolRender('techArea','💻 Technology & Islam',TECH_POOL,'techIdx'); }
-  function renderNeighbors() { poolRender('neighborsArea','🏠 Rights of Neighbors',NEIGHBORS_POOL,'neighborsIdx'); }
+  function renderNames() { poolRender('namesArea', iqIcon('mosque') + ' 99 Names of Allah',NAMES,'namesIdx', true); }
+  function renderSins() { poolRender('sinsArea', iqIcon('alert-triangle') + ' Major Sins to Avoid',SINS_POOL,'sinsIdx'); }
+  function renderPunishments() { poolRender('punishmentsArea', iqIcon('scales') + ' Islamic Justice',PUNISHMENTS_POOL,'punishmentsIdx'); }
+  function renderRepentance() { poolRender('repentanceArea', iqIcon('refresh-cw') + ' Repentance & Tawbah',REPENTANCE_POOL,'repentanceIdx'); }
+  function renderSeerah() { poolRender('seerahArea', iqIcon('book-open') + ' Life of the Prophet ﷺ',SEERAH_POOL,'seerahIdx',true); }
+  function renderTafsir() { poolRender('tafsirArea', iqIcon('book-open') + ' Quranic Tafsir',TAFSIR_POOL,'tafsirIdx'); }
+  function renderManners() { poolRender('mannersArea', iqIcon('handshake') + ' Islamic Manners (Adab)',MANNERS_POOL,'mannersIdx'); }
+  function renderAqeedah() { poolRender('aqeedahArea', iqIcon('mosque') + ' Islamic Aqeedah',AQEEDAH_POOL,'aqeedahIdx'); }
+  function renderFamily() { poolRender('familyArea', iqIcon('users') + ' Family & Kinship',FAMILY_POOL,'familyIdx'); }
+  function renderHealth() { poolRender('healthArea', iqIcon('heart') + ' Health & Well-being',HEALTH_POOL,'healthIdx'); }
+  function renderFinance() { poolRender('financeArea', iqIcon('wallet') + ' Halal Finance',FINANCE_POOL,'financeIdx'); }
+  function renderUmmah() { poolRender('ummahArea', iqIcon('globe') + ' The Muslim Ummah',UMMAH_POOL,'ummahIdx'); }
+  function renderHajj() { poolRender('hajjArea', iqIcon('kaaba') + ' Hajj & Umrah',HAJJ_POOL,'hajjIdx'); }
+  function renderAkhirah() { poolRender('akhirahArea', iqIcon('globe') + ' The Hereafter',AKHIRAH_POOL,'akhirahIdx'); }
+  function renderProphets() { poolRender('prophetsArea', iqIcon('book-open') + ' Stories of the Prophets',PROPHETS_POOL,'prophetsIdx',true); }
+  function renderWomen() { poolRender('womenArea', iqIcon('user') + ' Great Muslim Women',WOMEN_POOL,'womenIdx',true); }
+  function renderKnowledge() { poolRender('knowledgeArea', iqIcon('book') + ' Seeking Knowledge',KNOWLEDGE_POOL,'knowledgeIdx'); }
+  function renderHeart() { poolRender('heartArea', iqIcon('heart') + ' Diseases of the Heart',HEART_POOL,'heartIdx'); }
+  function renderJumuah() { poolRender('jumuahArea', iqIcon('mosque') + ' Friday (Jumuah) Virtues',JUMUAH_POOL,'jumuahIdx', true); }
+  function renderMarriage() { poolRender('marriageArea', iqIcon('gem') + ' Marriage & Halal Love',MARRIAGE_POOL,'marriageIdx'); }
+  function renderScience() { poolRender('scienceArea', iqIcon('microscope') + ' Islam & Science',SCIENCE_POOL,'scienceIdx',true); }
+  function renderWudu() { poolRender('wuduArea', iqIcon('droplets') + ' Wudu & Taharah',WUDU_POOL,'wuduIdx', true); }
+  function renderScholars() { poolRender('scholarsArea', iqIcon('award') + ' Great Islamic Scholars',SCHOLARS_POOL,'scholarsIdx'); }
+  function renderPatience() { poolRender('patienceArea', iqIcon('gem') + ' Sabr & Shukr',PATIENCE_POOL,'patienceIdx'); }
+  function renderWork() { poolRender('workArea', iqIcon('briefcase') + ' Career & Work Ethics',WORK_POOL,'workIdx'); }
+  function renderCommunity() { poolRender('communityArea', iqIcon('building') + ' Community & Society',COMMUNITY_POOL,'communityIdx'); }
+  function renderEnvironment() { poolRender('environmentArea', iqIcon('leaf') + ' Nature & Environment',ENVIRONMENT_POOL,'environmentIdx'); }
+  function renderTravel() { poolRender('travelArea', iqIcon('plane') + ' Travel & Safar',TRAVEL_POOL,'travelIdx'); }
+  function renderFiqh() { poolRender('fiqhArea', iqIcon('book-open') + ' Islamic Jurisprudence (Fiqh)',FIQH_POOL,'fiqhIdx'); }
+  function renderArabic() { poolRender('arabicArea', 'Learn Arabic',ARABIC_POOL,'arabicIdx',true); }
+  function renderTawakkul() { poolRender('tawakkulArea', iqIcon('handshake') + ' Tawakkul · Trust in Allah',TAWAKKUL_POOL,'tawakkulIdx'); }
+  function renderIkhlas() { poolRender('ikhlasArea', iqIcon('heart') + ' Ikhlas · Sincerity',IKHLAS_POOL,'ikhlasIdx'); }
+  function renderZuhd() { poolRender('zuhdArea', iqIcon('sparkles') + ' Zuhd · Asceticism',ZUHD_POOL,'zuhdIdx'); }
+  function renderDawah() { poolRender('dawahArea', iqIcon('megaphone') + " Da'wah · Inviting to Islam",DAWAH_POOL,'dawahIdx'); }
+  function renderCivilisation() { poolRender('civilisationArea', iqIcon('landmark') + ' Islamic Civilisation',CIVILISATION_POOL,'civilisationIdx'); }
+  function renderBattles() { poolRender('battlesArea', iqIcon('shield') + ' Battles of Islam',BATTLES_POOL,'battlesIdx',true); }
+  function renderJannah() { poolRender('jannahArea', iqIcon('flower') + ' Jannah · Paradise',JANNAH_POOL,'jannahIdx'); }
+  function renderJahannam() { poolRender('jahannamArea', iqIcon('flame') + ' Jahannam · Hellfire',JAHANNAM_POOL,'jahannamIdx'); }
+  function renderGrave() { poolRender('graveArea', iqIcon('coffin') + ' The Grave & Life After Death',GRAVE_POOL,'graveIdx'); }
+  function renderSigns() { poolRender('signsArea', iqIcon('hourglass') + ' Signs of Qiyamah',SIGNS_POOL,'signsIdx'); }
+  function renderDreams() { poolRender('dreamsArea', iqIcon('moon') + ' Islamic Dreams',DREAMS_POOL,'dreamsIdx'); }
+  function renderParenting() { poolRender('parentingArea', iqIcon('baby') + ' Islamic Parenting',PARENTING_POOL,'parentingIdx'); }
+  function renderFood() { poolRender('foodArea', iqIcon('utensils') + ' Halal & Haram Food',FOOD_POOL,'foodIdx'); }
+  function renderTibb() { poolRender('tibbArea', iqIcon('leaf') + ' Tibb Nabawi (Prophetic Medicine)',TIBB_POOL,'tibbIdx'); }
+  function renderYouth() { poolRender('youthArea', iqIcon('user') + ' Youth & Islam',YOUTH_POOL,'youthIdx'); }
+  function renderTech() { poolRender('techArea', iqIcon('monitor') + ' Technology & Islam',TECH_POOL,'techIdx'); }
+  function renderNeighbors() { poolRender('neighborsArea', iqIcon('home') + ' Rights of Neighbors',NEIGHBORS_POOL,'neighborsIdx'); }
   function renderSalah() {
     const el = document.getElementById('salahArea');
     if (!el) return;
-    el.innerHTML = '<div class="section-title">🕋 Salah Guide</div>' + [
+    el.innerHTML = '<div class="section-title">' + iqIcon('kaaba') + ' Salah Guide</div>' + [
       { name:'Wudu', desc:'Perform wudu perfectly before each prayer. Intention + 8 steps.' },
       { name:'Facing Qibla', desc:'Face the Kaaba in Makkah. Use a compass or app to find direction.' },
       { name:'Niyyah (Intention)', desc:'Make the intention in your heart for which prayer you are praying.' },
@@ -904,7 +906,7 @@
   function renderPrayerTimes() {
     const el = document.getElementById('prayerTimesArea');
     if (!el) return;
-    const icons = { Fajr:'🌅', Sunrise:'☀️', Dhuhr:'🌞', Asr:'🌤️', Maghrib:'🌇', Isha:'🌙' };
+    const icons = { Fajr: iqIcon('sunrise'), Sunrise: iqIcon('sun'), Dhuhr: iqIcon('sun'), Asr: iqIcon('cloud-sun'), Maghrib: iqIcon('sunset'), Isha: iqIcon('moon') };
     const descs = {
       Fajr: 'Dawn',
       Sunrise: 'Sunrise',
@@ -950,7 +952,7 @@
     
     return `
       <div class="dhikr-analytics">
-        <div class="section-title">📊 Dhikr Statistics</div>
+        <div class="section-title">' + iqIcon('bar-chart-3') + ' Dhikr Statistics</div>
         <div class="dhikr-stats-row">
           <div class="dhikr-stat-item">
             <div class="dhikr-stat-num">${totalDhikr}</div>
@@ -984,13 +986,13 @@
         <div style="font-style:italic;color:var(--text2);font-size:0.85rem;margin-bottom:4px;">${d.transliteration}</div>
         <div style="font-size:0.8rem;color:var(--text2);margin-bottom:12px;">${d.english}</div>
         <div class="dhikr-counter-num" style="color:${d.color}">${cnt}</div>
-        <div class="dhikr-counter-target">Target: ${d.target} ${cnt >= d.target ? '✅' : ''}</div>
+        <div class="dhikr-counter-target">Target: ${d.target} ${cnt >= d.target ? iqIcon('check') : ''}</div>
         <div style="background:rgba(0,0,0,0.3);border-radius:30px;height:8px;overflow:hidden;margin:8px 0 16px;">
           <div style="height:100%;width:${pct}%;background:${d.color};border-radius:30px;transition:width 0.3s;"></div>
         </div>
         <button class="dhikr-tap-btn" onclick="this.classList.add('tap'); setTimeout(() => this.classList.remove('tap'), 400); App.tapDhikr();">+1</button>
         <div style="margin-top:12px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
-          <button class="dhikr-reset-btn" onclick="App.resetDhikr()">🔄 Reset</button>
+          <button class="dhikr-reset-btn" onclick="App.resetDhikr()">' + iqIcon('refresh-cw') + ' Reset</button>
           <button class="dhikr-reset-btn" onclick="App.nextDhikr()">Next ▶</button>
         </div>
       </div>
@@ -999,50 +1001,50 @@
 
   function renderInspirations() {
     const idxs = S.inspireIdx && S.inspireIdx.length ? S.inspireIdx : [0,1,2,3,4];
-    document.getElementById('inspireArea').innerHTML = '<div class="section-title">✨ Inspirations</div>' + idxs.map(i => `<div class="content-card"><div class="content-english" style="font-size:1rem;line-height:1.8;">${INSPIRATIONS_POOL[i%INSPIRATIONS_POOL.length]}</div></div>`).join('');
+    document.getElementById('inspireArea').innerHTML = '<div class="section-title">' + iqIcon('sparkles') + ' Inspirations</div>' + idxs.map(i => `<div class="content-card"><div class="content-english" style="font-size:1rem;line-height:1.8;">${INSPIRATIONS_POOL[i%INSPIRATIONS_POOL.length]}</div></div>`).join('');
   }
   function renderSahaba() {
     const el = document.getElementById('sahabaArea');
     if (!el) return;
-    el.innerHTML = '<div class="section-title">👥 The Companions (Sahabah)</div>' + SAHABA_POOL.map(s => `<div class="content-card"><div style="font-weight:700;color:var(--gold-light);margin-bottom:6px;">⭐ ${s.title}</div><div class="content-english">${s.desc}</div></div>`).join('');
+    el.innerHTML = '<div class="section-title">' + iqIcon('users') + ' The Companions (Sahabah)</div>' + SAHABA_POOL.map(s => `<div class="content-card"><div style="font-weight:700;color:var(--gold-light);margin-bottom:6px;">${iqIcon('star')} ${s.title}</div><div class="content-english">${s.desc}</div></div>`).join('');
   }
   function renderGratitude() {
     const dt = today(), entries = S.gratitudeLog[dt] || [];
-    let h = '<div class="section-title">📝 Daily Gratitude Journal</div>';
+    let h = '<div class="section-title">' + iqIcon('pencil') + ' Daily Gratitude Journal</div>';
     h += `<div style="background:var(--card2);border-radius:var(--radius);padding:16px;margin-bottom:16px;border:1px solid var(--border);">Today's entries (${entries.length}):</div>`;
-    entries.forEach((e,i) => h += `<div class="quest-row">✅ ${i+1}. ${e}</div>`);
-    h += `<input class="profile-input" id="gratInput" placeholder="I am grateful for..."><button class="shop-card" onclick="App.addGratitude()" style="justify-content:center;width:100%;">➕ Add Entry</button>`;
+    entries.forEach((e,i) => h += `<div class="quest-row">${iqIcon('check')} ${i+1}. ${e}</div>`);
+    h += `<input class="profile-input" id="gratInput" placeholder="I am grateful for..."><button class="shop-card" onclick="App.addGratitude()" style="justify-content:center;width:100%;">${iqIcon('plus')} Add Entry</button>`;
     document.getElementById('gratitudeArea').innerHTML = h;
   }
   function addGratitude() { const inp=document.getElementById('gratInput'); if(!inp?.value.trim()) return; const dt=today(); if(!S.gratitudeLog[dt]) S.gratitudeLog[dt]=[]; S.gratitudeLog[dt].push(inp.value.trim()); inp.value=''; saveState(); renderGratitude(); checkA(); }
   function renderFasting() {
     const dt = today(), fasted = !!S.fastingDays[dt];
-    let h = '<div class="section-title">📅 Fasting Tracker</div>';
+    let h = '<div class="section-title">' + iqIcon('calendar') + ' Fasting Tracker</div>';
     h += `<label class="quest-row"><span style="flex:1">Fasted today?</span><input type="checkbox" class="quest-check" ${fasted?'checked':''} onchange="App.toggleFasting()"></label>`;
     const start=ms(), end=me(); let cnt=0;
     for (const dk in S.fastingDays) if (dk>=start && dk<=end && S.fastingDays[dk]) cnt++;
-    h += `<div class="content-card"><div class="content-english">📅 ${cnt} fasting days this month</div><div class="content-english" style="font-size:0.85rem;color:var(--text2);">Monday & Thursday are most recommended (Sunnah)</div></div>`;
+    h += `<div class="content-card"><div class="content-english">${iqIcon('calendar')} ${cnt} fasting days this month</div><div class="content-english" style="font-size:0.85rem;color:var(--text2);">Monday & Thursday are most recommended (Sunnah)</div></div>`;
     document.getElementById('fastingArea').innerHTML = h;
   }
   function toggleFasting() { const dt=today(); S.fastingDays[dt]=!S.fastingDays[dt]; if(S.fastingDays[dt]) S.td.fasting=(S.td.fasting||0)+1; else S.td.fasting=Math.max(0,(S.td.fasting||0)-1); saveState(); renderFasting(); }
   function renderCharity() {
     const cm = S.charity; if (cm.monthStart !== ms()) { cm.monthStart=ms(); cm.given=0; }
-    let h = '<div class="section-title">💰 Charity Tracker</div>';
+    let h = '<div class="section-title">' + iqIcon('wallet') + ' Charity Tracker</div>';
     h += `<div class="content-card"><div class="content-english">Daily target: <strong style="color:var(--gold)">${cm.daily||'Not set'}</strong></div><input type="number" id="charityDaily" placeholder="Set daily target" class="profile-input"></div>`;
     h += `<div class="content-card"><div class="content-english">Monthly target: <strong style="color:var(--gold)">${cm.monthly||'Not set'}</strong></div><input type="number" id="charityMonthly" placeholder="Set monthly target" class="profile-input"></div>`;
     h += `<div class="content-card"><div class="content-english">Given this month: <strong style="color:var(--green)">${cm.given} / ${cm.monthly||'?'}</strong></div><input type="number" id="charityGiven" placeholder="Log amount given today" class="profile-input"></div>`;
-    h += `<button class="shop-card" onclick="App.setCharityGoals()" style="justify-content:center;width:100%;">💾 Save & Log</button>`;
-    h += '<div class="section-title">📖 Charity Knowledge</div>';
+    h += `<button class="shop-card" onclick="App.setCharityGoals()" style="justify-content:center;width:100%;">${iqIcon('save')} Save & Log</button>`;
+    h += '<div class="section-title">' + iqIcon('book-open') + ' Charity Knowledge</div>';
     h += `<div class="content-card"><div class="content-english">Waqf (Endowments)</div><div class="content-english" style="font-size:0.85rem;color:var(--text2);">The Islamic institution of Waqf allows individuals to dedicate land or assets permanently for public benefit. Awqaf historically funded hospitals, schools, and water fountains.</div></div>`;
     h += `<div class="content-card"><div class="content-english">Sadaqah Jariyah</div><div class="content-english" style="font-size:0.85rem;color:var(--text2);">Continuous charity. If you build a well, plant a tree, or write a useful book, you continue to receive reward even after death as long as people benefit from it. (Sahih Muslim)</div></div>`;
     document.getElementById('charityArea').innerHTML = h;
   }
   function setCharityGoals() { const d=parseInt(document.getElementById('charityDaily').value); const m=parseInt(document.getElementById('charityMonthly').value); const g=parseInt(document.getElementById('charityGiven').value); if(!isNaN(d)) S.charity.daily=d; if(!isNaN(m)) S.charity.monthly=m; if(!isNaN(g)) S.charity.given+=g; saveState(); renderCharity(); }
   function renderMemorization() {
-    let h = '<div class="section-title">🧠 Memorization Tracker</div>';
+    let h = '<div class="section-title">' + iqIcon('brain') + ' Memorization Tracker</div>';
     h += `<div class="stat-card" style="margin-bottom:16px;"><div class="stat-num">${S.memorized}</div><div>Surahs Memorized</div></div>`;
-    h += `<input class="profile-input" id="memInput" placeholder="Surah name (e.g., Al-Fatiha)"><button class="shop-card" onclick="App.addMemorization()" style="justify-content:center;width:100%;">➕ Add Surah</button>`;
-    if (S.memorizationList.length) { h += '<div class="section-title" style="margin-top:20px;">📋 Memorized List</div>'; S.memorizationList.forEach(s => h += `<div class="quest-row">✅ ${s}</div>`); }
+    h += `<input class="profile-input" id="memInput" placeholder="Surah name (e.g., Al-Fatiha)"><button class="shop-card" onclick="App.addMemorization()" style="justify-content:center;width:100%;">${iqIcon('plus')} Add Surah</button>`;
+    if (S.memorizationList.length) { h += '<div class="section-title" style="margin-top:20px;">' + iqIcon('clipboard') + ' Memorized List</div>'; S.memorizationList.forEach(s => h += `<div class="quest-row">${iqIcon('check')} ${s}</div>`); }
     document.getElementById('memorizationArea').innerHTML = h;
   }
   function addMemorization() { const inp=document.getElementById('memInput'); if(!inp?.value.trim()) return; S.memorizationList.push(inp.value.trim()); S.memorized++; inp.value=''; saveState(); renderMemorization(); checkA(); }
@@ -1053,16 +1055,16 @@
     for (let i=0; i<total; i++) { if (S.morningDone[dt][i]) completed++; }
     
     let h = `<div class="section-title" style="display:flex;justify-content:space-between;align-items:center;">
-      <span>🌅 Morning Adhkar (After Fajr)</span>
+      <span>${iqIcon('sunrise')} Morning Adhkar (After Fajr)</span>
       <span style="font-size:0.75rem;background:rgba(201,168,76,0.15);padding:3px 10px;border-radius:12px;color:var(--gold-light);font-weight:700;">${completed} / ${total}</span>
     </div><div style="display:flex;flex-direction:column;gap:12px;">`;
     MORNING_DHIKR.forEach((item, idx) => { 
         const done = !!S.morningDone[dt][idx]; 
         h += `<div class="vol-card${done?' done':''}" onclick="App.toggleMorning(${idx}, ${item.xp})" style="cursor:pointer;">
-            <div class="prayer-check" style="font-size:1.2rem;">${done?'✅':'☀️'}</div>
+            <div class="prayer-check" style="font-size:1.2rem;">${done?iqIcon('check'):iqIcon('sun')}</div>
             <div class="prayer-info">
                 <div style="font-family:'Amiri',serif;font-size:1.3rem;margin-bottom:2px;color:var(--gold);line-height:1.4;">${item.arabic}</div>
-                ${item.roman ? `<div style="font-size:0.85rem;color:var(--text1);font-style:italic;margin-bottom:6px;opacity:0.9;">"${item.roman}"</div>` : ''}
+                ${item.roman ? `<div style="font-size:0.85rem;color:var(--text2);font-style:italic;margin-bottom:6px;opacity:0.9;">"${item.roman}"</div>` : ''}
                 <div class="prayer-name">${item.text}</div>
                 <div style="font-size:0.8rem;color:var(--text2);margin-top:4px;">${item.reward}</div>
             </div>
@@ -1091,16 +1093,16 @@
     for (let i=0; i<total; i++) { if (S.eveningDone[dt][i]) completed++; }
     
     let h = `<div class="section-title" style="display:flex;justify-content:space-between;align-items:center;">
-      <span>🌙 Evening Adhkar (After Asr)</span>
+      <span>${iqIcon('moon')} Evening Adhkar (After Asr)</span>
       <span style="font-size:0.75rem;background:rgba(201,168,76,0.15);padding:3px 10px;border-radius:12px;color:var(--gold-light);font-weight:700;">${completed} / ${total}</span>
     </div><div style="display:flex;flex-direction:column;gap:12px;">`;
     EVENING_DHIKR.forEach((item, idx) => { 
         const done = !!S.eveningDone[dt][idx]; 
         h += `<div class="vol-card${done?' done':''}" onclick="App.toggleEvening(${idx}, ${item.xp})" style="cursor:pointer;">
-            <div class="prayer-check" style="font-size:1.2rem;">${done?'✅':'🌙'}</div>
+            <div class="prayer-check" style="font-size:1.2rem;">${done?iqIcon('check'):iqIcon('moon')}</div>
             <div class="prayer-info">
                 <div style="font-family:'Amiri',serif;font-size:1.3rem;margin-bottom:2px;color:var(--gold);line-height:1.4;">${item.arabic}</div>
-                ${item.roman ? `<div style="font-size:0.85rem;color:var(--text1);font-style:italic;margin-bottom:6px;opacity:0.9;">"${item.roman}"</div>` : ''}
+                ${item.roman ? `<div style="font-size:0.85rem;color:var(--text2);font-style:italic;margin-bottom:6px;opacity:0.9;">"${item.roman}"</div>` : ''}
                 <div class="prayer-name">${item.text}</div>
                 <div style="font-size:0.8rem;color:var(--text2);margin-top:4px;">${item.reward}</div>
             </div>
@@ -1135,19 +1137,19 @@
       let html = `<details class="cat-details"${openAttr}><summary><div style="display:flex;justify-content:space-between;align-items:center;flex:1;"><span>${title}</span><span style="font-size:0.75rem;background:rgba(201,168,76,0.15);padding:3px 10px;border-radius:12px;color:var(--gold-light);font-weight:700;">${completed} / ${total}</span></div></summary><div style="padding:0 12px 12px;display:flex;flex-direction:column;gap:8px;margin-top:8px;">`;
       html += quests.map(q => {
         const d = q.done;
-        let icon = '🎯';
+        let icon = iqIcon('target');
         const t = q.d.toLowerCase();
-        if (t.includes('pray') || t.includes('prayer')) icon = '🕌';
-        if (t.includes('quran')) icon = '📖';
-        if (t.includes('charity')) icon = '🤲';
-        if (t.includes('fast')) icon = '🌙';
-        if (t.includes('deed')) icon = '⭐';
-        if (t.includes('streak') || t.includes('day')) icon = '🔥';
-        if (t.includes('dhikr') || t.includes('adhkar') || t.includes('istighfar')) icon = '🤲';
-        if (t.includes('memorize')) icon = '🧠';
+        if (t.includes('pray') || t.includes('prayer')) icon = iqIcon('mosque');
+        if (t.includes('quran')) icon = iqIcon('book-open');
+        if (t.includes('charity')) icon = iqIcon('hand-heart');
+        if (t.includes('fast')) icon = iqIcon('moon');
+        if (t.includes('deed')) icon = iqIcon('star');
+        if (t.includes('streak') || t.includes('day')) icon = iqIcon('flame');
+        if (t.includes('dhikr') || t.includes('adhkar') || t.includes('istighfar')) icon = iqIcon('hand-heart');
+        if (t.includes('memorize')) icon = iqIcon('brain');
         
         return `<div class="vol-card${d?' done':''}" onclick="App.toggleQuest('${q.id}','${type}',${q.xp})" style="cursor:pointer;">
-          <div class="prayer-check">${d?'✅':icon}</div>
+          <div class="prayer-check">${d?iqIcon('check'):icon}</div>
           <div class="prayer-info"><div class="prayer-name">${q.d}</div></div>
           <div class="prayer-xp">+${q.xp} XP</div>
         </div>`;
@@ -1155,11 +1157,11 @@
       return html + '</div></details>';
     };
 
-    let h = renderQuestGroup('📋 Daily Quests', S.dq, 'daily', openStates[0]);
-    h += renderQuestGroup('📅 Weekly Quests', S.wq, 'weekly', openStates[1]);
-    h += renderQuestGroup('📆 Monthly Quests', S.mq, 'monthly', openStates[2]);
-    h += renderQuestGroup('🗓️ Yearly Quests', S.yq, 'yearly', openStates[3]);
-    h += renderQuestGroup('⭐ Lifetime Quests', S.lq, 'lifetime', openStates[4]);
+    let h = renderQuestGroup(iqIcon('clipboard') + ' Daily Quests', S.dq, 'daily', openStates[0]);
+    h += renderQuestGroup(iqIcon('calendar') + ' Weekly Quests', S.wq, 'weekly', openStates[1]);
+    h += renderQuestGroup(iqIcon('calendar-days') + ' Monthly Quests', S.mq, 'monthly', openStates[2]);
+    h += renderQuestGroup(iqIcon('calendar-check') + ' Yearly Quests', S.yq, 'yearly', openStates[3]);
+    h += renderQuestGroup(iqIcon('star') + ' Lifetime Quests', S.lq, 'lifetime', openStates[4]);
     h += `<div style="text-align:center;margin-top:20px;color:var(--text2);">Total quests completed: <strong style="color:var(--gold)">${S.tq||0}</strong></div>`;
     
     if(questArea) questArea.innerHTML = h;
@@ -1171,7 +1173,7 @@
   const unlockedAchs = ACHS.filter(a => !!S.ua[a.id]);
 
   let h = '<div class="ach-header">';
-  h += `<div class="section-title">🏆 Trophy Cabinet</div>`;
+  h += `<div class="section-title">${iqIcon('trophy')} Trophy Cabinet</div>`;
   h += `<div class="ach-progress"><span class="ach-progress-bar" style="width:${pct}%"></span></div>`;
   h += `<div class="ach-progress-text">${cnt} / ${total} Unlocked</div>`;
   h += '</div>';
@@ -1180,10 +1182,11 @@
   h += '<div class="ach-grid">';
   h += ACHS.map(a => {
     const u = !!S.ua[a.id];
-    const tierStars = a.tier === 'jannah' ? '🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟' : a.tier === 'jahannam' ? '🔥🔥🔥🔥🔥🔥🔥🔥' : a.tier === 'mythic' ? '💎💎💎💎💎💎' : a.tier === 'legendary' ? '👑👑👑' : a.tier === 'diamond' || a.tier === 'platinum' ? '💠💠' : '⭐';
+    const tierStars = a.tier === 'jannah' ? iqIcon('star').repeat(10) : a.tier === 'mythic' ? iqIcon('gem').repeat(6) : a.tier === 'legendary' ? iqIcon('award').repeat(3) : a.tier === 'diamond' || a.tier === 'platinum' ? iqIcon('gem').repeat(2) : iqIcon('star');
+    const tierIcon = a.tier === 'jannah' ? iqIcon('kaaba') : a.tier === 'mythic' ? iqIcon('crown') : a.tier === 'legendary' ? iqIcon('award') : a.tier === 'diamond' ? iqIcon('gem') : a.tier === 'platinum' ? iqIcon('gem') : a.tier === 'gold' ? iqIcon('trophy') : a.tier === 'silver' ? iqIcon('medal') : iqIcon('star');
     return `<div class="ach-card${u ? ' unlocked' : ' locked'} tier-${a.tier}">
       <div class="ach-tier">${tierStars}</div>
-      <div class="ach-icon">${u ? a.icon : '🔒'}</div>
+      <div class="ach-icon">${u ? (iqIcon(a.icon || a.id || a.name) || tierIcon) : iqIcon('lock')}</div>
       <div class="ach-name">${a.name}</div>
       <div class="ach-desc">${a.desc}</div>
     </div>`;
@@ -1198,12 +1201,12 @@
 }
   function renderProg() {
     const stats = [
-      { icon: '🕌', value: S.tp, label: 'Prayers' },
-      { icon: '📅', value: S.pd, label: 'Perfect Days' },
-      { icon: '🔥', value: S.bs, label: 'Best Streak' },
-      { icon: '⭐', value: S.lv, label: 'Level' },
-      { icon: '📋', value: S.tq || 0, label: 'Quests Done' },
-      { icon: '🏅', value: Object.values(S.td).reduce((a, b) => a + b, 0), label: 'Extra Deeds' }
+      { icon: iqIcon('mosque'), value: S.tp, label: 'Prayers' },
+      { icon: iqIcon('calendar'), value: S.pd, label: 'Perfect Days' },
+      { icon: iqIcon('flame'), value: S.bs, label: 'Best Streak' },
+      { icon: iqIcon('star'), value: S.lv, label: 'Level' },
+      { icon: iqIcon('clipboard'), value: S.tq || 0, label: 'Quests Done' },
+      { icon: iqIcon('medal'), value: Object.values(S.td).reduce((a, b) => a + b, 0), label: 'Extra Deeds' }
     ];
 
     document.getElementById('statArea').innerHTML = `<div class="prog-stats">
@@ -1263,9 +1266,9 @@
     document.getElementById('calArea').innerHTML = cal;
   }
   function renderShop() {
-    let h = '<div class="section-title">🎁 Rewards Shop</div>';
+    let h = '<div class="section-title">' + iqIcon('gift') + ' Rewards Shop</div>';
 
-    h += `<div class="reward-xp-banner">⭐ <strong>${S.xp}</strong> XP Available</div>`;
+    h += `<div class="reward-xp-banner">${iqIcon('star')} <strong>${S.xp}</strong> XP Available</div>`;
 
     h += '<div class="reward-grid">';
     h += SHOP.map(r => {
@@ -1273,12 +1276,12 @@
       const canAfford = S.xp >= r.cost;
       const cls = owned ? 'owned' : (canAfford ? '' : 'disabled');
       return `<div class="reward-card ${cls}" onclick="${owned ? '' : 'App.buy(\'' + r.id + '\')'}">
-        <span class="reward-icon">${r.icon}</span>
+        <span class="reward-icon">${iqIcon(r.icon || r.id || r.name)}</span>
         <div class="reward-info">
           <div class="reward-name">${r.name}</div>
           <div class="reward-desc">${r.desc || ''}</div>
         </div>
-        <div class="reward-badge">${owned ? '✅ Owned' : '⭐ ' + r.cost + ' XP'}</div>
+        <div class="reward-badge">${owned ? iqIcon('check') + ' Owned' : iqIcon('star') + ' ' + r.cost + ' XP'}</div>
       </div>`;
     }).join('');
     h += '</div>';
@@ -1287,16 +1290,15 @@
   }
   function renderProfile() {
     const achCnt = Object.keys(S.ua).length;
-    const avatar = S.avatar || '👤';
+    const avatar = S.avatar || '';
     const joinDate = S.joinDate ? new Date(S.joinDate).toLocaleDateString('en', { month: 'long', year: 'numeric' }) : null;
 
-    let h = '<div class="section-title">👤 Profile</div>';
+    let h = '<div class="section-title">Profile</div>';
 
     // Identity card
     h += `<div class="profile-identity">
       <div class="profile-avatar-wrap" onclick="App.toggleAvatarPicker()">
         <span class="profile-avatar">${avatar}</span>
-        <span class="profile-avatar-edit">✏️</span>
       </div>
       <div class="profile-info">
         <h2 class="profile-name">${currentUser === 'default' ? 'Guest' : currentUser}</h2>
@@ -1305,24 +1307,16 @@
       </div>
     </div>`;
 
-    // Avatar picker (hidden by default)
-    const emojis = ['👤','👨','👩','🧔','🧑','👳','🧕','👨‍🦱','👩‍🦱','👨‍🦰','👩‍🦰'];
-    h += `<div class="avatar-picker" id="avatarPicker" style="display:none;">
-      <div class="avatar-grid">
-        ${emojis.map(e => `<div class="avatar-option${e === avatar ? ' selected' : ''}" onclick="App.selectAvatar('${e}')">${e}</div>`).join('')}
-      </div>
-    </div>`;
-
     // Stats row (4 cards)
     h += '<div class="profile-stats">';
-    h += `<div class="stat-card"><div class="stat-icon">⭐</div><div class="stat-num">${S.xp}</div><div class="stat-label">Total XP</div></div>`;
-    h += `<div class="stat-card"><div class="stat-icon">🕌</div><div class="stat-num">${S.tp}</div><div class="stat-label">Prayers</div></div>`;
-    h += `<div class="stat-card"><div class="stat-icon">🔥</div><div class="stat-num">${S.cs}</div><div class="stat-label">Streak</div></div>`;
-    h += `<div class="stat-card"><div class="stat-icon">🏆</div><div class="stat-num">${achCnt}</div><div class="stat-label">Achievements</div></div>`;
+    h += `<div class="stat-card"><div class="stat-num">${S.xp}</div><div class="stat-label">Total XP</div></div>`;
+    h += `<div class="stat-card"><div class="stat-num">${S.tp}</div><div class="stat-label">Prayers</div></div>`;
+    h += `<div class="stat-card"><div class="stat-num">${S.cs}</div><div class="stat-label">Streak</div></div>`;
+    h += `<div class="stat-card"><div class="stat-icon">${iqIcon('trophy')}</div><div class="stat-num">${achCnt}</div><div class="stat-label">Achievements</div></div>`;
     h += '</div>';
 
     // Settings
-    h += '<div class="section-title">⚙️ Settings</div>';
+    h += '<div class="section-title">' + iqIcon('settings') + ' Settings</div>';
     h += '<div class="profile-settings">';
     const curTheme = document.documentElement.getAttribute('data-theme') || 'light';
     const themeChips = (window.Themes || []).map(m => `
@@ -1330,14 +1324,14 @@
         <span class="theme-swatch" style="background:linear-gradient(135deg,${m.swatch.bg},${m.swatch.accent});"></span>
         <span class="name">${m.label}</span>
       </button>`).join('');
-h += '<div style="margin-bottom:10px;font-weight:700;color:var(--gold-dark);">🎨 Theme</div>';
+h += '<div style="margin-bottom:10px;font-weight:700;color:var(--gold-dark);">' + iqIcon('palette') + ' Theme</div>';
 h += '<div class="theme-picker">' + themeChips + '</div>';
-    h += '<div style="display:flex;gap:8px;margin-bottom:10px;"><input class="profile-input" id="usernameInput" placeholder="Switch user" style="margin-bottom:0;"><button class="shop-card" onclick="App.switchUser()" style="padding:10px 14px;border-radius:var(--radius-sm);">🔄</button></div>';
-    h += '<button class="shop-card" style="width:100%;justify-content:center;margin-bottom:10px;font-weight:700;font-size:1rem;color:var(--gold);letter-spacing:0.5px;" onclick="App.logout()">🚪 Logout</button>';
+    h += '<div style="display:flex;gap:8px;margin-bottom:10px;"><input class="profile-input" id="usernameInput" placeholder="Switch user" style="margin-bottom:0;"><button class="shop-card" onclick="App.switchUser()" style="padding:10px 14px;border-radius:var(--radius-sm);">' + iqIcon('refresh-cw') + '</button></div>';
+    h += '<button class="shop-card" style="width:100%;justify-content:center;margin-bottom:10px;font-weight:700;font-size:1rem;color:var(--gold);letter-spacing:0.5px;" onclick="App.logout()">' + iqIcon('log-out') + ' Logout</button>';
     h += '</div>';
 
     // Danger zone
-    h += '<div class="danger-zone"><h3 style="color:var(--red)">⚠️ Danger Zone</h3><p style="font-size:0.8rem;color:var(--text2);margin-bottom:10px;">Reset permanently deletes all your progress.</p><button class="danger-btn" onclick="App.resetAll()">🗑️ Reset All Data</button></div>';
+    h += '<div class="danger-zone"><h3 style="color:var(--red)">' + iqIcon('alert-triangle') + ' Danger Zone</h3><p style="font-size:0.8rem;color:var(--text2);margin-bottom:10px;">Reset permanently deletes all your progress.</p><button class="danger-btn" onclick="App.resetAll()">' + iqIcon('trash') + ' Reset All Data</button></div>';
 
     document.getElementById('profileArea').innerHTML = h;
   }
@@ -1388,8 +1382,8 @@ h += '<div class="theme-picker">' + themeChips + '</div>';
     const streak = document.getElementById('tbStreak');
     if (lv) lv.textContent = `Lv ${S.lv}`;
     if (title) title.textContent = lvTitle(S.lv);
-    if (xp) xp.textContent = `⭐ ${(S.xp||0).toLocaleString()} XP`;
-    if (streak) streak.textContent = `🔥 ${S.cs||0}`;
+    if (xp) xp.innerHTML = iqIcon('zap') + ' ' + (S.xp||0).toLocaleString() + ' XP';
+    if (streak) streak.innerHTML = iqIcon('flame') + ' ' + (S.cs||0);
   }
   window.renderTopBar = renderTopBar;
 
@@ -1400,7 +1394,6 @@ h += '<div class="theme-picker">' + themeChips + '</div>';
   window.renderLv = renderLv;
   window.renderStr = renderStr;
   window.renderBonus = renderBonus;
-  window.renderTip = renderTip;
   window.renderPrayers = renderPrayers;
   window.renderVol = renderVol;
   window.renderDeeds = renderDeeds;

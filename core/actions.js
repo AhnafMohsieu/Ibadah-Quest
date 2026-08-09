@@ -25,15 +25,17 @@
     renderTab(tab);
   }
   function toggleTheme() {
+    const themes = ['light', 'dark', 'serene', 'royal', 'sand', 'midnight'];
     const current = localStorage.getItem(THEME_KEY) || 'light';
-    const next = current === 'dark' ? 'light' : 'dark';
+    const idx = themes.indexOf(current);
+    const next = themes[(idx + 1) % themes.length];
     setTheme(next);
   }
   function checkLevelUp(oldLv) { if (S.lv > oldLv) { const t = lvTitle(S.lv); levelUpToast(S.lv, t); } }
   function toggleP(id) { const l=tlog(); const w=!!l.p[id]; const oldLv=S.lv; l.p[id]=!w; const pr=PRAYERS.find(x=>x.id===id); if(!pr) return; let xp=pr.xp; if(isFri()&&id==='dhuhr'&&pr.fri) xp=pr.fri.xp; if(S.ab&&S.ab.exp>=today()) xp*=2; if(!w){ S.tp++; S.xp+=xp; if(isFri()&&id==='dhuhr') S.tj=(S.tj||0)+1; playSound('pop'); } else { S.tp=Math.max(0,S.tp-1); S.xp=Math.max(0,S.xp-xp); if(isFri()&&id==='dhuhr') S.tj=Math.max(0,(S.tj||0)-1); } S.lv=lvFrom(S.xp); checkLevelUp(oldLv); recalc(); checkQ(); checkA(); saveState(); renderDynamic(); }
   function toggleV(id) { const l=tlog(); if(!l.v) l.v={}; const w=!!l.v[id]; const oldLv=S.lv; l.v[id]=!w; const vp=VOLUNTARY.find(x=>x.id===id); if(!vp) return; let xp=vp.xp; if(S.ab&&S.ab.exp>=today()) xp*=2; if(!w){ S.vc[id]=(S.vc[id]||0)+1; S.xp+=xp; playSound('pop'); } else { S.vc[id]=Math.max(0,(S.vc[id]||0)-1); S.xp=Math.max(0,S.xp-xp); } S.lv=lvFrom(S.xp); checkLevelUp(oldLv); checkQ(); checkA(); saveState(); renderDynamic(); }
   function toggleD(id) { const l=tlog(); const w=!!l.d[id]; const oldLv=S.lv; l.d[id]=!w; const de=DEEDS.find(x=>x.id===id); if(!de) return; let xp=de.xp; if(S.ab&&S.ab.exp>=today()) xp*=2; if(!w){ S.td[id]=(S.td[id]||0)+1; S.xp+=xp; playSound('pop'); } else { S.td[id]=Math.max(0,(S.td[id]||0)-1); S.xp=Math.max(0,S.xp-xp); } S.lv=lvFrom(S.xp); checkLevelUp(oldLv); recalc(); checkQ(); checkA(); saveState(); renderDynamic(); }
-  function buy(id) { const r=SHOP.find(x=>x.id===id); if(!r||S.ur[id]) return; if(S.xp<r.cost){ toast('😔','Not enough XP'); return; } const oldLv=S.lv; S.xp-=r.cost; S.ur[id]=true; if(r.t==='boost') S.ab={exp:today(new Date(Date.now()+86400000))}; if(r.t==='freeze') S.sfu=true; if(r.t==='xp') S.xp+=r.v||0; if(r.t==='reroll'){ genDQ(); toast('🎲','Quests rerolled!'); } else toast('🎁','Purchased!'); S.lv=lvFrom(S.xp); checkLevelUp(oldLv); saveState(); renderAll(); checkA(); setTimeout(() => { const cards = document.querySelectorAll('.reward-card'); cards.forEach(c => { if (c.onclick?.toString().includes(id)) c.classList.add('just-bought'); }); }, 50); }
+  function buy(id) { const r=SHOP.find(x=>x.id===id); if(!r||S.ur[id]) return; if(S.xp<r.cost){ toast(iqIcon('x'),'Not enough XP'); return; } const oldLv=S.lv; S.xp-=r.cost; S.ur[id]=true; if(r.t==='boost') S.ab={exp:today(new Date(Date.now()+86400000))}; if(r.t==='freeze') S.sfu=true; if(r.t==='xp') S.xp+=r.v||0; if(r.t==='reroll'){ genDQ(); toast(iqIcon('refresh-cw'),'Quests rerolled!'); } else toast(iqIcon('gift'),'Purchased!'); S.lv=lvFrom(S.xp); checkLevelUp(oldLv); saveState(); renderAll(); checkA(); setTimeout(() => { const cards = document.querySelectorAll('.reward-card'); cards.forEach(c => { if (c.onclick?.toString().includes(id)) c.classList.add('just-bought'); }); }, 50); }
   function checkA() { 
     const nu=[]; 
     for(const a of ACHS) if(!S.ua[a.id]&&a.c(S)){ S.ua[a.id]=today(); nu.push(a); } 
@@ -41,7 +43,8 @@
         saveState(); 
         let delay = 0;
         nu.forEach(a => {
-            setTimeout(() => { toast(a.icon, 'Achievement Unlocked:<br>' + a.name, true, 4000); }, delay);
+            const tierIcon = a.tier === 'jannah' ? iqIcon('kaaba') : a.tier === 'mythic' ? iqIcon('crown') : a.tier === 'legendary' ? iqIcon('award') : (a.tier === 'diamond' || a.tier === 'platinum') ? iqIcon('gem') : a.tier === 'gold' ? iqIcon('trophy') : a.tier === 'silver' ? iqIcon('medal') : iqIcon('star');
+            setTimeout(() => { toast(iqIcon(a.icon || a.id || a.name) || tierIcon, 'Achievement Unlocked:<br>' + a.name, true, 4000); }, delay);
             delay += 4500;
         });
         renderAll();
@@ -49,19 +52,19 @@
   }
   function levelUpToast(lv, title) {
     const ov=document.getElementById('toastOverlay');
-    ov.innerHTML=`<div class="levelup-box"><div class="levelup-glow"></div><div class="levelup-icon">⬆️</div><div class="levelup-label">LEVEL UP</div><div class="levelup-num">${lv}</div><div class="levelup-title">${title}</div></div>`;
+    ov.innerHTML=`<div class="levelup-box"><div class="levelup-glow"></div><div class="levelup-icon">${iqIcon('zap')}</div><div class="levelup-label">LEVEL UP</div><div class="levelup-num">${lv}</div><div class="levelup-title">${title}</div></div>`;
     ov.style.display='flex'; ov.classList.add('show'); ov.style.pointerEvents='auto';
     playSound('chime');
-    for(let i=0;i<50;i++){ const el=document.createElement('span'); el.className='confetti'; el.textContent=['✨','🌟','🎉','💫','⭐','🌙'][i%6]; el.style.left=Math.random()*100+'%'; el.style.top='-20px'; el.style.setProperty('--fall-dur',(2+Math.random()*4)+'s'); el.style.setProperty('--rot',(Math.random()*720-360)+'deg'); document.body.appendChild(el); setTimeout(()=>el.remove(),4000); }
+    for(let i=0;i<50;i++){ const el=document.createElement('span'); el.className='confetti'; el.textContent=[iqEmoji('sparkles'),iqEmoji('star'),iqEmoji('sparkles'),iqEmoji('zap'),iqEmoji('star'),iqEmoji('moon')][i%6]; el.style.left=Math.random()*100+'%'; el.style.top='-20px'; el.style.setProperty('--fall-dur',(2+Math.random()*4)+'s'); el.style.setProperty('--rot',(Math.random()*720-360)+'deg'); document.body.appendChild(el); setTimeout(()=>el.remove(),4000); }
     if(ov._t) clearTimeout(ov._t);
     ov._t=setTimeout(()=>{ ov.classList.remove('show'); setTimeout(()=>{ ov.style.display='none'; ov.innerHTML=''; },400); ov.style.pointerEvents='none'; },4000);
     ov.onclick=()=>{ ov.classList.remove('show'); setTimeout(()=>{ ov.style.display='none'; ov.innerHTML=''; },400); ov.style.pointerEvents='none'; if(ov._t) clearTimeout(ov._t); };
   }
   function toast(icon, msg, conf=false, ms=2600) {
     const ov=document.getElementById('toastOverlay'); ov.innerHTML=`<div class="toast-box"><span style="font-size:2.5rem">${icon}</span><h3>${msg}</h3></div>`;
-    ov.style.display='flex'; ov.classList.add('show'); if(conf) playSound('chime'); else if(icon!=='🔄') playSound('pop');
+    ov.style.display='flex'; ov.classList.add('show'); playSound(conf ? 'chime' : 'pop');
     ov.style.pointerEvents='auto';
-    if(conf) for(let i=0;i<30;i++){ const el=document.createElement('span'); el.className='confetti'; el.textContent=['✨','🌟','🎉','💫'][i%4]; el.style.left=Math.random()*100+'%'; el.style.top='-20px'; el.style.setProperty('--fall-dur',(2+Math.random()*3)+'s'); el.style.setProperty('--rot',(Math.random()*720-360)+'deg'); document.body.appendChild(el); setTimeout(()=>el.remove(),3000); }
+    if(conf) for(let i=0;i<30;i++){ const el=document.createElement('span'); el.className='confetti'; el.textContent=[iqEmoji('sparkles'),iqEmoji('star'),iqEmoji('sparkles'),iqEmoji('zap')][i%4]; el.style.left=Math.random()*100+'%'; el.style.top='-20px'; el.style.setProperty('--fall-dur',(2+Math.random()*3)+'s'); el.style.setProperty('--rot',(Math.random()*720-360)+'deg'); document.body.appendChild(el); setTimeout(()=>el.remove(),3000); }
     if(ov._t) clearTimeout(ov._t);
     if(ms>0) ov._t=setTimeout(()=>{ ov.classList.remove('show'); setTimeout(()=>{ ov.style.display='none'; ov.innerHTML=''; },300); ov.style.pointerEvents='none'; },ms);
     ov.onclick=()=>{ ov.classList.remove('show'); setTimeout(()=>{ ov.style.display='none'; ov.innerHTML=''; },300); ov.style.pointerEvents='none'; if(ov._t) clearTimeout(ov._t); };
@@ -135,13 +138,13 @@
     const keys = ['duaIdx','quranIdx','sunnahIdx','dhikrIdx','storiesIdx','hadithIdx','namesIdx','sinsIdx','punishmentsIdx','repentanceIdx','sahabaIdx','seerahIdx','tafsirIdx','mannersIdx','inspireIdx','aqeedahIdx','familyIdx','healthIdx','financeIdx','ummahIdx','hajjIdx','akhirahIdx','prophetsIdx','womenIdx','knowledgeIdx','heartIdx','jumuahIdx','marriageIdx','scienceIdx','wuduIdx','scholarsIdx','patienceIdx','workIdx','communityIdx','environmentIdx','travelIdx','fiqhIdx','arabicIdx','tawakkulIdx','ikhlasIdx','zuhdIdx','dawahIdx','civilisationIdx','battlesIdx','jannahIdx','jahannamIdx','graveIdx','signsIdx','dreamsIdx','parentingIdx','foodIdx','tibbIdx','youthIdx','techIdx','neighborsIdx'].concat(Object.keys(NEW_POOLS).map(k => k + "Idx"));
     const allPools = [DUA_POOL,(typeof QURAN_POOL !== 'undefined') ? QURAN_POOL : null,SUNNAH_POOL,DHIKR_POOL,STORIES,(typeof HADITHS !== 'undefined') ? HADITHS : null,NAMES,SINS_POOL,PUNISHMENTS_POOL,REPENTANCE_POOL,SAHABA_POOL,SEERAH_POOL,TAFSIR_POOL,MANNERS_POOL,INSPIRATIONS_POOL,AQEEDAH_POOL,FAMILY_POOL,HEALTH_POOL,FINANCE_POOL,UMMAH_POOL,HAJJ_POOL,AKHIRAH_POOL,PROPHETS_POOL,WOMEN_POOL,KNOWLEDGE_POOL,HEART_POOL,JUMUAH_POOL,MARRIAGE_POOL,SCIENCE_POOL,WUDU_POOL,SCHOLARS_POOL,PATIENCE_POOL,WORK_POOL,COMMUNITY_POOL,ENVIRONMENT_POOL,TRAVEL_POOL,FIQH_POOL,ARABIC_POOL,TAWAKKUL_POOL,IKHLAS_POOL,ZUHD_POOL,DAWAH_POOL,CIVILISATION_POOL,BATTLES_POOL,JANNAH_POOL,JAHANNAM_POOL,GRAVE_POOL,SIGNS_POOL,DREAMS_POOL,PARENTING_POOL,FOOD_POOL,TIBB_POOL,YOUTH_POOL,TECH_POOL,NEIGHBORS_POOL].concat(Object.keys(NEW_POOLS).map(k => NEW_POOLS[k]));
     keys.forEach((k,i) => { S[k] = rng(allPools[i]?.length||5); });
-    saveState(); renderAll(); toast('🔄','Content refreshed!',false,1500);
+    saveState(); renderAll(); toast(iqIcon('refresh-cw'),'Content refreshed!',false,1500);
   }
 
   function switchUser() { const inp=document.getElementById('usernameInput'); if(!inp?.value.trim()) return; saveState(); currentUser=inp.value.trim(); localStorage.setItem(USER_KEY,currentUser); S=loadState(); initApp(); }
   function logout() { switchUser(); }
   function resetAll() {
-    if (!confirm('⚠️ Reset all data? This cannot be undone.')) return;
+    if (!confirm(iqEmoji('alert-triangle') + ' Reset all data? This cannot be undone.')) return;
     const keys = [];
     for (let i = 0; i < localStorage.length; i++) {
       const k = localStorage.key(i);
@@ -152,7 +155,7 @@
     saveState();
     renderAll();
   }
-  function claimBonus() { const t=today(); if(S.lbd===t) return; const oldLv=S.lv; const b=S.cs>=7?75:30; S.xp+=b; S.lbd=t; S.lv=lvFrom(S.xp); checkLevelUp(oldLv); saveState(); renderDynamic(); toast('🎁','Daily Bonus: +'+b+' XP!'); }
+  function claimBonus() { const t=today(); if(S.lbd===t) return; const oldLv=S.lv; const b=S.cs>=7?75:30; S.xp+=b; S.lbd=t; S.lv=lvFrom(S.xp); checkLevelUp(oldLv); saveState(); renderDynamic(); toast(iqIcon('gift'),'Daily Bonus: +'+b+' XP!'); }
   function updateDhikrStreak() {
     const t = today();
     if (!S.dhikrStats) S.dhikrStats = { total: {}, daily: {}, streak: 0, bestStreak: 0, lastSessionDate: null, badges: [], achievements: [] };
@@ -189,7 +192,7 @@
     if (S.dhikrSettings?.haptic && navigator.vibrate) { navigator.vibrate(10); }
     const d = DHIKR_COUNTER_DATA[idx % DHIKR_COUNTER_DATA.length];
     if (S.dhikrCounters[idx] === d.target) {
-      toast('✨', 'Target reached! SubhanAllah!', false, 2000);
+      toast(iqIcon('sparkles'), 'Target reached! SubhanAllah!', false, 2000);
       if (S.dhikrSettings?.haptic && navigator.vibrate) { navigator.vibrate([50, 50, 50]); }
     }
     if (!S.dhikrSessions) S.dhikrSessions = [];
@@ -209,7 +212,7 @@
     DHIKR_BADGES.forEach(badge => {
       if (!badges.includes(badge.id) && badge.check(S)) {
         badges.push(badge.id);
-        toast('🏆', `Badge unlocked: ${badge.name}!`);
+        toast(iqIcon('trophy'), `Badge unlocked: ${badge.name}!`);
         S.xp += 25;
       }
     });
@@ -2032,106 +2035,106 @@
 };
 
 const NEW_POOL_TITLES = {
-  zakatrules:    '💰 Zakat — Purifying Your Wealth',
-  salahrules:    '🕌 Salah — The Pillar of Prayer',
-  sawmrules:     '🌙 Sawm — The Fast of Ramadan',
-  hajjrules:     '🕋 Hajj — The Sacred Pilgrimage',
-  purification:  '💧 Purification (Taharah)',
-  trade:         '⚖️ Islamic Trade & Commerce',
-  marriagelaws:  '💍 Marriage Laws in Islam',
-  inheritance:   '📜 Laws of Inheritance (Mirath)',
-  halaldiet:     '🍽️ Halal Diet & Forbidden Foods',
-  oaths:         '✋ Oaths & Vows in Islam',
-  umayyads:      '🏛️ The Umayyad Caliphate',
-  abbasids:      '📜 The Abbasid Golden Age',
-  andalus:       '🏰 Islamic Spain (Al-Andalus)',
-  ottomans:      '🕌 The Ottoman Empire',
-  mamluks:       '⚔️ The Mamluk Sultanate',
-  seljuks:       '🏇 The Seljuk Empire',
-  fatimids:      '🌙 The Fatimid Caliphate',
-  ayyubids:      '🛡️ The Ayyubid Dynasty',
-  modernhist:    '🌍 Modern Islamic History',
-  ancientprophets:'⏳ Ancient Prophets & Nations',
-  sufism:        '🤍 Sufism & Spiritual Paths',
-  tazkiyah:      '✨ Tazkiyah — Soul Purification',
-  asceticism:    '🌾 Asceticism (Zuhd)',
-  fear:          '😨 Fear of Allah (Khawf)',
-  hope:          '🕊️ Hope in Allah (Raja)',
-  loveofallah:   '❤️ Love of Allah',
-  contentment:   '😌 Contentment (Qana\'ah)',
-  reflection:    '🪞 Reflection & Contemplation',
-  technology:    '📱 Technology & Islam',
-  socialmedia:   '🌐 Social Media & Islam',
-  ethics:        '🤝 Islamic Ethics',
-  bioethics:     '🧬 Islamic Bioethics',
-  modfinance:    '💳 Modern Islamic Finance',
-  politics:      '🏛️ Islam & Politics',
-  green:         '🌱 Green Islam & Ecology',
-  mentalhealth:  '🧠 Mental Health in Islam',
-  youth:         '🎓 Youth & Islamic Identity',
-  education:     '📚 Islamic Education',
-  mecca:         '🕋 Mecca — The Holy City',
-  medina:        '🕌 Medina — City of the Prophet',
-  jerusalem:     '🕌 Jerusalem — Al-Quds',
-  damascus:      '🏛️ Damascus — Ancient Capital',
-  baghdad:       '📜 Baghdad — House of Wisdom',
-  cairo:         '🏛️ Cairo — Gateway of Egypt',
-  cordoba:       '🏰 Cordoba — Light of the West',
-  istanbul:      '🕌 Istanbul — City of Empires',
-  bukhara:       '🕌 Bukhara — City of Knowledge',
-  samarkand:     '🗺️ Samarkand — Silk Road Jewel',
-  calligraphy:   '🖋️ Islamic Calligraphy',
-  architecture:  '🏛️ Islamic Architecture',
-  geometry:      '💠 Islamic Geometric Art',
-  poetryart:     '📜 Islamic Poetry',
-  literature:    '📚 Islamic Literature',
-  nasheeds:      '🎵 Nasheeds & Spiritual Music',
-  illumination:  '✨ Manuscript Illumination',
-  textiles:      '🧵 Islamic Textiles',
-  ceramics:      '🏺 Islamic Ceramics',
-  woodwork:      '🪵 Islamic Woodwork',
-  abuhanifa:     '🧠 Imam Abu Hanifa',
-  malik:         '🧠 Imam Malik ibn Anas',
-  shafii:        '🧠 Imam Al-Shafi\'i',
-  ahmad:         '🧠 Imam Ahmad ibn Hanbal',
-  alghazali:     '🧠 Al-Ghazali — Proof of Islam',
-  ibntaymiyyah:  '🧠 Ibn Taymiyyah',
-  ibnkhaldun:    '🧠 Ibn Khaldun — Father of Sociology',
-  ibnrushd:      '🧠 Ibn Rushd (Averroes)',
-  ibnsina:       '🧠 Ibn Sina (Avicenna)',
-  alkhwarizmi:   '🧠 Al-Khwarizmi — Father of Algebra',
-  arabicgrammar: '📖 Arabic Grammar (Nahw)',
-  vocab:         '🔤 Arabic Vocabulary',
-  rhetoric:      '🗣️ Arabic Rhetoric (Balagha)',
-  morphology:    '🧩 Arabic Morphology (Sarf)',
-  pronunciation: '🎙️ Tajweed & Pronunciation',
-  poetry:        '📜 Arabic Poetry',
-  proverbs:      '💡 Arabic Proverbs',
-  etymology:     '🔍 Arabic Etymology',
-  dialects:      '🌍 Arabic Dialects',
-  scripts:       '✍️ Arabic Scripts',
-  brotherhood:   '🤝 Brotherhood in Islam',
-  sisterhood:    '🌸 Sisterhood in Islam',
-  orphans2:      '🧸 Care for Orphans',
-  elderly:       '🧓 Respecting the Elderly',
-  disabled:      '♿ Inclusion & Disability',
-  antiracism:    '🌍 Anti-Racism in Islam',
-  poverty:       '🫂 Poverty & Social Justice',
-  volunteering:  '🙋 Volunteering in Islam',
-  epistemology:  '🧠 Islamic Epistemology',
-  ontology:      '🌌 Islamic Ontology',
-  logic:         '🧩 Logic in Islamic Thought',
-  kalam:         '🗣️ Ilm al-Kalam (Theology)',
-  reason:        '💡 Reason & Revelation',
-  freewill:      '⚖️ Free Will & Qadar',
-  problemofevil: '🌑 The Problem of Evil',
-  prophethood:   '📜 Nubuwwah (Prophethood)',
-  existence:     '✨ Existence & Tawhid'
+  zakatrules:    iqIcon('wallet') + ' Zakat — Purifying Your Wealth',
+  salahrules:    iqIcon('mosque') + ' Salah — The Pillar of Prayer',
+  sawmrules:     iqIcon('moon') + ' Sawm — The Fast of Ramadan',
+  hajjrules:     iqIcon('mosque') + ' Hajj — The Sacred Pilgrimage',
+  purification:  iqIcon('droplets') + ' Purification (Taharah)',
+  trade:         iqIcon('handshake') + ' Islamic Trade & Commerce',
+  marriagelaws:  iqIcon('heart') + ' Marriage Laws in Islam',
+  inheritance:   iqIcon('scroll') + ' Laws of Inheritance (Mirath)',
+  halaldiet:     iqIcon('utensils') + ' Halal Diet & Forbidden Foods',
+  oaths:         iqIcon('hand-heart') + ' Oaths & Vows in Islam',
+  umayyads:      iqIcon('castle') + ' The Umayyad Caliphate',
+  abbasids:      iqIcon('scroll') + ' The Abbasid Golden Age',
+  andalus:       iqIcon('castle') + ' Islamic Spain (Al-Andalus)',
+  ottomans:      iqIcon('mosque') + ' The Ottoman Empire',
+  mamluks:       iqIcon('target') + ' The Mamluk Sultanate',
+  seljuks:       iqIcon('target') + ' The Seljuk Empire',
+  fatimids:      iqIcon('moon') + ' The Fatimid Caliphate',
+  ayyubids:      iqIcon('shield') + ' The Ayyubid Dynasty',
+  modernhist:    iqIcon('globe') + ' Modern Islamic History',
+  ancientprophets:iqIcon('clock') + ' Ancient Prophets & Nations',
+  sufism:        iqIcon('heart') + ' Sufism & Spiritual Paths',
+  tazkiyah:      iqIcon('sparkles') + ' Tazkiyah — Soul Purification',
+  asceticism:    iqIcon('leaf') + ' Asceticism (Zuhd)',
+  fear:          iqIcon('alert-triangle') + ' Fear of Allah (Khawf)',
+  hope:          iqIcon('heart') + ' Hope in Allah (Raja)',
+  loveofallah:   iqIcon('heart') + ' Love of Allah',
+  contentment:   iqIcon('heart') + ' Contentment (Qana\'ah)',
+  reflection:    iqIcon('pencil') + ' Reflection & Contemplation',
+  technology:    iqIcon('zap') + ' Technology & Islam',
+  socialmedia:   iqIcon('globe') + ' Social Media & Islam',
+  ethics:        iqIcon('handshake') + ' Islamic Ethics',
+  bioethics:     iqIcon('dna') + ' Islamic Bioethics',
+  modfinance:    iqIcon('credit-card') + ' Modern Islamic Finance',
+  politics:      iqIcon('castle') + ' Islam & Politics',
+  green:         iqIcon('sprout') + ' Green Islam & Ecology',
+  mentalhealth:  iqIcon('brain') + ' Mental Health in Islam',
+  youth:         iqIcon('user') + ' Youth & Islamic Identity',
+  education:     iqIcon('book-open') + ' Islamic Education',
+  mecca:         iqIcon('mosque') + ' Mecca — The Holy City',
+  medina:        iqIcon('mosque') + ' Medina — City of the Prophet',
+  jerusalem:     iqIcon('mosque') + ' Jerusalem — Al-Quds',
+  damascus:      iqIcon('castle') + ' Damascus — Ancient Capital',
+  baghdad:       iqIcon('scroll') + ' Baghdad — House of Wisdom',
+  cairo:         iqIcon('castle') + ' Cairo — Gateway of Egypt',
+  cordoba:       iqIcon('castle') + ' Cordoba — Light of the West',
+  istanbul:      iqIcon('mosque') + ' Istanbul — City of Empires',
+  bukhara:       iqIcon('mosque') + ' Bukhara — City of Knowledge',
+  samarkand:     iqIcon('globe') + ' Samarkand — Silk Road Jewel',
+  calligraphy:   iqIcon('pen-tool') + ' Islamic Calligraphy',
+  architecture:  iqIcon('castle') + ' Islamic Architecture',
+  geometry:      iqIcon('sparkles') + ' Islamic Geometric Art',
+  poetryart:     iqIcon('scroll') + ' Islamic Poetry',
+  literature:    iqIcon('book-open') + ' Islamic Literature',
+  nasheeds:      iqIcon('sparkles') + ' Nasheeds & Spiritual Music',
+  illumination:  iqIcon('sparkles') + ' Manuscript Illumination',
+  textiles:      iqIcon('sparkles') + ' Islamic Textiles',
+  ceramics:      iqIcon('sparkles') + ' Islamic Ceramics',
+  woodwork:      iqIcon('sparkles') + ' Islamic Woodwork',
+  abuhanifa:     iqIcon('brain') + ' Imam Abu Hanifa',
+  malik:         iqIcon('brain') + ' Imam Malik ibn Anas',
+  shafii:        iqIcon('brain') + ' Imam Al-Shafi\'i',
+  ahmad:         iqIcon('brain') + ' Imam Ahmad ibn Hanbal',
+  alghazali:     iqIcon('brain') + ' Al-Ghazali — Proof of Islam',
+  ibntaymiyyah:  iqIcon('brain') + ' Ibn Taymiyyah',
+  ibnkhaldun:    iqIcon('brain') + ' Ibn Khaldun — Father of Sociology',
+  ibnrushd:      iqIcon('brain') + ' Ibn Rushd (Averroes)',
+  ibnsina:       iqIcon('brain') + ' Ibn Sina (Avicenna)',
+  alkhwarizmi:   iqIcon('brain') + ' Al-Khwarizmi — Father of Algebra',
+  arabicgrammar: iqIcon('book-open') + ' Arabic Grammar (Nahw)',
+  vocab:         iqIcon('book-open') + ' Arabic Vocabulary',
+  rhetoric:      iqIcon('message-circle') + ' Arabic Rhetoric (Balagha)',
+  morphology:    iqIcon('sparkles') + ' Arabic Morphology (Sarf)',
+  pronunciation: iqIcon('sparkles') + ' Tajweed & Pronunciation',
+  poetry:        iqIcon('scroll') + ' Arabic Poetry',
+  proverbs:      iqIcon('zap') + ' Arabic Proverbs',
+  etymology:     iqIcon('search') + ' Arabic Etymology',
+  dialects:      iqIcon('globe') + ' Arabic Dialects',
+  scripts:       iqIcon('pencil') + ' Arabic Scripts',
+  brotherhood:   iqIcon('handshake') + ' Brotherhood in Islam',
+  sisterhood:    iqIcon('flower') + ' Sisterhood in Islam',
+  orphans2:      iqIcon('heart') + ' Care for Orphans',
+  elderly:       iqIcon('user') + ' Respecting the Elderly',
+  disabled:      iqIcon('heart') + ' Inclusion & Disability',
+  antiracism:    iqIcon('globe') + ' Anti-Racism in Islam',
+  poverty:       iqIcon('heart') + ' Poverty & Social Justice',
+  volunteering:  iqIcon('heart') + ' Volunteering in Islam',
+  epistemology:  iqIcon('brain') + ' Islamic Epistemology',
+  ontology:      iqIcon('brain') + ' Islamic Ontology',
+  logic:         iqIcon('sparkles') + ' Logic in Islamic Thought',
+  kalam:         iqIcon('message-circle') + ' Ilm al-Kalam (Theology)',
+  reason:        iqIcon('zap') + ' Reason & Revelation',
+  freewill:      iqIcon('handshake') + ' Free Will & Qadar',
+  problemofevil: iqIcon('moon') + ' The Problem of Evil',
+  prophethood:   iqIcon('scroll') + ' Nubuwwah (Prophethood)',
+  existence:     iqIcon('sparkles') + ' Existence & Tawhid'
 };
   window.NEW_POOLS = NEW_POOLS;
 Object.keys(NEW_POOLS).forEach(k => {
   window['render' + k] = function() {
-    const title = NEW_POOL_TITLES[k] || ('✨ ' + k.charAt(0).toUpperCase() + k.slice(1));
+    const title = NEW_POOL_TITLES[k] || (iqIcon('sparkles') + ' ' + k.charAt(0).toUpperCase() + k.slice(1));
     poolRender(k + 'Area', title, NEW_POOLS[k], k + 'Idx');
   }
 });
@@ -2148,14 +2151,14 @@ Object.keys(NEW_POOLS).forEach(k => {
     if (isCategorized) {
       _activeCategoryId = null;
       container.classList.add('cat-chips');
-      container.innerHTML = group.map((c, i) => `<button class="cat-chip ${i===0?'active':''}" onclick="App.selectCategory('${c.id}', this)"><span>${c.icon}</span> ${c.label}</button>`).join('');
+      container.innerHTML = group.map((c, i) => `<button class="cat-chip ${i===0?'active':''}" onclick="App.selectCategory('${c.id}', this)"><span>${iqIcon(c.icon || c.id)}</span> ${c.label}</button>`).join('');
       if (tier3Wrap) tier3Wrap.style.display = '';
       const firstCat = group[0];
       _activeCategoryId = firstCat.id;
       renderCategoryTabs(firstCat);
     } else {
       container.classList.remove('cat-chips');
-      container.innerHTML = group.map((p, i) => `<button class="t2-btn ${i===0?'active':''}" onclick="App.activateTab('${p.id}', this)"><span>${p.icon}</span> ${p.label}</button>`).join('');
+      container.innerHTML = group.map((p, i) => `<button class="t2-btn ${i===0?'active':''}" onclick="App.activateTab('${p.id}', this)"><span>${iqIcon(p.icon || p.id)}</span> ${p.label}</button>`).join('');
       if (tier3Wrap) tier3Wrap.style.display = 'none';
       if (group.length > 0) activateTab(group[0].id, container.firstElementChild);
     }
@@ -2171,7 +2174,7 @@ Object.keys(NEW_POOLS).forEach(k => {
   function renderCategoryTabs(cat) {
     const grid = document.getElementById('tier3Tabs');
     if (!grid) return;
-    grid.innerHTML = cat.tabs.map((p, i) => `<button class="t2-btn ${i===0?'active':''}" onclick="App.activateTab('${p.id}', this)"><span>${p.icon}</span> ${p.label}</button>`).join('');
+    grid.innerHTML = cat.tabs.map((p, i) => `<button class="t2-btn ${i===0?'active':''}" onclick="App.activateTab('${p.id}', this)"><span>${iqIcon(p.icon || p.id)}</span> ${p.label}</button>`).join('');
     if (cat.tabs.length > 0) activateTab(cat.tabs[0].id, grid.firstElementChild);
   }
   function getSectionPanels(sectionName) {
@@ -2206,6 +2209,7 @@ Object.keys(NEW_POOLS).forEach(k => {
     const _lazyRender = {
       quran:'renderQuran', hadith:'renderHadith', sunnahs:'renderSunnahs', dhikr:'renderDhikr',
       stories:'renderStories', names:'renderNames', inspirations:'renderInspirations', gratitude:'renderGratitude',
+      allah_names:'renderNames', scholars_names:'renderScholars',
       fasting:'renderFasting', charity:'renderCharity', memorization:'renderMemorization',
       morning:'renderMorning', evening:'renderEvening', sins:'renderSins', punishments:'renderPunishments',
       repentance:'renderRepentance', sahaba:'renderSahaba', seerah:'renderSeerah', tafsir:'renderTafsir',
@@ -2245,7 +2249,8 @@ Object.keys(NEW_POOLS).forEach(k => {
       proverbs:'renderProverbs', etymology:'renderEtymology', dialects:'renderDialects',
       scripts:'renderScripts', epistemology:'renderEpistemology', ontology:'renderOntology',
       logic:'renderLogic', kalam:'renderKalam', reason:'renderReason', freewill:'renderFreewill',
-      problemofevil:'renderProblemofevil', prophethood:'renderProphethood', existence:'renderExistence'
+      problemofevil:'renderProblemofevil', prophethood:'renderProphethood', existence:'renderExistence',
+      keys:'renderKeys', mosque:'renderMosque', ramadan:'renderRamadan', laylat:'renderLaylat'
     };
     if (_lazyRender[tabId] && window[_lazyRender[tabId]]) {
       try { window[_lazyRender[tabId]](); } catch(e) { console.warn('Lazy render ' + tabId + ' failed:', e.message); }
@@ -2287,8 +2292,12 @@ Object.keys(NEW_POOLS).forEach(k => {
       if (window.renderGarden) window.renderGarden();
       if (window.renderSpiritualGrowthTab) window.renderSpiritualGrowthTab();
       if (window.renderBoat) window.renderBoat();
+      if (window.renderArmor) window.renderArmor();
+      if (window.renderHeartRefinement) window.renderHeartRefinement();
     } else if (name === 'profile') {
       window.renderProfile();
+      if (window.renderKeys) window.renderKeys();
+      if (window.renderMosque) window.renderMosque();
     }
     updateTopBar();
   }
@@ -2300,56 +2309,35 @@ Object.keys(NEW_POOLS).forEach(k => {
     const str = document.getElementById('tbStreak');
     if (lv) lv.textContent = `Lv ${S.lv}`;
     if (title) title.textContent = lvTitle(S.lv);
-    if (xp) xp.textContent = `⚡ ${(S.xp||0).toLocaleString()} XP`;
-    if (str) str.textContent = `🔥 ${S.cs||0}`;
+    if (xp) xp.textContent = `${(S.xp||0).toLocaleString()} XP`;
+    if (str) str.textContent = `${S.cs||0} day`;
   }
 
  function initApp() {
   const overlay = document.getElementById('introOverlay');
-  const isNewUser = _currentUserSource === 'default';
-  const introWasSeen = (() => { try { return localStorage.getItem(INTRO_SEEN_KEY) === '1'; } catch(e) { return false; } })();
-  if (!introWasSeen && isNewUser) {
-   var btn = document.getElementById('introBtn');
-   if (btn) { btn.style.opacity = '1'; btn.style.transform = 'scale(1)'; btn.style.pointerEvents = 'auto'; }
-   if (overlay) { overlay.style.display = 'flex'; overlay.style.opacity = '1'; overlay.style.transform = 'scale(1)'; }
-  } else {
-   var hBtn = document.getElementById('introBtn');
-   var hOverlay = document.getElementById('introOverlay');
-   if (hBtn) { hBtn.style.opacity = '0'; hBtn.style.transform = 'scale(0.9)'; hBtn.style.pointerEvents = 'none'; }
-   if (hOverlay) hOverlay.style.display = 'none';
+  // Always show intro on every page load
+  if (overlay) {
+    overlay.classList.add('visible');
+    overlay.style.opacity = '1';
   }
   applyTheme();
   // Profile as main tab
   TAB_GROUPS.profile_main = [
-    { id: 'profile', icon: '👤', label: 'Profile' },
-    { id: 'trophies', icon: '🏆', label: 'Trophies' },
-    { id: 'progress', icon: '📊', label: 'Progress' },
-    { id: 'stats', icon: '📈', label: 'Analytics' },
-    { id: 'rewards', icon: '🎁', label: 'Rewards' }
+    { id: 'profile', icon: 'user', label: 'Profile' },
+    { id: 'trophies', icon: 'trophy', label: 'Trophies' },
+    { id: 'progress', icon: 'bar-chart-3', label: 'Progress' },
+    { id: 'stats', icon: 'trending-up', label: 'Analytics' },
+    { id: 'rewards', icon: 'gift', label: 'Rewards' }
   ];
-
-  if (!document.getElementById('panel-allah_names')) {
-      const cw = document.querySelector('.app') || document.body;
-      
-      const genCards = (arr, isScholars) => arr.map((n, idx) => `
-          <div style="position: relative; padding: 25px 20px; text-align: center; margin-bottom: 20px; background: rgba(255,255,255,0.62); border-radius: 16px; border: 1px solid rgba(244,63,94,0.2); box-shadow: 0 5px 15px rgba(0,0,0,0.3);">
-              <div style="position: absolute; top: 15px; left: 20px; font-size: 1.1rem; color: rgba(244,63,94,0.8); font-weight: bold; font-family: 'Outfit', sans-serif;">#${idx + 1}</div>
-              ${n.arabic ? `<div style="font-size: 3.5rem; color: var(--gold); font-family: 'Amiri', serif; margin-bottom: 10px; text-shadow: 0 0 10px rgba(244,63,94,0.3); line-height: 1;">${n.arabic}</div>` : ''}
-              <div style="font-size: 1.6rem; font-weight: 700; color: ${isScholars ? 'var(--gold)' : 'var(--text)'}; margin-bottom: 8px; letter-spacing: 0.5px;">${n.name || n.title}</div>
-              <div style="font-size: 1.05rem; color: var(--text2); max-width: 650px; margin: 0 auto; line-height: 1.5;">${n.desc}</div>
-          </div>
-      `).join('');
-
-      cw.insertAdjacentHTML('beforeend', `
-          <div class="tab-panel" id="panel-allah_names"><div class="tab-panel-inner" style="max-width:800px; margin:0 auto; padding: 20px 0;">${genCards(NAMES, false)}</div></div>
-          <div class="tab-panel" id="panel-prophet_names"><div class="tab-panel-inner" style="max-width:800px; margin:0 auto; padding: 20px 0;">${genCards(PROPHETS_POOL, false)}</div></div>
-          <div class="tab-panel" id="panel-scholars_names"><div class="tab-panel-inner" style="max-width:800px; margin:0 auto; padding: 20px 0;">${genCards(SCHOLARS_POOL, true)}</div></div>
-      `);
-  }
 
     const t = today();
     if (S.lad !== t) { S.lad=t; if(S.ab&&S.ab.exp<t) S.ab=null; recalc(); saveState(); }
-    genDQ(); genWQ(); genMQ(); genYQ(); genLQ(); refreshContent(); recalc(); checkQ(); S.lv=lvFrom(S.xp); saveState(); initCalView(); renderTab(S.lastTab || 'home'); renderTopBar(); renderAll();
+    genDQ(); genWQ(); genMQ(); genYQ(); genLQ(); refreshContent(); recalc(); checkQ(); S.lv=lvFrom(S.xp); saveState(); initCalView(); renderAll();
+    try {
+      const activeBtn = document.querySelector('.t1-btn.active');
+      const activeCat = activeBtn ? activeBtn.getAttribute('data-cat') : 'ibadah';
+      switchCategory(activeCat, activeBtn);
+    } catch(e) { console.warn('Initial nav render failed:', e); }
   }
 
   function init() {
@@ -2358,12 +2346,6 @@ Object.keys(NEW_POOLS).forEach(k => {
     try { applyTheme(); } catch(e) { console.error('Step 2 applyTheme failed:', e); }
     try { initApp(); } catch(e) { console.error('Step 3 initApp failed:', e); }
     try {
-      document.getElementById('xpWrap').addEventListener('click', () => {
-        const lv=S.lv, xp=S.xp, cur=xpFor(lv), nxt=xpFor(lv+1);
-        toast('⭐', `Level ${lv}: ${xp-cur} / ${nxt-cur} XP to next`);
-      });
-    } catch(e) { console.error('Step 6 xpWrap failed:', e); }
-    try {
       document.addEventListener('click', (e) => {
         const sr = document.getElementById('globalSearchResults');
         if (sr && !e.target.closest('.global-search-wrap')) sr.classList.remove('show');
@@ -2371,9 +2353,8 @@ Object.keys(NEW_POOLS).forEach(k => {
     } catch(e) { console.error('Step 6 clickOutside failed:', e); }
     window.App = {
       toggleP, toggleV, toggleD, buy,
-      detail: (id) => toast('ℹ️', DETAILS[id]||'Voluntary Prayer', false, 4000),
-      tip: (id) => toast('💡', TIPS[id]||'A beautiful deed!', false, 4000),
-      dismissTip: () => { S.tdismiss=true; saveState(); renderTip(); },
+      detail: (id) => toast(iqIcon('alert-triangle'), DETAILS[id]||'Voluntary Prayer', false, 4000),
+      tip: (id) => toast(iqIcon('zap'), TIPS[id]||'A beautiful deed!', false, 4000),
       toggleQuest, addGratitude, toggleFasting, setCharityGoals,
       logWater: typeof window.logWater === 'function' ? window.logWater : () => {},
       logSleep: typeof window.logSleep === 'function' ? window.logSleep : () => {},
@@ -2397,16 +2378,20 @@ Object.keys(NEW_POOLS).forEach(k => {
     window.playSound = playSound;
     window.levelUpToast = levelUpToast;
     App.switchTab = switchTab;
-    console.log('✅ Ibadah Quest initialized. window.App is set.');
+    console.log('Ibadah Quest initialized. window.App is set.');
   }
 
   function startJourney() {
-    var btn = document.getElementById('introBtn');
     var overlay = document.getElementById('introOverlay');
-    if (btn) { btn.style.opacity = '0'; btn.style.transform = 'scale(0.9)'; btn.style.pointerEvents = 'none'; }
-    if (overlay) { overlay.style.transition = 'opacity 1s ease-in-out, transform 1s ease-in-out'; overlay.style.opacity = '0'; overlay.style.transform = 'scale(1.05)'; setTimeout(function(){ overlay.style.display = 'none'; }, 1000); }
-    try { localStorage.setItem(INTRO_SEEN_KEY, '1'); } catch(e) {}
-    if (S) { S.introSeen = true; saveState(); }
+    if (overlay) {
+      overlay.style.transition = 'opacity 0.8s ease-in-out';
+      overlay.style.opacity = '0';
+      setTimeout(function(){
+        overlay.classList.remove('visible');
+        overlay.style.display = 'none';
+        overlay.style.transition = '';
+      }, 800);
+    }
   }
   window.startJourney = startJourney;
 

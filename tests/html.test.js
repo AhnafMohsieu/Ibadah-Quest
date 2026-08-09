@@ -181,3 +181,14 @@ test('index.html declares armor/heart growth areas and loads their scripts', () 
   assert.ok(html.includes('features/spiritual-growth/armor.js'), 'armor script missing');
   assert.ok(html.includes('features/spiritual-growth/heart.js'), 'heart script missing');
 });
+
+test('growth renderers are wired into renderDynamic and tab render paths', () => {
+  for (const name of ['renderKeys','renderMosque','renderRamadan','renderLaylat','renderHeartRefinement','renderArmor']) {
+    assert.ok(render.includes(`window.${name}`), `renderDynamic must reference ${name}`);
+  }
+  for (const key of ["keys:'renderKeys'","mosque:'renderMosque'","ramadan:'renderRamadan'","laylat:'renderLaylat'"]) {
+    assert.ok(actions.includes(key), `_lazyRender must map ${key}`);
+  }
+  assert.ok(actions.indexOf('renderHeartRefinement') > -1, 'renderTab must call renderHeartRefinement');
+  assert.ok(actions.indexOf('renderArmor') > -1, 'renderTab must call renderArmor');
+});
