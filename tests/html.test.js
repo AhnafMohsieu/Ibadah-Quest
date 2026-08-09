@@ -12,6 +12,7 @@ const render = fs.readFileSync(path.join(root, 'render', 'render.js'), 'utf8');
 const spiritual = fs.readFileSync(path.join(root, 'features', 'spiritual-growth', 'data.js'), 'utf8');
 const spiritualGrowth = fs.readFileSync(path.join(root, 'features', 'spiritual-growth', 'index.js'), 'utf8');
 const actions = fs.readFileSync(path.join(root, 'core', 'actions.js'), 'utf8');
+const meta = fs.readFileSync(path.join(root, 'data', 'theme-meta.js'), 'utf8');
 
 test('index.html has the three feature containers', () => {
   assert.ok(html.includes('id="gardenArea"'));
@@ -308,4 +309,16 @@ test('hero+topbar refresh on theme change and home tab', () => {
   assert.ok(actions.includes('renderDynamic();'), 'setTheme must call renderDynamic');
   const homeCall = actions.slice(actions.indexOf("name === 'home'"));
   assert.ok(homeCall.includes('window.renderTopBar();'), 'renderTab(home) calls renderTopBar');
+});
+
+test('theme: Emara jade-and-gold palette block exists', () => {
+  assert.ok(css.includes('html[data-theme="emara"]'), 'emara palette block missing');
+  assert.ok(css.includes('--bg: #123027'), 'emara background is deep jade');
+  assert.ok(css.includes('--gold: #d4af37'), 'emara accent is gold');
+  assert.ok(css.includes('--accent-rgb: 212,175,55'), 'emara accent rgb set');
+});
+
+test('theme: picker lists the Emara theme', () => {
+  assert.ok(meta.includes("key:'emara'"), 'theme-meta lists emara');
+  assert.ok(meta.includes("label:'Emara'"), 'theme-meta labels emara');
 });

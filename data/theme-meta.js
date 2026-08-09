@@ -4,5 +4,6 @@ window.Themes = [
   { key:'serene', label:'Serene', swatch:{ bg:'#d2e1cf', accent:'#4c7a4a' } },
   { key:'royal', label:'Royal', swatch:{ bg:'#d6cfe9', accent:'#7c5cf0' } },
   { key:'sand', label:'Sand', swatch:{ bg:'#e8dcc6', accent:'#c98a2e' } },
-  { key:'midnight', label:'Midnight', swatch:{ bg:'#cfdcea', accent:'#3fa7c8' } }
+  { key:'midnight', label:'Midnight', swatch:{ bg:'#cfdcea', accent:'#3fa7c8' } },
+  { key:'emara', label:'Emara', swatch:{ bg:'#123027', accent:'#d4af37' } }
 ];
