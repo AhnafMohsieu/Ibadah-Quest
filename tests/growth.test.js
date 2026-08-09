@@ -50,3 +50,10 @@ test('renderBoat renders a real SVG scene', () => {
   assert.ok(el.innerHTML.includes('<svg'), 'boat SVG missing');
   assert.ok(el.innerHTML.includes('Stage 3/7'), 'stage badge missing');
 });
+
+test('renderKeys renders a real SVG scene with per-stage key count', () => {
+  const { sandbox, el } = loadSpiritual(feature('keys'));
+  sandbox.window.renderKeys();
+  assert.ok(el.innerHTML.includes('<svg'), 'keys SVG missing');
+  assert.ok(el.innerHTML.includes('spiritual-svg'), 'keys must use spiritual-svg class');
+});

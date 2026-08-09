@@ -14,7 +14,7 @@
   // Key counts per stage: 1, 2, 3, 5, 7, 9, 10
   const KEY_COUNTS = [1, 2, 3, 5, 7, 9, 10];
 
-  function drawKey(x, y, angle, scale) {
+  function drawKey(x, y, angle, scale, stroke) {
     const rad = angle * Math.PI / 180;
     const cos = Math.cos(rad);
     const sin = Math.sin(rad);
@@ -41,79 +41,44 @@
     let path = '';
 
     // Bow (circle at top)
-    path += `<circle cx="${x}" cy="${y - bowR * scale}" r="${bowR * scale}" fill="none" stroke="${gold}" stroke-width="${1.5 * scale}"/>`;
+    path += `<circle cx="${x}" cy="${y - bowR * scale}" r="${bowR * scale}" fill="none" stroke="${stroke}" stroke-width="${1.5 * scale}"/>`;
     path += `<circle cx="${x}" cy="${y - bowR * scale}" r="${2 * scale}" fill="${gold}" opacity="0.5"/>`;
 
     // Shaft
     const shaftStart = rotate(0, 0);
     const shaftEnd = rotate(0, shaftLen);
-    path += `<line x1="${shaftStart.x}" y1="${shaftStart.y}" x2="${shaftEnd.x}" y2="${shaftEnd.y}" stroke="${gold}" stroke-width="${2 * scale}"/>`;
+    path += `<line x1="${shaftStart.x}" y1="${shaftStart.y}" x2="${shaftEnd.x}" y2="${shaftEnd.y}" stroke="${stroke}" stroke-width="${2 * scale}"/>`;
 
     // Bit (teeth) - two notches
     const bitY1 = rotate(bitW, shaftLen - bitH * 2);
     const bitY2 = rotate(bitW, shaftLen - bitH);
     const bitY3 = rotate(0, shaftLen - bitH);
-    path += `<polyline points="${shaftEnd.x},${shaftEnd.y} ${bitY1.x},${bitY1.y} ${bitY2.x},${bitY2.y} ${bitY3.x},${bitY3.y}" fill="none" stroke="${gold}" stroke-width="${1.5 * scale}"/>`;
+    path += `<polyline points="${shaftEnd.x},${shaftEnd.y} ${bitY1.x},${bitY1.y} ${bitY2.x},${bitY2.y} ${bitY3.x},${bitY3.y}" fill="none" stroke="${stroke}" stroke-width="${1.5 * scale}"/>`;
 
     return path;
   }
 
   function keysSVG(stage, progress) {
-    const keyCount = KEY_COUNTS[stage - 1] || 1;
-    const isMaxStage = stage === 7;
-    const cx = 60;
-    const ringY = 22;
-    const ringR = 18;
-
-    // Ring
-    let ring = `<circle cx="${cx}" cy="${ringY}" r="${ringR}" fill="none" stroke="${silver}" stroke-width="2.5"/>`;
-    ring += `<circle cx="${cx}" cy="${ringY}" r="${ringR - 4}" fill="none" stroke="${silver}" stroke-width="0.8" opacity="0.4"/>`;
-
-    // Calculate key positions around the ring
-    const startAngle = 90; // bottom of ring
-    const spread = 140; // degrees of spread
-    const angleStep = spread / Math.max(1, keyCount - 1);
-
-    let keys = '';
-    for (let i = 0; i < keyCount; i++) {
-      let angle;
-      if (keyCount === 1) {
-        angle = 180; // straight down
-      } else {
-        angle = startAngle - spread / 2 + i * angleStep;
-      }
-
-      const rad = angle * Math.PI / 180;
-      const kx = cx + ringR * Math.cos(rad);
-      const ky = ringY + ringR * Math.sin(rad);
-
-      // Draw chain link from ring to key
-      const chainLen = 10;
-      const chainEndX = kx + chainLen * Math.cos(rad);
-      const chainEndY = ky + chainLen * Math.sin(rad);
-
-      keys += `<line x1="${kx}" y1="${ky}" x2="${chainEndX}" y2="${chainEndY}" stroke="${silver}" stroke-width="1"/>`;
-      keys += drawKey(chainEndX, chainEndY, 0, 0.8);
+    const count = KEY_COUNTS[Math.min(stage, 7) - 1];
+    const cols = {
+      1: '#9CA3AF', 2: '#CD853F', 3: '#B87333',
+      4: '#6B7280', 5: '#C0C0C0', 6: '#FFD700', 7: '#FFF3B0'
+    };
+    const col = cols[stage];
+    let h = `<rect width="120" height="132" fill="var(--card-bg)" rx="10"/>`;
+    const spread = Math.max(0, count - 1);
+    for (let i = 0; i < count; i++) {
+      const t = spread === 0 ? 0.5 : i / spread;
+      const x = 30 + t * 60;
+      const y = 72 - Math.sin(t * Math.PI) * 20;
+      const angle = -30 + t * 60;
+      h += drawKey(x, y, angle, 1, col);
     }
-
-    // Stage 7 glow effect
-    let glow = '';
-    if (isMaxStage) {
-      glow = `
-        <circle cx="${cx}" cy="${ringY + 30}" r="50" fill="rgba(244,63,94,0.12)"/>
-        <circle cx="${cx}" cy="${ringY + 30}" r="35" fill="rgba(255,233,125,0.08)"/>
-        <circle cx="${cx}" cy="${ringY + 30}" r="20" fill="rgba(255,255,255,0.05)"/>`;
+    if (stage === 7) {
+      h += `<circle cx="60" cy="70" r="50" fill="none" stroke="var(--gold)" stroke-width="2" opacity="0.4"/>`;
+      h += `<path d="M84 18 a9 9 0 1 0 2 11 a11 11 0 1 1 -2 -11 Z" fill="var(--gold)" opacity="0.9"/>`;
     }
-
-    // Ring top hook
-    const hook = `<path d="M${cx} ${ringY - ringR} Q${cx} ${ringY - ringR - 8} ${cx + 4} ${ringY - ringR - 8} Q${cx + 8} ${ringY - ringR - 8} ${cx + 8} ${ringY - ringR - 2}" fill="none" stroke="${silver}" stroke-width="1.5"/>`;
-
-    return `<svg class="spiritual-svg" viewBox="0 0 120 160">
-      ${glow}
-      ${hook}
-      ${ring}
-      ${keys}
-    </svg>`;
+    return `<svg class="spiritual-svg" viewBox="0 0 120 132">${h}</svg>`;
   }
 
   function renderKeys() {
