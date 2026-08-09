@@ -57,3 +57,10 @@ test('renderKeys renders a real SVG scene with per-stage key count', () => {
   assert.ok(el.innerHTML.includes('<svg'), 'keys SVG missing');
   assert.ok(el.innerHTML.includes('spiritual-svg'), 'keys must use spiritual-svg class');
 });
+
+test('renderRamadan renders a real SVG scene', () => {
+  const { sandbox, el } = loadSpiritual(feature('ramadan'));
+  sandbox.window.renderRamadan();
+  assert.ok(el.innerHTML.includes('<svg'), 'ramadan SVG missing');
+  assert.ok(el.innerHTML.includes('Stage 3/7'), 'stage badge missing');
+});

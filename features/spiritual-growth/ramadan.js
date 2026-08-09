@@ -8,19 +8,23 @@
     return CAPTIONS[Math.floor(d.getTime() / 86400000) % CAPTIONS.length];
   }
   function ramadanSVG(stage) {
-    const crescent = 100 - stage * 14;
-    return `<svg class="spiritual-svg" viewBox="0 0 120 160">
-      <rect width="120" height="160" fill="#0a0a1a" rx="10"/>
-      <circle cx="20" cy="28" r="1.2" fill="#FFF" opacity="0.7"/>
-      <circle cx="98" cy="24" r="1.5" fill="#FFF" opacity="0.6"/>
-      <circle cx="40" cy="16" r="1" fill="#FFF" opacity="0.8"/>
-      <circle cx="82" cy="18" r="1.2" fill="#FFF" opacity="0.5"/>
-      <circle cx="58" cy="10" r="0.8" fill="#FFF" opacity="0.6"/>
-      <circle cx="60" cy="60" r="32" fill="#F5F5DC"/>
-      <circle cx="60" cy="60" r="30" fill="#0a0a1a"
-              clip-path="inset(0 ${crescent}% 0 0)"/>
-      <circle cx="60" cy="60" r="38" fill="none" stroke="#FFD700" stroke-width="1" opacity="0.25"/>
-    </svg>`;
+    const r = 26 + (stage - 1) * 2;
+    let h = `<rect width="120" height="132" fill="var(--card-bg)" rx="10"/>`;
+    h += `<circle cx="60" cy="62" r="${r}" fill="var(--gold)" opacity="0.9"/>`;
+    if (stage <= 4) {
+      const off = stage === 1 ? 18 : stage === 2 ? 12 : stage === 3 ? 7 : 3;
+      h += `<circle cx="${60 + off}" cy="62" r="${r - 2}" fill="var(--card-bg)"/>`;
+    }
+    if (stage >= 6) {
+      h += `<circle cx="30" cy="100" r="4" fill="var(--gold)" opacity="0.8"/>`;
+      h += `<circle cx="90" cy="94" r="3" fill="var(--gold)" opacity="0.8"/>`;
+      h += `<rect x="26" y="104" width="8" height="8" fill="var(--gold)" opacity="0.7"/>`;
+    }
+    if (stage === 7) {
+      h += `<circle cx="60" cy="62" r="${r + 12}" fill="none" stroke="var(--gold)" stroke-width="2" opacity="0.4"/>`;
+      h += `<path d="M86 18 a9 9 0 1 0 2 11 a11 11 0 1 1 -2 -11 Z" fill="var(--gold)"/>`;
+    }
+    return `<svg class="spiritual-svg" viewBox="0 0 120 132">${h}</svg>`;
   }
 
   function renderRamadan() {
