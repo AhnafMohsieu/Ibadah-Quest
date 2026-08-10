@@ -996,6 +996,17 @@ select.profile-input option { background: var(--bg-accent); color: var(--text); 
 .fab-action-icon { width:24px; height:24px; }
 .fab-action-icon .iq-icon { width:24px; height:24px; }
 .fab-action-label { font-size:0.8rem; font-weight:600; color:var(--text); }
+
+/* ── Weekly Summary ── */
+.weekly-summary { background:var(--card-bg); border-radius:20px; padding:28px; max-width:320px; width:100%; box-shadow:0 20px 60px rgba(0,0,0,0.2); text-align:center; }
+.ws-title { font-size:1.1rem; font-weight:800; color:var(--text); margin-bottom:16px; }
+.ws-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:16px; }
+.ws-stat { background:rgba(201,168,76,0.06); border-radius:12px; padding:12px; }
+.ws-val { font-size:1.4rem; font-weight:800; color:var(--gold-dark); }
+.ws-label { font-size:0.7rem; color:var(--text2); margin-top:2px; }
+.ws-quote { font-size:0.82rem; color:var(--text2); font-style:italic; line-height:1.5; margin-bottom:16px; padding:0 8px; }
+.ws-close { background:linear-gradient(135deg, var(--gold), #c9a84c); color:#fff; border:none; border-radius:14px; padding:10px 24px; font-size:0.85rem; font-weight:600; cursor:pointer; transition:all 0.2s; }
+.ws-close:hover { transform:translateY(-1px); }
 .verify-btn {
   display: inline-flex; align-items: center; gap: 6px;
   background: rgba(var(--accent-rgb),0.08); color: var(--gold-dark);

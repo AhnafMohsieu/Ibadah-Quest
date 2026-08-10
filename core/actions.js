@@ -90,7 +90,7 @@
     ov.innerHTML=`<div class="levelup-box"><div class="levelup-glow"></div><div class="levelup-icon">${iqIcon('zap')}</div><div class="levelup-label">LEVEL UP</div><div class="levelup-num">${lv}</div><div class="levelup-title">${title}</div></div>`;
     ov.style.display='flex'; ov.classList.add('show'); ov.style.pointerEvents='auto';
     playSound('chime');
-    for(let i=0;i<50;i++){ const el=document.createElement('span'); el.className='confetti'; el.textContent=[iqEmoji('sparkles'),iqEmoji('star'),iqEmoji('sparkles'),iqEmoji('zap'),iqEmoji('star'),iqEmoji('moon')][i%6]; el.style.left=Math.random()*100+'%'; el.style.top='-20px'; el.style.setProperty('--fall-dur',(2+Math.random()*4)+'s'); el.style.setProperty('--rot',(Math.random()*720-360)+'deg'); document.body.appendChild(el); setTimeout(()=>el.remove(),4000); }
+    for(let i=0;i<50;i++){ const el=document.createElement('span'); el.className='confetti'; el.textContent=[iqEmoji('star'),iqEmoji('sparkles'),iqEmoji('moon'),iqEmoji('sparkles'),iqEmoji('star'),iqEmoji('crescent')][i%6]; el.style.left=Math.random()*100+'%'; el.style.top='-20px'; el.style.setProperty('--fall-dur',(2+Math.random()*4)+'s'); el.style.setProperty('--rot',(Math.random()*720-360)+'deg'); document.body.appendChild(el); setTimeout(()=>el.remove(),4000); }
     if(ov._t) clearTimeout(ov._t);
     ov._t=setTimeout(()=>{ ov.classList.remove('show'); setTimeout(()=>{ ov.style.display='none'; ov.innerHTML=''; },400); ov.style.pointerEvents='none'; },4000);
     ov.onclick=()=>{ ov.classList.remove('show'); setTimeout(()=>{ ov.style.display='none'; ov.innerHTML=''; },400); ov.style.pointerEvents='none'; if(ov._t) clearTimeout(ov._t); };
@@ -124,7 +124,7 @@
   }
   function trackQuestXP(type, xp) { if (!S.questXP) S.questXP = {daily:0,weekly:0,monthly:0,yearly:0,lifetime:0}; S.questXP[type] = (S.questXP[type] || 0) + xp; S.questXP.lifetime = (S.questXP.lifetime || 0) + xp; }
   function toggleQuest(id,type,xp){ let arr; if(type==='daily') arr=S.dq; else if(type==='weekly') arr=S.wq; else if(type==='monthly') arr=S.mq; else if(type==='yearly') arr=S.yq; else if(type==='lifetime') arr=S.lq; else return; const q=arr.find(x=>x.id===id); if(!q) return; const oldLv=S.lv; q.done=!q.done; const xpVal=xp||q.xp; if(q.done){ S.xp+=xpVal; S.tq++; trackQuestXP(type,xpVal); } else { S.xp=Math.max(0,S.xp-xpVal); S.tq=Math.max(0,S.tq-1); trackQuestXP(type,-xpVal); } S.lv=lvFrom(S.xp); checkLevelUp(oldLv); saveState(); renderQ(); renderDynamic(); }
-  function recalc() { const all=Object.keys(S.log).filter(d=>Object.values(S.log[d].p||{}).filter(v=>v).length>=5).sort(); let best=0,run=0,prev=null; for(const d of all){ if(prev){ const p=new Date(prev+'T00:00:00'); const c=new Date(d+'T00:00:00'); const diffDays=Math.round((c-p)/86400000); if(diffDays===1) run++; else run=1; } else { run=1; } best=Math.max(best,run); prev=d; } S.bs=best; const tc=Object.values(tlog().p||{}).filter(v=>v).length>=5; if(tc){ let s=1,ck=new Date(); while(true){ ck.setDate(ck.getDate()-1); const dk=today(ck); if(S.log[dk]&&Object.values(S.log[dk].p||{}).filter(v=>v).length>=5) s++; else break; } S.cs=s; } else { const yd=today(new Date(Date.now()-86400000)); S.cs=(S.log[yd]&&Object.values(S.log[yd].p||{}).filter(v=>v).length>=5)?1:0; } S.pd=all.length; if(S.cs>S.bs) S.bs=S.cs; }
+  function recalc() { const all=Object.keys(S.log).filter(d=>Object.values(S.log[d].p||{}).filter(v=>v).length>=5).sort(); let best=0,run=0,prev=null; for(const d of all){ if(prev){ const p=new Date(prev+'T00:00:00'); const c=new Date(d+'T00:00:00'); const diffDays=Math.round((c-p)/86400000); if(diffDays===1) run++; else run=1; } else { run=1; } best=Math.max(best,run); prev=d; } S.bs=best; const tc=Object.values(tlog().p||{}).filter(v=>v).length>=5; if(tc){ let s=1,ck=new Date(); while(true){ ck.setDate(ck.getDate()-1); const dk=today(ck); if(S.log[dk]&&Object.values(S.log[dk].p||{}).filter(v=>v).length>=5) s++; else break; } S.cs=s; } else { const yd=today(new Date(Date.now()-86400000)); S.cs=(S.log[yd]&&Object.values(S.log[yd].p||{}).filter(v=>v).length>=5)?1:0; } S.pd=all.length; if(S.cs>S.bs) S.bs=S.cs; if(window.checkMilestones) checkMilestones(); }
   const _loadedScripts = new Set();
   function loadScript(srcUrl) {
     return new Promise((resolve, reject) => {
@@ -2372,6 +2372,7 @@ Object.keys(NEW_POOLS).forEach(k => {
     if (S.lad !== t) { S.lad=t; if(S.ab&&S.ab.exp<t) S.ab=null; recalc(); saveState(); }
     genDQ(); genWQ(); genMQ(); genYQ(); genLQ(); refreshContent(); recalc(); checkQ(); S.lv=lvFrom(S.xp); saveState(); initCalView(); renderAll();
     if (window.renderDailyContent) renderDailyContent();
+    if (window.showWeeklySummary) showWeeklySummary();
     try {
       const activeBtn = document.querySelector('.t1-btn.active');
       const activeCat = activeBtn ? activeBtn.getAttribute('data-cat') : 'ibadah';
