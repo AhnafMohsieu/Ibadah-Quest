@@ -307,13 +307,27 @@ function renderAll() {
     }
     let idx = showAll ? pool.map((_, i) => i) : (S[idxKey] || []);
     if (!showAll && idx.length > 5) idx = idx.slice(0, 5);
+    if (idx.length === 0 && !showAll) {
+      const stateKey = areaId.replace('Area', '');
+      const es = EMPTY_STATES[stateKey];
+      if (es) {
+        el.innerHTML = `<div class="section-title">${title}</div>
+          <div class="empty-state">
+            <div class="empty-state-icon">${iqIcon(es.icon)}</div>
+            <div class="empty-state-title">${es.title}</div>
+            <div class="empty-state-desc">${es.desc}</div>
+            <button class="empty-state-btn" onclick="App.activateTab('${es.tab}')">${es.cta}</button>
+          </div>`;
+        return;
+      }
+    }
     el.innerHTML = html + idx.map((i, mapIdx) => {
       const o = pool[i % pool.length];
       if (!o) return '';
       
       const numBadge = `<span style="display:inline-block; background:rgba(244,63,94,0.12); color:var(--gold-light); border:1px solid rgba(244,63,94,0.4); border-radius:12px; padding:0 8px; font-size:0.75rem; margin-right:8px; font-weight:800; height:22px; line-height:20px; white-space:nowrap; font-family:var(--font);">#${mapIdx + 1}</span>`;
 
-      if (typeof o === 'string') return `<div class="content-card"><div style="display:flex;align-items:flex-start;gap:10px;"><div style="margin-top:2px;">${numBadge}</div><div class="content-english" style="flex:1;">${o}</div></div></div>`;
+      if (typeof o === 'string') return `<div class="content-card" onclick="if(typeof window.grantDailyXp==='function')window.grantDailyXp(2,'read|${areaId}|${i}')"><div style="display:flex;align-items:flex-start;gap:10px;"><div style="margin-top:2px;">${numBadge}</div><div class="content-english" style="flex:1;">${o}</div></div></div>`;
       
       let inner = '';
       if (o.arabic) inner += `<div class="content-arabic">${o.arabic}</div>`;
@@ -325,16 +339,28 @@ function renderAll() {
       if (o.title) {
         title_line = `<div style="font-weight:700;margin-bottom:6px;color:var(--gold-light);display:flex;align-items:flex-start;"><div style="margin-top:1px;">${numBadge}</div><span style="line-height:1.4;">${o.title}</span></div>`;
       } else if (o.name && o.arabic && !o.title) {
-        inner = `<div style="font-weight:700;font-size:1.1rem;color:var(--gold-light);display:flex;align-items:flex-start;margin-bottom:6px;"><div style="margin-top:3px;">${numBadge}</div><span style="line-height:1.3;">${o.name}</span></div><div class="content-arabic" style="font-size:1.3rem">${o.arabic}</div><div class="content-english">${o.desc||''}</div>`;
+        inner = `<div style="font-weight:700;font-size:1.1rem;color:var(--gold-light);display:flex;align-items:flex-start;margin-bottom:6px;"><div style="margin-top:3px;">${numBadge}</div><span style="line-height:1.3;">${o.name}</span></div><div class="content-arabic arabic-letter-glow">${o.arabic}</div><div class="content-english">${o.desc||''}</div>`;
       } else {
-        return `<div class="content-card" style="flex-direction:row;align-items:flex-start;"><div style="margin-top:2px;">${numBadge}</div><div style="flex:1;">${inner}</div></div>`;
+        return `<div class="content-card" style="flex-direction:row;align-items:flex-start;" onclick="if(typeof window.grantDailyXp==='function')window.grantDailyXp(2,'read|${areaId}|${i}')"><div style="margin-top:2px;">${numBadge}</div><div style="flex:1;">${inner}</div></div>`;
       }
       
-      return `<div class="content-card">${title_line}${inner}</div>`;
+      return `<div class="content-card" onclick="if(typeof window.grantDailyXp==='function')window.grantDailyXp(2,'read|${areaId}|${i}')">${title_line}${inner}</div>`;
     }).join('');
   }
 
   function renderDuas() { poolRender('duaArea', iqIcon('hand-heart') + ' Daily Duas',DUA_POOL,'duaIdx'); }
+
+  const EMPTY_STATES = {
+    dhikr: { icon:'beads', title:'Start Your Dhikr', desc:'The Prophet ﷺ said: "Verily, in the remembrance of Allah do hearts find rest."', cta:'Begin Dhikr', tab:'dhikr' },
+    dua: { icon:'hand-heart', title:'Daily Duas', desc:'Supplicate to Allah — He loves to be asked.', cta:'Learn Duas', tab:'duas' },
+    heart: { icon:'heart', title:'Purify Your Heart', desc:'Indeed, in the remembrance of Allah do hearts find rest.', cta:'Explore', tab:'heart' },
+    sins: { icon:'alert-triangle', title:'Stay Vigilant', desc:'Be mindful of Allah and He will protect you.', cta:'Review Sins', tab:'sins' },
+    charity: { icon:'hand-heart', title:'Give Charity', desc:'Charity does not decrease wealth. (Muslim)', cta:'Log Charity', tab:'finance' },
+    fasting: { icon:'moon', title:'Track Your Fast', desc:'Whoever fasts a day for Allah\'s sake, Allah will distance him from Hell.', cta:'Log Fast', tab:'fasting' },
+    family: { icon:'family', title:'Strengthen Family Ties', desc:'Whoever believes in Allah and the Last Day, let him maintain family ties.', cta:'Learn More', tab:'family' },
+    patience: { icon:'hourglass', title:'Practice Patience', desc:'Indeed, Allah is with the patient.', cta:'Learn', tab:'patience' },
+    stories: { icon:'book-open', title:'Read Inspiring Stories', desc:'Indeed, in their stories is a lesson for those of understanding.', cta:'Read Stories', tab:'stories' }
+  };
 
   const QURAN_RECITERS = [
     {id:7, name:'Mishari Rashid al-Afasy', folder:'Alafasy'},
@@ -399,6 +425,7 @@ function renderAll() {
     const url = getQuranAudioUrl(reciterId, surah, verse);
     if (!url) return;
     quranAudio = new Audio(url);
+    if (typeof window.grantDailyXp === 'function') window.grantDailyXp(1, 'quranverse|' + surah + '|' + verse);
     quranPlayingVerse = verse;
     quranPlayingSurah = surah;
     quranAudio.play().catch(()=>{});
@@ -997,7 +1024,7 @@ function renderAll() {
     
     return `
       <div class="dhikr-analytics">
-        <div class="section-title">' + iqIcon('bar-chart-3') + ' Dhikr Statistics</div>
+        <div class="section-title">${iqIcon('bar-chart-3')} Dhikr Statistics</div>
         <div class="dhikr-stats-row">
           <div class="dhikr-stat-item">
             <div class="dhikr-stat-num">${totalDhikr}</div>
@@ -1061,7 +1088,7 @@ function renderAll() {
     h += `<input class="profile-input" id="gratInput" placeholder="I am grateful for..."><button class="shop-card" onclick="App.addGratitude()" style="justify-content:center;width:100%;">${iqIcon('plus')} Add Entry</button>`;
     document.getElementById('gratitudeArea').innerHTML = h;
   }
-  function addGratitude() { const inp=document.getElementById('gratInput'); if(!inp?.value.trim()) return; const dt=today(); if(!S.gratitudeLog[dt]) S.gratitudeLog[dt]=[]; S.gratitudeLog[dt].push(inp.value.trim()); inp.value=''; saveState(); renderGratitude(); checkA(); }
+  function addGratitude() { const inp=document.getElementById('gratInput'); if(!inp?.value.trim()) return; const dt=today(); if(!S.gratitudeLog[dt]) S.gratitudeLog[dt]=[]; S.gratitudeLog[dt].push(inp.value.trim()); inp.value=''; if (typeof window.grantCappedDailyXp === 'function') window.grantCappedDailyXp(3, 'gratitude', 3); saveState(); renderGratitude(); checkA(); }
   function renderFasting() {
     const dt = today(), fasted = !!S.fastingDays[dt];
     let h = '<div class="section-title">' + iqIcon('calendar') + ' Fasting Tracker</div>';
@@ -1092,7 +1119,7 @@ function renderAll() {
     if (S.memorizationList.length) { h += '<div class="section-title" style="margin-top:20px;">' + iqIcon('clipboard') + ' Memorized List</div>'; S.memorizationList.forEach(s => h += `<div class="quest-row">${iqIcon('check')} ${s}</div>`); }
     document.getElementById('memorizationArea').innerHTML = h;
   }
-  function addMemorization() { const inp=document.getElementById('memInput'); if(!inp?.value.trim()) return; S.memorizationList.push(inp.value.trim()); S.memorized++; inp.value=''; saveState(); renderMemorization(); checkA(); }
+  function addMemorization() { const inp=document.getElementById('memInput'); if(!inp?.value.trim()) return; S.memorizationList.push(inp.value.trim()); S.memorized++; inp.value=''; if (typeof window.grantCappedDailyXp === 'function') window.grantCappedDailyXp(3, 'memorization', 5); saveState(); renderMemorization(); checkA(); }
   function renderMorning() {
     const dt = today(); if (!S.morningDone[dt]) S.morningDone[dt] = {};
     const total = MORNING_DHIKR.length;
