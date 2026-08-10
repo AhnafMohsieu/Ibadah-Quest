@@ -972,6 +972,16 @@ select.profile-input option { background: var(--bg-accent); color: var(--text); 
 .carousel-dots { display:flex; justify-content:center; gap:6px; margin-top:12px; }
 .carousel-dot { width:6px; height:6px; border-radius:50%; background:var(--text2); opacity:0.3; cursor:pointer; transition:all 0.3s; }
 .carousel-dot.active { background:var(--gold); opacity:1; width:18px; border-radius:3px; }
+
+/* ── Search Results ── */
+.global-search-results { position:absolute; top:100%; left:0; right:0; background:var(--card-bg); box-shadow:0 8px 24px rgba(0,0,0,0.15); border-radius:0 0 14px 14px; max-height:320px; overflow-y:auto; z-index:100; display:none; }
+.global-search-results.show { display:block; }
+.gs-section { font-size:0.7rem; font-weight:700; color:var(--gold-light); padding:8px 14px 4px; text-transform:uppercase; letter-spacing:0.5px; }
+.gs-item { padding:10px 14px; font-size:0.82rem; color:var(--text); cursor:pointer; transition:background 0.15s; display:flex; align-items:center; gap:8px; }
+.gs-item:hover, .gs-item.active { background:rgba(201,168,76,0.08); }
+.gs-item .iq-icon { width:14px; height:14px; flex-shrink:0; }
+.gs-empty { color:var(--text2); font-style:italic; cursor:default; }
+.gs-recent { color:var(--text2); font-size:0.78rem; }
 .verify-btn {
   display: inline-flex; align-items: center; gap: 6px;
   background: rgba(var(--accent-rgb),0.08); color: var(--gold-dark);

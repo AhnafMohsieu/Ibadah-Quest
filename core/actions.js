@@ -2384,6 +2384,7 @@ Object.keys(NEW_POOLS).forEach(k => {
     try { S = loadState(); } catch(e) { console.error('Step 1 loadState failed:', e); }
     try { applyTheme(); } catch(e) { console.error('Step 2 applyTheme failed:', e); }
     try { initApp(); } catch(e) { console.error('Step 3 initApp failed:', e); }
+    try { if (window.initSearch) initSearch(); } catch(e) { console.error('Step 3b initSearch failed:', e); }
     try {
       document.addEventListener('click', (e) => {
         const sr = document.getElementById('globalSearchResults');
