@@ -137,7 +137,9 @@ const TAB_GROUPS = {
         { id: 'grave', label: 'The Grave' },
         { id: 'signs', label: 'Signs of Qiyamah' },
         { id: 'hajj', label: 'Pilgrimage' },
-        { id: 'dreams', label: 'Islamic Dreams' }
+        { id: 'dreams', label: 'Islamic Dreams' },
+        { id: 'ramadan', label: 'Ramadan' },
+        { id: 'laylat', label: 'Laylat al-Qadr' }
       ]
     }
   ],
