@@ -147,5 +147,6 @@
     if (_recent.length > 5) _recent = _recent.slice(0, 5);
   }
 
+  window.searchAll = searchAll;
   window.initSearch = init;
 })();
