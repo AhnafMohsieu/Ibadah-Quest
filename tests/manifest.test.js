@@ -21,6 +21,11 @@ test('manifest uses the light base theme colors', () => {
   assert.strictEqual(manifest.background_color, '#ddd3ea');
 });
 
-test('manifest declares no icons yet (will be re-added later)', () => {
-  assert.strictEqual(manifest.icons, undefined);
+test('manifest declares a PWA icon', () => {
+  assert.ok(Array.isArray(manifest.icons));
+  assert.strictEqual(manifest.icons.length, 1);
+  assert.strictEqual(manifest.icons[0].src, 'assets/icons/icon.svg');
+  assert.strictEqual(manifest.icons[0].type, 'image/svg+xml');
+  assert.strictEqual(manifest.icons[0].sizes, 'any');
+  assert.strictEqual(manifest.icons[0].purpose, 'maskable');
 });

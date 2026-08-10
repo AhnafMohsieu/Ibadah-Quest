@@ -8,5 +8,13 @@
   "id": "./",
   "display": "standalone",
   "background_color": "#ddd3ea",
-  "theme_color": "#ddd3ea"
+  "theme_color": "#ddd3ea",
+  "icons": [
+    {
+      "src": "assets/icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ]
 }
