@@ -2387,6 +2387,7 @@ Object.keys(NEW_POOLS).forEach(k => {
     try { initApp(); } catch(e) { console.error('Step 3 initApp failed:', e); }
     try { if (window.initSearch) initSearch(); } catch(e) { console.error('Step 3b initSearch failed:', e); }
     try { if (window.initFAB) initFAB(); } catch(e) { console.error('Step 3c initFAB failed:', e); }
+    try { if (window.initPullRefresh) initPullRefresh(); } catch(e) { console.error('Step 3d initPullRefresh failed:', e); }
     try {
       document.addEventListener('click', (e) => {
         const sr = document.getElementById('globalSearchResults');
