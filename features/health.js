@@ -74,6 +74,8 @@
       S.xp += xp;
       S.lv = lvFrom(S.xp);
       if (S.lv > oldLv && window.levelUpToast) window.levelUpToast(S.lv, lvTitle(S.lv));
+      if (typeof window !== 'undefined' && window.renderLv) window.renderLv();
+      if (typeof window !== 'undefined' && window.renderTopBar) window.renderTopBar();
     }
   }
 

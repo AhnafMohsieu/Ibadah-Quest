@@ -60,7 +60,7 @@ test('main.css uses modern light tokens', () => {
 });
 
 test('index.html registers the service worker and update banner', () => {
-  assert.ok(html.includes("navigator.serviceWorker.register('sw.js?v=8')"));
+  assert.ok(html.includes("navigator.serviceWorker.register('sw.js?v=9')"));
   assert.ok(html.includes("'SKIP_WAITING'"));
   assert.ok(html.includes('swUpdateBanner'));
 });
@@ -103,7 +103,7 @@ test('modern light theme: old emerald/gold dark backgrounds are removed', () => 
 });
 
 test('theme: light-family palette blocks exist in main.css', () => {
-  for (const key of ['serene','royal','sand','midnight']) {
+  for (const key of ['serene','royal','sand','midnight','cream']) {
     assert.ok(css.includes(`html[data-theme="${key}"]`), `missing palette block for ${key}`);
   }
   assert.ok(css.includes('--bg: #ddd3ea'));   // light (default) :root block present
@@ -114,7 +114,7 @@ test('theme: light-family palette blocks exist in main.css', () => {
 test('theme: index.html pre-paint script sets data-theme from localStorage', () => {
   assert.ok(html.includes("localStorage.getItem('iqTheme')"));
   assert.ok(html.includes("setAttribute('data-theme'"));
-  assert.ok(html.includes('styles/main.css?v=11'));
+  assert.ok(html.includes('styles/main.css?v=13'));
 });
 
 test('theme: picker references metadata and setTheme wiring', () => {
@@ -303,6 +303,7 @@ test('hero renderers are real and wired into renderDynamic', () => {
   assert.ok(render.includes("getElementById('streakFire')"), 'renderStr must fill the flame');
   assert.ok(render.includes("safe(renderLv, 'Lv')"), 'renderLv wired into renderDynamic');
   assert.ok(render.includes("safe(renderStr, 'Str')"), 'renderStr wired into renderDynamic');
+  assert.ok(render.includes("safe(renderTopBar, 'TopBar')"), 'renderTopBar wired into renderDynamic');
 });
 
 test('hero+topbar refresh on theme change and home tab', () => {
@@ -325,7 +326,29 @@ test('theme: picker lists the Emara theme', () => {
 });
 
 test('theme: theme toggle cycles through Emara', () => {
-  assert.ok(actions.includes("'midnight', 'emara'") || actions.includes("'emara']"), 'toggleTheme cycle includes emara');
+  assert.ok(actions.includes("'midnight', 'cream', 'night', 'emara'") || actions.includes("'emara']"), 'toggleTheme cycle includes cream/night/emara');
+});
+
+test('theme: Cream warm-gold palette block exists', () => {
+  assert.ok(css.includes('html[data-theme="cream"]'), 'cream palette block missing');
+  assert.ok(css.includes('--bg: #f7f0e1'), 'cream background is warm cream');
+  assert.ok(css.includes('--gold: #b8860b'), 'cream accent is gold');
+  assert.ok(css.includes('--accent-rgb: 184,134,11'), 'cream accent rgb set');
+});
+
+test('theme: Night deep-navy palette block + overrides exist', () => {
+  assert.ok(css.includes('html[data-theme="night"]'), 'night palette block missing');
+  assert.ok(css.includes('--bg: #0b1224'), 'night background is deep navy');
+  assert.ok(css.includes('--gold: #f5c842'), 'night accent is soft gold');
+  assert.ok(css.includes('html[data-theme="night"] .top-bar'), 'night top-bar override missing');
+  assert.ok(css.includes('html[data-theme="night"] .level-badge'), 'night hero override missing');
+});
+
+test('theme: picker lists Cream and Night themes', () => {
+  assert.ok(meta.includes("key:'cream'"), 'theme-meta lists cream');
+  assert.ok(meta.includes("label:'Cream'"), 'theme-meta labels cream');
+  assert.ok(meta.includes("key:'night'"), 'theme-meta lists night');
+  assert.ok(meta.includes("label:'Night'"), 'theme-meta labels night');
 });
 
 test('hero header styles exist with clay tokens', () => {

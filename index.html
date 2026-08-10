@@ -9,13 +9,13 @@
   <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Noto+Naskh+Arabic:wght@400;500;600;700&family=Sora:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <link rel="stylesheet" href="styles/main.css?v=11">
+  <link rel="stylesheet" href="styles/main.css?v=13">
   <script>
     (function () {
       try { var t = localStorage.getItem('iqTheme'); if (t && t !== 'light') document.documentElement.setAttribute('data-theme', t); } catch (e) {}
     })();
   </script>
-  <script src="data/theme-meta.js"></script>
+  <script src="data/theme-meta.js?v=2"></script>
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#ddd3ea">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -392,7 +392,7 @@
 <script src="state/state.js?v=2"></script>
 
 <!-- Render engine -->
-<script src="render/render.js?v=6"></script>
+<script src="render/render.js?v=7"></script>
 
 <!-- Chart.js CDN -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>
@@ -408,7 +408,7 @@
 <script src="features/garden.js?v=2"></script>
 <script src="features/muhasabah.js?v=3"></script>
 <script src="features/journeys.js?v=3"></script>
-<script src="features/health.js?v=3"></script>
+<script src="features/health.js?v=4"></script>
 <script src="features/finance.js?v=3"></script>
 <script src="features/mood.js?v=3"></script>
 <script src="features/spiritual-growth/data.js?v=2"></script>
@@ -423,7 +423,7 @@
 <script src="features/spiritual-growth/laylat.js?v=1"></script>
 
 <!-- Actions (core logic, navigation, init, window.App) -->
-<script src="core/actions.js?v=8"></script>
+<script src="core/actions.js?v=9"></script>
 
 <!-- PWA: Service Worker registration + update banner -->
 <script>
@@ -447,7 +447,7 @@
     });
   }
   window.addEventListener('load', function() {
-    navigator.serviceWorker.register('sw.js?v=8').then(function(reg) {
+    navigator.serviceWorker.register('sw.js?v=9').then(function(reg) {
       if (reg.waiting) { showUpdateBanner(reg); return; }
       reg.addEventListener('updatefound', function() {
         var sw = reg.installing;

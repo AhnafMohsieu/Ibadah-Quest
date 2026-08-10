@@ -25,7 +25,7 @@
     renderTab(tab);
   }
   function toggleTheme() {
-    const themes = ['light', 'dark', 'serene', 'royal', 'sand', 'midnight', 'emara'];
+    const themes = ['light', 'dark', 'serene', 'royal', 'sand', 'midnight', 'cream', 'night', 'emara'];
     const current = localStorage.getItem(THEME_KEY) || 'light';
     const idx = themes.indexOf(current);
     const next = themes[(idx + 1) % themes.length];
@@ -212,6 +212,8 @@
     S.lv = lvFrom(S.xp);
     checkLevelUp(oldLv);
     saveState(); renderDhikrCounter();
+    if (typeof window !== 'undefined' && window.renderLv) window.renderLv();
+    if (typeof window !== 'undefined' && window.renderTopBar) window.renderTopBar();
   }
   function checkDhikrBadges() {
     if (!S.dhikrStats) return;
