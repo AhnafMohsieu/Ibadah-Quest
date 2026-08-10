@@ -423,6 +423,9 @@
 <script src="features/spiritual-growth/boat.js?v=1"></script>
 <script src="features/spiritual-growth/ramadan.js?v=1"></script>
 <script src="features/spiritual-growth/laylat.js?v=1"></script>
+<script src="features/carousel.js" defer></script>
+<script src="features/search.js" defer></script>
+<script src="features/fab.js" defer></script>
 
 <!-- Actions (core logic, navigation, init, window.App) -->
 <script src="core/actions.js?v=11"></script>
@@ -465,7 +468,17 @@
 })();
 </script>
 
-
+<div id="fab" class="fab-container">
+  <div class="fab-actions" id="fabActions" style="display:none;">
+    <button class="fab-action" onclick="App.toggleP('fajr')" title="Log Prayer"><span class="fab-action-icon"></span><span class="fab-action-label">Prayer</span></button>
+    <button class="fab-action" onclick="App.tapDhikr()" title="Dhikr"><span class="fab-action-icon"></span><span class="fab-action-label">Dhikr</span></button>
+    <button class="fab-action" onclick="financeTracker.logCharity('sadaqah')" title="Charity"><span class="fab-action-icon"></span><span class="fab-action-label">Charity</span></button>
+    <button class="fab-action" onclick="App.activateTab('quests')" title="Quests"><span class="fab-action-icon"></span><span class="fab-action-label">Quests</span></button>
+  </div>
+  <button class="fab-main" id="fabMain" onclick="window.toggleFAB()">
+    <span class="fab-main-icon">✦</span>
+  </button>
+</div>
 
 </body>
 </html>

@@ -2385,6 +2385,7 @@ Object.keys(NEW_POOLS).forEach(k => {
     try { applyTheme(); } catch(e) { console.error('Step 2 applyTheme failed:', e); }
     try { initApp(); } catch(e) { console.error('Step 3 initApp failed:', e); }
     try { if (window.initSearch) initSearch(); } catch(e) { console.error('Step 3b initSearch failed:', e); }
+    try { if (window.initFAB) initFAB(); } catch(e) { console.error('Step 3c initFAB failed:', e); }
     try {
       document.addEventListener('click', (e) => {
         const sr = document.getElementById('globalSearchResults');
@@ -2410,7 +2411,6 @@ Object.keys(NEW_POOLS).forEach(k => {
       setQuranView, quranSearchFilter, openQuranSurah, quranBack, openQuranJuz,
       openHadithCollection, openHadithBook, hadithBack,
       playQuranVerse, playSurah, stopSurah, setQuranReciter, playJuz, updateJuzButton,
-      globalSearch, executeSearch,
       calPrevMonth, calNextMonth, calGoToday, selectAvatar, toggleAvatarPicker,
       setTheme, toggleTheme,
       switchTab
