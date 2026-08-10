@@ -962,6 +962,16 @@ select.profile-input option { background: var(--bg-accent); color: var(--text); 
 .empty-state-desc { font-size:0.85rem; color:var(--text2); line-height:1.6; margin-bottom:16px; max-width:300px; margin-left:auto; margin-right:auto; }
 .empty-state-btn { background:linear-gradient(135deg, var(--gold), #c9a84c); color:#fff; border:none; border-radius:14px; padding:10px 24px; font-size:0.85rem; font-weight:600; cursor:pointer; transition:all 0.2s; }
 .empty-state-btn:hover { transform:translateY(-1px); box-shadow:0 4px 12px rgba(201,168,76,0.3); }
+
+/* ── Daily Carousel ── */
+.daily-carousel { padding:0 16px; margin-bottom:12px; }
+.carousel-card { background:linear-gradient(135deg, var(--card-bg) 0%, rgba(201,168,76,0.04) 100%); box-shadow:4px 4px 10px var(--shadow-dark), -4px -4px 10px var(--shadow-light); border:1px solid rgba(201,168,76,0.1); border-radius:16px; padding:16px; min-height:80px; }
+.carousel-header { font-size:0.75rem; font-weight:600; color:var(--gold-light); margin-bottom:8px; display:flex; align-items:center; gap:6px; text-transform:uppercase; letter-spacing:0.5px; }
+.carousel-header .iq-icon { width:14px; height:14px; }
+.carousel-text { font-size:0.88rem; color:var(--text); line-height:1.6; font-style:italic; opacity:0.9; }
+.carousel-dots { display:flex; justify-content:center; gap:6px; margin-top:12px; }
+.carousel-dot { width:6px; height:6px; border-radius:50%; background:var(--text2); opacity:0.3; cursor:pointer; transition:all 0.3s; }
+.carousel-dot.active { background:var(--gold); opacity:1; width:18px; border-radius:3px; }
 .verify-btn {
   display: inline-flex; align-items: center; gap: 6px;
   background: rgba(var(--accent-rgb),0.08); color: var(--gold-dark);

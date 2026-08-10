@@ -36,6 +36,37 @@
     setTheme(next);
   }
   function checkLevelUp(oldLv) { if (S.lv > oldLv) { const t = lvTitle(S.lv); levelUpToast(S.lv, t); } }
+  function grantDailyXp(amount, key) {
+    if (!S.xpDaily) S.xpDaily = {};
+    var dk = key + '|' + today();
+    if (S.xpDaily[dk]) return false;
+    S.xpDaily[dk] = true;
+    var oldLv = S.lv;
+    S.xp += amount;
+    S.lv = lvFrom(S.xp);
+    checkLevelUp(oldLv);
+    playSound('pop');
+    saveState();
+    if (typeof renderLv === 'function') renderLv();
+    if (typeof renderTopBar === 'function') renderTopBar();
+    return true;
+  }
+  function grantCappedDailyXp(amount, key, cap) {
+    if (!S.xpDaily) S.xpDaily = {};
+    var ck = key + '|count|' + today();
+    var count = S.xpDaily[ck] || 0;
+    if (count >= cap) return false;
+    S.xpDaily[ck] = count + 1;
+    var oldLv = S.lv;
+    S.xp += amount;
+    S.lv = lvFrom(S.xp);
+    checkLevelUp(oldLv);
+    playSound('pop');
+    saveState();
+    if (typeof renderLv === 'function') renderLv();
+    if (typeof renderTopBar === 'function') renderTopBar();
+    return true;
+  }
   function toggleP(id) { const l=tlog(); const w=!!l.p[id]; const oldLv=S.lv; l.p[id]=!w; const pr=PRAYERS.find(x=>x.id===id); if(!pr) return; let xp=pr.xp; if(isFri()&&id==='dhuhr'&&pr.fri) xp=pr.fri.xp; if(S.ab&&S.ab.exp>=today()) xp*=2; if(!w){ S.tp++; S.xp+=xp; if(isFri()&&id==='dhuhr') S.tj=(S.tj||0)+1; playSound('pop'); } else { S.tp=Math.max(0,S.tp-1); S.xp=Math.max(0,S.xp-xp); if(isFri()&&id==='dhuhr') S.tj=Math.max(0,(S.tj||0)-1); } S.lv=lvFrom(S.xp); checkLevelUp(oldLv); recalc(); checkQ(); checkA(); saveState(); renderDynamic(); }
   function toggleV(id) { const l=tlog(); if(!l.v) l.v={}; const w=!!l.v[id]; const oldLv=S.lv; l.v[id]=!w; const vp=VOLUNTARY.find(x=>x.id===id); if(!vp) return; let xp=vp.xp; if(S.ab&&S.ab.exp>=today()) xp*=2; if(!w){ S.vc[id]=(S.vc[id]||0)+1; S.xp+=xp; playSound('pop'); } else { S.vc[id]=Math.max(0,(S.vc[id]||0)-1); S.xp=Math.max(0,S.xp-xp); } S.lv=lvFrom(S.xp); checkLevelUp(oldLv); checkQ(); checkA(); saveState(); renderDynamic(); }
   function toggleD(id) { const l=tlog(); const w=!!l.d[id]; const oldLv=S.lv; l.d[id]=!w; const de=DEEDS.find(x=>x.id===id); if(!de) return; let xp=de.xp; if(S.ab&&S.ab.exp>=today()) xp*=2; if(!w){ S.td[id]=(S.td[id]||0)+1; S.xp+=xp; playSound('pop'); } else { S.td[id]=Math.max(0,(S.td[id]||0)-1); S.xp=Math.max(0,S.xp-xp); } S.lv=lvFrom(S.xp); checkLevelUp(oldLv); recalc(); checkQ(); checkA(); saveState(); renderDynamic(); }
@@ -2235,7 +2266,7 @@ Object.keys(NEW_POOLS).forEach(k => {
       zuhd:'renderZuhd', dawah:'renderDawah', battles:'renderBattles', jannah:'renderJannah',
       jahannam:'renderJahannam', grave:'renderGrave', signs:'renderSigns', dreams:'renderDreams',
       parenting:'renderParenting', food:'renderFood', tibb:'renderTibb', youth:'renderYouth',
-      tech:'renderTech', neighbors:'renderNeighbors', salah:'renderSalah',
+      tech:'renderTech', neighbors:'renderNeighbors', salah:'renderSalah', finance:'renderFinanceTab',
       aqeedah:'renderAqeedah', knowledge:'renderKnowledge', civilisation:'renderCivilisation', jumuah:'renderJumuah',
       purification:'renderPurification', salahrules:'renderSalahrules', zakatrules:'renderZakatrules',
       sawmrules:'renderSawmrules', hajjrules:'renderHajjrules', trade:'renderTrade',
@@ -2340,6 +2371,7 @@ Object.keys(NEW_POOLS).forEach(k => {
     const t = today();
     if (S.lad !== t) { S.lad=t; if(S.ab&&S.ab.exp<t) S.ab=null; recalc(); saveState(); }
     genDQ(); genWQ(); genMQ(); genYQ(); genLQ(); refreshContent(); recalc(); checkQ(); S.lv=lvFrom(S.xp); saveState(); initCalView(); renderAll();
+    if (window.renderDailyContent) renderDailyContent();
     try {
       const activeBtn = document.querySelector('.t1-btn.active');
       const activeCat = activeBtn ? activeBtn.getAttribute('data-cat') : 'ibadah';
@@ -2363,6 +2395,7 @@ Object.keys(NEW_POOLS).forEach(k => {
       detail: (id) => toast(iqIcon('alert-triangle'), DETAILS[id]||'Voluntary Prayer', false, 4000),
       tip: (id) => toast(iqIcon('zap'), TIPS[id]||'A beautiful deed!', false, 4000),
       toggleQuest, addGratitude, toggleFasting, setCharityGoals,
+      grantDailyXp, grantCappedDailyXp,
       logWater: typeof window.logWater === 'function' ? window.logWater : () => {},
       logSleep: typeof window.logSleep === 'function' ? window.logSleep : () => {},
       logExercise: typeof window.logExercise === 'function' ? window.logExercise : () => {},
@@ -2384,6 +2417,8 @@ Object.keys(NEW_POOLS).forEach(k => {
     window.checkA = checkA;
     window.playSound = playSound;
     window.levelUpToast = levelUpToast;
+    window.grantDailyXp = grantDailyXp;
+    window.grantCappedDailyXp = grantCappedDailyXp;
     App.switchTab = switchTab;
     console.log('Ibadah Quest initialized. window.App is set.');
   }
