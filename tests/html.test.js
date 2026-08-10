@@ -60,7 +60,7 @@ test('main.css uses modern light tokens', () => {
 });
 
 test('index.html registers the service worker and update banner', () => {
-  assert.ok(html.includes("navigator.serviceWorker.register('sw.js?v=9')"));
+  assert.ok(html.includes("navigator.serviceWorker.register('sw.js?v=10')"));
   assert.ok(html.includes("'SKIP_WAITING'"));
   assert.ok(html.includes('swUpdateBanner'));
 });
@@ -107,14 +107,15 @@ test('theme: light-family palette blocks exist in main.css', () => {
     assert.ok(css.includes(`html[data-theme="${key}"]`), `missing palette block for ${key}`);
   }
   assert.ok(css.includes('--bg: #ddd3ea'));   // light (default) :root block present
-  assert.ok(css.includes('html[data-theme="dark"]'), 'dark palette block must exist');
+  assert.ok(!css.includes('html[data-theme="dark"]'), 'dark palette block must be removed');
+  assert.ok(!css.includes('html[data-theme="night"]'), 'night palette block must be removed');
   assert.ok(!css.includes('html[data-theme="serene-dark"]'), 'serene-dark palette block must be removed');
 });
 
 test('theme: index.html pre-paint script sets data-theme from localStorage', () => {
   assert.ok(html.includes("localStorage.getItem('iqTheme')"));
   assert.ok(html.includes("setAttribute('data-theme'"));
-  assert.ok(html.includes('styles/main.css?v=13'));
+  assert.ok(html.includes('styles/main.css?v=14'));
 });
 
 test('theme: picker references metadata and setTheme wiring', () => {
@@ -122,6 +123,13 @@ test('theme: picker references metadata and setTheme wiring', () => {
   assert.ok(render.includes('window.Themes'));
   assert.ok(render.includes('App.setTheme('));
   assert.ok(render.includes('theme-chip'));
+});
+
+test('theme: removed themes fall back to light via isValidTheme guard', () => {
+  assert.ok(actions.includes('function isValidTheme'), 'isValidTheme helper missing');
+  assert.ok(actions.includes('window.Themes || []'), 'isValidTheme must consult window.Themes');
+  assert.ok(actions.includes('const safe = isValidTheme(t) ? t : \'light\''), 'applyTheme must fall back to light');
+  assert.ok(actions.includes('isValidTheme(name) ? name : \'light\''), 'setTheme must fall back to light');
 });
 
 test('app shell has tab content container', () => {
@@ -325,8 +333,10 @@ test('theme: picker lists the Emara theme', () => {
   assert.ok(meta.includes("bg:'#123027'"), 'emara swatch uses deep jade');
 });
 
-test('theme: theme toggle cycles through Emara', () => {
-  assert.ok(actions.includes("'midnight', 'cream', 'night', 'emara'") || actions.includes("'emara']"), 'toggleTheme cycle includes cream/night/emara');
+test('theme: theme toggle cycle drops dark and night', () => {
+  assert.ok(actions.includes("'midnight', 'cream', 'emara'") || actions.includes("'emara']"), 'toggleTheme cycle includes cream/emara');
+  assert.ok(!actions.includes("'dark'"), 'toggleTheme must not include dark');
+  assert.ok(!actions.includes("'night'"), 'toggleTheme must not include night');
 });
 
 test('theme: Cream warm-gold palette block exists', () => {
@@ -336,19 +346,11 @@ test('theme: Cream warm-gold palette block exists', () => {
   assert.ok(css.includes('--accent-rgb: 184,134,11'), 'cream accent rgb set');
 });
 
-test('theme: Night deep-navy palette block + overrides exist', () => {
-  assert.ok(css.includes('html[data-theme="night"]'), 'night palette block missing');
-  assert.ok(css.includes('--bg: #0b1224'), 'night background is deep navy');
-  assert.ok(css.includes('--gold: #f5c842'), 'night accent is soft gold');
-  assert.ok(css.includes('html[data-theme="night"] .top-bar'), 'night top-bar override missing');
-  assert.ok(css.includes('html[data-theme="night"] .level-badge'), 'night hero override missing');
-});
-
-test('theme: picker lists Cream and Night themes', () => {
+test('theme: picker metadata excludes dark and night', () => {
   assert.ok(meta.includes("key:'cream'"), 'theme-meta lists cream');
   assert.ok(meta.includes("label:'Cream'"), 'theme-meta labels cream');
-  assert.ok(meta.includes("key:'night'"), 'theme-meta lists night');
-  assert.ok(meta.includes("label:'Night'"), 'theme-meta labels night');
+  assert.ok(!meta.includes("key:'dark'"), 'theme-meta must not list dark');
+  assert.ok(!meta.includes("key:'night'"), 'theme-meta must not list night');
 });
 
 test('hero header styles exist with clay tokens', () => {
@@ -358,6 +360,6 @@ test('hero header styles exist with clay tokens', () => {
   assert.ok(css.includes('.xp-inner'), 'xp bar style missing');
   assert.ok(css.includes('.streak-bar'), 'streak bar style missing');
   assert.ok(css.includes('.best-num'), 'best number style missing');
-  assert.ok(css.includes('html[data-theme="dark"] .streak-bar'), 'dark streak override missing');
+  assert.ok(!css.includes('html[data-theme="dark"] .streak-bar'), 'dark streak override must be removed');
   assert.ok(css.includes('html[data-theme="emara"] .streak-bar') || css.includes('html[data-theme="emara"]') , 'emara hero override present');
 });

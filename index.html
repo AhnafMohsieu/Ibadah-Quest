@@ -9,13 +9,13 @@
   <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Noto+Naskh+Arabic:wght@400;500;600;700&family=Sora:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <link rel="stylesheet" href="styles/main.css?v=13">
+  <link rel="stylesheet" href="styles/main.css?v=14">
   <script>
     (function () {
       try { var t = localStorage.getItem('iqTheme'); if (t && t !== 'light') document.documentElement.setAttribute('data-theme', t); } catch (e) {}
     })();
   </script>
-  <script src="data/theme-meta.js?v=2"></script>
+  <script src="data/theme-meta.js?v=3"></script>
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#ddd3ea">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -423,7 +423,7 @@
 <script src="features/spiritual-growth/laylat.js?v=1"></script>
 
 <!-- Actions (core logic, navigation, init, window.App) -->
-<script src="core/actions.js?v=9"></script>
+<script src="core/actions.js?v=10"></script>
 
 <!-- PWA: Service Worker registration + update banner -->
 <script>
@@ -447,7 +447,7 @@
     });
   }
   window.addEventListener('load', function() {
-    navigator.serviceWorker.register('sw.js?v=9').then(function(reg) {
+    navigator.serviceWorker.register('sw.js?v=10').then(function(reg) {
       if (reg.waiting) { showUpdateBanner(reg); return; }
       reg.addEventListener('updatefound', function() {
         var sw = reg.installing;
