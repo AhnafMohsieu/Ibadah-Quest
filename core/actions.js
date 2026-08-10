@@ -298,10 +298,6 @@
     saveState();
     renderProfile();
   }
-  function toggleAvatarPicker() {
-    const picker = document.getElementById('avatarPicker');
-    if (picker) picker.style.display = picker.style.display === 'none' ? 'block' : 'none';
-  }
 
   const NEW_POOLS = {
   "umayyads": [
@@ -2413,8 +2409,8 @@ Object.keys(NEW_POOLS).forEach(k => {
       setQuranView, quranSearchFilter, openQuranSurah, quranBack, openQuranJuz,
       openHadithCollection, openHadithBook, hadithBack,
       playQuranVerse, playSurah, stopSurah, setQuranReciter, playJuz, updateJuzButton,
-      calPrevMonth, calNextMonth, calGoToday, selectAvatar, toggleAvatarPicker,
-      setTheme, toggleTheme,
+calPrevMonth, calNextMonth, calGoToday, selectAvatar,
+setTheme, toggleTheme,
       switchTab
     };
     window.checkA = checkA;

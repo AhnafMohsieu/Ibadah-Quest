@@ -28,6 +28,7 @@
   --font: 'Sora', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --font-arabic: 'Noto Naskh Arabic', 'Amiri', serif;
   --font-heading: 'Sora', system-ui, sans-serif;
+  --rose: rgba(244,63,94,0.12);
   --accent-rgb: 244,63,94; --shadow-rgb: 180,90,120;
 }
 
@@ -70,6 +71,7 @@ html[data-theme="serene"] {
   --emerald: #4c7a4a; --emerald-deep: #3a5c38; --teal: #4c7a4a;
   --green: #16a34a; --orange: #d97706; --red: #dc2626; --purple: #7c8a4a;
   --border: rgba(0,0,0,0.06); --shadow: 0 8px 32px rgba(0,0,0,0.12);
+  --rose: rgba(34,120,80,0.12);
   --accent-rgb: 76,122,74; --shadow-rgb: 0,0,0;
 }
 html[data-theme="royal"] {
@@ -80,6 +82,7 @@ html[data-theme="royal"] {
   --emerald: #7c5cf0; --emerald-deep: #5b3fd8; --teal: #7c5cf0;
   --green: #16a34a; --orange: #d97706; --red: #dc2626; --purple: #7c5cf0;
   --border: rgba(0,0,0,0.06); --shadow: 0 8px 32px rgba(0,0,0,0.12);
+  --rose: rgba(120,60,180,0.12);
   --accent-rgb: 124,92,240; --shadow-rgb: 0,0,0;
 }
 html[data-theme="sand"] {
@@ -90,6 +93,7 @@ html[data-theme="sand"] {
   --emerald: #c98a2e; --emerald-deep: #a5701f; --teal: #c98a2e;
   --green: #16a34a; --orange: #b06a18; --red: #c0392b; --purple: #9b6a8a;
   --border: rgba(0,0,0,0.06); --shadow: 0 8px 32px rgba(0,0,0,0.12);
+  --rose: rgba(180,140,60,0.12);
   --accent-rgb: 201,138,46; --shadow-rgb: 0,0,0;
 }
 html[data-theme="midnight"] {
@@ -110,6 +114,7 @@ html[data-theme="cream"] {
   --emerald: #b8860b; --emerald-deep: #8a6508; --teal: #b8860b;
   --green: #2f7d3a; --orange: #b06a18; --red: #b03a2e; --purple: #7a5a8a;
   --border: rgba(0,0,0,0.07); --shadow: 0 8px 32px rgba(0,0,0,0.12);
+  --rose: rgba(200,160,80,0.12);
   --accent-rgb: 184,134,11; --shadow-rgb: 0,0,0;
 }
 html[data-theme="emara"] {
@@ -121,6 +126,7 @@ html[data-theme="emara"] {
   --emerald: #d4af37; --emerald-deep: #b08d24; --teal: #d4af37;
   --green: #4caf7d; --orange: #d97706; --red: #dc2626; --purple: #a78bfa;
   --border: rgba(255,255,255,0.09); --shadow: 0 8px 32px rgba(0,0,0,0.35);
+  --rose: rgba(30,120,90,0.12);
   --accent-rgb: 212,175,55; --shadow-rgb: 0,0,0;
 }
 html[data-theme="emara"] body {
