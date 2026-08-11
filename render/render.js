@@ -1360,6 +1360,14 @@ function renderAll() {
 
     document.getElementById('shopArea').innerHTML = h;
   }
+  function getFrameStyle(frameId) {
+    const frames = {
+      'r10': 'border: 3px solid #FFD700; border-radius: 50%;',
+      'r19': 'border: 3px solid #E5E4E2; border-radius: 50%;',
+      'r20': 'border: 3px solid #B9F2FF; border-radius: 50%;'
+    };
+    return frames[frameId] || '';
+  }
   function renderProfile() {
     const achCnt = Object.keys(S.ua).length;
     const avatar = S.avatar || '';
@@ -1370,7 +1378,7 @@ function renderAll() {
     // Identity card
     h += `<div class="profile-identity">
       <div class="profile-avatar-wrap" onclick="App.toggleAvatarPicker()">
-        <span class="profile-avatar">${avatar}</span>
+        <span class="profile-avatar" style="${S.activeFrame ? getFrameStyle(S.activeFrame) : ''}">${avatar}</span>
       </div>
       <div class="profile-info">
         <h2 class="profile-name">${currentUser === 'default' ? 'Guest' : currentUser}</h2>

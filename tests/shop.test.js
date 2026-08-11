@@ -221,7 +221,6 @@ test('selectTitle rejects unowned title', () => {
     checkLevelUp: stub(),
     checkQ: stub(),
     recalc: stub(),
-    genDQ: stub(),
     tlog: () => ({ p: {}, v: {} }),
     TAB_GROUPS: { profile_main: [] },
     PRAYERS: [],
@@ -235,4 +234,24 @@ test('selectTitle rejects unowned title', () => {
   
   sandbox.selectTitle('r7');
   assert.strictEqual(S.activeTitle, null);
+});
+
+test('selectFrame sets active frame', () => {
+  const S = { xp: 1000, ur: {}, lv: 1, cs: 0, tp: 0, ownedFrames: ['r10', 'r19'], activeFrame: null };
+  const sandbox = loadSandbox(['data/shop.js', 'core/actions.js'], {
+    S,
+    SHOP: [{ id:'r10', name:'Golden Profile Frame', cost:2000 }],
+    lvFrom: () => 1,
+    lvTitle: () => 'Test',
+    today: () => '2026-08-11',
+    toast: () => {},
+    playSound: () => {},
+    saveState: () => {},
+    renderProfile: () => {},
+    iqIcon: () => '',
+    iqEmoji: () => ''
+  });
+  
+  sandbox.selectFrame('r10');
+  assert.strictEqual(S.activeFrame, 'r10');
 });
