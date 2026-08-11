@@ -16,5 +16,67 @@
       "type": "image/svg+xml",
       "purpose": "maskable"
     }
+  ],
+  "widgets": [
+    {
+      "name": "Daily Progress",
+      "description": "Track your daily prayer completion, XP, and streak.",
+      "tag": "daily-progress",
+      "ms_ac_template": "widgets/daily-progress.json",
+      "data": "/",
+      "screenshots": [],
+      "icons": [
+        {
+          "src": "assets/icons/icon.svg",
+          "sizes": "any",
+          "type": "image/svg+xml"
+        }
+      ],
+      "backgrounds": [
+        {
+          "src": "assets/icons/icon.svg"
+        }
+      ]
+    },
+    {
+      "name": "Dhikr Counter",
+      "description": "View your dhikr session counts for today.",
+      "tag": "dhikr-counter",
+      "ms_ac_template": "widgets/dhikr-counter.json",
+      "data": "/",
+      "screenshots": [],
+      "icons": [
+        {
+          "src": "assets/icons/icon.svg",
+          "sizes": "any",
+          "type": "image/svg+xml"
+        }
+      ],
+      "backgrounds": [
+        {
+          "src": "assets/icons/icon.svg"
+        }
+      ]
+    },
+    {
+      "name": "Streak Calendar",
+      "description": "See your monthly prayer streak calendar.",
+      "tag": "streak-calendar",
+      "ms_ac_template": "widgets/streak-calendar.json",
+      "data": "/",
+      "screenshots": [],
+      "icons": [
+        {
+          "src": "assets/icons/icon.svg",
+          "sizes": "any",
+          "type": "image/svg+xml"
+        }
+      ],
+      "backgrounds": [
+        {
+          "src": "assets/icons/icon.svg"
+        }
+      ]
+    }
   ]
 }
