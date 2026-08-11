@@ -1,6 +1,6 @@
   const ACHS = [
     // -------------------------------------------------------
-    // EASIEST (bronze) — First steps, basic deeds
+    // EASIEST (bronze) ï¿½ First steps, basic deeds
     // -------------------------------------------------------
     { id:'a1',  name:'First Step',          desc:'Complete 1 prayer', tier:'bronze', c: s => s.tp>=1 },
     { id:'a2',  name:'Perfect Day',         desc:'All 5 prayers in a day', tier:'bronze', c: s => s.pd>=1 },
@@ -39,7 +39,7 @@
     { id:'a286', name:'Gratitude 3',        desc:'3 gratitude entries', tier:'bronze', c: s => Object.values(s.gratitudeLog||{}).flat().length>=3 },
 
     // -------------------------------------------------------
-    // EASIER (silver) — Building habits, consistency
+    // EASIER (silver) ï¿½ Building habits, consistency
     // -------------------------------------------------------
     { id:'a3',  name:'7-Day Streak',        desc:'7-day streak', tier:'silver', c: s => s.bs>=7 },
     { id:'a5',  name:'100 Prayers',         desc:'Complete 100 prayers', tier:'silver', c: s => s.tp>=100 },
@@ -80,7 +80,7 @@
     { id:'a301', name:'Jummah 10',          desc:'Pray 10 Jummahs', tier:'silver', c: s => (s.tj||0)>=10 },
 
     // -------------------------------------------------------
-    // EASY (gold) — Regular practice, solid habits
+    // EASY (gold) ï¿½ Regular practice, solid habits
     // -------------------------------------------------------
     { id:'a4',  name:'30-Day Streak',       desc:'30-day streak', tier:'gold', c: s => s.bs>=30 },
     { id:'a17', name:'500 Prayers',         desc:'Complete 500 prayers', tier:'gold', c: s => s.tp>=500 },
@@ -119,7 +119,7 @@
     { id:'a302', name:'Quran Reader 250',   desc:'Do quran 250x', tier:'gold', c: s => (s.td.quran||0)>=250 },
 
     // -------------------------------------------------------
-    // MEDIUM (platinum) — Dedicated effort, serious practice
+    // MEDIUM (platinum) ï¿½ Dedicated effort, serious practice
     // -------------------------------------------------------
     { id:'a16', name:'100-Day Streak',      desc:'100-day streak', tier:'platinum', c: s => s.bs>=100 },
     { id:'a19', name:'Level 100',           desc:'Reach level 100', tier:'platinum', c: s => s.lv>=100 },
@@ -172,7 +172,7 @@
     { id:'a271', name:'Quran Reader 750',   desc:'Do quran 750x', tier:'platinum', c: s => (s.td.quran||0)>=750 },
 
     // -------------------------------------------------------
-    // HARD (diamond) — Serious commitment, elite level
+    // HARD (diamond) ï¿½ Serious commitment, elite level
     // -------------------------------------------------------
     { id:'a27', name:'2500 Prayers',        desc:'Complete 2500 prayers', tier:'diamond', c: s => s.tp>=2500 },
     { id:'a29', name:'365-Day Streak',      desc:'365-day streak', tier:'diamond', c: s => s.bs>=365 },
@@ -234,7 +234,7 @@
     { id:'a246', name:'Perfect Year',       desc:'300 perfect days in a year', tier:'diamond', c: s => (s.pd||0)>=300 },
 
     // -------------------------------------------------------
-    // HARDER (legendary) — Elite status, years of dedication
+    // HARDER (legendary) ï¿½ Elite status, years of dedication
     // -------------------------------------------------------
     { id:'a28', name:'5000 Prayers',        desc:'Complete 5000 prayers', tier:'legendary', c: s => s.tp>=5000 },
     { id:'a46', name:'Devout 25000',        desc:'Complete 25000 prayers', tier:'legendary', c: s => s.tp>=25000 },
@@ -271,7 +271,7 @@
     { id:'a250', name:'Ultimate Devotee',   desc:'Reach Level 100', tier:'legendary', c: s => (s.lv||1)>=100 },
 
     // -------------------------------------------------------
-    // HARDEST (mythic) — Near-impossible dedication
+    // HARDEST (mythic) ï¿½ Near-impossible dedication
     // -------------------------------------------------------
     { id:'m1',  name:'Eternal Servant',     desc:'Complete 200000 prayers', tier:'mythic', c: s => s.tp>=200000 },
     { id:'m2',  name:'Flawless 3000',       desc:'3000 days of 5 prayers', tier:'mythic', c: s => s.pd>=3000 },
@@ -310,7 +310,7 @@
     { id:'m35', name:'Hafiz Progress 110',  desc:'Memorize 110 surahs', tier:'mythic', c: s => (s.memorized||0)>=110 },
 
     // -------------------------------------------------------
-    // IMPOSSIBLE (jannah) — Paradise-level, lifelong devotion
+    // IMPOSSIBLE (jannah) ï¿½ Paradise-level, lifelong devotion
     // -------------------------------------------------------
     { id:'p1',  name:'Jannah\'s Gate',       desc:'Complete 1000000 prayers', tier:'jannah', c: s => s.tp>=1000000 },
     { id:'p2',  name:'Flawless 10000',      desc:'10000 days of 5 prayers', tier:'jannah', c: s => s.pd>=10000 },
@@ -329,5 +329,19 @@
     { id:'p15', name:'Quest Grandmaster 30000',desc:'Complete 30000 quests', tier:'jannah', c: s => (s.tq||0)>=30000 },
     { id:'p16', name:'Endless Good 250000', desc:'250000 total extra deeds', tier:'jannah', c: s => Object.values(s.td).reduce((a,b)=>a+b,0)>=250000 },
     { id:'p17', name:'Versatile 200',       desc:'200 different deeds', tier:'jannah', c: s => Object.keys(s.td).filter(k=>s.td[k]>0).length>=200 },
-    { id:'p18', name:'Nawafil Master 100000',desc:'100000 voluntary prayers', tier:'jannah', c: s => Object.values(s.vc).reduce((a,b)=>a+b,0)>=100000 }
+    { id:'p18', name:'Nawafil Master 100000',desc:'100000 voluntary prayers', tier:'jannah', c: s => Object.values(s.vc).reduce((a,b)=>a+b,0)>=100000 },
+
+    // -------------------------------------------------------
+    // SEASONAL â€” Islamic calendar events
+    // -------------------------------------------------------
+    { id:'sa1', name:'Ramadan Starter', desc:'Complete first Ramadan quest', tier:'bronze', c: s => s.seasonal?.ramadanQuests?.length >= 1 },
+    { id:'sa2', name:'Ramadan Warrior', desc:'Complete 10 Ramadan quests', tier:'silver', c: s => s.seasonal?.ramadanQuests?.length >= 10 },
+    { id:'sa3', name:'Ramadan Champion', desc:'Complete 30 Ramadan quests', tier:'gold', c: s => s.seasonal?.ramadanQuests?.length >= 30 },
+    { id:'sa4', name:'Eid Celebrator', desc:'Claim Eid reward', tier:'bronze', c: s => s.seasonal?.eidRewards?.length >= 1 },
+    { id:'sa5', name:'Hajj Pilgrim', desc:'Track 10 days of Dhul Hijjah', tier:'silver', c: s => s.seasonal?.hajjDays >= 10 },
+    { id:'sa6', name:'Arafah Devotee', desc:'Complete Arafah day bonus', tier:'gold', c: s => s.seasonal?.arafahDone },
+    { id:'sa7', name:'Double Devotion', desc:'Earn 2x XP during Ramadan', tier:'platinum', c: s => s.seasonal?.ramadanQuests?.length >= 20 },
+    { id:'sa8', name:'Seasonal Scholar', desc:'Complete all seasonal quest types', tier:'diamond', c: s => s.seasonal?.ramadanQuests?.length >= 15 && s.seasonal?.hajjDays >= 5 },
+    { id:'sa9', name:'Eid Mastery', desc:'Claim both Eid rewards', tier:'legendary', c: s => s.seasonal?.eidRewards?.length >= 2 },
+    { id:'sa10', name:'Year of Faith', desc:'Complete all seasonal achievements', tier:'mythic', c: s => s.ua?.sa1 && s.ua?.sa2 && s.ua?.sa3 && s.ua?.sa4 && s.ua?.sa5 }
   ];

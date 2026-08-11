@@ -1895,6 +1895,31 @@ select.profile-input option { background: var(--bg-accent); color: var(--text); 
 }
 .dr-close:active { transform: scale(0.97); }
 
+/* Seasonal Events Banner */
+.seasonal-banner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 18px;
+  border-radius: var(--radius);
+  color: #fff;
+  font-weight: 600;
+  font-size: 0.95rem;
+  margin: 0 0 16px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+}
+.seasonal-multiplier {
+  background: rgba(255,255,255,0.25);
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+.seasonal-ramadan { background: linear-gradient(135deg, #16a34a, #059669); }
+.seasonal-eid_fitr { background: linear-gradient(135deg, #d97706, #f59e0b); }
+.seasonal-eid_adha { background: linear-gradient(135deg, #9333ea, #a855f7); }
+.seasonal-hajj { background: linear-gradient(135deg, #2563eb, #3b82f6); }
+
 @media (max-width: 600px) {
   .spiritual-card { flex-direction: column; text-align: center; }
   .spiritual-svg-wrap { width: 100px; height: 110px; }
