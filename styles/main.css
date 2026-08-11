@@ -1808,6 +1808,92 @@ select.profile-input option { background: var(--bg-accent); color: var(--text); 
 .add-goal-btn { width: 100%; background: var(--bg); border: 2px dashed var(--border); border-radius: var(--radius-sm); padding: 12px; font-size: 0.95rem; font-weight: 600; color: var(--text2); cursor: pointer; margin-top: 8px; }
 .add-goal-btn:active { background: var(--card-bg); }
 
+/* ── Daily Ritual Modal ── */
+.daily-ritual {
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  box-shadow: 8px 8px 16px var(--shadow-dark), -8px -8px 16px var(--shadow-light);
+  padding: 24px;
+  max-width: 340px;
+  width: 90%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  text-align: center;
+}
+.dr-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--text);
+}
+.dr-stats {
+  display: flex;
+  gap: 16px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text2);
+}
+.dr-rating { width: 100%; }
+.dr-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text2);
+  margin-bottom: 6px;
+}
+.dr-stars {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+.dr-star {
+  background: none;
+  border: none;
+  font-size: 1.8rem;
+  color: var(--gold);
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 8px;
+  transition: transform 0.15s, background 0.15s;
+}
+.dr-star:hover, .dr-star:active {
+  transform: scale(1.2);
+  background: var(--rose);
+}
+.dr-reflection { width: 100%; }
+.dr-textarea {
+  width: 100%;
+  min-height: 72px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 10px;
+  font-family: var(--font);
+  font-size: 0.9rem;
+  color: var(--text);
+  background: var(--bg);
+  resize: vertical;
+  box-sizing: border-box;
+}
+.dr-textarea::placeholder { color: var(--text2); }
+.dr-quote {
+  font-size: 0.82rem;
+  color: var(--text2);
+  font-style: italic;
+  line-height: 1.4;
+}
+.dr-close {
+  background: var(--gold);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: 10px 24px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  width: 100%;
+}
+.dr-close:active { transform: scale(0.97); }
+
 @media (max-width: 600px) {
   .spiritual-card { flex-direction: column; text-align: center; }
   .spiritual-svg-wrap { width: 100px; height: 110px; }

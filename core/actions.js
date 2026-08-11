@@ -2375,6 +2375,7 @@ Object.keys(NEW_POOLS).forEach(k => {
     if (window.renderDailyContent) renderDailyContent();
     if (window.showWeeklySummary) showWeeklySummary();
     if (window.showDailySummary) showDailySummary();
+    if (window.showDailyRitual) showDailyRitual();
     if (window.checkConsistency) checkConsistency();
     if (window.checkWeeklyConsistency) checkWeeklyConsistency();
     try {
