@@ -1,0 +1,17 @@
+{
+  "type": "AdaptiveCard",
+  "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+  "version": "1.5",
+  "body": [
+    {
+      "type": "TextBlock",
+      "text": "Dhikr Counter",
+      "weight": "Bolder",
+      "size": "Medium"
+    },
+    {
+      "type": "TextBlock",
+      "text": "Today: {{todayTotal}} dhikr"
+    }
+  ]
+}

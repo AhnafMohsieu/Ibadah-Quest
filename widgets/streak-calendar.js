@@ -1,7 +1,7 @@
 (function() {
   function renderStreakCalendarWidget() {
     var t = today();
-    var now = new Date();
+    var now = new Date(t + 'T00:00:00');
     var month = now.getMonth();
     var year = now.getFullYear();
     var monthName = now.toLocaleString('default', { month: 'long' });

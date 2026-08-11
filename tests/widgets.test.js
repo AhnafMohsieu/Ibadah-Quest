@@ -2,29 +2,10 @@
 const { test } = require('node:test');
 const assert = require('node:assert');
 const path = require('path');
-const fs = require('fs');
-const vm = require('vm');
-
-function loadSandbox(files, globals) {
-  const sandbox = Object.assign({
-    window: {},
-    console,
-    localStorage: { getItem: () => null, setItem: () => {}, removeItem: () => {} }
-  }, globals || {});
-  for (const f of files) {
-    const code = fs.readFileSync(path.join(__dirname, '..', f), 'utf8');
-    vm.runInNewContext(code, sandbox, { filename: f });
-    if (sandbox.window) {
-      for (const key of Object.keys(sandbox.window)) {
-        sandbox[key] = sandbox.window[key];
-      }
-    }
-  }
-  return sandbox;
-}
+const { loadFile } = require('./helpers/load.js');
 
 test('daily progress widget returns correct structure', () => {
-  const sandbox = loadSandbox(['widgets/daily-progress.js'], {
+  const sandbox = loadFile(path.join(__dirname, '..', 'widgets', 'daily-progress.js'), {
     S: {
       log: {
         '2026-08-12': { p: { fajr: true, dhuhr: true, asr: false, maghrib: false, isha: false } }
@@ -36,7 +17,7 @@ test('daily progress widget returns correct structure', () => {
     today: () => '2026-08-12'
   });
 
-  const result = sandbox.renderDailyProgressWidget();
+  const result = sandbox.window.renderDailyProgressWidget();
   assert.strictEqual(result.prayers.fajr, true);
   assert.strictEqual(result.prayers.dhuhr, true);
   assert.strictEqual(result.prayers.asr, false);
@@ -48,7 +29,7 @@ test('daily progress widget returns correct structure', () => {
 });
 
 test('daily progress widget handles empty state', () => {
-  const sandbox = loadSandbox(['widgets/daily-progress.js'], {
+  const sandbox = loadFile(path.join(__dirname, '..', 'widgets', 'daily-progress.js'), {
     S: {
       log: {},
       xp: 0,
@@ -58,7 +39,7 @@ test('daily progress widget handles empty state', () => {
     today: () => '2026-08-12'
   });
 
-  const result = sandbox.renderDailyProgressWidget();
+  const result = sandbox.window.renderDailyProgressWidget();
   assert.strictEqual(result.prayedCount, 0);
   assert.strictEqual(result.totalPrayers, 5);
   assert.strictEqual(result.xp, 0);
@@ -67,7 +48,7 @@ test('daily progress widget handles empty state', () => {
 });
 
 test('daily progress widget all prayers logged', () => {
-  const sandbox = loadSandbox(['widgets/daily-progress.js'], {
+  const sandbox = loadFile(path.join(__dirname, '..', 'widgets', 'daily-progress.js'), {
     S: {
       log: {
         '2026-08-12': { p: { fajr: true, dhuhr: true, asr: true, maghrib: true, isha: true } }
@@ -79,13 +60,13 @@ test('daily progress widget all prayers logged', () => {
     today: () => '2026-08-12'
   });
 
-  const result = sandbox.renderDailyProgressWidget();
+  const result = sandbox.window.renderDailyProgressWidget();
   assert.strictEqual(result.prayedCount, 5);
   assert.deepStrictEqual(Object.values(result.prayers).filter(v => v).length, 5);
 });
 
 test('dhikr counter widget returns correct structure', () => {
-  const sandbox = loadSandbox(['widgets/dhikr-counter.js'], {
+  const sandbox = loadFile(path.join(__dirname, '..', 'widgets', 'dhikr-counter.js'), {
     S: {
       dhikrSessions: [
         { date: '2026-08-11', count: 100 },
@@ -96,26 +77,26 @@ test('dhikr counter widget returns correct structure', () => {
     today: () => '2026-08-12'
   });
 
-  const result = sandbox.renderDhikrCounterWidget();
+  const result = sandbox.window.renderDhikrCounterWidget();
   assert.strictEqual(result.todayTotal, 80);
   assert.deepStrictEqual(result.lastSession, { date: '2026-08-12', count: 30 });
 });
 
 test('dhikr counter widget handles empty state', () => {
-  const sandbox = loadSandbox(['widgets/dhikr-counter.js'], {
+  const sandbox = loadFile(path.join(__dirname, '..', 'widgets', 'dhikr-counter.js'), {
     S: {
       dhikrSessions: []
     },
     today: () => '2026-08-12'
   });
 
-  const result = sandbox.renderDhikrCounterWidget();
+  const result = sandbox.window.renderDhikrCounterWidget();
   assert.strictEqual(result.todayTotal, 0);
   assert.strictEqual(result.lastSession, null);
 });
 
 test('dhikr counter widget no sessions today', () => {
-  const sandbox = loadSandbox(['widgets/dhikr-counter.js'], {
+  const sandbox = loadFile(path.join(__dirname, '..', 'widgets', 'dhikr-counter.js'), {
     S: {
       dhikrSessions: [
         { date: '2026-08-11', count: 100 }
@@ -124,13 +105,13 @@ test('dhikr counter widget no sessions today', () => {
     today: () => '2026-08-12'
   });
 
-  const result = sandbox.renderDhikrCounterWidget();
+  const result = sandbox.window.renderDhikrCounterWidget();
   assert.strictEqual(result.todayTotal, 0);
   assert.deepStrictEqual(result.lastSession, { date: '2026-08-11', count: 100 });
 });
 
 test('streak calendar widget returns correct structure', () => {
-  const sandbox = loadSandbox(['widgets/streak-calendar.js'], {
+  const sandbox = loadFile(path.join(__dirname, '..', 'widgets', 'streak-calendar.js'), {
     S: {
       log: {
         '2026-08-01': { p: { fajr: true, dhuhr: true, asr: true, maghrib: true, isha: true } },
@@ -143,7 +124,7 @@ test('streak calendar widget returns correct structure', () => {
     today: () => '2026-08-12'
   });
 
-  const result = sandbox.renderStreakCalendarWidget();
+  const result = sandbox.window.renderStreakCalendarWidget();
   assert.strictEqual(result.month, 'August');
   assert.strictEqual(result.year, 2026);
   assert.strictEqual(result.currentStreak, 2);
@@ -156,7 +137,7 @@ test('streak calendar widget returns correct structure', () => {
 });
 
 test('streak calendar widget handles empty state', () => {
-  const sandbox = loadSandbox(['widgets/streak-calendar.js'], {
+  const sandbox = loadFile(path.join(__dirname, '..', 'widgets', 'streak-calendar.js'), {
     S: {
       log: {},
       cs: 0,
@@ -165,14 +146,14 @@ test('streak calendar widget handles empty state', () => {
     today: () => '2026-08-12'
   });
 
-  const result = sandbox.renderStreakCalendarWidget();
+  const result = sandbox.window.renderStreakCalendarWidget();
   assert.strictEqual(result.currentStreak, 0);
   assert.strictEqual(result.bestStreak, 0);
   assert.ok(result.streakDays.every(d => d.completed === false));
 });
 
 test('streak calendar widget marks partial days as incomplete', () => {
-  const sandbox = loadSandbox(['widgets/streak-calendar.js'], {
+  const sandbox = loadFile(path.join(__dirname, '..', 'widgets', 'streak-calendar.js'), {
     S: {
       log: {
         '2026-08-05': { p: { fajr: true, dhuhr: true } }
@@ -183,7 +164,7 @@ test('streak calendar widget marks partial days as incomplete', () => {
     today: () => '2026-08-12'
   });
 
-  const result = sandbox.renderStreakCalendarWidget();
+  const result = sandbox.window.renderStreakCalendarWidget();
   const day5 = result.streakDays.find(d => d.day === 5);
   assert.strictEqual(day5.completed, false);
 });
