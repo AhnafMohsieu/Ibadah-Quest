@@ -791,6 +791,7 @@ select.profile-input option { background: var(--bg-accent); color: var(--text); 
   transition: box-shadow 0.3s;
 }
 .profile-identity:hover { box-shadow: 8px 8px 16px var(--shadow-dark), -8px -8px 16px var(--shadow-light); }
+.profile-title { font-size: 0.9rem; color: var(--gold); font-weight: 600; margin-bottom: 4px; }
 
 .profile-avatar-wrap {
   position: relative; cursor: pointer; transition: transform 0.2s;
