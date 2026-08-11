@@ -43,7 +43,6 @@
     ov.style.pointerEvents = 'auto';
 
     window._drRating = 0;
-    S.lastDailyRitual = t;
   }
 
   function saveDailyRitual(rating, reflection) {

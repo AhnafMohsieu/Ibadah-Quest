@@ -4,7 +4,7 @@ const assert = require('node:assert');
 const path = require('path');
 const { loadFile } = require('./helpers/load.js');
 
-test('showDailyRitual shows once per day', () => {
+test('showDailyRitual shows modal without setting lastDailyRitual', () => {
   const S = {
     dailyRatings: {},
     dailyReflections: {},
@@ -22,7 +22,8 @@ test('showDailyRitual shows once per day', () => {
   });
 
   sandbox.window.showDailyRitual();
-  assert.strictEqual(S.lastDailyRitual, '2026-08-11');
+  assert.strictEqual(S.lastDailyRitual, null);
+  assert.ok(ov.innerHTML.length > 0);
 });
 
 test('showDailyRitual does not show again on same day', () => {

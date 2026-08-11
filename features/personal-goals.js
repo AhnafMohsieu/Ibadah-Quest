@@ -69,8 +69,40 @@
     el.innerHTML = h;
   }
   
+  function showAddGoalModal() {
+    const ov = document.getElementById('toastOverlay');
+    if (!ov) return;
+    ov.innerHTML = `<div class="modal-box">
+      <h3>${iqIcon('target')} Add Goal</h3>
+      <div class="form-group">
+        <label>Type</label>
+        <select id="goalType">
+          <option value="Quran Reading">Quran Reading</option>
+          <option value="Dhikr">Dhikr</option>
+          <option value="Charity">Charity</option>
+          <option value="Fasting">Fasting</option>
+          <option value="Prayer">Prayer</option>
+          <option value="Custom">Custom</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Target (times)</label>
+        <input type="number" id="goalTarget" min="1" max="365" value="10" />
+      </div>
+      <div class="form-group">
+        <label>Deadline</label>
+        <input type="date" id="goalDeadline" value="${new Date(Date.now()+30*86400000).toISOString().split('T')[0]}" />
+      </div>
+      <button class="dr-close" onclick="addPersonalGoal(document.getElementById('goalType').value, parseInt(document.getElementById('goalTarget').value)||10, document.getElementById('goalDeadline').value);document.getElementById('toastOverlay').classList.remove('show');document.getElementById('toastOverlay').style.display='none';">Add</button>
+    </div>`;
+    ov.style.display = 'flex';
+    ov.classList.add('show');
+    ov.style.pointerEvents = 'auto';
+  }
+
   window.addPersonalGoal = addPersonalGoal;
   window.updateGoalProgress = updateGoalProgress;
   window.deletePersonalGoal = deletePersonalGoal;
   window.renderPersonalGoals = renderPersonalGoals;
+  window.showAddGoalModal = showAddGoalModal;
 })();

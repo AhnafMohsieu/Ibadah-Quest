@@ -12,12 +12,12 @@
       const todayDate = new Date(t + 'T00:00:00');
       const diffDays = Math.round((todayDate - lastDate) / 86400000);
 
-      if (diffDays === 2) {
+      if (diffDays === 1) {
         S.xp += 50;
         S.lv = lvFrom(S.xp);
         toast(iqIcon('arrow-left'), 'Comeback Bonus: +50 XP!');
         saveState();
-      } else if (diffDays >= 3) {
+      } else if (diffDays > 1) {
         S.xp += 100;
         S.lv = lvFrom(S.xp);
         toast(iqIcon('arrow-left'), 'Welcome Back! +100 XP!');

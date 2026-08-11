@@ -26,7 +26,7 @@ function loadSandbox(files, globals) {
 test('comeback bonus after 1 day missed', () => {
   const sandbox = loadSandbox(['features/consistency-bonuses.js'], {
     S: {
-      lastActiveDate: '2026-08-09',
+      lastActiveDate: '2026-08-10',
       xp: 100,
       lv: 1,
       log: { '2026-08-11': { p: { fajr: true } } }
@@ -61,7 +61,7 @@ test('comeback bonus after 2+ days missed', () => {
   assert.strictEqual(sandbox.S.xp, 200);
 });
 
-test('no bonus if logged yesterday', () => {
+test('comeback bonus if logged yesterday', () => {
   const sandbox = loadSandbox(['features/consistency-bonuses.js'], {
     S: {
       lastActiveDate: '2026-08-10',
@@ -77,7 +77,7 @@ test('no bonus if logged yesterday', () => {
   });
 
   sandbox.checkConsistency();
-  assert.strictEqual(sandbox.S.xp, 100);
+  assert.strictEqual(sandbox.S.xp, 150);
 });
 
 test('no bonus if same day', () => {

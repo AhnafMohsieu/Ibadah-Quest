@@ -2,7 +2,11 @@
   function checkSurpriseReward(action) {
     let chance = 0;
     if (action === 'prayer') chance = 0.10;
-    else if (action === 'allPrayers') chance = 0.25;
+    else if (action === 'allPrayers') {
+      const t = today();
+      if (S.lastAllPrayersSurprise === t) return;
+      chance = 0.25;
+    }
     else if (action === 'quest') chance = 0.15;
     
     if (Math.random() > chance) return;
@@ -38,6 +42,7 @@
       toast(iqIcon('zap'), 'Surprise! 2x XP Boost!', true);
     }
     
+    if (action === 'allPrayers') S.lastAllPrayersSurprise = today();
     saveState();
   }
   
