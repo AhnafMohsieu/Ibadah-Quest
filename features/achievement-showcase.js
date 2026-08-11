@@ -34,6 +34,7 @@
   }
 
   function unfeatureAchievement(id) {
+    S.achievementShowcase = S.achievementShowcase || { featured: [], unlockedAt: {} };
     S.achievementShowcase.featured = (S.achievementShowcase.featured || []).filter(f => f !== id);
     saveState();
     renderAchievementShowcase();
