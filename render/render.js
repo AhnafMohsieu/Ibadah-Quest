@@ -1435,6 +1435,10 @@ h += '</div>';
         var weeklyHTML = '<div id="weeklyCompare" class="insights-charts"></div>';
         trendEl.insertAdjacentHTML('beforeend', weeklyHTML);
         if (window.renderWeeklyCompare) window.renderWeeklyCompare();
+
+        var smartHTML = '<div id="smartInsights" class="insights-charts"></div>';
+        trendEl.insertAdjacentHTML('beforeend', smartHTML);
+        if (window.renderSmartInsights) window.renderSmartInsights();
       }
     } else {
       const el = document.getElementById('statsArea');
