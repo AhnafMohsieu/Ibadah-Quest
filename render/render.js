@@ -1433,7 +1433,7 @@ h += '</div>';
         if (window.renderTrendCharts) window.renderTrendCharts();
       }
     } else {
-      var el = document.getElementById('statsArea');
+      const el = document.getElementById('statsArea');
       if (!el) return;
       el.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text2);">Loading analytics...</div>';
     }

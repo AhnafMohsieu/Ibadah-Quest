@@ -16,7 +16,6 @@
   }
 
   function renderTrendCharts() {
-    Charts.destroyAll();
     const container = document.getElementById('trendCharts');
     if (!container) return;
 
