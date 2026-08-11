@@ -1793,6 +1793,21 @@ select.profile-input option { background: var(--bg-accent); color: var(--text); 
 .ds-close { background: var(--accent-rgb); background: rgb(var(--accent-rgb)); color: #fff; border: none; border-radius: var(--radius-sm); padding: 0.7rem 2rem; font-size: 1rem; font-weight: 600; cursor: pointer; box-shadow: 4px 4px 8px var(--shadow-dark), -2px -2px 6px var(--shadow-light); }
 .ds-close:active { transform: scale(0.96); }
 
+/* Goals */
+.goal-card { background: var(--card-bg); border-radius: var(--radius-sm); padding: 16px; margin-bottom: 12px; border: 1px solid var(--border); }
+.goal-card.completed { opacity: 0.7; }
+.goal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+.goal-type { font-weight: 600; text-transform: capitalize; color: var(--text); }
+.goal-deadline { font-size: 0.8rem; color: var(--text2); }
+.goal-progress { height: 8px; background: var(--bg); border-radius: 4px; overflow: hidden; margin-bottom: 8px; }
+.goal-bar { height: 100%; background: var(--gold); border-radius: 4px; transition: width 0.3s ease; }
+.goal-stats { font-size: 0.9rem; color: var(--text2); margin-bottom: 8px; }
+.goal-btn { background: var(--gold); color: #fff; border: none; border-radius: var(--radius-sm); padding: 6px 16px; font-weight: 600; cursor: pointer; }
+.goal-btn:active { transform: scale(0.96); }
+.goal-done { color: var(--green); font-weight: 600; font-size: 0.9rem; }
+.add-goal-btn { width: 100%; background: var(--bg); border: 2px dashed var(--border); border-radius: var(--radius-sm); padding: 12px; font-size: 0.95rem; font-weight: 600; color: var(--text2); cursor: pointer; margin-top: 8px; }
+.add-goal-btn:active { background: var(--card-bg); }
+
 @media (max-width: 600px) {
   .spiritual-card { flex-direction: column; text-align: center; }
   .spiritual-svg-wrap { width: 100px; height: 110px; }

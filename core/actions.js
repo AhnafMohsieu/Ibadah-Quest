@@ -2363,6 +2363,7 @@ Object.keys(NEW_POOLS).forEach(k => {
   TAB_GROUPS.profile_main = [
     { id: 'profile', icon: 'user', label: 'Profile' },
     { id: 'trophies', icon: 'trophy', label: 'Trophies' },
+    { id: 'goals', icon: 'target', label: 'Goals' },
     { id: 'progress', icon: 'bar-chart-3', label: 'Progress' },
     { id: 'stats', icon: 'trending-up', label: 'Analytics' },
     { id: 'rewards', icon: 'gift', label: 'Rewards' }
