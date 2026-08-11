@@ -2388,6 +2388,9 @@ Object.keys(NEW_POOLS).forEach(k => {
   function init() {
     try { resolveCurrentUser(); } catch(e) { console.error('Step 0 resolve user failed:', e); }
     try { S = loadState(); } catch(e) { console.error('Step 1 loadState failed:', e); }
+    if (typeof isOnboardingComplete === 'function' && !isOnboardingComplete()) {
+      startOnboarding();
+    }
     try { applyTheme(); } catch(e) { console.error('Step 2 applyTheme failed:', e); }
     try { initApp(); } catch(e) { console.error('Step 3 initApp failed:', e); }
     try { if (window.initSearch) initSearch(); } catch(e) { console.error('Step 3b initSearch failed:', e); }
