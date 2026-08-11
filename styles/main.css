@@ -1930,6 +1930,15 @@ select.profile-input option { background: var(--bg-accent); color: var(--text); 
 .showcase-item { display: flex; justify-content: space-between; align-items: center; padding: 8px; border-left: 3px solid; margin: 4px 0; background: var(--card-bg); border-radius: 0 8px 8px 0; }
 .showcase-item.featured { opacity: 0.5; }
 
+/* ── Weekly Comparison ── */
+.compare-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+.compare-card { background: var(--card-bg); border-radius: 12px; padding: 12px; text-align: center; }
+.compare-label { font-size: 0.85em; opacity: 0.7; }
+.compare-value { font-size: 1.5em; font-weight: 700; margin: 4px 0; }
+.compare-change { font-size: 0.9em; }
+.compare-change.positive { color: #4caf50; }
+.compare-change.negative { color: #f44336; }
+
 @media (max-width: 600px) {
   .spiritual-card { flex-direction: column; text-align: center; }
   .spiritual-svg-wrap { width: 100px; height: 110px; }

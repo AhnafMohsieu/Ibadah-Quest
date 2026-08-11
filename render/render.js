@@ -1431,6 +1431,10 @@ h += '</div>';
         var trendHTML = '<div id="trendCharts" class="insights-charts"><div class="insight-chart-wrap"><canvas id="prayerTrendCanvas" style="width:100%;height:200px;"></canvas></div><div class="insight-chart-wrap"><canvas id="xpTrendCanvas" style="width:100%;height:200px;"></canvas></div></div>';
         trendEl.insertAdjacentHTML('beforeend', trendHTML);
         if (window.renderTrendCharts) window.renderTrendCharts();
+        
+        var weeklyHTML = '<div id="weeklyCompare" class="insights-charts"></div>';
+        trendEl.insertAdjacentHTML('beforeend', weeklyHTML);
+        if (window.renderWeeklyCompare) window.renderWeeklyCompare();
       }
     } else {
       const el = document.getElementById('statsArea');
