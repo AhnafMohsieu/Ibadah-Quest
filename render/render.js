@@ -1426,8 +1426,14 @@ h += '</div>';
   function renderStats() {
     if (window.Dashboard && typeof Dashboard.renderInsights === 'function') {
       Dashboard.renderInsights();
+      var trendEl = document.getElementById('statsArea');
+      if (trendEl) {
+        var trendHTML = '<div id="trendCharts" class="insights-charts"><div class="insight-chart-wrap"><canvas id="prayerTrendCanvas" style="width:100%;height:200px;"></canvas></div><div class="insight-chart-wrap"><canvas id="xpTrendCanvas" style="width:100%;height:200px;"></canvas></div></div>';
+        trendEl.insertAdjacentHTML('beforeend', trendHTML);
+        if (window.renderTrendCharts) window.renderTrendCharts();
+      }
     } else {
-      const el = document.getElementById('statsArea');
+      var el = document.getElementById('statsArea');
       if (!el) return;
       el.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text2);">Loading analytics...</div>';
     }
