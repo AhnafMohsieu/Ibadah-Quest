@@ -154,3 +154,85 @@ test('mystery box handler exists for mystery type', () => {
   // XP should have changed from initial 1000
   assert.notStrictEqual(S.xp, 1000, 'XP should change after buying mystery box');
 });
+
+test('selectTitle sets active title', () => {
+  const S = { xp: 1000, ur: {}, lv: 1, cs: 0, tp: 0, ownedTitles: ['r1', 'r7'], activeTitle: null };
+  const sandbox = loadSandbox(['data/shop.js', 'core/actions.js'], {
+    S,
+    SHOP: [{ id:'r1', name:'Title: True Seeker', cost:300 }],
+    lvFrom: () => 1,
+    lvTitle: () => 'Test',
+    today: () => '2026-08-11',
+    toast: () => {},
+    playSound: () => {},
+    saveState: () => {},
+    renderProfile: () => {},
+    iqIcon: () => '',
+    iqEmoji: () => '',
+    document: docStub(),
+    setTimeout: (fn) => fn(),
+    clearTimeout: stub(),
+    renderAll: stub(),
+    renderDynamic: stub(),
+    renderLv: stub(),
+    renderTopBar: stub(),
+    checkA: stub(),
+    checkLevelUp: stub(),
+    checkQ: stub(),
+    recalc: stub(),
+    genDQ: stub(),
+    tlog: () => ({ p: {}, v: {} }),
+    TAB_GROUPS: { profile_main: [] },
+    PRAYERS: [],
+    VOLUNTARY: [],
+    DEEDS: [],
+    ACHS: [],
+    DETAILS: {},
+    TIPS: {},
+    trackQuestXP: stub()
+  });
+  
+  sandbox.selectTitle('r1');
+  assert.strictEqual(S.activeTitle, 'r1');
+});
+
+test('selectTitle rejects unowned title', () => {
+  const S = { xp: 1000, ur: {}, lv: 1, cs: 0, tp: 0, ownedTitles: ['r1'], activeTitle: null };
+  const sandbox = loadSandbox(['data/shop.js', 'core/actions.js'], {
+    S,
+    SHOP: [{ id:'r1', name:'Title: True Seeker', cost:300 }],
+    lvFrom: () => 1,
+    lvTitle: () => 'Test',
+    today: () => '2026-08-11',
+    toast: () => {},
+    playSound: () => {},
+    saveState: () => {},
+    renderProfile: () => {},
+    iqIcon: () => '',
+    iqEmoji: () => '',
+    document: docStub(),
+    setTimeout: (fn) => fn(),
+    clearTimeout: stub(),
+    renderAll: stub(),
+    renderDynamic: stub(),
+    renderLv: stub(),
+    renderTopBar: stub(),
+    checkA: stub(),
+    checkLevelUp: stub(),
+    checkQ: stub(),
+    recalc: stub(),
+    genDQ: stub(),
+    tlog: () => ({ p: {}, v: {} }),
+    TAB_GROUPS: { profile_main: [] },
+    PRAYERS: [],
+    VOLUNTARY: [],
+    DEEDS: [],
+    ACHS: [],
+    DETAILS: {},
+    TIPS: {},
+    trackQuestXP: stub()
+  });
+  
+  sandbox.selectTitle('r7');
+  assert.strictEqual(S.activeTitle, null);
+});

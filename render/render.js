@@ -1375,6 +1375,7 @@ function renderAll() {
       <div class="profile-info">
         <h2 class="profile-name">${currentUser === 'default' ? 'Guest' : currentUser}</h2>
         <div class="profile-level">Level ${S.lv} · ${lvTitle(S.lv)}</div>
+        ${S.activeTitle ? (() => { const t = (typeof SHOP !== 'undefined' ? SHOP : []).find(x => x.id === S.activeTitle); return t ? `<div class="profile-title" style="color:var(--gold);font-weight:600;margin-top:2px;">${t.name.replace('Title: ','')}</div>` : ''; })() : ''}
         ${joinDate ? `<div class="profile-join">Member since ${joinDate}</div>` : ''}
       </div>
     </div>`;
