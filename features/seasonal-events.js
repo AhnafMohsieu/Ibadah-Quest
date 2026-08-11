@@ -34,13 +34,13 @@
   function renderSeasonalBanner() {
     const area = document.getElementById('seasonalBanner');
     if (!area) return;
+    if (!S.seasonal) return;
     if (!seasonalActive()) { area.innerHTML = ''; return; }
 
     const type = S.seasonal.active;
-    const colors = { ramadan: 'green', eid_fitr: 'gold', eid_adha: 'purple', hajj: 'blue' };
     const icons = { ramadan: '🌙', eid_fitr: '🎉', eid_adha: '🐑', hajj: '🕋' };
 
-    area.innerHTML = '<div class="seasonal-banner seasonal-' + type + '" style="background:var(--' + (colors[type] || 'accent') + '-accent)">' +
+    area.innerHTML = '<div class="seasonal-banner seasonal-' + type + '">' +
       '<span>' + (icons[type] || '✨') + ' ' + type.replace('_', ' ').toUpperCase() + ' MODE</span>' +
       '<span class="seasonal-multiplier">' + getSeasonalMultiplier() + 'x XP</span>' +
     '</div>';

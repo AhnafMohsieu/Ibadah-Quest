@@ -71,15 +71,3 @@ const SEASONAL_DQUESTS = [
   { id:'sd3', name:'Laylat al-Qadr', desc:'Pray on Laylat al-Qadr night', xp:200, c: s => s.seasonal?.active === 'ramadan' },
 ];
 
-const SEASONAL_ACHS = [
-  { id:'sa1', name:'Ramadan Starter', desc:'Complete first Ramadan quest', tier:'bronze', c: s => s.seasonal?.ramadanQuests?.length >= 1 },
-  { id:'sa2', name:'Ramadan Warrior', desc:'Complete 10 Ramadan quests', tier:'silver', c: s => s.seasonal?.ramadanQuests?.length >= 10 },
-  { id:'sa3', name:'Ramadan Champion', desc:'Complete 30 Ramadan quests', tier:'gold', c: s => s.seasonal?.ramadanQuests?.length >= 30 },
-  { id:'sa4', name:'Eid Celebrator', desc:'Claim Eid reward', tier:'bronze', c: s => s.seasonal?.eidRewards?.length >= 1 },
-  { id:'sa5', name:'Hajj Pilgrim', desc:'Track 10 days of Dhul Hijjah', tier:'silver', c: s => s.seasonal?.hajjDays >= 10 },
-  { id:'sa6', name:'Arafah Devotee', desc:'Complete Arafah day bonus', tier:'gold', c: s => s.seasonal?.arafahDone },
-  { id:'sa7', name:'Double Devotion', desc:'Earn 2x XP during Ramadan', tier:'platinum', c: s => s.seasonal?.ramadanQuests?.length >= 20 },
-  { id:'sa8', name:'Seasonal Scholar', desc:'Complete all seasonal quest types', tier:'diamond', c: s => s.seasonal?.ramadanQuests?.length >= 15 && s.seasonal?.hajjDays >= 5 },
-  { id:'sa9', name:'Eid Mastery', desc:'Claim both Eid rewards', tier:'legendary', c: s => s.seasonal?.eidRewards?.length >= 2 },
-  { id:'sa10', name:'Year of Faith', desc:'Complete all seasonal achievements', tier:'mythic', c: s => s.ua?.sa1 && s.ua?.sa2 && s.ua?.sa3 && s.ua?.sa4 && s.ua?.sa5 },
-];
