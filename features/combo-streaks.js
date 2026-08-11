@@ -26,7 +26,9 @@
     if (completed) {
       if (combo.lastDate) {
         var diff = daysBetween(combo.lastDate, t);
-        if (diff === 0 || diff === 1) {
+        if (diff === 0) {
+          // same day — already tracked, do not increment again
+        } else if (diff === 1) {
           combo.count++;
         } else {
           combo.count = 1;

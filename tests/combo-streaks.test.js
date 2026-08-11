@@ -68,7 +68,7 @@ test('getComboMultiplier returns 5x for count 30+', () => {
 
 // ── checkCombo increment tests ──
 
-test('checkCombo increments count when completed and lastDate is today', () => {
+test('checkCombo does NOT increment count when completed and lastDate is today', () => {
   const s = loadSandbox(['features/combo-streaks.js'], {
     S: { ...freshState(), combos: { fajr: { count: 2, lastDate: '2026-08-11' } } },
     today: () => '2026-08-11',
@@ -76,7 +76,7 @@ test('checkCombo increments count when completed and lastDate is today', () => {
     toast: () => {}
   });
   s.checkCombo('fajr', true);
-  assert.strictEqual(s.S.combos.fajr.count, 3);
+  assert.strictEqual(s.S.combos.fajr.count, 2);
 });
 
 test('checkCombo increments count when completed and lastDate is yesterday', () => {
