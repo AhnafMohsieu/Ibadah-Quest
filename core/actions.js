@@ -2373,6 +2373,7 @@ Object.keys(NEW_POOLS).forEach(k => {
     genDQ(); genWQ(); genMQ(); genYQ(); genLQ(); refreshContent(); recalc(); checkQ(); S.lv=lvFrom(S.xp); saveState(); initCalView(); renderAll();
     if (window.renderDailyContent) renderDailyContent();
     if (window.showWeeklySummary) showWeeklySummary();
+    if (window.showDailySummary) showDailySummary();
     try {
       const activeBtn = document.querySelector('.t1-btn.active');
       const activeCat = activeBtn ? activeBtn.getAttribute('data-cat') : 'ibadah';
