@@ -343,5 +343,14 @@
     { id:'sa7', name:'Double Devotion', desc:'Earn 2x XP during Ramadan', tier:'platinum', c: s => s.seasonal?.ramadanQuests?.length >= 20 },
     { id:'sa8', name:'Seasonal Scholar', desc:'Complete all seasonal quest types', tier:'diamond', c: s => s.seasonal?.ramadanQuests?.length >= 15 && s.seasonal?.hajjDays >= 5 },
     { id:'sa9', name:'Eid Mastery', desc:'Claim both Eid rewards', tier:'legendary', c: s => s.seasonal?.eidRewards?.length >= 2 },
-    { id:'sa10', name:'Year of Faith', desc:'Complete all seasonal achievements', tier:'mythic', c: s => s.ua?.sa1 && s.ua?.sa2 && s.ua?.sa3 && s.ua?.sa4 && s.ua?.sa5 }
+    { id:'sa10', name:'Year of Faith', desc:'Complete all seasonal achievements', tier:'mythic', c: s => s.ua?.sa1 && s.ua?.sa2 && s.ua?.sa3 && s.ua?.sa4 && s.ua?.sa5 },
+
+    // -------------------------------------------------------
+    // COMBO STREAKS — Consecutive day combos
+    // -------------------------------------------------------
+    { id:'cs1', name:'Combo Starter',    desc:'3-day combo streak', tier:'bronze', c: s => { const c=s.combos||{}; return Object.values(c).some(x=>x.count>=3); } },
+    { id:'cs2', name:'Combo Regular',    desc:'7-day combo streak', tier:'silver', c: s => { const c=s.combos||{}; return Object.values(c).some(x=>x.count>=7); } },
+    { id:'cs3', name:'Combo Champion',   desc:'14-day combo streak', tier:'gold', c: s => { const c=s.combos||{}; return Object.values(c).some(x=>x.count>=14); } },
+    { id:'cs4', name:'Combo Legend',      desc:'30-day combo streak', tier:'platinum', c: s => { const c=s.combos||{}; return Object.values(c).some(x=>x.count>=30); } },
+    { id:'cs5', name:'Combo Master',     desc:'Best combo of 30+ days on 3 types', tier:'diamond', c: s => { const c=s.combos||{}; return Object.values(c).filter(x=>x.best>=30).length>=3; } }
   ];

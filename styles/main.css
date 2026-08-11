@@ -1943,3 +1943,14 @@ select.profile-input option { background: var(--bg-accent); color: var(--text); 
   .tb-right { gap: 10px; }
 }
 
+/* ── Combo Streaks ── */
+.combo-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+.combo-card { background: var(--card-bg); border-radius: 12px; padding: 12px; text-align: center; }
+.combo-card.hot { border: 2px solid #ff6b6b; animation: fireGlow 1.5s infinite; }
+.combo-fire { font-size: 1.5em; }
+.combo-count { font-size: 2em; font-weight: 700; }
+.combo-type { font-size: 0.85em; text-transform: capitalize; }
+.combo-mult { font-size: 0.9em; color: var(--xp-color); }
+.combo-best { font-size: 0.75em; opacity: 0.6; }
+@keyframes fireGlow { 0%, 100% { box-shadow: 0 0 10px rgba(255,107,107,0.5); } 50% { box-shadow: 0 0 20px rgba(255,107,107,0.8); } }
+
