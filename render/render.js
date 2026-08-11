@@ -17,7 +17,7 @@
     const questScroll = questArea ? questArea.scrollTop : 0;
 
     const safe = (fn, name) => { try { fn(); } catch(e) { console.warn('Render ' + name + ' failed:', e.message); } };
-    safe(renderTopBar, 'TopBar'); safe(renderLv, 'Lv'); safe(renderStr, 'Str'); safe(renderToday, 'Today'); safe(renderQ, 'Q'); safe(renderAch, 'Ach'); safe(renderProg, 'Prog'); safe(renderShop, 'Shop'); safe(renderProfile, 'Profile'); safe(renderTimer, 'Timer'); safe(renderPrayerTimes, 'PrayerTimes'); safe(renderStats, 'Stats'); safe(() => window.renderGarden && window.renderGarden(), 'Garden'); safe(() => window.renderLantern && window.renderLantern(), 'Lantern'); safe(() => window.renderMuhasabahEntry && window.renderMuhasabahEntry(), 'MuhEntry'); safe(() => window.renderJourneys && window.renderJourneys(), 'Journeys'); safe(() => window.renderBoat && window.renderBoat(), 'Boat'); safe(() => window.renderKeys && window.renderKeys(), 'Keys'); safe(() => window.renderMosque && window.renderMosque(), 'Mosque'); safe(() => window.renderRamadan && window.renderRamadan(), 'Ramadan'); safe(() => window.renderLaylat && window.renderLaylat(), 'Laylat'); safe(() => window.renderHeartRefinement && window.renderHeartRefinement(), 'HeartRefinement'); safe(() => window.renderArmor && window.renderArmor(), 'Armor'); safe(() => window.renderSpiritualGrowthTab && window.renderSpiritualGrowthTab(), 'GrowthTab'); safe(() => window.autoTrackJourneyProgress && window.autoTrackJourneyProgress(), 'AutoTrackJourneys');
+    safe(renderTopBar, 'TopBar'); safe(renderLv, 'Lv'); safe(renderStr, 'Str'); safe(renderToday, 'Today'); safe(renderQ, 'Q'); safe(renderAch, 'Ach'); safe(renderProg, 'Prog'); safe(renderShop, 'Shop'); safe(renderProfile, 'Profile'); safe(renderTimer, 'Timer'); safe(renderPrayerTimes, 'PrayerTimes'); safe(renderStats, 'Stats'); safe(() => window.renderGarden && window.renderGarden(), 'Garden'); safe(() => window.renderLantern && window.renderLantern(), 'Lantern'); safe(() => window.renderMuhasabahEntry && window.renderMuhasabahEntry(), 'MuhEntry'); safe(() => window.renderJourneys && window.renderJourneys(), 'Journeys');     safe(() => window.renderBoat && window.renderBoat(), 'Boat'); safe(() => window.renderKeys && window.renderKeys(), 'Keys'); safe(() => window.renderMosque && window.renderMosque(), 'Mosque'); safe(() => window.renderAchievementShowcase && window.renderAchievementShowcase(), 'AchievementShowcase'); safe(() => window.renderRamadan && window.renderRamadan(), 'Ramadan'); safe(() => window.renderLaylat && window.renderLaylat(), 'Laylat'); safe(() => window.renderHeartRefinement && window.renderHeartRefinement(), 'HeartRefinement'); safe(() => window.renderArmor && window.renderArmor(), 'Armor'); safe(() => window.renderSpiritualGrowthTab && window.renderSpiritualGrowthTab(), 'GrowthTab'); safe(() => window.autoTrackJourneyProgress && window.autoTrackJourneyProgress(), 'AutoTrackJourneys');
 
     if (volArea) volArea.scrollTop = volScroll;
     if (deedArea) deedArea.scrollTop = deedScroll;
@@ -1395,6 +1395,9 @@ function renderAll() {
     h += `<div class="stat-card"><div class="stat-num">${S.cs}</div><div class="stat-label">Streak</div></div>`;
     h += `<div class="stat-card"><div class="stat-icon">${iqIcon('trophy')}</div><div class="stat-num">${achCnt}</div><div class="stat-label">Achievements</div></div>`;
     h += '</div>';
+
+    // Achievement Showcase
+    h += '<div class="profile-section"><h3>Achievement Showcase</h3><div id="achievementShowcase"></div></div>';
 
     // Settings
     h += '<div class="section-title">' + iqIcon('settings') + ' Settings</div>';

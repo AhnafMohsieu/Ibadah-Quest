@@ -1920,6 +1920,16 @@ select.profile-input option { background: var(--bg-accent); color: var(--text); 
 .seasonal-eid_adha { background: linear-gradient(135deg, #9333ea, #a855f7); }
 .seasonal-hajj { background: linear-gradient(135deg, #2563eb, #3b82f6); }
 
+.showcase-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 8px; margin: 12px 0; }
+.showcase-card { background: var(--card-bg); border: 2px solid; border-radius: 12px; padding: 12px; position: relative; }
+.showcase-rarity { font-size: 0.7em; color: white; padding: 2px 8px; border-radius: 8px; text-transform: uppercase; }
+.showcase-name { font-weight: 600; margin: 8px 0 4px; }
+.showcase-desc { font-size: 0.85em; opacity: 0.7; }
+.showcase-remove { position: absolute; top: 8px; right: 8px; background: none; border: none; cursor: pointer; opacity: 0.5; }
+.showcase-unlocked { margin-top: 16px; }
+.showcase-item { display: flex; justify-content: space-between; align-items: center; padding: 8px; border-left: 3px solid; margin: 4px 0; background: var(--card-bg); border-radius: 0 8px 8px 0; }
+.showcase-item.featured { opacity: 0.5; }
+
 @media (max-width: 600px) {
   .spiritual-card { flex-direction: column; text-align: center; }
   .spiritual-svg-wrap { width: 100px; height: 110px; }
