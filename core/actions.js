@@ -2374,6 +2374,8 @@ Object.keys(NEW_POOLS).forEach(k => {
     if (window.renderDailyContent) renderDailyContent();
     if (window.showWeeklySummary) showWeeklySummary();
     if (window.showDailySummary) showDailySummary();
+    if (window.checkConsistency) checkConsistency();
+    if (window.checkWeeklyConsistency) checkWeeklyConsistency();
     try {
       const activeBtn = document.querySelector('.t1-btn.active');
       const activeCat = activeBtn ? activeBtn.getAttribute('data-cat') : 'ibadah';
