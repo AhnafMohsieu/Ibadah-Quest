@@ -2394,6 +2394,10 @@ Object.keys(NEW_POOLS).forEach(k => {
     try { if (window.initFAB) initFAB(); } catch(e) { console.error('Step 3c initFAB failed:', e); }
     try { if (window.initPullRefresh) initPullRefresh(); } catch(e) { console.error('Step 3d initPullRefresh failed:', e); }
     try {
+      if (window.requestNotificationPermission) requestNotificationPermission();
+      if (S.notificationsEnabled && window.scheduleNotifications) scheduleNotifications();
+    } catch(e) { console.error('Step 3e notifications init failed:', e); }
+    try {
       document.addEventListener('click', (e) => {
         const sr = document.getElementById('globalSearchResults');
         if (sr && !e.target.closest('.global-search-wrap')) sr.classList.remove('show');
@@ -2420,6 +2424,7 @@ Object.keys(NEW_POOLS).forEach(k => {
       playQuranVerse, playSurah, stopSurah, setQuranReciter, playJuz, updateJuzButton,
 calPrevMonth, calNextMonth, calGoToday, selectAvatar, selectTitle, selectFrame,
 setTheme, toggleTheme,
+      toggleNotifications: typeof window.toggleNotifications === 'function' ? window.toggleNotifications : () => {},
       switchTab
     };
     window.checkA = checkA;

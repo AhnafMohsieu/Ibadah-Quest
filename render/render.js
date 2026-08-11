@@ -1407,6 +1407,10 @@ function renderAll() {
       </button>`).join('');
 h += '<div style="margin-bottom:10px;font-weight:700;color:var(--gold-dark);">' + iqIcon('palette') + ' Theme</div>';
 h += '<div class="theme-picker">' + themeChips + '</div>';
+h += '<div style="margin-bottom:10px;font-weight:700;color:var(--gold-dark);">' + iqIcon('bell') + ' Notifications</div>';
+h += '<div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">';
+h += '<button class="shop-card" onclick="App.toggleNotifications()" style="padding:10px 14px;border-radius:var(--radius-sm);font-weight:700;">' + (S.notificationsEnabled ? iqIcon('bell-off') + ' Disable' : iqIcon('bell') + ' Enable') + '</button>';
+h += '</div>';
     h += '<div style="display:flex;gap:8px;margin-bottom:10px;"><input class="profile-input" id="usernameInput" placeholder="Switch user" style="margin-bottom:0;"><button class="shop-card" onclick="App.switchUser()" style="padding:10px 14px;border-radius:var(--radius-sm);">' + iqIcon('refresh-cw') + '</button></div>';
     h += '<button class="shop-card" style="width:100%;justify-content:center;margin-bottom:10px;font-weight:700;font-size:1rem;color:var(--gold);letter-spacing:0.5px;" onclick="App.logout()">' + iqIcon('log-out') + ' Logout</button>';
     h += '</div>';
