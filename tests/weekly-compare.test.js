@@ -62,19 +62,20 @@ test('getWeekStats returns correct structure', () => {
 
 test('getWeekStats returns correct prayer count', () => {
   const stats = w.getWeekStats(0);
-  // Current week should have prayers from the log
-  assert.ok(stats.prayers > 0, 'should have prayers logged');
+  // Current week (Aug 10-12): Aug 10(5) + Aug 11(5) + Aug 12(5) = 15
+  assert.strictEqual(stats.prayers, 15, 'should have 15 prayers logged');
 });
 
 test('getWeekStats returns correct XP count', () => {
   const stats = w.getWeekStats(0);
-  assert.ok(stats.xp > 0, 'should have XP earned');
+  // Current week (Aug 10-12): 15 prayers × 10 + deed1×2×5 + deed2×1×5 + deed3×1×5 = 170
+  assert.strictEqual(stats.xp, 170, 'should have 170 XP earned');
 });
 
 test('getWeekStats returns correct quest count', () => {
   const stats = w.getWeekStats(0);
-  // Should include completed quests
-  assert.ok(stats.quests >= 0, 'quest count should be non-negative');
+  // Quest counting removed: S.dq/S.wq lack date fields
+  assert.strictEqual(stats.quests, 0, 'quest count should be 0');
 });
 
 test('getWeekStats handles previous week offset', () => {

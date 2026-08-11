@@ -23,7 +23,7 @@
       const dDeeds = log.d || {};
       
       // Count prayers
-      prayers += Object.values(p).filter(v => v).length;
+      prayers += Object.values(p).filter(v => v === true).length;
       
       // Calculate XP for this day
       let dayXP = 0;
@@ -38,10 +38,6 @@
       });
       xp += dayXP;
     });
-    
-    // Count quests completed during this week
-    if (S.dq) quests += S.dq.filter(q => q.done).length;
-    if (S.wq) quests += S.wq.filter(q => q.done).length;
     
     return { xp, prayers, quests, weekStart, weekEnd };
   }
