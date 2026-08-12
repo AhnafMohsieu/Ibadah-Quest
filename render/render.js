@@ -1444,6 +1444,17 @@ h += '</div>';
       const el = document.getElementById('statsArea');
       if (!el) return;
       el.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text2);">Loading analytics...</div>';
+      if (window._loadAnalytics) {
+        window._loadAnalytics().then(function() {
+          if (window.Dashboard && typeof Dashboard.renderInsights === 'function') {
+            renderStats();
+          } else {
+            el.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text2);">Analytics unavailable</div>';
+          }
+        }).catch(function() {
+          el.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text2);">Failed to load analytics</div>';
+        });
+      }
     }
   }
   function renderTimer() {
