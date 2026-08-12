@@ -1443,6 +1443,9 @@ h += '</div>';
     } else {
       const el = document.getElementById('statsArea');
       if (!el) return;
+      const statsPanel = document.getElementById('panel-stats');
+      const isActive = statsPanel ? statsPanel.classList.contains('active') : true;
+      if (!isActive) return;
       el.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text2);">Loading analytics...</div>';
       if (window._loadAnalytics) {
         window._loadAnalytics().then(function() {
