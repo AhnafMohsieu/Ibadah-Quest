@@ -5,7 +5,7 @@
 
   function init() {
     if (!('ontouchstart' in window)) return;
-    const content = document.getElementById('tabContent');
+    const content = document.getElementById('mainContent');
     const indicator = document.getElementById('pullRefreshIndicator');
     if (!content || !indicator) return;
 

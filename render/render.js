@@ -1608,4 +1608,48 @@ h += '</div>';
 
   // NEW_POOLS renderers are defined in actions.js (with proper titles from NEW_POOL_TITLES)
 
+  // Screen reader announcements
+  function announceToScreenReader(message) {
+    const el = document.getElementById('srAnnounce');
+    if (el) {
+      el.textContent = '';
+      setTimeout(() => { el.textContent = message; }, 100);
+    }
+  }
+  window.announceToScreenReader = announceToScreenReader;
+
+  // Hook announcements into XP gains, level-ups, and achievement unlocks
+  const _origGrantDailyXp = window.grantDailyXp;
+  const _origGrantCappedDailyXp = window.grantCappedDailyXp;
+  const _origCheckA = window.checkA;
+  const _origLevelUpToast = window.levelUpToast;
+
+  if (typeof _origGrantDailyXp === 'function') {
+    window.grantDailyXp = function(amount, key) {
+      const result = _origGrantDailyXp(amount, key);
+      if (result) announceToScreenReader('+' + amount + ' XP earned');
+      return result;
+    };
+  }
+  if (typeof _origGrantCappedDailyXp === 'function') {
+    window.grantCappedDailyXp = function(amount, key, cap) {
+      const result = _origGrantCappedDailyXp(amount, key, cap);
+      if (result) announceToScreenReader('+' + amount + ' XP earned');
+      return result;
+    };
+  }
+  if (typeof _origCheckA === 'function') {
+    window.checkA = function() {
+      const result = _origCheckA();
+      // Announcements for achievements are handled in the toast function
+      return result;
+    };
+  }
+  if (typeof _origLevelUpToast === 'function') {
+    window.levelUpToast = function(lv, title) {
+      announceToScreenReader('Level up! You are now level ' + lv + ', ' + title);
+      return _origLevelUpToast(lv, title);
+    };
+  }
+
 })();

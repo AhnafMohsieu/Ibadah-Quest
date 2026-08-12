@@ -133,7 +133,7 @@ test('theme: removed themes fall back to light via isValidTheme guard', () => {
 });
 
 test('app shell has tab content container', () => {
-  assert.ok(html.includes('id="tabContent"'), 'tab content container missing');
+  assert.ok(html.includes('id="mainContent"'), 'tab content container missing');
 });
 
 test('tab controller: switchTab dispatches renderTab', () => {

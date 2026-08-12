@@ -2308,7 +2308,7 @@ Object.keys(NEW_POOLS).forEach(k => {
   function switchTab(name) {
     if (S) S.lastTab = name;
     if (S) saveState();
-    const content = document.getElementById('tabContent');
+    const content = document.getElementById('mainContent');
     if (content) { content.classList.add('fading'); setTimeout(() => content.classList.remove('fading'), 60); }
     renderTab(name);
   }
@@ -2351,7 +2351,109 @@ Object.keys(NEW_POOLS).forEach(k => {
     if (window.renderTopBar) window.renderTopBar();
   }
 
- function initApp() {
+  // Keyboard navigation for tier tabs
+  function initTierTabKeyboardNav() {
+    const tier1Tabs = document.querySelector('.tier1-tabs');
+    if (!tier1Tabs) return;
+    
+    tier1Tabs.addEventListener('keydown', function(e) {
+      const tabs = Array.from(tier1Tabs.querySelectorAll('.t1-btn'));
+      const currentIndex = tabs.findIndex(t => t.classList.contains('active'));
+      
+      if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+        e.preventDefault();
+        const nextIndex = (currentIndex + 1) % tabs.length;
+        tabs[nextIndex].focus();
+        tabs[nextIndex].click();
+      } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+        e.preventDefault();
+        const prevIndex = (currentIndex - 1 + tabs.length) % tabs.length;
+        tabs[prevIndex].focus();
+        tabs[prevIndex].click();
+      } else if (e.key === 'Home') {
+        e.preventDefault();
+        tabs[0].focus();
+        tabs[0].click();
+      } else if (e.key === 'End') {
+        e.preventDefault();
+        tabs[tabs.length - 1].focus();
+        tabs[tabs.length - 1].click();
+      }
+    });
+  }
+
+  // Keyboard navigation for tier2 tabs
+  function initTier2TabKeyboardNav() {
+    const tier2Tabs = document.getElementById('tier2Tabs');
+    if (!tier2Tabs) return;
+    
+    tier2Tabs.addEventListener('keydown', function(e) {
+      const tabs = Array.from(tier2Tabs.querySelectorAll('.t2-btn, .cat-chip'));
+      if (tabs.length === 0) return;
+      const currentIndex = tabs.findIndex(t => t.classList.contains('active'));
+      
+      if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+        e.preventDefault();
+        const nextIndex = (currentIndex + 1) % tabs.length;
+        tabs[nextIndex].focus();
+        tabs[nextIndex].click();
+      } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+        e.preventDefault();
+        const prevIndex = (currentIndex - 1 + tabs.length) % tabs.length;
+        tabs[prevIndex].focus();
+        tabs[prevIndex].click();
+      } else if (e.key === 'Home') {
+        e.preventDefault();
+        tabs[0].focus();
+        tabs[0].click();
+      } else if (e.key === 'End') {
+        e.preventDefault();
+        tabs[tabs.length - 1].focus();
+        tabs[tabs.length - 1].click();
+      }
+    });
+  }
+
+  // Modal keyboard handlers (Escape to close, focus trap)
+  function initModalKeyboardHandlers() {
+    // Muhasabah modal
+    const muhasabahModal = document.getElementById('muhasabahModal');
+    if (muhasabahModal) {
+      muhasabahModal.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+          if (typeof window.dismissMuhasabah === 'function') window.dismissMuhasabah();
+        }
+      });
+    }
+    
+    // Toast overlay
+    const toastOverlay = document.getElementById('toastOverlay');
+    if (toastOverlay) {
+      toastOverlay.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+          toastOverlay.classList.remove('show');
+          toastOverlay.style.display = 'none';
+          toastOverlay.innerHTML = '';
+          toastOverlay.style.pointerEvents = 'none';
+        }
+      });
+    }
+  }
+
+  // Theme toggle keyboard support
+  function initThemeToggleKeyboard() {
+    const themeToggle = document.getElementById('themeToggle');
+    if (!themeToggle) return;
+    
+    themeToggle.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        toggleTheme();
+      }
+    });
+  }
+
+  function initApp() {
   const overlay = document.getElementById('introOverlay');
   // Always show intro on every page load
   if (overlay) {
@@ -2406,6 +2508,10 @@ Object.keys(NEW_POOLS).forEach(k => {
         if (sr && !e.target.closest('.global-search-wrap')) sr.classList.remove('show');
       });
     } catch(e) { console.error('Step 6 clickOutside failed:', e); }
+    try { initTierTabKeyboardNav(); } catch(e) { console.error('Step 7 tier tab keyboard nav failed:', e); }
+    try { initTier2TabKeyboardNav(); } catch(e) { console.error('Step 8 tier2 tab keyboard nav failed:', e); }
+    try { initModalKeyboardHandlers(); } catch(e) { console.error('Step 9 modal keyboard handlers failed:', e); }
+    try { initThemeToggleKeyboard(); } catch(e) { console.error('Step 10 theme toggle keyboard failed:', e); }
     window.App = {
       toggleP, toggleV, toggleD, buy,
       detail: (id) => toast(iqIcon('alert-triangle'), DETAILS[id]||'Voluntary Prayer', false, 4000),

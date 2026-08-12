@@ -23,6 +23,9 @@
 </head>
 <body class="loading">
 
+<!-- Skip to content link for keyboard users -->
+<a href="#mainContent" class="skip-link">Skip to content</a>
+
 <!-- INTRO OVERLAY -->
 <div id="introOverlay" class="intro-overlay">
     <canvas id="introCanvas"></canvas>
@@ -30,12 +33,14 @@
       <div class="intro-glow"></div>
       <div id="introBismillah" class="intro-bismillah">بِسْمِ ٱللَّهِ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ</div>
       <div id="introSub" class="intro-subtitle">In the Name of Allah, the Most Merciful</div>
-      <button id="introBtn" class="intro-btn" onclick="window.startJourney()">Begin Your Quest</button>
+      <button id="introBtn" class="intro-btn" onclick="window.startJourney()" aria-label="Begin Your Quest">Begin Your Quest</button>
     </div>
 </div>
 
 <div class="toast-overlay" id="toastOverlay" style="display:none;"></div>
 <div id="muhasabahModal"></div>
+<!-- Screen reader announcement region -->
+<div id="srAnnounce" class="sr-only" aria-live="polite" aria-atomic="true"></div>
 <div class="app">
   <header class="top-bar" id="topBar">
     <div class="geometric-bg"></div>
@@ -46,7 +51,7 @@
 <div class="tb-right">
   <span class="tb-stat" id="tbXP">0 XP</span>
   <span class="tb-stat" id="tbStreak">0</span>
-  <div class="theme-toggle" id="themeToggle" onclick="App.toggleTheme()">
+  <div class="theme-toggle" id="themeToggle" onclick="App.toggleTheme()" role="button" tabindex="0" aria-label="Toggle theme">
         <div class="theme-toggle-track">
           <div class="theme-toggle-thumb" id="themeThumb"></div>
         </div>
@@ -84,7 +89,7 @@
 
   <div id="seasonalBanner"></div>
 
-  <main class="tab-content" id="tabContent">
+  <main class="tab-content" id="mainContent">
   <div id="pullRefreshIndicator" class="pull-refresh-indicator">
     <div class="pull-refresh-spinner"></div>
     <div class="pull-refresh-text">Pull to refresh</div>
@@ -98,12 +103,12 @@
   </div>
 
   <div class="tier-nav-container">
-    <div class="tier1-tabs">
-      <button class="t1-btn active" data-cat="ibadah" onclick="App.switchCategory('ibadah', this)"><span class="iq-inline"></span> Daily</button>
-      <button class="t1-btn" data-cat="knowledge" onclick="App.switchCategory('knowledge', this)"><span class="iq-inline"></span> Knowledge</button>
-      <button class="t1-btn" data-cat="names_main" onclick="App.switchCategory('names_main', this)"><span class="iq-inline"></span> Names</button>
-      <button class="t1-btn" data-cat="library" onclick="App.switchCategory('library', this)"><span class="iq-inline"></span> Library</button>
-      <button class="t1-btn" data-cat="profile_main" onclick="App.switchCategory('profile_main', this)"><span class="iq-inline"></span> Profile</button>
+    <div class="tier1-tabs" role="tablist" aria-label="Main navigation">
+      <button class="t1-btn active" data-cat="ibadah" onclick="App.switchCategory('ibadah', this)" role="tab" aria-selected="true" aria-controls="panel-today"><span class="iq-inline"></span> Daily</button>
+      <button class="t1-btn" data-cat="knowledge" onclick="App.switchCategory('knowledge', this)" role="tab" aria-selected="false" aria-controls="panel-sunnahs"><span class="iq-inline"></span> Knowledge</button>
+      <button class="t1-btn" data-cat="names_main" onclick="App.switchCategory('names_main', this)" role="tab" aria-selected="false" aria-controls="panel-allah_names"><span class="iq-inline"></span> Names</button>
+      <button class="t1-btn" data-cat="library" onclick="App.switchCategory('library', this)" role="tab" aria-selected="false" aria-controls="panel-quests"><span class="iq-inline"></span> Library</button>
+      <button class="t1-btn" data-cat="profile_main" onclick="App.switchCategory('profile_main', this)" role="tab" aria-selected="false" aria-controls="panel-profile"><span class="iq-inline"></span> Profile</button>
     </div>
     <div class="tier2-scroll"><div class="tier2-tabs" id="tier2Tabs"></div></div>
     <div class="tier3-scroll" id="tier3Wrap" style="display:none;"><div class="tier3-tabs" id="tier3Tabs"></div></div>
