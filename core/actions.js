@@ -2422,6 +2422,18 @@ Object.keys(NEW_POOLS).forEach(k => {
     });
   }
 
+  function populateTier1Icons() {
+    const buttons = document.querySelectorAll('.t1-btn');
+    buttons.forEach(function(btn) {
+      const span = btn.querySelector('.iq-inline');
+      if (!span || span.childElementCount > 0) return;
+      const cat = btn.getAttribute('data-cat');
+      if (!cat) return;
+      const icon = iqIcon(cat);
+      if (icon) span.innerHTML = icon;
+    });
+  }
+
   // Modal keyboard handlers (Escape to close, focus trap)
   var _modalTriggerEl = null;
   function trapFocus(modal, e) {
@@ -2545,6 +2557,7 @@ Object.keys(NEW_POOLS).forEach(k => {
     } catch(e) { console.error('Step 6 clickOutside failed:', e); }
     try { initTierTabKeyboardNav(); } catch(e) { console.error('Step 7 tier tab keyboard nav failed:', e); }
     try { initTier2TabKeyboardNav(); } catch(e) { console.error('Step 8 tier2 tab keyboard nav failed:', e); }
+    try { populateTier1Icons(); } catch(e) { console.error('Step 8b tier1 icons failed:', e); }
     try { initModalKeyboardHandlers(); } catch(e) { console.error('Step 9 modal keyboard handlers failed:', e); }
     try { initThemeToggleKeyboard(); } catch(e) { console.error('Step 10 theme toggle keyboard failed:', e); }
     window.App = {
