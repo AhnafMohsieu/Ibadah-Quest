@@ -36,7 +36,7 @@ function resolveCurrentUser() {
       avatar:'', joinDate:null,
       healthLog:{}, financeLog:{}, moodLog:{},
       growthSettings:{visible:['garden','lantern','keys','mosque','boat','heart','armor','ramadan','laylat']},
-      theme:'light', lastTab:'home', introSeen:false,
+      theme:'light', lastTab:'home', lastCat:null, lastSub:null, introSeen:false,
       notificationsEnabled:false
     };
   }

@@ -2196,6 +2196,7 @@ Object.keys(NEW_POOLS).forEach(k => {
       btn.classList.add('active');
       btn.setAttribute('aria-selected', 'true');
     }
+    if (S) { S.lastCat = catId; saveState(); }
     const group = TAB_GROUPS[catId] || [];
     const container = document.getElementById('tier2Tabs');
     const tier3Wrap = document.getElementById('tier3Wrap');
@@ -2210,7 +2211,7 @@ Object.keys(NEW_POOLS).forEach(k => {
       renderCategoryTabs(firstCat);
     } else {
       container.classList.remove('cat-chips');
-      container.innerHTML = group.map((p, i) => `<button class="t2-btn ${i===0?'active':''}" onclick="App.activateTab('${p.id}', this)"><span>${iqIcon(p.icon || p.id)}</span> ${p.label}</button>`).join('');
+      container.innerHTML = group.map((p, i) => `<button data-tab="${p.id}" class="t2-btn ${i===0?'active':''}" onclick="App.activateTab('${p.id}', this)"><span>${iqIcon(p.icon || p.id)}</span> ${p.label}</button>`).join('');
       if (tier3Wrap) tier3Wrap.style.display = 'none';
       if (group.length > 0) activateTab(group[0].id, container.firstElementChild);
     }
@@ -2226,7 +2227,7 @@ Object.keys(NEW_POOLS).forEach(k => {
   function renderCategoryTabs(cat) {
     const grid = document.getElementById('tier3Tabs');
     if (!grid) return;
-    grid.innerHTML = cat.tabs.map((p, i) => `<button class="t2-btn ${i===0?'active':''}" onclick="App.activateTab('${p.id}', this)"><span>${iqIcon(p.icon || p.id)}</span> ${p.label}</button>`).join('');
+    grid.innerHTML = cat.tabs.map((p, i) => `<button data-tab="${p.id}" class="t2-btn ${i===0?'active':''}" onclick="App.activateTab('${p.id}', this)"><span>${iqIcon(p.icon || p.id)}</span> ${p.label}</button>`).join('');
     if (cat.tabs.length > 0) activateTab(cat.tabs[0].id, grid.firstElementChild);
   }
   function getSectionPanels(sectionName) {
@@ -2242,6 +2243,7 @@ Object.keys(NEW_POOLS).forEach(k => {
   function activateTab(tabId, btn) {
     document.querySelectorAll('.t2-btn').forEach(b => b.classList.remove('active'));
     if (btn) btn.classList.add('active');
+    if (S) { S.lastSub = tabId; saveState(); }
     let sectionName = null;
     for (const [sec, panels] of Object.entries({home:['panel-today','panel-timer','panel-journeys','panel-morning','panel-evening','panel-dhikr','panel-duas','panel-quran','panel-wudu','panel-jumuah','panel-salah','panel-fasting','panel-healthlog','panel-finance','panel-mood'],quests:['panel-quests'],stats:['panel-stats'],growth:['panel-progress','panel-growth'],profile:['panel-profile','panel-trophies','panel-rewards','panel-allah_names','panel-prophet_names','panel-scholars_names']})) {
       if (panels.includes('panel-' + tabId)) { sectionName = sec; break; }
@@ -2528,9 +2530,16 @@ Object.keys(NEW_POOLS).forEach(k => {
     if (window.checkConsistency) checkConsistency();
     if (window.checkWeeklyConsistency) checkWeeklyConsistency();
     try {
-      const activeBtn = document.querySelector('.t1-btn.active');
+      const savedCat = S ? S.lastCat : null;
+      const savedSub = S ? S.lastSub : null;
+      let activeBtn = savedCat ? document.querySelector('.t1-btn[data-cat="' + savedCat + '"]') : null;
+      if (!activeBtn) activeBtn = document.querySelector('.t1-btn.active');
       const activeCat = activeBtn ? activeBtn.getAttribute('data-cat') : 'ibadah';
       switchCategory(activeCat, activeBtn);
+      if (savedSub) {
+        const subBtn = document.querySelector('[data-tab="' + savedSub + '"]');
+        if (subBtn) subBtn.click();
+      }
     } catch(e) { console.warn('Initial nav render failed:', e); }
   }
 

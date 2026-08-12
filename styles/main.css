@@ -413,7 +413,7 @@ body.loading { opacity: 0; }
   border-bottom: none;
   padding-bottom: 0;
 }
-@media (max-width: 600px) { .tier1-tabs { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 600px) { .tier1-tabs { display: flex; flex-wrap: nowrap; overflow-x: auto; overflow-y: hidden; scrollbar-width: none; -webkit-overflow-scrolling: touch; gap: 8px; padding-bottom: 4px; } .tier1-tabs .t1-btn { flex: 0 0 auto; min-width: 92px; } }
 .t1-btn {
   width: 100%;
   min-width: 0;
@@ -432,6 +432,7 @@ body.loading { opacity: 0; }
   justify-content: center;
   letter-spacing: 0.3px;
   gap: 6px;
+  white-space: nowrap;
 }
 .t1-btn:hover {
   color: var(--text);
@@ -442,31 +443,29 @@ body.loading { opacity: 0; }
   color: var(--gold-dark);
   background: var(--card-bg);
   border-color: rgba(var(--accent-rgb),0.4);
-  border-bottom-color: var(--card-bg);
+  border-bottom: 3px solid var(--gold);
   font-weight: 800;
   box-shadow: 0 -2px 6px var(--shadow-dark);
   position: relative;
   z-index: 1;
 }
 
-.tier2-scroll { width: 100%; overflow-x: auto; scrollbar-width: none; }
-.tier2-tabs { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin-top: 12px; padding: 2px; }
-@media (max-width: 600px) { .tier2-tabs { grid-template-columns: repeat(3, 1fr); } }
-.t2-btn { background: var(--card-bg); border: none; color: var(--text2); padding: 10px 4px; border-radius: 10px; font-size: 0.72rem; font-weight: 700; cursor: pointer; transition: all 0.3s; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; letter-spacing: 0.2px; width: 100%; box-shadow: 3px 3px 6px var(--shadow-dark), -3px -3px 6px var(--shadow-light); }
+.tier2-scroll { width: 100%; overflow-x: auto; overflow-y: hidden; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+.tier2-tabs { display: flex; flex-wrap: nowrap; align-items: stretch; gap: 8px; margin-top: 12px; padding: 4px 2px; }
+.t2-btn { flex: 0 0 auto; min-width: 84px; background: var(--card-bg); border: none; color: var(--text2); padding: 10px 12px; border-radius: 12px; font-size: 0.72rem; font-weight: 700; cursor: pointer; transition: all 0.3s; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; letter-spacing: 0.2px; white-space: nowrap; box-shadow: 3px 3px 6px var(--shadow-dark), -3px -3px 6px var(--shadow-light); }
 .t2-btn span { font-size: 1.4rem; opacity: 0.9; }
 .t2-btn:hover { color: var(--text); }
 .t2-btn.active { color: var(--gold-dark); border: none; box-shadow: inset 2px 2px 5px var(--shadow-dark), inset -2px -2px 5px var(--shadow-light); }
 
-.tier2-tabs.cat-chips { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-top: 16px; border-bottom: 1px solid var(--border); padding-bottom: 16px; }
-.cat-chip { background: var(--card-bg); border: none; color: var(--text2); padding: 8px 16px; border-radius: 30px; font-size: 0.82rem; font-weight: 700; cursor: pointer; transition: all 0.3s; display: inline-flex; align-items: center; gap: 6px; letter-spacing: 0.2px; box-shadow: 3px 3px 6px var(--shadow-dark), -3px -3px 6px var(--shadow-light); }
+.tier2-tabs.cat-chips { display: flex; flex-wrap: nowrap; align-items: center; overflow-x: auto; overflow-y: hidden; justify-content: flex-start; gap: 8px; margin-top: 16px; border-bottom: 1px solid var(--border); padding: 4px 2px 12px; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+.cat-chip { flex: 0 0 auto; background: var(--card-bg); border: none; color: var(--text2); padding: 8px 16px; border-radius: 30px; font-size: 0.82rem; font-weight: 700; cursor: pointer; transition: all 0.3s; display: inline-flex; align-items: center; gap: 6px; letter-spacing: 0.2px; white-space: nowrap; box-shadow: 3px 3px 6px var(--shadow-dark), -3px -3px 6px var(--shadow-light); }
 .cat-chip span { font-size: 1rem; }
 .cat-chip:hover { color: var(--text); }
 .cat-chip.active { color: var(--gold-dark); border: none; box-shadow: inset 2px 2px 5px var(--shadow-dark), inset -2px -2px 5px var(--shadow-light); }
 
-.tier3-scroll { width: 100%; overflow-x: auto; scrollbar-width: none; }
-.tier3-tabs { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin-top: 10px; padding: 2px; }
-@media (max-width: 600px) { .tier3-tabs { grid-template-columns: repeat(3, 1fr); } }
-.t3-btn { background: var(--card-bg); border: none; color: var(--text2); padding: 10px 4px; border-radius: 10px; font-size: 0.72rem; font-weight: 700; cursor: pointer; transition: all 0.3s; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; letter-spacing: 0.2px; width: 100%; box-shadow: 3px 3px 6px var(--shadow-dark), -3px -3px 6px var(--shadow-light); }
+.tier3-scroll { width: 100%; overflow-x: auto; overflow-y: hidden; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+.tier3-tabs { display: flex; flex-wrap: nowrap; align-items: stretch; gap: 8px; margin-top: 10px; padding: 4px 2px; }
+.t3-btn { flex: 0 0 auto; min-width: 84px; background: var(--card-bg); border: none; color: var(--text2); padding: 10px 12px; border-radius: 12px; font-size: 0.72rem; font-weight: 700; cursor: pointer; transition: all 0.3s; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; letter-spacing: 0.2px; white-space: nowrap; box-shadow: 3px 3px 6px var(--shadow-dark), -3px -3px 6px var(--shadow-light); }
 .t3-btn span { font-size: 1.4rem; opacity: 0.9; }
 .t3-btn:hover { color: var(--text); }
 .t3-btn.active { color: var(--gold-dark); border: none; box-shadow: inset 2px 2px 5px var(--shadow-dark), inset -2px -2px 5px var(--shadow-light); }
@@ -1940,9 +1939,8 @@ select.profile-input option { background: var(--bg-accent); color: var(--text); 
 .compare-change.negative { color: #f44336; }
 
 @media (max-width: 600px) {
-  .spiritual-card { flex-direction: column; text-align: center; }
+.spiritual-card { flex-direction: column; text-align: center; }
   .spiritual-svg-wrap { width: 100px; height: 110px; }
-  .tier1-tabs { grid-template-columns: repeat(3, 1fr); }
   .card-grid .card-item { width: calc((100% - 24px) / 3); flex-basis: calc((100% - 24px) / 3); }
   .prayer-times-grid .pt-card { width: calc((100% - 24px) / 3); flex-basis: calc((100% - 24px) / 3); }
 }
