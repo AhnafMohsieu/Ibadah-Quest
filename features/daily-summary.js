@@ -27,7 +27,7 @@
         <div class="ds-stat"><div class="ds-val">${streak}</div><div class="ds-label">Streak</div></div>
       </div>
       <div class="ds-quote">"${quote}"</div>
-      <button class="ds-close" onclick="document.getElementById('toastOverlay').classList.remove('show');document.getElementById('toastOverlay').style.display='none';">Alhamdulillah</button>
+      <button class="ds-close" onclick="closeToastOverlay()">Alhamdulillah</button>
     </div>`;
 
     ov.style.display = 'flex';

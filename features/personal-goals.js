@@ -93,7 +93,7 @@
         <label>Deadline</label>
         <input type="date" id="goalDeadline" value="${new Date(Date.now()+30*86400000).toISOString().split('T')[0]}" />
       </div>
-      <button class="dr-close" onclick="addPersonalGoal(document.getElementById('goalType').value, parseInt(document.getElementById('goalTarget').value)||10, document.getElementById('goalDeadline').value);document.getElementById('toastOverlay').classList.remove('show');document.getElementById('toastOverlay').style.display='none';">Add</button>
+      <button class="dr-close" onclick="addPersonalGoal(document.getElementById('goalType').value, parseInt(document.getElementById('goalTarget').value)||10, document.getElementById('goalDeadline').value);closeToastOverlay();">Add</button>
     </div>`;
     ov.style.display = 'flex';
     ov.classList.add('show');

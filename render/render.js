@@ -1621,7 +1621,6 @@ h += '</div>';
   // Hook announcements into XP gains, level-ups, and achievement unlocks
   const _origGrantDailyXp = window.grantDailyXp;
   const _origGrantCappedDailyXp = window.grantCappedDailyXp;
-  const _origCheckA = window.checkA;
   const _origLevelUpToast = window.levelUpToast;
 
   if (typeof _origGrantDailyXp === 'function') {
@@ -1635,13 +1634,6 @@ h += '</div>';
     window.grantCappedDailyXp = function(amount, key, cap) {
       const result = _origGrantCappedDailyXp(amount, key, cap);
       if (result) announceToScreenReader('+' + amount + ' XP earned');
-      return result;
-    };
-  }
-  if (typeof _origCheckA === 'function') {
-    window.checkA = function() {
-      const result = _origCheckA();
-      // Announcements for achievements are handled in the toast function
       return result;
     };
   }

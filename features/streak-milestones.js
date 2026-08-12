@@ -57,7 +57,7 @@
         <div class="ws-stat"><div class="ws-val">${xpEarned}</div><div class="ws-label">XP Earned</div></div>
       </div>
       <div class="ws-quote">"${quote}"</div>
-      <button class="ws-close" onclick="document.getElementById('toastOverlay').classList.remove('show');document.getElementById('toastOverlay').style.display='none';">Jazak Allahu Khairan</button>
+      <button class="ws-close" onclick="closeToastOverlay()">Jazak Allahu Khairan</button>
     </div>`;
     ov.style.display = 'flex';
     ov.classList.add('show');

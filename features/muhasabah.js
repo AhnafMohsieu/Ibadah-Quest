@@ -60,6 +60,7 @@
   }
   function openMuhasabah() {
     try {
+      _muhasabahTriggerEl = document.activeElement;
       const wrap = document.getElementById('muhasabahModal');
       if (!wrap) return;
       const metrics = muhasabahMetrics(S.log, ws(), today());
@@ -73,12 +74,18 @@
       wrap.innerHTML = muhasabahHTML(metrics, info, S.cs || 0);
     } catch (e) { console.warn('Open Muhasabah failed:', e.message); }
   }
+  var _muhasabahTriggerEl = null;
   function dismissMuhasabah() {
     try {
+      if (typeof window.grantDailyXp === 'function') window.grantDailyXp(50, 'muhasabah|' + ws());
       S.muhWeek = ws();
       saveState();
       const wrap = document.getElementById('muhasabahModal');
       if (wrap) wrap.innerHTML = '';
+      if (_muhasabahTriggerEl && _muhasabahTriggerEl.focus) {
+        _muhasabahTriggerEl.focus();
+        _muhasabahTriggerEl = null;
+      }
     } catch (e) { console.warn('Dismiss Muhasabah failed:', e.message); }
   }
   function maybeShowMuhasabah() {

@@ -86,6 +86,7 @@
     } 
   }
   function levelUpToast(lv, title) {
+    _modalTriggerEl = document.activeElement;
     const ov=document.getElementById('toastOverlay');
     ov.innerHTML=`<div class="levelup-box"><div class="levelup-glow"></div><div class="levelup-icon">${iqIcon('zap')}</div><div class="levelup-label">LEVEL UP</div><div class="levelup-num">${lv}</div><div class="levelup-title">${title}</div></div>`;
     ov.style.display='flex'; ov.classList.add('show'); ov.style.pointerEvents='auto';
@@ -96,6 +97,7 @@
     ov.onclick=()=>{ ov.classList.remove('show'); setTimeout(()=>{ ov.style.display='none'; ov.innerHTML=''; },400); ov.style.pointerEvents='none'; if(ov._t) clearTimeout(ov._t); };
   }
   function toast(icon, msg, conf=false, ms=2600) {
+    _modalTriggerEl = document.activeElement;
     const ov=document.getElementById('toastOverlay'); ov.innerHTML=`<div class="toast-box"><span style="font-size:2.5rem">${icon}</span><h3>${msg}</h3></div>`;
     ov.style.display='flex'; ov.classList.add('show'); playSound(conf ? 'chime' : 'pop');
     ov.style.pointerEvents='auto';
@@ -2186,8 +2188,14 @@ Object.keys(NEW_POOLS).forEach(k => {
   let _activeCategoryId = null;
 
   function switchCategory(catId, btn) {
-    document.querySelectorAll('.t1-btn').forEach(el => el.classList.remove('active'));
-    if (btn) btn.classList.add('active');
+    document.querySelectorAll('.t1-btn').forEach(el => {
+      el.classList.remove('active');
+      el.setAttribute('aria-selected', 'false');
+    });
+    if (btn) {
+      btn.classList.add('active');
+      btn.setAttribute('aria-selected', 'true');
+    }
     const group = TAB_GROUPS[catId] || [];
     const container = document.getElementById('tier2Tabs');
     const tier3Wrap = document.getElementById('tier3Wrap');
@@ -2415,28 +2423,55 @@ Object.keys(NEW_POOLS).forEach(k => {
   }
 
   // Modal keyboard handlers (Escape to close, focus trap)
+  var _modalTriggerEl = null;
+  function trapFocus(modal, e) {
+    var focusable = modal.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+    if (!focusable.length) return;
+    var first = focusable[0];
+    var last = focusable[focusable.length - 1];
+    if (e.shiftKey && document.activeElement === first) {
+      e.preventDefault();
+      last.focus();
+    } else if (!e.shiftKey && document.activeElement === last) {
+      e.preventDefault();
+      first.focus();
+    }
+  }
   function initModalKeyboardHandlers() {
     // Muhasabah modal
-    const muhasabahModal = document.getElementById('muhasabahModal');
+    var muhasabahModal = document.getElementById('muhasabahModal');
     if (muhasabahModal) {
       muhasabahModal.addEventListener('keydown', function(e) {
         if (e.key === 'Escape') {
           if (typeof window.dismissMuhasabah === 'function') window.dismissMuhasabah();
+        } else if (e.key === 'Tab') {
+          trapFocus(muhasabahModal, e);
         }
       });
     }
     
     // Toast overlay
-    const toastOverlay = document.getElementById('toastOverlay');
+    var toastOverlay = document.getElementById('toastOverlay');
     if (toastOverlay) {
       toastOverlay.addEventListener('keydown', function(e) {
         if (e.key === 'Escape') {
-          toastOverlay.classList.remove('show');
-          toastOverlay.style.display = 'none';
-          toastOverlay.innerHTML = '';
-          toastOverlay.style.pointerEvents = 'none';
+          closeToastOverlay();
+        } else if (e.key === 'Tab') {
+          trapFocus(toastOverlay, e);
         }
       });
+    }
+  }
+  function closeToastOverlay() {
+    var toastOverlay = document.getElementById('toastOverlay');
+    if (!toastOverlay) return;
+    toastOverlay.classList.remove('show');
+    toastOverlay.style.display = 'none';
+    toastOverlay.innerHTML = '';
+    toastOverlay.style.pointerEvents = 'none';
+    if (_modalTriggerEl && _modalTriggerEl.focus) {
+      _modalTriggerEl.focus();
+      _modalTriggerEl = null;
     }
   }
 
@@ -2541,6 +2576,7 @@ setTheme, toggleTheme,
     window.levelUpToast = levelUpToast;
     window.grantDailyXp = grantDailyXp;
     window.grantCappedDailyXp = grantCappedDailyXp;
+    window.closeToastOverlay = closeToastOverlay;
     App.switchTab = switchTab;
     console.log('Ibadah Quest initialized. window.App is set.');
   }
