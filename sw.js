@@ -1,9 +1,9 @@
 // ═══════════════════════════════════════════════════════
-// SERVICE WORKER — Network-first for HTML, stale-while-revalidate for assets
+// SERVICE WORKER — Cache-first for static assets, network-first for HTML
 // Cache versioning: bump CACHE_NAME to force a full purge.
 // ═══════════════════════════════════════════════════════
 (function() {
-  const CACHE_NAME = 'iq-cache-v14';
+  const CACHE_NAME = 'iq-cache-v15';
 
   function cacheKey(urlString) {
     const url = new URL(urlString, self.location.href);
@@ -46,12 +46,14 @@
     const isNavigation = req.mode === 'navigate';
     const isJS = req.url.endsWith('.js') || req.url.includes('.js?');
     const isCSS = req.url.endsWith('.css') || req.url.includes('.css?');
+    const isImage = /\.(png|jpg|jpeg|gif|svg|webp|ico)($|\?)/.test(req.url);
+    const isData = req.url.includes('/data/') || req.url.includes('cdn.jsdelivr.net');
 
     event.respondWith((async () => {
       const key = cacheKey(req.url);
       const cache = await caches.open(CACHE_NAME);
 
-      // HTML / navigation: NETWORK FIRST
+      // HTML / navigation: NETWORK FIRST (ensures latest content)
       if (isNavigation) {
         try {
           const fresh = await fetch(req);
@@ -66,8 +68,17 @@
         }
       }
 
-      // JS/CSS: NETWORK FIRST (prevents stale code)
-      if (isJS || isCSS) {
+      // Static assets: CACHE FIRST (JS, CSS, images, data)
+      if (isJS || isCSS || isImage || isData) {
+        const cached = await cache.match(key);
+        if (cached) {
+          // Return cached, update in background
+          fetch(req).then(fresh => {
+            if (fresh && fresh.ok) cache.put(key, fresh.clone()).catch(() => {});
+          }).catch(() => {});
+          return cached;
+        }
+        // Not cached yet - fetch and cache
         try {
           const fresh = await fetch(req);
           if (fresh && fresh.ok) {
@@ -75,8 +86,6 @@
           }
           return fresh;
         } catch (e) {
-          const cached = await cache.match(key);
-          if (cached) return cached;
           return Response.error();
         }
       }
