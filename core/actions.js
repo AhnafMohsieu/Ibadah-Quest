@@ -1,21 +1,6 @@
 ﻿(function() {
   // ═══════════════════════════════════════════════════════
   function buy(id) { const r=SHOP.find(x=>x.id===id); if(!r||S.ur[id]) return; if(S.xp<r.cost){ toast(iqIcon('x'),'Not enough XP'); return; } const oldLv=S.lv; S.xp-=r.cost; S.ur[id]=true; const seasonalMult = typeof getSeasonalMultiplier === 'function' ? getSeasonalMultiplier() : 1; if(r.t==='boost') S.ab={exp:today(new Date(Date.now()+86400000))}; if(r.t==='freeze') S.sfu=true; if(r.t==='xp') S.xp+=(r.v||0)*seasonalMult; if(r.t==='mystery') { const pool = [ { type:'xp', weight:60, min:100, max:2000 }, { type:'freeze', weight:10 }, { type:'reroll', weight:15 }, { type:'boost', weight:15 } ]; const total = pool.reduce((s,p) => s + p.weight, 0); let roll = Math.random() * total; let chosen = pool[0]; for (const p of pool) { roll -= p.weight; if (roll <= 0) { chosen = p; break; } } if (chosen.type === 'xp') { const amt = chosen.min + Math.floor(Math.random() * (chosen.max - chosen.min + 1)); S.xp += amt*seasonalMult; toast(iqIcon('gift'), `Mystery Box: +${amt*seasonalMult} XP!`); } else if (chosen.type === 'freeze') { S.sfu = true; toast(iqIcon('gift'), 'Mystery Box: Streak Freeze!'); } else if (chosen.type === 'reroll') { genDQ(); toast(iqIcon('refresh-cw'), 'Mystery Box: Quest Reroll!'); } else if (chosen.type === 'boost') { S.ab = { exp: today(new Date(Date.now() + 86400000)) }; toast(iqIcon('gift'), 'Mystery Box: 2x XP Boost!'); } } else if(r.t==='reroll'){ genDQ(); toast(iqIcon('refresh-cw'),'Quests rerolled!'); } else toast(iqIcon('gift'),'Purchased!'); if(r.id.startsWith('r')&&!r.t){if(!S.ownedTitles)S.ownedTitles=[];if(!S.ownedTitles.includes(r.id))S.ownedTitles.push(r.id);} if(r.id==='r10'||r.id==='r19'||r.id==='r20'){if(!S.ownedFrames)S.ownedFrames=[];if(!S.ownedFrames.includes(r.id))S.ownedFrames.push(r.id);} S.lv=lvFrom(S.xp); checkLevelUp(oldLv); saveState(); renderAll(); checkA(); setTimeout(() => { const cards = document.querySelectorAll('.reward-card'); cards.forEach(c => { if (c.onclick?.toString().includes(id)) c.classList.add('just-bought'); }); }, 50); }
-  function checkA() { 
-    const nu=[]; 
-    for(const a of ACHS) if(!S.ua[a.id]&&a.c(S)){ S.ua[a.id]=today(); nu.push(a); } 
-    if(nu.length){ 
-        saveState(); 
-        let delay = 0;
-        nu.forEach(a => {
-            const tierIcon = a.tier === 'jannah' ? iqIcon('kaaba') : a.tier === 'mythic' ? iqIcon('crown') : a.tier === 'legendary' ? iqIcon('award') : (a.tier === 'diamond' || a.tier === 'platinum') ? iqIcon('gem') : a.tier === 'gold' ? iqIcon('trophy') : a.tier === 'silver' ? iqIcon('medal') : iqIcon('star');
-            setTimeout(() => { toast(iqIcon(a.icon || a.id || a.name) || tierIcon, 'Achievement Unlocked:<br>' + a.name, true, 4000); }, delay);
-            delay += 4500;
-        });
-        renderAll();
-    } 
-  }
-
   function toast(icon, msg, conf=false, ms=2600) {
     window._modalTriggerEl = document.activeElement;
     const ov=document.getElementById('toastOverlay'); ov.innerHTML=`<div class="toast-box"><span style="font-size:2.5rem">${icon}</span><h3>${msg}</h3></div>`;
