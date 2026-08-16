@@ -12,7 +12,7 @@
   }
 
 
-  function switchUser() { const inp=document.getElementById('usernameInput'); if(!inp?.value.trim()) return; saveState(); currentUser=inp.value.trim(); localStorage.setItem(USER_KEY,currentUser); S=loadState(); initApp(); }
+  function switchUser() { const inp=document.getElementById('usernameInput'); if(!inp?.value.trim()) return; saveState(); currentUser=inp.value.trim(); localStorage.setItem(USER_KEY,currentUser); S=window.loadState(); initApp(); }
   function logout() { switchUser(); }
   function resetAll() {
     if (!confirm(iqEmoji('alert-triangle') + ' Reset all data? This cannot be undone.')) return;
@@ -231,7 +231,7 @@ Object.keys(NEW_POOLS).forEach(k => {
     themeToggle.addEventListener('keydown', function(e) {
       if (e.key === 'Enter' || e.key === ' ') {
         e.preventDefault();
-        toggleTheme();
+        window.toggleTheme();
       }
     });
   }
@@ -245,16 +245,16 @@ Object.keys(NEW_POOLS).forEach(k => {
         const btn = document.querySelector('.t1-btn[data-cat="' + cat + '"]');
         if (btn) {
           window._hashNavigating = true;
-          switchCategory(cat, btn);
-          const { catObj, tabBtn } = _findTabBtn(cat, tab);
+          window.switchCategory(cat, btn);
+          const { catObj, tabBtn } = window._findTabBtn(cat, tab);
           if (catObj) {
             const chipBtn = document.querySelector('.cat-chip[onclick*="' + catObj.id + '"]');
-            if (chipBtn) selectCategory(catObj.id, chipBtn);
+            if (chipBtn) window.selectCategory(catObj.id, chipBtn);
           }
           if (tabBtn) {
-            activateTab(tab, tabBtn);
+            window.activateTab(tab, tabBtn);
           } else {
-            activateTab(tab, null);
+            window.activateTab(tab, null);
           }
           window._hashNavigating = false;
           return true;
@@ -269,16 +269,16 @@ Object.keys(NEW_POOLS).forEach(k => {
       if (e.state && e.state.cat && e.state.tab) {
         window._hashNavigating = true;
         const btn = document.querySelector('.t1-btn[data-cat="' + e.state.cat + '"]');
-        if (btn) switchCategory(e.state.cat, btn);
-        const { catObj, tabBtn } = _findTabBtn(e.state.cat, e.state.tab);
+        if (btn) window.switchCategory(e.state.cat, btn);
+        const { catObj, tabBtn } = window._findTabBtn(e.state.cat, e.state.tab);
         if (catObj) {
           const chipBtn = document.querySelector('.cat-chip[onclick*="' + catObj.id + '"]');
-          if (chipBtn) selectCategory(catObj.id, chipBtn);
+          if (chipBtn) window.selectCategory(catObj.id, chipBtn);
         }
         if (tabBtn) {
-          activateTab(e.state.tab, tabBtn);
+          window.activateTab(e.state.tab, tabBtn);
         } else {
-          activateTab(e.state.tab, null);
+          window.activateTab(e.state.tab, null);
         }
         window._hashNavigating = false;
       }
@@ -292,7 +292,7 @@ Object.keys(NEW_POOLS).forEach(k => {
     overlay.classList.add('visible');
     overlay.style.opacity = '1';
   }
-  applyTheme();
+  window.applyTheme();
   // Profile as main tab
   TAB_GROUPS.profile_main = [
     { id: 'profile', icon: 'user', label: 'Profile' },
@@ -307,12 +307,12 @@ Object.keys(NEW_POOLS).forEach(k => {
     if (S.lad !== t) { S.lad=t; if(S.ab&&S.ab.exp<t) S.ab=null; window.recalc(); saveState(); }
     if (S.log && Object.keys(S.log).length > 400) compactLogs();
     genDQ(); genWQ(); genMQ(); genYQ(); genLQ(); window.refreshContent(); window.recalc(); checkQ(); S.lv=lvFrom(S.xp); saveState(); initCalView(); renderAll();
-    if (window.renderDailyContent) renderDailyContent();
-    if (window.showWeeklySummary) showWeeklySummary();
-    if (window.showDailySummary) showDailySummary();
-    if (window.showDailyRitual) showDailyRitual();
-    if (window.checkConsistency) checkConsistency();
-    if (window.checkWeeklyConsistency) checkWeeklyConsistency();
+    if (window.renderDailyContent) window.renderDailyContent();
+    if (window.showWeeklySummary) window.showWeeklySummary();
+    if (window.showDailySummary) window.showDailySummary();
+    if (window.showDailyRitual) window.showDailyRitual();
+    if (window.checkConsistency) window.checkConsistency();
+    if (window.checkWeeklyConsistency) window.checkWeeklyConsistency();
     try {
       if (!_parseHashAndNavigate()) {
         const savedCat = S ? S.lastCat : null;
@@ -331,18 +331,18 @@ Object.keys(NEW_POOLS).forEach(k => {
 
   function init() {
     try { resolveCurrentUser(); } catch(e) { console.error('Step 0 resolve user failed:', e); }
-    try { S = loadState(); } catch(e) { console.error('Step 1 loadState failed:', e); }
-    if (typeof isOnboardingComplete === 'function' && !isOnboardingComplete()) {
-      startOnboarding();
+    try { S = window.loadState(); } catch(e) { console.error('Step 1 loadState failed:', e); }
+    if (typeof window.isOnboardingComplete === 'function' && !window.isOnboardingComplete()) {
+      window.startOnboarding();
     }
-    try { applyTheme(); } catch(e) { console.error('Step 2 applyTheme failed:', e); }
+    try { window.applyTheme(); } catch(e) { console.error('Step 2 applyTheme failed:', e); }
     try { initApp(); } catch(e) { console.error('Step 3 initApp failed:', e); }
-    try { if (window.initSearch) initSearch(); } catch(e) { console.error('Step 3b initSearch failed:', e); }
-    try { if (window.initFAB) initFAB(); } catch(e) { console.error('Step 3c initFAB failed:', e); }
-    try { if (window.initPullRefresh) initPullRefresh(); } catch(e) { console.error('Step 3d initPullRefresh failed:', e); }
+    try { if (window.initSearch) window.initSearch(); } catch(e) { console.error('Step 3b initSearch failed:', e); }
+    try { if (window.initFAB) window.initFAB(); } catch(e) { console.error('Step 3c initFAB failed:', e); }
+    try { if (window.initPullRefresh) window.initPullRefresh(); } catch(e) { console.error('Step 3d initPullRefresh failed:', e); }
     try {
-      if (window.requestNotificationPermission) requestNotificationPermission();
-      if (S.notificationsEnabled && window.scheduleNotifications) scheduleNotifications();
+      if (window.requestNotificationPermission) window.requestNotificationPermission();
+      if (S.notificationsEnabled && window.scheduleNotifications) window.scheduleNotifications();
     } catch(e) { console.error('Step 3e notifications init failed:', e); }
     try {
       document.addEventListener('click', (e) => {
@@ -365,25 +365,25 @@ Object.keys(NEW_POOLS).forEach(k => {
       });
     } catch(e) { console.error('Step 11 card keyboard nav failed:', e); }
     window.App = {
-      toggleP: window.toggleP, toggleV: window.toggleV, toggleD: window.toggleD, buy,
+      toggleP: window.toggleP, toggleV: window.toggleV, toggleD: window.toggleD, buy: window.buy,
       detail: (id) => toast(iqIcon('alert-triangle'), DETAILS[id]||'Voluntary Prayer', false, 4000),
       tip: (id) => toast(iqIcon('zap'), TIPS[id]||'A beautiful deed!', false, 4000),
-      toggleQuest, addGratitude, toggleFasting, setCharityGoals,
-      grantDailyXp, grantCappedDailyXp,
+      toggleQuest: window.toggleQuest, addGratitude: window.addGratitude, toggleFasting: window.toggleFasting, setCharityGoals: window.setCharityGoals,
+      grantDailyXp: window.grantDailyXp, grantCappedDailyXp: window.grantCappedDailyXp,
       logWater: typeof window.logWater === 'function' ? window.logWater : () => {},
       logSleep: typeof window.logSleep === 'function' ? window.logSleep : () => {},
       logExercise: typeof window.logExercise === 'function' ? window.logExercise : () => {},
       toggleMeal: typeof window.toggleMeal === 'function' ? window.toggleMeal : () => {},
-      addMemorization, toggleMorning, toggleEvening, switchUser, logout, resetAll,
+      addMemorization: window.addMemorization, toggleMorning: window.toggleMorning, toggleEvening: window.toggleEvening, switchUser, logout, resetAll,
       openMuhasabah: typeof window.openMuhasabah === 'function' ? window.openMuhasabah : () => {},
       dismissMuhasabah: typeof window.dismissMuhasabah === 'function' ? window.dismissMuhasabah : () => {},
       joinJourney: typeof window.joinJourney === 'function' ? window.joinJourney : () => {},
       manualRefresh: window.manualRefreshContent, ensureQuranLoaded: window.ensureQuranLoaded, ensureHadithLoaded: window.ensureHadithLoaded,
       claimBonus,
-      setQuranView, quranSearchFilter, openQuranSurah, quranBack, openQuranJuz,
-      openHadithCollection, openHadithBook, hadithBack,
-      playQuranVerse, playSurah, stopSurah, setQuranReciter, playJuz, updateJuzButton,
-      calPrevMonth, calNextMonth, calGoToday, selectAvatar, selectTitle, selectFrame,
+      setQuranView: window.setQuranView, quranSearchFilter: window.quranSearchFilter, openQuranSurah: window.openQuranSurah, quranBack: window.quranBack, openQuranJuz: window.openQuranJuz,
+      openHadithCollection: window.openHadithCollection, openHadithBook: window.openHadithBook, hadithBack: window.hadithBack,
+      playQuranVerse: window.playQuranVerse, playSurah: window.playSurah, stopSurah: window.stopSurah, setQuranReciter: window.setQuranReciter, playJuz: window.playJuz, updateJuzButton: window.updateJuzButton,
+      calPrevMonth: window.calPrevMonth, calNextMonth: window.calNextMonth, calGoToday: window.calGoToday, selectAvatar, selectTitle, selectFrame,
       setTheme, toggleTheme,
       toggleNotifications: typeof window.toggleNotifications === 'function' ? window.toggleNotifications : () => {}
     };
