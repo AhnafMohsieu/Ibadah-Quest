@@ -23,10 +23,10 @@
     else document.documentElement.setAttribute('data-theme', theme);
     if (S) { S.theme = theme; saveState(); }
     updateMeta();
-    updateTopBar();
+    if (window.updateTopBar) window.updateTopBar();
     const activePanel = document.querySelector('.tab-panel.active');
     const tab = activePanel ? activePanel.id.replace('panel-', '') : 'home';
-    renderTab(tab);
+    if (window.renderTab) window.renderTab(tab);
   }
   function toggleTheme() {
     const themes = ['light', 'serene', 'royal', 'sand', 'midnight', 'cream', 'emara'];

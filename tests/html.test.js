@@ -13,6 +13,7 @@ const renderDynamic = fs.readFileSync(path.join(root, 'render', 'dynamic.js'), '
 const renderStatic = fs.readFileSync(path.join(root, 'render', 'static.js'), 'utf8');
 const renderPrayers = fs.readFileSync(path.join(root, 'render', 'prayers.js'), 'utf8');
 const renderCalendar = fs.readFileSync(path.join(root, 'render', 'calendar.js'), 'utf8');
+const renderTabs = fs.readFileSync(path.join(root, 'render', 'tabs.js'), 'utf8');
 const renderAll = render + renderDynamic + renderStatic + renderPrayers + renderCalendar;
 const spiritual = fs.readFileSync(path.join(root, 'features', 'spiritual-growth', 'data.js'), 'utf8');
 const spiritualGrowth = fs.readFileSync(path.join(root, 'features', 'spiritual-growth', 'index.js'), 'utf8');
@@ -144,10 +145,10 @@ test('app shell has tab content container', () => {
 });
 
 test('tab controller: switchTab dispatches renderTab', () => {
-  assert.ok(actions.includes('switchTab'), 'switchTab function missing');
-  assert.ok(actions.includes("App.switchTab"), 'App.switchTab export missing');
-  assert.ok(actions.includes('renderTab'), 'renderTab dispatch missing');
-  assert.ok(renderAll.includes('renderTop'), 'renderTop function missing');
+  assert.ok(actions.includes('switchTab') || renderTabs.includes('function switchTab'), 'switchTab function missing');
+  assert.ok(actions.includes("App.switchTab") || renderTabs.includes('window.switchTab = switchTab'), 'App.switchTab export missing');
+  assert.ok(actions.includes('renderTab') || renderTabs.includes('function renderTab'), 'renderTab dispatch missing');
+  assert.ok(renderAll.includes('renderTop') || renderTabs.includes('renderTopBar'), 'renderTop function missing');
 });
 
 test('intro overlay uses CSS vars for theme accent', () => {
@@ -203,10 +204,10 @@ test('growth renderers are wired into renderDynamic and tab render paths', () =>
     assert.ok(renderAll.includes(`window.${name}`), `renderDynamic must reference ${name}`);
   }
   for (const key of ["keys:'renderKeys'","mosque:'renderMosque'","ramadan:'renderRamadan'","laylat:'renderLaylat'"]) {
-    assert.ok(actions.includes(key), `_lazyRender must map ${key}`);
+    assert.ok(actions.includes(key) || renderTabs.includes(key), `_lazyRender must map ${key}`);
   }
-  assert.ok(actions.indexOf('renderHeartRefinement') > -1, 'renderTab must call renderHeartRefinement');
-  assert.ok(actions.indexOf('renderArmor') > -1, 'renderTab must call renderArmor');
+  assert.ok(actions.indexOf('renderHeartRefinement') > -1 || renderTabs.indexOf('renderHeartRefinement') > -1, 'renderTab must call renderHeartRefinement');
+  assert.ok(actions.indexOf('renderArmor') > -1 || renderTabs.indexOf('renderArmor') > -1, 'renderTab must call renderArmor');
 });
 
 test('spiritual and garden cards get aligned grid sizing', () => {
@@ -280,25 +281,27 @@ test('prayer timer tab renders its countdown and times grid', () => {
   assert.ok(html.includes('id="prayerTimesArea"'), 'prayer times grid area present');
   assert.ok(renderAll.includes("prayertimes: renderPrayerTimes"),
     'renderPrayerTimes must be wired into PANEL_RENDERERS');
-  assert.ok(actions.includes("timer:'renderPrayerTimes'"),
+  assert.ok(actions.includes("timer:'renderPrayerTimes'") || renderTabs.includes("timer:'renderPrayerTimes'"),
     '_lazyRender must map timer tab to renderPrayerTimes');
   assert.ok(css.includes('.prayer-times-grid') && css.includes('.pt-card'),
     'prayer times grid styles present');
 });
 
 test('top-bar: orphan renderTip call is removed from renderTab', () => {
-  assert.ok(!actions.includes('window.renderTip()'), 'orphan renderTip() must not be called');
-  assert.ok(!actions.includes('renderTip();'), 'renderTip reference must be gone');
-  assert.ok(actions.includes('window.renderTopBar();'), 'renderTopBar still called from renderTab');
+  assert.ok(!actions.includes('window.renderTip()') && !renderTabs.includes('window.renderTip()'), 'orphan renderTip() must not be called');
+  assert.ok(!actions.includes('renderTip();') && !renderTabs.includes('renderTip();'), 'renderTip reference must be gone');
+  assert.ok(actions.includes('window.renderTopBar();') || renderTabs.includes('window.renderTopBar();'), 'renderTopBar still called from renderTab');
 });
 
 test('top-bar: updateTopBar delegates to renderTopBar (single writer)', () => {
   const fnIdx = actions.indexOf('function updateTopBar');
-  assert.ok(fnIdx > -1, 'updateTopBar must exist');
-  const body = actions.slice(fnIdx, fnIdx + 220);
-  assert.ok(body.includes('window.renderTopBar'), 'updateTopBar must call renderTopBar');
-  assert.ok(!body.includes("getElementById('tbXP')"), 'updateTopBar must not write pills directly');
-  assert.ok(!body.includes("getElementById('tbStreak')"), 'updateTopBar must not write streak directly');
+  const fnIdxTabs = renderTabs.indexOf('function updateTopBar');
+  const idx = fnIdx > -1 ? fnIdx : fnIdxTabs;
+  const src = idx > -1 ? (fnIdx > -1 ? actions : renderTabs) : '';
+  assert.ok(idx > -1, 'updateTopBar must exist');
+  assert.ok(src.includes('window.renderTopBar'), 'updateTopBar must call renderTopBar');
+  assert.ok(!src.includes("getElementById('tbXP')"), 'updateTopBar must not write pills directly');
+  assert.ok(!src.includes("getElementById('tbStreak')"), 'updateTopBar must not write streak directly');
 });
 
 test('hero header markup is restored with all ids', () => {
@@ -324,7 +327,7 @@ test('hero renderers are real and wired into renderDynamic', () => {
 test('hero+topbar refresh on theme change and home tab', () => {
   assert.ok(actions.includes('renderDynamic();'), 'setTheme must call renderDynamic');
   const homeCall = actions.slice(actions.indexOf("name === 'home'"));
-  assert.ok(homeCall.includes('window.renderTopBar();'), 'renderTab(home) calls renderTopBar');
+  assert.ok(homeCall.includes('window.renderTopBar();') || renderTabs.includes('window.renderTopBar();'), 'renderTab(home) calls renderTopBar');
 });
 
 test('theme: Emara jade-and-gold palette block exists', () => {

@@ -142,281 +142,32 @@ Object.keys(NEW_POOLS).forEach(k => {
   }
 });
 
-  let _activeCategoryId = null;
-
-  function _pushTabState(catId, tabId) {
-    if (tabId) {
-      const hash = '#/' + catId + '/' + tabId;
-      history.pushState({ cat: catId, tab: tabId }, '', hash);
-    }
-  }
-
-  function _findTabBtn(catId, tabId) {
-    const group = TAB_GROUPS[catId] || [];
-    const isCategorized = group.length > 0 && Array.isArray(group[0].tabs);
-    if (isCategorized) {
-      for (const cat of group) {
-        const found = cat.tabs.find(t => t.id === tabId);
-        if (found) {
-          return { catObj: cat, tabBtn: document.querySelector('[data-tab="' + tabId + '"]') };
+  function _parseHashAndNavigate() {
+    const hash = location.hash;
+    if (hash && hash.startsWith('#/')) {
+      const parts = hash.slice(2).split('/');
+      if (parts.length === 2) {
+        const [cat, tab] = parts;
+        const btn = document.querySelector('.t1-btn[data-cat="' + cat + '"]');
+        if (btn) {
+          window._hashNavigating = true;
+          window.switchCategory(cat, btn);
+          const { catObj, tabBtn } = window._findTabBtn(cat, tab);
+          if (catObj) {
+            const chipBtn = document.querySelector('.cat-chip[onclick*="' + catObj.id + '"]');
+            if (chipBtn) window.selectCategory(catObj.id, chipBtn);
+          }
+          if (tabBtn) {
+            window.activateTab(tab, tabBtn);
+          } else {
+            window.activateTab(tab, null);
+          }
+          window._hashNavigating = false;
+          return true;
         }
       }
     }
-    return { catObj: null, tabBtn: document.querySelector('[data-tab="' + tabId + '"]') };
-  }
-
-  function switchCategory(catId, btn) {
-    document.querySelectorAll('.t1-btn').forEach(el => {
-      el.classList.remove('active');
-      el.setAttribute('aria-selected', 'false');
-    });
-    if (btn) {
-      btn.classList.add('active');
-      btn.setAttribute('aria-selected', 'true');
-    }
-    if (S) { S.lastCat = catId; saveState(); }
-    const group = TAB_GROUPS[catId] || [];
-    const container = document.getElementById('tier2Tabs');
-    const tier3Wrap = document.getElementById('tier3Wrap');
-    const isCategorized = group.length > 0 && Array.isArray(group[0].tabs);
-    if (isCategorized) {
-      _activeCategoryId = null;
-      container.classList.add('cat-chips');
-      container.innerHTML = group.map((c, i) => `<button class="cat-chip ${i===0?'active':''}" onclick="App.selectCategory('${c.id}', this)"><span>${iqIcon(c.icon || c.id)}</span> ${c.label}</button>`).join('');
-      if (tier3Wrap) tier3Wrap.style.display = '';
-      const firstCat = group[0];
-      _activeCategoryId = firstCat.id;
-      renderCategoryTabs(firstCat);
-    } else {
-      container.classList.remove('cat-chips');
-      container.innerHTML = group.map((p, i) => `<button data-tab="${p.id}" class="t2-btn ${i===0?'active':''}" onclick="App.activateTab('${p.id}', this)"><span>${iqIcon(p.icon || p.id)}</span> ${p.label}</button>`).join('');
-      if (tier3Wrap) tier3Wrap.style.display = 'none';
-      if (group.length > 0) activateTab(group[0].id, container.firstElementChild);
-    }
-  }
-  function selectCategory(catId, btn) {
-    document.querySelectorAll('.cat-chip').forEach(el => el.classList.remove('active'));
-    if (btn) btn.classList.add('active');
-    _activeCategoryId = catId;
-    const group = Object.values(TAB_GROUPS).find(g => Array.isArray(g[0]?.tabs) && g.some(c => c.id === catId)) || [];
-    const cat = group.find(c => c.id === catId);
-    if (cat) renderCategoryTabs(cat);
-  }
-  function renderCategoryTabs(cat) {
-    const grid = document.getElementById('tier3Tabs');
-    if (!grid) return;
-    grid.innerHTML = cat.tabs.map((p, i) => `<button data-tab="${p.id}" class="t2-btn ${i===0?'active':''}" onclick="App.activateTab('${p.id}', this)"><span>${iqIcon(p.icon || p.id)}</span> ${p.label}</button>`).join('');
-    if (cat.tabs.length > 0) activateTab(cat.tabs[0].id, grid.firstElementChild);
-  }
-  function getSectionPanels(sectionName) {
-    const sections = {
-      home: ['panel-today','panel-timer','panel-journeys','panel-morning','panel-evening','panel-dhikr','panel-duas','panel-quran','panel-wudu','panel-jumuah','panel-salah','panel-fasting','panel-healthlog','panel-finance','panel-mood'],
-      quests: ['panel-quests'],
-      stats: ['panel-stats'],
-      growth: ['panel-progress', 'panel-growth'],
-      profile: ['panel-profile','panel-trophies','panel-rewards','panel-allah_names','panel-prophet_names','panel-scholars_names']
-    };
-    return sections[sectionName] || null;
-  }
-  function activateTab(tabId, btn) {
-    document.querySelectorAll('.t2-btn').forEach(b => b.classList.remove('active'));
-    if (btn) btn.classList.add('active');
-    if (S) { S.lastSub = tabId; saveState(); }
-    if (!window._hashNavigating) {
-      const catEl = document.querySelector('.t1-btn.active');
-      const catId = catEl ? catEl.getAttribute('data-cat') : null;
-      if (catId) _pushTabState(catId, tabId);
-    }
-    let sectionName = null;
-    for (const [sec, panels] of Object.entries({home:['panel-today','panel-timer','panel-journeys','panel-morning','panel-evening','panel-dhikr','panel-duas','panel-quran','panel-wudu','panel-jumuah','panel-salah','panel-fasting','panel-healthlog','panel-finance','panel-mood'],quests:['panel-quests'],stats:['panel-stats'],growth:['panel-progress','panel-growth'],profile:['panel-profile','panel-trophies','panel-rewards','panel-allah_names','panel-prophet_names','panel-scholars_names']})) {
-      if (panels.includes('panel-' + tabId)) { sectionName = sec; break; }
-    }
-    const sectionPanels = sectionName ? getSectionPanels(sectionName) : null;
-    if (sectionPanels) {
-      sectionPanels.forEach(id => {
-        const el = document.getElementById(id);
-        if (el) el.classList.remove('active');
-      });
-    } else {
-      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-    }
-    const panel = document.getElementById('panel-' + tabId);
-    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-    if (panel) panel.classList.add('active');
-    const _lazyRender = {
-      quran:'renderQuran', hadith:'renderHadith', sunnahs:'renderSunnahs', dhikr:'renderDhikr',
-      stories:'renderStories', names:'renderNames', inspirations:'renderInspirations', gratitude:'renderGratitude',
-      allah_names:'renderNames', scholars_names:'renderScholars',
-      fasting:'renderFasting', charity:'renderCharity', memorization:'renderMemorization',
-      morning:'renderMorning', evening:'renderEvening', sins:'renderSins', punishments:'renderPunishments',
-      repentance:'renderRepentance', sahaba:'renderSahaba', seerah:'renderSeerah', tafsir:'renderTafsir',
-      manners:'renderManners', family:'renderFamily', health:'renderHealth', finance:'renderFinance',
-      ummah:'renderUmmah', hajj:'renderHajj', akhirah:'renderAkhirah', prophets:'renderProphets',
-      women:'renderWomen', heart:'renderHeart', marriage:'renderMarriage', science:'renderScience',
-      wudu:'renderWudu', scholars:'renderScholars', patience:'renderPatience', work:'renderWork',
-      community:'renderCommunity', environment:'renderEnvironment', travel:'renderTravel',
-      fiqh:'renderFiqh', arabic:'renderArabic', tawakkul:'renderTawakkul', ikhlas:'renderIkhlas',
-      zuhd:'renderZuhd', dawah:'renderDawah', battles:'renderBattles', jannah:'renderJannah',
-      jahannam:'renderJahannam', grave:'renderGrave', signs:'renderSigns', dreams:'renderDreams',
-      parenting:'renderParenting', food:'renderFood', tibb:'renderTibb', youth:'renderYouth',
-      tech:'renderTech', neighbors:'renderNeighbors', salah:'renderSalah', finance:'renderFinanceTab',
-      aqeedah:'renderAqeedah', knowledge:'renderKnowledge', civilisation:'renderCivilisation', jumuah:'renderJumuah',
-      purification:'renderPurification', salahrules:'renderSalahrules', zakatrules:'renderZakatrules',
-      sawmrules:'renderSawmrules', hajjrules:'renderHajjrules', trade:'renderTrade',
-      inheritance:'renderInheritance', oaths:'renderOaths', sufism:'renderSufism', tazkiyah:'renderTazkiyah',
-      fear:'renderFear', hope:'renderHope', loveofallah:'renderLoveofallah', contentment:'renderContentment',
-      reflection:'renderReflection', brotherhood:'renderBrotherhood', sisterhood:'renderSisterhood',
-      orphans2:'renderOrphans2', elderly:'renderElderly', disabled:'renderDisabled',
-      antiracism:'renderAntiracism', poverty:'renderPoverty', volunteering:'renderVolunteering',
-      technology:'renderTechnology', socialmedia:'renderSocialmedia', ethics:'renderEthics',
-      bioethics:'renderBioethics', modfinance:'renderModfinance', politics:'renderPolitics',
-      green:'renderGreen', mentalhealth:'renderMentalhealth', education:'renderEducation',
-      umayyads:'renderUmayyads', abbasids:'renderAbbasids', andalus:'renderAndalus',
-      ottomans:'renderOttomans', mamluks:'renderMamluks', seljuks:'renderSeljuks',
-      fatimids:'renderFatimids', ayyubids:'renderAyyubids', modernhist:'renderModernhist',
-      ancientprophets:'renderAncientprophets', mecca:'renderMecca', medina:'renderMedina',
-      jerusalem:'renderJerusalem', damascus:'renderDamascus', baghdad:'renderBaghdad',
-      cairo:'renderCairo', cordoba:'renderCordoba', istanbul:'renderIstanbul',
-      bukhara:'renderBukhara', samarkand:'renderSamarkand', calligraphy:'renderCalligraphy',
-      architecture:'renderArchitecture', geometry:'renderGeometry', poetryart:'renderPoetryart',
-      literature:'renderLiterature', nasheeds:'renderNasheeds', illumination:'renderIllumination',
-      textiles:'renderTextiles', ceramics:'renderCeramics', woodwork:'renderWoodwork',
-      arabicgrammar:'renderArabicgrammar', vocab:'renderVocab', rhetoric:'renderRhetoric',
-      morphology:'renderMorphology', pronunciation:'renderPronunciation', poetry:'renderPoetry',
-      proverbs:'renderProverbs', etymology:'renderEtymology', dialects:'renderDialects',
-      scripts:'renderScripts', epistemology:'renderEpistemology', ontology:'renderOntology',
-      logic:'renderLogic', kalam:'renderKalam', reason:'renderReason', freewill:'renderFreewill',
-      problemofevil:'renderProblemofevil', prophethood:'renderProphethood', existence:'renderExistence',
-      keys:'renderKeys', mosque:'renderMosque', ramadan:'renderRamadan', laylat:'renderLaylat',
-      timer:'renderPrayerTimes', stats:'renderStats'
-    };
-    if (_lazyRender[tabId] && window[_lazyRender[tabId]]) {
-      try { window[_lazyRender[tabId]](); } catch(e) { console.warn('Lazy render ' + tabId + ' failed:', e.message); }
-    }
-    if (tabId === 'hadith' && typeof HADITH_COLLECTIONS_DATA === 'undefined') {
-      ensureHadithLoaded().then(() => { if (window.renderHadith) window.renderHadith(); }).catch(() => {});
-    }
-  }
-
-  function switchTab(name) {
-    if (S) S.lastTab = name;
-    if (S) saveState();
-    const content = document.getElementById('mainContent');
-    if (content) { content.classList.add('fading'); setTimeout(() => content.classList.remove('fading'), 60); }
-    renderTab(name);
-  }
-
-  function renderTab(name) {
-    const panelMap = {
-      home: 'panel-today',
-      quests: 'panel-quests',
-      stats: 'panel-stats',
-      growth: 'panel-growth',
-      profile: 'panel-profile'
-    };
-    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-    const panelId = panelMap[name] || 'panel-today';
-    const panel = document.getElementById(panelId);
-    if (panel) panel.classList.add('active');
-    if (name === 'home') {
-      window.renderPrayers(); window.renderVol(); window.renderDeeds(); window.renderBonus();
-      window.renderTopBar();
-    } else if (name === 'quests') {
-      window.renderQ(); window.renderAch();
-    } else if (name === 'stats') {
-      if (window.Dashboard && typeof window.Dashboard.renderInsights === 'function') window.Dashboard.renderInsights();
-    } else if (name === 'growth') {
-      if (window.renderProg) window.renderProg();
-      if (window.renderGarden) window.renderGarden();
-      if (window.renderSpiritualGrowthTab) window.renderSpiritualGrowthTab();
-      if (window.renderBoat) window.renderBoat();
-      if (window.renderArmor) window.renderArmor();
-      if (window.renderHeartRefinement) window.renderHeartRefinement();
-    } else if (name === 'profile') {
-      window.renderProfile();
-      if (window.renderKeys) window.renderKeys();
-      if (window.renderMosque) window.renderMosque();
-    }
-    updateTopBar();
-  }
-
-  function updateTopBar() {
-    if (window.renderTopBar) window.renderTopBar();
-  }
-
-  // Keyboard navigation for tier tabs
-  function initTierTabKeyboardNav() {
-    const tier1Tabs = document.querySelector('.tier1-tabs');
-    if (!tier1Tabs) return;
-    
-    tier1Tabs.addEventListener('keydown', function(e) {
-      const tabs = Array.from(tier1Tabs.querySelectorAll('.t1-btn'));
-      const currentIndex = tabs.findIndex(t => t.classList.contains('active'));
-      
-      if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
-        e.preventDefault();
-        const nextIndex = (currentIndex + 1) % tabs.length;
-        tabs[nextIndex].focus();
-        tabs[nextIndex].click();
-      } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
-        e.preventDefault();
-        const prevIndex = (currentIndex - 1 + tabs.length) % tabs.length;
-        tabs[prevIndex].focus();
-        tabs[prevIndex].click();
-      } else if (e.key === 'Home') {
-        e.preventDefault();
-        tabs[0].focus();
-        tabs[0].click();
-      } else if (e.key === 'End') {
-        e.preventDefault();
-        tabs[tabs.length - 1].focus();
-        tabs[tabs.length - 1].click();
-      }
-    });
-  }
-
-  // Keyboard navigation for tier2 tabs
-  function initTier2TabKeyboardNav() {
-    const tier2Tabs = document.getElementById('tier2Tabs');
-    if (!tier2Tabs) return;
-    
-    tier2Tabs.addEventListener('keydown', function(e) {
-      const tabs = Array.from(tier2Tabs.querySelectorAll('.t2-btn, .cat-chip'));
-      if (tabs.length === 0) return;
-      const currentIndex = tabs.findIndex(t => t.classList.contains('active'));
-      
-      if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
-        e.preventDefault();
-        const nextIndex = (currentIndex + 1) % tabs.length;
-        tabs[nextIndex].focus();
-        tabs[nextIndex].click();
-      } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
-        e.preventDefault();
-        const prevIndex = (currentIndex - 1 + tabs.length) % tabs.length;
-        tabs[prevIndex].focus();
-        tabs[prevIndex].click();
-      } else if (e.key === 'Home') {
-        e.preventDefault();
-        tabs[0].focus();
-        tabs[0].click();
-      } else if (e.key === 'End') {
-        e.preventDefault();
-        tabs[tabs.length - 1].focus();
-        tabs[tabs.length - 1].click();
-      }
-    });
-  }
-
-  function populateTier1Icons() {
-    const buttons = document.querySelectorAll('.t1-btn');
-    buttons.forEach(function(btn) {
-      const span = btn.querySelector('.iq-inline');
-      if (!span || span.childElementCount > 0) return;
-      const cat = btn.getAttribute('data-cat');
-      if (!cat) return;
-      const icon = iqIcon(cat);
-      if (icon) span.innerHTML = icon;
-    });
+    return false;
   }
 
   // Modal keyboard handlers (Escape to close, focus trap)
@@ -569,7 +320,7 @@ Object.keys(NEW_POOLS).forEach(k => {
         let activeBtn = savedCat ? document.querySelector('.t1-btn[data-cat="' + savedCat + '"]') : null;
         if (!activeBtn) activeBtn = document.querySelector('.t1-btn.active');
         const activeCat = activeBtn ? activeBtn.getAttribute('data-cat') : 'ibadah';
-        switchCategory(activeCat, activeBtn);
+        window.switchCategory(activeCat, activeBtn);
         if (savedSub) {
           const subBtn = document.querySelector('[data-tab="' + savedSub + '"]');
           if (subBtn) subBtn.click();
@@ -599,9 +350,9 @@ Object.keys(NEW_POOLS).forEach(k => {
         if (sr && !e.target.closest('.global-search-wrap')) sr.classList.remove('show');
       });
     } catch(e) { console.error('Step 6 clickOutside failed:', e); }
-    try { initTierTabKeyboardNav(); } catch(e) { console.error('Step 7 tier tab keyboard nav failed:', e); }
-    try { initTier2TabKeyboardNav(); } catch(e) { console.error('Step 8 tier2 tab keyboard nav failed:', e); }
-    try { populateTier1Icons(); } catch(e) { console.error('Step 8b tier1 icons failed:', e); }
+    try { window.initTierTabKeyboardNav(); } catch(e) { console.error('Step 7 tier tab keyboard nav failed:', e); }
+    try { window.initTier2TabKeyboardNav(); } catch(e) { console.error('Step 8 tier2 tab keyboard nav failed:', e); }
+    try { window.populateTier1Icons(); } catch(e) { console.error('Step 8b tier1 icons failed:', e); }
     try { initModalKeyboardHandlers(); } catch(e) { console.error('Step 9 modal keyboard handlers failed:', e); }
     try { initThemeToggleKeyboard(); } catch(e) { console.error('Step 10 theme toggle keyboard failed:', e); }
     try { _initHashRouting(); } catch(e) { console.error('Step 10b hash routing init failed:', e); }
@@ -627,18 +378,16 @@ Object.keys(NEW_POOLS).forEach(k => {
       openMuhasabah: typeof window.openMuhasabah === 'function' ? window.openMuhasabah : () => {},
       dismissMuhasabah: typeof window.dismissMuhasabah === 'function' ? window.dismissMuhasabah : () => {},
       joinJourney: typeof window.joinJourney === 'function' ? window.joinJourney : () => {},
-      manualRefresh: window.manualRefreshContent, ensureQuranLoaded: window.ensureQuranLoaded, ensureHadithLoaded: window.ensureHadithLoaded, switchCategory, selectCategory, activateTab,
+      manualRefresh: window.manualRefreshContent, ensureQuranLoaded: window.ensureQuranLoaded, ensureHadithLoaded: window.ensureHadithLoaded,
       claimBonus,
       setQuranView, quranSearchFilter, openQuranSurah, quranBack, openQuranJuz,
       openHadithCollection, openHadithBook, hadithBack,
       playQuranVerse, playSurah, stopSurah, setQuranReciter, playJuz, updateJuzButton,
       calPrevMonth, calNextMonth, calGoToday, selectAvatar, selectTitle, selectFrame,
       setTheme, toggleTheme,
-      toggleNotifications: typeof window.toggleNotifications === 'function' ? window.toggleNotifications : () => {},
-      switchTab
+      toggleNotifications: typeof window.toggleNotifications === 'function' ? window.toggleNotifications : () => {}
     };
     window.closeToastOverlay = closeToastOverlay;
-    App.switchTab = switchTab;
     console.log('Ibadah Quest initialized. window.App is set.');
   }
 
