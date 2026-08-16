@@ -12,6 +12,7 @@ const render = fs.readFileSync(path.join(root, 'render', 'render.js'), 'utf8');
 const spiritual = fs.readFileSync(path.join(root, 'features', 'spiritual-growth', 'data.js'), 'utf8');
 const spiritualGrowth = fs.readFileSync(path.join(root, 'features', 'spiritual-growth', 'index.js'), 'utf8');
 const actions = fs.readFileSync(path.join(root, 'core', 'actions.js'), 'utf8');
+const themes = fs.readFileSync(path.join(root, 'core', 'themes.js'), 'utf8');
 const meta = fs.readFileSync(path.join(root, 'data', 'theme-meta.js'), 'utf8');
 
 test('index.html has the three feature containers', () => {
@@ -126,10 +127,10 @@ test('theme: picker references metadata and setTheme wiring', () => {
 });
 
 test('theme: removed themes fall back to light via isValidTheme guard', () => {
-  assert.ok(actions.includes('function isValidTheme'), 'isValidTheme helper missing');
-  assert.ok(actions.includes('window.Themes || []'), 'isValidTheme must consult window.Themes');
-  assert.ok(actions.includes('const safe = isValidTheme(t) ? t : \'light\''), 'applyTheme must fall back to light');
-  assert.ok(actions.includes('isValidTheme(name) ? name : \'light\''), 'setTheme must fall back to light');
+  assert.ok(themes.includes('function isValidTheme'), 'isValidTheme helper missing');
+  assert.ok(themes.includes('window.Themes || []'), 'isValidTheme must consult window.Themes');
+  assert.ok(themes.includes('const safe = isValidTheme(t) ? t : \'light\''), 'applyTheme must fall back to light');
+  assert.ok(themes.includes('isValidTheme(name) ? name : \'light\''), 'setTheme must fall back to light');
 });
 
 test('app shell has tab content container', () => {
@@ -334,9 +335,9 @@ test('theme: picker lists the Emara theme', () => {
 });
 
 test('theme: theme toggle cycle drops dark and night', () => {
-  assert.ok(actions.includes("'midnight', 'cream', 'emara'") || actions.includes("'emara']"), 'toggleTheme cycle includes cream/emara');
-  assert.ok(!actions.includes("'dark'"), 'toggleTheme must not include dark');
-  assert.ok(!actions.includes("'night'"), 'toggleTheme must not include night');
+  assert.ok(themes.includes("'midnight', 'cream', 'emara'") || themes.includes("'emara']"), 'toggleTheme cycle includes cream/emara');
+  assert.ok(!themes.includes("'dark'"), 'toggleTheme must not include dark');
+  assert.ok(!themes.includes("'night'"), 'toggleTheme must not include night');
 });
 
 test('theme: Cream warm-gold palette block exists', () => {
