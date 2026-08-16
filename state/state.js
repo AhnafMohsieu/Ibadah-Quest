@@ -102,3 +102,8 @@ function compactLogs() {
     S.pd = (S.pd || 0) + perfectDays;
     saveState();
   }
+  window.freshState = freshState;
+  window.loadState = loadState;
+  window.saveState = saveState;
+  window.resolveCurrentUser = resolveCurrentUser;
+})();
