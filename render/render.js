@@ -1620,8 +1620,6 @@ h += '</div>';
   window.globalSearch = globalSearch;
   window.executeSearch = executeSearch;
 
-  // NEW_POOLS renderers are defined in actions.js (with proper titles from NEW_POOL_TITLES)
-
   // Screen reader announcements
   function announceToScreenReader(message) {
     const el = document.getElementById('srAnnounce');

@@ -1,6 +1,5 @@
 ﻿(function() {
   // ═══════════════════════════════════════════════════════
-  // buy() extracted to core/shop.js
   function toast(icon, msg, conf=false, ms=2600) {
     window._modalTriggerEl = document.activeElement;
     const ov=document.getElementById('toastOverlay'); ov.innerHTML=`<div class="toast-box"><span style="font-size:2.5rem">${icon}</span><h3>${msg}</h3></div>`;
@@ -12,7 +11,6 @@
     ov.onclick=()=>{ ov.classList.remove('show'); setTimeout(()=>{ ov.style.display='none'; ov.innerHTML=''; },300); ov.style.pointerEvents='none'; if(ov._t) clearTimeout(ov._t); };
   }
 
-  // content pool refresh and lazy loading extracted to core/content.js
 
   function switchUser() { const inp=document.getElementById('usernameInput'); if(!inp?.value.trim()) return; saveState(); currentUser=inp.value.trim(); localStorage.setItem(USER_KEY,currentUser); S=loadState(); initApp(); }
   function logout() { switchUser(); }
@@ -29,7 +27,6 @@
     renderAll();
   }
   function claimBonus() { const t=today(); if(S.lbd===t) return; const oldLv=S.lv; const b=S.cs>=7?75:30; S.xp+=b; S.lbd=t; S.lv=lvFrom(S.xp); checkLevelUp(oldLv); saveState(); renderDynamic(); toast(iqIcon('gift'),'Daily Bonus: +'+b+' XP!'); }
-  // dhikr functions extracted to core/dhikr.js
   function selectAvatar(emoji) {
     S.avatar = emoji;
     saveState();
@@ -40,9 +37,7 @@
   function selectFrame(id) { if(!S.ownedFrames||!S.ownedFrames.includes(id))return; S.activeFrame=id; saveState(); renderProfile(); }
   window.selectFrame = selectFrame;
 
-  // NEW_POOLS extracted to data/pools/new-pools.js
-
-const NEW_POOL_TITLES = {
+  const NEW_POOL_TITLES = {
   zakatrules:    iqIcon('wallet') + ' Zakat — Purifying Your Wealth',
   salahrules:    iqIcon('mosque') + ' Salah — The Pillar of Prayer',
   sawmrules:     iqIcon('moon') + ' Sawm — The Fast of Ramadan',
@@ -550,16 +545,11 @@ Object.keys(NEW_POOLS).forEach(k => {
       setQuranView, quranSearchFilter, openQuranSurah, quranBack, openQuranJuz,
       openHadithCollection, openHadithBook, hadithBack,
       playQuranVerse, playSurah, stopSurah, setQuranReciter, playJuz, updateJuzButton,
-calPrevMonth, calNextMonth, calGoToday, selectAvatar, selectTitle, selectFrame,
-setTheme, toggleTheme,
+      calPrevMonth, calNextMonth, calGoToday, selectAvatar, selectTitle, selectFrame,
+      setTheme, toggleTheme,
       toggleNotifications: typeof window.toggleNotifications === 'function' ? window.toggleNotifications : () => {},
       switchTab
     };
-    window.checkA = checkA;
-    window.playSound = playSound;
-    window.levelUpToast = levelUpToast;
-    window.grantDailyXp = grantDailyXp;
-    window.grantCappedDailyXp = grantCappedDailyXp;
     window.closeToastOverlay = closeToastOverlay;
     App.switchTab = switchTab;
     console.log('Ibadah Quest initialized. window.App is set.');
