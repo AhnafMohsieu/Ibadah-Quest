@@ -144,6 +144,27 @@ Object.keys(NEW_POOLS).forEach(k => {
 
   let _activeCategoryId = null;
 
+  function _pushTabState(catId, tabId) {
+    if (tabId) {
+      const hash = '#/' + catId + '/' + tabId;
+      history.pushState({ cat: catId, tab: tabId }, '', hash);
+    }
+  }
+
+  function _findTabBtn(catId, tabId) {
+    const group = TAB_GROUPS[catId] || [];
+    const isCategorized = group.length > 0 && Array.isArray(group[0].tabs);
+    if (isCategorized) {
+      for (const cat of group) {
+        const found = cat.tabs.find(t => t.id === tabId);
+        if (found) {
+          return { catObj: cat, tabBtn: document.querySelector('[data-tab="' + tabId + '"]') };
+        }
+      }
+    }
+    return { catObj: null, tabBtn: document.querySelector('[data-tab="' + tabId + '"]') };
+  }
+
   function switchCategory(catId, btn) {
     document.querySelectorAll('.t1-btn').forEach(el => {
       el.classList.remove('active');
@@ -201,6 +222,11 @@ Object.keys(NEW_POOLS).forEach(k => {
     document.querySelectorAll('.t2-btn').forEach(b => b.classList.remove('active'));
     if (btn) btn.classList.add('active');
     if (S) { S.lastSub = tabId; saveState(); }
+    if (!window._hashNavigating) {
+      const catEl = document.querySelector('.t1-btn.active');
+      const catId = catEl ? catEl.getAttribute('data-cat') : null;
+      if (catId) _pushTabState(catId, tabId);
+    }
     let sectionName = null;
     for (const [sec, panels] of Object.entries({home:['panel-today','panel-timer','panel-journeys','panel-morning','panel-evening','panel-dhikr','panel-duas','panel-quran','panel-wudu','panel-jumuah','panel-salah','panel-fasting','panel-healthlog','panel-finance','panel-mood'],quests:['panel-quests'],stats:['panel-stats'],growth:['panel-progress','panel-growth'],profile:['panel-profile','panel-trophies','panel-rewards','panel-allah_names','panel-prophet_names','panel-scholars_names']})) {
       if (panels.includes('panel-' + tabId)) { sectionName = sec; break; }
@@ -459,6 +485,55 @@ Object.keys(NEW_POOLS).forEach(k => {
     });
   }
 
+  function _parseHashAndNavigate() {
+    const hash = location.hash;
+    if (hash && hash.startsWith('#/')) {
+      const parts = hash.slice(2).split('/');
+      if (parts.length === 2) {
+        const [cat, tab] = parts;
+        const btn = document.querySelector('.t1-btn[data-cat="' + cat + '"]');
+        if (btn) {
+          window._hashNavigating = true;
+          switchCategory(cat, btn);
+          const { catObj, tabBtn } = _findTabBtn(cat, tab);
+          if (catObj) {
+            const chipBtn = document.querySelector('.cat-chip[onclick*="' + catObj.id + '"]');
+            if (chipBtn) selectCategory(catObj.id, chipBtn);
+          }
+          if (tabBtn) {
+            activateTab(tab, tabBtn);
+          } else {
+            activateTab(tab, null);
+          }
+          window._hashNavigating = false;
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  function _initHashRouting() {
+    window.addEventListener('popstate', function(e) {
+      if (e.state && e.state.cat && e.state.tab) {
+        window._hashNavigating = true;
+        const btn = document.querySelector('.t1-btn[data-cat="' + e.state.cat + '"]');
+        if (btn) switchCategory(e.state.cat, btn);
+        const { catObj, tabBtn } = _findTabBtn(e.state.cat, e.state.tab);
+        if (catObj) {
+          const chipBtn = document.querySelector('.cat-chip[onclick*="' + catObj.id + '"]');
+          if (chipBtn) selectCategory(catObj.id, chipBtn);
+        }
+        if (tabBtn) {
+          activateTab(e.state.tab, tabBtn);
+        } else {
+          activateTab(e.state.tab, null);
+        }
+        window._hashNavigating = false;
+      }
+    });
+  }
+
   function initApp() {
   const overlay = document.getElementById('introOverlay');
   // Always show intro on every page load
@@ -488,15 +563,17 @@ Object.keys(NEW_POOLS).forEach(k => {
     if (window.checkConsistency) checkConsistency();
     if (window.checkWeeklyConsistency) checkWeeklyConsistency();
     try {
-      const savedCat = S ? S.lastCat : null;
-      const savedSub = S ? S.lastSub : null;
-      let activeBtn = savedCat ? document.querySelector('.t1-btn[data-cat="' + savedCat + '"]') : null;
-      if (!activeBtn) activeBtn = document.querySelector('.t1-btn.active');
-      const activeCat = activeBtn ? activeBtn.getAttribute('data-cat') : 'ibadah';
-      switchCategory(activeCat, activeBtn);
-      if (savedSub) {
-        const subBtn = document.querySelector('[data-tab="' + savedSub + '"]');
-        if (subBtn) subBtn.click();
+      if (!_parseHashAndNavigate()) {
+        const savedCat = S ? S.lastCat : null;
+        const savedSub = S ? S.lastSub : null;
+        let activeBtn = savedCat ? document.querySelector('.t1-btn[data-cat="' + savedCat + '"]') : null;
+        if (!activeBtn) activeBtn = document.querySelector('.t1-btn.active');
+        const activeCat = activeBtn ? activeBtn.getAttribute('data-cat') : 'ibadah';
+        switchCategory(activeCat, activeBtn);
+        if (savedSub) {
+          const subBtn = document.querySelector('[data-tab="' + savedSub + '"]');
+          if (subBtn) subBtn.click();
+        }
       }
     } catch(e) { console.warn('Initial nav render failed:', e); }
   }
@@ -527,6 +604,7 @@ Object.keys(NEW_POOLS).forEach(k => {
     try { populateTier1Icons(); } catch(e) { console.error('Step 8b tier1 icons failed:', e); }
     try { initModalKeyboardHandlers(); } catch(e) { console.error('Step 9 modal keyboard handlers failed:', e); }
     try { initThemeToggleKeyboard(); } catch(e) { console.error('Step 10 theme toggle keyboard failed:', e); }
+    try { _initHashRouting(); } catch(e) { console.error('Step 10b hash routing init failed:', e); }
     try {
       document.addEventListener('keydown', (e) => {
         if ((e.key === 'Enter' || e.key === ' ') && e.target.matches('.card-item, .vol-card, .shop-card')) {
