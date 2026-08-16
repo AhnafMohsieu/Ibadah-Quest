@@ -55,7 +55,7 @@ const sandbox = loadSandbox([], {
 });
 
 const S = sandbox.S;
-const actionsSrc = fs.readFileSync(path.join(__dirname, '..', 'core', 'actions.js'), 'utf8');
+const dhikrSrc = fs.readFileSync(path.join(__dirname, '..', 'core', 'dhikr.js'), 'utf8');
 
 function extractFunction(src, name) {
   const idx = src.indexOf('function ' + name);
@@ -75,7 +75,7 @@ function extractFunction(src, name) {
   throw new Error('could not extract ' + name);
 }
 
-const tapSrc = extractFunction(actionsSrc, 'tapDhikr');
+const tapSrc = extractFunction(dhikrSrc, 'tapDhikr');
 
 const wrapped = tapSrc + '\nthis.__tap = tapDhikr;';
 vm.runInNewContext(wrapped, sandbox, { filename: 'tapDhikr' });

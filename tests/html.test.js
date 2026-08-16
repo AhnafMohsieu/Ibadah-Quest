@@ -12,6 +12,7 @@ const render = fs.readFileSync(path.join(root, 'render', 'render.js'), 'utf8');
 const spiritual = fs.readFileSync(path.join(root, 'features', 'spiritual-growth', 'data.js'), 'utf8');
 const spiritualGrowth = fs.readFileSync(path.join(root, 'features', 'spiritual-growth', 'index.js'), 'utf8');
 const actions = fs.readFileSync(path.join(root, 'core', 'actions.js'), 'utf8');
+const dhikr = fs.readFileSync(path.join(root, 'core', 'dhikr.js'), 'utf8');
 const themes = fs.readFileSync(path.join(root, 'core', 'themes.js'), 'utf8');
 const meta = fs.readFileSync(path.join(root, 'data', 'theme-meta.js'), 'utf8');
 
@@ -239,9 +240,9 @@ assert.ok(body.includes("App.resetDhikr()"), 'reset button must call resetDhikr'
 });
 
 test('dhikr tap grants per-tap XP, completion bonus, and auto-resets counter', () => {
-  const fnIdx = actions.indexOf('function tapDhikr');
-  assert.ok(fnIdx > -1, 'tapDhikr must exist');
-  const body = actions.slice(fnIdx, fnIdx + 1600);
+  const fnIdx = dhikr.indexOf('function tapDhikr');
+  assert.ok(fnIdx > -1, 'tapDhikr must exist in core/dhikr.js');
+  const body = dhikr.slice(fnIdx, fnIdx + 1600);
   assert.ok(body.includes('S.xp += 1;') || body.includes('S.xp+=1;'), 'per-tap dhikr XP +1 missing');
   assert.ok(body.includes('S.xp += 20') || body.includes('S.xp+=20'), 'dhikr completion bonus +20 missing');
   assert.ok(body.includes('S.dhikrCounters[idx] = 0'), 'counter must auto-reset on completion');
