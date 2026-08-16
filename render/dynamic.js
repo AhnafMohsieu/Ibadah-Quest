@@ -3,10 +3,50 @@
   function refreshLucideIcons() {}
 
   // -------------------------------------------------------
+  // DIRTY FLAGS — selective panel re-rendering
+  // -------------------------------------------------------
+  const dirtyPanels = new Set();
+  function markDirty(panel) { dirtyPanels.add(panel); }
+  function clearDirty() { dirtyPanels.clear(); }
+
+  // Panel name → render function mapping
+  const PANEL_RENDERERS = {
+    topbar: renderTopBar,
+    lv: renderLv,
+    str: renderStr,
+    today: renderToday,
+    quests: renderQ,
+    achievements: renderAch,
+    progress: renderProg,
+    shop: renderShop,
+    profile: renderProfile,
+    stats: renderStats,
+    timer: renderTimer,
+    prayertimes: renderPrayerTimes,
+    garden: () => window.renderGarden && window.renderGarden(),
+    lantern: () => window.renderLantern && window.renderLantern(),
+    muhasabah: () => window.renderMuhasabahEntry && window.renderMuhasabahEntry(),
+    journeys: () => window.renderJourneys && window.renderJourneys(),
+    boat: () => window.renderBoat && window.renderBoat(),
+    keys: () => window.renderKeys && window.renderKeys(),
+    mosque: () => window.renderMosque && window.renderMosque(),
+    achievementshowcase: () => window.renderAchievementShowcase && window.renderAchievementShowcase(),
+    ramadan: () => window.renderRamadan && window.renderRamadan(),
+    laylat: () => window.renderLaylat && window.renderLaylat(),
+    heartrefinement: () => window.renderHeartRefinement && window.renderHeartRefinement(),
+    armor: () => window.renderArmor && window.renderArmor(),
+    growthtab: () => window.renderSpiritualGrowthTab && window.renderSpiritualGrowthTab(),
+    combos: () => window.renderCombos && window.renderCombos(),
+    autotrack: () => window.autoTrackJourneyProgress && window.autoTrackJourneyProgress(),
+  };
+
+  // -------------------------------------------------------
   // DYNAMIC CONTENT RENDERING
   // -------------------------------------------------------
 
   function renderDynamic() {
+    if (dirtyPanels.size === 0) return;
+
     const pageScroll = window.scrollY;
     const volArea = document.getElementById('volArea');
     const deedArea = document.getElementById('deedArea');
@@ -17,7 +57,11 @@
     const questScroll = questArea ? questArea.scrollTop : 0;
 
     const safe = (fn, name) => { try { fn(); } catch(e) { console.warn('Render ' + name + ' failed:', e.message); } };
-    safe(renderTopBar, 'TopBar'); safe(renderLv, 'Lv'); safe(renderStr, 'Str'); safe(renderToday, 'Today'); safe(renderQ, 'Q'); safe(renderAch, 'Ach'); safe(renderProg, 'Prog'); safe(renderShop, 'Shop'); safe(renderProfile, 'Profile'); safe(renderTimer, 'Timer'); safe(renderPrayerTimes, 'PrayerTimes'); safe(renderStats, 'Stats'); safe(() => window.renderGarden && window.renderGarden(), 'Garden'); safe(() => window.renderLantern && window.renderLantern(), 'Lantern'); safe(() => window.renderMuhasabahEntry && window.renderMuhasabahEntry(), 'MuhEntry'); safe(() => window.renderJourneys && window.renderJourneys(), 'Journeys'); safe(() => window.renderBoat && window.renderBoat(), 'Boat'); safe(() => window.renderKeys && window.renderKeys(), 'Keys'); safe(() => window.renderMosque && window.renderMosque(), 'Mosque'); safe(() => window.renderAchievementShowcase && window.renderAchievementShowcase(), 'AchievementShowcase'); safe(() => window.renderRamadan && window.renderRamadan(), 'Ramadan'); safe(() => window.renderLaylat && window.renderLaylat(), 'Laylat'); safe(() => window.renderHeartRefinement && window.renderHeartRefinement(), 'HeartRefinement'); safe(() => window.renderArmor && window.renderArmor(), 'Armor'); safe(() => window.renderSpiritualGrowthTab && window.renderSpiritualGrowthTab(), 'GrowthTab'); safe(() => window.renderCombos && window.renderCombos(), 'Combos'); safe(() => window.autoTrackJourneyProgress && window.autoTrackJourneyProgress(), 'AutoTrackJourneys');
+    for (const panel of dirtyPanels) {
+      const fn = PANEL_RENDERERS[panel];
+      if (fn) safe(fn, panel);
+    }
+    clearDirty();
 
     if (volArea) volArea.scrollTop = volScroll;
     if (deedArea) deedArea.scrollTop = deedScroll;
@@ -37,6 +81,7 @@
 
 function renderAll() {
   document.body.classList.remove('loading');
+  for (const panel of Object.keys(PANEL_RENDERERS)) dirtyPanels.add(panel);
   renderDynamic();
   renderStatic();
 }
@@ -878,6 +923,8 @@ h += '</div>';
   window.renderDynamic = renderDynamic;
   window.renderStatic = renderStatic;
   window.renderAll = renderAll;
+  window.markDirty = markDirty;
+  window.clearDirty = clearDirty;
   window.renderToday = renderToday;
   window.renderLv = renderLv;
   window.renderStr = renderStr;

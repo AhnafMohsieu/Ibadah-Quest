@@ -89,6 +89,8 @@ function createSandbox(overrides) {
     saveState: stub(),
     renderDynamic: stub(),
     renderQ: stub(),
+    markDirty: stub(),
+    clearDirty: stub(),
     checkLevelUp: stub(),
     checkA: stub(),
     checkSurpriseReward: stub(),
@@ -299,14 +301,14 @@ test('checkQ calls saveState and checkLevelUp on completion', () => {
   assert.strictEqual(checkLevelUpCalled, true, 'checkLevelUp should be called');
 });
 
-test('toggleQuest calls saveState, renderQ, renderDynamic', () => {
+test('toggleQuest calls saveState, markDirty, renderDynamic', () => {
   const { sandbox, S } = createSandbox();
   let saveStateCalled = false;
-  let renderQCalled = false;
+  let markDirtyCalled = false;
   let renderDynamicCalled = false;
   
   sandbox.saveState = () => { saveStateCalled = true; };
-  sandbox.renderQ = () => { renderQCalled = true; };
+  sandbox.markDirty = () => { markDirtyCalled = true; };
   sandbox.renderDynamic = () => { renderDynamicCalled = true; };
   
   S.dq = [{ id: 'dq1', xp: 10, done: false }];
@@ -314,7 +316,7 @@ test('toggleQuest calls saveState, renderQ, renderDynamic', () => {
   sandbox.toggleQuest('dq1', 'daily', 10);
   
   assert.strictEqual(saveStateCalled, true, 'saveState should be called');
-  assert.strictEqual(renderQCalled, true, 'renderQ should be called');
+  assert.strictEqual(markDirtyCalled, true, 'markDirty should be called');
   assert.strictEqual(renderDynamicCalled, true, 'renderDynamic should be called');
 });
 

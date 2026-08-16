@@ -16,6 +16,9 @@ function setup(overrides) {
     saveState: () => {},
     toast: () => {},
     renderAll: () => {},
+    renderDynamic: () => {},
+    markDirty: () => {},
+    clearDirty: () => {},
     iqIcon: () => '',
     setTimeout: (fn) => fn(),
     clearTimeout: () => {}
@@ -49,22 +52,22 @@ test('checkA: shows toast on unlock', () => {
   assert.ok(toastCalled, 'toast should be called');
 });
 
-test('checkA: calls renderAll when new achievements unlocked', () => {
+test('checkA: calls renderDynamic when new achievements unlocked', () => {
   let renderCalled = false;
   const s = setup({
-    renderAll: () => { renderCalled = true; }
+    renderDynamic: () => { renderCalled = true; }
   });
   s.S.tp = 1;
   s.window.checkA();
-  assert.ok(renderCalled, 'renderAll should be called');
+  assert.ok(renderCalled, 'renderDynamic should be called');
 });
 
-test('checkA: does not call renderAll when no new achievements', () => {
+test('checkA: does not call renderDynamic when no new achievements', () => {
   let renderCalled = false;
   const s = setup({
-    renderAll: () => { renderCalled = true; }
+    renderDynamic: () => { renderCalled = true; }
   });
   s.S.tp = 0;
   s.window.checkA();
-  assert.ok(!renderCalled, 'renderAll should not be called');
+  assert.ok(!renderCalled, 'renderDynamic should not be called');
 });

@@ -10,7 +10,10 @@
             setTimeout(() => { toast(iqIcon(a.icon || a.id || a.name) || tierIcon, 'Achievement Unlocked:<br>' + a.name, true, 4000); }, delay);
             delay += 4500;
         });
-        renderAll();
+        markDirty('achievements');
+        markDirty('topbar');
+        markDirty('lv');
+        renderDynamic();
     } 
   }
   window.checkA = checkA;

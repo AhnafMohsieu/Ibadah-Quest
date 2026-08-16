@@ -278,8 +278,8 @@ test('prayer timer tab renders its countdown and times grid', () => {
   assert.ok(html.includes('id="timerArea"'), 'countdown area present');
   assert.ok(html.includes('id="prayerNamesArea"'), 'prayer names area present');
   assert.ok(html.includes('id="prayerTimesArea"'), 'prayer times grid area present');
-  assert.ok(renderAll.includes("safe(renderPrayerTimes, 'PrayerTimes')"),
-    'renderPrayerTimes must be invoked from renderDynamic');
+  assert.ok(renderAll.includes("prayertimes: renderPrayerTimes"),
+    'renderPrayerTimes must be wired into PANEL_RENDERERS');
   assert.ok(actions.includes("timer:'renderPrayerTimes'"),
     '_lazyRender must map timer tab to renderPrayerTimes');
   assert.ok(css.includes('.prayer-times-grid') && css.includes('.pt-card'),
@@ -316,9 +316,9 @@ test('hero renderers are real and wired into renderDynamic', () => {
   assert.ok(renderAll.includes("getElementById('bestStr')"), 'renderStr must update bestStr');
   assert.ok(renderAll.includes("getElementById('headerCrescent')"), 'renderLv must fill the moon');
   assert.ok(renderAll.includes("getElementById('streakFire')"), 'renderStr must fill the flame');
-  assert.ok(renderAll.includes("safe(renderLv, 'Lv')"), 'renderLv wired into renderDynamic');
-  assert.ok(renderAll.includes("safe(renderStr, 'Str')"), 'renderStr wired into renderDynamic');
-  assert.ok(renderAll.includes("safe(renderTopBar, 'TopBar')"), 'renderTopBar wired into renderDynamic');
+  assert.ok(renderAll.includes("lv: renderLv"), 'renderLv wired into PANEL_RENDERERS');
+  assert.ok(renderAll.includes("str: renderStr"), 'renderStr wired into PANEL_RENDERERS');
+  assert.ok(renderAll.includes("topbar: renderTopBar"), 'renderTopBar wired into PANEL_RENDERERS');
 });
 
 test('hero+topbar refresh on theme change and home tab', () => {

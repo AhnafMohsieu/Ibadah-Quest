@@ -63,6 +63,8 @@ function setup() {
     playSound: () => {},
     saveState: () => {},
     renderDynamic: () => {},
+    markDirty: () => {},
+    clearDirty: () => {},
     checkQ: () => {},
     checkA: () => {},
     checkCombo: () => {},
