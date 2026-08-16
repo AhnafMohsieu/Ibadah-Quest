@@ -51,6 +51,7 @@
     for (let i = 0; i < 50; i++) {
       const el = document.createElement('span');
       el.className = 'confetti';
+      el.setAttribute('aria-hidden', 'true');
       el.textContent = [iqEmoji('star'), iqEmoji('sparkles'), iqEmoji('moon'), iqEmoji('sparkles'), iqEmoji('star'), iqEmoji('crescent')][i % 6];
       el.style.left = Math.random() * 100 + '%';
       el.style.top = '-20px';

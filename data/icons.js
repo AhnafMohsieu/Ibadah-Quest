@@ -278,7 +278,7 @@ function iqIcon(key) {
   const f = _iqFile(key);
   if (!f) return '';
   const k = _iqResolve(key);
-  return '<img class="iq-icon" src="' + f + '" alt="' + (IQ_EMOJI[k] || '') + '" loading="lazy">';
+  return '<img class="iq-icon" src="' + f + '" alt="' + (IQ_EMOJI[k] || '') + '" role="img" aria-label="' + key + '" loading="lazy">';
 }
 
 /* Plain-text context — the emoji character itself */

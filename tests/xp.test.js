@@ -20,7 +20,7 @@ function setup() {
     }),
     createElement: () => ({
       style: { setProperty: () => {} }, className: '', textContent: '',
-      appendChild: () => {}, remove: () => {}
+      appendChild: () => {}, remove: () => {}, setAttribute: () => {}
     }),
     body: { appendChild: () => {} },
     activeElement: null
