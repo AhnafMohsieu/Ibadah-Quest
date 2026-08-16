@@ -1,8 +1,5 @@
 ﻿(function() {
   // ═══════════════════════════════════════════════════════
-  function toggleP(id) { const l=tlog(); const w=!!l.p[id]; const oldLv=S.lv; l.p[id]=!w; const pr=PRAYERS.find(x=>x.id===id); if(!pr) return; let xp=pr.xp; if(isFri()&&id==='dhuhr'&&pr.fri) xp=pr.fri.xp; if(S.ab&&S.ab.exp>=today()) xp*=2; if(!w){ S.tp++; S.xp+=xp; if(isFri()&&id==='dhuhr') S.tj=(S.tj||0)+1; playSound('pop'); if(typeof checkSurpriseReward==='function') checkSurpriseReward('prayer'); } else { S.tp=Math.max(0,S.tp-1); S.xp=Math.max(0,S.xp-xp); if(isFri()&&id==='dhuhr') S.tj=Math.max(0,(S.tj||0)-1); } S.lv=lvFrom(S.xp); checkLevelUp(oldLv); recalc(); checkQ(); checkA(); saveState(); renderDynamic(); if(typeof checkCombo==='function'){const prayedFajr=!!l.p.fajr;const prayedAll=Object.values(l.p||{}).filter(v=>v).length>=5;if(prayedFajr)checkCombo('fajr',true);if(prayedAll)checkCombo('adhkar',true);} }
-  function toggleV(id) { const l=tlog(); if(!l.v) l.v={}; const w=!!l.v[id]; const oldLv=S.lv; l.v[id]=!w; const vp=VOLUNTARY.find(x=>x.id===id); if(!vp) return; let xp=vp.xp; if(S.ab&&S.ab.exp>=today()) xp*=2; if(!w){ S.vc[id]=(S.vc[id]||0)+1; S.xp+=xp; playSound('pop'); } else { S.vc[id]=Math.max(0,(S.vc[id]||0)-1); S.xp=Math.max(0,S.xp-xp); } S.lv=lvFrom(S.xp); checkLevelUp(oldLv); checkQ(); checkA(); saveState(); renderDynamic(); }
-  function toggleD(id) { const l=tlog(); const w=!!l.d[id]; const oldLv=S.lv; l.d[id]=!w; const de=DEEDS.find(x=>x.id===id); if(!de) return; let xp=de.xp; if(S.ab&&S.ab.exp>=today()) xp*=2; if(!w){ S.td[id]=(S.td[id]||0)+1; S.xp+=xp; playSound('pop'); } else { S.td[id]=Math.max(0,(S.td[id]||0)-1); S.xp=Math.max(0,S.xp-xp); } S.lv=lvFrom(S.xp); checkLevelUp(oldLv); recalc(); checkQ(); checkA(); saveState(); renderDynamic(); }
   function buy(id) { const r=SHOP.find(x=>x.id===id); if(!r||S.ur[id]) return; if(S.xp<r.cost){ toast(iqIcon('x'),'Not enough XP'); return; } const oldLv=S.lv; S.xp-=r.cost; S.ur[id]=true; const seasonalMult = typeof getSeasonalMultiplier === 'function' ? getSeasonalMultiplier() : 1; if(r.t==='boost') S.ab={exp:today(new Date(Date.now()+86400000))}; if(r.t==='freeze') S.sfu=true; if(r.t==='xp') S.xp+=(r.v||0)*seasonalMult; if(r.t==='mystery') { const pool = [ { type:'xp', weight:60, min:100, max:2000 }, { type:'freeze', weight:10 }, { type:'reroll', weight:15 }, { type:'boost', weight:15 } ]; const total = pool.reduce((s,p) => s + p.weight, 0); let roll = Math.random() * total; let chosen = pool[0]; for (const p of pool) { roll -= p.weight; if (roll <= 0) { chosen = p; break; } } if (chosen.type === 'xp') { const amt = chosen.min + Math.floor(Math.random() * (chosen.max - chosen.min + 1)); S.xp += amt*seasonalMult; toast(iqIcon('gift'), `Mystery Box: +${amt*seasonalMult} XP!`); } else if (chosen.type === 'freeze') { S.sfu = true; toast(iqIcon('gift'), 'Mystery Box: Streak Freeze!'); } else if (chosen.type === 'reroll') { genDQ(); toast(iqIcon('refresh-cw'), 'Mystery Box: Quest Reroll!'); } else if (chosen.type === 'boost') { S.ab = { exp: today(new Date(Date.now() + 86400000)) }; toast(iqIcon('gift'), 'Mystery Box: 2x XP Boost!'); } } else if(r.t==='reroll'){ genDQ(); toast(iqIcon('refresh-cw'),'Quests rerolled!'); } else toast(iqIcon('gift'),'Purchased!'); if(r.id.startsWith('r')&&!r.t){if(!S.ownedTitles)S.ownedTitles=[];if(!S.ownedTitles.includes(r.id))S.ownedTitles.push(r.id);} if(r.id==='r10'||r.id==='r19'||r.id==='r20'){if(!S.ownedFrames)S.ownedFrames=[];if(!S.ownedFrames.includes(r.id))S.ownedFrames.push(r.id);} S.lv=lvFrom(S.xp); checkLevelUp(oldLv); saveState(); renderAll(); checkA(); setTimeout(() => { const cards = document.querySelectorAll('.reward-card'); cards.forEach(c => { if (c.onclick?.toString().includes(id)) c.classList.add('just-bought'); }); }, 50); }
   function checkA() { 
     const nu=[]; 
@@ -46,7 +43,6 @@
   }
   function trackQuestXP(type, xp) { if (!S.questXP) S.questXP = {daily:0,weekly:0,monthly:0,yearly:0,lifetime:0}; S.questXP[type] = (S.questXP[type] || 0) + xp; S.questXP.lifetime = (S.questXP.lifetime || 0) + xp; }
   function toggleQuest(id,type,xp){ let arr; if(type==='daily') arr=S.dq; else if(type==='weekly') arr=S.wq; else if(type==='monthly') arr=S.mq; else if(type==='yearly') arr=S.yq; else if(type==='lifetime') arr=S.lq; else return; const q=arr.find(x=>x.id===id); if(!q) return; const oldLv=S.lv; q.done=!q.done; const xpVal=xp||q.xp; if(q.done){ S.xp+=xpVal; S.tq++; trackQuestXP(type,xpVal); } else { S.xp=Math.max(0,S.xp-xpVal); S.tq=Math.max(0,S.tq-1); trackQuestXP(type,-xpVal); } S.lv=lvFrom(S.xp); checkLevelUp(oldLv); saveState(); renderQ(); renderDynamic(); if(q.done&&typeof checkSurpriseReward==='function') checkSurpriseReward('quest'); }
-  function recalc() { const all=Object.keys(S.log).filter(d=>Object.values(S.log[d].p||{}).filter(v=>v).length>=5).sort(); let best=0,run=0,prev=null; for(const d of all){ if(prev){ const p=new Date(prev+'T00:00:00'); const c=new Date(d+'T00:00:00'); const diffDays=Math.round((c-p)/86400000); if(diffDays===1) run++; else run=1; } else { run=1; } best=Math.max(best,run); prev=d; } S.bs=best; const tc=Object.values(tlog().p||{}).filter(v=>v).length>=5; if(tc){ let s=1,ck=new Date(); while(true){ ck.setDate(ck.getDate()-1); const dk=today(ck); if(S.log[dk]&&Object.values(S.log[dk].p||{}).filter(v=>v).length>=5) s++; else break; } S.cs=s; if(typeof checkSurpriseReward==='function') checkSurpriseReward('allPrayers'); } else { const yd=today(new Date(Date.now()-86400000)); S.cs=(S.log[yd]&&Object.values(S.log[yd].p||{}).filter(v=>v).length>=5)?1:0; } S.pd=all.length; if(S.cs>S.bs) S.bs=S.cs; if(window.checkMilestones) checkMilestones(); }
   const _loadedScripts = new Set();
   function loadScript(srcUrl) {
     return new Promise((resolve, reject) => {
@@ -668,8 +664,8 @@ Object.keys(NEW_POOLS).forEach(k => {
   ];
 
     const t = today();
-    if (S.lad !== t) { S.lad=t; if(S.ab&&S.ab.exp<t) S.ab=null; recalc(); saveState(); }
-    genDQ(); genWQ(); genMQ(); genYQ(); genLQ(); refreshContent(); recalc(); checkQ(); S.lv=lvFrom(S.xp); saveState(); initCalView(); renderAll();
+    if (S.lad !== t) { S.lad=t; if(S.ab&&S.ab.exp<t) S.ab=null; window.recalc(); saveState(); }
+    genDQ(); genWQ(); genMQ(); genYQ(); genLQ(); refreshContent(); window.recalc(); checkQ(); S.lv=lvFrom(S.xp); saveState(); initCalView(); renderAll();
     if (window.renderDailyContent) renderDailyContent();
     if (window.showWeeklySummary) showWeeklySummary();
     if (window.showDailySummary) showDailySummary();
@@ -717,7 +713,7 @@ Object.keys(NEW_POOLS).forEach(k => {
     try { initModalKeyboardHandlers(); } catch(e) { console.error('Step 9 modal keyboard handlers failed:', e); }
     try { initThemeToggleKeyboard(); } catch(e) { console.error('Step 10 theme toggle keyboard failed:', e); }
     window.App = {
-      toggleP, toggleV, toggleD, buy,
+      toggleP: window.toggleP, toggleV: window.toggleV, toggleD: window.toggleD, buy,
       detail: (id) => toast(iqIcon('alert-triangle'), DETAILS[id]||'Voluntary Prayer', false, 4000),
       tip: (id) => toast(iqIcon('zap'), TIPS[id]||'A beautiful deed!', false, 4000),
       toggleQuest, addGratitude, toggleFasting, setCharityGoals,
