@@ -288,10 +288,11 @@ Object.keys(NEW_POOLS).forEach(k => {
 
   function initApp() {
   const overlay = document.getElementById('introOverlay');
-  // Always show intro on every page load
+  // Dismiss intro overlay immediately so it never blocks clicks
   if (overlay) {
-    overlay.classList.add('visible');
-    overlay.style.opacity = '1';
+    overlay.classList.remove('visible');
+    overlay.style.opacity = '0';
+    overlay.style.pointerEvents = 'none';
   }
   try { window.applyTheme(); } catch(e) { console.error('applyTheme in initApp failed:', e); }
   // Profile as main tab
