@@ -1,4 +1,9 @@
 ﻿const ARABIC_POOL = [
+  { title: "Why Learn Arabic?", desc: "The Quran was revealed in clear Arabic. Understanding Arabic opens the direct gateway to Allah's words." },
+  { title: "The Arabic Alphabet", desc: "28 letters (plus hamza). Each letter changes shape depending on its position in a word: initial, medial, final, or standalone." },
+  { title: "Common Islamic Phrases", desc: "Bismillah (In Allah's name), Alhamdulillah (Praise Allah), Inshallah (If Allah wills), Mashallah (What Allah wills)." },
+  { title: "Root Words System", desc: "Arabic is built on 3-letter roots. From k-t-b: Kitab (book), Kataba (wrote), Maktab (office), Katib (writer)." },
+
   { name: "Alif", arabic: "ا", desc: "The first letter. A silent carrier of the long 'aa' vowel. Often appears as a vertical stroke." },
   { name: "Baa", arabic: "ب", desc: "Sounds like 'b' in 'book'. Has a dot below the curve." },
   { name: "Taa", arabic: "ت", desc: "Sounds like 't' in 'top'. Same shape as baa but with two dots above." },
