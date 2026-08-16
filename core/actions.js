@@ -479,6 +479,7 @@ Object.keys(NEW_POOLS).forEach(k => {
 
     const t = today();
     if (S.lad !== t) { S.lad=t; if(S.ab&&S.ab.exp<t) S.ab=null; window.recalc(); saveState(); }
+    if (S.log && Object.keys(S.log).length > 400) compactLogs();
     genDQ(); genWQ(); genMQ(); genYQ(); genLQ(); window.refreshContent(); window.recalc(); checkQ(); S.lv=lvFrom(S.xp); saveState(); initCalView(); renderAll();
     if (window.renderDailyContent) renderDailyContent();
     if (window.showWeeklySummary) showWeeklySummary();

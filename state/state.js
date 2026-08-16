@@ -88,3 +88,17 @@ function resolveCurrentUser() {
     while (res.length < limit) { let r = Math.floor(Math.random()*len); if (res.indexOf(r)===-1) res.push(r); }
     return res;
   }
+  function compactLogs() {
+    const cutoff = today(new Date(Date.now() - 365 * 86400000));
+    let perfectDays = 0;
+    for (const dk of Object.keys(S.log)) {
+      if (dk < cutoff) {
+        const entry = S.log[dk];
+        const prayed = Object.values(entry.p || {}).filter(v => v).length;
+        if (prayed >= 5) perfectDays++;
+        delete S.log[dk];
+      }
+    }
+    S.pd = (S.pd || 0) + perfectDays;
+    saveState();
+  }
