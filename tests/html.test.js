@@ -52,8 +52,8 @@ test('index.html declares the PWA manifest and theme color', () => {
   assert.ok(html.includes('<meta name="theme-color" content="#ddd3ea">'));
 });
 
-test('index.html loads Tailwind CDN', () => {
-  assert.ok(html.includes('tailwindcss'));
+test('index.html does NOT load Tailwind CDN', () => {
+  assert.ok(!html.includes('tailwindcss'));
 });
 
 test('index.html theme-color uses light base', () => {
