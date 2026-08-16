@@ -234,6 +234,8 @@
       S.journeyStats.currentStreaks[j.id] = currentStreak + 1;
       S.journeyStats.lastTracked[j.id] = t;
       
+      if (typeof window.grantDailyXp === 'function') window.grantDailyXp(15, 'journey|' + j.id + '|' + t);
+
       if (!S.journeyStats.bestStreaks) S.journeyStats.bestStreaks = {};
       if (S.journeyStats.currentStreaks[j.id] > (S.journeyStats.bestStreaks[j.id] || 0)) {
         S.journeyStats.bestStreaks[j.id] = S.journeyStats.currentStreaks[j.id];

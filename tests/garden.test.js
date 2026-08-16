@@ -24,6 +24,7 @@ function loadSandbox(files, globals) {
 }
 
 const sandbox = loadSandbox([
+  'data/icons.js',
   'features/spiritual-growth/data.js',
   'features/garden.js'
 ], { S: { xp: 0, cs: 0, bs: 0 } });

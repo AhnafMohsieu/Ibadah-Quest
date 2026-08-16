@@ -62,11 +62,14 @@
     if (!ov) return;
     let h = '<div class="amount-picker-box"><div class="amount-picker-title">Choose Amount</div><div class="amount-picker-grid">';
     AMOUNTS.forEach(a => { h += `<button class="amount-pick-btn" onclick="financeTracker.pickAmount(${a})">${a}</button>`; });
-    h += '</div><button class="amount-pick-cancel" onclick="financeTracker.cancelPick()">Cancel</button></div>';
+    h += '</div>';
+    h += '<div class="amount-custom-row"><input id="customAmountInput" class="amount-custom-input" type="number" inputmode="decimal" placeholder="Enter amount" min="1"><button class="amount-custom-btn" onclick="financeTracker.pickCustomAmount()">OK</button></div>';
+    h += '<button class="amount-pick-cancel" onclick="financeTracker.cancelPick()">Cancel</button></div>';
     ov.innerHTML = h;
     ov.style.display = 'flex';
     ov.classList.add('show');
     ov.style.pointerEvents = 'auto';
+    setTimeout(() => { const inp = document.getElementById('customAmountInput'); if (inp) inp.focus(); }, 100);
   }
 
   function hideAmountPicker() {
@@ -75,6 +78,13 @@
   }
 
   function cancelPick() { _pendingAction = null; hideAmountPicker(); }
+
+  function pickCustomAmount() {
+    const inp = document.getElementById('customAmountInput');
+    const val = inp ? parseFloat(inp.value) : 0;
+    if (!val || val <= 0 || isNaN(val)) { if (inp) inp.focus(); return; }
+    pickAmount(val);
+  }
 
   function getTotalCharity() {
     let total = 0;
@@ -188,9 +198,21 @@
     h += `<div class="fin-lt-item"><div class="fin-lt-val">${totalIncome}</div><div class="fin-lt-label">Total Income</div></div>`;
     h += '</div>';
 
+    // Islamic finance knowledge
+    if (typeof FINANCE_POOL !== 'undefined' && FINANCE_POOL.length) {
+      h += `<div class="section-title" style="margin-top:20px">${iqIcon('book-open')} Islamic Finance Wisdom</div>`;
+      const finIdx = S.financeIdx || [];
+      let indices = finIdx.length ? finIdx : [];
+      if (!indices.length) { indices = Array.from({length: Math.min(5, FINANCE_POOL.length)}, (_, i) => i); S.financeIdx = indices; }
+      h += indices.slice(0, 5).map(i => {
+        const o = FINANCE_POOL[i % FINANCE_POOL.length];
+        return `<div class="content-card"><div style="font-weight:700;color:var(--gold-light);margin-bottom:6px;">${o.title}</div><div class="content-english">${o.desc}</div></div>`;
+      }).join('');
+    }
+
     el.innerHTML = h;
   }
 
-  window.financeTracker = { logIncome, logExpense, logCharity, removeEntry, pickAmount, cancelPick, renderFinanceTab };
+  window.financeTracker = { logIncome, logExpense, logCharity, removeEntry, pickAmount, pickCustomAmount, cancelPick, renderFinanceTab };
   window.renderFinanceTab = renderFinanceTab;
 })();
