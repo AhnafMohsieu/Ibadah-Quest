@@ -9,6 +9,11 @@ const html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
 const tabs = fs.readFileSync(path.join(root, 'data', 'tab-groups.js'), 'utf8');
 const css = fs.readFileSync(path.join(root, 'styles', 'main.css'), 'utf8');
 const render = fs.readFileSync(path.join(root, 'render', 'render.js'), 'utf8');
+const renderDynamic = fs.readFileSync(path.join(root, 'render', 'dynamic.js'), 'utf8');
+const renderStatic = fs.readFileSync(path.join(root, 'render', 'static.js'), 'utf8');
+const renderPrayers = fs.readFileSync(path.join(root, 'render', 'prayers.js'), 'utf8');
+const renderCalendar = fs.readFileSync(path.join(root, 'render', 'calendar.js'), 'utf8');
+const renderAll = render + renderDynamic + renderStatic + renderPrayers + renderCalendar;
 const spiritual = fs.readFileSync(path.join(root, 'features', 'spiritual-growth', 'data.js'), 'utf8');
 const spiritualGrowth = fs.readFileSync(path.join(root, 'features', 'spiritual-growth', 'index.js'), 'utf8');
 const actions = fs.readFileSync(path.join(root, 'core', 'actions.js'), 'utf8');
@@ -121,10 +126,10 @@ test('theme: index.html pre-paint script sets data-theme from localStorage', () 
 });
 
 test('theme: picker references metadata and setTheme wiring', () => {
-  assert.ok(render.includes('Theme'));
-  assert.ok(render.includes('window.Themes'));
-  assert.ok(render.includes('App.setTheme('));
-  assert.ok(render.includes('theme-chip'));
+  assert.ok(renderAll.includes('Theme'));
+  assert.ok(renderAll.includes('window.Themes'));
+  assert.ok(renderAll.includes('App.setTheme('));
+  assert.ok(renderAll.includes('theme-chip'));
 });
 
 test('theme: removed themes fall back to light via isValidTheme guard', () => {
@@ -142,7 +147,7 @@ test('tab controller: switchTab dispatches renderTab', () => {
   assert.ok(actions.includes('switchTab'), 'switchTab function missing');
   assert.ok(actions.includes("App.switchTab"), 'App.switchTab export missing');
   assert.ok(actions.includes('renderTab'), 'renderTab dispatch missing');
-  assert.ok(render.includes('renderTop'), 'renderTop function missing');
+  assert.ok(renderAll.includes('renderTop'), 'renderTop function missing');
 });
 
 test('intro overlay uses CSS vars for theme accent', () => {
@@ -195,7 +200,7 @@ test('index.html declares armor/heart growth areas and loads their scripts', () 
 
 test('growth renderers are wired into renderDynamic and tab render paths', () => {
   for (const name of ['renderKeys','renderMosque','renderRamadan','renderLaylat','renderHeartRefinement','renderArmor']) {
-    assert.ok(render.includes(`window.${name}`), `renderDynamic must reference ${name}`);
+    assert.ok(renderAll.includes(`window.${name}`), `renderDynamic must reference ${name}`);
   }
   for (const key of ["keys:'renderKeys'","mosque:'renderMosque'","ramadan:'renderRamadan'","laylat:'renderLaylat'"]) {
     assert.ok(actions.includes(key), `_lazyRender must map ${key}`);
@@ -211,9 +216,9 @@ test('spiritual and garden cards get aligned grid sizing', () => {
 });
 
 test('99 Names tab renders premium golden centered name cards', () => {
-  const fnIdx = render.indexOf('function renderNames');
+  const fnIdx = renderAll.indexOf('function renderNames');
   assert.ok(fnIdx > -1, 'renderNames must exist');
-  const body = render.slice(fnIdx, fnIdx + 1200);
+  const body = renderAll.slice(fnIdx, fnIdx + 1200);
   assert.ok(body.includes('name-card'), 'names must use scoped name-card class');
   assert.ok(body.includes('"content-arabic name-an"'), 'arabic must get centered golden styling');
   assert.ok(body.includes('name-roman'), 'transliterated name must be rendered');
@@ -231,9 +236,9 @@ test('99 Names name-card styles exist', () => {
 });
 
 test('dhikr reset button renders icon without leaked concatenation text', () => {
-  const fnIdx = render.indexOf('function renderDhikrCounter');
+  const fnIdx = renderAll.indexOf('function renderDhikrCounter');
   assert.ok(fnIdx > -1, 'renderDhikrCounter must exist');
-  const body = render.slice(fnIdx, fnIdx + 2000);
+  const body = renderAll.slice(fnIdx, fnIdx + 2000);
 assert.ok(body.includes("App.resetDhikr()"), 'reset button must call resetDhikr');
   assert.ok(body.includes('${iqIcon("refresh-cw")} Reset') || body.includes("${iqIcon('refresh-cw')} Reset"), 'reset icon must be interpolated via template literal');
   assert.ok(body.includes('refresh-cw'), 'refresh icon referenced');
@@ -251,9 +256,9 @@ test('dhikr tap grants per-tap XP, completion bonus, and auto-resets counter', (
 });
 
 test('fasting toggle grants 50 XP on day checked and revokes on uncheck', () => {
-  const fnIdx = render.indexOf('function toggleFasting');
+  const fnIdx = renderAll.indexOf('function toggleFasting');
   assert.ok(fnIdx > -1, 'toggleFasting must exist');
-  const body = render.slice(fnIdx, fnIdx + 700);
+  const body = renderAll.slice(fnIdx, fnIdx + 700);
   assert.ok(body.includes('S.xp += 50') || body.includes('S.xp+=50'), 'fasting day must grant 50 XP');
   assert.ok(body.includes('S.xp = Math.max(0'), 'unchecking must revoke XP without going negative');
   assert.ok(body.includes('levelUpToast'), 'level up must be evaluated after fasting XP');
@@ -273,7 +278,7 @@ test('prayer timer tab renders its countdown and times grid', () => {
   assert.ok(html.includes('id="timerArea"'), 'countdown area present');
   assert.ok(html.includes('id="prayerNamesArea"'), 'prayer names area present');
   assert.ok(html.includes('id="prayerTimesArea"'), 'prayer times grid area present');
-  assert.ok(render.includes("safe(renderPrayerTimes, 'PrayerTimes')"),
+  assert.ok(renderAll.includes("safe(renderPrayerTimes, 'PrayerTimes')"),
     'renderPrayerTimes must be invoked from renderDynamic');
   assert.ok(actions.includes("timer:'renderPrayerTimes'"),
     '_lazyRender must map timer tab to renderPrayerTimes');
@@ -305,15 +310,15 @@ test('hero header markup is restored with all ids', () => {
 });
 
 test('hero renderers are real and wired into renderDynamic', () => {
-  assert.ok(render.includes("getElementById('xpBar')"), 'renderLv must update xpBar');
-  assert.ok(render.includes("getElementById('lvTitle')"), 'renderLv must update lvTitle');
-  assert.ok(render.includes('STREAK_MSGS'), 'renderStr must use STREAK_MSGS');
-  assert.ok(render.includes("getElementById('bestStr')"), 'renderStr must update bestStr');
-  assert.ok(render.includes("getElementById('headerCrescent')"), 'renderLv must fill the moon');
-  assert.ok(render.includes("getElementById('streakFire')"), 'renderStr must fill the flame');
-  assert.ok(render.includes("safe(renderLv, 'Lv')"), 'renderLv wired into renderDynamic');
-  assert.ok(render.includes("safe(renderStr, 'Str')"), 'renderStr wired into renderDynamic');
-  assert.ok(render.includes("safe(renderTopBar, 'TopBar')"), 'renderTopBar wired into renderDynamic');
+  assert.ok(renderAll.includes("getElementById('xpBar')"), 'renderLv must update xpBar');
+  assert.ok(renderAll.includes("getElementById('lvTitle')"), 'renderLv must update lvTitle');
+  assert.ok(renderAll.includes('STREAK_MSGS'), 'renderStr must use STREAK_MSGS');
+  assert.ok(renderAll.includes("getElementById('bestStr')"), 'renderStr must update bestStr');
+  assert.ok(renderAll.includes("getElementById('headerCrescent')"), 'renderLv must fill the moon');
+  assert.ok(renderAll.includes("getElementById('streakFire')"), 'renderStr must fill the flame');
+  assert.ok(renderAll.includes("safe(renderLv, 'Lv')"), 'renderLv wired into renderDynamic');
+  assert.ok(renderAll.includes("safe(renderStr, 'Str')"), 'renderStr wired into renderDynamic');
+  assert.ok(renderAll.includes("safe(renderTopBar, 'TopBar')"), 'renderTopBar wired into renderDynamic');
 });
 
 test('hero+topbar refresh on theme change and home tab', () => {
