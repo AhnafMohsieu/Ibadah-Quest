@@ -60,6 +60,7 @@ function createSandbox(overrides) {
     genMQ: () => {},
     genYQ: () => {},
     genLQ: () => {},
+    toggleQuest: () => {},
     iqIcon: () => '⭐',
     iqEmoji: () => '⭐',
     trackQuestXP: () => {},
