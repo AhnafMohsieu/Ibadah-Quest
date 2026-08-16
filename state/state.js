@@ -1,22 +1,16 @@
-(function() {
-// ═══════════════════════════════════════════════════════
-// STATE MANAGEMENT
-// ═══════════════════════════════════════════════════════
-let currentUser = 'default';
+  // ═══════════════════════════════════════════════════════
+  // STATE MANAGEMENT
+  // ═══════════════════════════════════════════════════════
+  let currentUser = 'default';
 let _hasLoggedIn = false;
 let _currentUserSource = 'default';
-
-const USER_KEY = 'iq9_active_user', PREFIX = 'iq9_user_', INTRO_SEEN_KEY = 'iq9_intro_seen';
 
 function resolveCurrentUser() {
   const stored = (() => { try { return localStorage.getItem(USER_KEY); } catch(e) { return null; } })();
   currentUser = stored || 'default';
   _currentUserSource = stored ? 'saved' : 'default';
 }
-
-let S = null;
-
-function loadState() {
+  const USER_KEY = 'iq9_active_user', PREFIX = 'iq9_user_', INTRO_SEEN_KEY = 'iq9_intro_seen';
   function freshState() {
     const t = today();
     return {
@@ -46,6 +40,8 @@ function loadState() {
       notificationsEnabled:false
     };
   }
+  let S = null;
+function loadState() {
   const key = PREFIX + currentUser;
   try {
     const raw = localStorage.getItem(key);
@@ -69,7 +65,6 @@ function loadState() {
   } catch(e) {}
   return freshState();
 }
-
 function saveState() { try { localStorage.setItem(PREFIX + currentUser, JSON.stringify(S)); } catch(e) {} }
 function today(d) { const d2 = d || new Date(); return d2.getFullYear() + '-' + (d2.getMonth()+1).toString().padStart(2,'0') + '-' + d2.getDate().toString().padStart(2,'0'); }
 function tlog() { const t = today(); if (!S.log[t]) S.log[t] = {p:{},d:{},v:{}}; return S.log[t]; }
@@ -94,22 +89,20 @@ function fastRng(len) {
   return res;
 }
 function compactLogs() {
-  const cutoff = today(new Date(Date.now() - 365 * 86400000));
-  let perfectDays = 0;
-  for (const dk of Object.keys(S.log)) {
-    if (dk < cutoff) {
-      const entry = S.log[dk];
-      const prayed = Object.values(entry.p || {}).filter(v => v).length;
-      if (prayed >= 5) perfectDays++;
-      delete S.log[dk];
+    const cutoff = today(new Date(Date.now() - 365 * 86400000));
+    let perfectDays = 0;
+    for (const dk of Object.keys(S.log)) {
+      if (dk < cutoff) {
+        const entry = S.log[dk];
+        const prayed = Object.values(entry.p || {}).filter(v => v).length;
+        if (prayed >= 5) perfectDays++;
+        delete S.log[dk];
+      }
     }
+    S.pd = (S.pd || 0) + perfectDays;
+    saveState();
   }
-  S.pd = (S.pd || 0) + perfectDays;
-  saveState();
-}
-
-window.freshState = freshState;
-window.loadState = loadState;
-window.saveState = saveState;
-window.resolveCurrentUser = resolveCurrentUser;
-})();
+  window.freshState = freshState;
+  window.loadState = loadState;
+  window.saveState = saveState;
+  window.resolveCurrentUser = resolveCurrentUser;

@@ -7,24 +7,31 @@ const { loadFile } = require(path.join(__dirname, 'helpers', 'load.js'));
 function today(d = new Date()) { return d.getFullYear() + '-' + (d.getMonth()+1).toString().padStart(2,'0') + '-' + d.getDate().toString().padStart(2,'0'); }
 function ws(d = new Date()) { const day = d.getDay(); const diff = d.getDate() - day + (day===0?-6:1); const m = new Date(d); m.setDate(diff); return today(m); }
 function we(d = new Date()) { const s = new Date(d); s.setDate(s.getDate() + (7-s.getDay())%7); return today(s); }
+function shift(base, dayDelta) { const d = new Date(base); d.setDate(d.getDate() + dayDelta); return today(d); }
+
+// Build week dates dynamically relative to today so the test is not time-dependent
+const weekStart = new Date(ws());
+const day0 = shift(weekStart, 0);
+const day1 = shift(weekStart, 1);
+const day2 = shift(weekStart, 2);
 
 const sandbox = loadFile(path.join(__dirname, '..', 'analytics', 'weekly-compare.js'), {
   S: {
     log: {
-      '2026-08-06': { p: { fajr: true, dhuhr: true, asr: true, maghrib: true, isha: true }, d: { deed1: true } },
-      '2026-08-07': { p: { fajr: true, dhuhr: true, asr: false, maghrib: true, isha: true }, d: {} },
-      '2026-08-08': { p: { fajr: true, dhuhr: true, asr: true, maghrib: true, isha: true }, d: { deed1: true, deed2: true } },
-      '2026-08-09': { p: { fajr: false, dhuhr: false, asr: false, maghrib: false, isha: false }, d: {} },
-      '2026-08-10': { p: { fajr: true, dhuhr: true, asr: true, maghrib: true, isha: true }, d: { deed1: true } },
-      '2026-08-11': { p: { fajr: true, dhuhr: true, asr: true, maghrib: true, isha: true }, d: {} },
-      '2026-08-12': { p: { fajr: true, dhuhr: true, asr: true, maghrib: true, isha: true }, d: { deed1: true, deed2: true, deed3: true } },
-      '2026-07-30': { p: { fajr: true, dhuhr: true, asr: true, maghrib: true, isha: true }, d: { deed1: true } },
-      '2026-07-31': { p: { fajr: true, dhuhr: true, asr: true, maghrib: true, isha: true }, d: {} },
-      '2026-08-01': { p: { fajr: true, dhuhr: true, asr: true, maghrib: true, isha: true }, d: { deed1: true, deed2: true } },
-      '2026-08-02': { p: { fajr: false, dhuhr: true, asr: false, maghrib: true, isha: false }, d: {} },
-      '2026-08-03': { p: { fajr: true, dhuhr: true, asr: true, maghrib: true, isha: true }, d: { deed1: true } },
-      '2026-08-04': { p: { fajr: true, dhuhr: true, asr: true, maghrib: true, isha: true }, d: {} },
-      '2026-08-05': { p: { fajr: true, dhuhr: true, asr: true, maghrib: true, isha: true }, d: { deed1: true } }
+      [shift(weekStart, -6)]: { p: { fajr: true, dhuhr: true, asr: true, maghrib: true, isha: true }, d: { deed1: true } },
+      [shift(weekStart, -5)]: { p: { fajr: true, dhuhr: true, asr: false, maghrib: true, isha: true }, d: {} },
+      [shift(weekStart, -4)]: { p: { fajr: true, dhuhr: true, asr: true, maghrib: true, isha: true }, d: { deed1: true, deed2: true } },
+      [shift(weekStart, -3)]: { p: { fajr: false, dhuhr: false, asr: false, maghrib: false, isha: false }, d: {} },
+      [day0]: { p: { fajr: true, dhuhr: true, asr: true, maghrib: true, isha: true }, d: { deed1: true } },
+      [day1]: { p: { fajr: true, dhuhr: true, asr: true, maghrib: true, isha: true }, d: {} },
+      [day2]: { p: { fajr: true, dhuhr: true, asr: true, maghrib: true, isha: true }, d: { deed1: true, deed2: true, deed3: true } },
+      [shift(weekStart, -7)]: { p: { fajr: true, dhuhr: true, asr: true, maghrib: true, isha: true }, d: { deed1: true } },
+      [shift(weekStart, -8)]: { p: { fajr: true, dhuhr: true, asr: true, maghrib: true, isha: true }, d: {} },
+      [shift(weekStart, -9)]: { p: { fajr: true, dhuhr: true, asr: true, maghrib: true, isha: true }, d: { deed1: true, deed2: true } },
+      [shift(weekStart, -10)]: { p: { fajr: false, dhuhr: true, asr: false, maghrib: true, isha: false }, d: {} },
+      [shift(weekStart, -11)]: { p: { fajr: true, dhuhr: true, asr: true, maghrib: true, isha: true }, d: { deed1: true } },
+      [shift(weekStart, -12)]: { p: { fajr: true, dhuhr: true, asr: true, maghrib: true, isha: true }, d: {} },
+      [shift(weekStart, -13)]: { p: { fajr: true, dhuhr: true, asr: true, maghrib: true, isha: true }, d: { deed1: true } }
     },
     dq: [{ done: true, xp: 10 }, { done: false, xp: 10 }],
     wq: [{ done: true, xp: 20 }]
@@ -62,13 +69,13 @@ test('getWeekStats returns correct structure', () => {
 
 test('getWeekStats returns correct prayer count', () => {
   const stats = w.getWeekStats(0);
-  // Current week (Aug 10-12): Aug 10(5) + Aug 11(5) + Aug 12(5) = 15
+  // Current week: day0(5) + day1(5) + day2(5) = 15
   assert.strictEqual(stats.prayers, 15, 'should have 15 prayers logged');
 });
 
 test('getWeekStats returns correct XP count', () => {
   const stats = w.getWeekStats(0);
-  // Current week (Aug 10-12): 15 prayers × 10 + deed1×2×5 + deed2×1×5 + deed3×1×5 = 170
+  // Current week: 15 prayers × 10 + deed1×2×5 + deed2×1×5 + deed3×1×5 = 170
   assert.strictEqual(stats.xp, 170, 'should have 170 XP earned');
 });
 
