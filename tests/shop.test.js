@@ -38,7 +38,7 @@ function docStub() {
 
 function createSandbox(overrides) {
   const S = Object.assign({ xp: 1000, ur: {}, lv: 1, cs: 0, tp: 0, dq: [], wq: [], mq: [], yq: [], lq: [], lad: '2026-08-11', ua: {} }, overrides);
-  const sandbox = loadSandbox(['data/shop.js', 'core/actions.js'], {
+  const sandbox = loadSandbox(['data/pools/new-pools.js', 'data/shop.js', 'core/actions.js'], {
     S,
     SHOP: [],
     DQUESTS: [], WQUESTS: [], MQUESTS: [], YQUESTS: [], LQUESTS: [],
@@ -124,9 +124,10 @@ test('mystery box gives random XP reward', () => {
   // Set up mystery box item
   sandbox.SHOP = [{ id:'r3', name:'Mystery Box', cost:350, t:'mystery' }];
   
-  // Mock Math.random to always pick XP reward (first in pool, weight 60/100)
+  // Mock Math.random inside the sandbox to always pick XP reward
   const origRandom = Math.random;
-  Math.random = () => 0.01; // Well within XP weight range
+  const mockMath = { random: () => 0.01, floor: Math.floor };
+  sandbox.Math = mockMath;
   
   // Buy mystery box
   sandbox.App.buy('r3');
@@ -157,7 +158,7 @@ test('mystery box handler exists for mystery type', () => {
 
 test('selectTitle sets active title', () => {
   const S = { xp: 1000, ur: {}, lv: 1, cs: 0, tp: 0, ownedTitles: ['r1', 'r7'], activeTitle: null };
-  const sandbox = loadSandbox(['data/shop.js', 'core/actions.js'], {
+  const sandbox = loadSandbox(['data/pools/new-pools.js', 'data/shop.js', 'core/actions.js'], {
     S,
     SHOP: [{ id:'r1', name:'Title: True Seeker', cost:300 }],
     lvFrom: () => 1,
@@ -198,7 +199,7 @@ test('selectTitle sets active title', () => {
 
 test('selectTitle rejects unowned title', () => {
   const S = { xp: 1000, ur: {}, lv: 1, cs: 0, tp: 0, ownedTitles: ['r1'], activeTitle: null };
-  const sandbox = loadSandbox(['data/shop.js', 'core/actions.js'], {
+  const sandbox = loadSandbox(['data/pools/new-pools.js', 'data/shop.js', 'core/actions.js'], {
     S,
     SHOP: [{ id:'r1', name:'Title: True Seeker', cost:300 }],
     lvFrom: () => 1,
@@ -238,7 +239,7 @@ test('selectTitle rejects unowned title', () => {
 
 test('selectFrame sets active frame', () => {
   const S = { xp: 1000, ur: {}, lv: 1, cs: 0, tp: 0, ownedFrames: ['r10', 'r19'], activeFrame: null };
-  const sandbox = loadSandbox(['data/shop.js', 'core/actions.js'], {
+  const sandbox = loadSandbox(['data/pools/new-pools.js', 'data/shop.js', 'core/actions.js'], {
     S,
     SHOP: [{ id:'r10', name:'Golden Profile Frame', cost:2000 }],
     lvFrom: () => 1,
