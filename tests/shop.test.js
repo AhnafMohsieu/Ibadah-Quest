@@ -4,6 +4,7 @@ const assert = require('node:assert');
 const path = require('path');
 const fs = require('fs');
 const vm = require('vm');
+const { loadFile } = require('./helpers/load.js');
 
 function loadSandbox(files, globals) {
   const sandbox = Object.assign({
@@ -258,4 +259,74 @@ test('selectFrame sets active frame', () => {
   
   sandbox.selectFrame('r10');
   assert.strictEqual(S.activeFrame, 'r10');
+});
+
+test('buy with enough XP succeeds', () => {
+  const S = { xp: 200, ur: {}, lv: 1 };
+  const sandbox = loadFile(path.join(__dirname, '..', 'core', 'shop.js'), {
+    S,
+    SHOP: [{ id: 'r1', name: 'Title', cost: 100 }],
+    today: () => '2026-08-11',
+    toast: () => {},
+    saveState: () => {},
+    renderAll: () => {},
+    checkA: () => {},
+    checkLevelUp: () => {},
+    lvFrom: () => 1,
+    iqIcon: () => '',
+    document: { querySelectorAll: () => [] },
+    setTimeout: (fn) => fn()
+  });
+  sandbox.window.buy('r1');
+  assert.strictEqual(S.xp, 100);
+  assert.ok(S.ur.r1);
+});
+
+test('buy with not enough XP shows toast', () => {
+  let toastCalled = false;
+  const S = { xp: 50, ur: {}, lv: 1 };
+  const sandbox = loadFile(path.join(__dirname, '..', 'core', 'shop.js'), {
+    S,
+    SHOP: [{ id: 'r1', name: 'Title', cost: 100 }],
+    today: () => '2026-08-11',
+    toast: () => { toastCalled = true; },
+    saveState: () => {},
+    renderAll: () => {},
+    checkA: () => {},
+    checkLevelUp: () => {},
+    lvFrom: () => 1,
+    iqIcon: () => '',
+    document: { querySelectorAll: () => [] },
+    setTimeout: (fn) => fn()
+  });
+  sandbox.window.buy('r1');
+  assert.ok(toastCalled, 'toast should be called for insufficient XP');
+  assert.strictEqual(S.xp, 50);
+  assert.ok(!S.ur.r1);
+});
+
+test('mystery box activates correctly', () => {
+  const S = { xp: 1000, ur: {}, lv: 1 };
+  const sandbox = loadFile(path.join(__dirname, '..', 'core', 'shop.js'), {
+    S,
+    SHOP: [{ id: 'r3', name: 'Mystery Box', cost: 350, t: 'mystery' }],
+    today: () => '2026-08-11',
+    toast: () => {},
+    saveState: () => {},
+    renderAll: () => {},
+    checkA: () => {},
+    checkLevelUp: () => {},
+    lvFrom: () => 1,
+    iqIcon: () => '',
+    genDQ: () => {},
+    document: { querySelectorAll: () => [] },
+    setTimeout: (fn) => fn()
+  });
+  const origRandom = Math.random;
+  const mockMath = { random: () => 0.5, floor: Math.floor };
+  sandbox.Math = mockMath;
+  sandbox.window.buy('r3');
+  assert.ok(S.xp > 650, 'XP should include mystery box reward');
+  assert.ok(S.ur.r3);
+  Math.random = origRandom;
 });
