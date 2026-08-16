@@ -387,7 +387,13 @@ Object.keys(NEW_POOLS).forEach(k => {
       playQuranVerse: window.playQuranVerse, playSurah: window.playSurah, stopSurah: window.stopSurah, setQuranReciter: window.setQuranReciter, playJuz: window.playJuz, updateJuzButton: window.updateJuzButton,
       calPrevMonth: window.calPrevMonth, calNextMonth: window.calNextMonth, calGoToday: window.calGoToday, selectAvatar, selectTitle, selectFrame,
       setTheme: window.setTheme, toggleTheme: window.toggleTheme,
-      toggleNotifications: typeof window.toggleNotifications === 'function' ? window.toggleNotifications : () => {}
+      toggleNotifications: typeof window.toggleNotifications === 'function' ? window.toggleNotifications : () => {},
+      switchCategory: typeof window.switchCategory === 'function' ? window.switchCategory : () => {},
+      activateTab: typeof window.activateTab === 'function' ? window.activateTab : () => {},
+      tapDhikr: typeof window.tapDhikr === 'function' ? window.tapDhikr : () => {},
+      resetDhikr: typeof window.resetDhikr === 'function' ? window.resetDhikr : () => {},
+      nextDhikr: typeof window.nextDhikr === 'function' ? window.nextDhikr : () => {},
+      toggleAvatarPicker: () => toast(iqIcon('user'), 'Avatar picker coming soon!', false, 2000)
     };
     window.closeToastOverlay = closeToastOverlay;
     console.log('Ibadah Quest initialized. window.App is set.');
