@@ -38,7 +38,7 @@ function docStub() {
 
 function createSandbox(overrides) {
   const S = Object.assign({ xp: 1000, ur: {}, lv: 1, cs: 0, tp: 0, dq: [], wq: [], mq: [], yq: [], lq: [], lad: '2026-08-11', ua: {} }, overrides);
-  const sandbox = loadSandbox(['data/pools/new-pools.js', 'data/shop.js', 'core/actions.js'], {
+  const sandbox = loadSandbox(['data/pools/new-pools.js', 'data/shop.js', 'core/xp.js', 'core/actions.js'], {
     S,
     SHOP: [],
     DQUESTS: [], WQUESTS: [], MQUESTS: [], YQUESTS: [], LQUESTS: [],
@@ -48,6 +48,8 @@ function createSandbox(overrides) {
     isFri: () => false,
     toast: () => {},
     playSound: () => {},
+    iqIcon: () => '',
+    iqEmoji: () => '',
     saveState: () => {},
     checkA: () => {},
     renderAll: () => {},

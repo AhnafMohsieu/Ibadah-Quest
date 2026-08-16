@@ -35,38 +35,7 @@
     const next = themes[(idx + 1) % themes.length];
     setTheme(next);
   }
-  function checkLevelUp(oldLv) { if (S.lv > oldLv) { const t = lvTitle(S.lv); levelUpToast(S.lv, t); } }
-  function grantDailyXp(amount, key) {
-    if (!S.xpDaily) S.xpDaily = {};
-    var dk = key + '|' + today();
-    if (S.xpDaily[dk]) return false;
-    S.xpDaily[dk] = true;
-    var oldLv = S.lv;
-    S.xp += amount;
-    S.lv = lvFrom(S.xp);
-    checkLevelUp(oldLv);
-    playSound('pop');
-    saveState();
-    if (typeof renderLv === 'function') renderLv();
-    if (typeof renderTopBar === 'function') renderTopBar();
-    return true;
-  }
-  function grantCappedDailyXp(amount, key, cap) {
-    if (!S.xpDaily) S.xpDaily = {};
-    var ck = key + '|count|' + today();
-    var count = S.xpDaily[ck] || 0;
-    if (count >= cap) return false;
-    S.xpDaily[ck] = count + 1;
-    var oldLv = S.lv;
-    S.xp += amount;
-    S.lv = lvFrom(S.xp);
-    checkLevelUp(oldLv);
-    playSound('pop');
-    saveState();
-    if (typeof renderLv === 'function') renderLv();
-    if (typeof renderTopBar === 'function') renderTopBar();
-    return true;
-  }
+
   function toggleP(id) { const l=tlog(); const w=!!l.p[id]; const oldLv=S.lv; l.p[id]=!w; const pr=PRAYERS.find(x=>x.id===id); if(!pr) return; let xp=pr.xp; if(isFri()&&id==='dhuhr'&&pr.fri) xp=pr.fri.xp; if(S.ab&&S.ab.exp>=today()) xp*=2; if(!w){ S.tp++; S.xp+=xp; if(isFri()&&id==='dhuhr') S.tj=(S.tj||0)+1; playSound('pop'); if(typeof checkSurpriseReward==='function') checkSurpriseReward('prayer'); } else { S.tp=Math.max(0,S.tp-1); S.xp=Math.max(0,S.xp-xp); if(isFri()&&id==='dhuhr') S.tj=Math.max(0,(S.tj||0)-1); } S.lv=lvFrom(S.xp); checkLevelUp(oldLv); recalc(); checkQ(); checkA(); saveState(); renderDynamic(); if(typeof checkCombo==='function'){const prayedFajr=!!l.p.fajr;const prayedAll=Object.values(l.p||{}).filter(v=>v).length>=5;if(prayedFajr)checkCombo('fajr',true);if(prayedAll)checkCombo('adhkar',true);} }
   function toggleV(id) { const l=tlog(); if(!l.v) l.v={}; const w=!!l.v[id]; const oldLv=S.lv; l.v[id]=!w; const vp=VOLUNTARY.find(x=>x.id===id); if(!vp) return; let xp=vp.xp; if(S.ab&&S.ab.exp>=today()) xp*=2; if(!w){ S.vc[id]=(S.vc[id]||0)+1; S.xp+=xp; playSound('pop'); } else { S.vc[id]=Math.max(0,(S.vc[id]||0)-1); S.xp=Math.max(0,S.xp-xp); } S.lv=lvFrom(S.xp); checkLevelUp(oldLv); checkQ(); checkA(); saveState(); renderDynamic(); }
   function toggleD(id) { const l=tlog(); const w=!!l.d[id]; const oldLv=S.lv; l.d[id]=!w; const de=DEEDS.find(x=>x.id===id); if(!de) return; let xp=de.xp; if(S.ab&&S.ab.exp>=today()) xp*=2; if(!w){ S.td[id]=(S.td[id]||0)+1; S.xp+=xp; playSound('pop'); } else { S.td[id]=Math.max(0,(S.td[id]||0)-1); S.xp=Math.max(0,S.xp-xp); } S.lv=lvFrom(S.xp); checkLevelUp(oldLv); recalc(); checkQ(); checkA(); saveState(); renderDynamic(); }
@@ -85,19 +54,9 @@
         renderAll();
     } 
   }
-  function levelUpToast(lv, title) {
-    _modalTriggerEl = document.activeElement;
-    const ov=document.getElementById('toastOverlay');
-    ov.innerHTML=`<div class="levelup-box"><div class="levelup-glow"></div><div class="levelup-icon">${iqIcon('zap')}</div><div class="levelup-label">LEVEL UP</div><div class="levelup-num">${lv}</div><div class="levelup-title">${title}</div></div>`;
-    ov.style.display='flex'; ov.classList.add('show'); ov.style.pointerEvents='auto';
-    playSound('chime');
-    for(let i=0;i<50;i++){ const el=document.createElement('span'); el.className='confetti'; el.textContent=[iqEmoji('star'),iqEmoji('sparkles'),iqEmoji('moon'),iqEmoji('sparkles'),iqEmoji('star'),iqEmoji('crescent')][i%6]; el.style.left=Math.random()*100+'%'; el.style.top='-20px'; el.style.setProperty('--fall-dur',(2+Math.random()*4)+'s'); el.style.setProperty('--rot',(Math.random()*720-360)+'deg'); document.body.appendChild(el); setTimeout(()=>el.remove(),4000); }
-    if(ov._t) clearTimeout(ov._t);
-    ov._t=setTimeout(()=>{ ov.classList.remove('show'); setTimeout(()=>{ ov.style.display='none'; ov.innerHTML=''; },400); ov.style.pointerEvents='none'; },4000);
-    ov.onclick=()=>{ ov.classList.remove('show'); setTimeout(()=>{ ov.style.display='none'; ov.innerHTML=''; },400); ov.style.pointerEvents='none'; if(ov._t) clearTimeout(ov._t); };
-  }
+
   function toast(icon, msg, conf=false, ms=2600) {
-    _modalTriggerEl = document.activeElement;
+    window._modalTriggerEl = document.activeElement;
     const ov=document.getElementById('toastOverlay'); ov.innerHTML=`<div class="toast-box"><span style="font-size:2.5rem">${icon}</span><h3>${msg}</h3></div>`;
     ov.style.display='flex'; ov.classList.add('show'); playSound(conf ? 'chime' : 'pop');
     ov.style.pointerEvents='auto';
@@ -106,10 +65,7 @@
     if(ms>0) ov._t=setTimeout(()=>{ ov.classList.remove('show'); setTimeout(()=>{ ov.style.display='none'; ov.innerHTML=''; },300); ov.style.pointerEvents='none'; },ms);
     ov.onclick=()=>{ ov.classList.remove('show'); setTimeout(()=>{ ov.style.display='none'; ov.innerHTML=''; },300); ov.style.pointerEvents='none'; if(ov._t) clearTimeout(ov._t); };
   }
-  let _audioCtx = null;
-  function playSound(type) {
-    try { const AC=window.AudioContext||window.webkitAudioContext; if(!AC) return; if(!_audioCtx) _audioCtx=new AC(); const ctx=_audioCtx; const osc=ctx.createOscillator(); const gain=ctx.createGain(); osc.connect(gain); gain.connect(ctx.destination); if(type==='pop'){ osc.type='sine'; osc.frequency.setValueAtTime(880,ctx.currentTime); osc.frequency.exponentialRampToValueAtTime(110,ctx.currentTime+0.1); gain.gain.setValueAtTime(0.5,ctx.currentTime); gain.gain.exponentialRampToValueAtTime(0.01,ctx.currentTime+0.1); osc.start(ctx.currentTime); osc.stop(ctx.currentTime+0.1); } else if(type==='chime'){ osc.type='triangle'; osc.frequency.setValueAtTime(523.25,ctx.currentTime); osc.frequency.exponentialRampToValueAtTime(1046.50,ctx.currentTime+0.3); gain.gain.setValueAtTime(0.3,ctx.currentTime); gain.gain.exponentialRampToValueAtTime(0.01,ctx.currentTime+0.8); osc.start(ctx.currentTime); osc.stop(ctx.currentTime+0.8); } } catch(e){}
-  }
+
   function genDQ() { const t=today(); if(S.qd===t&&S.dq.length) return; const l=tlog(); S.dq=[...DQUESTS].sort(()=>Math.random()-0.5).slice(0,4).map(q=>{ const o=DQUESTS.find(x=>x.id===q.id); return {...q, done:!!(o&&o.c(S,l))}; }); S.qd=t; }
   function genWQ() { const w=ws(); if(S.wqd===w&&S.wq.length) return; S.wq=[...WQUESTS].sort(()=>Math.random()-0.5).slice(0,3).map(q=>{ const o=WQUESTS.find(x=>x.id===q.id); return {...q, done:!!(o&&o.c(S))}; }); S.wqd=w; }
   function genMQ() { const m=ms(); if(S.mqd===m&&S.mq.length) return; S.mq=[...MQUESTS].sort(()=>Math.random()-0.5).slice(0,3).map(q=>{ const o=MQUESTS.find(x=>x.id===q.id); return {...q, done:!!(o&&o.c(S))}; }); S.mqd=m; }
@@ -664,7 +620,7 @@ Object.keys(NEW_POOLS).forEach(k => {
   }
 
   // Modal keyboard handlers (Escape to close, focus trap)
-  var _modalTriggerEl = null;
+  window._modalTriggerEl = null;
   function trapFocus(modal, e) {
     var focusable = modal.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
     if (!focusable.length) return;
@@ -710,9 +666,9 @@ Object.keys(NEW_POOLS).forEach(k => {
     toastOverlay.style.display = 'none';
     toastOverlay.innerHTML = '';
     toastOverlay.style.pointerEvents = 'none';
-    if (_modalTriggerEl && _modalTriggerEl.focus) {
-      _modalTriggerEl.focus();
-      _modalTriggerEl = null;
+    if (window._modalTriggerEl && window._modalTriggerEl.focus) {
+      window._modalTriggerEl.focus();
+      window._modalTriggerEl = null;
     }
   }
 
