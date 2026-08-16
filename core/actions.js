@@ -27,6 +27,7 @@
     renderAll();
   }
   function claimBonus() { const t=today(); if(S.lbd===t) return; const oldLv=S.lv; const b=S.cs>=7?75:30; S.xp+=b; S.lbd=t; S.lv=lvFrom(S.xp); checkLevelUp(oldLv); saveState(); markDirty('today'); markDirty('topbar'); markDirty('lv'); markDirty('progress'); renderDynamic(); toast(iqIcon('gift'),'Daily Bonus: +'+b+' XP!'); }
+  window.claimBonus = claimBonus;
   function selectAvatar(emoji) {
     S.avatar = emoji;
     saveState();
