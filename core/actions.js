@@ -526,6 +526,14 @@ Object.keys(NEW_POOLS).forEach(k => {
     try { populateTier1Icons(); } catch(e) { console.error('Step 8b tier1 icons failed:', e); }
     try { initModalKeyboardHandlers(); } catch(e) { console.error('Step 9 modal keyboard handlers failed:', e); }
     try { initThemeToggleKeyboard(); } catch(e) { console.error('Step 10 theme toggle keyboard failed:', e); }
+    try {
+      document.addEventListener('keydown', (e) => {
+        if ((e.key === 'Enter' || e.key === ' ') && e.target.matches('.card-item, .vol-card, .shop-card')) {
+          e.preventDefault();
+          e.target.click();
+        }
+      });
+    } catch(e) { console.error('Step 11 card keyboard nav failed:', e); }
     window.App = {
       toggleP: window.toggleP, toggleV: window.toggleV, toggleD: window.toggleD, buy,
       detail: (id) => toast(iqIcon('alert-triangle'), DETAILS[id]||'Voluntary Prayer', false, 4000),

@@ -284,7 +284,7 @@
     </div><div style="display:flex;flex-direction:column;gap:12px;">`;
     MORNING_DHIKR.forEach((item, idx) => { 
         const done = !!S.morningDone[dt][idx]; 
-        h += `<div class="vol-card${done?' done':''}" onclick="App.toggleMorning(${idx}, ${item.xp})" style="cursor:pointer;">
+        h += `<div class="vol-card${done?' done':''}" tabindex="0" role="button" onclick="App.toggleMorning(${idx}, ${item.xp})" style="cursor:pointer;">
             <div class="prayer-check" style="font-size:1.2rem;">${done?iqIcon('check'):iqIcon('sun')}</div>
             <div class="prayer-info">
                 <div style="font-family:'Amiri',serif;font-size:1.3rem;margin-bottom:2px;color:var(--gold);line-height:1.4;">${item.arabic}</div>
@@ -322,7 +322,7 @@
     </div><div style="display:flex;flex-direction:column;gap:12px;">`;
     EVENING_DHIKR.forEach((item, idx) => { 
         const done = !!S.eveningDone[dt][idx]; 
-        h += `<div class="vol-card${done?' done':''}" onclick="App.toggleEvening(${idx}, ${item.xp})" style="cursor:pointer;">
+        h += `<div class="vol-card${done?' done':''}" tabindex="0" role="button" onclick="App.toggleEvening(${idx}, ${item.xp})" style="cursor:pointer;">
             <div class="prayer-check" style="font-size:1.2rem;">${done?iqIcon('check'):iqIcon('moon')}</div>
             <div class="prayer-info">
                 <div style="font-family:'Amiri',serif;font-size:1.3rem;margin-bottom:2px;color:var(--gold);line-height:1.4;">${item.arabic}</div>

@@ -100,7 +100,7 @@ function renderAll() {
         if (t.includes('dhikr') || t.includes('adhkar') || t.includes('istighfar')) icon = iqIcon('hand-heart');
         if (t.includes('memorize')) icon = iqIcon('brain');
         
-        return `<div class="vol-card${d?' done':''}" onclick="App.toggleQuest('${q.id}','${type}',${q.xp})" style="cursor:pointer;">
+        return `<div class="vol-card${d?' done':''}" tabindex="0" role="button" onclick="App.toggleQuest('${q.id}','${type}',${q.xp})" style="cursor:pointer;">
           <div class="prayer-check">${d?iqIcon('check'):icon}</div>
           <div class="prayer-info"><div class="prayer-name">${q.d}</div></div>
           <div class="prayer-xp">+${q.xp} XP</div>
