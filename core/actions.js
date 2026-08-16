@@ -292,7 +292,7 @@ Object.keys(NEW_POOLS).forEach(k => {
     overlay.classList.add('visible');
     overlay.style.opacity = '1';
   }
-  window.applyTheme();
+  try { window.applyTheme(); } catch(e) { console.error('applyTheme in initApp failed:', e); }
   // Profile as main tab
   TAB_GROUPS.profile_main = [
     { id: 'profile', icon: 'user', label: 'Profile' },
@@ -379,12 +379,12 @@ Object.keys(NEW_POOLS).forEach(k => {
       dismissMuhasabah: typeof window.dismissMuhasabah === 'function' ? window.dismissMuhasabah : () => {},
       joinJourney: typeof window.joinJourney === 'function' ? window.joinJourney : () => {},
       manualRefresh: window.manualRefreshContent, ensureQuranLoaded: window.ensureQuranLoaded, ensureHadithLoaded: window.ensureHadithLoaded,
-      claimBonus,
+      claimBonus: window.claimBonus,
       setQuranView: window.setQuranView, quranSearchFilter: window.quranSearchFilter, openQuranSurah: window.openQuranSurah, quranBack: window.quranBack, openQuranJuz: window.openQuranJuz,
       openHadithCollection: window.openHadithCollection, openHadithBook: window.openHadithBook, hadithBack: window.hadithBack,
       playQuranVerse: window.playQuranVerse, playSurah: window.playSurah, stopSurah: window.stopSurah, setQuranReciter: window.setQuranReciter, playJuz: window.playJuz, updateJuzButton: window.updateJuzButton,
       calPrevMonth: window.calPrevMonth, calNextMonth: window.calNextMonth, calGoToday: window.calGoToday, selectAvatar, selectTitle, selectFrame,
-      setTheme, toggleTheme,
+      setTheme: window.setTheme, toggleTheme: window.toggleTheme,
       toggleNotifications: typeof window.toggleNotifications === 'function' ? window.toggleNotifications : () => {}
     };
     window.closeToastOverlay = closeToastOverlay;
