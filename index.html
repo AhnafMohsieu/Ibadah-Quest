@@ -23,7 +23,7 @@
     .tab-panel.active{display:block;animation:fadeIn 0.25s ease}
     @keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
   </style>
-  <link rel="preload" href="styles/main.css?v=14" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <link rel="preload" href="styles/main.css?v=15" as="style" onload="this.onload=null;this.rel='stylesheet'">
   <script>
     (function () {
       try { var t = localStorage.getItem('iqTheme'); if (t && t !== 'light') document.documentElement.setAttribute('data-theme', t); } catch (e) {}
@@ -340,7 +340,7 @@
 
 <!-- Core Data Files (must load in dependency order) -->
 <script src="data/prayers.js?v=3"></script>
-<script src="data/icons.js?v=2"></script>
+<script src="data/icons.js?v=3"></script>
 <script>
   if (typeof iqIcon !== 'function') { function iqIcon(){return '';} function iqEmoji(){return '';} }
   document.querySelectorAll('.tier1-tabs .t1-btn').forEach(function (b) {
@@ -357,9 +357,9 @@
 <script src="data/levels.js?v=3"></script>
 <script src="data/streak-msgs.js?v=3"></script>
 <script src="data/quests.js?v=3"></script>
-<script src="data/achievements.js?v=3"></script>
+<script src="data/achievements.js?v=4"></script>
 <script src="data/morning-evening.js?v=3"></script>
-<script src="data/tab-groups.js?v=5"></script>
+<script src="data/tab-groups.js?v=6"></script>
 
 <!-- Content Pools (extracted from content-pools.js) -->
 <script src="data/pools/quran-meta.js?v=3"></script>
@@ -420,14 +420,14 @@
 <script src="data/pools/new-pools.js?v=1"></script>
 
 <!-- State -->
-<script src="state/state.js?v=2"></script>
+<script src="state/state.js?v=3"></script>
 
 <!-- Render engine (split modules) -->
 <script src="render/calendar.js?v=1"></script>
 <script src="render/prayers.js?v=1"></script>
 <script src="render/static.js?v=1"></script>
-<script src="render/dynamic.js?v=1"></script>
-<script src="render/tabs.js?v=1"></script>
+<script src="render/dynamic.js?v=2"></script>
+<script src="render/tabs.js?v=2"></script>
 
 <!-- Chart.js CDN (lazy loaded) -->
 <script>
@@ -492,7 +492,7 @@
 <script src="features/spiritual-growth/ramadan.js?v=1" defer></script>
 <script src="features/spiritual-growth/laylat.js?v=1" defer></script>
 <script src="features/search.js" defer></script>
-<script src="features/fab.js" defer></script>
+<script src="features/fab.js?v=1" defer></script>
 <script src="features/streak-milestones.js" defer></script>
 <script src="features/pull-refresh.js" defer></script>
 <script src="features/surprise-rewards.js" defer></script>
@@ -520,7 +520,7 @@
 <script src="core/shop.js?v=1"></script>
 <script src="core/dhikr.js?v=1"></script>
 <script src="core/content.js?v=1"></script>
-<script src="core/actions.js?v=11"></script>
+<script src="core/actions.js?v=12"></script>
 
 <!-- PWA: Service Worker registration + update banner -->
 <script>
@@ -544,7 +544,7 @@
     });
   }
   window.addEventListener('load', function() {
-    navigator.serviceWorker.register('sw.js?v=15').then(function(reg) {
+    navigator.serviceWorker.register('sw.js?v=16').then(function(reg) {
       if (reg.waiting) { showUpdateBanner(reg); return; }
       reg.addEventListener('updatefound', function() {
         var sw = reg.installing;
