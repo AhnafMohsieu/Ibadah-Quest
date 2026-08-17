@@ -123,7 +123,7 @@ test('theme: light-family palette blocks exist in main.css', () => {
 test('theme: index.html pre-paint script sets data-theme from localStorage', () => {
   assert.ok(html.includes("localStorage.getItem('iqTheme')"));
   assert.ok(html.includes("setAttribute('data-theme'"));
-  assert.ok(html.includes('styles/main.css?v=15'));
+  assert.ok(html.includes('styles/main.css?v=16'));
 });
 
 test('theme: picker references metadata and setTheme wiring', () => {
