@@ -415,7 +415,7 @@ body.loading { opacity: 0; }
 @media (max-width: 600px) {
   .tier-nav-container { padding: 12px 8px 0; }
   .tier1-tabs { display: grid; grid-template-columns: repeat(5, 1fr); gap: 4px; padding-bottom: 4px; }
-  .tier1-tabs .t1-btn { width: auto; min-width: 0; flex-direction: column; gap: 4px; padding: 10px 2px; font-size: 0.65rem; }
+  .tier1-tabs .t1-btn { width: auto; min-width: 0; flex-direction: column; gap: 4px; padding: 10px 2px; font-size: 0.6rem; }
 }
 
 /* ── Compact Hero Strip ── */
@@ -502,7 +502,7 @@ body.loading { opacity: 0; }
 /* mobile tier2/tier3 grid overrides — placed AFTER the desktop .tier2-tabs/.tier3-tabs rules so they win the cascade at <=600px */
 @media (max-width: 600px) {
   .tier2-tabs, .tier2-tabs.cat-chips, .tier3-tabs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; align-items: stretch; }
-  .tier2-tabs .t2-btn, .tier2-tabs.cat-chips .cat-chip, .tier3-tabs .t3-btn, .tier3-tabs .t2-btn { width: 100%; min-width: 0; justify-content: center; white-space: normal; padding: 6px 4px; font-size: 0.62rem; }
+  .tier2-tabs .t2-btn, .tier2-tabs.cat-chips .cat-chip, .tier3-tabs .t3-btn, .tier3-tabs .t2-btn { width: 100%; min-width: 0; justify-content: center; white-space: normal; padding: 6px 4px; font-size: 0.58rem; }
   .tier2-tabs.cat-chips .cat-chip { border-radius: 12px; }
 }
 
