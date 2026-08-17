@@ -409,7 +409,7 @@ Append to `tests/html.test.js`:
 test('focus-visible and reduced-motion polish present', () => {
   assert.ok(css.includes(':focus-visible'), 'focus-visible rings missing');
   assert.ok(css.includes('prefers-reduced-motion'), 'reduced-motion guard missing');
-  assert.ok(css.includes('.deed-card { flex: 1 1 calc(50% - 8px)') || css.includes('grid-template-columns: repeat(2, 1fr)'), 'desktop 2-col grid missing');
+  assert.ok(css.includes('#deedArea .deed-card { flex: 1 1 calc(50% - 8px)'), 'desktop 2-col deed grid missing');
 });
 ```
 
