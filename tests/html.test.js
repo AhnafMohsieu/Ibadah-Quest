@@ -426,6 +426,14 @@ test('mobile tab strips use even grids (tier1 5-across, tier2/tier3 4-per-row)',
   const t2Block = css.slice(t2mIdx, selIdx + 140);
   assert.ok(t2Block.includes(tier23Sel) && t2Block.includes('repeat(4, 1fr)'),
     'mobile tier2/tier3 must be 4-column grids');
+  const ptGridIdx = css.indexOf('.prayer-times-grid');
+  assert.ok(ptGridIdx > -1, '.prayer-times-grid must exist');
+  const ptGridBlock = css.slice(ptGridIdx, ptGridIdx + 400);
+  assert.ok(ptGridBlock.includes('repeat(auto-fit, minmax(140px, 1fr))'),
+    'prayer grid must use auto-fit minmax(140px, 1fr)');
+  const ptCardIdx = css.indexOf('.prayer-times-grid .pt-card {');
+  assert.ok(ptCardIdx > -1 && css.slice(ptCardIdx, ptCardIdx + 400).includes('aspect-ratio: 1'),
+    '.pt-card must set aspect-ratio: 1 (square cards)');
 });
 
 test('Mood feature is fully removed', () => {

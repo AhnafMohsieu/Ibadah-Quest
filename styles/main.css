@@ -612,15 +612,16 @@ body.loading { opacity: 0; }
 .name-roman { font-size: 1.05rem; font-weight: 700; color: var(--gold-light); letter-spacing: 1px; margin-bottom: 6px; text-transform: uppercase; }
 
 /* ── Prayer Times Grid ── */
-.prayer-times-grid { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 8px; }
+.prayer-times-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-bottom: 8px; }
 .prayer-times-grid .pt-card {
   width: calc((100% - 60px) / 6); flex: 1 1 calc((100% - 60px) / 6); min-width: 0;
+  aspect-ratio: 1;
   background: var(--card-bg);
   box-shadow: 5px 5px 10px var(--shadow-dark), -5px -5px 10px var(--shadow-light);
   border: none;
   border-radius: 14px;
-  padding: 18px 10px; text-align: center;
-  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  padding: 12px 10px; text-align: center;
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
   transition: all 0.25s; position: relative;
 }
 .prayer-times-grid .pt-card:hover { transform: translateY(-3px); box-shadow: 8px 8px 16px var(--shadow-dark), -8px -8px 16px var(--shadow-light); }
@@ -1967,11 +1968,9 @@ select.profile-input option { background: var(--bg-accent); color: var(--text); 
 .spiritual-card { flex-direction: column; text-align: center; }
   .spiritual-svg-wrap { width: 100px; height: 110px; }
   .card-grid .card-item { width: calc((100% - 24px) / 3); flex-basis: calc((100% - 24px) / 3); }
-  .prayer-times-grid .pt-card { width: calc((100% - 24px) / 3); flex-basis: calc((100% - 24px) / 3); }
 }
 @media (max-width: 400px) {
   .card-grid .card-item { width: calc((100% - 12px) / 2); flex-basis: calc((100% - 12px) / 2); }
-  .prayer-times-grid .pt-card { width: calc((100% - 12px) / 2); flex-basis: calc((100% - 12px) / 2); }
   .tb-right { gap: 10px; }
 }
 
