@@ -83,4 +83,10 @@
   window.closeFAB = close;
   window.populateFABIcons = populateFABIcons;
   window.initFAB = init;
+
+  // features/fab.js is a defer script: it loads after core/actions.js's
+  // synchronous init() has already run, so window.initFAB is never invoked
+  // from there. Populate the icon spans directly at module load (the DOM is
+  // fully parsed by now). Idempotent: populateFABIcons skips filled spans.
+  populateFABIcons();
 })();
