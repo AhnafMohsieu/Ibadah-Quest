@@ -409,14 +409,18 @@ test('focus-visible and reduced-motion polish present', () => {
   assert.ok(css.includes('#deedArea .deed-card { flex: 1 1 calc(50% - 8px)'), 'desktop 2-col deed grid missing');
 });
 
-test('mobile tab strips wrap instead of scrolling', () => {
+test('mobile tab strips use even grids (tier1 5-across, tier2/tier3 4-per-row)', () => {
   const mqIdx = css.indexOf('@media (max-width: 600px)');
   assert.ok(mqIdx > -1, 'mobile media query must exist');
-  const mobileBlock = css.slice(mqIdx, mqIdx + 400);
-  assert.ok(mobileBlock.includes('flex-wrap: wrap'), 'mobile tier1 must flex-wrap: wrap');
-  assert.ok(!mobileBlock.includes('overflow-x: auto'), 'mobile tier1 must not overflow-x: auto');
-  assert.ok(css.includes('.tier2-tabs.cat-chips') && css.includes('flex-wrap: wrap'),
-    'tier2 cat-chips must flex-wrap: wrap somewhere');
+  const mobileBlock = css.slice(mqIdx, mqIdx + 600);
+  assert.ok(mobileBlock.includes('.t1-btn') && mobileBlock.includes('width: auto;'),
+    'mobile .t1-btn must set width: auto (fixes flex-basis:auto resolving to width:100%)');
+  assert.ok(mobileBlock.includes('repeat(5, 1fr)'), 'mobile tier1 must be a 5-column grid');
+  assert.ok(!mobileBlock.includes('flex-wrap: wrap'), 'mobile tier1 must not flex-wrap');
+  assert.ok(!mobileBlock.includes('overflow-x: auto'), 'mobile tab strips must not overflow-x: auto');
+  assert.ok(css.includes('.tier2-tabs.cat-chips') && css.includes('repeat(4, 1fr)'),
+    'tier2 cat-chips must be a 4-column grid');
+  assert.ok(css.includes('grid-template-columns: repeat(4, 1fr)'), 'tier2/tier3 must use 4 columns');
 });
 
 test('Mood feature is fully removed', () => {
