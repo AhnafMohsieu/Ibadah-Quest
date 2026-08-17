@@ -365,6 +365,64 @@ git commit -m "chore: remove-mood + grid-tabs verification fixes"
 
 ---
 
+### Task 6: Cache-bust the changed assets for field users
+
+**Files:**
+- Modify: `index.html` (bump `?v=` queries on changed assets), `sw.js` (bump `CACHE_NAME`), `tests/html.test.js` (update pinned version assertions)
+
+**Interfaces:**
+- Consumes: all changed assets from Tasks 1-5.
+- Produces: field users served the new versions. The service worker (sw.js) is **cache-first** for JS/CSS/data and keys the cache on `pathname + query` (see `cacheKey` in sw.js). So a version-query bump on a changed asset forces a fresh fetch; `features/fab.js` has NO version query (index.html:495) so it must get one. Per sw.js:3 the reliable purge is bumping `CACHE_NAME` (the `activate` handler deletes all other `iq-cache-*` caches).
+
+**Reason (verified):** `render/tabs.js` gained the bnav refill (Task 2) but `index.html:430` still loads `render/tabs.js?v=1`. An existing user's SW cache holds `render/tabs.js?v=1` and would keep serving the OLD file cache-first — the bnav fix would never reach them. Same for every other changed asset. Bumping `CACHE_NAME` (v15 → v16) purges all old caches on activation, guaranteeing fresh fetches for all assets including `features/fab.js` and the unversioned deferred scripts.
+
+- [ ] **Step 1: Bump CACHE_NAME in sw.js**
+
+In `sw.js:6`, change `const CACHE_NAME = 'iq-cache-v15';` → `const CACHE_NAME = 'iq-cache-v16';`
+
+- [ ] **Step 2: Bump version queries on every changed asset in index.html**
+
+Changed assets and their bumps:
+- `styles/main.css?v=14` (index.html:26) → `?v=15` (mood CSS removed in Task 1; grid CSS lands in Task 4)
+- `data/icons.js?v=2` (index.html:343) → `?v=3` (mood icons removed)
+- `data/achievements.js?v=3` (index.html:360) → `?v=4` (11 mood achievements removed)
+- `data/tab-groups.js?v=5` (index.html:362) → `?v=6` (mood tab removed)
+- `state/state.js?v=2` (index.html:423) → `?v=3` (moodLog removed)
+- `render/dynamic.js?v=1` (index.html:429) → `?v=2` (renderMoodTab call removed)
+- `render/tabs.js?v=1` (index.html:430) → `?v=2` (panel-mood refs removed + bnav refill added)
+- `core/actions.js?v=11` (index.html:523) → `?v=12` (comment reference to mood removed)
+- `features/fab.js` (index.html:495) — currently NO version query → add `?v=1` (populateFABIcons at module load)
+- `sw.js?v=15` (index.html:547) → `sw.js?v=16` (CACHE_NAME bump must reach users; SW update check compares fetched bytes, but bump the query to be consistent with the existing convention)
+
+Do NOT touch version queries of assets that were NOT changed (health, finance, garden, spiritual-growth, pools, widgets, etc.).
+
+- [ ] **Step 3: Update pinned assertions in tests/html.test.js**
+
+- Line 71: `sw.js?v=15` → `sw.js?v=16`
+- Line 126: `styles/main.css?v=14` → `styles/main.css?v=15`
+
+Check no other test pins a version query (grep tests/ for `?v=`). Update any that break.
+
+- [ ] **Step 4: Run the full test suite**
+
+Run: `node --test tests/*.test.js`
+Expected: 317 pass / 0 fail (Task 2 added 1; no net change here).
+
+- [ ] **Step 5: Verify in headless Chrome with a fresh SW**
+
+Run: `node C:\Users\Mahin\AppData\Local\Temp\opencode\cdp_iconcheck.js`
+Expected: `fab action icons: ok,ok,ok,ok` and `bnav icons: ok,ok,ok,ok,ok`.
+IMPORTANT: the check must run against a fresh profile or after unregistering the old service worker / clearing its caches, otherwise the stale `iq-cache-v15` cache will serve the OLD tabs.js and falsely report empty bnav icons. If the harness doesn't clear caches, unregister SW + `caches.delete('iq-cache-v15')` before navigating, or use a fresh `--user-data-dir`. The `activate` handler purges old caches automatically once the new SW (v16) is active.
+
+- [ ] **Step 6: Commit**
+
+```bash
+git add sw.js index.html tests/html.test.js
+git commit -m "chore: cache-bust changed assets (sw cache v16, version-query bumps)"
+```
+
+---
+
 ## Self-Review
 
 **Spec coverage:**
@@ -375,6 +433,7 @@ git commit -m "chore: remove-mood + grid-tabs verification fixes"
 - Tier2/tier3 4 per row, equal width, no horizontal scroll, partial last rows left-aligned → Task 4 Steps 3-4.
 - Desktop unchanged → Task 4 preserves non-media rules (tier1 desktop rule at 408-414 untouched; only the mobile override at 415 changed).
 - Tests + headless verification → every task + Task 5.
+- Cache-bust changed assets so field users get the fixes (SW cache-first + `?v=` key) → Task 6.
 
 **Notes:**
 - The `tests/html.test.js:366-372` first-600px-query assertion (`.t1-btn` + `width: auto;` in first 400 chars) is preserved in Task 4 Step 2's replacement.
