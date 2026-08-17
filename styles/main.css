@@ -614,7 +614,7 @@ body.loading { opacity: 0; }
 /* ── Prayer Times Grid ── */
 .prayer-times-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-bottom: 8px; }
 .prayer-times-grid .pt-card {
-  width: calc((100% - 60px) / 6); flex: 1 1 calc((100% - 60px) / 6); min-width: 0;
+  width: 100%; min-width: 0;
   aspect-ratio: 1;
   background: var(--card-bg);
   box-shadow: 5px 5px 10px var(--shadow-dark), -5px -5px 10px var(--shadow-light);
