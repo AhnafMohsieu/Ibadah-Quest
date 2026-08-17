@@ -330,6 +330,14 @@
       var icon = window.iqIcon(cat);
       if (icon) span.innerHTML = icon;
     });
+    document.querySelectorAll('.bnav-btn').forEach(function(btn) {
+      var span = btn.querySelector('.bnav-icon');
+      if (!span || span.childElementCount > 0) return;
+      var cat = btn.getAttribute('data-cat');
+      if (!cat) return;
+      var icon = window.iqIcon(cat);
+      if (icon) span.innerHTML = icon;
+    });
   }
 
   window._pushTabState = _pushTabState;

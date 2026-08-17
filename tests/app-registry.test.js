@@ -108,3 +108,12 @@ test('initBnavKeyboardNav is defined and wired', () => {
   const actionsSrc = require('fs').readFileSync(require('path').join(__dirname, '..', 'core', 'actions.js'), 'utf8');
   assert.ok(actionsSrc.includes('window.initBnavKeyboardNav'), 'init() must call initBnavKeyboardNav');
 });
+
+test('populateTier1Icons fills bnav icons too', () => {
+  const tabsSrc = require('fs').readFileSync(require('path').join(__dirname, '..', 'render', 'tabs.js'), 'utf8');
+  const fnIdx = tabsSrc.indexOf('function populateTier1Icons');
+  assert.ok(fnIdx > -1, 'populateTier1Icons must exist');
+  const body = tabsSrc.slice(fnIdx, fnIdx + 600);
+  assert.ok(body.includes('.bnav-btn'), 'populateTier1Icons must fill .bnav-btn');
+  assert.ok(body.includes('.bnav-icon'), 'populateTier1Icons must target .bnav-icon');
+});
