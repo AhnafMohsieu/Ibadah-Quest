@@ -363,6 +363,14 @@ test('theme: picker metadata excludes dark and night', () => {
   assert.ok(!meta.includes("key:'night'"), 'theme-meta must not list night');
 });
 
+test('mobile tier1 media query overrides t1-btn width to auto', () => {
+  const mqIdx = css.indexOf('@media (max-width: 600px)');
+  assert.ok(mqIdx > -1, 'mobile media query must exist');
+  const mobileBlock = css.slice(mqIdx, mqIdx + 400);
+  assert.ok(mobileBlock.includes('.t1-btn') && mobileBlock.includes('width: auto;'),
+    'mobile .t1-btn must set width: auto to fix flex-basis:auto resolving to width:100%');
+});
+
 test('hero header styles exist with clay tokens', () => {
   assert.ok(css.includes('.header-crescent'), 'crescent style missing');
   assert.ok(css.includes('@keyframes moonFloat'), 'moon float animation missing');
