@@ -11,7 +11,7 @@
 ## Global Constraints
 
 - All existing tests must keep passing: `node --test tests/*.test.js`. Currently 315 pass / 0 fail.
-- `tests/html.test.js:366-372` keys off the FIRST `@media (max-width: 600px)` block in `main.css` and asserts `.t1-btn` AND `width: auto;` appear within the first 400 chars of that block. Task 3 MUST keep `.t1-btn` and `width: auto;` inside the first 400 chars and MUST keep that query as the file's first 600px query.
+- `tests/html.test.js:366-372` keys off the FIRST `@media (max-width: 600px)` block in `main.css` and asserts `.t1-btn` AND `width: auto;` appear within the first 400 chars of that block. Task 4 MUST keep `.t1-btn` and `width: auto;` inside the first 400 chars and MUST keep that query as the file's first 600px query.
 - Required CSS markers MUST stay in `styles/main.css`: `--bg: #ddd3ea`, `--gold: #f43f5e`, `--shadow-light`, `backdrop-filter`, `.header-crescent`, `@keyframes moonFloat`, `@keyframes xpWave`, `.xp-inner`, `.streak-bar`, `.best-num`, `.t1-btn.active`, `.prayer-times-grid`, `.pt-card`, all 6 theme blocks, `.garden-tree svg`, `border-radius: var(--radius) var(--radius) 6px 6px`, `transition: background 300ms`, `transition: transform 200ms`, `align-items: stretch`.
 - FORBIDDEN markers (tests assert absence): `html[data-theme="dark"]`, `html[data-theme="night"]`, `html[data-theme="serene-dark"]`, `--bg: #0b1513`, `--emerald: #10b981`, `--gold: #D4AF37`, `tailwindcss`, `panel-leaderboard`.
 - `.mood-btn` and `.mood-streak` must NOT appear anywhere in `styles/main.css` after Task 1.
@@ -150,13 +150,75 @@ git commit -m "feat: remove Mood feature entirely"
 
 ---
 
-### Task 2: Rewrite the mobile tab-strip test for the grid layout
+### Task 2: Fix bnav icon fill timing (populateTier1Icons runs before #bnav exists)
+
+**Files:**
+- Modify: `render/tabs.js` (add DOMContentLoaded re-invocation)
+- Test: `tests/app-registry.test.js` (append)
+
+**Interfaces:**
+- Consumes: `populateTier1Icons()` (already fills `.bnav-icon` spans, idempotent — skips spans with `childElementCount > 0`).
+- Produces: bnav icons reliably filled after full DOM parse. Task 5's headless check confirms 5/5 bnav icons non-empty.
+
+**Bug (verified via CDP at 390×844):** `populateTier1Icons()` is called from `core/actions.js:330` inside `init()`, which executes synchronously when `core/actions.js` runs at `index.html:523` — BEFORE the `#bnav` markup at `index.html:567` is parsed. So the `document.querySelectorAll('.bnav-btn')` query inside `populateTier1Icons` returns an empty NodeList at init time and bnav icons stay empty. Tier1 icons are unaffected (filled by the inline script at index.html:347 which runs after the tier1 markup at index.html:122). The FAB had the same class of bug, fixed in commit 8493c1b by calling `populateFABIcons()` at module load (fab.js is a defer script).
+
+- [ ] **Step 1: Write the failing test**
+
+Append to `tests/app-registry.test.js`:
+
+```js
+test('populateTier1Icons is re-invoked after DOM ready for bnav', () => {
+  const tabsSrc = require('fs').readFileSync(require('path').join(__dirname, '..', 'render', 'tabs.js'), 'utf8');
+  assert.ok(tabsSrc.includes('DOMContentLoaded'), 'tabs.js must re-run populateTier1Icons on DOMContentLoaded');
+  const dclIdx = tabsSrc.indexOf('DOMContentLoaded');
+  const dclBlock = tabsSrc.slice(dclIdx, dclIdx + 200);
+  assert.ok(dclBlock.includes('populateTier1Icons'), 'DOMContentLoaded handler must call populateTier1Icons');
+});
+```
+
+- [ ] **Step 2: Run test to verify it fails**
+
+Run: `node --test tests/app-registry.test.js`
+Expected: FAIL — no `DOMContentLoaded` in `render/tabs.js`.
+
+- [ ] **Step 3: Add the DOMContentLoaded re-invocation**
+
+In `render/tabs.js`, inside the IIFE (before the `})();` closing at line 348), add:
+
+```js
+  document.addEventListener('DOMContentLoaded', function() {
+    try { populateTier1Icons(); } catch(e) { console.error('bnav icons refill failed:', e); }
+  });
+```
+
+`populateTier1Icons` is idempotent (skips filled spans), so re-running it after the full DOM parses fills the bnav icons without double-filling tier1. This is safe even though `render/tabs.js` itself is a synchronous script — the listener fires after all markup is parsed, when `#bnav` exists.
+
+- [ ] **Step 4: Run test to verify it passes**
+
+Run: `node --test tests/app-registry.test.js`
+Expected: PASS. Then full suite: `node --test tests/*.test.js` — expect 317 pass.
+
+- [ ] **Step 5: Verify in headless Chrome**
+
+Run: `node C:\Users\Mahin\AppData\Local\Temp\opencode\cdp_iconcheck.js`
+Expected: `bnav icons: ok,ok,ok,ok,ok` (and `fab action icons: ok,ok,ok,ok`).
+
+- [ ] **Step 6: Commit**
+
+```bash
+git add render/tabs.js tests/app-registry.test.js
+git commit -m "fix: refill bnav icons on DOMContentLoaded (init() ran before #bnav existed)"
+```
+
+---
+
+### Task 3: Rewrite the mobile tab-strip test for the grid layout
 
 **Files:**
 - Test: `tests/html.test.js` (modify)
 
 **Interfaces:**
-- Consumes: nothing at runtime — test-only task. Establishes the assertions Task 3's CSS must satisfy.
+- Consumes: nothing at runtime — test-only task. Establishes the assertions Task 4's CSS must satisfy.
 
 - [ ] **Step 1: Rewrite the test**
 
@@ -194,18 +256,18 @@ git commit -m "test: assert mobile tab strips use even grids instead of wrap"
 
 ---
 
-### Task 3: Restyle tab strips as even grids (mobile)
+### Task 4: Restyle tab strips as even grids (mobile)
 
 **Files:**
 - Modify: `styles/main.css:408-415` (tier1 + mobile override)
 - Modify: `styles/main.css:479-493` (tier2/tier3 scroll + tabs rules)
-- Test: `tests/html.test.js` (already rewritten in Task 2 — no further changes needed)
+- Test: `tests/html.test.js` (already rewritten in Task 3 — no further changes needed)
 
 **Interfaces:**
-- Consumes: Task 2's test (must pass), existing `.t1-btn`/`.t2-btn`/`.t3-btn`/`.cat-chip` markup.
-- Produces: mobile tab layout where tier1 is 5 equal columns in one row (icon stacked above label), tier2/tier3 are 4 equal columns per row, no horizontal scrolling, no ragged centered rows. Desktop unchanged. Task 4's headless check verifies the real layout.
+- Consumes: Task 3's test (must pass), existing `.t1-btn`/`.t2-btn`/`.t3-btn`/`.cat-chip` markup.
+- Produces: mobile tab layout where tier1 is 5 equal columns in one row (icon stacked above label), tier2/tier3 are 4 equal columns per row, no horizontal scrolling, no ragged centered rows. Desktop unchanged. Task 5's headless check verifies the real layout.
 
-- [ ] **Step 1: Run the Task 2 test to confirm the target state**
+- [ ] **Step 1: Run the Task 3 test to confirm the target state**
 
 Run: `node --test tests/html.test.js`
 Expected: FAIL on the grid assertions (`.t1-btn`/`width:auto` block passes, `repeat(5, 1fr)` missing). This is the red phase.
@@ -257,7 +319,7 @@ git commit -m "style: even-grid tab strips on mobile (tier1 5-across, tier2/tier
 
 ---
 
-### Task 4: Verify removal + grid end-to-end (verification-only)
+### Task 5: Verify removal + grid end-to-end (verification-only)
 
 **Files:**
 - Test: run full suite + CDP harnesses (no code changes unless a regression is found)
@@ -290,7 +352,7 @@ Expected: cdp_full shows `overflowing els: NONE`, `fab action icons: ok,ok,ok,ok
 
 - [ ] **Step 5: Fix any regressions and re-verify**
 
-If any check fails, fix the offending file, re-run Steps 1-4 until green. If the grid causes a real layout regression (e.g., labels clipped, a panel overflows), fix it in the same CSS rules from Task 3 and note it in the report.
+If any check fails, fix the offending file, re-run Steps 1-4 until green. If the grid causes a real layout regression (e.g., labels clipped, a panel overflows), fix it in the same CSS rules from Task 4 and note it in the report.
 
 - [ ] **Step 6: Commit any fixes**
 
@@ -307,14 +369,15 @@ git commit -m "chore: remove-mood + grid-tabs verification fixes"
 
 **Spec coverage:**
 - Remove Mood feature entirely (tab, panel, scripts, files, dynamic call, panel references, state, achievements, icons, CSS, test fixture) → Task 1.
-- Rewrite the wrap test to assert grids → Task 2.
-- Tier1 5-across single row, icon stacked above label → Task 3 Step 2.
-- Tier2/tier3 4 per row, equal width, no horizontal scroll, partial last rows left-aligned → Task 3 Steps 3-4.
-- Desktop unchanged → Task 3 preserves non-media rules (tier1 desktop rule at 408-414 untouched; only the mobile override at 415 changed).
-- Tests + headless verification → every task + Task 4.
+- Fix bnav icon fill timing (init ran before #bnav existed) → Task 2.
+- Rewrite the wrap test to assert grids → Task 3.
+- Tier1 5-across single row, icon stacked above label → Task 4 Step 2.
+- Tier2/tier3 4 per row, equal width, no horizontal scroll, partial last rows left-aligned → Task 4 Steps 3-4.
+- Desktop unchanged → Task 4 preserves non-media rules (tier1 desktop rule at 408-414 untouched; only the mobile override at 415 changed).
+- Tests + headless verification → every task + Task 5.
 
 **Notes:**
-- The `tests/html.test.js:366-372` first-600px-query assertion (`.t1-btn` + `width: auto;` in first 400 chars) is preserved in Task 3 Step 2's replacement.
+- The `tests/html.test.js:366-372` first-600px-query assertion (`.t1-btn` + `width: auto;` in first 400 chars) is preserved in Task 4 Step 2's replacement.
 - `cloud-lightning` icon key is NOT removed (used by `istisqa` in icons.js and spiritual-growth Storm) — Task 1 only removes the mood block's lines 174-176.
 - `a286` (Gratitude 3) uses `gratitudeLog`, not `moodLog` — kept.
 - `tests/quests.test.js:52` fixture cleanup is included so the codebase has zero mood references.
