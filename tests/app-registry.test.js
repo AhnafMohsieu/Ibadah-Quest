@@ -117,3 +117,10 @@ test('populateTier1Icons fills bnav icons too', () => {
   assert.ok(body.includes('.bnav-btn'), 'populateTier1Icons must fill .bnav-btn');
   assert.ok(body.includes('.bnav-icon'), 'populateTier1Icons must target .bnav-icon');
 });
+
+test('populateFABIcons exists and is exported', () => {
+  const fabSrc = require('fs').readFileSync(require('path').join(__dirname, '..', 'features', 'fab.js'), 'utf8');
+  assert.ok(fabSrc.includes('function populateFABIcons'), 'populateFABIcons must exist');
+  assert.ok(fabSrc.includes('window.populateFABIcons'), 'populateFABIcons must be exported');
+  assert.ok(fabSrc.includes('populateFABIcons()'), 'initFAB must call populateFABIcons');
+});

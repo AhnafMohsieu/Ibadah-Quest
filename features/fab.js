@@ -26,10 +26,21 @@
     if (_open) toggle();
   }
 
+  function populateFABIcons() {
+    var map = { 'Log Prayer': 'prayer', 'Dhikr': 'dhikr', 'Charity': 'charity', 'Quests': 'quests' };
+    document.querySelectorAll('.fab-action').forEach(function (a) {
+      var icon = a.querySelector('.fab-action-icon');
+      if (!icon || icon.childElementCount > 0) return;
+      var key = map[a.getAttribute('title')];
+      if (key && window.iqIcon) icon.innerHTML = window.iqIcon(key);
+    });
+  }
+
   function init() {
     let lastScroll = 0;
     const fab = document.getElementById('fab');
     if (!fab) return;
+    populateFABIcons();
     window.addEventListener('scroll', () => {
       const cur = window.scrollY;
       if (cur > lastScroll && cur > 100) { close(); }
@@ -70,5 +81,6 @@
 
   window.toggleFAB = toggle;
   window.closeFAB = close;
+  window.populateFABIcons = populateFABIcons;
   window.initFAB = init;
 })();
