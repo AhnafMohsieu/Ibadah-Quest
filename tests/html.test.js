@@ -68,7 +68,7 @@ test('main.css uses modern light tokens', () => {
 });
 
 test('index.html registers the service worker and update banner', () => {
-  assert.ok(html.includes("navigator.serviceWorker.register('sw.js?v=15')"));
+  assert.ok(html.includes("navigator.serviceWorker.register('sw.js?v=16')"));
   assert.ok(html.includes("'SKIP_WAITING'"));
   assert.ok(html.includes('swUpdateBanner'));
 });
@@ -123,7 +123,7 @@ test('theme: light-family palette blocks exist in main.css', () => {
 test('theme: index.html pre-paint script sets data-theme from localStorage', () => {
   assert.ok(html.includes("localStorage.getItem('iqTheme')"));
   assert.ok(html.includes("setAttribute('data-theme'"));
-  assert.ok(html.includes('styles/main.css?v=14'));
+  assert.ok(html.includes('styles/main.css?v=15'));
 });
 
 test('theme: picker references metadata and setTheme wiring', () => {
@@ -407,4 +407,44 @@ test('focus-visible and reduced-motion polish present', () => {
   assert.ok(css.includes(':focus-visible'), 'focus-visible rings missing');
   assert.ok(css.includes('prefers-reduced-motion'), 'reduced-motion guard missing');
   assert.ok(css.includes('#deedArea .deed-card { flex: 1 1 calc(50% - 8px)'), 'desktop 2-col deed grid missing');
+});
+
+test('mobile tab strips use even grids (tier1 5-across, tier2/tier3 4-per-row)', () => {
+  const mqIdx = css.indexOf('@media (max-width: 600px)');
+  assert.ok(mqIdx > -1, 'mobile media query must exist');
+  const mobileBlock = css.slice(mqIdx, mqIdx + 600);
+  assert.ok(mobileBlock.includes('.t1-btn') && mobileBlock.includes('width: auto;'),
+    'mobile .t1-btn must set width: auto (fixes flex-basis:auto resolving to width:100%)');
+  assert.ok(mobileBlock.includes('repeat(5, 1fr)'), 'mobile tier1 must be a 5-column grid');
+  assert.ok(!mobileBlock.includes('flex-wrap: wrap'), 'mobile tier1 must not flex-wrap');
+  assert.ok(!mobileBlock.includes('overflow-x: auto'), 'mobile tab strips must not overflow-x: auto');
+  const tier23Sel = '.tier2-tabs, .tier2-tabs.cat-chips, .tier3-tabs';
+  const selIdx = css.indexOf(tier23Sel);
+  assert.ok(selIdx > -1, 'tier2/tier3 combined grid selector must exist');
+  const t2mIdx = css.lastIndexOf('@media (max-width: 600px)', selIdx);
+  assert.ok(t2mIdx > -1, 'tier2/tier3 grid override must live in a mobile media query');
+  const t2Block = css.slice(t2mIdx, selIdx + 140);
+  assert.ok(t2Block.includes(tier23Sel) && t2Block.includes('repeat(4, 1fr)'),
+    'mobile tier2/tier3 must be 4-column grids');
+});
+
+test('Mood feature is fully removed', () => {
+  const achievements = fs.readFileSync(path.join(root, 'data', 'achievements.js'), 'utf8');
+  const stateSrc = fs.readFileSync(path.join(root, 'state', 'state.js'), 'utf8');
+  const iconsSrc = fs.readFileSync(path.join(root, 'data', 'icons.js'), 'utf8');
+  assert.ok(!tabs.includes("label: 'Mood'"), 'tab-groups must not list a Mood tab');
+  assert.ok(!html.includes('panel-mood'), 'index.html must not have panel-mood');
+  assert.ok(!html.includes('moodArea'), 'index.html must not have moodArea');
+  assert.ok(!html.includes('pools/mood.js'), 'index.html must not load pools/mood.js');
+  assert.ok(!html.includes('features/mood.js'), 'index.html must not load features/mood.js');
+  assert.ok(!renderTabs.includes('panel-mood'), 'tabs.js must not reference panel-mood');
+  assert.ok(!renderDynamic.includes('renderMoodTab'), 'dynamic.js must not call renderMoodTab');
+  assert.ok(!stateSrc.includes('moodLog'), 'state.js must not have moodLog');
+  assert.ok(!achievements.includes('Mood Tracker') && !achievements.includes('Reflection') && !achievements.includes('Gratitude Journal') && !achievements.includes('FirstReflection'),
+    'achievements must not have mood/reflection/gratitude-journal entries');
+  assert.ok(!iconsSrc.includes("'mood':'rainbow'") && !iconsSrc.includes("'great':'sun'") && !iconsSrc.includes("['mood', 'cloud-sun']"),
+    'icons.js must not have mood mappings');
+  assert.ok(!css.includes('.mood-btn') && !css.includes('.mood-streak'), 'main.css must not have mood styles');
+  assert.ok(!fs.existsSync(path.join(root, 'features', 'mood.js')), 'features/mood.js must be deleted');
+  assert.ok(!fs.existsSync(path.join(root, 'data', 'pools', 'mood.js')), 'data/pools/mood.js must be deleted');
 });

@@ -412,7 +412,11 @@ body.loading { opacity: 0; }
   border-bottom: none;
   padding-bottom: 0;
 }
-@media (max-width: 600px) { .tier1-tabs { display: flex; flex-wrap: nowrap; overflow-x: auto; overflow-y: hidden; scrollbar-width: none; -webkit-overflow-scrolling: touch; gap: 8px; padding-bottom: 4px; } .tier1-tabs .t1-btn { flex: 0 0 auto; min-width: 92px; width: auto; } }
+@media (max-width: 600px) {
+  .tier-nav-container { padding: 12px 8px 0; }
+  .tier1-tabs { display: grid; grid-template-columns: repeat(5, 1fr); gap: 4px; padding-bottom: 4px; }
+  .tier1-tabs .t1-btn { width: auto; min-width: 0; flex-direction: column; gap: 4px; padding: 10px 2px; font-size: 0.6rem; }
+}
 
 /* ── Compact Hero Strip ── */
 .hero-strip { margin-bottom: 18px; }
@@ -476,25 +480,31 @@ body.loading { opacity: 0; }
   z-index: 1;
 }
 
-.tier2-scroll { width: 100%; overflow-x: auto; overflow-y: hidden; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
-.tier2-tabs { display: flex; flex-wrap: nowrap; align-items: stretch; gap: 8px; margin-top: 12px; padding: 4px 2px; }
+.tier2-scroll { width: 100%; overflow-x: hidden; }
+.tier2-tabs { display: flex; flex-wrap: wrap; justify-content: center; align-items: stretch; gap: 8px; margin-top: 12px; padding: 4px 2px; }
 .t2-btn { flex: 0 0 auto; min-width: 84px; background: var(--card-bg); border: none; color: var(--text2); padding: 10px 12px; border-radius: 12px; font-size: 0.72rem; font-weight: 700; cursor: pointer; transition: all 0.3s; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; letter-spacing: 0.2px; white-space: nowrap; box-shadow: 3px 3px 6px var(--shadow-dark), -3px -3px 6px var(--shadow-light); user-select: none; }
 .t2-btn span { font-size: 1.4rem; opacity: 0.9; }
 .t2-btn:hover { color: var(--text); }
 .t2-btn.active { color: var(--gold-dark); border: none; box-shadow: inset 2px 2px 5px var(--shadow-dark), inset -2px -2px 5px var(--shadow-light); }
 
-.tier2-tabs.cat-chips { display: flex; flex-wrap: nowrap; align-items: center; overflow-x: auto; overflow-y: hidden; justify-content: flex-start; gap: 8px; margin-top: 16px; border-bottom: 1px solid var(--border); padding: 4px 2px 12px; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+.tier2-tabs.cat-chips { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 8px; margin-top: 16px; border-bottom: 1px solid var(--border); padding: 4px 2px 12px; }
 .cat-chip { flex: 0 0 auto; background: var(--card-bg); border: none; color: var(--text2); padding: 8px 16px; border-radius: 30px; font-size: 0.82rem; font-weight: 700; cursor: pointer; transition: all 0.3s; display: inline-flex; align-items: center; gap: 6px; letter-spacing: 0.2px; white-space: nowrap; box-shadow: 3px 3px 6px var(--shadow-dark), -3px -3px 6px var(--shadow-light); }
 .cat-chip span { font-size: 1rem; }
 .cat-chip:hover { color: var(--text); }
 .cat-chip.active { color: var(--gold-dark); border: none; box-shadow: inset 2px 2px 5px var(--shadow-dark), inset -2px -2px 5px var(--shadow-light); }
 
-.tier3-scroll { width: 100%; overflow-x: auto; overflow-y: hidden; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
-.tier3-tabs { display: flex; flex-wrap: nowrap; align-items: stretch; gap: 8px; margin-top: 10px; padding: 4px 2px; }
+.tier3-scroll { width: 100%; overflow-x: hidden; }
+.tier3-tabs { display: flex; flex-wrap: wrap; justify-content: center; align-items: stretch; gap: 8px; margin-top: 10px; padding: 4px 2px; }
 .t3-btn { flex: 0 0 auto; min-width: 84px; background: var(--card-bg); border: none; color: var(--text2); padding: 10px 12px; border-radius: 12px; font-size: 0.72rem; font-weight: 700; cursor: pointer; transition: all 0.3s; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; letter-spacing: 0.2px; white-space: nowrap; box-shadow: 3px 3px 6px var(--shadow-dark), -3px -3px 6px var(--shadow-light); }
 .t3-btn span { font-size: 1.4rem; opacity: 0.9; }
 .t3-btn:hover { color: var(--text); }
 .t3-btn.active { color: var(--gold-dark); border: none; box-shadow: inset 2px 2px 5px var(--shadow-dark), inset -2px -2px 5px var(--shadow-light); }
+/* mobile tier2/tier3 grid overrides — placed AFTER the desktop .tier2-tabs/.tier3-tabs rules so they win the cascade at <=600px */
+@media (max-width: 600px) {
+  .tier2-tabs, .tier2-tabs.cat-chips, .tier3-tabs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; align-items: stretch; }
+  .tier2-tabs .t2-btn, .tier2-tabs.cat-chips .cat-chip, .tier3-tabs .t3-btn, .tier3-tabs .t2-btn { width: 100%; min-width: 0; justify-content: center; white-space: normal; padding: 6px 4px; font-size: 0.58rem; }
+  .tier2-tabs.cat-chips .cat-chip { border-radius: 12px; }
+}
 
 /* ── Tab Panels ── */
 .tab-panel { display: none; }
@@ -1658,17 +1668,6 @@ select.profile-input option { background: var(--bg-accent); color: var(--text); 
 .amount-custom-btn { background:var(--gold); color:#fff; border:none; border-radius:12px; padding:12px 20px; font-size:1rem; font-weight:700; cursor:pointer; transition: all 0.2s; }
 .amount-custom-btn:hover { opacity:0.9; transform:translateY(-1px); }
 
-/* Mood */
-.mood-streak { text-align: center; margin-bottom: 16px; }
-.mood-streak-num { font-size: 2rem; font-weight: 700; color: var(--gold-dark); }
-.mood-streak-label { font-size: 0.8rem; color: var(--text2); }
-.mood-select { margin-bottom: 16px; }
-.mood-select-label { font-size: 0.85rem; color: var(--text2); margin-bottom: 8px; text-align: center; }
-.mood-options { display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; }
-.mood-btn { display: flex; flex-direction: column; align-items: center; padding: 10px; border: 2px solid var(--border); border-radius: var(--radius); cursor: pointer; transition: all 0.2s; min-width: 55px; background: var(--card-bg); box-shadow: 3px 3px 6px var(--shadow-dark), -3px -3px 6px var(--shadow-light); }
-.mood-btn:hover { border-color: var(--gold); }
-.mood-btn.active { border-color: var(--gold); background: rgba(var(--accent-rgb),0.1); }
-.mood-btn-label { font-size: 0.72rem; color: var(--text2); margin-top: 4px; }
 .reflection-grid { display: grid; gap: 10px; }
 .reflection-card {
   background: var(--card-bg);

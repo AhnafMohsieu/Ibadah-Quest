@@ -331,7 +331,7 @@ Object.keys(NEW_POOLS).forEach(k => {
     try { initModalKeyboardHandlers(); } catch(e) { console.error('Step 9 modal keyboard handlers failed:', e); }
     try { initThemeToggleKeyboard(); } catch(e) { console.error('Step 10 theme toggle keyboard failed:', e); }
     try { _initHashRouting(); } catch(e) { console.error('Step 10b hash routing init failed:', e); }
-    // Deferred feature scripts (health, mood, goals, spiritual-growth, etc.) execute after
+    // Deferred feature scripts (health, goals, spiritual-growth, etc.) execute after
     // init()/renderAll() has already run, so re-render once they have loaded to populate
     // their panels (DOMContentLoaded fires after all defer scripts execute).
     try {

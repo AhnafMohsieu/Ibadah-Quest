@@ -89,7 +89,7 @@ const IQ_IDS = {
   'today':'home', 'timer':'clock', 'quests':'scroll', 'journeys':'map',
   'morning':'sunrise', 'evening':'sunset', 'dhikr':'beads', 'wudu':'droplets',
   'salah':'mosque', 'fasting':'crescent', 'healthlog':'heartbeat',
-  'finance':'wallet', 'mood':'rainbow',
+  'finance':'wallet',
 
   /* Profile tabs */
   'profile':'user', 'trophies':'trophy', 'progress':'bar-chart-3',
@@ -171,10 +171,6 @@ const IQ_IDS = {
   'freewill':'shield', 'problemofevil':'alert-triangle',
   'prophethood':'scroll', 'existence':'eye',
 
-  /* Mood (data/pools/mood.js) */
-  'great':'sun', 'good':'sunrise', 'okay':'cloud-sun',
-  'low':'moon', 'stressed':'cloud-lightning',
-
   /* Rewards shop (data/shop.js) */
   'r1':'medal', 'r2':'zap', 'r3':'gift', 'r4':'snow',
   'r5':'star', 'r6':'refresh-cw', 'r7':'shield', 'r8':'sword',
@@ -237,7 +233,7 @@ const IQ_AUTO = [
   ['hug', 'hand-heart'], ['visit', 'map'], ['answer', 'message-circle'],
   /* achievements / generic words */
   ['first', 'star'], ['step', 'map'], ['achiever', 'award'],
-  ['mood', 'cloud-sun'], ['level', 'trending-up'], ['quest', 'scroll'],
+  ['level', 'trending-up'], ['quest', 'scroll'],
   ['diversif', 'target'], ['flawless', 'gem'], ['hafiz', 'book-open'],
   ['generous', 'gift'], ['champion', 'trophy'], ['master', 'trophy'],
   ['keeper', 'shield'], ['legend', 'award'], ['soul', 'sparkles'],

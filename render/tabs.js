@@ -92,7 +92,7 @@
 
   function getSectionPanels(sectionName) {
     var sections = {
-      home: ['panel-today','panel-timer','panel-journeys','panel-morning','panel-evening','panel-dhikr','panel-duas','panel-quran','panel-wudu','panel-jumuah','panel-salah','panel-fasting','panel-healthlog','panel-finance','panel-mood'],
+      home: ['panel-today','panel-timer','panel-journeys','panel-morning','panel-evening','panel-dhikr','panel-duas','panel-quran','panel-wudu','panel-jumuah','panel-salah','panel-fasting','panel-healthlog','panel-finance'],
       quests: ['panel-quests'],
       stats: ['panel-stats'],
       growth: ['panel-progress', 'panel-growth'],
@@ -111,7 +111,7 @@
       if (catId) _pushTabState(catId, tabId);
     }
     var sectionName = null;
-    var panelLookup = {home:['panel-today','panel-timer','panel-journeys','panel-morning','panel-evening','panel-dhikr','panel-duas','panel-quran','panel-wudu','panel-jumuah','panel-salah','panel-fasting','panel-healthlog','panel-finance','panel-mood'],quests:['panel-quests'],stats:['panel-stats'],growth:['panel-progress','panel-growth'],profile:['panel-profile','panel-trophies','panel-rewards','panel-allah_names','panel-prophet_names','panel-scholars_names']};
+    var panelLookup = {home:['panel-today','panel-timer','panel-journeys','panel-morning','panel-evening','panel-dhikr','panel-duas','panel-quran','panel-wudu','panel-jumuah','panel-salah','panel-fasting','panel-healthlog','panel-finance'],quests:['panel-quests'],stats:['panel-stats'],growth:['panel-progress','panel-growth'],profile:['panel-profile','panel-trophies','panel-rewards','panel-allah_names','panel-prophet_names','panel-scholars_names']};
     for (var sec in panelLookup) {
       if (panelLookup[sec].indexOf('panel-' + tabId) > -1) { sectionName = sec; break; }
     }
@@ -330,6 +330,14 @@
       var icon = window.iqIcon(cat);
       if (icon) span.innerHTML = icon;
     });
+    document.querySelectorAll('.bnav-btn').forEach(function(btn) {
+      var span = btn.querySelector('.bnav-icon');
+      if (!span || span.childElementCount > 0) return;
+      var cat = btn.getAttribute('data-cat');
+      if (!cat) return;
+      var icon = window.iqIcon(cat);
+      if (icon) span.innerHTML = icon;
+    });
   }
 
   window._pushTabState = _pushTabState;
@@ -345,4 +353,8 @@
   window.initTier2TabKeyboardNav = initTier2TabKeyboardNav;
   window.initBnavKeyboardNav = initBnavKeyboardNav;
   window.populateTier1Icons = populateTier1Icons;
+
+  document.addEventListener('DOMContentLoaded', function() {
+    try { populateTier1Icons(); } catch(e) { console.error('bnav icons refill failed:', e); }
+  });
 })();

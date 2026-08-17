@@ -49,7 +49,7 @@ function createSandbox(overrides) {
     morningDone: {}, eveningDone: {}, charity: { daily: 0, monthly: 0, given: 0, monthStart: '' },
     quranAudioReciter: 7,
     avatar: '', joinDate: null,
-    healthLog: {}, financeLog: {}, moodLog: {},
+    healthLog: {}, financeLog: {},
     growthSettings: { visible: ['garden', 'lantern', 'keys', 'mosque', 'boat', 'heart', 'armor', 'ramadan', 'laylat'] },
     theme: 'light', lastTab: 'home', lastCat: null, lastSub: null, introSeen: false,
     notificationsEnabled: false

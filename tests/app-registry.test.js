@@ -108,3 +108,27 @@ test('initBnavKeyboardNav is defined and wired', () => {
   const actionsSrc = require('fs').readFileSync(require('path').join(__dirname, '..', 'core', 'actions.js'), 'utf8');
   assert.ok(actionsSrc.includes('window.initBnavKeyboardNav'), 'init() must call initBnavKeyboardNav');
 });
+
+test('populateTier1Icons fills bnav icons too', () => {
+  const tabsSrc = require('fs').readFileSync(require('path').join(__dirname, '..', 'render', 'tabs.js'), 'utf8');
+  const fnIdx = tabsSrc.indexOf('function populateTier1Icons');
+  assert.ok(fnIdx > -1, 'populateTier1Icons must exist');
+  const body = tabsSrc.slice(fnIdx, fnIdx + 600);
+  assert.ok(body.includes('.bnav-btn'), 'populateTier1Icons must fill .bnav-btn');
+  assert.ok(body.includes('.bnav-icon'), 'populateTier1Icons must target .bnav-icon');
+});
+
+test('populateFABIcons exists and is exported', () => {
+  const fabSrc = require('fs').readFileSync(require('path').join(__dirname, '..', 'features', 'fab.js'), 'utf8');
+  assert.ok(fabSrc.includes('function populateFABIcons'), 'populateFABIcons must exist');
+  assert.ok(fabSrc.includes('window.populateFABIcons'), 'populateFABIcons must be exported');
+  assert.ok(fabSrc.includes('populateFABIcons()'), 'initFAB must call populateFABIcons');
+});
+
+test('populateTier1Icons is re-invoked after DOM ready for bnav', () => {
+  const tabsSrc = require('fs').readFileSync(require('path').join(__dirname, '..', 'render', 'tabs.js'), 'utf8');
+  assert.ok(tabsSrc.includes('DOMContentLoaded'), 'tabs.js must re-run populateTier1Icons on DOMContentLoaded');
+  const dclIdx = tabsSrc.indexOf('DOMContentLoaded');
+  const dclBlock = tabsSrc.slice(dclIdx, dclIdx + 200);
+  assert.ok(dclBlock.includes('populateTier1Icons'), 'DOMContentLoaded handler must call populateTier1Icons');
+});
