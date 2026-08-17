@@ -402,3 +402,9 @@ test('bottom nav exists with five category buttons', () => {
   assert.ok(css.includes('.bnav'), 'bnav styles missing');
   assert.ok(css.includes('.bnav-btn'), 'bnav-btn styles missing');
 });
+
+test('focus-visible and reduced-motion polish present', () => {
+  assert.ok(css.includes(':focus-visible'), 'focus-visible rings missing');
+  assert.ok(css.includes('prefers-reduced-motion'), 'reduced-motion guard missing');
+  assert.ok(css.includes('#deedArea .deed-card { flex: 1 1 calc(50% - 8px)'), 'desktop 2-col deed grid missing');
+});

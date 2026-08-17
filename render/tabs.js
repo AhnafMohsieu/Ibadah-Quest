@@ -291,6 +291,35 @@
     });
   }
 
+  function initBnavKeyboardNav() {
+    var bnav = document.getElementById('bnav');
+    if (!bnav) return;
+    bnav.addEventListener('keydown', function(e) {
+      var tabs = Array.from(bnav.querySelectorAll('.bnav-btn'));
+      if (tabs.length === 0) return;
+      var currentIndex = tabs.findIndex(function(t) { return t.classList.contains('active'); });
+      if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+        e.preventDefault();
+        var nextIndex = (currentIndex + 1) % tabs.length;
+        tabs[nextIndex].focus();
+        tabs[nextIndex].click();
+      } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+        e.preventDefault();
+        var prevIndex = (currentIndex - 1 + tabs.length) % tabs.length;
+        tabs[prevIndex].focus();
+        tabs[prevIndex].click();
+      } else if (e.key === 'Home') {
+        e.preventDefault();
+        tabs[0].focus();
+        tabs[0].click();
+      } else if (e.key === 'End') {
+        e.preventDefault();
+        tabs[tabs.length - 1].focus();
+        tabs[tabs.length - 1].click();
+      }
+    });
+  }
+
   function populateTier1Icons() {
     var buttons = document.querySelectorAll('.t1-btn');
     buttons.forEach(function(btn) {
@@ -314,5 +343,6 @@
   window.renderTab = renderTab;
   window.initTierTabKeyboardNav = initTierTabKeyboardNav;
   window.initTier2TabKeyboardNav = initTier2TabKeyboardNav;
+  window.initBnavKeyboardNav = initBnavKeyboardNav;
   window.populateTier1Icons = populateTier1Icons;
 })();

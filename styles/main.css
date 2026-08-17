@@ -2049,3 +2049,19 @@ select.profile-input option { background: var(--bg-accent); color: var(--text); 
   .tab-content { padding-bottom: calc(84px + env(safe-area-inset-bottom, 0px)); }
 }
 
+/* ── Visual Polish: focus rings, reduced motion, responsive grids ── */
+a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible, [tabindex]:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+}
+@media (min-width: 768px) {
+  .hero-strip .header { padding: 26px 0 10px; }
+  .hero-strip .level-row { margin: 14px auto 18px; }
+  .hero-strip .streak-bar { margin-bottom: 18px; }
+  #deedArea { flex-direction: row !important; flex-wrap: wrap; }
+  #deedArea .deed-card { flex: 1 1 calc(50% - 8px); }
+  #prayerArea { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+}

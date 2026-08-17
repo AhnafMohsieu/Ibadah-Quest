@@ -100,3 +100,11 @@ test('switchCategory syncs bottom nav active state', () => {
   const body = tabsSrc.slice(fnIdx, fnIdx + 1400);
   assert.ok(body.includes('.bnav-btn'), 'switchCategory must sync .bnav-btn');
 });
+
+test('initBnavKeyboardNav is defined and wired', () => {
+  const tabsSrc = require('fs').readFileSync(require('path').join(__dirname, '..', 'render', 'tabs.js'), 'utf8');
+  assert.ok(tabsSrc.includes('function initBnavKeyboardNav'), 'initBnavKeyboardNav must exist');
+  assert.ok(tabsSrc.includes('window.initBnavKeyboardNav = initBnavKeyboardNav'), 'initBnavKeyboardNav must be exported');
+  const actionsSrc = require('fs').readFileSync(require('path').join(__dirname, '..', 'core', 'actions.js'), 'utf8');
+  assert.ok(actionsSrc.includes('window.initBnavKeyboardNav'), 'init() must call initBnavKeyboardNav');
+});
