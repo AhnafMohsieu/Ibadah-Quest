@@ -123,7 +123,7 @@ test('theme: light-family palette blocks exist in main.css', () => {
 test('theme: index.html pre-paint script sets data-theme from localStorage', () => {
   assert.ok(html.includes("localStorage.getItem('iqTheme')"));
   assert.ok(html.includes("setAttribute('data-theme'"));
-  assert.ok(html.includes('styles/main.css?v=15'));
+  assert.ok(html.includes('styles/main.css?v=16'));
 });
 
 test('theme: picker references metadata and setTheme wiring', () => {
@@ -409,7 +409,7 @@ test('focus-visible and reduced-motion polish present', () => {
   assert.ok(css.includes('#deedArea .deed-card { flex: 1 1 calc(50% - 8px)'), 'desktop 2-col deed grid missing');
 });
 
-test('mobile tab strips use even grids (tier1 5-across, tier2/tier3 4-per-row)', () => {
+test('mobile tab strips use even grid cards (tier1 5-across, tier2/tier3 auto-fit)', () => {
   const mqIdx = css.indexOf('@media (max-width: 600px)');
   assert.ok(mqIdx > -1, 'mobile media query must exist');
   const mobileBlock = css.slice(mqIdx, mqIdx + 600);
@@ -423,9 +423,19 @@ test('mobile tab strips use even grids (tier1 5-across, tier2/tier3 4-per-row)',
   assert.ok(selIdx > -1, 'tier2/tier3 combined grid selector must exist');
   const t2mIdx = css.lastIndexOf('@media (max-width: 600px)', selIdx);
   assert.ok(t2mIdx > -1, 'tier2/tier3 grid override must live in a mobile media query');
-  const t2Block = css.slice(t2mIdx, selIdx + 140);
-  assert.ok(t2Block.includes(tier23Sel) && t2Block.includes('repeat(4, 1fr)'),
-    'mobile tier2/tier3 must be 4-column grids');
+  const t2Block = css.slice(t2mIdx, selIdx + 200);
+  assert.ok(t2Block.includes(tier23Sel) && t2Block.includes('repeat(auto-fit, minmax(70px, 1fr))'),
+    'mobile tier2/tier3 must use auto-fit minmax(70px, 1fr) square cards');
+  assert.ok(css.slice(selIdx, selIdx + 400).includes('aspect-ratio: 1'),
+    'mobile tier2/tier3 tab buttons must set aspect-ratio: 1');
+  const ptGridIdx = css.indexOf('.prayer-times-grid');
+  assert.ok(ptGridIdx > -1, '.prayer-times-grid must exist');
+  const ptGridBlock = css.slice(ptGridIdx, ptGridIdx + 400);
+  assert.ok(ptGridBlock.includes('repeat(auto-fit, minmax(140px, 1fr))'),
+    'prayer grid must use auto-fit minmax(140px, 1fr)');
+  const ptCardIdx = css.indexOf('.prayer-times-grid .pt-card {');
+  assert.ok(ptCardIdx > -1 && css.slice(ptCardIdx, ptCardIdx + 400).includes('aspect-ratio: 1'),
+    '.pt-card must set aspect-ratio: 1 (square cards)');
 });
 
 test('Mood feature is fully removed', () => {
