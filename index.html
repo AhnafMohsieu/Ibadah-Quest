@@ -348,6 +348,10 @@
     var s = b.querySelector('.iq-inline');
     if (s) s.innerHTML = iqIcon(b.getAttribute('data-cat'));
   });
+  document.querySelectorAll('.bnav-btn').forEach(function (b) {
+    var s = b.querySelector('.bnav-icon');
+    if (s) s.innerHTML = iqIcon(b.getAttribute('data-cat'));
+  });
 </script>
 
 
@@ -562,6 +566,15 @@
   });
 })();
 </script>
+
+<!-- Mobile bottom navigation -->
+<nav class="bnav" id="bnav" aria-label="Main navigation">
+  <button class="bnav-btn" data-cat="ibadah" onclick="App.switchCategory('ibadah', this)" role="tab" aria-selected="true"><span class="bnav-icon"></span><span class="bnav-label">Daily</span></button>
+  <button class="bnav-btn" data-cat="knowledge" onclick="App.switchCategory('knowledge', this)" role="tab" aria-selected="false"><span class="bnav-icon"></span><span class="bnav-label">Knowledge</span></button>
+  <button class="bnav-btn" data-cat="names_main" onclick="App.switchCategory('names_main', this)" role="tab" aria-selected="false"><span class="bnav-icon"></span><span class="bnav-label">Names</span></button>
+  <button class="bnav-btn" data-cat="library" onclick="App.switchCategory('library', this)" role="tab" aria-selected="false"><span class="bnav-icon"></span><span class="bnav-label">Library</span></button>
+  <button class="bnav-btn" data-cat="profile_main" onclick="App.switchCategory('profile_main', this)" role="tab" aria-selected="false"><span class="bnav-icon"></span><span class="bnav-label">Profile</span></button>
+</nav>
 
 <div id="fab" class="fab-container">
   <div class="fab-actions" id="fabActions" style="display:none;">

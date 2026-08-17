@@ -27,9 +27,23 @@
       el.classList.remove('active');
       el.setAttribute('aria-selected', 'false');
     });
+    document.querySelectorAll('.bnav-btn').forEach(function(el) {
+      el.classList.remove('active');
+      el.setAttribute('aria-selected', 'false');
+    });
     if (btn) {
       btn.classList.add('active');
       btn.setAttribute('aria-selected', 'true');
+    }
+    var bnavMatch = document.querySelector('.bnav-btn[data-cat="' + catId + '"]');
+    if (bnavMatch) {
+      bnavMatch.classList.add('active');
+      bnavMatch.setAttribute('aria-selected', 'true');
+    }
+    var t1Match = document.querySelector('.t1-btn[data-cat="' + catId + '"]');
+    if (t1Match) {
+      t1Match.classList.add('active');
+      t1Match.setAttribute('aria-selected', 'true');
     }
     if (window.S) { window.S.lastCat = catId; window.saveState(); }
     var group = window.TAB_GROUPS[catId] || [];

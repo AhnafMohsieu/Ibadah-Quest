@@ -391,3 +391,14 @@ test('hero is wrapped in compact hero-strip and keeps all ids', () => {
   }
   assert.ok(css.includes('.hero-strip'), 'hero-strip styles missing');
 });
+
+test('bottom nav exists with five category buttons', () => {
+  assert.ok(html.includes('id="bnav"'), 'bottom nav missing');
+  const cats = ['ibadah','knowledge','names_main','library','profile_main'];
+  for (const c of cats) {
+    assert.ok(html.includes(`data-cat="${c}"`), `bottom nav missing ${c}`);
+  }
+  assert.ok(html.includes('class="bnav-btn'), 'bnav-btn class missing');
+  assert.ok(css.includes('.bnav'), 'bnav styles missing');
+  assert.ok(css.includes('.bnav-btn'), 'bnav-btn styles missing');
+});

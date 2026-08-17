@@ -93,3 +93,10 @@ test('window.activateTab is defined', () => {
 test('window.tapDhikr is defined', () => {
   assert.strictEqual(typeof sandbox.window.tapDhikr, 'function');
 });
+
+test('switchCategory syncs bottom nav active state', () => {
+  const tabsSrc = require('fs').readFileSync(require('path').join(__dirname, '..', 'render', 'tabs.js'), 'utf8');
+  const fnIdx = tabsSrc.indexOf('function switchCategory');
+  const body = tabsSrc.slice(fnIdx, fnIdx + 1400);
+  assert.ok(body.includes('.bnav-btn'), 'switchCategory must sync .bnav-btn');
+});
