@@ -75,7 +75,7 @@
 
   function renderStatic() {
     const safe = (fn, name) => { try { fn(); } catch(e) { console.warn('Static ' + name + ' failed:', e.message); } };
-    safe(renderQuran,'Quran'); safe(renderSunnahs,'Sunnahs'); safe(renderDhikr,'Dhikr'); safe(renderDhikrCounter,'DhikrCounter'); safe(renderStories,'Stories'); safe(renderHadith,'Hadith'); safe(renderNames,'Names'); safe(renderInspirations,'Inspirations'); safe(renderGratitude,'Gratitude'); safe(renderFasting,'Fasting'); safe(renderCharity,'Charity'); safe(renderMemorization,'Memorization'); safe(renderMorning,'Morning'); safe(renderEvening,'Evening'); safe(renderSins,'Sins'); safe(renderPunishments,'Punishments'); safe(renderRepentance,'Repentance'); safe(renderSahaba,'Sahaba'); safe(renderSeerah,'Seerah'); safe(renderTafsir,'Tafsir'); safe(renderManners,'Manners'); safe(renderFamily,'Family'); safe(renderHealth,'Health'); safe(() => window.renderHealthLog && window.renderHealthLog(), 'HealthLog'); safe(renderFinance,'Finance'); safe(() => window.renderFinanceTab && window.renderFinanceTab(), 'FinanceTab'); safe(() => window.renderMoodTab && window.renderMoodTab(), 'MoodTab'); safe(renderUmmah,'Ummah'); safe(renderHajj,'Hajj'); safe(renderAkhirah,'Akhirah'); safe(renderProphets,'Prophets'); safe(renderWomen,'Women'); safe(renderHeart,'Heart'); safe(renderMarriage,'Marriage'); safe(renderScience,'Science'); safe(renderWudu,'Wudu'); safe(renderScholars,'Scholars'); safe(renderPatience,'Patience'); safe(renderWork,'Work'); safe(renderCommunity,'Community'); safe(renderEnvironment,'Environment'); safe(renderTravel,'Travel'); safe(renderFiqh,'Fiqh'); safe(renderArabic,'Arabic'); safe(renderTawakkul,'Tawakkul'); safe(renderIkhlas,'Ikhlas'); safe(renderZuhd,'Zuhd'); safe(renderDawah,'Dawah'); safe(renderAqeedah,'Aqeedah'); safe(renderKnowledge,'Knowledge'); safe(renderCivilisation,'Civilisation'); safe(renderJumuah,'Jumuah'); safe(renderBattles,'Battles'); safe(renderJannah,'Jannah'); safe(renderJahannam,'Jahannam'); safe(renderGrave,'Grave'); safe(renderSigns,'Signs'); safe(renderDreams,'Dreams'); safe(renderParenting,'Parenting'); safe(renderFood,'Food'); safe(renderTibb,'Tibb'); safe(renderYouth,'Youth'); safe(renderTech,'Tech'); safe(renderNeighbors,'Neighbors'); safe(renderSalah,'Salah');
+    safe(renderQuran,'Quran'); safe(renderSunnahs,'Sunnahs'); safe(renderDhikr,'Dhikr'); safe(renderDhikrCounter,'DhikrCounter'); safe(renderStories,'Stories'); safe(renderHadith,'Hadith'); safe(renderNames,'Names'); safe(renderInspirations,'Inspirations'); safe(renderGratitude,'Gratitude'); safe(renderFasting,'Fasting'); safe(renderCharity,'Charity'); safe(renderMemorization,'Memorization'); safe(renderMorning,'Morning'); safe(renderEvening,'Evening'); safe(renderSins,'Sins'); safe(renderPunishments,'Punishments'); safe(renderRepentance,'Repentance'); safe(renderSahaba,'Sahaba'); safe(renderSeerah,'Seerah'); safe(renderTafsir,'Tafsir'); safe(renderManners,'Manners'); safe(renderFamily,'Family'); safe(renderHealth,'Health'); safe(() => window.renderHealthLog && window.renderHealthLog(), 'HealthLog'); safe(renderFinance,'Finance'); safe(() => window.renderFinanceTab && window.renderFinanceTab(), 'FinanceTab'); safe(() => window.renderMoodTab && window.renderMoodTab(), 'MoodTab'); safe(renderUmmah,'Ummah'); safe(renderHajj,'Hajj'); safe(renderAkhirah,'Akhirah'); safe(renderProphets,'Prophets'); safe(renderWomen,'Women'); safe(renderHeart,'Heart'); safe(renderMarriage,'Marriage'); safe(renderScience,'Science'); safe(renderWudu,'Wudu'); safe(renderScholars,'Scholars'); safe(renderPatience,'Patience'); safe(renderWork,'Work'); safe(renderCommunity,'Community'); safe(renderEnvironment,'Environment'); safe(renderTravel,'Travel'); safe(renderFiqh,'Fiqh'); safe(renderArabic,'Arabic'); safe(renderTawakkul,'Tawakkul'); safe(renderIkhlas,'Ikhlas'); safe(renderZuhd,'Zuhd'); safe(renderDawah,'Dawah'); safe(renderAqeedah,'Aqeedah'); safe(renderKnowledge,'Knowledge'); safe(renderCivilisation,'Civilisation'); safe(renderJumuah,'Jumuah'); safe(renderBattles,'Battles'); safe(renderJannah,'Jannah'); safe(renderJahannam,'Jahannam'); safe(renderGrave,'Grave'); safe(renderSigns,'Signs'); safe(renderDreams,'Dreams'); safe(renderParenting,'Parenting'); safe(renderFood,'Food'); safe(renderTibb,'Tibb'); safe(renderYouth,'Youth'); safe(renderTech,'Tech'); safe(renderNeighbors,'Neighbors'); safe(renderSalah,'Salah'); safe(() => window.renderPersonalGoals && window.renderPersonalGoals(), 'PersonalGoals');
     if (typeof NEW_POOLS !== 'undefined') Object.keys(NEW_POOLS).forEach(k => {
       if(window['render'+k]) safe(window['render'+k], k);
     });
@@ -218,16 +218,17 @@ function renderAll() {
 
     const now = new Date();
     const tk = today();
-    const dim = new Date(calViewYear, calViewMonth + 1, 0).getDate();
-    const fd = new Date(calViewYear, calViewMonth, 1).getDay();
+    const calY = window.calViewYear, calM = window.calViewMonth;
+    const dim = new Date(calY, calM + 1, 0).getDate();
+    const fd = new Date(calY, calM, 1).getDay();
     const gMonthName = now.toLocaleString('en', { month: 'long' });
-    const isCurrentMonth = calViewYear === now.getFullYear() && calViewMonth === now.getMonth();
+    const isCurrentMonth = calY === now.getFullYear() && calM === now.getMonth();
 
     let cal = '<div class="cal-header">';
     cal += '<div class="cal-nav"><button onclick="App.calPrevMonth()">◀</button></div>';
     cal += '<div class="cal-header-info">';
-    cal += `<h3>${gMonthName} ${calViewYear}</h3>`;
-    cal += `<div class="cal-hijri-title">${HIJRI_MONTHS_AR[calViewHijriM - 1]} ${calViewHijriY} AH</div>`;
+    cal += `<h3>${gMonthName} ${window.calViewYear}</h3>`;
+    cal += `<div class="cal-hijri-title">${HIJRI_MONTHS_AR[window.calViewHijriM - 1]} ${window.calViewHijriY} AH</div>`;
     cal += '</div>';
     cal += '<div class="cal-nav"><button onclick="App.calNextMonth()">▶</button>';
     if (!isCurrentMonth) cal += ' <button class="cal-today-btn" onclick="App.calGoToday()">Today</button>';
@@ -241,7 +242,7 @@ function renderAll() {
     for (let i = 0; i < fd; i++) cal += '<div class="cal-day empty"></div>';
 
     for (let d = 1; d <= dim; d++) {
-      const dk = today(new Date(calViewYear, calViewMonth, d));
+      const dk = today(new Date(window.calViewYear, window.calViewMonth, d));
       const log = S.log[dk];
       const cnt = log ? Object.values(log.p || {}).filter(v => v).length : 0;
       let cls = cnt >= 5 ? 'good' : (cnt > 0 ? 'ok' : (dk < tk ? 'bad' : ''));

@@ -1,15 +1,18 @@
 // core/content.js — Content pool refresh and lazy loading
 (function() {
   const _loadedScripts = new Set();
+  const _loadingScripts = {};
   function loadScript(srcUrl) {
-    return new Promise((resolve, reject) => {
-      if (_loadedScripts.has(srcUrl)) { resolve(); return; }
+    if (_loadedScripts.has(srcUrl)) return Promise.resolve();
+    if (_loadingScripts[srcUrl]) return _loadingScripts[srcUrl];
+    _loadingScripts[srcUrl] = new Promise((resolve, reject) => {
       const s = document.createElement('script');
       s.src = srcUrl + '?v=3';
-      s.onload = () => { _loadedScripts.add(srcUrl); resolve(); };
-      s.onerror = () => { console.warn('Failed to load ' + srcUrl); reject(new Error(srcUrl)); };
+      s.onload = () => { _loadedScripts.add(srcUrl); delete _loadingScripts[srcUrl]; resolve(); };
+      s.onerror = () => { delete _loadingScripts[srcUrl]; console.warn('Failed to load ' + srcUrl); reject(new Error(srcUrl)); };
       document.head.appendChild(s);
     });
+    return _loadingScripts[srcUrl];
   }
   function ensureQuranLoaded() { return loadScript('data/pools/quran-verses.js').then(() => { if (window.invalidateSearchIndex) window.invalidateSearchIndex(); }); }
   function ensureHadithLoaded() {

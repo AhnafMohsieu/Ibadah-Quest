@@ -143,34 +143,6 @@ Object.keys(NEW_POOLS).forEach(k => {
   }
 });
 
-  function _parseHashAndNavigate() {
-    const hash = location.hash;
-    if (hash && hash.startsWith('#/')) {
-      const parts = hash.slice(2).split('/');
-      if (parts.length === 2) {
-        const [cat, tab] = parts;
-        const btn = document.querySelector('.t1-btn[data-cat="' + cat + '"]');
-        if (btn) {
-          window._hashNavigating = true;
-          window.switchCategory(cat, btn);
-          const { catObj, tabBtn } = window._findTabBtn(cat, tab);
-          if (catObj) {
-            const chipBtn = document.querySelector('.cat-chip[onclick*="' + catObj.id + '"]');
-            if (chipBtn) window.selectCategory(catObj.id, chipBtn);
-          }
-          if (tabBtn) {
-            window.activateTab(tab, tabBtn);
-          } else {
-            window.activateTab(tab, null);
-          }
-          window._hashNavigating = false;
-          return true;
-        }
-      }
-    }
-    return false;
-  }
-
   // Modal keyboard handlers (Escape to close, focus trap)
   window._modalTriggerEl = null;
   function trapFocus(modal, e) {
@@ -358,6 +330,14 @@ Object.keys(NEW_POOLS).forEach(k => {
     try { initModalKeyboardHandlers(); } catch(e) { console.error('Step 9 modal keyboard handlers failed:', e); }
     try { initThemeToggleKeyboard(); } catch(e) { console.error('Step 10 theme toggle keyboard failed:', e); }
     try { _initHashRouting(); } catch(e) { console.error('Step 10b hash routing init failed:', e); }
+    // Deferred feature scripts (health, mood, goals, spiritual-growth, etc.) execute after
+    // init()/renderAll() has already run, so re-render once they have loaded to populate
+    // their panels (DOMContentLoaded fires after all defer scripts execute).
+    try {
+      document.addEventListener('DOMContentLoaded', function() {
+        try { if (window.renderAll) window.renderAll(); } catch(e) { console.error('Post-defer re-render failed:', e); }
+      });
+    } catch(e) { console.error('Step 10c post-defer re-render hook failed:', e); }
     try {
       document.addEventListener('keydown', (e) => {
         if ((e.key === 'Enter' || e.key === ' ') && e.target.matches('.card-item, .vol-card, .shop-card')) {

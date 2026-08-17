@@ -97,10 +97,16 @@
     renderProg();
   }
 
+  Object.defineProperty(window, 'calViewYear', { get: function() { return calViewYear; }, set: function(v) { calViewYear = v; }, configurable: true });
+  Object.defineProperty(window, 'calViewMonth', { get: function() { return calViewMonth; }, set: function(v) { calViewMonth = v; }, configurable: true });
+  Object.defineProperty(window, 'calViewHijriY', { get: function() { return calViewHijriY; }, set: function(v) { calViewHijriY = v; }, configurable: true });
+  Object.defineProperty(window, 'calViewHijriM', { get: function() { return calViewHijriM; }, set: function(v) { calViewHijriM = v; }, configurable: true });
+
   window.HIJRI_MONTHS = HIJRI_MONTHS;
   window.HIJRI_MONTHS_AR = HIJRI_MONTHS_AR;
   window.WEEKDAYS_EN = WEEKDAYS_EN;
   window.WEEKDAYS_AR = WEEKDAYS_AR;
+  window.WEEKDAYS_ROM = WEEKDAYS_ROM;
   window.gregorianToHijri = gregorianToHijri;
   window.hijriToGregorian = hijriToGregorian;
   window.initCalView = initCalView;

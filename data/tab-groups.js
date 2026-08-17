@@ -193,3 +193,5 @@ const TAB_GROUPS = {
     }
   ]
 };
+
+window.TAB_GROUPS = TAB_GROUPS;

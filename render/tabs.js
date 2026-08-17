@@ -158,12 +158,12 @@
       logic:'renderLogic', kalam:'renderKalam', reason:'renderReason', freewill:'renderFreewill',
       problemofevil:'renderProblemofevil', prophethood:'renderProphethood', existence:'renderExistence',
       keys:'renderKeys', mosque:'renderMosque', ramadan:'renderRamadan', laylat:'renderLaylat',
-      timer:'renderPrayerTimes', stats:'renderStats'
+      timer:'renderPrayerTimes', stats:'renderStats', goals:'renderPersonalGoals'
     };
     if (_lazyRender[tabId] && window[_lazyRender[tabId]]) {
       try { window[_lazyRender[tabId]](); } catch(e) { console.warn('Lazy render ' + tabId + ' failed:', e.message); }
     }
-    if (tabId === 'hadith' && typeof window.HADITH_COLLECTIONS_DATA === 'undefined') {
+    if (tabId === 'hadith' && typeof HADITH_COLLECTIONS_DATA === 'undefined') {
       if (typeof window.ensureHadithLoaded === 'function') {
         window.ensureHadithLoaded().then(function() { if (window.renderHadith) window.renderHadith(); }).catch(function() {});
       }
