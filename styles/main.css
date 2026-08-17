@@ -501,8 +501,8 @@ body.loading { opacity: 0; }
 .t3-btn.active { color: var(--gold-dark); border: none; box-shadow: inset 2px 2px 5px var(--shadow-dark), inset -2px -2px 5px var(--shadow-light); }
 /* mobile tier2/tier3 grid overrides — placed AFTER the desktop .tier2-tabs/.tier3-tabs rules so they win the cascade at <=600px */
 @media (max-width: 600px) {
-  .tier2-tabs, .tier2-tabs.cat-chips, .tier3-tabs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; align-items: stretch; }
-  .tier2-tabs .t2-btn, .tier2-tabs.cat-chips .cat-chip, .tier3-tabs .t3-btn, .tier3-tabs .t2-btn { width: 100%; min-width: 0; justify-content: center; white-space: normal; padding: 6px 4px; font-size: 0.58rem; }
+  .tier2-tabs, .tier2-tabs.cat-chips, .tier3-tabs { display: grid; grid-template-columns: repeat(auto-fit, minmax(70px, 1fr)); gap: 6px; align-items: stretch; }
+  .tier2-tabs .t2-btn, .tier2-tabs.cat-chips .cat-chip, .tier3-tabs .t3-btn, .tier3-tabs .t2-btn { width: 100%; min-width: 0; aspect-ratio: 1; justify-content: center; white-space: normal; padding: 6px 4px; font-size: 0.58rem; }
   .tier2-tabs.cat-chips .cat-chip { border-radius: 12px; }
 }
 
