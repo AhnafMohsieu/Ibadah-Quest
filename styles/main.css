@@ -413,6 +413,32 @@ body.loading { opacity: 0; }
   padding-bottom: 0;
 }
 @media (max-width: 600px) { .tier1-tabs { display: flex; flex-wrap: nowrap; overflow-x: auto; overflow-y: hidden; scrollbar-width: none; -webkit-overflow-scrolling: touch; gap: 8px; padding-bottom: 4px; } .tier1-tabs .t1-btn { flex: 0 0 auto; min-width: 92px; width: auto; } }
+
+/* ── Compact Hero Strip ── */
+.hero-strip { margin-bottom: 18px; }
+@media (max-width: 600px) {
+  .hero-strip .header { padding: 12px 0 6px; }
+  .hero-strip .header-crescent { width: 40px; height: 40px; margin-bottom: 4px; }
+  .hero-strip .header-crescent .iq-icon { width: 34px; height: 34px; }
+  .hero-strip .header h1 { font-size: 1.35rem; letter-spacing: 2px; margin: 2px 0; }
+  .hero-strip .header-deco { margin-top: 6px; font-size: 0.6rem; letter-spacing: 3px; }
+  .hero-strip .level-row { margin: 8px auto 6px; gap: 12px; }
+  .hero-strip .level-badge { padding: 8px 16px; }
+  .hero-strip .lv-num { font-size: 1.3rem; }
+  .hero-strip .xp-wrap { min-width: 160px; }
+  .hero-strip .xp-label { margin-top: 4px; font-size: 0.68rem; }
+  .hero-strip .streak-bar { padding: 10px 16px; margin-bottom: 12px; gap: 12px; }
+  .hero-strip .streak-fire .iq-icon { width: 28px; height: 28px; }
+  .hero-strip .streak-info h3 { font-size: 0.95rem; }
+  .hero-strip .streak-best { padding: 4px 12px; }
+  .hero-strip .best-num { font-size: 1.15rem; }
+}
+@media (min-width: 601px) and (max-width: 768px) {
+  .hero-strip .header { padding: 22px 0 8px; }
+  .hero-strip .level-row { margin: 12px auto 14px; }
+  .hero-strip .streak-bar { margin-bottom: 16px; }
+}
+
 .t1-btn {
   width: 100%;
   min-width: 0;

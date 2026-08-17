@@ -381,3 +381,13 @@ test('hero header styles exist with clay tokens', () => {
   assert.ok(!css.includes('html[data-theme="dark"] .streak-bar'), 'dark streak override must be removed');
   assert.ok(css.includes('html[data-theme="emara"] .streak-bar') || css.includes('html[data-theme="emara"]') , 'emara hero override present');
 });
+
+test('hero is wrapped in compact hero-strip and keeps all ids', () => {
+  const stripIdx = html.indexOf('class="hero-strip"');
+  assert.ok(stripIdx > -1, 'hero-strip wrapper missing');
+  const stripHtml = html.slice(stripIdx, stripIdx + 1600);
+  for (const id of ['headerCrescent','lvNum','lvTitle','xpBar','xpLabel','strDays','strMsg','bestStr','streakFire']) {
+    assert.ok(stripHtml.includes(`id="${id}"`), `hero-strip must contain ${id}`);
+  }
+  assert.ok(css.includes('.hero-strip'), 'hero-strip styles missing');
+});
