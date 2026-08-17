@@ -418,3 +418,24 @@ test('mobile tab strips wrap instead of scrolling', () => {
   assert.ok(css.includes('.tier2-tabs.cat-chips') && css.includes('flex-wrap: wrap'),
     'tier2 cat-chips must flex-wrap: wrap somewhere');
 });
+
+test('Mood feature is fully removed', () => {
+  const achievements = fs.readFileSync(path.join(root, 'data', 'achievements.js'), 'utf8');
+  const stateSrc = fs.readFileSync(path.join(root, 'state', 'state.js'), 'utf8');
+  const iconsSrc = fs.readFileSync(path.join(root, 'data', 'icons.js'), 'utf8');
+  assert.ok(!tabs.includes("label: 'Mood'"), 'tab-groups must not list a Mood tab');
+  assert.ok(!html.includes('panel-mood'), 'index.html must not have panel-mood');
+  assert.ok(!html.includes('moodArea'), 'index.html must not have moodArea');
+  assert.ok(!html.includes('pools/mood.js'), 'index.html must not load pools/mood.js');
+  assert.ok(!html.includes('features/mood.js'), 'index.html must not load features/mood.js');
+  assert.ok(!renderTabs.includes('panel-mood'), 'tabs.js must not reference panel-mood');
+  assert.ok(!renderDynamic.includes('renderMoodTab'), 'dynamic.js must not call renderMoodTab');
+  assert.ok(!stateSrc.includes('moodLog'), 'state.js must not have moodLog');
+  assert.ok(!achievements.includes('Mood Tracker') && !achievements.includes('Reflection') && !achievements.includes('Gratitude Journal') && !achievements.includes('FirstReflection'),
+    'achievements must not have mood/reflection/gratitude-journal entries');
+  assert.ok(!iconsSrc.includes("'mood':'rainbow'") && !iconsSrc.includes("'great':'sun'") && !iconsSrc.includes("['mood', 'cloud-sun']"),
+    'icons.js must not have mood mappings');
+  assert.ok(!css.includes('.mood-btn') && !css.includes('.mood-streak'), 'main.css must not have mood styles');
+  assert.ok(!fs.existsSync(path.join(root, 'features', 'mood.js')), 'features/mood.js must be deleted');
+  assert.ok(!fs.existsSync(path.join(root, 'data', 'pools', 'mood.js')), 'data/pools/mood.js must be deleted');
+});

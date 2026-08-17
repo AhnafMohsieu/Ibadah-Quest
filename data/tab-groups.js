@@ -13,8 +13,7 @@ const TAB_GROUPS = {
     { id: 'salah', label: 'Prayer Guide' },
     { id: 'fasting', label: 'Fasting' },
     { id: 'healthlog', label: 'Health' },
-    { id: 'finance', label: 'Finance' },
-    { id: 'mood', label: 'Mood' }
+    { id: 'finance', label: 'Finance' }
   ],
 
   // -- KNOWLEDGE (categorized � religious learning) --

@@ -92,7 +92,7 @@
 
   function getSectionPanels(sectionName) {
     var sections = {
-      home: ['panel-today','panel-timer','panel-journeys','panel-morning','panel-evening','panel-dhikr','panel-duas','panel-quran','panel-wudu','panel-jumuah','panel-salah','panel-fasting','panel-healthlog','panel-finance','panel-mood'],
+      home: ['panel-today','panel-timer','panel-journeys','panel-morning','panel-evening','panel-dhikr','panel-duas','panel-quran','panel-wudu','panel-jumuah','panel-salah','panel-fasting','panel-healthlog','panel-finance'],
       quests: ['panel-quests'],
       stats: ['panel-stats'],
       growth: ['panel-progress', 'panel-growth'],
@@ -111,7 +111,7 @@
       if (catId) _pushTabState(catId, tabId);
     }
     var sectionName = null;
-    var panelLookup = {home:['panel-today','panel-timer','panel-journeys','panel-morning','panel-evening','panel-dhikr','panel-duas','panel-quran','panel-wudu','panel-jumuah','panel-salah','panel-fasting','panel-healthlog','panel-finance','panel-mood'],quests:['panel-quests'],stats:['panel-stats'],growth:['panel-progress','panel-growth'],profile:['panel-profile','panel-trophies','panel-rewards','panel-allah_names','panel-prophet_names','panel-scholars_names']};
+    var panelLookup = {home:['panel-today','panel-timer','panel-journeys','panel-morning','panel-evening','panel-dhikr','panel-duas','panel-quran','panel-wudu','panel-jumuah','panel-salah','panel-fasting','panel-healthlog','panel-finance'],quests:['panel-quests'],stats:['panel-stats'],growth:['panel-progress','panel-growth'],profile:['panel-profile','panel-trophies','panel-rewards','panel-allah_names','panel-prophet_names','panel-scholars_names']};
     for (var sec in panelLookup) {
       if (panelLookup[sec].indexOf('panel-' + tabId) > -1) { sectionName = sec; break; }
     }
