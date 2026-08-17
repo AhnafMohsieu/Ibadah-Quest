@@ -124,3 +124,11 @@ test('populateFABIcons exists and is exported', () => {
   assert.ok(fabSrc.includes('window.populateFABIcons'), 'populateFABIcons must be exported');
   assert.ok(fabSrc.includes('populateFABIcons()'), 'initFAB must call populateFABIcons');
 });
+
+test('populateTier1Icons is re-invoked after DOM ready for bnav', () => {
+  const tabsSrc = require('fs').readFileSync(require('path').join(__dirname, '..', 'render', 'tabs.js'), 'utf8');
+  assert.ok(tabsSrc.includes('DOMContentLoaded'), 'tabs.js must re-run populateTier1Icons on DOMContentLoaded');
+  const dclIdx = tabsSrc.indexOf('DOMContentLoaded');
+  const dclBlock = tabsSrc.slice(dclIdx, dclIdx + 200);
+  assert.ok(dclBlock.includes('populateTier1Icons'), 'DOMContentLoaded handler must call populateTier1Icons');
+});

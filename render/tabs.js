@@ -353,4 +353,8 @@
   window.initTier2TabKeyboardNav = initTier2TabKeyboardNav;
   window.initBnavKeyboardNav = initBnavKeyboardNav;
   window.populateTier1Icons = populateTier1Icons;
+
+  document.addEventListener('DOMContentLoaded', function() {
+    try { populateTier1Icons(); } catch(e) { console.error('bnav icons refill failed:', e); }
+  });
 })();
