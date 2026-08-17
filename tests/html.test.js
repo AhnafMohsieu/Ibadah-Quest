@@ -408,3 +408,13 @@ test('focus-visible and reduced-motion polish present', () => {
   assert.ok(css.includes('prefers-reduced-motion'), 'reduced-motion guard missing');
   assert.ok(css.includes('#deedArea .deed-card { flex: 1 1 calc(50% - 8px)'), 'desktop 2-col deed grid missing');
 });
+
+test('mobile tab strips wrap instead of scrolling', () => {
+  const mqIdx = css.indexOf('@media (max-width: 600px)');
+  assert.ok(mqIdx > -1, 'mobile media query must exist');
+  const mobileBlock = css.slice(mqIdx, mqIdx + 400);
+  assert.ok(mobileBlock.includes('flex-wrap: wrap'), 'mobile tier1 must flex-wrap: wrap');
+  assert.ok(!mobileBlock.includes('overflow-x: auto'), 'mobile tier1 must not overflow-x: auto');
+  assert.ok(css.includes('.tier2-tabs.cat-chips') && css.includes('flex-wrap: wrap'),
+    'tier2 cat-chips must flex-wrap: wrap somewhere');
+});
