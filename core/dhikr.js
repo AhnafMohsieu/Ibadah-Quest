@@ -81,7 +81,7 @@
       transliteration: roman,
       english,
       target: target || 33,
-      color: 'var(--gold)'
+      color: 'var(--accent)'
     });
     saveState();
     renderDhikrCounter();

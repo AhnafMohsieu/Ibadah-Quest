@@ -7,9 +7,9 @@
     const d = new Date();
     return CAPTIONS[Math.floor(d.getTime() / 86400000) % CAPTIONS.length];
   }
-  const gold = 'var(--gold)';
+  const gold = 'var(--accent)';
   const silver = '#C0C0C0';
-  const lightGold = 'var(--gold-light)';
+  const lightGold = 'var(--accent-light)';
 
   // Key counts per stage: 1, 2, 3, 5, 7, 9, 10
   const KEY_COUNTS = [1, 2, 3, 5, 7, 9, 10];
@@ -75,8 +75,8 @@
       h += drawKey(x, y, angle, 1, col);
     }
     if (stage === 7) {
-      h += `<circle cx="60" cy="70" r="50" fill="none" stroke="var(--gold)" stroke-width="2" opacity="0.4"/>`;
-      h += `<path d="M84 18 a9 9 0 1 0 2 11 a11 11 0 1 1 -2 -11 Z" fill="var(--gold)" opacity="0.9"/>`;
+      h += `<circle cx="60" cy="70" r="50" fill="none" stroke="var(--accent)" stroke-width="2" opacity="0.4"/>`;
+      h += `<path d="M84 18 a9 9 0 1 0 2 11 a11 11 0 1 1 -2 -11 Z" fill="var(--accent)" opacity="0.9"/>`;
     }
     return `<svg class="spiritual-svg" viewBox="0 0 120 132">${h}</svg>`;
   }

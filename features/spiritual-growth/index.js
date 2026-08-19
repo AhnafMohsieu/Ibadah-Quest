@@ -63,7 +63,7 @@
   
   // Add to Profile tab
   if (TAB_GROUPS.profile_main) {
-    TAB_GROUPS.profile_main.push({ id: 'growth', icon: iqIcon('sprout'), label: 'Growth' });
+    TAB_GROUPS.profile_main.push({ id: 'growth', icon: 'sprout', label: 'Growth' });
   }
 
   function renderSpiritualGrowthTab() {

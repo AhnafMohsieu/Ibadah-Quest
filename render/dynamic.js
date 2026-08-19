@@ -88,7 +88,7 @@ function renderAll() {
   renderDynamic();
   renderStatic();
 }
-  function renderToday() { renderBonus(); renderPrayers(); renderVol(); renderDeeds(); }
+  function renderToday() { const s=(fn,n)=>{try{fn();}catch(e){console.warn('Today render '+n+' failed:',e.message);}}; s(renderBonus,'bonus'); s(renderPrayers,'prayers'); s(renderVol,'vol'); s(renderDeeds,'deeds'); }
 
   function renderLv() {
     const cres = document.getElementById('headerCrescent');
@@ -134,7 +134,7 @@ function renderAll() {
       const completed = quests.filter(q => q.done).length;
       const openAttr = isOpen ? ' open' : '';
       
-      let html = `<details class="cat-details"${openAttr}><summary><div style="display:flex;justify-content:space-between;align-items:center;flex:1;"><span>${title}</span><span style="font-size:0.75rem;background:rgba(201,168,76,0.15);padding:3px 10px;border-radius:12px;color:var(--gold-light);font-weight:700;">${completed} / ${total}</span></div></summary><div style="padding:0 12px 12px;display:flex;flex-direction:column;gap:8px;margin-top:8px;">`;
+      let html = `<details class="cat-details"${openAttr}><summary><div style="display:flex;justify-content:space-between;align-items:center;flex:1;"><span>${title}</span><span style="font-size:0.75rem;background:rgba(201,168,76,0.15);padding:3px 10px;border-radius:12px;color:var(--accent-light);font-weight:700;">${completed} / ${total}</span></div></summary><div style="padding:0 12px 12px;display:flex;flex-direction:column;gap:8px;margin-top:8px;">`;
       html += quests.map(q => {
         const d = q.done;
         let icon = iqIcon('target');
@@ -162,7 +162,7 @@ function renderAll() {
     h += renderQuestGroup(iqIcon('calendar-days') + ' Monthly Quests', S.mq, 'monthly', openStates[2]);
     h += renderQuestGroup(iqIcon('calendar-check') + ' Yearly Quests', S.yq, 'yearly', openStates[3]);
     h += renderQuestGroup(iqIcon('star') + ' Lifetime Quests', S.lq, 'lifetime', openStates[4]);
-    h += `<div style="text-align:center;margin-top:20px;color:var(--text2);">Total quests completed: <strong style="color:var(--gold)">${S.tq||0}</strong></div>`;
+    h += `<div style="text-align:center;margin-top:20px;color:var(--text2);">Total quests completed: <strong style="color:var(--accent)">${S.tq||0}</strong></div>`;
     
     if(questArea) questArea.innerHTML = h;
   }
@@ -203,19 +203,6 @@ function renderAll() {
 
   // ── Progress / Calendar ──
   function renderProg() {
-    const stats = [
-      { icon: iqIcon('mosque'), value: S.tp, label: 'Prayers' },
-      { icon: iqIcon('calendar'), value: S.pd, label: 'Perfect Days' },
-      { icon: iqIcon('flame'), value: S.bs, label: 'Best Streak' },
-      { icon: iqIcon('star'), value: S.lv, label: 'Level' },
-      { icon: iqIcon('clipboard'), value: S.tq || 0, label: 'Quests Done' },
-      { icon: iqIcon('medal'), value: Object.values(S.td).reduce((a, b) => a + b, 0), label: 'Extra Deeds' }
-    ];
-
-    document.getElementById('statArea').innerHTML = `<div class="prog-stats">
-      ${stats.map(s => `<div class="stat-card"><div class="stat-icon">${s.icon}</div><div class="stat-num">${s.value}</div><div class="stat-label">${s.label}</div></div>`).join('')}
-    </div>`;
-
     const now = new Date();
     const tk = today();
     const calY = window.calViewYear, calM = window.calViewMonth;
@@ -259,10 +246,11 @@ function renderAll() {
     cal += '<div class="cal-legend-item"><div class="cal-legend-dot" style="background:rgba(22,163,74,0.5);"></div>5 prayers</div>';
     cal += '<div class="cal-legend-item"><div class="cal-legend-dot" style="background:rgba(245,158,11,0.5);"></div>Some prayers</div>';
     cal += '<div class="cal-legend-item"><div class="cal-legend-dot" style="background:rgba(239,68,68,0.5);"></div>Missed</div>';
-    cal += '<div class="cal-legend-item"><div class="cal-legend-dot" style="background:var(--rose);"></div>Today</div>';
+    cal += '<div class="cal-legend-item"><div class="cal-legend-dot" style="background:var(--accent-bg);"></div>Today</div>';
     cal += '</div>';
 
     document.getElementById('calArea').innerHTML = cal;
+    document.getElementById('statArea').innerHTML = '';
   }
 
   // ── Shop ──
@@ -313,7 +301,7 @@ function renderAll() {
       <div class="profile-info">
         <h2 class="profile-name">${currentUser === 'default' ? 'Guest' : currentUser}</h2>
         <div class="profile-level">Level ${S.lv} · ${lvTitle(S.lv)}</div>
-        ${S.activeTitle ? (() => { const t = (typeof SHOP !== 'undefined' ? SHOP : []).find(x => x.id === S.activeTitle); return t ? `<div class="profile-title" style="color:var(--gold);font-weight:600;margin-top:2px;">${t.name.replace('Title: ','')}</div>` : ''; })() : ''}
+        ${S.activeTitle ? (() => { const t = (typeof SHOP !== 'undefined' ? SHOP : []).find(x => x.id === S.activeTitle); return t ? `<div class="profile-title" style="color:var(--accent);font-weight:600;margin-top:2px;">${t.name.replace('Title: ','')}</div>` : ''; })() : ''}
         ${joinDate ? `<div class="profile-join">Member since ${joinDate}</div>` : ''}
       </div>
     </div>`;
@@ -335,14 +323,14 @@ function renderAll() {
         <span class="theme-swatch" style="background:linear-gradient(135deg,${m.swatch.bg},${m.swatch.accent});"></span>
         <span class="name">${m.label}</span>
       </button>`).join('');
-h += '<div style="margin-bottom:10px;font-weight:700;color:var(--gold-dark);">' + iqIcon('palette') + ' Theme</div>';
+h += '<div style="margin-bottom:10px;font-weight:700;color:var(--accent-dark);">' + iqIcon('palette') + ' Theme</div>';
 h += '<div class="theme-picker">' + themeChips + '</div>';
-h += '<div style="margin-bottom:10px;font-weight:700;color:var(--gold-dark);">' + iqIcon('bell') + ' Notifications</div>';
+h += '<div style="margin-bottom:10px;font-weight:700;color:var(--accent-dark);">' + iqIcon('bell') + ' Notifications</div>';
 h += '<div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">';
 h += '<button class="shop-card" onclick="App.toggleNotifications()" style="padding:10px 14px;border-radius:var(--radius-sm);font-weight:700;">' + (S.notificationsEnabled ? iqIcon('bell-off') + ' Disable' : iqIcon('bell') + ' Enable') + '</button>';
 h += '</div>';
     h += '<div style="display:flex;gap:8px;margin-bottom:10px;"><input class="profile-input" id="usernameInput" placeholder="Switch user" style="margin-bottom:0;"><button class="shop-card" onclick="App.switchUser()" style="padding:10px 14px;border-radius:var(--radius-sm);">' + iqIcon('refresh-cw') + '</button></div>';
-    h += '<button class="shop-card" style="width:100%;justify-content:center;margin-bottom:10px;font-weight:700;font-size:1rem;color:var(--gold);letter-spacing:0.5px;" onclick="App.logout()">' + iqIcon('log-out') + ' Logout</button>';
+    h += '<button class="shop-card" style="width:100%;justify-content:center;margin-bottom:10px;font-weight:700;font-size:1rem;color:var(--accent);letter-spacing:0.5px;" onclick="App.logout()">' + iqIcon('log-out') + ' Logout</button>';
     h += '</div>';
 
     h += '<div class="danger-zone"><h3 style="color:var(--red)">' + iqIcon('alert-triangle') + ' Danger Zone</h3><p style="font-size:0.8rem;color:var(--text2);margin-bottom:10px;">Reset permanently deletes all your progress.</p><button class="danger-btn" onclick="App.resetAll()">' + iqIcon('trash') + ' Reset All Data</button></div>';
@@ -352,6 +340,23 @@ h += '</div>';
 
   // ── Stats ──
   function renderStats() {
+    // Render stat cards at top of Analytics
+    const stats = [
+      { icon: iqIcon('mosque'), value: S.tp, label: 'Prayers' },
+      { icon: iqIcon('calendar'), value: S.pd, label: 'Perfect Days' },
+      { icon: iqIcon('flame'), value: S.bs, label: 'Best Streak' },
+      { icon: iqIcon('star'), value: S.lv, label: 'Level' },
+      { icon: iqIcon('clipboard'), value: S.tq || 0, label: 'Quests Done' },
+      { icon: iqIcon('medal'), value: Object.values(S.td).reduce((a, b) => a + b, 0), label: 'Extra Deeds' }
+    ];
+
+    const statsArea = document.getElementById('statsArea');
+    if (!statsArea) return;
+
+    statsArea.innerHTML = `<div class="prog-stats" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:12px;margin-bottom:20px;">
+      ${stats.map(s => `<div class="stat-card"><div class="stat-icon">${s.icon}</div><div class="stat-num">${s.value}</div><div class="stat-label">${s.label}</div></div>`).join('')}
+    </div>`;
+
     if (window.Dashboard && typeof Dashboard.renderInsights === 'function') {
       Dashboard.renderInsights();
       var trendEl = document.getElementById('statsArea');
@@ -369,21 +374,15 @@ h += '</div>';
         if (window.renderSmartInsights) window.renderSmartInsights();
       }
     } else {
-      const el = document.getElementById('statsArea');
-      if (!el) return;
-      const statsPanel = document.getElementById('panel-stats');
-      const isActive = statsPanel ? statsPanel.classList.contains('active') : true;
-      if (!isActive) return;
-      el.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text2);">Loading analytics...</div>';
       if (window._loadAnalytics) {
         window._loadAnalytics().then(function() {
           if (window.Dashboard && typeof Dashboard.renderInsights === 'function') {
             renderStats();
           } else {
-            el.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text2);">Analytics unavailable</div>';
+            statsArea.innerHTML += '<div style="text-align:center;padding:40px;color:var(--text2);">Analytics unavailable</div>';
           }
         }).catch(function() {
-          el.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text2);">Failed to load analytics</div>';
+          statsArea.innerHTML += '<div style="text-align:center;padding:40px;color:var(--text2);">Failed to load analytics</div>';
         });
       }
     }
@@ -675,7 +674,7 @@ h += '</div>';
     if (quranViewMode === 'juz') {
       html += '<div class="juz-grid">';
       QURAN_JUZ.forEach(j => {
-        html += `<div class="juz-card" onclick="App.openQuranJuz(${j.n})"><div style="font-weight:700;color:var(--gold-light);">Juz ${j.n}</div><div style="font-size:0.7rem;color:var(--text2);margin-top:3px;">${j.name}</div></div>`;
+        html += `<div class="juz-card" onclick="App.openQuranJuz(${j.n})"><div style="font-weight:700;color:var(--accent-light);">Juz ${j.n}</div><div style="font-size:0.7rem;color:var(--text2);margin-top:3px;">${j.name}</div></div>`;
       });
       html += '</div>';
     } else {
@@ -705,7 +704,7 @@ h += '</div>';
     const s = QURAN_SURAHS.find(x => x.n === surahNum);
     if (!s) { quranCurrentSurah = null; renderQuran(); return; }
     let html = '<button class="quran-back-btn" onclick="App.quranBack()">◀ Back to Surahs</button>';
-    html += `<div class="quran-header"><h2>${s.ar}</h2><div style="font-family:'Amiri',serif;font-size:1.3rem;color:var(--gold);margin:4px 0;">${s.en}</div><div class="quran-sub">${s.ay} verses · ${s.type}</div></div>`;
+    html += `<div class="quran-header"><h2>${s.ar}</h2><div style="font-family:'Amiri',serif;font-size:1.3rem;color:var(--accent);margin:4px 0;">${s.en}</div><div class="quran-sub">${s.ay} verses · ${s.type}</div></div>`;
     html += `<div style="text-align:center;margin:8px 0 12px;"><button id="surahPlayBtn" class="surah-play-btn" onclick="App.playSurah(${surahNum})">▶ Play Surah</button></div>`;
     const verses = QURAN_POOL.filter(v => {
       if (!v.source) return false;
@@ -713,7 +712,7 @@ h += '</div>';
       return m && parseInt(m[1]) === surahNum;
     });
     if (surahNum !== 1) {
-      html += `<div style="text-align:center;font-size:1.6rem;color:var(--gold);font-family:'Amiri',serif;margin:16px 0;">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ</div>`;
+      html += `<div style="text-align:center;font-size:1.6rem;color:var(--accent);font-family:'Amiri',serif;margin:16px 0;">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ</div>`;
     }
     if (verses.length === 0) {
       html += `<div class="quran-loading">No local verses available for this surah. ${s.ay} verses total.</div>`;
@@ -751,9 +750,9 @@ h += '</div>';
     const verseCount = endG - startG + 1;
 
     let html = '<button class="quran-back-btn" onclick="App.quranBack()">◀ Back to Juzes</button>';
-    html += `<div class="quran-header"><h2>Juz ${juzNum} · ${j ? j.name : ''}</h2><div style="font-family:'Amiri',serif;font-size:1.2rem;color:var(--gold);margin:4px 0;">${startS.en} → ${endS.en}</div><div class="quran-sub">${startS.n}:${firstLocal} · ${endS.n}:${lastLocal} · ${verseCount} verses</div></div>`;
+    html += `<div class="quran-header"><h2>Juz ${juzNum} · ${j ? j.name : ''}</h2><div style="font-family:'Amiri',serif;font-size:1.2rem;color:var(--accent);margin:4px 0;">${startS.en} → ${endS.en}</div><div class="quran-sub">${startS.n}:${firstLocal} · ${endS.n}:${lastLocal} · ${verseCount} verses</div></div>`;
     html += `<div style="text-align:center;margin:8px 0 12px;"><button id="juzPlayBtn" class="surah-play-btn" onclick="App.playJuz(${juzNum})">▶ Play Juz</button></div>`;
-    if (startS.n !== 1) { html += `<div style="text-align:center;font-size:1.6rem;color:var(--gold);font-family:'Amiri',serif;margin:16px 0;">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ</div>`; }
+    if (startS.n !== 1) { html += `<div style="text-align:center;font-size:1.6rem;color:var(--accent);font-family:'Amiri',serif;margin:16px 0;">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ</div>`; }
 
     const verses = [];
     QURAN_POOL.forEach(v => {

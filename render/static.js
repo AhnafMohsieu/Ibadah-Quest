@@ -45,7 +45,7 @@
       const o = pool[i % pool.length];
       if (!o) return '';
       
-      const numBadge = `<span style="display:inline-block; background:var(--rose); color:var(--gold-light); border:1px solid rgba(var(--accent-rgb),0.4); border-radius:12px; padding:0 8px; font-size:0.75rem; margin-right:8px; font-weight:800; height:22px; line-height:20px; white-space:nowrap; font-family:var(--font);">#${mapIdx + 1}</span>`;
+      const numBadge = `<span style="display:inline-block; background:var(--accent-bg); color:var(--accent-light); border:1px solid var(--accent-border); border-radius:12px; padding:0 8px; font-size:0.75rem; margin-right:8px; font-weight:800; height:22px; line-height:20px; white-space:nowrap; font-family:var(--font);">#${mapIdx + 1}</span>`;
 
       if (typeof o === 'string') return `<div class="content-card" onclick="if(typeof window.grantDailyXp==='function')window.grantDailyXp(2,'read|${areaId}|${i}')"><div style="display:flex;align-items:flex-start;gap:10px;"><div style="margin-top:2px;">${numBadge}</div><div class="content-english" style="flex:1;">${o}</div></div></div>`;
       
@@ -57,9 +57,9 @@
       
       let title_line = '';
       if (o.title) {
-        title_line = `<div style="font-weight:700;margin-bottom:6px;color:var(--gold-light);display:flex;align-items:flex-start;"><div style="margin-top:1px;">${numBadge}</div><span style="line-height:1.4;">${o.title}</span></div>`;
+        title_line = `<div style="font-weight:700;margin-bottom:6px;color:var(--accent-light);display:flex;align-items:flex-start;"><div style="margin-top:1px;">${numBadge}</div><span style="line-height:1.4;">${o.title}</span></div>`;
       } else if (o.name && o.arabic && !o.title) {
-        inner = `<div style="font-weight:700;font-size:1.1rem;color:var(--gold-light);display:flex;align-items:flex-start;margin-bottom:6px;"><div style="margin-top:3px;">${numBadge}</div><span style="line-height:1.3;">${o.name}</span></div><div class="content-arabic arabic-letter-glow">${o.arabic}</div><div class="content-english">${o.desc||''}</div>`;
+        inner = `<div style="font-weight:700;font-size:1.1rem;color:var(--accent-light);display:flex;align-items:flex-start;margin-bottom:6px;"><div style="margin-top:3px;">${numBadge}</div><span style="line-height:1.3;">${o.name}</span></div><div class="content-arabic arabic-letter-glow">${o.arabic}</div><div class="content-english">${o.desc||''}</div>`;
       } else {
         return `<div class="content-card" style="flex-direction:row;align-items:flex-start;" onclick="if(typeof window.grantDailyXp==='function')window.grantDailyXp(2,'read|${areaId}|${i}')"><div style="margin-top:2px;">${numBadge}</div><div style="flex:1;">${inner}</div></div>`;
       }
@@ -92,7 +92,7 @@
     let html = `<div class="section-title">${iqIcon('mosque')} 99 Names of Allah</div>`;
     html += NAMES.map((o, i) => {
       if (!o) return '';
-      const numBadge = `<span style="display:inline-block; background:var(--rose); color:var(--gold-light); border:1px solid rgba(var(--accent-rgb),0.4); border-radius:12px; padding:0 8px; font-size:0.75rem; margin-right:8px; font-weight:800; height:22px; line-height:20px; white-space:nowrap; font-family:var(--font);">#${i + 1}</span>`;
+      const numBadge = `<span style="display:inline-block; background:var(--accent-bg); color:var(--accent-light); border:1px solid var(--accent-border); border-radius:12px; padding:0 8px; font-size:0.75rem; margin-right:8px; font-weight:800; height:22px; line-height:20px; white-space:nowrap; font-family:var(--font);">#${i + 1}</span>`;
       return `<div class="content-card name-card">
         <div style="align-self:flex-end; display:flex;">${numBadge}</div>
         <div class="content-arabic name-an">${o.arabic || ''}</div>
@@ -163,8 +163,8 @@
       { name:'Tashahud', desc:'Sit between rakats reciting At-Tahiyyatu lillahi... and send Salawat on the Prophet ﷺ.' },
       { name:'Tasleem', desc:'End prayer by turning head right then left saying As-Salamu Alaykum wa rahmatullah.' }
     ].map((s, i) => {
-      const numBadge = `<span style="display:inline-block; background:var(--rose); color:var(--gold-light); border:1px solid rgba(var(--accent-rgb),0.4); border-radius:12px; padding:0 8px; font-size:0.75rem; margin-right:8px; font-weight:800; height:22px; line-height:20px; white-space:nowrap; font-family:var(--font);">#${i + 1}</span>`;
-      return `<div class="content-card" style="flex-direction:row;align-items:flex-start;"><div style="margin-top:2px;">${numBadge}</div><div style="flex:1;"><div style="font-weight:700;color:var(--gold-light);margin-bottom:6px;">${s.name}</div><div class="content-english">${s.desc}</div></div></div>`;
+      const numBadge = `<span style="display:inline-block; background:var(--accent-bg); color:var(--accent-light); border:1px solid var(--accent-border); border-radius:12px; padding:0 8px; font-size:0.75rem; margin-right:8px; font-weight:800; height:22px; line-height:20px; white-space:nowrap; font-family:var(--font);">#${i + 1}</span>`;
+      return `<div class="content-card" style="flex-direction:row;align-items:flex-start;"><div style="margin-top:2px;">${numBadge}</div><div style="flex:1;"><div style="font-weight:700;color:var(--accent-light);margin-bottom:6px;">${s.name}</div><div class="content-english">${s.desc}</div></div></div>`;
     }).join('');
   }
 
@@ -230,7 +230,7 @@
   function renderSahaba() {
     const el = document.getElementById('sahabaArea');
     if (!el) return;
-    el.innerHTML = '<div class="section-title">' + iqIcon('users') + ' The Companions (Sahabah)</div>' + SAHABA_POOL.map(s => `<div class="content-card"><div style="font-weight:700;color:var(--gold-light);margin-bottom:6px;">${iqIcon('star')} ${s.title}</div><div class="content-english">${s.desc}</div></div>`).join('');
+    el.innerHTML = '<div class="section-title">' + iqIcon('users') + ' The Companions (Sahabah)</div>' + SAHABA_POOL.map(s => `<div class="content-card"><div style="font-weight:700;color:var(--accent-light);margin-bottom:6px;">${iqIcon('star')} ${s.title}</div><div class="content-english">${s.desc}</div></div>`).join('');
   }
   function renderGratitude() {
     const dt = today(), entries = S.gratitudeLog[dt] || [];
@@ -254,8 +254,8 @@
   function renderCharity() {
     const cm = S.charity; if (cm.monthStart !== ms()) { cm.monthStart=ms(); cm.given=0; }
     let h = '<div class="section-title">' + iqIcon('wallet') + ' Charity Tracker</div>';
-    h += `<div class="content-card"><div class="content-english">Daily target: <strong style="color:var(--gold)">${cm.daily||'Not set'}</strong></div><input type="number" id="charityDaily" placeholder="Set daily target" class="profile-input"></div>`;
-    h += `<div class="content-card"><div class="content-english">Monthly target: <strong style="color:var(--gold)">${cm.monthly||'Not set'}</strong></div><input type="number" id="charityMonthly" placeholder="Set monthly target" class="profile-input"></div>`;
+    h += `<div class="content-card"><div class="content-english">Daily target: <strong style="color:var(--accent)">${cm.daily||'Not set'}</strong></div><input type="number" id="charityDaily" placeholder="Set daily target" class="profile-input"></div>`;
+    h += `<div class="content-card"><div class="content-english">Monthly target: <strong style="color:var(--accent)">${cm.monthly||'Not set'}</strong></div><input type="number" id="charityMonthly" placeholder="Set monthly target" class="profile-input"></div>`;
     h += `<div class="content-card"><div class="content-english">Given this month: <strong style="color:var(--green)">${cm.given} / ${cm.monthly||'?'}</strong></div><input type="number" id="charityGiven" placeholder="Log amount given today" class="profile-input"></div>`;
     h += `<button class="shop-card" onclick="App.setCharityGoals()" style="justify-content:center;width:100%;">${iqIcon('save')} Save & Log</button>`;
     h += '<div class="section-title">' + iqIcon('book-open') + ' Charity Knowledge</div>';
@@ -280,14 +280,14 @@
     
     let h = `<div class="section-title" style="display:flex;justify-content:space-between;align-items:center;">
       <span>${iqIcon('sunrise')} Morning Adhkar (After Fajr)</span>
-      <span style="font-size:0.75rem;background:rgba(201,168,76,0.15);padding:3px 10px;border-radius:12px;color:var(--gold-light);font-weight:700;">${completed} / ${total}</span>
+      <span style="font-size:0.75rem;background:rgba(201,168,76,0.15);padding:3px 10px;border-radius:12px;color:var(--accent-light);font-weight:700;">${completed} / ${total}</span>
     </div><div style="display:flex;flex-direction:column;gap:12px;">`;
     MORNING_DHIKR.forEach((item, idx) => { 
         const done = !!S.morningDone[dt][idx]; 
         h += `<div class="vol-card${done?' done':''}" tabindex="0" role="button" onclick="App.toggleMorning(${idx}, ${item.xp})" style="cursor:pointer;">
             <div class="prayer-check" style="font-size:1.2rem;">${done?iqIcon('check'):iqIcon('sun')}</div>
             <div class="prayer-info">
-                <div style="font-family:'Amiri',serif;font-size:1.3rem;margin-bottom:2px;color:var(--gold);line-height:1.4;">${item.arabic}</div>
+                <div style="font-family:'Amiri',serif;font-size:1.3rem;margin-bottom:2px;color:var(--accent);line-height:1.4;">${item.arabic}</div>
                 ${item.roman ? `<div style="font-size:0.85rem;color:var(--text2);font-style:italic;margin-bottom:6px;opacity:0.9;">"${item.roman}"</div>` : ''}
                 <div class="prayer-name">${item.text}</div>
                 <div style="font-size:0.8rem;color:var(--text2);margin-top:4px;">${item.reward}</div>
@@ -318,14 +318,14 @@
     
     let h = `<div class="section-title" style="display:flex;justify-content:space-between;align-items:center;">
       <span>${iqIcon('moon')} Evening Adhkar (After Asr)</span>
-      <span style="font-size:0.75rem;background:rgba(201,168,76,0.15);padding:3px 10px;border-radius:12px;color:var(--gold-light);font-weight:700;">${completed} / ${total}</span>
+      <span style="font-size:0.75rem;background:rgba(201,168,76,0.15);padding:3px 10px;border-radius:12px;color:var(--accent-light);font-weight:700;">${completed} / ${total}</span>
     </div><div style="display:flex;flex-direction:column;gap:12px;">`;
     EVENING_DHIKR.forEach((item, idx) => { 
         const done = !!S.eveningDone[dt][idx]; 
         h += `<div class="vol-card${done?' done':''}" tabindex="0" role="button" onclick="App.toggleEvening(${idx}, ${item.xp})" style="cursor:pointer;">
             <div class="prayer-check" style="font-size:1.2rem;">${done?iqIcon('check'):iqIcon('moon')}</div>
             <div class="prayer-info">
-                <div style="font-family:'Amiri',serif;font-size:1.3rem;margin-bottom:2px;color:var(--gold);line-height:1.4;">${item.arabic}</div>
+                <div style="font-family:'Amiri',serif;font-size:1.3rem;margin-bottom:2px;color:var(--accent);line-height:1.4;">${item.arabic}</div>
                 ${item.roman ? `<div style="font-size:0.85rem;color:var(--text2);font-style:italic;margin-bottom:6px;opacity:0.9;">"${item.roman}"</div>` : ''}
                 <div class="prayer-name">${item.text}</div>
                 <div style="font-size:0.8rem;color:var(--text2);margin-top:4px;">${item.reward}</div>

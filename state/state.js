@@ -37,7 +37,7 @@ function resolveCurrentUser() {
       healthLog:{}, financeLog:{},
       growthSettings:{visible:['garden','lantern','keys','mosque','boat','heart','armor','ramadan','laylat']},
       theme:'light', lastTab:'home', lastCat:null, lastSub:null, introSeen:false,
-      notificationsEnabled:false
+      notificationsEnabled:false, bookmarks:[]
     };
   }
   let S = null;

@@ -1,9 +1,8 @@
 window.Themes = [
-  { key:'light', label:'Light', swatch:{ bg:'#ddd3ea', accent:'#f43f5e' } },
-  { key:'serene', label:'Serene', swatch:{ bg:'#d2e1cf', accent:'#4c7a4a' } },
-  { key:'royal', label:'Royal', swatch:{ bg:'#d6cfe9', accent:'#7c5cf0' } },
-  { key:'sand', label:'Sand', swatch:{ bg:'#e8dcc6', accent:'#c98a2e' } },
-  { key:'midnight', label:'Midnight', swatch:{ bg:'#cfdcea', accent:'#3fa7c8' } },
-  { key:'cream', label:'Cream', swatch:{ bg:'#f7f0e1', accent:'#b8860b' } },
-  { key:'emara', label:'Emara', swatch:{ bg:'#123027', accent:'#d4af37' } }
+  { key:'light', label:'Light', swatch:{ bg:'#f8f9fa', accent:'#c9a84c' } },
+  { key:'serene', label:'Serene', swatch:{ bg:'#f5f7f4', accent:'#4c7a4a' } },
+  { key:'royal', label:'Royal', swatch:{ bg:'#f5f3fa', accent:'#7c5cf0' } },
+  { key:'midnight', label:'Midnight', swatch:{ bg:'#f0f4f8', accent:'#3fa7c8' } },
+  { key:'cream', label:'Cream', swatch:{ bg:'#faf8f3', accent:'#b8860b' } },
+  { key:'emara', label:'Emara', swatch:{ bg:'#0f1a15', accent:'#d4af37' } }
 ];

@@ -223,7 +223,7 @@
       if (diff < 0) return;
       const hh = String(Math.floor(diff / (1000*60*60))).padStart(2,'0');
       const mm = String(Math.floor((diff / (1000*60)) % 60)).padStart(2,'0');
-      const ss = String(Math.floor((diff / 1000) % 60)).padStart(2,'0');
+      const ss = String(Math.floor((diff / (1000*60)) % 60)).padStart(2,'0');
       const te = document.getElementById('timerArea');
       const pna = document.getElementById('prayerNamesArea');
       if (te) te.innerText = `${hh}:${mm}:${ss}`;

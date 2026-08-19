@@ -37,11 +37,11 @@
       svg += `<path d="M60 90 Q48 74 60 62 Q72 74 60 90 Z" fill="var(--card-bg)" opacity="0.55"/>`;
     }
     if (stage >= 5) {
-      svg += `<circle cx="60" cy="78" r="${44 + stage}" fill="none" stroke="var(--gold)" stroke-width="2" opacity="${0.15 + stage * 0.05}"/>`;
+      svg += `<circle cx="60" cy="78" r="${44 + stage}" fill="none" stroke="var(--accent)" stroke-width="2" opacity="${0.15 + stage * 0.05}"/>`;
     }
     if (stage === 7) {
       svg += `<circle cx="60" cy="80" r="18" fill="#FFF" opacity="0.4"/>`;
-      svg += `<path d="M84 22 a9 9 0 1 0 2 11 a11 11 0 1 1 -2 -11 Z" fill="var(--gold)" opacity="0.9"/>`;
+      svg += `<path d="M84 22 a9 9 0 1 0 2 11 a11 11 0 1 1 -2 -11 Z" fill="var(--accent)" opacity="0.9"/>`;
     }
     return `<svg class="spiritual-svg" viewBox="0 0 120 160">${svg}</svg>`;
   }

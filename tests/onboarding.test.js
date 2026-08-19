@@ -89,7 +89,7 @@ test('startOnboarding persists state via saveState', () => {
 
 // ── nextOnboardingStep tests ──
 
-test('nextOnboardingStep advances through the four steps', () => {
+test('nextOnboardingStep advances through the five steps', () => {
   const state = { onboarding: { step: 0, complete: false } };
   const s = loadSandbox(state);
   s.startOnboarding();
@@ -97,21 +97,25 @@ test('nextOnboardingStep advances through the four steps', () => {
 
   s.nextOnboardingStep();
   assert.strictEqual(state.onboarding.step, 1);
-  assert.ok(overlayHtml(s).includes('Key Features'), 'step 2 must be key features');
+  assert.ok(overlayHtml(s).includes('Log Your First Prayer'), 'step 2 must be log first prayer');
   assert.ok(overlayHtml(s).includes('onboarding-dot', 'progress dots must render'));
 
   s.nextOnboardingStep();
   assert.strictEqual(state.onboarding.step, 2);
-  assert.ok(overlayHtml(s).includes('Quick Settings'), 'step 3 must be quick settings');
+  assert.ok(overlayHtml(s).includes('Daily Quests'), 'step 3 must be daily quests');
 
   s.nextOnboardingStep();
   assert.strictEqual(state.onboarding.step, 3);
-  assert.ok(overlayHtml(s).includes('Begin Your Journey'), 'step 4 must be the start screen');
+  assert.ok(overlayHtml(s).includes('Personalize'), 'step 4 must be personalize');
+
+  s.nextOnboardingStep();
+  assert.strictEqual(state.onboarding.step, 4);
+  assert.ok(overlayHtml(s).includes('Begin Your Journey'), 'step 5 must be the start screen');
   assert.strictEqual(s.isOnboardingComplete(), false, 'not complete before final step');
 });
 
 test('nextOnboardingStep completes onboarding when advancing past the last step', () => {
-  const state = { onboarding: { step: 3, complete: false } };
+  const state = { onboarding: { step: 4, complete: false } };
   const s = loadSandbox(state);
   s.nextOnboardingStep();
   assert.strictEqual(s.isOnboardingComplete(), true, 'advancing past the end must complete onboarding');
@@ -123,7 +127,7 @@ test('full walkthrough from fresh state completes after the last step', () => {
   const s = loadSandbox(state);
   assert.strictEqual(s.isOnboardingComplete(), false);
   s.startOnboarding();
-  for (let i = 0; i < 3; i++) s.nextOnboardingStep();
+  for (let i = 0; i < 4; i++) s.nextOnboardingStep();
   assert.strictEqual(s.isOnboardingComplete(), false, 'must not complete before the start screen');
   s.nextOnboardingStep();
   assert.strictEqual(s.isOnboardingComplete(), true, 'must complete after the start screen');

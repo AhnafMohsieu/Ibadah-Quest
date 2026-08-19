@@ -11,7 +11,7 @@ const IQ_EMOJI = {
   'brain':'🧠', 'briefcase':'💼', 'building':'🏢', 'calendar':'📅',
   'calendar-check':'📆', 'calendar-days':'🗓️', 'lightbulb':'💡',
   'map':'🗺️', 'castle':'🏯', 'check':'✅', 'clipboard':'📋',
-  'clock':'⏰', 'cloud-sun':'⛅', 'coffin':'⚰️', 'credit-card':'💳',
+  'clock':'⏰', 'cloud-sun':'⛅', 'coffin':'⚰️',   'credit-card':'💳',
   'dna':'🧬', 'dollar-sign':'💵', 'droplets':'💧', 'eye':'👁️',
   'flame':'🔥', 'flower':'🌸', 'gem':'💎', 'gift':'🎁',
   'globe':'🌐', 'hand-heart':'🙏', 'handshake':'🤝', 'heart':'❤️',
@@ -99,7 +99,7 @@ const IQ_IDS = {
   'bukhari':'book', 'muslim':'book-open', 'nawawi':'bookmarks',
 
   /* ── Knowledge groups (cat chips) ── */
-  'knowledge':'book-open', 'ibadah':'hand-heart', 'library':'book',
+  'knowledge':'book-open', 'ibadah':'mosque', 'library':'book',
   'names_main':'brain', 'allah_names':'moon', 'scholars_names':'book',
 
   /* quran_sunnah */
@@ -108,7 +108,7 @@ const IQ_IDS = {
 
   /* fiqh */
   'fiqh':'scales', 'purification':'droplets', 'salah':'mosque',
-  'salahrules':'mosque', 'zakat':'wallet', 'zakatrules':'wallet',
+  'salahrules':'mosque', 'zakat':'wallet', 'zakatcalc':'coins', 'zakatrules':'wallet',
   'sawmrules':'crescent', 'hajj':'kaaba', 'hajjrules':'kaaba',
   'trade':'handshake', 'inheritance':'scroll', 'oaths':'handshake',
 
@@ -150,16 +150,16 @@ const IQ_IDS = {
   'jahannam':'flame', 'grave':'moon', 'signs':'clock', 'dreams':'moon',
 
   /* ── Library groups (tab-groups.js) ── */
-  'dynasties':'castle', 'umayyads':'castle', 'abbasids':'castle',
-  'andalus':'castle', 'ottomans':'castle', 'mamluks':'castle',
-  'seljuks':'castle', 'fatimids':'castle', 'ayyubids':'castle',
-  'modernhist':'clock', 'ancientprophets':'scroll',
+  'dynasties':'landmark', 'umayyads':'crescent', 'abbasids':'book-open',
+  'andalus':'palette', 'ottomans':'crown', 'mamluks':'shield',
+  'seljuks':'moon', 'fatimids':'star', 'ayyubids':'sword',
+  'modernhist':'trending-up', 'ancientprophets':'scroll',
   'cities':'building', 'mecca':'kaaba', 'medina':'kaaba',
   'jerusalem':'mosque', 'damascus':'mosque', 'baghdad':'mosque',
-  'cairo':'mosque', 'cordoba':'building', 'istanbul':'mosque',
+  'cairo':'mosque', 'cordoba':'palette', 'istanbul':'crown',
   'bukhara':'book', 'samarkand':'building',
   'arts':'palette', 'calligraphy':'pen-tool', 'architecture':'mosque',
-  'geometry':'pen-tool', 'poetryart':'pen-tool', 'literature':'book-open',
+  'geometry':'target', 'poetryart':'pen-tool', 'literature':'book-open',
   'nasheeds':'headphones', 'illumination':'sparkles', 'textiles':'palette',
   'ceramics':'palette', 'woodwork':'leaf', 'wood':'tree',
   'arabic_lang':'pencil', 'arabicgrammar':'pencil', 'vocab':'book-open',
@@ -167,7 +167,7 @@ const IQ_IDS = {
   'poetry':'pen-tool', 'proverbs':'lightbulb', 'etymology':'book-open',
   'dialects':'globe', 'scripts':'pencil',
   'philosophy':'brain', 'epistemology':'brain', 'ontology':'globe',
-  'logic':'brain', 'kalam':'brain', 'reason':'lightbulb',
+  'logic':'brain', 'kalam':'book', 'reason':'lightbulb',
   'freewill':'shield', 'problemofevil':'alert-triangle',
   'prophethood':'scroll', 'existence':'eye',
 

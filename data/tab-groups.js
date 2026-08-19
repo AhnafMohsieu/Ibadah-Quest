@@ -1,19 +1,43 @@
 const TAB_GROUPS = {
 
-  // -- DAILY (flat � core habit loop, always visible) --
+  // -- DAILY (categorized — core habit loop, always visible) --
   ibadah: [
-    { id: 'today', label: 'Today' },
-    { id: 'timer', label: 'Prayer Times' },
-    { id: 'quests', label: 'Quests' },
-    { id: 'journeys', label: 'Journeys' },
-    { id: 'morning', label: 'Morning' },
-    { id: 'evening', label: 'Evening' },
-    { id: 'dhikr', label: 'Remembrance' },
-    { id: 'wudu', label: 'Ablution' },
-    { id: 'salah', label: 'Prayer Guide' },
-    { id: 'fasting', label: 'Fasting' },
-    { id: 'healthlog', label: 'Health' },
-    { id: 'finance', label: 'Finance' }
+    {
+      id: 'core', label: 'Core',
+      tabs: [
+        { id: 'today', label: 'Today' },
+        { id: 'timer', label: 'Prayer Times' },
+        { id: 'quests', label: 'Quests' },
+        { id: 'journeys', label: 'Journeys' }
+      ]
+    },
+    {
+      id: 'adhkar', label: 'Adhkar',
+      tabs: [
+        { id: 'morning', label: 'Morning' },
+        { id: 'evening', label: 'Evening' },
+        { id: 'dhikr', label: 'Remembrance' }
+      ]
+    },
+    {
+      id: 'worship', label: 'Guide',
+      tabs: [
+        { id: 'wudu', label: 'Ablution' },
+        { id: 'salah', label: 'Prayer Guide' }
+      ]
+    },
+    {
+      id: 'tracking', label: 'Self-Tracking',
+      tabs: [
+        { id: 'fasting', label: 'Fasting' },
+        { id: 'healthlog', label: 'Health' },
+        { id: 'finance', label: 'Finance' },
+        { id: 'memorization', label: 'Memorization' },
+        { id: 'gratitude', label: 'Gratitude' },
+        { id: 'charity', label: 'Charity' },
+        { id: 'zakatcalc', label: 'Zakat' }
+      ]
+    }
   ],
 
   // -- KNOWLEDGE (categorized � religious learning) --
@@ -24,8 +48,7 @@ const TAB_GROUPS = {
         { id: 'quran', label: 'Quran' },
         { id: 'tafsir', label: 'Interpretation' },
         { id: 'hadith', label: 'Hadith' },
-        { id: 'sunnahs', label: 'Prophetic Ways' },
-        { id: 'memorization', label: 'Memorization' }
+        { id: 'sunnahs', label: 'Prophetic Ways' }
       ]
     },
     {
@@ -56,8 +79,7 @@ const TAB_GROUPS = {
         { id: 'ikhlas', label: 'Sincerity' },
         { id: 'tawakkul', label: 'Reliance' },
         { id: 'manners', label: 'Manners' },
-        { id: 'patience', label: 'Patience & Gratitude' },
-        { id: 'gratitude', label: 'Gratitude' },
+        { id: 'patience', label: 'Patience' },
         { id: 'sins', label: 'Major Sins' },
         { id: 'repentance', label: 'Repentance' },
         { id: 'zuhd', label: 'Asceticism' },
@@ -77,7 +99,6 @@ const TAB_GROUPS = {
         { id: 'family', label: 'Family' },
         { id: 'marriage', label: 'Marriage' },
         { id: 'parenting', label: 'Parenting' },
-        { id: 'charity', label: 'Charity' },
         { id: 'work', label: 'Career' },
         { id: 'neighbors', label: 'Neighbors' },
         { id: 'community', label: 'Community' },
@@ -136,9 +157,7 @@ const TAB_GROUPS = {
         { id: 'grave', label: 'The Grave' },
         { id: 'signs', label: 'Signs of Qiyamah' },
         { id: 'hajj', label: 'Pilgrimage' },
-        { id: 'dreams', label: 'Islamic Dreams' },
-        { id: 'ramadan', label: 'Ramadan' },
-        { id: 'laylat', label: 'Laylat al-Qadr' }
+        { id: 'dreams', label: 'Islamic Dreams' }
       ]
     }
   ],

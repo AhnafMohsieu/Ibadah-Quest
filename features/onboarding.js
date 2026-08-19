@@ -6,19 +6,24 @@
       text: 'بِسْمِ ٱللَّهِ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ<br>In the Name of Allah, the Most Gracious, the Most Merciful.<br>Your journey of worship begins now.'
     },
     {
-      icon: 'sparkles',
-      title: 'Key Features',
-      text: 'Track your five daily prayers, complete quests for XP, and unlock achievements as you grow in worship and character.'
-    },
-    {
-      icon: 'settings',
-      title: 'Quick Settings',
-      text: 'Personalize your experience: choose a theme from the top bar and manage your notification preferences whenever you like.'
+      icon: 'sun',
+      title: 'Log Your First Prayer',
+      text: 'Tap the prayer cards below to log today\'s prayers. Each prayer earns XP — Fajr gives 70 XP, and Isha gives 60 XP. Build your streak for bonus rewards!'
     },
     {
       icon: 'target',
+      title: 'Daily Quests & Streaks',
+      text: 'Complete daily quests for bonus XP. Maintain a 7-day streak to unlock bigger rewards. Your consistency is your strength.'
+    },
+    {
+      icon: 'settings',
+      title: 'Personalize Your Experience',
+      text: 'Choose a theme from the top bar. Enable notifications to get reminded at prayer time. Your journey, your way.'
+    },
+    {
+      icon: 'sparkles',
       title: 'Begin Your Journey',
-      text: 'Your first quest awaits — complete a daily quest today to earn XP and start building your streak. May Allah accept your efforts.'
+      text: 'Your first quest awaits — log a prayer today to earn XP and start building your streak. May Allah accept your efforts.'
     }
   ];
 

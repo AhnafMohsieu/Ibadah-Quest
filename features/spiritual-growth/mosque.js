@@ -21,16 +21,16 @@
   function mosqueSVG(stage) {
     var h = '<rect width="120" height="132" fill="var(--card-bg)" rx="10"/>';
     h += '<line x1="10" y1="118" x2="110" y2="118" stroke="var(--text2)" stroke-width="2" opacity="0.35"/>';
-    if (stage >= 1) h += '<rect x="30" y="106" width="60" height="9" fill="var(--gold)" opacity="0.8"/>';
-    if (stage >= 2) h += '<rect x="34" y="64" width="52" height="42" fill="var(--card-bg)" stroke="var(--gold)" stroke-width="2"/>';
-    if (stage >= 3) h += '<path d="M28 64 L60 38 L92 64 Z" fill="var(--gold)" opacity="0.85"/>';
-    if (stage >= 4) h += '<path d="M46 38 Q60 8 74 38 Z" fill="var(--gold)"/>';
-    if (stage >= 5) h += '<rect x="92" y="58" width="8" height="48" fill="var(--gold)" opacity="0.9"/>' +
-      '<circle cx="96" cy="56" r="4" fill="var(--gold)"/>';
-    if (stage >= 6) h += '<path d="M46 86 h9 q0 -10 -9 -10 z M74 86 h-9 q0 -10 9 -10 z" fill="var(--gold)" opacity="0.9"/>';
+    if (stage >= 1) h += '<rect x="30" y="106" width="60" height="9" fill="var(--accent)" opacity="0.8"/>';
+    if (stage >= 2) h += '<rect x="34" y="64" width="52" height="42" fill="var(--card-bg)" stroke="var(--accent)" stroke-width="2"/>';
+    if (stage >= 3) h += '<path d="M28 64 L60 38 L92 64 Z" fill="var(--accent)" opacity="0.85"/>';
+    if (stage >= 4) h += '<path d="M46 38 Q60 8 74 38 Z" fill="var(--accent)"/>';
+    if (stage >= 5) h += '<rect x="92" y="58" width="8" height="48" fill="var(--accent)" opacity="0.9"/>' +
+      '<circle cx="96" cy="56" r="4" fill="var(--accent)"/>';
+    if (stage >= 6) h += '<path d="M46 86 h9 q0 -10 -9 -10 z M74 86 h-9 q0 -10 9 -10 z" fill="var(--accent)" opacity="0.9"/>';
     if (stage === 7) {
-      h += '<circle cx="60" cy="70" r="54" fill="none" stroke="var(--gold)" stroke-width="2" opacity="0.35"/>';
-      h += '<path d="M86 18 a9 9 0 1 0 2 11 a11 11 0 1 1 -2 -11 Z" fill="var(--gold)" opacity="0.9"/>';
+      h += '<circle cx="60" cy="70" r="54" fill="none" stroke="var(--accent)" stroke-width="2" opacity="0.35"/>';
+      h += '<path d="M86 18 a9 9 0 1 0 2 11 a11 11 0 1 1 -2 -11 Z" fill="var(--accent)" opacity="0.9"/>';
     }
     return '<svg class="spiritual-svg" viewBox="0 0 120 132">' + h + '</svg>';
   }

@@ -96,7 +96,20 @@
       quests: ['panel-quests'],
       stats: ['panel-stats'],
       growth: ['panel-progress', 'panel-growth'],
-      profile: ['panel-profile','panel-trophies','panel-rewards','panel-allah_names','panel-prophet_names','panel-scholars_names']
+      profile: ['panel-profile','panel-trophies','panel-rewards','panel-goals','panel-allah_names','panel-scholars_names'],
+      knowledge_quran: ['panel-quran','panel-tafsir','panel-hadith','panel-sunnahs'],
+      knowledge_fiqh: ['panel-fiqh','panel-purification','panel-salahrules','panel-zakatrules','panel-sawmrules','panel-hajjrules','panel-trade','panel-inheritance','panel-oaths'],
+      knowledge_creed: ['panel-aqeedah','panel-arabic'],
+      knowledge_heart: ['panel-heart','panel-ikhlas','panel-tawakkul','panel-manners','panel-patience','panel-sins','panel-repentance','panel-zuhd','panel-inspirations','panel-sufism','panel-tazkiyah','panel-fear','panel-hope','panel-loveofallah','panel-contentment','panel-reflection'],
+      knowledge_society: ['panel-family','panel-marriage','panel-parenting','panel-work','panel-neighbors','panel-community','panel-ummah','panel-dawah','panel-punishments','panel-brotherhood','panel-sisterhood','panel-orphans2','panel-elderly','panel-disabled','panel-antiracism','panel-poverty','panel-volunteering'],
+      knowledge_life: ['panel-health','panel-tibb','panel-food','panel-environment','panel-travel','panel-youth','panel-tech','panel-technology','panel-socialmedia','panel-ethics','panel-bioethics','panel-modfinance','panel-politics','panel-green','panel-mentalhealth','panel-education'],
+      knowledge_history: ['panel-seerah','panel-sahaba','panel-prophets','panel-women','panel-stories','panel-civilisation','panel-science','panel-battles'],
+      knowledge_hereafter: ['panel-akhirah','panel-jannah','panel-jahannam','panel-grave','panel-signs','panel-hajj','panel-dreams','panel-ramadan','panel-laylat'],
+      library_dynasties: ['panel-umayyads','panel-abbasids','panel-andalus','panel-ottomans','panel-mamluks','panel-seljuks','panel-fatimids','panel-ayyubids','panel-modernhist','panel-ancientprophets'],
+      library_cities: ['panel-mecca','panel-medina','panel-jerusalem','panel-damascus','panel-baghdad','panel-cairo','panel-cordoba','panel-istanbul','panel-bukhara','panel-samarkand'],
+      library_arts: ['panel-calligraphy','panel-architecture','panel-geometry','panel-poetryart','panel-literature','panel-nasheeds','panel-illumination','panel-textiles','panel-ceramics','panel-woodwork'],
+      library_arabic: ['panel-arabicgrammar','panel-vocab','panel-rhetoric','panel-morphology','panel-pronunciation','panel-poetry','panel-proverbs','panel-etymology','panel-dialects','panel-scripts'],
+      library_philosophy: ['panel-epistemology','panel-ontology','panel-logic','panel-kalam','panel-reason','panel-freewill','panel-problemofevil','panel-prophethood','panel-existence']
     };
     return sections[sectionName] || null;
   }
@@ -111,7 +124,7 @@
       if (catId) _pushTabState(catId, tabId);
     }
     var sectionName = null;
-    var panelLookup = {home:['panel-today','panel-timer','panel-journeys','panel-morning','panel-evening','panel-dhikr','panel-duas','panel-quran','panel-wudu','panel-jumuah','panel-salah','panel-fasting','panel-healthlog','panel-finance'],quests:['panel-quests'],stats:['panel-stats'],growth:['panel-progress','panel-growth'],profile:['panel-profile','panel-trophies','panel-rewards','panel-allah_names','panel-prophet_names','panel-scholars_names']};
+    var panelLookup = {home:['panel-today','panel-timer','panel-journeys','panel-morning','panel-evening','panel-dhikr','panel-duas','panel-quran','panel-wudu','panel-jumuah','panel-salah','panel-fasting','panel-healthlog','panel-finance','panel-zakatcalc','panel-memorization','panel-gratitude','panel-charity'],quests:['panel-quests'],stats:['panel-stats'],growth:['panel-progress','panel-growth'],profile:['panel-profile','panel-trophies','panel-rewards','panel-goals','panel-allah_names','panel-scholars_names'],knowledge_quran:['panel-quran','panel-tafsir','panel-hadith','panel-sunnahs'],knowledge_fiqh:['panel-fiqh','panel-purification','panel-salahrules','panel-zakatrules','panel-sawmrules','panel-hajjrules','panel-trade','panel-inheritance','panel-oaths'],knowledge_creed:['panel-aqeedah','panel-arabic'],knowledge_heart:['panel-heart','panel-ikhlas','panel-tawakkul','panel-manners','panel-patience','panel-sins','panel-repentance','panel-zuhd','panel-inspirations','panel-sufism','panel-tazkiyah','panel-fear','panel-hope','panel-loveofallah','panel-contentment','panel-reflection'],knowledge_society:['panel-family','panel-marriage','panel-parenting','panel-work','panel-neighbors','panel-community','panel-ummah','panel-dawah','panel-punishments','panel-brotherhood','panel-sisterhood','panel-orphans2','panel-elderly','panel-disabled','panel-antiracism','panel-poverty','panel-volunteering'],knowledge_life:['panel-health','panel-tibb','panel-food','panel-environment','panel-travel','panel-youth','panel-tech','panel-technology','panel-socialmedia','panel-ethics','panel-bioethics','panel-modfinance','panel-politics','panel-green','panel-mentalhealth','panel-education'],knowledge_history:['panel-seerah','panel-sahaba','panel-prophets','panel-women','panel-stories','panel-civilisation','panel-science','panel-battles'],knowledge_hereafter:['panel-akhirah','panel-jannah','panel-jahannam','panel-grave','panel-signs','panel-hajj','panel-dreams','panel-ramadan','panel-laylat'],library_dynasties:['panel-umayyads','panel-abbasids','panel-andalus','panel-ottomans','panel-mamluks','panel-seljuks','panel-fatimids','panel-ayyubids','panel-modernhist','panel-ancientprophets'],library_cities:['panel-mecca','panel-medina','panel-jerusalem','panel-damascus','panel-baghdad','panel-cairo','panel-cordoba','panel-istanbul','panel-bukhara','panel-samarkand'],library_arts:['panel-calligraphy','panel-architecture','panel-geometry','panel-poetryart','panel-literature','panel-nasheeds','panel-illumination','panel-textiles','panel-ceramics','panel-woodwork'],library_arabic:['panel-arabicgrammar','panel-vocab','panel-rhetoric','panel-morphology','panel-pronunciation','panel-poetry','panel-proverbs','panel-etymology','panel-dialects','panel-scripts'],library_philosophy:['panel-epistemology','panel-ontology','panel-logic','panel-kalam','panel-reason','panel-freewill','panel-problemofevil','panel-prophethood','panel-existence']};
     for (var sec in panelLookup) {
       if (panelLookup[sec].indexOf('panel-' + tabId) > -1) { sectionName = sec; break; }
     }
@@ -172,7 +185,7 @@
       logic:'renderLogic', kalam:'renderKalam', reason:'renderReason', freewill:'renderFreewill',
       problemofevil:'renderProblemofevil', prophethood:'renderProphethood', existence:'renderExistence',
       keys:'renderKeys', mosque:'renderMosque', ramadan:'renderRamadan', laylat:'renderLaylat',
-      timer:'renderPrayerTimes', stats:'renderStats', goals:'renderPersonalGoals'
+      timer:'renderPrayerTimes', stats:'renderStats', goals:'renderPersonalGoals', zakatcalc:'renderZakatCalc'
     };
     if (_lazyRender[tabId] && window[_lazyRender[tabId]]) {
       try { window[_lazyRender[tabId]](); } catch(e) { console.warn('Lazy render ' + tabId + ' failed:', e.message); }

@@ -14,7 +14,8 @@ function loadModule(sandbox, relPath) {
 const expected = [
   'toggleP','toggleV','toggleD','detail','tip','toggleQuest','addGratitude','toggleFasting','setCharityGoals',
   'grantDailyXp','grantCappedDailyXp','logWater','logSleep','logExercise','toggleMeal','addMemorization',
-  'toggleMorning','toggleEvening','switchUser','logout','resetAll','openMuhasabah','dismissMuhasabah',
+  'toggleMorning','toggleEvening','switchUser','logout','resetAll','exportData','importData','toggleBookmark','isBookmarked',
+  'openMuhasabah','dismissMuhasabah',
   'joinJourney','manualRefresh','ensureQuranLoaded','ensureHadithLoaded','claimBonus','setQuranView',
   'quranSearchFilter','openQuranSurah','quranBack','openQuranJuz','openHadithCollection','openHadithBook',
   'hadithBack','playQuranVerse','playSurah','stopSurah','setQuranReciter','playJuz','updateJuzButton',

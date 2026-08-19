@@ -206,7 +206,7 @@
       if (!indices.length) { indices = Array.from({length: Math.min(5, FINANCE_POOL.length)}, (_, i) => i); S.financeIdx = indices; }
       h += indices.slice(0, 5).map(i => {
         const o = FINANCE_POOL[i % FINANCE_POOL.length];
-        return `<div class="content-card"><div style="font-weight:700;color:var(--gold-light);margin-bottom:6px;">${o.title}</div><div class="content-english">${o.desc}</div></div>`;
+        return `<div class="content-card"><div style="font-weight:700;color:var(--accent-light);margin-bottom:6px;">${o.title}</div><div class="content-english">${o.desc}</div></div>`;
       }).join('');
     }
 

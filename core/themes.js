@@ -29,7 +29,7 @@
     if (window.renderTab) window.renderTab(tab);
   }
   function toggleTheme() {
-    const themes = ['light', 'serene', 'royal', 'sand', 'midnight', 'cream', 'emara'];
+    const themes = ['light', 'serene', 'royal', 'midnight', 'cream', 'emara'];
     const current = localStorage.getItem(THEME_KEY) || 'light';
     const idx = themes.indexOf(current);
     const next = themes[(idx + 1) % themes.length];

@@ -59,13 +59,13 @@
         const a = (i / Math.max(1, flowers)) * Math.PI * 2;
         const x = 60 + Math.cos(a) * 30;
         const y = 46 + Math.sin(a) * 24;
-        h += `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="3.4" fill="var(--gold)"/>`;
+        h += `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="3.4" fill="var(--accent)"/>`;
       }
     }
     if (stage === 7) {
-      h += `<circle cx="60" cy="56" r="54" fill="none" stroke="var(--gold)" stroke-width="2" opacity="0.4"/>`;
-      h += `<circle cx="60" cy="46" r="44" fill="var(--gold)" opacity="0.12"/>`;
-      h += `<path d="M88 18 a9 9 0 1 0 2 11 a11 11 0 1 1 -2 -11 Z" fill="var(--gold)" opacity="0.9"/>`;
+      h += `<circle cx="60" cy="56" r="54" fill="none" stroke="var(--accent)" stroke-width="2" opacity="0.4"/>`;
+      h += `<circle cx="60" cy="46" r="44" fill="var(--accent)" opacity="0.12"/>`;
+      h += `<path d="M88 18 a9 9 0 1 0 2 11 a11 11 0 1 1 -2 -11 Z" fill="var(--accent)" opacity="0.9"/>`;
     }
     return `<svg class="garden-svg" viewBox="0 0 120 132">${h}</svg>`;
   }

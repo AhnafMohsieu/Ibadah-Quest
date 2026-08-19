@@ -14,13 +14,13 @@
     if (stage === 4) sky = '#2E4053';
     if (stage >= 5) sky = '#F4C27A';
     let h = `<rect width="120" height="132" fill="${sky}" opacity="0.85" rx="10"/>`;
-    if (stage === 3) h += `<circle cx="92" cy="34" r="13" fill="var(--gold)"/>`;
-    if (stage >= 5) h += `<circle cx="92" cy="44" r="15" fill="var(--gold)"/>`;
+    if (stage === 3) h += `<circle cx="92" cy="34" r="13" fill="var(--accent)"/>`;
+    if (stage >= 5) h += `<circle cx="92" cy="44" r="15" fill="var(--accent)"/>`;
     if (stage === 4) {
       h += `<path d="M20 34 Q35 20 52 32 Q62 20 76 30 Q90 22 100 34 L100 44 L20 44 Z" fill="#39464F"/>`;
-      h += `<polyline points="50 54 58 68 54 68 62 82" fill="none" stroke="var(--gold)" stroke-width="2.5"/>`;
+      h += `<polyline points="50 54 58 68 54 68 62 82" fill="none" stroke="var(--accent)" stroke-width="2.5"/>`;
     }
-    if (stage >= 7) h += `<path d="M84 18 a9 9 0 1 0 2 11 a11 11 0 1 1 -2 -11 Z" fill="var(--gold)"/>`;
+    if (stage >= 7) h += `<path d="M84 18 a9 9 0 1 0 2 11 a11 11 0 1 1 -2 -11 Z" fill="var(--accent)"/>`;
     if (stage >= 6) {
       h += `<path d="M12 108 Q24 90 36 108 Z" fill="var(--green)"/>`;
       h += `<path d="M14 108 Q24 98 34 108" fill="none" stroke="var(--green)" stroke-width="2"/>`;
@@ -30,7 +30,7 @@
     const sailP = stage >= 3 ? 1 : stage === 2 ? (0.4 + p * 0.6) : 0;
     if (sailP > 0) {
       h += `<line x1="60" y1="50" x2="60" y2="100" stroke="var(--text2)" stroke-width="2"/>`;
-      h += `<path d="M60 ${(104 - 34 * sailP).toFixed(1)} L60 ${(100).toFixed(1)} L${(60 + 22 * sailP).toFixed(1)} ${(104 - 24 * sailP).toFixed(1)} Z" fill="var(--gold)" opacity="0.9"/>`;
+      h += `<path d="M60 ${(104 - 34 * sailP).toFixed(1)} L60 ${(100).toFixed(1)} L${(60 + 22 * sailP).toFixed(1)} ${(104 - 24 * sailP).toFixed(1)} Z" fill="var(--accent)" opacity="0.9"/>`;
     }
     return `<svg class="spiritual-svg" viewBox="0 0 120 132">${h}</svg>`;
   }

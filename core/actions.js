@@ -26,6 +26,68 @@
     saveState();
     renderAll();
   }
+  function exportData() {
+    const data = {};
+    for (let i = 0; i < localStorage.length; i++) {
+      const k = localStorage.key(i);
+      if (k && (k.startsWith(PREFIX) || k === USER_KEY)) {
+        try { data[k] = JSON.parse(localStorage.getItem(k)); } catch(e) { data[k] = localStorage.getItem(k); }
+      }
+    }
+    data._exported = new Date().toISOString();
+    data._version = '1.0';
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = 'ibadah-quest-backup-' + today() + '.json';
+    document.body.appendChild(a); a.click(); a.remove();
+    URL.revokeObjectURL(url);
+    toast(iqIcon('download'), 'Data exported successfully!', false, 2000);
+  }
+  function importData() {
+    const inp = document.createElement('input');
+    inp.type = 'file'; inp.accept = '.json';
+    inp.onchange = function(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(ev) {
+        try {
+          const data = JSON.parse(ev.target.result);
+          if (!data || typeof data !== 'object') throw new Error('Invalid file');
+          const keys = [];
+          for (let i = 0; i < localStorage.length; i++) {
+            const k = localStorage.key(i);
+            if (k && (k.startsWith(PREFIX) || k === USER_KEY)) keys.push(k);
+          }
+          keys.forEach(k => localStorage.removeItem(k));
+          Object.keys(data).forEach(k => {
+            if (k === '_exported' || k === '_version') return;
+            try { localStorage.setItem(k, typeof data[k] === 'string' ? data[k] : JSON.stringify(data[k])); } catch(e) {}
+          });
+          S = window.loadState();
+          initApp();
+          toast(iqIcon('upload'), 'Data imported successfully!', false, 2000);
+        } catch(e) {
+          toast(iqIcon('alert-triangle'), 'Invalid backup file.', false, 2000);
+        }
+      };
+      reader.readAsText(file);
+    };
+    inp.click();
+  }
+  window.exportData = exportData;
+  window.importData = importData;
+  function toggleBookmark(id) {
+    if (!S.bookmarks) S.bookmarks = [];
+    const idx = S.bookmarks.indexOf(id);
+    if (idx === -1) { S.bookmarks.push(id); toast(iqIcon('bookmark'), 'Bookmarked!', false, 1500); }
+    else { S.bookmarks.splice(idx, 1); toast(iqIcon('bookmark'), 'Bookmark removed', false, 1500); }
+    saveState();
+  }
+  function isBookmarked(id) { return S.bookmarks && S.bookmarks.indexOf(id) !== -1; }
+  window.toggleBookmark = toggleBookmark;
+  window.isBookmarked = isBookmarked;
   function claimBonus() { const t=today(); if(S.lbd===t) return; const oldLv=S.lv; const b=S.cs>=7?75:30; S.xp+=b; S.lbd=t; S.lv=lvFrom(S.xp); checkLevelUp(oldLv); saveState(); markDirty('today'); markDirty('topbar'); markDirty('lv'); markDirty('progress'); renderDynamic(); toast(iqIcon('gift'),'Daily Bonus: +'+b+' XP!'); }
   window.claimBonus = claimBonus;
   function selectAvatar(emoji) {
@@ -260,18 +322,24 @@ Object.keys(NEW_POOLS).forEach(k => {
 
   function initApp() {
   const overlay = document.getElementById('introOverlay');
-  // Dismiss intro overlay immediately so it never blocks clicks
+  const introSeen = localStorage.getItem('iq_intro_seen');
   if (overlay) {
-    overlay.classList.remove('visible');
-    overlay.style.opacity = '0';
-    overlay.style.pointerEvents = 'none';
+    if (!introSeen) {
+      overlay.style.display = 'flex';
+      overlay.style.opacity = '1';
+      overlay.style.pointerEvents = 'auto';
+      overlay.classList.add('visible');
+    } else {
+      overlay.classList.remove('visible');
+      overlay.style.opacity = '0';
+      overlay.style.pointerEvents = 'none';
+    }
   }
   try { window.applyTheme(); } catch(e) { console.error('applyTheme in initApp failed:', e); }
   // Profile as main tab
   TAB_GROUPS.profile_main = [
     { id: 'profile', icon: 'user', label: 'Profile' },
     { id: 'trophies', icon: 'trophy', label: 'Trophies' },
-    { id: 'goals', icon: 'target', label: 'Goals' },
     { id: 'progress', icon: 'bar-chart-3', label: 'Progress' },
     { id: 'stats', icon: 'trending-up', label: 'Analytics' },
     { id: 'rewards', icon: 'gift', label: 'Rewards' }
@@ -282,9 +350,28 @@ Object.keys(NEW_POOLS).forEach(k => {
     if (S.log && Object.keys(S.log).length > 400) compactLogs();
     genDQ(); genWQ(); genMQ(); genYQ(); genLQ(); window.refreshContent(); window.recalc(); checkQ(); S.lv=lvFrom(S.xp); saveState(); initCalView(); renderAll();
     if (window.renderDailyContent) window.renderDailyContent();
-    if (window.showWeeklySummary) window.showWeeklySummary();
-    if (window.showDailySummary) window.showDailySummary();
-    if (window.showDailyRitual) window.showDailyRitual();
+    const modalQueue = [];
+    if (window.showWeeklySummary) modalQueue.push(window.showWeeklySummary);
+    if (window.showDailySummary) modalQueue.push(window.showDailySummary);
+    if (window.showDailyRitual) modalQueue.push(window.showDailyRitual);
+    function runModalQueue() {
+      if (modalQueue.length === 0) return;
+      const fn = modalQueue.shift();
+      fn();
+      const overlay = document.getElementById('toastOverlay');
+      if (overlay) {
+        const checkClosed = setInterval(() => {
+          if (overlay.style.display === 'none' || overlay.style.opacity === '0' || !overlay.classList.contains('visible')) {
+            clearInterval(checkClosed);
+            setTimeout(runModalQueue, 300);
+          }
+        }, 200);
+        setTimeout(() => { clearInterval(checkClosed); runModalQueue(); }, 10000);
+      } else {
+        runModalQueue();
+      }
+    }
+    runModalQueue();
     if (window.checkConsistency) window.checkConsistency();
     if (window.checkWeeklyConsistency) window.checkWeeklyConsistency();
     try {
@@ -357,7 +444,7 @@ Object.keys(NEW_POOLS).forEach(k => {
       logSleep: typeof window.logSleep === 'function' ? window.logSleep : () => {},
       logExercise: typeof window.logExercise === 'function' ? window.logExercise : () => {},
       toggleMeal: typeof window.toggleMeal === 'function' ? window.toggleMeal : () => {},
-      addMemorization: window.addMemorization, toggleMorning: window.toggleMorning, toggleEvening: window.toggleEvening, switchUser, logout, resetAll,
+      addMemorization: window.addMemorization, toggleMorning: window.toggleMorning, toggleEvening: window.toggleEvening, switchUser, logout, resetAll, exportData, importData, toggleBookmark, isBookmarked, toggleVolCat: typeof window.toggleVolCat === 'function' ? window.toggleVolCat : () => {}, toggleDeedCat: typeof window.toggleDeedCat === 'function' ? window.toggleDeedCat : () => {},
       openMuhasabah: typeof window.openMuhasabah === 'function' ? window.openMuhasabah : () => {},
       dismissMuhasabah: typeof window.dismissMuhasabah === 'function' ? window.dismissMuhasabah : () => {},
       joinJourney: typeof window.joinJourney === 'function' ? window.joinJourney : () => {},
@@ -389,10 +476,30 @@ Object.keys(NEW_POOLS).forEach(k => {
         overlay.classList.remove('visible');
         overlay.style.display = 'none';
         overlay.style.transition = '';
+        localStorage.setItem('iq_intro_seen', '1');
+        if (typeof window.isOnboardingComplete === 'function' && !window.isOnboardingComplete()) {
+          setTimeout(function() { window.startOnboarding(); }, 400);
+        }
       }, 800);
     }
   }
   window.startJourney = startJourney;
+
+  function setupOfflineDetection() {
+    try {
+      if (typeof navigator === 'undefined' || typeof window === 'undefined') return;
+      const banner = document.getElementById('offlineBanner');
+      if (!banner) return;
+      if (typeof window.addEventListener !== 'function') return;
+      function update() {
+        banner.style.display = navigator.onLine ? 'none' : 'flex';
+      }
+      window.addEventListener('online', update);
+      window.addEventListener('offline', update);
+      update();
+    } catch(e) {}
+  }
+  setupOfflineDetection();
 
   try {
     init();
