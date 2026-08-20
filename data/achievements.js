@@ -149,7 +149,7 @@
     { id:'a258', name:'Ascendant 225',      desc:'Reach level 225', tier:'platinum', c: s => s.lv>=225 },
     { id:'a259', name:'Quest Grandmaster 600', desc:'Complete 600 quests', tier:'platinum', c: s => (s.tq||0)>=600 },
     { id:'a260', name:'Quest Grandmaster 800', desc:'Complete 800 quests', tier:'platinum', c: s => (s.tq||0)>=800 },
-    { id:'a261', name:'Endless Good 2000',  desc:'2000 total extra deeds', tier:'platinum', c: s => Object.values(s.td).reduce((a,b)=>a+b,0)>=2000 },
+    { id:'a261', name:'Endless Good 1500',  desc:'1500 total extra deeds', tier:'platinum', c: s => Object.values(s.td).reduce((a,b)=>a+b,0)>=1500 },
     { id:'a262', name:'Versatile 70',       desc:'70 different deeds', tier:'platinum', c: s => Object.keys(s.td).filter(k=>s.td[k]>0).length>=70 },
     { id:'a263', name:'Nawafil Master 1500',desc:'1500 voluntary prayers', tier:'platinum', c: s => Object.values(s.vc).reduce((a,b)=>a+b,0)>=1500 },
     { id:'a264', name:'Jummah Regular 30',  desc:'Pray 30 Jummahs', tier:'platinum', c: s => (s.tj||0)>=30 },

@@ -73,7 +73,10 @@
   function renderGarden() {
     try {
       const el = document.getElementById('gardenArea');
-      if (!el) return;
+      if (!el || !SpiritualGrowth.isVisible('garden')) {
+        if (el) el.innerHTML = '';
+        return;
+      }
       const streak = Math.max(S.cs || 0, S.bs || 0);
       const g = gardenStage(S.xp || 0, streak);
       const flowers = g.stage >= 6 ? flowerCount(streak) : 0;

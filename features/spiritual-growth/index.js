@@ -18,6 +18,18 @@
     return settings.visible.includes(featureName);
   }
   
+  const RENDERER_MAP = {
+    garden: 'renderGarden',
+    lantern: 'renderLantern',
+    boat: 'renderBoat',
+    armor: 'renderArmor',
+    heart: 'renderHeartRefinement',
+    keys: 'renderKeys',
+    mosque: 'renderMosque',
+    ramadan: 'renderRamadan',
+    laylat: 'renderLaylat'
+  };
+
   function toggleFeature(featureName) {
     const settings = getSettings();
     const idx = settings.visible.indexOf(featureName);
@@ -27,7 +39,10 @@
       settings.visible.push(featureName);
     }
     saveSettings(settings);
-    renderGrowthSettings();
+    const fnName = RENDERER_MAP[featureName];
+    if (fnName && typeof window[fnName] === 'function') {
+      try { window[fnName](); } catch(e) { console.warn('Re-render ' + featureName + ' failed:', e.message); }
+    }
   }
   
   function renderGrowthSettings() {
@@ -53,7 +68,7 @@
           <div class="growth-setting-name">${label}</div>
           <div class="growth-setting-stage">${progress.name} (${progress.stage}/${progress.totalStages})</div>
         </div>
-        <div class="growth-setting-toggle">${visible ? iqIcon('eye') : iqIcon('eye')}</div>
+        <div class="growth-setting-toggle">${visible ? iqIcon('eye') : iqIcon('lock')}</div>
       </div>`;
     });
     

@@ -16,14 +16,19 @@ const TAB_GROUPS = {
       tabs: [
         { id: 'morning', label: 'Morning' },
         { id: 'evening', label: 'Evening' },
-        { id: 'dhikr', label: 'Remembrance' }
+        { id: 'dhikr', label: 'Remembrance' },
+        { id: 'situational', label: 'Situational' }
       ]
     },
     {
       id: 'worship', label: 'Guide',
       tabs: [
         { id: 'wudu', label: 'Ablution' },
-        { id: 'salah', label: 'Prayer Guide' }
+        { id: 'salah', label: 'Prayer Guide' },
+        { id: 'tafsir', label: 'Interpretation' },
+        { id: 'sunnahs', label: 'Prophetic Ways' },
+        { id: 'extradeeds', label: 'Extra Deeds' },
+        { id: 'volprayers', label: 'Vol. Prayers' }
       ]
     },
     {
@@ -46,9 +51,7 @@ const TAB_GROUPS = {
       id: 'quran_sunnah', label: "Qur'an & Sunnah",
       tabs: [
         { id: 'quran', label: 'Quran' },
-        { id: 'tafsir', label: 'Interpretation' },
-        { id: 'hadith', label: 'Hadith' },
-        { id: 'sunnahs', label: 'Prophetic Ways' }
+        { id: 'hadith', label: 'Hadith' }
       ]
     },
     {

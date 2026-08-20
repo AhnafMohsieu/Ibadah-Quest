@@ -87,8 +87,9 @@ const IQ_IDS = {
 
   /* Daily tabs (flat ibadah group) */
   'today':'home', 'timer':'clock', 'quests':'scroll', 'journeys':'map',
-  'morning':'sunrise', 'evening':'sunset', 'dhikr':'beads', 'wudu':'droplets',
-  'salah':'mosque', 'fasting':'crescent', 'healthlog':'heartbeat',
+  'morning':'sunrise', 'evening':'sunset', 'dhikr':'beads', 'situational':'heart',
+  'extradeeds':'star', 'volprayers':'moon',
+  'wudu':'droplets', 'salah':'mosque', 'fasting':'crescent', 'healthlog':'heartbeat',
   'finance':'wallet',
 
   /* Profile tabs */
@@ -108,7 +109,7 @@ const IQ_IDS = {
 
   /* fiqh */
   'fiqh':'scales', 'purification':'droplets', 'salah':'mosque',
-  'salahrules':'mosque', 'zakat':'wallet', 'zakatcalc':'coins', 'zakatrules':'wallet',
+  'salahrules':'mosque',   'zakat':'wallet', 'zakatcalc':'coin', 'zakatrules':'wallet',
   'sawmrules':'crescent', 'hajj':'kaaba', 'hajjrules':'kaaba',
   'trade':'handshake', 'inheritance':'scroll', 'oaths':'handshake',
 

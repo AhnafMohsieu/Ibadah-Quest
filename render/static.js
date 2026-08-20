@@ -349,6 +349,59 @@
     saveState(); renderAll(); 
   }
 
+  // ── Situational Dhikr ──
+  let _situationalView = null; // null = category grid, string = category key
+
+  function renderSituationalDhikr() {
+    const el = document.getElementById('situationalArea');
+    if (!el) return;
+
+    if (_situationalView && SITUATIONAL_DHIKR[_situationalView]) {
+      const cat = SITUATIONAL_DHIKR[_situationalView];
+      let h = `<button class="quran-back-btn" onclick="App.situationalBack()">${iqIcon('arrow-left')} Back to Categories</button>`;
+      h += `<div class="section-title">${iqIcon(cat.icon)} ${cat.label}</div>`;
+      h += '<div style="display:flex;flex-direction:column;gap:12px;">';
+      cat.dhikr.forEach(function(item) {
+        h += `<div class="vol-card" style="cursor:default;">
+          <div class="prayer-info">
+            <div style="font-family:'Amiri',serif;font-size:1.3rem;margin-bottom:2px;color:var(--accent);line-height:1.4;">${item.arabic}</div>
+            ${item.roman ? '<div style="font-size:0.85rem;color:var(--text2);font-style:italic;margin-bottom:6px;opacity:0.9;">"' + item.roman + '"</div>' : ''}
+            <div class="prayer-name">${item.english}</div>
+            ${item.source ? '<div style="font-size:0.75rem;color:var(--text2);margin-top:4px;">' + iqIcon('book-open') + ' ' + item.source + '</div>' : ''}
+          </div>
+        </div>`;
+      });
+      h += '</div>';
+      el.innerHTML = h;
+      return;
+    }
+
+    const keys = Object.keys(SITUATIONAL_DHIKR);
+    let h = '<div class="section-title">' + iqIcon('heart') + ' Situational Dhikr</div>';
+    h += '<div style="color:var(--text2);font-size:0.82rem;margin-bottom:14px;line-height:1.5;">Dhikr organized by emotional and spiritual need. Tap a category to explore.</div>';
+    h += '<div class="situational-grid">';
+    keys.forEach(function(key) {
+      const cat = SITUATIONAL_DHIKR[key];
+      h += '<div class="situational-card" onclick="App.openSituational(\'' + key + '\')">';
+      h += '<div class="situational-icon">' + iqIcon(cat.icon) + '</div>';
+      h += '<div class="situational-label">' + cat.label + '</div>';
+      h += '<div class="situational-count">' + cat.dhikr.length + ' dhikr</div>';
+      h += '</div>';
+    });
+    h += '</div>';
+    el.innerHTML = h;
+  }
+
+  function openSituational(key) {
+    _situationalView = key;
+    renderSituationalDhikr();
+  }
+
+  function situationalBack() {
+    _situationalView = null;
+    renderSituationalDhikr();
+  }
+
   window.getSourceLink = getSourceLink;
   window.poolRender = poolRender;
   window.renderDuas = renderDuas;
@@ -418,4 +471,107 @@
   window.addMemorization = addMemorization;
   window.toggleMorning = toggleMorning;
   window.toggleEvening = toggleEvening;
+  window.renderSituationalDhikr = renderSituationalDhikr;
+  window.openSituational = openSituational;
+  window.situationalBack = situationalBack;
+
+  // ── Extra Good Deeds ──
+  let _extraDeedsView = null;
+
+  function renderExtraDeeds() {
+    const el = document.getElementById('extraDeedsArea');
+    if (!el) return;
+
+    if (_extraDeedsView && EXTRA_GOOD_DEEDS[_extraDeedsView]) {
+      const cat = EXTRA_GOOD_DEEDS[_extraDeedsView];
+      let h = '<button class="quran-back-btn" onclick="App.extraDeedsBack()">' + iqIcon('arrow-left') + ' Back to Categories</button>';
+      h += '<div class="section-title">' + iqIcon(cat.icon) + ' ' + cat.label + '</div>';
+      h += '<div style="display:flex;flex-direction:column;gap:12px;">';
+      cat.deeds.forEach(function(item) {
+        h += '<div class="vol-card" style="cursor:default;">';
+        h += '<div class="prayer-info">';
+        h += '<div class="prayer-name" style="font-size:1rem;font-weight:700;color:var(--accent);">' + item.name + '</div>';
+        h += '<div style="font-size:0.85rem;color:var(--text2);margin-top:4px;line-height:1.5;">"' + item.virtue + '"</div>';
+        if (item.source) h += '<div style="font-size:0.75rem;color:var(--text2);margin-top:4px;">' + iqIcon('book-open') + ' ' + item.source + '</div>';
+        h += '</div>';
+        h += '<div class="card-info-btn" onclick="event.stopPropagation();App.detail(\'' + item.id + '\')">' + iqIcon('info') + '</div>';
+        h += '</div>';
+      });
+      h += '</div>';
+      el.innerHTML = h;
+      return;
+    }
+
+    var keys = Object.keys(EXTRA_GOOD_DEEDS);
+    var h = '<div class="section-title">' + iqIcon('star') + ' Extra Good Deeds</div>';
+    h += '<div style="color:var(--text2);font-size:0.82rem;margin-bottom:14px;line-height:1.5;">Virtuous deeds organized by spiritual benefit. Tap a category to explore.</div>';
+    h += '<div class="guide-grid">';
+    keys.forEach(function(key) {
+      var cat = EXTRA_GOOD_DEEDS[key];
+      h += '<div class="guide-card" onclick="App.openExtraDeeds(\'' + key + '\')">';
+      h += '<div class="guide-icon">' + iqIcon(cat.icon) + '</div>';
+      h += '<div class="guide-label">' + cat.label + '</div>';
+      h += '<div class="guide-count">' + cat.deeds.length + ' deeds</div>';
+      h += '</div>';
+    });
+    h += '</div>';
+    el.innerHTML = h;
+  }
+
+  function openExtraDeeds(key) { _extraDeedsView = key; renderExtraDeeds(); }
+  function extraDeedsBack() { _extraDeedsView = null; renderExtraDeeds(); }
+
+  // ── Volunteer Prayers ──
+  let _volPrayersView = null;
+
+  function renderVolPrayers() {
+    const el = document.getElementById('volPrayersArea');
+    if (!el) return;
+
+    if (_volPrayersView && VOL_PRAYERS[_volPrayersView]) {
+      const cat = VOL_PRAYERS[_volPrayersView];
+      let h = '<button class="quran-back-btn" onclick="App.volPrayersBack()">' + iqIcon('arrow-left') + ' Back to Categories</button>';
+      h += '<div class="section-title">' + iqIcon(cat.icon) + ' ' + cat.label + '</div>';
+      h += '<div style="display:flex;flex-direction:column;gap:12px;">';
+      cat.prayers.forEach(function(item) {
+        h += '<div class="vol-card" style="cursor:default;">';
+        h += '<div class="prayer-info">';
+        h += '<div class="prayer-name" style="font-size:1rem;font-weight:700;color:var(--accent);">' + item.name + '</div>';
+        h += '<div style="font-size:0.85rem;color:var(--text);margin-top:4px;line-height:1.5;">' + item.desc + '</div>';
+        h += '<div style="font-size:0.8rem;color:var(--accent-light);margin-top:4px;font-weight:600;">' + item.rakat + '</div>';
+        if (item.source) h += '<div style="font-size:0.75rem;color:var(--text2);margin-top:4px;">' + iqIcon('book-open') + ' ' + item.source + '</div>';
+        h += '</div>';
+        h += '<div class="card-info-btn" onclick="event.stopPropagation();App.detail(\'' + item.id + '\')">' + iqIcon('info') + '</div>';
+        h += '</div>';
+      });
+      h += '</div>';
+      el.innerHTML = h;
+      return;
+    }
+
+    var keys = Object.keys(VOL_PRAYERS);
+    var h = '<div class="section-title">' + iqIcon('moon') + ' Volunteer Prayers</div>';
+    h += '<div style="color:var(--text2);font-size:0.82rem;margin-bottom:14px;line-height:1.5;">Sunnah and nafl prayers organized by type. Tap a category to explore.</div>';
+    h += '<div class="guide-grid">';
+    keys.forEach(function(key) {
+      var cat = VOL_PRAYERS[key];
+      h += '<div class="guide-card" onclick="App.openVolPrayers(\'' + key + '\')">';
+      h += '<div class="guide-icon">' + iqIcon(cat.icon) + '</div>';
+      h += '<div class="guide-label">' + cat.label + '</div>';
+      h += '<div class="guide-count">' + cat.prayers.length + ' prayers</div>';
+      h += '</div>';
+    });
+    h += '</div>';
+    el.innerHTML = h;
+  }
+
+  function openVolPrayers(key) { _volPrayersView = key; renderVolPrayers(); }
+  function volPrayersBack() { _volPrayersView = null; renderVolPrayers(); }
+
+  window.renderExtraDeeds = renderExtraDeeds;
+  window.openExtraDeeds = openExtraDeeds;
+  window.extraDeedsBack = extraDeedsBack;
+  window.renderVolPrayers = renderVolPrayers;
+  window.openVolPrayers = openVolPrayers;
+  window.volPrayersBack = volPrayersBack;
 })();

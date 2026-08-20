@@ -6,8 +6,8 @@
   function renderPrayers() {
     const l = tlog(), f = isFri();
     const cards = PRAYERS.map(p => {
-      const d = !!l.p[p.id]; let nm=p.name, ic=p.icon, xp=p.xp;
-      if (f && p.id==='dhuhr') { nm=p.fri.name; ic=p.fri.icon; xp=p.fri.xp; }
+      const d = !!l.p[p.id]; let nm=p.name, xp=p.xp;
+      if (f && p.id==='dhuhr') { nm=p.fri.name; xp=p.fri.xp; }
       if (S.ab && S.ab.exp >= today()) xp *= 2;
       return `<div class="card-item${d?' done':''}" tabindex="0" role="button" onclick="App.toggleP('${p.id}')"><div class="card-icon">${iqIcon(p.id)}</div><div class="card-name">${nm}</div><div class="card-sub">${p.time}</div><div class="card-xp">+${xp} XP</div>${d?'<div class="card-check">'+iqIcon('check')+'</div>':''}<div class="card-info-btn" onclick="event.stopPropagation();App.detail('${p.id}')">ℹ</div></div>`;
     }).join('');
@@ -223,7 +223,7 @@
       if (diff < 0) return;
       const hh = String(Math.floor(diff / (1000*60*60))).padStart(2,'0');
       const mm = String(Math.floor((diff / (1000*60)) % 60)).padStart(2,'0');
-      const ss = String(Math.floor((diff / (1000*60)) % 60)).padStart(2,'0');
+      const ss = String(Math.floor((diff / 1000) % 60)).padStart(2,'0');
       const te = document.getElementById('timerArea');
       const pna = document.getElementById('prayerNamesArea');
       if (te) te.innerText = `${hh}:${mm}:${ss}`;

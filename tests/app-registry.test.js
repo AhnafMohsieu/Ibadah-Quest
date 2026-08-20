@@ -62,6 +62,7 @@ sandbox.global = sandbox;
 
 const files = [
   'data/levels.js','data/prayers.js','data/quests.js','data/deeds.js','data/voluntary.js','data/morning-evening.js',
+  'data/relatable-dhikr.js',
   'data/shop.js','data/journeys.js','data/achievements.js','data/tab-groups.js','data/icons.js',
   'data/tips-details.js','data/hadith-collections.js','data/theme-meta.js','data/streak-msgs.js',
   'data/pools/new-pools.js','data/pools/helpers.js',

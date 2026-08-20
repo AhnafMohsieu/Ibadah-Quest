@@ -322,7 +322,7 @@ Object.keys(NEW_POOLS).forEach(k => {
 
   function initApp() {
   const overlay = document.getElementById('introOverlay');
-  const introSeen = localStorage.getItem('iq_intro_seen');
+  const introSeen = localStorage.getItem('iq9_intro_seen');
   if (overlay) {
     if (!introSeen) {
       overlay.style.display = 'flex';
@@ -461,6 +461,12 @@ Object.keys(NEW_POOLS).forEach(k => {
       tapDhikr: typeof window.tapDhikr === 'function' ? window.tapDhikr : () => {},
       resetDhikr: typeof window.resetDhikr === 'function' ? window.resetDhikr : () => {},
       nextDhikr: typeof window.nextDhikr === 'function' ? window.nextDhikr : () => {},
+      openSituational: typeof window.openSituational === 'function' ? window.openSituational : () => {},
+      situationalBack: typeof window.situationalBack === 'function' ? window.situationalBack : () => {},
+      openExtraDeeds: typeof window.openExtraDeeds === 'function' ? window.openExtraDeeds : () => {},
+      extraDeedsBack: typeof window.extraDeedsBack === 'function' ? window.extraDeedsBack : () => {},
+      openVolPrayers: typeof window.openVolPrayers === 'function' ? window.openVolPrayers : () => {},
+      volPrayersBack: typeof window.volPrayersBack === 'function' ? window.volPrayersBack : () => {},
       toggleAvatarPicker: () => toast(iqIcon('user'), 'Avatar picker coming soon!', false, 2000)
     };
     window.closeToastOverlay = closeToastOverlay;
@@ -476,7 +482,7 @@ Object.keys(NEW_POOLS).forEach(k => {
         overlay.classList.remove('visible');
         overlay.style.display = 'none';
         overlay.style.transition = '';
-        localStorage.setItem('iq_intro_seen', '1');
+        localStorage.setItem('iq9_intro_seen', '1');
         if (typeof window.isOnboardingComplete === 'function' && !window.isOnboardingComplete()) {
           setTimeout(function() { window.startOnboarding(); }, 400);
         }

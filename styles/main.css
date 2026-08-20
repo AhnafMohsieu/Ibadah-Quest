@@ -35,6 +35,9 @@
   --combo-hot: rgba(255,107,107,0.3);
   --accent-pulse: rgba(201,168,76,0.3);
   --accent-fill: rgba(201,168,76,0.12);
+  --gold: var(--accent);
+  --gold-light: var(--accent-light);
+  --gold-dark: var(--accent-dark);
   --tier-bronze: #b87333;
   --tier-bronze-bg: rgba(184,115,51,0.06);
   --tier-silver: #9ca3af;
@@ -2244,6 +2247,32 @@ select.profile-input option { background: var(--card-bg); color: var(--text); }
 .growth-setting-stage { font-size: 0.72rem; color: var(--text2); }
 .growth-setting-toggle { font-size: 1.1rem; }
 
+/* ── Situational Dhikr ── */
+.situational-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
+.situational-card {
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  padding: 16px 12px; background: var(--card-bg); border: 1px solid var(--card-border);
+  border-radius: var(--radius-md); cursor: pointer; transition: border-color 0.2s, transform 0.15s;
+  text-align: center;
+}
+.situational-card:hover { border-color: var(--accent-border); transform: translateY(-2px); }
+.situational-icon { font-size: 1.6rem; color: var(--accent); }
+.situational-label { font-family: var(--font-heading); font-weight: 700; color: var(--accent-dark); font-size: 0.88rem; }
+.situational-count { font-size: 0.7rem; color: var(--text2); }
+
+/* ── Guide Grid (Extra Deeds, Vol Prayers) ── */
+.guide-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
+.guide-card {
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  padding: 16px 12px; background: var(--card-bg); border: 1px solid var(--card-border);
+  border-radius: var(--radius-sm); cursor: pointer; transition: border-color 0.2s, transform 0.15s;
+  text-align: center;
+}
+.guide-card:hover { border-color: var(--accent-border); transform: translateY(-2px); }
+.guide-icon { font-size: 1.6rem; color: var(--accent); }
+.guide-label { font-family: var(--font-heading); font-weight: 700; color: var(--accent-dark); font-size: 0.88rem; }
+.guide-count { font-size: 0.7rem; color: var(--text2); }
+
 /* ── Daily Summary ── */
 .daily-summary {
   display: flex;
@@ -2561,3 +2590,77 @@ html[data-theme="emara"] {
   --glass-bg: rgba(15,26,21,0.9); --glass-bg-heavy: rgba(15,26,21,0.95);
 }
 html[data-theme="emara"] .global-search { background: var(--card-bg); }
+
+/* ── Modal & Form ── */
+.modal-box {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  max-width: 400px;
+  width: 90%;
+  margin: auto;
+  box-shadow: var(--shadow-lg);
+}
+.modal-box h3 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 1.1rem;
+  color: var(--accent);
+  margin-bottom: 16px;
+}
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.form-group label {
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: var(--text2);
+}
+.form-group input,
+.form-group select,
+.form-group textarea {
+  padding: 10px 12px;
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-sm);
+  font-family: var(--font);
+  font-size: 0.9rem;
+  background: var(--bg);
+  color: var(--text);
+  transition: border-color var(--transition);
+}
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+/* ── Smart Insights ── */
+.insight-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+  background: var(--accent-bg);
+  border: 1px solid var(--accent-border);
+  margin-bottom: 8px;
+}
+.insight-icon {
+  flex-shrink: 0;
+  font-size: 1.2rem;
+  line-height: 1;
+  margin-top: 2px;
+}
+.insight-text {
+  font-size: 0.85rem;
+  color: var(--text);
+  line-height: 1.5;
+}
+.insight-positive { border-color: var(--green-border); background: var(--green-bg); }
+.insight-warning { border-color: var(--orange-border); background: var(--orange-bg); }
+.insight-negative { border-color: var(--red-border); background: var(--red-bg); }

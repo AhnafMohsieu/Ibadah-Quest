@@ -27,7 +27,7 @@
   }
 
   function populateFABIcons() {
-    var map = { 'Log Prayer': 'prayer', 'Dhikr': 'dhikr', 'Charity': 'charity', 'Quests': 'quests' };
+    var map = { 'Log Prayer': 'mosque', 'Dhikr': 'beads', 'Charity': 'hand-heart', 'Quests': 'scroll' };
     document.querySelectorAll('.fab-action').forEach(function (a) {
       var icon = a.querySelector('.fab-action-icon');
       if (!icon || icon.childElementCount > 0) return;

@@ -10,7 +10,7 @@ function resolveCurrentUser() {
   currentUser = stored || 'default';
   _currentUserSource = stored ? 'saved' : 'default';
 }
-  const USER_KEY = 'iq9_active_user', PREFIX = 'iq9_user_', INTRO_SEEN_KEY = 'iq9_intro_seen';
+  const USER_KEY = 'iq9_active_user', PREFIX = 'iq9_user_';
   function freshState() {
     const t = today();
     return {
@@ -21,6 +21,7 @@ function resolveCurrentUser() {
       storiesIdx:[], hadithIdx:[], namesIdx:[], sinsIdx:[], punishmentsIdx:[],
       repentanceIdx:[], seerahIdx:[], tafsirIdx:[], mannersIdx:[],
       aqeedahIdx:[], familyIdx:[], healthIdx:[], financeIdx:[], ummahIdx:[], hajjIdx:[],
+      sahabaIdx:[],
       questXP:{daily:0,weekly:0,monthly:0,yearly:0,lifetime:0},
       akhirahIdx:[], prophetsIdx:[], womenIdx:[], knowledgeIdx:[], heartIdx:[],
       jumuahIdx:[], marriageIdx:[], scienceIdx:[], wuduIdx:[], scholarsIdx:[],
@@ -65,7 +66,7 @@ function loadState() {
   } catch(e) {}
   return freshState();
 }
-function saveState() { try { localStorage.setItem(PREFIX + currentUser, JSON.stringify(S)); } catch(e) {} }
+function saveState() { try { localStorage.setItem(PREFIX + currentUser, JSON.stringify(S)); } catch(e) { if (e.name === 'QuotaExceededError' || e.code === 22) console.warn('localStorage quota exceeded — data may not persist'); } }
 function today(d) { const d2 = d || new Date(); return d2.getFullYear() + '-' + (d2.getMonth()+1).toString().padStart(2,'0') + '-' + d2.getDate().toString().padStart(2,'0'); }
 function tlog() { const t = today(); if (!S.log[t]) S.log[t] = {p:{},d:{},v:{}}; return S.log[t]; }
 function isFri() { return new Date().getDay() === 5; }

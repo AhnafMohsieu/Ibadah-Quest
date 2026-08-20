@@ -431,3 +431,16 @@ test('Mood feature is fully removed', () => {
   assert.ok(!fs.existsSync(path.join(root, 'features', 'mood.js')), 'features/mood.js must be deleted');
   assert.ok(!fs.existsSync(path.join(root, 'data', 'pools', 'mood.js')), 'data/pools/mood.js must be deleted');
 });
+
+test('situational dhikr tab is wired correctly', () => {
+  const relatable = fs.readFileSync(path.join(root, 'data', 'relatable-dhikr.js'), 'utf8');
+  assert.ok(html.includes('id="panel-situational"'), 'panel-situational missing from index.html');
+  assert.ok(html.includes('id="situationalArea"'), 'situationalArea div missing');
+  assert.ok(html.includes('data/relatable-dhikr.js'), 'relatable-dhikr.js script tag missing');
+  assert.ok(tabs.includes("id: 'situational'"), 'situational tab missing from tab-groups');
+  assert.ok(renderAll.includes('renderSituationalDhikr'), 'renderSituationalDhikr must exist');
+  assert.ok(renderTabs.includes("situational:'renderSituationalDhikr'"), 'lazy render must map situational');
+  assert.ok(relatable.includes('SITUATIONAL_DHIKR'), 'SITUATIONAL_DHIKR data must exist');
+  assert.ok(css.includes('.situational-grid'), 'situational-grid CSS missing');
+  assert.ok(css.includes('.situational-card'), 'situational-card CSS missing');
+});
