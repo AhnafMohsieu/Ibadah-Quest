@@ -26,7 +26,16 @@
     saveState();
     renderAll();
   }
-  function exportData() {
+  function _downloadBackup(data) {
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = 'ibadah-quest-backup-' + today() + '.json';
+    document.body.appendChild(a); a.click(); a.remove();
+    URL.revokeObjectURL(url);
+  }
+
+  function exportDataLS() {
     const data = {};
     for (let i = 0; i < localStorage.length; i++) {
       const k = localStorage.key(i);
@@ -36,14 +45,41 @@
     }
     data._exported = new Date().toISOString();
     data._version = '1.0';
-    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url; a.download = 'ibadah-quest-backup-' + today() + '.json';
-    document.body.appendChild(a); a.click(); a.remove();
-    URL.revokeObjectURL(url);
+    _downloadBackup(data);
     toast(iqIcon('download'), 'Data exported successfully!', false, 2000);
   }
+
+  function exportData() {
+    if (window.Storage && window.Storage.exportAll) {
+      window.Storage.exportAll().then(function(data) {
+        data._exported = new Date().toISOString();
+        data._version = '2.0';
+        _downloadBackup(data);
+        toast(iqIcon('download'), 'Data exported successfully!', false, 2000);
+      }).catch(function() {
+        exportDataLS();
+      });
+    } else {
+      exportDataLS();
+    }
+  }
+
+  function importDataLS(data) {
+    const keys = [];
+    for (let i = 0; i < localStorage.length; i++) {
+      const k = localStorage.key(i);
+      if (k && (k.startsWith(PREFIX) || k === USER_KEY)) keys.push(k);
+    }
+    keys.forEach(k => localStorage.removeItem(k));
+    Object.keys(data).forEach(k => {
+      if (k === '_exported' || k === '_version') return;
+      try { localStorage.setItem(k, typeof data[k] === 'string' ? data[k] : JSON.stringify(data[k])); } catch(e) {}
+    });
+    S = window.loadState();
+    initApp();
+    toast(iqIcon('upload'), 'Data imported successfully!', false, 2000);
+  }
+
   function importData() {
     const inp = document.createElement('input');
     inp.type = 'file'; inp.accept = '.json';
@@ -55,19 +91,19 @@
         try {
           const data = JSON.parse(ev.target.result);
           if (!data || typeof data !== 'object') throw new Error('Invalid file');
-          const keys = [];
-          for (let i = 0; i < localStorage.length; i++) {
-            const k = localStorage.key(i);
-            if (k && (k.startsWith(PREFIX) || k === USER_KEY)) keys.push(k);
+          delete data._exported;
+          delete data._version;
+          if (window.Storage && window.Storage.importAll) {
+            window.Storage.importAll(data).then(function() {
+              S = window.loadState();
+              initApp();
+              toast(iqIcon('upload'), 'Data imported successfully!', false, 2000);
+            }).catch(function() {
+              importDataLS(data);
+            });
+          } else {
+            importDataLS(data);
           }
-          keys.forEach(k => localStorage.removeItem(k));
-          Object.keys(data).forEach(k => {
-            if (k === '_exported' || k === '_version') return;
-            try { localStorage.setItem(k, typeof data[k] === 'string' ? data[k] : JSON.stringify(data[k])); } catch(e) {}
-          });
-          S = window.loadState();
-          initApp();
-          toast(iqIcon('upload'), 'Data imported successfully!', false, 2000);
         } catch(e) {
           toast(iqIcon('alert-triangle'), 'Invalid backup file.', false, 2000);
         }
@@ -463,6 +499,8 @@ Object.keys(NEW_POOLS).forEach(k => {
       nextDhikr: typeof window.nextDhikr === 'function' ? window.nextDhikr : () => {},
       openSituational: typeof window.openSituational === 'function' ? window.openSituational : () => {},
       situationalBack: typeof window.situationalBack === 'function' ? window.situationalBack : () => {},
+      tapSituationalDhikr: typeof window.tapSituationalDhikr === 'function' ? window.tapSituationalDhikr : () => {},
+      toggleSitFav: typeof window.toggleSitFav === 'function' ? window.toggleSitFav : () => {},
       openExtraDeeds: typeof window.openExtraDeeds === 'function' ? window.openExtraDeeds : () => {},
       extraDeedsBack: typeof window.extraDeedsBack === 'function' ? window.extraDeedsBack : () => {},
       openVolPrayers: typeof window.openVolPrayers === 'function' ? window.openVolPrayers : () => {},
