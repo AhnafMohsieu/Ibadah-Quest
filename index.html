@@ -177,7 +177,6 @@
   <div class="tab-panel" role="tabpanel" id="panel-hadith"><div id="hadithArea"></div></div>
   <div class="tab-panel" role="tabpanel" id="panel-aqeedah"><div id="aqeedahArea"></div></div>
   <div class="tab-panel" role="tabpanel" id="panel-arabic"><div id="arabicArea"></div></div>
-  <div class="tab-panel" role="tabpanel" id="panel-knowledge"><div id="knowledgeArea"></div></div>
   <div class="tab-panel" role="tabpanel" id="panel-fiqh"><div id="fiqhArea"></div></div>
   <div class="tab-panel" role="tabpanel" id="panel-memorization"><div id="memorizationArea"></div></div>
 
@@ -224,7 +223,6 @@
   <div class="tab-panel" role="tabpanel" id="panel-jahannam"><div id="jahannamArea"></div></div>
   <div class="tab-panel" role="tabpanel" id="panel-grave"><div id="graveArea"></div></div>
   <div class="tab-panel" role="tabpanel" id="panel-signs"><div id="signsArea"></div></div>
-  <div class="tab-panel" role="tabpanel" id="panel-hajj"><div id="hajjArea"></div></div>
   <div class="tab-panel" role="tabpanel" id="panel-dreams"><div id="dreamsArea"></div></div>
 
   <!-- PROFILE GROUP -->
@@ -338,8 +336,6 @@
   <div class="tab-panel" role="tabpanel" id="panel-prophethood"><div id="prophethoodArea"></div></div>
   <div class="tab-panel" role="tabpanel" id="panel-existence"><div id="existenceArea"></div></div>
 <div class="tab-panel" role="tabpanel" id="panel-growth"><div id="growthStatArea"></div><div id="growthCalArea"></div><div id="growthArea"></div><div id="armorArea"></div><div id="heartArea"></div></div>
-<div class="tab-panel" role="tabpanel" id="panel-ramadan"><div id="ramadanArea"></div></div>
-<div class="tab-panel" role="tabpanel" id="panel-laylat"><div id="laylatArea"></div></div>
   </main>
 
   <div class="copyright-footer">Copyright &copy; 2026 Md. Mahin Ahmed. All rights reserved.</div>
@@ -430,7 +426,18 @@
 <script src="data/pools/new-pools.js?v=1"></script>
 
 <!-- State -->
+<script src="core/storage.js"></script>
 <script src="state/state.js?v=3"></script>
+<script>
+  if (window.Storage && window.Storage.init) {
+    window.Storage.init().then(function() {
+      if (window.initApp) initApp();
+    }).catch(function(e) {
+      console.warn('IndexedDB unavailable:', e);
+      if (window.initApp) initApp();
+    });
+  }
+</script>
 
 <!-- Render engine (split modules) -->
 <script src="render/calendar.js?v=1"></script>

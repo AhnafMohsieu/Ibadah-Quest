@@ -41,32 +41,61 @@ function resolveCurrentUser() {
       notificationsEnabled:false, bookmarks:[]
     };
   }
-  let S = null;
+  var S = null;
 function loadState() {
-  const key = PREFIX + currentUser;
-  try {
-    const raw = localStorage.getItem(key);
-    if (raw) {
-      const p = JSON.parse(raw);
-      const d = freshState();
-      for (const k of Object.keys(d)) if (!(k in p)) p[k] = d[k];
-      if (p.growthSettings && Array.isArray(p.growthSettings.visible)) {
-        for (const f of d.growthSettings.visible) {
-          if (!p.growthSettings.visible.includes(f)) p.growthSettings.visible.push(f);
-        }
+  var key = PREFIX + currentUser;
+  var d = freshState();
+  // Try IndexedDB first
+  if (window.Storage && window.Storage.load) {
+    var idbState = null;
+    try {
+      // At this point init() was already called, IDB is ready
+      window.Storage.load(currentUser).then(function(s) { idbState = s; }).catch(function() {});
+    } catch(e) {}
+    if (idbState) {
+      for (var k of Object.keys(d)) if (!(k in idbState)) idbState[k] = d[k];
+      if (typeof idbState.log !== 'object' || typeof idbState.td !== 'object') return idbState;
+      for (var dk in idbState.log) {
+        var e = idbState.log[dk];
+        if (!e || typeof e !== 'object') idbState.log[dk] = {p:{},d:{},v:{}};
+        else { if (!e.p) e.p = {}; if (!e.d) e.d = {}; if (!e.v) e.v = {}; }
       }
+      return idbState;
+    }
+  }
+  // Fallback: localStorage (legacy / IDB unavailable)
+  try {
+    var raw = localStorage.getItem(key);
+    if (raw) {
+      var p = JSON.parse(raw);
+      for (var k of Object.keys(d)) if (!(k in p)) p[k] = d[k];
       if (typeof p.log !== 'object' || typeof p.td !== 'object') return p;
-      for (const dk in p.log) {
-        const e = p.log[dk];
+      for (var dk in p.log) {
+        var e = p.log[dk];
         if (!e || typeof e !== 'object') p.log[dk] = {p:{},d:{},v:{}};
         else { if (!e.p) e.p = {}; if (!e.d) e.d = {}; if (!e.v) e.v = {}; }
       }
       return p;
     }
   } catch(e) {}
-  return freshState();
+  return d;
 }
-function saveState() { try { localStorage.setItem(PREFIX + currentUser, JSON.stringify(S)); } catch(e) { if (e.name === 'QuotaExceededError' || e.code === 22) console.warn('localStorage quota exceeded — data may not persist'); } }
+function saveState() {
+  try {
+    // Save to IndexedDB (primary)
+    if (window.Storage && window.Storage.save) {
+      window.Storage.save(currentUser, S).catch(function(e) {
+        console.warn('IDB save failed:', e);
+      });
+    }
+  } catch(e) {}
+  try {
+    // Also save to localStorage (fallback / backward compat)
+    localStorage.setItem(PREFIX + currentUser, JSON.stringify(S));
+  } catch (e) {
+    if (e.name === 'QuotaExceededError' || e.code === 22) console.warn('localStorage quota exceeded');
+  }
+}
 function today(d) { const d2 = d || new Date(); return d2.getFullYear() + '-' + (d2.getMonth()+1).toString().padStart(2,'0') + '-' + d2.getDate().toString().padStart(2,'0'); }
 function tlog() { const t = today(); if (!S.log[t]) S.log[t] = {p:{},d:{},v:{}}; return S.log[t]; }
 function isFri() { return new Date().getDay() === 5; }
