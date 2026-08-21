@@ -113,9 +113,9 @@ test('Storage.migrate copies localStorage to IDB', async () => {
   const Storage = sb.window.Storage;
   await Storage.init();
   const migrated = await Storage.migrate('u1');
-  assert.deepEqual(migrated, { xp: 500, lv: 3, log: {} });
+  assert.deepEqual(migrated, { xp: 500, lv: 3, log: {}, _dbVersion: 1 });
   const loaded = await Storage.load('u1');
-  assert.deepEqual(loaded, { xp: 500, lv: 3, log: {} });
+  assert.deepEqual(loaded, { xp: 500, lv: 3, log: {}, _dbVersion: 1 });
 });
 
 test('Storage.migrate returns null when no localStorage data', async () => {

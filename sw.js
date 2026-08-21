@@ -3,7 +3,7 @@
 // Cache versioning: bump CACHE_NAME to force a full purge.
 // ═══════════════════════════════════════════════════════
 (function() {
-  const CACHE_NAME = 'iq-cache-v16';
+  const CACHE_NAME = 'iq-cache-v17';
 
   function cacheKey(urlString) {
     const url = new URL(urlString, self.location.href);
