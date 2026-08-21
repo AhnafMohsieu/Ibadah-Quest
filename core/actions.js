@@ -358,7 +358,7 @@ Object.keys(NEW_POOLS).forEach(k => {
 
   function initApp() {
   const overlay = document.getElementById('introOverlay');
-  const introSeen = localStorage.getItem('iq9_intro_seen');
+  const introSeen = S.introSeen;
   if (overlay) {
     if (!introSeen) {
       overlay.style.display = 'flex';
@@ -520,7 +520,7 @@ Object.keys(NEW_POOLS).forEach(k => {
         overlay.classList.remove('visible');
         overlay.style.display = 'none';
         overlay.style.transition = '';
-        localStorage.setItem('iq9_intro_seen', '1');
+        S.introSeen = true; saveState();
         if (typeof window.isOnboardingComplete === 'function' && !window.isOnboardingComplete()) {
           setTimeout(function() { window.startOnboarding(); }, 400);
         }
