@@ -33,7 +33,7 @@
   }
 
   function save(user, state) {
-    state._dbVersion = 1;
+    state._dbVersion = DB_VERSION;
     return new Promise(function(resolve, reject) {
       var req = getStore('readwrite').put(state, user);
       req.onsuccess = function() { resolve(); };

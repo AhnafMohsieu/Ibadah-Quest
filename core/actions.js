@@ -22,6 +22,9 @@
       if (k && (k.startsWith(PREFIX) || k === USER_KEY)) keys.push(k);
     }
     keys.forEach(k => localStorage.removeItem(k));
+    if (window.Storage && window.Storage.destroy) {
+      window.Storage.destroy(currentUser).catch(function() {});
+    }
     S = freshState();
     saveState();
     renderAll();
