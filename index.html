@@ -436,6 +436,8 @@
       console.warn('IndexedDB unavailable:', e);
       if (window.initApp) initApp();
     });
+  } else {
+    if (window.initApp) initApp();
   }
 </script>
 

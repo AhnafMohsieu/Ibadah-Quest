@@ -15,40 +15,6 @@ function makeStore(initial) {
   };
 }
 
-function makeFakeIDB() {
-  const stores = {};
-  return {
-    open: () => {
-      const req = { onsuccess: null, onerror: null, result: null };
-      setTimeout(() => {
-        req.result = {
-          objectStoreNames: { contains: () => false },
-          createObjectStore: (name) => { stores[name] = {}; return {}; },
-          transaction: (name, mode) => {
-            const store = stores[name] || {};
-            return {
-              objectStore: () => ({
-                get: (key) => {
-                  const r = { onsuccess: null, result: store[key] };
-                  setTimeout(() => r.onsuccess && r.onsuccess(), 0);
-                  return r;
-                },
-                put: (val, key) => { store[key] = val; const r = { onsuccess: null }; setTimeout(() => r.onsuccess && r.onsuccess(), 0); return r; },
-                delete: (key) => { delete store[key]; const r = { onsuccess: null }; setTimeout(() => r.onsuccess && r.onsuccess(), 0); return r; },
-                getAllKeys: () => { const r = { onsuccess: null, result: Object.keys(store) }; setTimeout(() => r.onsuccess && r.onsuccess(), 0); return r; }
-              })
-            };
-          }
-        };
-        if (req.onsuccess) req.onsuccess();
-      }, 0);
-      return req;
-    },
-    deleteDatabase: () => ({ onsuccess: null }),
-    _stores: stores
-  };
-}
-
 test('freshState includes muhWeek and journeys', () => {
   const { localStorage } = makeStore({});
   const sb = loadFile(path.join(__dirname, '..', 'state', 'state.js'), { localStorage });
@@ -92,4 +58,17 @@ test('saveState writes to both IDB and localStorage', () => {
   assert.strictEqual(saved.xp, 42);
   // Verify IDB was written
   assert.deepStrictEqual(idbSaved, sb.S);
+});
+
+test('loadState merges new growthSettings.visible items into existing saves', () => {
+  const old = JSON.stringify({
+    log: {}, xp: 100,
+    growthSettings: { visible: ['garden', 'lantern'] }
+  });
+  const { localStorage } = makeStore({ iq9_user_default: old });
+  const sb = loadFile(path.join(__dirname, '..', 'state', 'state.js'), { localStorage });
+  const p = sb.loadState();
+  assert.ok(p.growthSettings.visible.includes('garden'), 'keeps existing');
+  assert.ok(p.growthSettings.visible.includes('ramadan'), 'adds new ramadan');
+  assert.ok(p.growthSettings.visible.includes('laylat'), 'adds new laylat');
 });

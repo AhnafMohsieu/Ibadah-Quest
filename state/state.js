@@ -54,6 +54,11 @@ function loadState() {
     } catch(e) {}
     if (idbState) {
       for (var k of Object.keys(d)) if (!(k in idbState)) idbState[k] = d[k];
+      if (idbState.growthSettings && Array.isArray(idbState.growthSettings.visible)) {
+        for (var f of d.growthSettings.visible) {
+          if (!idbState.growthSettings.visible.includes(f)) idbState.growthSettings.visible.push(f);
+        }
+      }
       if (typeof idbState.log !== 'object' || typeof idbState.td !== 'object') return idbState;
       for (var dk in idbState.log) {
         var e = idbState.log[dk];
@@ -69,6 +74,11 @@ function loadState() {
     if (raw) {
       var p = JSON.parse(raw);
       for (var k of Object.keys(d)) if (!(k in p)) p[k] = d[k];
+      if (p.growthSettings && Array.isArray(p.growthSettings.visible)) {
+        for (var f of d.growthSettings.visible) {
+          if (!p.growthSettings.visible.includes(f)) p.growthSettings.visible.push(f);
+        }
+      }
       if (typeof p.log !== 'object' || typeof p.td !== 'object') return p;
       for (var dk in p.log) {
         var e = p.log[dk];
