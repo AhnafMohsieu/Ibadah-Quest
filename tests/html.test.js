@@ -72,18 +72,21 @@ test('main.css uses modern light tokens', () => {
 });
 
 test('index.html registers the service worker and update banner', () => {
-  assert.ok(html.includes("navigator.serviceWorker.register('sw.js?v=21')"));
+  assert.ok(html.includes("navigator.serviceWorker.register('sw.js?v=22')"));
   assert.ok(html.includes("'SKIP_WAITING'"));
   assert.ok(html.includes('swUpdateBanner'));
 });
 
 test('hadith/dhikr audio modules wired with versions and load order', () => {
   assert.ok(html.includes('<script src="core/content-cache.js?v=1"></script>'));
-  assert.ok(html.includes('<script src="core/audio.js?v=2"></script>'));
+  assert.ok(html.includes('<script src="core/audio.js?v=3"></script>'));
   assert.ok(html.includes('<script src="data/hadith-normalize.js?v=1"></script>'));
-  assert.ok(html.includes('<script src="features/hadith-library.js?v=1" defer></script>'));
+  assert.ok(html.includes('<script src="features/hadith-library.js?v=2" defer></script>'));
+  assert.ok(html.includes('<script src="features/tafsir-library.js?v=1" defer></script>'));
+  assert.ok(html.includes('styles/main.css?v=18'));
   assert.ok(html.indexOf('core/content-cache.js') < html.indexOf('state/state.js'), 'cache module loads before state');
   assert.ok(html.indexOf('core/audio.js') < html.indexOf('render/static.js'), 'audio module loads before renderers');
+  assert.ok(html.indexOf('features/tafsir-library.js') > html.indexOf('render/static.js'), 'deferred features load after renderers');
 });
 
 test('modal queue waits for both overlay visibility styles to close', () => {
@@ -140,7 +143,7 @@ test('theme: light-family palette blocks exist in main.css', () => {
 test('theme: index.html pre-paint script sets data-theme from localStorage', () => {
   assert.ok(html.includes("localStorage.getItem('iqTheme')"));
   assert.ok(html.includes("setAttribute('data-theme'"));
-  assert.ok(html.includes('styles/main.css?v=17'));
+  assert.ok(html.includes('styles/main.css?v=18'));
 });
 
 test('theme: picker references metadata and setTheme wiring', () => {

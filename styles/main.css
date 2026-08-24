@@ -2781,3 +2781,10 @@ html[data-theme="emara"] .global-search { background: var(--card-bg); }
 .insight-positive { border-color: var(--green-border); background: var(--green-bg); }
 .insight-warning { border-color: var(--orange-border); background: var(--orange-bg); }
 .insight-negative { border-color: var(--red-border); background: var(--red-bg); }
+/* Tafsir */
+.verse-tafsir-btn{background:none;border:none;cursor:pointer;padding:6px 8px;font-size:.85rem;color:var(--text2);}
+.verse-tafsir-btn:hover{color:var(--accent);}
+.tafsir-panel{margin-top:10px;padding:12px;background:rgba(201,168,76,.07);border-radius:10px;border:1px solid rgba(201,168,76,.18);}
+/* Dhikr play/stop */
+.dhikr-play-btn.playing{color:var(--accent-light)!important;animation:pulseGlow 1.6s ease-in-out infinite;}
+@keyframes pulseGlow{0%,100%{opacity:1}50%{opacity:.55}}

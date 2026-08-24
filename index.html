@@ -23,7 +23,7 @@
     .tab-panel.active{display:block;animation:fadeIn 0.2s ease}
     @keyframes fadeIn{from{opacity:0}to{opacity:1}}
   </style>
-  <link rel="preload" href="styles/main.css?v=17" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <link rel="preload" href="styles/main.css?v=18" as="style" onload="this.onload=null;this.rel='stylesheet'">
   <script>
     (function () {
       try { var t = localStorage.getItem('iqTheme'); if (t && t !== 'light') document.documentElement.setAttribute('data-theme', t); } catch (e) {}
@@ -431,8 +431,8 @@
 <!-- State -->
 <script src="core/storage.js"></script>
 <script src="core/content-cache.js?v=1"></script>
-<script src="core/audio.js?v=2"></script>
-<script src="state/state.js?v=5"></script>
+<script src="core/audio.js?v=3"></script>
+<script src="state/state.js?v=6"></script>
 <script>
   window.storageReady = window.Storage && window.Storage.init
     ? window.Storage.init().catch(function(e) {
@@ -444,8 +444,8 @@
 <!-- Render engine (split modules) -->
 <script src="render/calendar.js?v=1"></script>
 <script src="render/prayers.js?v=2"></script>
-<script src="render/static.js?v=3"></script>
-<script src="render/dynamic.js?v=5"></script>
+<script src="render/static.js?v=4"></script>
+<script src="render/dynamic.js?v=6"></script>
 <script src="render/tabs.js?v=3"></script>
 
 <!-- Chart.js CDN (lazy loaded) -->
@@ -511,7 +511,8 @@
 <script src="features/spiritual-growth/ramadan.js?v=1" defer></script>
 <script src="features/spiritual-growth/laylat.js?v=1" defer></script>
 <script src="features/search.js?v=3" defer></script>
-<script src="features/hadith-library.js?v=1" defer></script>
+<script src="features/hadith-library.js?v=2" defer></script>
+<script src="features/tafsir-library.js?v=1" defer></script>
 <script src="features/fab.js?v=1" defer></script>
 <script src="features/streak-milestones.js" defer></script>
 <script src="features/pull-refresh.js" defer></script>
@@ -541,7 +542,7 @@
 <script src="core/shop.js?v=1"></script>
 <script src="core/dhikr.js?v=2"></script>
 <script src="core/content.js?v=1"></script>
-<script src="core/actions.js?v=17"></script>
+<script src="core/actions.js?v=18"></script>
 
 <!-- PWA: Service Worker registration + update banner -->
 <script>
@@ -565,7 +566,7 @@
     });
   }
   window.addEventListener('load', function() {
-    navigator.serviceWorker.register('sw.js?v=21').then(function(reg) {
+    navigator.serviceWorker.register('sw.js?v=22').then(function(reg) {
       if (reg.waiting) { showUpdateBanner(reg); return; }
       reg.addEventListener('updatefound', function() {
         var sw = reg.installing;
