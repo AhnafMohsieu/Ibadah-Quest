@@ -72,14 +72,14 @@ test('main.css uses modern light tokens', () => {
 });
 
 test('index.html registers the service worker and update banner', () => {
-  assert.ok(html.includes("navigator.serviceWorker.register('sw.js?v=20')"));
+  assert.ok(html.includes("navigator.serviceWorker.register('sw.js?v=21')"));
   assert.ok(html.includes("'SKIP_WAITING'"));
   assert.ok(html.includes('swUpdateBanner'));
 });
 
 test('hadith/dhikr audio modules wired with versions and load order', () => {
   assert.ok(html.includes('<script src="core/content-cache.js?v=1"></script>'));
-  assert.ok(html.includes('<script src="core/audio.js?v=1"></script>'));
+  assert.ok(html.includes('<script src="core/audio.js?v=2"></script>'));
   assert.ok(html.includes('<script src="data/hadith-normalize.js?v=1"></script>'));
   assert.ok(html.includes('<script src="data/dhikr-audio-map.js?v=1"></script>'));
   assert.ok(html.includes('<script src="features/hadith-library.js?v=1" defer></script>'));

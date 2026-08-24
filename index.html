@@ -432,7 +432,7 @@
 <!-- State -->
 <script src="core/storage.js"></script>
 <script src="core/content-cache.js?v=1"></script>
-<script src="core/audio.js?v=1"></script>
+<script src="core/audio.js?v=2"></script>
 <script src="state/state.js?v=5"></script>
 <script>
   window.storageReady = window.Storage && window.Storage.init
@@ -446,7 +446,7 @@
 <script src="render/calendar.js?v=1"></script>
 <script src="render/prayers.js?v=2"></script>
 <script src="render/static.js?v=3"></script>
-<script src="render/dynamic.js?v=4"></script>
+<script src="render/dynamic.js?v=5"></script>
 <script src="render/tabs.js?v=3"></script>
 
 <!-- Chart.js CDN (lazy loaded) -->
@@ -566,7 +566,7 @@
     });
   }
   window.addEventListener('load', function() {
-    navigator.serviceWorker.register('sw.js?v=20').then(function(reg) {
+    navigator.serviceWorker.register('sw.js?v=21').then(function(reg) {
       if (reg.waiting) { showUpdateBanner(reg); return; }
       reg.addEventListener('updatefound', function() {
         var sw = reg.installing;

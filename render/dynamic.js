@@ -846,11 +846,18 @@ h += '</div>';
       const ok = AppAudio.toggleTTS(arabic, S.hadithTTSLang || 'ar');
       if (!ok) toast(iqIcon('music'), 'No Arabic voice installed on this device', false, 2200);
     };
-    if (found.col.remotePending || !found.hadith.a) {
-      const loader = (colId === 'bukhari' || colId === 'muslim')
-        ? HadithLibrary.ensureBundledArabic(colId)
-        : HadithLibrary.ensureHadithCollection(colId);
-      loader.then(col => { if (col && !_remoteCols[colId] && col.remote) _remoteCols[colId] = col; attempt(); })
+    if (!found.hadith.a) {
+      /* _findHadith only matches real hadith entries, so found.col is never a
+         remotePending stub (those have empty books). Bundled collections
+         (bukhari/muslim/nawawi) backfill Arabic in place via ensureBundledArabic;
+         loaded remote cols re-run ensureHadithCollection. */
+      const loader = found.col.remote ? HadithLibrary.ensureHadithCollection(colId) : HadithLibrary.ensureBundledArabic(colId);
+      loader.then(col => {
+        if (col && !_remoteCols[colId] && col.remote) _remoteCols[colId] = col;
+        const cur = _findHadith(colId, b, h);
+        if (cur && cur.hadith.a && hadithView.level === 'hadiths' && hadithView.collectionId === colId) renderHadith();
+        attempt();
+      })
         .catch(() => { toast(iqIcon('music'), 'Could not download audio text — check connection', false, 2200); });
       return;
     }
@@ -881,7 +888,7 @@ h += '</div>';
           ${hasA ? `<div dir="rtl" style="font-family:'Amiri',serif;font-size:1.25rem;line-height:1.9;color:var(--accent);margin-bottom:10px;">${h.a}</div>` : ''}
           <div class="verse-english">${h.t}</div>
           <div class="content-source">${iqIcon('book-open')} ${col.name} ${h.b}:${h.h}<a class="verify-btn" href="https://sunnah.com/${col.id}/${h.b}#${h.n}" target="_blank" rel="noopener noreferrer" title="Verify on sunnah.com">Verify</a></div>
-          ${hasA ? `<button type="button" class="sit-fav-btn" aria-label="Listen" title="Listen (Arabic)" style="position:absolute;top:8px;right:8px;background:none;border:none;cursor:pointer;padding:6px;font-size:1rem;line-height:1;color:var(--accent);" onclick="event.stopPropagation();hadithSpeak('${col.id}',${Number(h.b)},${Number(h.h)})">${iqIcon('music')}</button>` : ''}
+          <button type="button" class="sit-fav-btn" aria-label="Listen" title="Listen (Arabic)" style="position:absolute;top:8px;right:8px;background:none;border:none;cursor:pointer;padding:6px;font-size:1rem;line-height:1;color:var(--accent);" onclick="event.stopPropagation();hadithSpeak('${col.id}',${Number(h.b)},${Number(h.h)})">${iqIcon('music')}</button>
         </div>`;
       });
       el.innerHTML = html;
@@ -911,9 +918,12 @@ h += '</div>';
     _allCollections().forEach(c => {
       const total = (c.books || []).reduce((s, b) => s + b.hadiths.length, 0);
       const pending = !!c.remotePending;
+      /* Bundled cols (bukhari/muslim/nawawi) resolve via icon aliases; remote/pending
+         ids don't resolve in data/icons.js, so fall back to colIconFor for those. */
+      const iconHtml = (c.remote || c.remotePending) ? iqIcon(colIconFor(c.id)) : iqIcon(c.icon || c.id);
       const badge = pending ? '<span style="float:right;font-size:0.62rem;background:rgba(201,168,76,0.18);color:var(--accent-light);padding:2px 8px;border-radius:10px;">Online</span>' : '';
       html += `<div class="surah-card" onclick="App.openHadithCollection('${c.id}')">
-        <div class="surah-num">${iqIcon(c.icon || colIconFor(c.id))}${badge}</div>
+        <div class="surah-num">${iconHtml}${badge}</div>
         <div class="surah-name-en">${c.name}</div>
         <div class="surah-meta">${pending ? 'Tap to download' : (c.books.length + ' books · ' + total + ' hadiths')}</div>
         <div style="font-size:0.72rem;color:var(--text2);margin-top:4px;line-height:1.4;">${c.desc}</div>

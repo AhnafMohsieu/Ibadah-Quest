@@ -3,6 +3,7 @@
   let seqQueue = [];
   let seqIdx = 0;
   let seqActive = false;
+  let _voices = [];
 
   function pickArabicVoice(voices) {
     const arabic = (voices || []).filter(v => /^ar/i.test(v.lang));
@@ -11,6 +12,12 @@
   }
 
   function ttsAvailable() { return 'speechSynthesis' in window; }
+
+  // Voices load asynchronously in browsers; prime now and refresh on voiceschanged.
+  if (ttsAvailable()) {
+    _voices = window.speechSynthesis.getVoices();
+    window.speechSynthesis.onvoiceschanged = function() { _voices = window.speechSynthesis.getVoices(); };
+  }
 
   function stopTTS() {
     if (ttsAvailable()) window.speechSynthesis.cancel();
@@ -41,7 +48,8 @@
     if (lang === 'en') {
       u.lang = 'en-US';
     } else {
-      const v = pickArabicVoice(window.speechSynthesis.getVoices());
+      if (_voices.length === 0) _voices = window.speechSynthesis.getVoices();
+      const v = pickArabicVoice(_voices);
       if (!v) return false;
       u.voice = v;
       u.lang = v.lang;
