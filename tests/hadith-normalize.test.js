@@ -21,9 +21,9 @@ const ENG = {
 const ARA = {
   metadata: { name: 'Sunan Test AR', sections: { '1': 'x', '2': 'y' } },
   hadiths: [
-    { hadithnumber: 1, arabicnumber: 1, text: 'Ø¹Ø±Ø¨ÙŠ ÙˆØ§Ø­Ø¯<br>extra', grades: [], reference: { book: 1, hadith: 1 } },
-    { hadithnumber: 2, arabicnumber: 2, text: 'Ø¹Ø±Ø¨ÙŠ Ø§Ø«Ù†Ø§Ù†', grades: [], reference: { book: 1, hadith: 2 } },
-    { hadithnumber: 9, arabicnumber: 9, text: 'Ø¹Ø±Ø¨ÙŠ Ø¨Ù„Ø§ Ù…Ù‚Ø§Ø¨Ù„', grades: [], reference: { book: 2, hadith: 9 } }
+    { hadithnumber: 1, arabicnumber: 1, text: '\u0639\u0631\u0628\u064A \u0648\u0627\u062D\u062F<br>extra', grades: [], reference: { book: 1, hadith: 1 } },
+    { hadithnumber: 2, arabicnumber: 2, text: '\u0639\u0631\u0628\u064A \u0627\u062B\u0646\u0627\u0646', grades: [], reference: { book: 1, hadith: 2 } },
+    { hadithnumber: 9, arabicnumber: 9, text: '\u0639\u0631\u0628\u064A \u0628\u0644\u0627 \u0645\u0642\u0627\u0628\u0644', grades: [], reference: { book: 2, hadith: 9 } }
   ]
 };
 
@@ -40,11 +40,11 @@ test('normalize: joins arabic by book:hadith, strips <br>, null when unmatched',
   const norm = loadNormalizer();
   const col = norm(ENG, ARA, { id: 'test', name: 'Sunan Test' });
   const b1 = col.books[0].hadiths;
-  assert.equal(b1[0].a, 'Ø¹Ø±Ø¨ÙŠ ÙˆØ§Ø­Ø¯ extra');
-  assert.equal(b1[1].a, 'Ø¹Ø±Ø¨ÙŠ Ø§Ø«Ù†Ø§Ù†');
+  assert.equal(b1[0].a, '\u0639\u0631\u0628\u064A \u0648\u0627\u062D\u062F extra');
+  assert.equal(b1[1].a, '\u0639\u0631\u0628\u064A \u0627\u062B\u0646\u0627\u0646');
   assert.equal(col.books[1].hadiths[0].a, null); // eng 2:5 has no arabic match
   assert.equal(col.books[1].hadiths[0].t, 'Unmatched english');
-  assert.deepEqual(b1[0], { n: 1, t: 'English one', a: 'Ø¹Ø±Ø¨ÙŠ ÙˆØ§Ø­Ø¯ extra', b: 1, h: 1 });
+  assert.deepEqual(b1[0], { n: 1, t: 'English one', a: '\u0639\u0631\u0628\u064A \u0648\u0627\u062D\u062F extra', b: 1, h: 1 });
 });
 
 test('normalize: survives missing ara edition and empty sections', () => {
