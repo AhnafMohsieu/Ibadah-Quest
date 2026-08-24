@@ -818,23 +818,70 @@ h += '</div>';
 
   // ── Hadith ──
   let hadithView = { level: 'collections', collectionId: null, bookId: null };
+  const _remoteCols = {};
+
+  function _allCollections() {
+    const bundled = (typeof HADITH_COLLECTIONS_DATA !== 'undefined') ? HADITH_COLLECTIONS_DATA : [];
+    const remoteMeta = (typeof HadithLibrary !== 'undefined') ? HadithLibrary.REMOTE_COLLECTIONS : [];
+    return bundled.concat(remoteMeta.map(m => _remoteCols[m.id] || Object.assign({ remotePending: true, remote: true, books: [] }, m)));
+  }
+
+  function _findHadith(colId, b, h) {
+    const col = _allCollections().find(c => c.id === colId);
+    if (!col) return null;
+    for (const bk of (col.books || [])) {
+      const hit = bk.hadiths.find(x => String(x.h) === String(h) && String(x.b) === String(b));
+      if (hit) return { col, hadith: hit };
+    }
+    return null;
+  }
+
+  function hadithSpeak(colId, b, h) {
+    const found = _findHadith(colId, b, h);
+    if (!found || !found.hadith) return;
+    const attempt = () => {
+      const cur = _findHadith(colId, b, h);
+      const arabic = cur && cur.hadith.a;
+      if (!arabic) { toast(iqIcon('music'), 'Arabic text unavailable for this narration', false, 1800); return; }
+      const ok = AppAudio.toggleTTS(arabic, S.hadithTTSLang || 'ar');
+      if (!ok) toast(iqIcon('music'), 'No Arabic voice installed on this device', false, 2200);
+    };
+    if (found.col.remotePending || !found.hadith.a) {
+      const loader = (colId === 'bukhari' || colId === 'muslim')
+        ? HadithLibrary.ensureBundledArabic(colId)
+        : HadithLibrary.ensureHadithCollection(colId);
+      loader.then(col => { if (col && !_remoteCols[colId] && col.remote) _remoteCols[colId] = col; attempt(); })
+        .catch(() => { toast(iqIcon('music'), 'Could not download audio text — check connection', false, 2200); });
+      return;
+    }
+    attempt();
+  }
+
+  /* Icon keys verified against data/icons.js: 'scroll' resolves (IQ_CODES 1F4DC);
+     'scale' does NOT exist (canonical key is 'scales'), so malik falls back to 'book-open'. */
+  function colIconFor(id) {
+    return ({ abudawud: 'scroll', tirmidhi: 'scroll', nasai: 'scroll', ibnmajah: 'scroll', malik: 'book-open' })[id] || 'book';
+  }
 
   function renderHadith() {
     const el = document.getElementById('hadithArea');
-    if (!el || typeof HADITH_COLLECTIONS_DATA === 'undefined') return;
-    const data = HADITH_COLLECTIONS_DATA;
+    if (!el) return;
+    const data = _allCollections();
 
     if (hadithView.level === 'hadiths') {
       const col = data.find(c => c.id === hadithView.collectionId);
       const book = col && col.books.find(b => b.id === hadithView.bookId);
       if (!col || !book) { hadithView = { level: 'collections', collectionId: null, bookId: null }; renderHadith(); return; }
       let html = `<button class="quran-back-btn" onclick="App.hadithBack()">◀ Back to ${col.name}</button>`;
-      html += `<div class="quran-header"><h2>${iqIcon(col.icon || col.id)} ${book.name}</h2><div class="quran-sub">${book.hadiths.length} hadiths</div></div>`;
+      html += `<div class="quran-header"><h2>${iqIcon(col.icon || colIconFor(col.id))} ${book.name}</h2><div class="quran-sub">${book.hadiths.length} hadiths</div></div>`;
       book.hadiths.forEach(h => {
-        html += `<div class="verse-card">
+        const hasA = !!h.a;
+        html += `<div class="verse-card" style="position:relative;">
           <div class="verse-num">${h.n}</div>
+          ${hasA ? `<div dir="rtl" style="font-family:'Amiri',serif;font-size:1.25rem;line-height:1.9;color:var(--accent);margin-bottom:10px;">${h.a}</div>` : ''}
           <div class="verse-english">${h.t}</div>
           <div class="content-source">${iqIcon('book-open')} ${col.name} ${h.b}:${h.h}<a class="verify-btn" href="https://sunnah.com/${col.id}/${h.b}#${h.n}" target="_blank" rel="noopener noreferrer" title="Verify on sunnah.com">Verify</a></div>
+          ${hasA ? `<button type="button" class="sit-fav-btn" aria-label="Listen" title="Listen (Arabic)" style="position:absolute;top:8px;right:8px;background:none;border:none;cursor:pointer;padding:6px;font-size:1rem;line-height:1;color:var(--accent);" onclick="event.stopPropagation();hadithSpeak('${col.id}',${Number(h.b)},${Number(h.h)})">${iqIcon('music')}</button>` : ''}
         </div>`;
       });
       el.innerHTML = html;
@@ -845,7 +892,7 @@ h += '</div>';
       const col = data.find(c => c.id === hadithView.collectionId);
       if (!col) { hadithView = { level: 'collections', collectionId: null, bookId: null }; renderHadith(); return; }
       let html = `<button class="quran-back-btn" onclick="App.hadithBack()">◀ Back to Collections</button>`;
-      html += `<div class="quran-header"><h2>${iqIcon(col.icon || col.id)} ${col.name}</h2><div class="quran-sub">${col.books.length} books · ${col.books.reduce((s, b) => s + b.hadiths.length, 0)} hadiths</div></div>`;
+      html += `<div class="quran-header"><h2>${iqIcon(col.icon || colIconFor(col.id))} ${col.name}</h2><div class="quran-sub">${col.books.length} books · ${col.books.reduce((s, b) => s + b.hadiths.length, 0)} hadiths</div></div>`;
       html += '<div class="surah-grid">';
       col.books.forEach(book => {
         html += `<div class="surah-card" onclick="App.openHadithBook('${col.id}',${book.id})">
@@ -861,12 +908,14 @@ h += '</div>';
 
     let html = '<div class="quran-header"><h2>' + iqIcon('book') + ' The Hadith Collections</h2><div class="quran-sub">Authentic narrations of the Prophet Muhammad ﷺ</div></div>';
     html += '<div class="surah-grid">';
-    data.forEach(c => {
-      const total = c.books.reduce((s, b) => s + b.hadiths.length, 0);
+    _allCollections().forEach(c => {
+      const total = (c.books || []).reduce((s, b) => s + b.hadiths.length, 0);
+      const pending = !!c.remotePending;
+      const badge = pending ? '<span style="float:right;font-size:0.62rem;background:rgba(201,168,76,0.18);color:var(--accent-light);padding:2px 8px;border-radius:10px;">Online</span>' : '';
       html += `<div class="surah-card" onclick="App.openHadithCollection('${c.id}')">
-        <div class="surah-num">${iqIcon(c.icon || c.id)}</div>
+        <div class="surah-num">${iqIcon(c.icon || colIconFor(c.id))}${badge}</div>
         <div class="surah-name-en">${c.name}</div>
-        <div class="surah-meta">${c.books.length} books · ${total} hadiths</div>
+        <div class="surah-meta">${pending ? 'Tap to download' : (c.books.length + ' books · ' + total + ' hadiths')}</div>
         <div style="font-size:0.72rem;color:var(--text2);margin-top:4px;line-height:1.4;">${c.desc}</div>
       </div>`;
     });
@@ -874,8 +923,24 @@ h += '</div>';
     el.innerHTML = html;
   }
 
-  function openHadithCollection(id) { hadithView = { level: 'books', collectionId: id, bookId: null }; renderHadith(); }
   function openHadithBook(colId, bookId) { hadithView = { level: 'hadiths', collectionId: colId, bookId }; renderHadith(); }
+
+  function openHadithCollection(id) {
+    const col = _allCollections().find(c => c.id === id);
+    if (col && !col.remotePending) { hadithView = { level: 'books', collectionId: id, bookId: null }; renderHadith(); return; }
+    const el = document.getElementById('hadithArea');
+    if (el) el.innerHTML = '<div class="quran-header"><h2>' + iqIcon('book') + ' Downloading…</h2><div class="quran-sub">Fetching collection from the online library</div></div>';
+    HadithLibrary.ensureHadithCollection(id).then(loaded => {
+      if (loaded && loaded.remote) _remoteCols[id] = loaded;
+      hadithView = { level: 'books', collectionId: id, bookId: null };
+      renderHadith();
+    }).catch(() => {
+      toast(iqIcon('book'), 'Could not download collection — check connection', false, 2400);
+      hadithView = { level: 'collections', collectionId: null, bookId: null };
+      renderHadith();
+    });
+  }
+
   function hadithBack() {
     if (hadithView.level === 'hadiths') { hadithView.level = 'books'; hadithView.bookId = null; }
     else { hadithView = { level: 'collections', collectionId: null, bookId: null }; }
@@ -949,6 +1014,7 @@ h += '</div>';
   window.openHadithCollection = openHadithCollection;
   window.openHadithBook = openHadithBook;
   window.hadithBack = hadithBack;
+  window.hadithSpeak = hadithSpeak;
   window.playQuranVerse = playQuranVerse;
   window.playSurah = playSurah;
   window.stopSurah = stopSurah;

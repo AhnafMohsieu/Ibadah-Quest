@@ -23,3 +23,12 @@ test('library: cache-first with shared in-flight promise and arabic backfill', (
   assert.ok(src.includes('ensureBundledArabic'));
   assert.match(src, /window\.HadithLibrary = \{/);
 });
+
+test('renderer: hadith UI wires library + audio', () => {
+  const dyn = fs.readFileSync(path.join(__dirname, '..', 'render', 'dynamic.js'), 'utf8');
+  assert.match(dyn, /HadithLibrary\.ensureHadithCollection\(/);
+  assert.match(dyn, /HadithLibrary\.ensureBundledArabic\(/);
+  assert.match(dyn, /AppAudio\.toggleTTS\(/);
+  assert.match(dyn, /window\.hadithSpeak = hadithSpeak;/);
+  assert.match(dyn, /Online<\/span>/, 'remote cards carry an Online badge');
+});
