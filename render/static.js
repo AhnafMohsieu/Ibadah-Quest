@@ -292,18 +292,54 @@
     document.getElementById('memorizationArea').innerHTML = h;
   }
   function addMemorization() { const inp=document.getElementById('memInput'); if(!inp?.value.trim()) return; S.memorizationList.push(inp.value.trim()); S.memorized++; inp.value=''; if (typeof window.grantCappedDailyXp === 'function') window.grantCappedDailyXp(3, 'memorization', 5); saveState(); renderMemorization(); checkA(); }
+  // ── Dhikr audio (hisnmuslim recordings, TTS fallback) ──
+  function _dhikrAudioUrl(kind, catKey, idx) {
+    if (typeof DHIKR_AUDIO_MAP === 'undefined') return null;
+    if (kind === 'situational') {
+      const arr = DHIKR_AUDIO_MAP.situational && DHIKR_AUDIO_MAP.situational[catKey];
+      return (arr && arr[idx]) || null;
+    }
+    const arr = DHIKR_AUDIO_MAP[kind];
+    return (arr && arr[idx]) || null;
+  }
+
+  function _dhikrSeqItems(kind, catKey) {
+    const pool = kind === 'morning' ? MORNING_DHIKR : kind === 'evening' ? EVENING_DHIKR : (SITUATIONAL_DHIKR[catKey] ? SITUATIONAL_DHIKR[catKey].dhikr : []);
+    return pool.map((item, i) => {
+      const url = _dhikrAudioUrl(kind, catKey, i);
+      return url ? { url } : { tts: item.arabic, lang: 'ar' };
+    });
+  }
+
+  function dhikrSpeak(kind, catKey, idx) {
+    const item = kind === 'morning' ? MORNING_DHIKR[idx] : kind === 'evening' ? EVENING_DHIKR[idx] : (SITUATIONAL_DHIKR[catKey] ? SITUATIONAL_DHIKR[catKey].dhikr[idx] : null);
+    if (!item) return;
+    const url = _dhikrAudioUrl(kind, catKey, idx);
+    if (url) { AppAudio.playRecording(url); return; }
+    const ok = AppAudio.toggleTTS(item.arabic, 'ar');
+    if (!ok) toast(iqIcon('music'), 'No Arabic voice installed on this device', false, 2200);
+  }
+
+  function dhikrPlayAll(kind, catKey) {
+    AppAudio.playSequence(_dhikrSeqItems(kind, catKey));
+  }
+  window.dhikrSpeak = dhikrSpeak;
+  window.dhikrPlayAll = dhikrPlayAll;
+
   function renderMorning() {
     const dt = today(); if (!S.morningDone[dt]) S.morningDone[dt] = {};
     const total = MORNING_DHIKR.length;
     let completed = 0;
     for (let i=0; i<total; i++) { if (S.morningDone[dt][i]) completed++; }
-    
+
     let h = `<div class="section-title" style="display:flex;justify-content:space-between;align-items:center;">
       <span>${iqIcon('sunrise')} Morning Adhkar (After Fajr)</span>
       <span style="font-size:0.75rem;background:rgba(201,168,76,0.15);padding:3px 10px;border-radius:12px;color:var(--accent-light);font-weight:700;">${completed} / ${total}</span>
-    </div><div style="display:flex;flex-direction:column;gap:12px;">`;
-    MORNING_DHIKR.forEach((item, idx) => { 
-        const done = !!S.morningDone[dt][idx]; 
+    </div>`;
+    h += `<button type="button" class="quran-back-btn" style="margin-bottom:12px;" onclick="App.dhikrPlayAll('morning')">${iqIcon('music')} Play all</button>`;
+    h += `<div style="display:flex;flex-direction:column;gap:12px;">`;
+    MORNING_DHIKR.forEach((item, idx) => {
+        const done = !!S.morningDone[dt][idx];
         h += `<div class="vol-card${done?' done':''}" tabindex="0" role="button" onclick="App.toggleMorning(${idx}, ${item.xp})" style="cursor:pointer;">
             <div class="prayer-check" style="font-size:1.2rem;">${done?iqIcon('check'):iqIcon('sun')}</div>
             <div class="prayer-info">
@@ -312,8 +348,9 @@
                 <div class="prayer-name">${item.text}</div>
                 <div style="font-size:0.8rem;color:var(--text2);margin-top:4px;">${item.reward}</div>
             </div>
+            <button type="button" aria-label="Listen" style="background:none;border:none;cursor:pointer;padding:6px;font-size:1rem;color:var(--accent);" onclick="event.stopPropagation();App.dhikrSpeak('morning','',${idx})">${iqIcon('music')}</button>
             <div class="prayer-xp">+${item.xp} XP</div>
-        </div>`; 
+        </div>`;
     });
     document.getElementById('morningArea').innerHTML = h + '</div>';
   }
@@ -339,9 +376,11 @@
     let h = `<div class="section-title" style="display:flex;justify-content:space-between;align-items:center;">
       <span>${iqIcon('moon')} Evening Adhkar (After Asr)</span>
       <span style="font-size:0.75rem;background:rgba(201,168,76,0.15);padding:3px 10px;border-radius:12px;color:var(--accent-light);font-weight:700;">${completed} / ${total}</span>
-    </div><div style="display:flex;flex-direction:column;gap:12px;">`;
-    EVENING_DHIKR.forEach((item, idx) => { 
-        const done = !!S.eveningDone[dt][idx]; 
+    </div>`;
+    h += `<button type="button" class="quran-back-btn" style="margin-bottom:12px;" onclick="App.dhikrPlayAll('evening')">${iqIcon('music')} Play all</button>`;
+    h += `<div style="display:flex;flex-direction:column;gap:12px;">`;
+    EVENING_DHIKR.forEach((item, idx) => {
+        const done = !!S.eveningDone[dt][idx];
         h += `<div class="vol-card${done?' done':''}" tabindex="0" role="button" onclick="App.toggleEvening(${idx}, ${item.xp})" style="cursor:pointer;">
             <div class="prayer-check" style="font-size:1.2rem;">${done?iqIcon('check'):iqIcon('moon')}</div>
             <div class="prayer-info">
@@ -350,8 +389,9 @@
                 <div class="prayer-name">${item.text}</div>
                 <div style="font-size:0.8rem;color:var(--text2);margin-top:4px;">${item.reward}</div>
             </div>
+            <button type="button" aria-label="Listen" style="background:none;border:none;cursor:pointer;padding:6px;font-size:1rem;color:var(--accent);" onclick="event.stopPropagation();App.dhikrSpeak('evening','',${idx})">${iqIcon('music')}</button>
             <div class="prayer-xp">+${item.xp} XP</div>
-        </div>`; 
+        </div>`;
     });
     document.getElementById('eveningArea').innerHTML = h + '</div>';
   }
@@ -380,6 +420,7 @@
       const cat = SITUATIONAL_DHIKR[_situationalView];
       let h = `<button class="quran-back-btn" onclick="App.situationalBack()">${iqIcon('arrow-left')} Back to Categories</button>`;
       h += `<div class="section-title">${iqIcon(cat.icon)} ${cat.label}</div>`;
+      h += `<button type="button" class="quran-back-btn" style="margin-bottom:12px;" onclick="App.dhikrPlayAll('situational','${_situationalView}')">${iqIcon('music')} Play all</button>`;
       h += '<div style="display:flex;flex-direction:column;gap:12px;">';
       const favs = S.sitFavs || [];
       const sorted = cat.dhikr.map(function(item, idx) { return {item:item, idx:idx}; }).sort(function(a,b) {
@@ -401,6 +442,7 @@
               <div class="prayer-name">${escapeHTML(item.english)}</div>
               ${item.source ? '<div style="font-size:0.75rem;color:var(--text2);margin-top:4px;">' + iqIcon('book-open') + ' ' + escapeHTML(item.source) + '</div>' : ''}
             </div>
+            <button type="button" aria-label="Listen" style="background:none;border:none;cursor:pointer;padding:6px;font-size:1rem;color:var(--accent);" onclick="event.stopPropagation();App.dhikrSpeak('situational','${_situationalView}',${idx})">${iqIcon('music')}</button>
             <div class="prayer-xp">+5 XP<br><span style="font-size:0.65rem;opacity:0.8;">${tapCount}/10</span></div>
         </div>`;
       });
