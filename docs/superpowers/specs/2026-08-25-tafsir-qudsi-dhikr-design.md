@@ -41,9 +41,9 @@ window.TafsirLibrary = {
 ### UI
 
 - Verse cards in BOTH `renderQuranSurah` and `renderQuranJuz` gain a small toggle button (`iqIcon('book-open')`, label "Tafsir") next to the play button. Tap toggles an inline panel below that card: spinner while fetching, then sanitized rich text. Only one panel open at a time is NOT enforced (independent cards fine); state kept in a module-level map `openTafsir = {'s:v': true}` cleared when leaving the surah/juz view so re-entry starts collapsed.
+- Panel text container: `sanitizeRichText` output via innerHTML (remote dataset = trusted-pool convention, sanitizer as defense-in-depth).
 - Segmented control above the verse list (both views): two buttons bound to `S.tafsirEdition`; switching re-renders and refetches any open panels.
 - Arabic rendering: `dir="rtl"`, `'Amiri',serif`, accent color — mirrors existing Arabic styling.
-- Panel text container: `sanitizeRichText` output via innerHTML (remote dataset = trusted-pool convention, sanitizer as defense-in-depth).
 
 ### State
 
@@ -61,9 +61,18 @@ Regenerate `data/dhikr-audio-map.js` from the same hisnmuslim item JSONs (re-fet
 - Keep a URL **only if normalized card text === normalized recording text** (exact equality).
 - Everything else → `null` (TTS fallback). The prior loose substitutions (e.g., full tasbih-fatimi for bare "سبحان الله وبحمده") are dropped by design.
 
+### Play/stop toggles on individual dhikr cards
+
+The existing music-icon speaker buttons on Morning/Evening/Situational cards become true Quran-style play/stop toggles with visible playing state:
+
+- **Source tracking in `core/audio.js`** (backward-compatible extension): `playRecording(url, onended)` gains an optional options form `playRecording(url, { id, onended })` and `playTTS`/`toggleTTS` accept an optional trailing `{ id }`; module records `_currentId` when playback starts and clears it on natural end/stop. New exports: `currentId() -> string|null` and `setOnChange(fn)` — a single callback fired whenever the active source changes (start / stop / natural end), so renderers update button states without polling.
+- **Button states**: idle → music icon; that card's audio active → stop icon (`iqIcon('x')`) + accent highlight color. Tapping while active stops it; tapping another card switches sources (existing single-source discipline handles superseding).
+- **IDs**: `dhikr-morning-{idx}`, `dhikr-evening-{idx}`, `dhikr-situational-{cat}-{idx}`; Play-all uses id `dhikr-playall-{kind}`.
+- **State refresh**: static.js registers one `AppAudio.setOnChange` handler that updates only the affected buttons' icon/class via a light DOM pass (no full `renderAll`, which would reset scroll). Handlers also call the refresh after initiating playback (start is synchronous state).
+
 ## Wiring & cache discipline
 
-- index.html: add `<script src="features/tafsir-library.js?v=1" defer></script>` near hadith-library; bump touched assets: `features/hadith-library.js?v=1→2`, `render/dynamic.js?v=5→6`, `render/static.js?v=3→4`, `state/state.js?v=5→6`, `data/dhikr-audio-map.js?v=1→2`, SW registration `sw.js?v=21→22`.
+- index.html: add `<script src="features/tafsir-library.js?v=1" defer></script>` near hadith-library; bump touched assets: `core/audio.js?v=2→3`, `features/hadith-library.js?v=1→2`, `render/dynamic.js?v=5→6`, `render/static.js?v=3→4`, `state/state.js?v=5→6`, `data/dhikr-audio-map.js?v=1→2`, SW registration `sw.js?v=21→22`.
 - sw.js: `CACHE_NAME 'iq-cache-v21' → 'iq-cache-v22'`.
 - tests/html.test.js: update pins; add assertions for the new tag + ordering (tafsir-library after quran-meta-bearing scripts not required — it reads QURAN_SURAHS only at call time via globals).
 
@@ -75,6 +84,7 @@ Regenerate `data/dhikr-audio-map.js` from the same hisnmuslim item JSONs (re-fet
 
 ## Testing
 
-- Unit tests: `sanitizeRichText` fixtures (script/style/on-handler/javascript: removal; benign HTML passthrough); jalalayn index lookup math vs fixture slice; qudsi id-list wiring test update.
+- Unit tests: `sanitizeRichText` fixtures (script/style/on-handler/javascript: removal; benign HTML passthrough); jalalayn index lookup math vs fixture slice; qudsi id-list wiring test update; audio source-tracking (`currentId` lifecycle: set on start, cleared on stop/end; `setOnChange` fires) via the existing Node eval harness.
+- Wiring pins: play/stop toggle markup present in static.js (data-id attributes, stop-state class), `currentId()`/`setOnChange` exported from audio.js.
 - Full suite green; `node --check` every touched file; version-pin updates in html.test.js.
-- Browser smoke via iq-qa: selector switches editions, both texts render (RTL check for Jalalayn), offline reopen works, dhikr speakers now TTS-fallback on previously-loose slots, zero console errors.
+- Browser smoke via iq-qa: selector switches editions, both texts render (RTL check for Jalalayn), offline reopen works, dhikr speakers flip to stop-state while playing and back after end, previously-loose slots now TTS-fallback, zero console errors.
