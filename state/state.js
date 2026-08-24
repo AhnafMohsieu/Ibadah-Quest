@@ -11,13 +11,15 @@ function resolveCurrentUser() {
   _currentUserSource = stored ? 'saved' : 'default';
 }
   const USER_KEY = 'iq9_active_user', PREFIX = 'iq9_user_';
+  const STATE_SCHEMA_VERSION = 2;
   function freshState() {
     const t = today();
     return {
-      log:{[t]:{p:{},d:{},v:{}}}, tp:0, td:{}, vc:{}, tj:0, pd:0, cs:0, bs:0, lad:t,
+      log:{[t]:{p:{},d:{},v:{}}}, tp:0, td:{}, vc:{}, tj:0, pd:0, pdArchived:0, cs:0, bs:0, lad:t,
       xp:0, lv:1, ua:{}, ur:{}, sd:false, ab:null, tq:0, dq:[], qd:t, sfu:false,
       lbd:null, tdismiss:false, wq:[], mq:[], yq:[], lq:[], wqd:'', mqd:'', yqd:'', lqd:'',
       contentDate:t, duaIdx:[], quranIdx:[], sunnahIdx:[], dhikrIdx:[], dhikrCustom:[], dhikrFavorites:[],
+      sitFavs:[], situationalXp:{},
       storiesIdx:[], hadithIdx:[], namesIdx:[], sinsIdx:[], punishmentsIdx:[],
       repentanceIdx:[], seerahIdx:[], tafsirIdx:[], mannersIdx:[],
       aqeedahIdx:[], familyIdx:[], healthIdx:[], financeIdx:[], ummahIdx:[], hajjIdx:[],
@@ -38,58 +40,73 @@ function resolveCurrentUser() {
       healthLog:{}, financeLog:{},
       growthSettings:{visible:['garden','lantern','keys','mosque','boat','heart','armor','ramadan','laylat']},
       theme:'light', lastTab:'home', lastCat:null, lastSub:null, introSeen:false,
-      notificationsEnabled:false, bookmarks:[]
+      onboarding:{complete:false,step:0},
+      notificationsEnabled:false, notificationLog:{},
+      prayerSettings:{lat:23.8103,lng:90.4125,label:'Dhaka',method:1},
+      schemaVersion:STATE_SCHEMA_VERSION, bookmarks:[]
     };
   }
   var S = null;
-function loadState() {
-  var key = PREFIX + currentUser;
-  var d = freshState();
-  // Try IndexedDB first
-  if (window.Storage && window.Storage.load) {
-    var idbState = null;
-    try {
-      // At this point init() was already called, IDB is ready
-      window.Storage.load(currentUser).then(function(s) { idbState = s; }).catch(function() {});
-    } catch(e) {}
-    if (idbState) {
-      for (var k of Object.keys(d)) if (!(k in idbState)) idbState[k] = d[k];
-      if (idbState.growthSettings && Array.isArray(idbState.growthSettings.visible)) {
-        for (var f of d.growthSettings.visible) {
-          if (!idbState.growthSettings.visible.includes(f)) idbState.growthSettings.visible.push(f);
-        }
-      }
-      if (typeof idbState.log !== 'object' || typeof idbState.td !== 'object') return idbState;
-      for (var dk in idbState.log) {
-        var e = idbState.log[dk];
-        if (!e || typeof e !== 'object') idbState.log[dk] = {p:{},d:{},v:{}};
-        else { if (!e.p) e.p = {}; if (!e.d) e.d = {}; if (!e.v) e.v = {}; }
-      }
-      return idbState;
-    }
-  }
-  // Fallback: localStorage (legacy / IDB unavailable)
-  try {
-    var raw = localStorage.getItem(key);
-    if (raw) {
-      var p = JSON.parse(raw);
-      for (var k of Object.keys(d)) if (!(k in p)) p[k] = d[k];
-      if (p.growthSettings && Array.isArray(p.growthSettings.visible)) {
-        for (var f of d.growthSettings.visible) {
-          if (!p.growthSettings.visible.includes(f)) p.growthSettings.visible.push(f);
-        }
-      }
-      if (typeof p.log !== 'object' || typeof p.td !== 'object') return p;
+  function migrateState(p, fromVersion) {
+    var version = fromVersion || Number(p.schemaVersion) || 1;
+    if (version < 2 && p.log && typeof p.log === 'object') {
       for (var dk in p.log) {
-        var e = p.log[dk];
-        if (!e || typeof e !== 'object') p.log[dk] = {p:{},d:{},v:{}};
-        else { if (!e.p) e.p = {}; if (!e.d) e.d = {}; if (!e.v) e.v = {}; }
+        var entry = p.log[dk];
+        if (entry && entry.p && entry.p.Fajr && !entry.p.fajr) entry.p.fajr = entry.p.Fajr;
+        if (entry && entry.p && entry.p.Fajr) delete entry.p.Fajr;
       }
-      return p;
     }
-  } catch(e) {}
-  return d;
-}
+    p.schemaVersion = STATE_SCHEMA_VERSION;
+    return p;
+  }
+  function normalizeState(value) {
+    var d = freshState();
+    var p = value && typeof value === 'object' ? value : d;
+    var sourceVersion = Number(p.schemaVersion) || 1;
+    for (var k of Object.keys(d)) if (!(k in p)) p[k] = d[k];
+    if (p.growthSettings && Array.isArray(p.growthSettings.visible)) {
+      for (var f of d.growthSettings.visible) {
+        if (!p.growthSettings.visible.includes(f)) p.growthSettings.visible.push(f);
+      }
+    }
+    if (typeof p.log !== 'object' || typeof p.td !== 'object') return migrateState(p, sourceVersion);
+    for (var dk in p.log) {
+      var e = p.log[dk];
+      if (!e || typeof e !== 'object') p.log[dk] = {p:{},d:{},v:{}};
+      else { if (!e.p) e.p = {}; if (!e.d) e.d = {}; if (!e.v) e.v = {}; }
+    }
+    return migrateState(p, sourceVersion);
+  }
+  function loadLocalState() {
+    try {
+      var raw = localStorage.getItem(PREFIX + currentUser);
+      return raw ? JSON.parse(raw) : null;
+    } catch(e) { return null; }
+  }
+  // Synchronous compatibility path for callers outside the async boot sequence.
+  function loadState() {
+    var state = normalizeState(loadLocalState());
+    try { localStorage.setItem(PREFIX + currentUser, JSON.stringify(state)); } catch(e) {}
+    return state;
+  }
+  async function loadStateAsync() {
+    var local = loadLocalState();
+    if (window.Storage && window.Storage.load) {
+      try {
+        var stored = await window.Storage.load(currentUser);
+        if (stored) {
+          var storedVersion = Number(stored.schemaVersion) || 1;
+          var normalized = normalizeState(stored);
+          if (storedVersion < normalized.schemaVersion) await window.Storage.save(currentUser, normalized);
+          return normalized;
+        }
+        if (local) await window.Storage.save(currentUser, normalizeState(local));
+      } catch(e) {
+        console.warn('IndexedDB load failed; using localStorage:', e);
+      }
+    }
+    return normalizeState(local);
+  }
 function saveState() {
   try {
     // Save to IndexedDB (primary)
@@ -124,6 +141,7 @@ function cvl(s, sid, st, en) { let c = 0; for (const dk in s.log) if (dk >= st &
 function countDeedP(s, deed, st, en) { let c = 0; for (const dk in s.log) if (dk >= st && dk <= en) c += s.log[dk].d?.[deed]?1:0; return c; }
 function fastRng(len) {
   const res = [];
+  if (!Number.isInteger(len) || len <= 0) return res;
   const limit = Math.min(len, 5);
   while (res.length < limit) { let r = Math.floor(Math.random()*len); if (res.indexOf(r)===-1) res.push(r); }
   return res;
@@ -133,16 +151,18 @@ function compactLogs() {
     let perfectDays = 0;
     for (const dk of Object.keys(S.log)) {
       if (dk < cutoff) {
-        const entry = S.log[dk];
+        const entry = S.log[dk] || {};
         const prayed = Object.values(entry.p || {}).filter(v => v).length;
         if (prayed >= 5) perfectDays++;
         delete S.log[dk];
       }
     }
-    S.pd = (S.pd || 0) + perfectDays;
+    S.pdArchived = (S.pdArchived || 0) + perfectDays;
+    S.pd = (S.pdArchived || 0) + Object.keys(S.log).filter(function(d) { return Object.values((S.log[d] && S.log[d].p) || {}).filter(function(v) { return v; }).length >= 5; }).length;
     saveState();
   }
   window.freshState = freshState;
   window.loadState = loadState;
+  window.loadStateAsync = loadStateAsync;
   window.saveState = saveState;
   window.resolveCurrentUser = resolveCurrentUser;

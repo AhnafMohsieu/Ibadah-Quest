@@ -91,6 +91,7 @@ const IQ_IDS = {
   'extradeeds':'star', 'volprayers':'moon',
   'wudu':'droplets', 'salah':'mosque', 'fasting':'crescent', 'healthlog':'heartbeat',
   'finance':'wallet',
+  'map-pin':'map', 'map-pin-off':'map',
 
   /* Profile tabs */
   'profile':'user', 'trophies':'trophy', 'progress':'bar-chart-3',
@@ -148,7 +149,7 @@ const IQ_IDS = {
 
   /* hereafter */
   'hereafter':'moon', 'akhirah':'moon', 'jannah':'sparkles',
-  'jahannam':'flame', 'grave':'moon', 'signs':'clock', 'dreams':'moon',
+  'jahannam':'flame', 'grave':'coffin', 'signs':'clock', 'dreams':'moon',
 
   /* ── Library groups (tab-groups.js) ── */
   'dynasties':'landmark', 'umayyads':'crescent', 'abbasids':'book-open',

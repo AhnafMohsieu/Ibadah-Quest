@@ -10,22 +10,27 @@
   }
 
   function logIncome(source) {
+    if (!INCOME_SOURCES.some(item => item.id === source)) return;
     _pendingAction = { type: 'income', source };
     showAmountPicker();
   }
 
   function logExpense(category) {
+    if (!EXPENSE_CATEGORIES.some(item => item.id === category)) return;
     _pendingAction = { type: 'expense', category };
     showAmountPicker();
   }
 
   function logCharity(charityType) {
+    if (!FINANCE_PROMPTS.some(item => item.id === charityType)) return;
     _pendingAction = { type: 'charity', charityType };
     showAmountPicker();
   }
 
   function pickAmount(amount) {
     if (!_pendingAction) return;
+    amount = Number(amount);
+    if (!Number.isFinite(amount) || amount <= 0 || amount > 1000000000) return;
     const f = getTodayFinance();
     const p = _pendingAction;
     if (p.type === 'income') {
@@ -44,6 +49,9 @@
   }
 
   function removeEntry(type, key) {
+    if (type === 'charity' && !FINANCE_PROMPTS.some(item => item.id === key)) return;
+    if (type === 'expense' && !EXPENSE_CATEGORIES.some(item => item.id === key)) return;
+    if (type !== 'charity' && type !== 'expense') return;
     const f = getTodayFinance();
     if (type === 'charity') {
       const amt = f.charity[key] || 0;
@@ -63,7 +71,7 @@
     let h = '<div class="amount-picker-box"><div class="amount-picker-title">Choose Amount</div><div class="amount-picker-grid">';
     AMOUNTS.forEach(a => { h += `<button class="amount-pick-btn" onclick="financeTracker.pickAmount(${a})">${a}</button>`; });
     h += '</div>';
-    h += '<div class="amount-custom-row"><input id="customAmountInput" class="amount-custom-input" type="number" inputmode="decimal" placeholder="Enter amount" min="1"><button class="amount-custom-btn" onclick="financeTracker.pickCustomAmount()">OK</button></div>';
+    h += '<div class="amount-custom-row"><label class="sr-only" for="customAmountInput">Custom amount</label><input id="customAmountInput" class="amount-custom-input" type="number" inputmode="decimal" placeholder="Enter amount" min="1"><button class="amount-custom-btn" onclick="financeTracker.pickCustomAmount()">OK</button></div>';
     h += '<button class="amount-pick-cancel" onclick="financeTracker.cancelPick()">Cancel</button></div>';
     ov.innerHTML = h;
     ov.style.display = 'flex';

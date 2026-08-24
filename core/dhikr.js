@@ -74,13 +74,19 @@
   function resetDhikr() { if (!S.dhikrCounters) S.dhikrCounters={}; const idx=S.dhikrCounters._active||0; S.dhikrCounters[idx]=0; saveState(); renderDhikrCounter(); }
   function nextDhikr() { if (!S.dhikrCounters) S.dhikrCounters={}; S.dhikrCounters._active=((S.dhikrCounters._active||0)+1)%DHIKR_COUNTER_DATA.length; saveState(); renderDhikrCounter(); }
   function addCustomDhikr(arabic, roman, english, target) {
+    const clean = value => String(value == null ? '' : value).trim().slice(0, 500);
+    arabic = clean(arabic);
+    roman = clean(roman);
+    english = clean(english);
+    target = Math.max(1, Math.min(10000, Math.floor(Number(target) || 33)));
+    if (!arabic || !english) return;
     if (!S.dhikrCustom) S.dhikrCustom = [];
     S.dhikrCustom.push({
       id: 'custom_' + Date.now(),
       arabic,
       transliteration: roman,
       english,
-      target: target || 33,
+      target,
       color: 'var(--accent)'
     });
     saveState();
@@ -110,5 +116,43 @@
   window.nextDhikr = nextDhikr;
   window.addCustomDhikr = addCustomDhikr;
   window.removeCustomDhikr = removeCustomDhikr;
+  function tapSituationalDhikr(category, index) {
+    const cat = typeof SITUATIONAL_DHIKR !== 'undefined' && SITUATIONAL_DHIKR[category];
+    index = Number(index);
+    if (!cat || !Number.isInteger(index) || index < 0 || index >= cat.dhikr.length) return;
+    if (!S.situationalXp) S.situationalXp = {};
+    const key = category + '_' + index;
+    const t = today();
+    const dayKey = key + '|' + t;
+    if (!S.situationalXp[dayKey]) S.situationalXp[dayKey] = 0;
+    const count = S.situationalXp[dayKey];
+    if (count >= 10) { toast(iqIcon('info'), 'Daily limit reached for this dhikr (10)'); return; }
+    S.situationalXp[dayKey] = count + 1;
+    const oldLv = S.lv;
+    S.xp += 5;
+    S.lv = lvFrom(S.xp);
+    checkLevelUp(oldLv);
+    playSound('pop');
+    saveState();
+    if (typeof renderLv === 'function') renderLv();
+    if (typeof renderTopBar === 'function') renderTopBar();
+    if (typeof renderSituationalDhikr === 'function') renderSituationalDhikr();
+  }
+
+  function toggleSitFav(category, index) {
+    const cat = typeof SITUATIONAL_DHIKR !== 'undefined' && SITUATIONAL_DHIKR[category];
+    index = Number(index);
+    if (!cat || !Number.isInteger(index) || index < 0 || index >= cat.dhikr.length) return;
+    if (!S.sitFavs) S.sitFavs = [];
+    const id = category + '_' + index;
+    const idx = S.sitFavs.indexOf(id);
+    if (idx === -1) { S.sitFavs.push(id); toast(iqIcon('star'), 'Pinned!'); }
+    else { S.sitFavs.splice(idx, 1); toast(iqIcon('star'), 'Unpinned'); }
+    saveState();
+    if (typeof renderSituationalDhikr === 'function') renderSituationalDhikr();
+  }
+
+  window.tapSituationalDhikr = tapSituationalDhikr;
+  window.toggleSitFav = toggleSitFav;
   window.toggleDhikrFavorite = toggleDhikrFavorite;
 })();

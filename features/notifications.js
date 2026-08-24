@@ -2,23 +2,44 @@
   let notificationTimer = null;
   
   function requestNotificationPermission() {
-    if (!('Notification' in window)) return;
-    if (Notification.permission === 'default') {
-      Notification.requestPermission();
-    }
+    return 'Notification' in window && Notification.permission === 'granted';
+  }
+
+  function askNotificationPermission() {
+    if (!('Notification' in window)) return false;
+    if (Notification.permission === 'granted') return true;
+    if (Notification.permission !== 'default' || typeof Notification.requestPermission !== 'function') return false;
+    return Notification.requestPermission().then(permission => permission === 'granted');
   }
   
   function toggleNotifications() {
-    S.notificationsEnabled = !S.notificationsEnabled;
-    saveState();
-    
     if (S.notificationsEnabled) {
-      scheduleNotifications();
-      toast(iqIcon('bell'), 'Notifications enabled!');
-    } else {
+      S.notificationsEnabled = false;
+      saveState();
       if (notificationTimer) clearInterval(notificationTimer);
       toast(iqIcon('bell-off'), 'Notifications disabled');
+      return;
     }
+
+    const permission = askNotificationPermission();
+    if (permission && typeof permission.then === 'function') {
+      permission.then(enableNotifications).catch(() => enableNotifications(false));
+    } else if (permission) {
+      enableNotifications(true);
+    } else {
+      toast(iqIcon('bell-off'), 'Allow notifications in your browser settings first.');
+    }
+  }
+
+  function enableNotifications(granted) {
+    if (!granted) {
+      toast(iqIcon('bell-off'), 'Notifications were not enabled.');
+      return;
+    }
+    S.notificationsEnabled = true;
+    saveState();
+    scheduleNotifications();
+    toast(iqIcon('bell'), 'Notifications enabled!');
   }
   
   function scheduleNotifications() {
@@ -39,7 +60,7 @@
         const l = S.log[t] || {};
         const prayers = Object.values(l.p || {}).filter(v => v).length;
         if (prayers === 0) {
-          sendNotification('Streak at Risk!', 'You haven\'t logged any prayers today. Don\'t break your streak!');
+          notifyOnce('risk|' + t, 'Streak at Risk!', 'You haven\'t logged any prayers today. Don\'t break your streak!');
         }
       }
       
@@ -47,21 +68,33 @@
       if (hour === 8 && minute === 0) {
         const t = today();
         if (S.lbd !== t) {
-          sendNotification('Daily Bonus', 'Claim your daily bonus XP!');
+          notifyOnce('bonus|' + t, 'Daily Bonus', 'Claim your daily bonus XP!');
         }
       }
     }, 60000); // Check every minute
   }
   
   function sendNotification(title, body) {
-    if (!('Notification' in window)) return;
-    if (Notification.permission !== 'granted') return;
+    if (!('Notification' in window)) return false;
+    if (Notification.permission !== 'granted') return false;
     
     new Notification(title, {
       body,
       icon: '🕌',
       badge: '🕌'
     });
+    return true;
+  }
+
+  function notifyOnce(key, title, body) {
+    if (!S.notificationLog) S.notificationLog = {};
+    if (S.notificationLog[key]) return;
+    let sent = false;
+    try { sent = sendNotification(title, body); } catch(e) {}
+    if (sent) {
+      S.notificationLog[key] = Date.now();
+      saveState();
+    }
   }
   
   window.requestNotificationPermission = requestNotificationPermission;

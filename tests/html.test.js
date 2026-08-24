@@ -30,6 +30,11 @@ test('index.html has the three feature containers', () => {
   assert.ok(html.includes('id="journeyArea"'));
 });
 
+test('situational dhikr favorites distinguish pinned and unpinned states', () => {
+  assert.ok(renderStatic.includes("isFav ? iqIcon('star') : iqIcon('bookmark')"));
+  assert.ok(renderStatic.includes('aria-label="${isFav ? \'Remove from favorites\' : \'Add to favorites\'}"'));
+});
+
 test('index.html loads the feature scripts in order', () => {
   const i1 = html.indexOf('data/journeys.js');
   const i2 = html.indexOf('features/garden.js');
@@ -67,9 +72,14 @@ test('main.css uses modern light tokens', () => {
 });
 
 test('index.html registers the service worker and update banner', () => {
-  assert.ok(html.includes("navigator.serviceWorker.register('sw.js?v=16')"));
+  assert.ok(html.includes("navigator.serviceWorker.register('sw.js?v=19')"));
   assert.ok(html.includes("'SKIP_WAITING'"));
   assert.ok(html.includes('swUpdateBanner'));
+});
+
+test('modal queue waits for both overlay visibility styles to close', () => {
+  assert.ok(actions.includes("overlay.classList.contains('show')"));
+  assert.ok(actions.includes("overlay.classList.contains('visible')"));
 });
 
 test('shell surfaces use clean borders and rounded corners', () => {
@@ -121,7 +131,7 @@ test('theme: light-family palette blocks exist in main.css', () => {
 test('theme: index.html pre-paint script sets data-theme from localStorage', () => {
   assert.ok(html.includes("localStorage.getItem('iqTheme')"));
   assert.ok(html.includes("setAttribute('data-theme'"));
-  assert.ok(html.includes('styles/main.css?v=16'));
+  assert.ok(html.includes('styles/main.css?v=17'));
 });
 
 test('theme: picker references metadata and setTheme wiring', () => {

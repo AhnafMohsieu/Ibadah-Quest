@@ -97,3 +97,13 @@ test('health: milestones stack (water+sleep+exercise+meals = 100)', () => {
   w.toggleMeal('dinner');
   assert.strictEqual(S.xp, 100, 'all four milestones should total 100 XP');
 });
+
+test('health: invalid input does not create invalid activity', () => {
+  resetDay();
+  w.logWater('not-a-number');
+  w.logExercise('not-an-exercise', 30);
+  w.toggleMeal('midnight-snack');
+  assert.strictEqual(S.healthLog['2026-08-10'].water, 0);
+  assert.deepStrictEqual(S.healthLog['2026-08-10'].exercise, []);
+  assert.deepStrictEqual(S.healthLog['2026-08-10'].meals, {});
+});

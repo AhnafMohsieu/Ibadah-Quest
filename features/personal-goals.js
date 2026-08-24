@@ -1,13 +1,21 @@
 (function() {
+  function safeText(value) {
+    return typeof window.escapeHTML === 'function' ? window.escapeHTML(value) : String(value == null ? '' : value).replace(/[&<>\"']/g, function(ch) { return {'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',"'":'&#39;'}[ch]; });
+  }
   function addPersonalGoal(type, target, deadline) {
     if (!S.personalGoals) S.personalGoals = [];
+    const safeType = typeof type === 'string' && type.trim() ? type.trim().slice(0, 50) : 'Custom';
+    const safeTarget = Math.max(1, Math.min(365, Math.floor(Number(target) || 10)));
+    const safeDeadline = /^\d{4}-\d{2}-\d{2}$/.test(String(deadline)) && !Number.isNaN(new Date(String(deadline) + 'T00:00:00').getTime())
+      ? String(deadline)
+      : today(new Date(Date.now() + 30 * 86400000));
     const goal = {
       id: 'g' + Date.now(),
-      type,
-      target,
+      type: safeType,
+      target: safeTarget,
       current: 0,
-      deadline,
-      xpReward: Math.min(target * 10, 500),
+      deadline: safeDeadline,
+      xpReward: Math.min(safeTarget * 10, 500),
       completed: false
     };
     S.personalGoals.push(goal);
@@ -16,16 +24,21 @@
   }
   
   function updateGoalProgress(goalId) {
-    const goal = S.personalGoals.find(g => g.id === goalId);
+    if (!Array.isArray(S.personalGoals)) return;
+    const goal = S.personalGoals.find(g => g && g.id === goalId);
     if (!goal || goal.completed) return;
-    
-    goal.current++;
-    
+
+    const target = Math.max(1, Math.min(365, Math.floor(Number(goal.target) || 1)));
+    const current = Math.max(0, Math.floor(Number(goal.current) || 0));
+    const reward = Math.max(0, Math.min(500, Math.floor(Number(goal.xpReward) || 0)));
+    goal.target = target;
+    goal.current = Math.min(target, current + 1);
+
     if (goal.current >= goal.target) {
       goal.completed = true;
-      S.xp += goal.xpReward;
+      S.xp = Math.max(0, Number(S.xp) || 0) + reward;
       S.lv = lvFrom(S.xp);
-      toast(iqIcon('target'), `Goal Complete! +${goal.xpReward} XP!`, true);
+      toast(iqIcon('target'), `Goal Complete! +${reward} XP!`, true);
     }
     
     saveState();
@@ -49,24 +62,30 @@
       h += '<div class="empty-state">No goals yet. Create one to start tracking!</div>';
     } else {
       for (const g of goals) {
-        const progress = Math.min(100, Math.round((g.current / g.target) * 100));
+        if (!g || typeof g !== 'object') continue;
+        const current = Math.max(0, Math.floor(Number(g.current) || 0));
+        const target = Math.max(1, Math.floor(Number(g.target) || 1));
+        const progress = Math.min(100, Math.round((current / target) * 100));
         const daysLeft = Math.max(0, Math.ceil((new Date(g.deadline) - new Date()) / 86400000));
         h += `<div class="goal-card ${g.completed ? 'completed' : ''}">
           <div class="goal-header">
-            <span class="goal-type">${g.type}</span>
+          <span class="goal-type">${safeText(g.type)}</span>
             <span class="goal-deadline">${daysLeft} days left</span>
           </div>
           <div class="goal-progress">
             <div class="goal-bar" style="width:${progress}%"></div>
           </div>
-          <div class="goal-stats">${g.current}/${g.target}</div>
-          ${!g.completed ? `<button class="goal-btn" onclick="updateGoalProgress('${g.id}')">+1</button>` : '<span class="goal-done">✓ Complete</span>'}
+          <div class="goal-stats">${current}/${target}</div>
+          ${!g.completed ? `<button type="button" class="goal-btn" data-goal-id="${safeText(g.id)}">+1</button>` : '<span class="goal-done">✓ Complete</span>'}
         </div>`;
       }
     }
     
     h += `<button class="add-goal-btn" onclick="showAddGoalModal()">+ Add Goal</button>`;
     el.innerHTML = h;
+    el.querySelectorAll('.goal-btn[data-goal-id]').forEach(btn => {
+      btn.addEventListener('click', () => updateGoalProgress(btn.dataset.goalId));
+    });
   }
   
   function showAddGoalModal() {
@@ -75,7 +94,7 @@
     ov.innerHTML = `<div class="modal-box">
       <h3>${iqIcon('target')} Add Goal</h3>
       <div class="form-group">
-        <label>Type</label>
+        <label for="goalType">Type</label>
         <select id="goalType">
           <option value="Quran Reading">Quran Reading</option>
           <option value="Dhikr">Dhikr</option>
@@ -86,11 +105,11 @@
         </select>
       </div>
       <div class="form-group">
-        <label>Target (times)</label>
+        <label for="goalTarget">Target (times)</label>
         <input type="number" id="goalTarget" min="1" max="365" value="10" />
       </div>
       <div class="form-group">
-        <label>Deadline</label>
+        <label for="goalDeadline">Deadline</label>
         <input type="date" id="goalDeadline" value="${new Date(Date.now()+30*86400000).toISOString().split('T')[0]}" />
       </div>
       <button class="dr-close" onclick="addPersonalGoal(document.getElementById('goalType').value, parseInt(document.getElementById('goalTarget').value)||10, document.getElementById('goalDeadline').value);closeToastOverlay();">Add</button>

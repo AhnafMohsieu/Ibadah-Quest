@@ -96,6 +96,13 @@ test('window.tapDhikr is defined', () => {
   assert.strictEqual(typeof sandbox.window.tapDhikr, 'function');
 });
 
+test('deferred App actions resolve handlers loaded after startup', () => {
+  let received = null;
+  sandbox.window.logWater = (amount) => { received = amount; };
+  sandbox.window.App.logWater(8);
+  assert.strictEqual(received, 8);
+});
+
 test('switchCategory syncs bottom nav active state', () => {
   const tabsSrc = require('fs').readFileSync(require('path').join(__dirname, '..', 'render', 'tabs.js'), 'utf8');
   const fnIdx = tabsSrc.indexOf('function switchCategory');

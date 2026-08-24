@@ -125,3 +125,11 @@ test('search: search works with string items in pool', () => {
   assert.ok(results.length > 0, 'should find results with string items');
   assert.ok(results.some(r => r.text.includes('Simple')), 'should contain Simple text');
 });
+
+test('search renderer escapes user-entered recent terms', () => {
+  const source = fs.readFileSync(path.join(__dirname, '..', 'features', 'search.js'), 'utf8');
+  assert.ok(source.includes('escapeSearchText(term)'), 'empty-result terms must be escaped');
+  assert.ok(source.includes('data-recent-index'), 'recent searches must not be interpolated into inline JavaScript');
+  assert.ok(source.includes('data-result-index'), 'search results must use data-bound buttons');
+  assert.ok(!source.includes('onclick="App.activateTab'), 'search results must not use inline JavaScript');
+});

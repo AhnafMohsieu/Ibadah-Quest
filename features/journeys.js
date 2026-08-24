@@ -78,14 +78,22 @@
   }
   function checkJourneyMilestone(journey, completed) {
     const milestones = [0.25, 0.5, 0.75].map(p => Math.round(journey.target * p)).filter(m => m < journey.target);
+    if (!S.journeyStats) S.journeyStats = {};
+    if (!S.journeyStats.milestones) S.journeyStats.milestones = {};
+    if (!S.journeyStats.milestones[journey.id]) S.journeyStats.milestones[journey.id] = [];
+    const seen = S.journeyStats.milestones[journey.id];
     for (const m of milestones) {
-      if (completed === m) {
+      if (completed >= m && !seen.includes(m)) {
+        seen.push(m);
         toast(iqIcon('target'), `Journey Milestone: ${m} days complete!`);
+        saveState();
         return true;
       }
     }
-    if (completed >= journey.target) {
+    if (completed >= journey.target && !seen.includes(journey.target)) {
+      seen.push(journey.target);
       toast(iqIcon('sparkles'), 'Journey Complete! Alhamdulillah!', false, 3000);
+      saveState();
       return true;
     }
     return false;
@@ -230,7 +238,11 @@
       
       if (!S.journeyStats.currentStreaks) S.journeyStats.currentStreaks = {};
       
-      const currentStreak = S.journeyStats.currentStreaks[j.id] || 0;
+      const previousDate = S.journeyStats.lastTracked[j.id];
+      const yesterday = new Date();
+      yesterday.setDate(yesterday.getDate() - 1);
+      const yesterdayKey = today(yesterday);
+      const currentStreak = previousDate === yesterdayKey ? (S.journeyStats.currentStreaks[j.id] || 0) : 0;
       S.journeyStats.currentStreaks[j.id] = currentStreak + 1;
       S.journeyStats.lastTracked[j.id] = t;
       
@@ -241,13 +253,19 @@
         S.journeyStats.bestStreaks[j.id] = S.journeyStats.currentStreaks[j.id];
       }
       
-      checkJourneyMilestone(j, S.journeyStats.currentStreaks[j.id]);
+      const completedDays = journeyProgress(S.log, j, S.journeys[j.id], t);
+      checkJourneyMilestone(j, completedDays);
+      if (completedDays >= j.target) {
+        recordJourneyCompletion(j.id, S.journeys[j.id], t, completedDays, j.target);
+      }
       
       saveState();
     });
   }
   function recordJourneyCompletion(id, startDate, endDate, completedDays, target) {
     if (!S.journeyStats) S.journeyStats = { completed: [], currentStreaks: {}, bestStreaks: {}, totalCompleted: 0, unlockedTiers: ['7day'], history: [] };
+    if (!S.journeyStats.completed) S.journeyStats.completed = [];
+    if (S.journeyStats.completed.includes(id)) return;
     S.journeyStats.completed.push(id);
     S.journeyStats.totalCompleted++;
     S.journeyStats.history.push({ id, startDate, endDate, completedDays, target });

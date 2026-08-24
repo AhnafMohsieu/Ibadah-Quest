@@ -129,6 +129,26 @@ test('genDQ does not regenerate on same day', () => {
   assert.strictEqual(S.dq[0].id, 'dq1', 'Should keep existing quests');
 });
 
+test('generated quests contain no functions (IndexedDB clone-safe)', () => {
+  const { sandbox, S } = createSandbox();
+  S.dq = []; S.qd = '';
+  S.wq = []; S.wqd = '';
+  S.mq = []; S.mqd = '';
+  S.yq = []; S.yqd = '';
+  S.lq = []; S.lqd = '';
+  
+  sandbox.genDQ(); sandbox.genWQ(); sandbox.genMQ(); sandbox.genYQ(); sandbox.genLQ();
+  
+  for (const arr of [S.dq, S.wq, S.mq, S.yq, S.lq]) {
+    for (const q of arr) {
+      assert.doesNotThrow(() => structuredClone(q),
+        `quest ${q.id} must be structured-cloneable or IDB saves fail`);
+      assert.strictEqual(typeof q.c, 'undefined',
+        `quest ${q.id} must not carry the condition function into state`);
+    }
+  }
+});
+
 test('genDQ shuffles quest order', () => {
   const { sandbox, S } = createSandbox();
   const originalRandom = Math.random;

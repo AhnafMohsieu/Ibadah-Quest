@@ -1,4 +1,7 @@
 (function() {
+  function safeText(value) {
+    return typeof window.escapeHTML === 'function' ? window.escapeHTML(value) : String(value == null ? '' : value).replace(/[&<>\"']/g, function(ch) { return {'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',"'":'&#39;'}[ch]; });
+  }
   const WATER_TARGET = HEALTH_PROMPTS.find(p => p.id === 'water').target;
   const SLEEP_TARGET = HEALTH_PROMPTS.find(p => p.id === 'sleep').target;
 
@@ -6,12 +9,19 @@
     const t = today();
     if (!S.healthLog) S.healthLog = {};
     if (!S.healthLog[t]) S.healthLog[t] = { water: 0, sleep: 0, exercise: [], meals: {} };
-    return S.healthLog[t];
+    const h = S.healthLog[t];
+    h.water = Math.max(0, Math.min(WATER_TARGET + 2, Number(h.water) || 0));
+    h.sleep = Math.max(0, Math.min(12, Number(h.sleep) || 0));
+    if (!Array.isArray(h.exercise)) h.exercise = [];
+    if (!h.meals || typeof h.meals !== 'object') h.meals = {};
+    return h;
   }
 
   function logWater(glasses) {
     const h = getTodayHealth();
-    h.water = Math.max(0, Math.min(WATER_TARGET + 2, glasses));
+    const value = Number(glasses);
+    if (!Number.isFinite(value)) return;
+    h.water = Math.max(0, Math.min(WATER_TARGET + 2, value));
     grantMilestoneXp();
     saveState();
     renderHealthLog();
@@ -26,14 +36,18 @@
   }
 
   function logExercise(type, duration) {
+    if (!EXERCISE_TYPES.some(item => item.id === type)) return;
+    const minutes = Math.max(1, Math.min(1440, parseInt(duration, 10) || 0));
+    if (!minutes) return;
     const h = getTodayHealth();
-    h.exercise.push({ type, duration: parseInt(duration) || 0, date: today() });
+    h.exercise.push({ type, duration: minutes, date: today() });
     grantMilestoneXp();
     saveState();
     renderHealthLog();
   }
 
   function toggleMeal(meal) {
+    if (!['breakfast', 'lunch', 'dinner'].includes(meal)) return;
     const h = getTodayHealth();
     h.meals[meal] = !h.meals[meal];
     grantMilestoneXp();
@@ -99,7 +113,7 @@
       <div class="health-card-header">${iqIcon('droplets')} Water (${h.water}/${WATER_TARGET} glasses)</div>
       <div class="water-grid">
         ${Array.from({length: WATER_TARGET}, (_, i) =>
-          `<div class="water-glass ${i < h.water ? 'filled' : ''}" onclick="App.logWater(${i + 1})">${iqIcon('droplets')}</div>`
+          `<button type="button" class="water-glass ${i < h.water ? 'filled' : ''}" aria-label="Log ${i + 1} glasses of water" aria-pressed="${i < h.water}" onclick="App.logWater(${i + 1})">${iqIcon('droplets')}</button>`
         ).join('')}
       </div>
     </div>`;
@@ -107,6 +121,7 @@
     // Sleep Tracker
     html += `<div class="health-card">
       <div class="health-card-header">${iqIcon('cloud-sun')} Sleep (${h.sleep}h)</div>
+      <label class="sr-only" for="sleepInput">Hours slept</label>
       <input type="number" class="profile-input" id="sleepInput" placeholder="Hours slept" min="0" max="12" step="0.5" value="${h.sleep}">
       <button class="shop-card" onclick="App.logSleep(document.getElementById('sleepInput').value)" style="justify-content:center;width:100%;">Log Sleep</button>
     </div>`;
@@ -114,14 +129,16 @@
     // Exercise Tracker
     html += `<div class="health-card">
       <div class="health-card-header">${iqIcon('target')} Exercise</div>
+      <label class="sr-only" for="exerciseType">Exercise type</label>
       <select class="profile-input" id="exerciseType">
         ${EXERCISE_TYPES.map(e => `<option value="${e.id}">${iqIcon(e.icon)} ${e.label}</option>`).join('')}
       </select>
+      <label class="sr-only" for="exerciseDuration">Exercise duration in minutes</label>
       <input type="number" class="profile-input" id="exerciseDuration" placeholder="Duration (minutes)" min="1">
       <button class="shop-card" onclick="App.logExercise(document.getElementById('exerciseType').value, document.getElementById('exerciseDuration').value)" style="justify-content:center;width:100%;">Log Exercise</button>
       ${h.exercise.length > 0 ? `<div class="exercise-log">${h.exercise.map(e => {
         const type = EXERCISE_TYPES.find(t => t.id === e.type);
-        return `<div class="exercise-item">${iqIcon(type?.icon || 'target')} ${type?.label || e.type} - ${e.duration}min</div>`;
+        return `<div class="exercise-item">${iqIcon(type?.icon || 'target')} ${safeText(type?.label || e.type)} - ${e.duration}min</div>`;
       }).join('')}</div>` : ''}
     </div>`;
 
@@ -129,9 +146,9 @@
     html += `<div class="health-card">
       <div class="health-card-header">${iqIcon('utensils')} Meals</div>
       <div class="meal-grid">
-        <div class="meal-item ${h.meals.breakfast ? 'eaten' : ''}" onclick="App.toggleMeal('breakfast')">${iqIcon('sunrise')} Breakfast</div>
-        <div class="meal-item ${h.meals.lunch ? 'eaten' : ''}" onclick="App.toggleMeal('lunch')">${iqIcon('sun')} Lunch</div>
-        <div class="meal-item ${h.meals.dinner ? 'eaten' : ''}" onclick="App.toggleMeal('dinner')">${iqIcon('sunset')} Dinner</div>
+        <button type="button" class="meal-item ${h.meals.breakfast ? 'eaten' : ''}" aria-pressed="${!!h.meals.breakfast}" onclick="App.toggleMeal('breakfast')">${iqIcon('sunrise')} Breakfast</button>
+        <button type="button" class="meal-item ${h.meals.lunch ? 'eaten' : ''}" aria-pressed="${!!h.meals.lunch}" onclick="App.toggleMeal('lunch')">${iqIcon('sun')} Lunch</button>
+        <button type="button" class="meal-item ${h.meals.dinner ? 'eaten' : ''}" aria-pressed="${!!h.meals.dinner}" onclick="App.toggleMeal('dinner')">${iqIcon('sunset')} Dinner</button>
       </div>
     </div>`;
 

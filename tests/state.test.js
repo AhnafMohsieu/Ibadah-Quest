@@ -31,6 +31,9 @@ test('loadState migrates into existing saves', () => {
   assert.strictEqual(p.muhWeek, '');
   assert.deepEqual(p.journeys, {});
   assert.strictEqual(p.xp, 500);
+  assert.strictEqual(p.log['2026-08-03'].p.fajr, true);
+  assert.strictEqual(p.log['2026-08-03'].p.Fajr, undefined);
+  assert.strictEqual(p.schemaVersion, 2);
 });
 
 test('saveState writes to both IDB and localStorage', () => {
@@ -71,4 +74,24 @@ test('loadState merges new growthSettings.visible items into existing saves', ()
   assert.ok(p.growthSettings.visible.includes('garden'), 'keeps existing');
   assert.ok(p.growthSettings.visible.includes('ramadan'), 'adds new ramadan');
   assert.ok(p.growthSettings.visible.includes('laylat'), 'adds new laylat');
+});
+
+test('loadStateAsync prefers IndexedDB when it has a saved state', async () => {
+  let requestedUser = null;
+  const fakeStorage = {
+    load: async (user) => {
+      requestedUser = user;
+      return { xp: 900, log: {} };
+    },
+    save: async () => {}
+  };
+  const { localStorage } = makeStore({ iq9_user_default: JSON.stringify({ xp: 10 }) });
+  const sb = loadFile(path.join(__dirname, '..', 'state', 'state.js'), {
+    localStorage,
+    window: { Storage: fakeStorage }
+  });
+  const p = await sb.window.loadStateAsync();
+  assert.strictEqual(requestedUser, 'default');
+  assert.strictEqual(p.xp, 900);
+  assert.deepEqual(p.log, {});
 });

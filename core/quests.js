@@ -1,9 +1,9 @@
 (function() {
-  function genDQ() { const t=today(); if(S.qd===t&&S.dq.length) return; const l=tlog(); S.dq=[...DQUESTS].sort(()=>Math.random()-0.5).slice(0,4).map(q=>{ const o=DQUESTS.find(x=>x.id===q.id); return {...q, done:!!(o&&o.c(S,l))}; }); S.qd=t; }
-  function genWQ() { const w=ws(); if(S.wqd===w&&S.wq.length) return; S.wq=[...WQUESTS].sort(()=>Math.random()-0.5).slice(0,5).map(q=>{ const o=WQUESTS.find(x=>x.id===q.id); return {...q, done:!!(o&&o.c(S))}; }); S.wqd=w; }
-  function genMQ() { const m=ms(); if(S.mqd===m&&S.mq.length) return; S.mq=[...MQUESTS].sort(()=>Math.random()-0.5).slice(0,5).map(q=>{ const o=MQUESTS.find(x=>x.id===q.id); return {...q, done:!!(o&&o.c(S))}; }); S.mqd=m; }
-  function genYQ() { const y=ys(); if(S.yqd===y&&S.yq.length) return; S.yq=[...YQUESTS].sort(()=>Math.random()-0.5).slice(0,5).map(q=>{ const o=YQUESTS.find(x=>x.id===q.id); return {...q, done:!!(o&&o.c(S))}; }); S.yqd=y; }
-  function genLQ() { if(!S.lq) S.lq=[]; const existing=new Set(S.lq.map(q=>q.id)); for(const q of LQUESTS) if(!existing.has(q.id)) S.lq.push({...q, done:!!q.c(S)}); S.lqd='set'; }
+  function genDQ() { const t=today(); if(S.qd===t&&S.dq.length) return; const l=tlog(); S.dq=[...DQUESTS].sort(()=>Math.random()-0.5).slice(0,4).map(q=>{ const o=DQUESTS.find(x=>x.id===q.id); return {id:q.id,d:q.d,xp:q.xp,done:!!(o&&o.c(S,l))}; }); S.qd=t; }
+  function genWQ() { const w=ws(); if(S.wqd===w&&S.wq.length) return; S.wq=[...WQUESTS].sort(()=>Math.random()-0.5).slice(0,5).map(q=>{ const o=WQUESTS.find(x=>x.id===q.id); return {id:q.id,d:q.d,xp:q.xp,done:!!(o&&o.c(S))}; }); S.wqd=w; }
+  function genMQ() { const m=ms(); if(S.mqd===m&&S.mq.length) return; S.mq=[...MQUESTS].sort(()=>Math.random()-0.5).slice(0,7).map(q=>{ const o=MQUESTS.find(x=>x.id===q.id); return {id:q.id,d:q.d,xp:q.xp,done:!!(o&&o.c(S))}; }); S.mqd=m; }
+  function genYQ() { const y=ys(); if(S.yqd===y&&S.yq.length) return; S.yq=[...YQUESTS].sort(()=>Math.random()-0.5).slice(0,10).map(q=>{ const o=YQUESTS.find(x=>x.id===q.id); return {id:q.id,d:q.d,xp:q.xp,done:!!(o&&o.c(S))}; }); S.yqd=y; }
+  function genLQ() { if(!S.lq) S.lq=[]; const existing=new Set(S.lq.map(q=>q.id)); for(const q of LQUESTS) if(!existing.has(q.id)) S.lq.push({id:q.id,d:q.d,xp:q.xp,done:!!q.c(S)}); S.lqd='set'; }
   function checkQ() {
     let u=false; const l=tlog(); const oldLv=S.lv;
     for(const q of S.dq){ const o=DQUESTS.find(x=>x.id===q.id); if(o&&!q.done&&o.c(S,l)){ q.done=true; S.xp+=q.xp; S.tq++; trackQuestXP('daily',q.xp); u=true; } }

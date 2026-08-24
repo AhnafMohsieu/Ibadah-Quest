@@ -113,12 +113,33 @@
   }
 
   const PRAYER_CACHE_KEY = 'iq9_prayer_times';
-  const DHAKA_LAT = 23.8103, DHAKA_LNG = 90.4125;
-  const PRAYER_METHOD = 1;
+  const DEFAULT_PRAYER_SETTINGS = { lat: 23.8103, lng: 90.4125, label: 'Dhaka', method: 1 };
+
+  function getPrayerSettings() {
+    const saved = (typeof S === 'object' && S.prayerSettings) || {};
+    const lat = Number(saved.lat), lng = Number(saved.lng), method = Number(saved.method);
+    return {
+      lat: Number.isFinite(lat) && lat >= -90 && lat <= 90 ? lat : DEFAULT_PRAYER_SETTINGS.lat,
+      lng: Number.isFinite(lng) && lng >= -180 && lng <= 180 ? lng : DEFAULT_PRAYER_SETTINGS.lng,
+      label: typeof saved.label === 'string' && saved.label.trim() ? saved.label.trim() : DEFAULT_PRAYER_SETTINGS.label,
+      method: Number.isFinite(method) && method > 0 ? method : DEFAULT_PRAYER_SETTINGS.method
+    };
+  }
+
+  function prayerCacheKey() {
+    const p = getPrayerSettings();
+    return PRAYER_CACHE_KEY + '_' + p.lat.toFixed(3) + '_' + p.lng.toFixed(3) + '_' + p.method;
+  }
+
+  let prayerTimesRequest = null;
+
+  function safePrayerText(value) {
+    return typeof window.escapeHTML === 'function' ? window.escapeHTML(value) : String(value == null ? '' : value).replace(/[&<>\"']/g, function(ch) { return {'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',"'":'&#39;'}[ch]; });
+  }
 
   function getPrayerTimesFromCache() {
     try {
-      const raw = localStorage.getItem(PRAYER_CACHE_KEY);
+      const raw = localStorage.getItem(prayerCacheKey());
       if (!raw) return null;
       const cache = JSON.parse(raw);
       if (cache.date === today()) return cache.times;
@@ -128,7 +149,7 @@
 
   function setPrayerTimesCache(times) {
     try {
-      localStorage.setItem(PRAYER_CACHE_KEY, JSON.stringify({ date: today(), times }));
+      localStorage.setItem(prayerCacheKey(), JSON.stringify({ date: today(), times }));
     } catch(e) {}
   }
 
@@ -139,13 +160,21 @@
   }
 
   async function fetchPrayerTimes() {
+    if (prayerTimesRequest) return prayerTimesRequest;
+    prayerTimesRequest = fetchPrayerTimesInternal();
+    try { return await prayerTimesRequest; } finally { prayerTimesRequest = null; }
+  }
+
+  async function fetchPrayerTimesInternal() {
     const cached = getPrayerTimesFromCache();
     if (cached) return cached;
+    const settings = getPrayerSettings();
     const d = new Date();
     const dateStr = String(d.getDate()).padStart(2,'0') + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + d.getFullYear();
-    const url = `https://api.aladhan.com/v1/timings/${dateStr}?latitude=${DHAKA_LAT}&longitude=${DHAKA_LNG}&method=${PRAYER_METHOD}`;
+    const url = `https://api.aladhan.com/v1/timings/${dateStr}?latitude=${settings.lat}&longitude=${settings.lng}&method=${settings.method}`;
     try {
       const res = await fetch(url);
+      if (res && res.ok === false) throw new Error('Prayer times request failed');
       const json = await res.json();
       if (json.code === 200 && json.data && json.data.timings) {
         const t = json.data.timings;
@@ -189,7 +218,11 @@
         const t = times[name];
         if (t && (t.h * 60 + t.m) > nowMin) { nextPrayer = name; break; }
       }
-      el.innerHTML = '<div class="prayer-times-grid">' + prayerNames.map(name => {
+      const settings = getPrayerSettings();
+      const locateButton = typeof navigator !== 'undefined' && navigator.geolocation
+        ? '<button class="shop-card" type="button" onclick="useCurrentPrayerLocation()" style="padding:7px 10px;font-size:0.75rem;">Use my location</button>'
+        : '';
+      el.innerHTML = `<div style="display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px;color:var(--text2);font-size:0.8rem;"><span>Location: ${safePrayerText(settings.label)}</span>${locateButton}</div><div class="prayer-times-grid">` + prayerNames.map(name => {
         const t = times[name];
         if (!t) return '';
         const ampm = t.h >= 12 ? 'PM' : 'AM';
@@ -205,12 +238,35 @@
     });
   }
 
+  function useCurrentPrayerLocation() {
+    if (typeof navigator === 'undefined' || !navigator.geolocation) {
+      if (typeof toast === 'function') toast(iqIcon('map-pin'), 'Location is not available in this browser.');
+      return;
+    }
+    navigator.geolocation.getCurrentPosition(function(position) {
+      const coords = position.coords;
+      S.prayerSettings = {
+        lat: coords.latitude,
+        lng: coords.longitude,
+        label: 'Current location',
+        method: getPrayerSettings().method
+      };
+      saveState();
+      renderPrayerTimes();
+      renderTimer();
+      if (typeof toast === 'function') toast(iqIcon('map-pin'), 'Prayer times updated for your location.');
+    }, function() {
+      if (typeof toast === 'function') toast(iqIcon('map-pin-off'), 'Unable to access your location.');
+    }, { enableHighAccuracy: false, maximumAge: 86400000, timeout: 10000 });
+  }
+
   function renderTimer() {
     if (window.timerInt) clearInterval(window.timerInt);
     function tick(times) {
       const now = new Date();
       const nowMin = now.getHours() * 60 + now.getMinutes();
       const prayers = ['Fajr','Dhuhr','Asr','Maghrib','Isha'].map(n => ({ n, ...times[n] })).filter(p => p.h != null);
+      if (!prayers.length) return;
       let next = null;
       for (const p of prayers) {
         const pMin = p.h * 60 + p.m;
@@ -242,4 +298,5 @@
   window.fetchPrayerTimes = fetchPrayerTimes;
   window.renderPrayerTimes = renderPrayerTimes;
   window.renderTimer = renderTimer;
+  window.useCurrentPrayerLocation = useCurrentPrayerLocation;
 })();

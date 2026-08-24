@@ -27,8 +27,11 @@ function loadSandbox(files, globals) {
 
 test('toggleNotifications updates state', () => {
   const state = { notificationsEnabled: false };
+  const notification = { permission: 'granted' };
   const sandbox = loadSandbox(['features/notifications.js'], {
     S: state,
+    Notification: notification,
+    window: { Notification: notification },
     saveState: () => {},
     toast: () => {},
     iqIcon: () => '🔔'

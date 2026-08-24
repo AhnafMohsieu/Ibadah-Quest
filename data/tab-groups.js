@@ -25,7 +25,6 @@ const TAB_GROUPS = {
       tabs: [
         { id: 'wudu', label: 'Ablution' },
         { id: 'salah', label: 'Prayer Guide' },
-        { id: 'tafsir', label: 'Interpretation' },
         { id: 'sunnahs', label: 'Prophetic Ways' },
         { id: 'extradeeds', label: 'Extra Deeds' },
         { id: 'volprayers', label: 'Vol. Prayers' }
@@ -51,7 +50,9 @@ const TAB_GROUPS = {
       id: 'quran_sunnah', label: "Qur'an & Sunnah",
       tabs: [
         { id: 'quran', label: 'Quran' },
-        { id: 'hadith', label: 'Hadith' }
+        { id: 'hadith', label: 'Hadith' },
+        { id: 'tafsir', label: 'Interpretation' },
+        { id: 'seerah', label: 'Biography' }
       ]
     },
     {
@@ -69,15 +70,9 @@ const TAB_GROUPS = {
       ]
     },
     {
-      id: 'creed', label: 'Aqeedah & Creed',
-      tabs: [
-        { id: 'aqeedah', label: 'Aqeedah' },
-        { id: 'arabic', label: 'Arabic' }
-      ]
-    },
-    {
       id: 'heart', label: 'Heart & Soul',
       tabs: [
+        { id: 'aqeedah', label: 'Aqeedah' },
         { id: 'heart', label: 'Heart Diseases' },
         { id: 'ikhlas', label: 'Sincerity' },
         { id: 'tawakkul', label: 'Reliance' },
@@ -87,13 +82,15 @@ const TAB_GROUPS = {
         { id: 'repentance', label: 'Repentance' },
         { id: 'zuhd', label: 'Asceticism' },
         { id: 'inspirations', label: 'Inspirations' },
+        { id: 'stories', label: 'Stories' },
         { id: 'sufism', label: 'Sufism' },
         { id: 'tazkiyah', label: 'Tazkiyah' },
         { id: 'fear', label: 'Fear of Allah' },
         { id: 'hope', label: 'Hope' },
         { id: 'loveofallah', label: 'Love of Allah' },
         { id: 'contentment', label: 'Contentment' },
-        { id: 'reflection', label: 'Reflection' }
+        { id: 'reflection', label: 'Reflection' },
+        { id: 'dreams', label: 'Dreams' }
       ]
     },
     {
@@ -136,18 +133,7 @@ const TAB_GROUPS = {
         { id: 'politics', label: 'Politics' },
         { id: 'green', label: 'Green Islam' },
         { id: 'mentalhealth', label: 'Mental Health' },
-        { id: 'education', label: 'Education' }
-      ]
-    },
-    {
-      id: 'history', label: 'History & Seerah',
-      tabs: [
-        { id: 'seerah', label: 'Biography' },
-        { id: 'sahaba', label: 'Companions' },
-        { id: 'prophets', label: 'Prophets' },
-        { id: 'women', label: 'Great Women' },
-        { id: 'stories', label: 'Stories' },
-        { id: 'battles', label: 'Battles' },
+        { id: 'education', label: 'Education' },
         { id: 'science', label: 'Science' }
       ]
     },
@@ -158,26 +144,27 @@ const TAB_GROUPS = {
         { id: 'jannah', label: 'Paradise' },
         { id: 'jahannam', label: 'Hellfire' },
         { id: 'grave', label: 'The Grave' },
-        { id: 'signs', label: 'Signs of Qiyamah' },
-        { id: 'hajj', label: 'Pilgrimage' },
-        { id: 'dreams', label: 'Islamic Dreams' }
+        { id: 'signs', label: 'Signs of Qiyamah' }
       ]
     }
   ],
 
   names_main: [
     { id: 'allah_names', label: "Allah's Names" },
-    { id: 'scholars_names', label: 'Great Scholars' }
+    { id: 'prophets', label: 'Prophets' },
+    { id: 'scholars_names', label: 'Great Scholars' },
+    { id: 'sahaba', label: 'Companions' },
+    { id: 'women', label: 'Great Women' }
   ],
 
   // -- LIBRARY (categorized -- reference shelves) --
   library: [
     {
-      id: 'dynasties', label: 'Dynasties',
+      id: 'dynasties', label: 'Dynasties & Battles',
       tabs: [
         { id: 'umayyads', label: 'Umayyads' }, { id: 'abbasids', label: 'Abbasids' }, { id: 'andalus', label: 'Andalus' }, { id: 'ottomans', label: 'Ottomans' },
         { id: 'mamluks', label: 'Mamluks' }, { id: 'seljuks', label: 'Seljuks' }, { id: 'fatimids', label: 'Fatimids' }, { id: 'ayyubids', label: 'Ayyubids' },
-        { id: 'modernhist', label: 'Modern Hist.' }, { id: 'ancientprophets', label: 'Ancient' }
+        { id: 'modernhist', label: 'Modern Hist.' }, { id: 'ancientprophets', label: 'Ancient' }, { id: 'battles', label: 'Battles' }, { id: 'civilisation', label: 'Civilisation' }
       ]
     },
     {
@@ -199,6 +186,7 @@ const TAB_GROUPS = {
     {
       id: 'arabic_lang', label: 'Arabic Language',
       tabs: [
+        { id: 'arabic', label: 'Alphabet' },
         { id: 'arabicgrammar', label: 'Grammar' }, { id: 'vocab', label: 'Vocab' }, { id: 'rhetoric', label: 'Rhetoric' }, { id: 'morphology', label: 'Morphology' },
         { id: 'pronunciation', label: 'Tajweed' }, { id: 'poetry', label: 'Poetry' }, { id: 'proverbs', label: 'Proverbs' }, { id: 'etymology', label: 'Etymology' },
         { id: 'dialects', label: 'Dialects' }, { id: 'scripts', label: 'Scripts' }

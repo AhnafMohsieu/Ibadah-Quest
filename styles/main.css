@@ -13,7 +13,7 @@
   --shadow-lg: 0 4px 16px rgba(0,0,0,0.08);
   --text: #1a1a2e;
   --text2: #6b7280;
-  --text3: #82828d;
+  --text3: #71717a;
   --accent: #c9a84c;
   --accent-light: #d4b96a;
   --accent-dark: #b8952f;
@@ -72,6 +72,10 @@
   --font-heading: 'Sora', system-ui, sans-serif;
   --transition: 150ms cubic-bezier(0.4, 0, 0.2, 1);
 }
+
+/* ── Fluid Typography Scale ── */
+/* Mobile: 16px base, Desktop: 16px base with fluid scaling */
+/* Using clamp(min, preferred, max) for smooth transitions */
 
 /* ── Reset ── */
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
@@ -196,8 +200,25 @@ html[data-theme="light"] .theme-toggle-thumb { transform: translateX(20px); }
   background: linear-gradient(90deg, var(--accent-dark), var(--accent));
   transition: width 0.6s cubic-bezier(0.34,1.56,0.64,1);
   will-change: width;
+  box-shadow: 0 0 8px var(--accent-pulse), 0 0 16px var(--accent-pulse);
+  position: relative;
+  overflow: hidden;
 }
-.xp-inner::after { display: none; }
+.xp-inner::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+  border-radius: 6px;
+  animation: xpShimmer 2s ease-in-out infinite;
+}
+@keyframes xpShimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
 .xp-label { font-size: 0.72rem; color: var(--text2); text-align: center; margin-top: 6px; font-weight: 500; }
 
 /* ── Streak Bar ── */
@@ -263,7 +284,7 @@ html[data-theme="light"] .theme-toggle-thumb { transform: translateX(20px); }
   background: transparent;
   color: var(--text2);
   border: none;
-  font-size: 1.05rem;
+  font-size: clamp(0.95rem, 2.5vw, 1.05rem);
   font-weight: 700;
   padding: 12px 6px;
   cursor: pointer;
@@ -291,9 +312,9 @@ html[data-theme="light"] .theme-toggle-thumb { transform: translateX(20px); }
   background: var(--bg-accent);
   border: 1px solid var(--border);
   color: var(--text2);
-  padding: 8px 6px;
+  padding: 10px 6px;
   border-radius: var(--radius-sm);
-  font-size: 0.78rem;
+  font-size: clamp(0.72rem, 1.8vw, 0.78rem);
   font-weight: 600;
   cursor: pointer;
   transition: all var(--transition);
@@ -304,6 +325,7 @@ html[data-theme="light"] .theme-toggle-thumb { transform: translateX(20px); }
   white-space: nowrap;
   user-select: none;
   min-width: 0;
+  min-height: 44px;
 }
 .t2-btn span { font-size: 1.25rem; opacity: 0.9; }
 .t2-btn:hover { color: var(--text); border-color: var(--text3); }
@@ -337,9 +359,9 @@ html[data-theme="light"] .theme-toggle-thumb { transform: translateX(20px); }
   background: var(--bg-accent);
   border: 1px solid var(--border);
   color: var(--text2);
-  padding: 8px 6px;
+  padding: 10px 6px;
   border-radius: var(--radius-sm);
-  font-size: 0.7rem;
+  font-size: clamp(0.65rem, 1.7vw, 0.7rem);
   font-weight: 600;
   cursor: pointer;
   transition: all var(--transition);
@@ -349,6 +371,7 @@ html[data-theme="light"] .theme-toggle-thumb { transform: translateX(20px); }
   gap: 3px;
   white-space: nowrap;
   min-width: 0;
+  min-height: 44px;
 }
 .t3-btn span { font-size: 1.15rem; opacity: 0.9; }
 .t3-btn:hover { color: var(--text); border-color: var(--text3); }
@@ -383,12 +406,18 @@ html[data-theme="light"] .theme-toggle-thumb { transform: translateX(20px); }
 .skeleton-title { height: 20px; margin-bottom: 12px; width: 60%; }
 .skeleton-card { height: 80px; margin-bottom: 8px; }
 .skeleton-circle { width: 40px; height: 40px; border-radius: 50%; }
+.skeleton-prayer { height: 60px; margin-bottom: 8px; border-radius: var(--radius); }
+.skeleton-achievement { height: 100px; margin-bottom: 8px; border-radius: var(--radius); }
+.skeleton-nav { height: 44px; margin-bottom: 8px; border-radius: var(--radius-sm); }
+.skeleton-progress { height: 8px; margin-bottom: 8px; border-radius: 4px; }
+.skeleton-avatar { width: 48px; height: 48px; border-radius: 50%; }
+.skeleton-badge { width: 60px; height: 24px; border-radius: 12px; }
 @keyframes skeleton-shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
 
 /* ── Section Titles ── */
 .section-title {
   font-family: var(--font-heading);
-  font-size: 0.85rem;
+  font-size: clamp(0.8rem, 2vw, 0.85rem);
   font-weight: 600;
   color: var(--text2);
   margin: 20px 0 10px;
@@ -429,7 +458,7 @@ html[data-theme="light"] .theme-toggle-thumb { transform: translateX(20px); }
 }
 .card-grid .card-item .card-icon { font-size: 1.6rem; line-height: 1; display: flex; align-items: center; justify-content: center; }
 .card-grid .card-item .card-icon svg { width: 40px; height: 40px; }
-.card-grid .card-item .card-name { font-weight: 600; font-size: 0.78rem; color: var(--text); line-height: 1.3; }
+.card-grid .card-item .card-name { font-weight: 600; font-size: clamp(0.75rem, 2vw, 0.78rem); color: var(--text); line-height: 1.3; }
 .card-grid .card-item .card-sub { font-size: 0.7rem; color: var(--text2); }
 .card-grid .card-item .card-xp {
   font-size: 0.7rem;
@@ -493,8 +522,8 @@ html[data-theme="light"] .theme-toggle-thumb { transform: translateX(20px); }
 }
 
 .prayer-check {
-  width: 36px;
-  height: 36px;
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
   border: 2px solid var(--border);
   display: flex;
@@ -512,7 +541,7 @@ html[data-theme="light"] .theme-toggle-thumb { transform: translateX(20px); }
 }
 
 .prayer-info { flex: 1; }
-.prayer-name { font-weight: 600; font-size: 0.95rem; color: var(--text); }
+.prayer-name { font-weight: 600; font-size: clamp(0.9rem, 2.5vw, 0.95rem); color: var(--text); }
 .prayer-time { font-size: 0.7rem; color: var(--text2); margin-top: 2px; letter-spacing: 0.5px; text-transform: uppercase; }
 .prayer-xp {
   font-weight: 600;
@@ -529,7 +558,7 @@ html[data-theme="light"] .theme-toggle-thumb { transform: translateX(20px); }
 .deeds-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 8px; }
 .deed-card { flex-direction: column; text-align: center; padding: 16px 12px; gap: 8px; }
 .deed-icon { font-size: 1.8rem; opacity: 0.9; }
-.deed-name { font-weight: 500; font-size: 0.82rem; color: var(--text); line-height: 1.4; }
+.deed-name { font-weight: 500; font-size: clamp(0.78rem, 2vw, 0.82rem); color: var(--text); line-height: 1.4; }
 .deed-xp { font-size: 0.7rem; color: var(--accent-dark); font-weight: 600; }
 
 /* ── Content Cards ── */
@@ -558,7 +587,7 @@ html[data-theme="light"] .theme-toggle-thumb { transform: translateX(20px); }
   color: var(--accent);
   text-shadow: none;
 }
-.content-english { font-size: 0.88rem; line-height: 1.6; color: var(--text2); }
+.content-english { font-size: clamp(0.82rem, 2.2vw, 0.88rem); line-height: 1.6; color: var(--text2); }
 .name-card { align-items: center; text-align: center; }
 .name-card .name-an { color: var(--accent); font-size: clamp(1.5rem, 3.5vw, 2rem); text-align: center; margin: 4px 0 2px; }
 .name-roman { font-size: 0.95rem; font-weight: 700; color: var(--accent-dark); letter-spacing: 1px; margin-bottom: 4px; text-transform: uppercase; }
@@ -575,7 +604,7 @@ html[data-theme="light"] .theme-toggle-thumb { transform: translateX(20px); }
   background: var(--card-bg);
   border: 1px solid var(--card-border);
   border-radius: var(--radius);
-  padding: 10px 8px;
+  padding: 12px 8px;
   text-align: center;
   cursor: pointer;
   display: flex;
@@ -584,6 +613,7 @@ html[data-theme="light"] .theme-toggle-thumb { transform: translateX(20px); }
   gap: 4px;
   position: relative;
   transition: all var(--transition);
+  min-height: 44px;
 }
 .cat-card:hover { border-color: var(--text3); }
 .cat-card.expanded { border-color: var(--accent-border); background: var(--accent-bg); }
@@ -633,7 +663,7 @@ html[data-theme="light"] .theme-toggle-thumb { transform: translateX(20px); }
   background: var(--card-bg);
   border: 1px solid var(--card-border);
   border-radius: var(--radius);
-  padding: 10px 8px;
+  padding: 12px 8px;
   text-align: center;
   display: flex;
   flex-direction: column;
@@ -641,6 +671,7 @@ html[data-theme="light"] .theme-toggle-thumb { transform: translateX(20px); }
   gap: 4px;
   position: relative;
   transition: border-color var(--transition);
+  min-height: 44px;
 }
 .prayer-times-grid .pt-card:hover { border-color: var(--text3); }
 .prayer-times-grid .pt-card.next-prayer {
@@ -764,8 +795,8 @@ html[data-theme="light"] .theme-toggle-thumb { transform: translateX(20px); }
   color: var(--accent-dark);
 }
 .ach-card .ach-icon { font-size: 1.5rem; }
-.ach-name { font-weight: 600; font-size: 0.72rem; color: var(--text); line-height: 1.2; }
-.ach-desc { font-size: 0.68rem; color: var(--text2); line-height: 1.2; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.ach-name { font-weight: 600; font-size: clamp(0.68rem, 1.8vw, 0.72rem); color: var(--text); line-height: 1.2; }
+.ach-desc { font-size: clamp(0.65rem, 1.7vw, 0.68rem); color: var(--text2); line-height: 1.2; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 .ach-empty { text-align: center; padding: 32px 16px; color: var(--text2); font-size: 0.85rem; grid-column: 1 / -1; }
 
 /* ── Shop ── */
@@ -1336,6 +1367,11 @@ select.profile-input option { background: var(--card-bg); color: var(--text); }
   display: flex;
   align-items: center;
   gap: 6px;
+  width: 100%;
+  border: 0;
+  background: transparent;
+  text-align: left;
+  font-family: inherit;
 }
 .gs-item:hover, .gs-item.active { background: var(--accent-bg); }
 .gs-item .iq-icon { width: 12px; height: 12px; flex-shrink: 0; }
@@ -1379,10 +1415,11 @@ select.profile-input option { background: var(--card-bg); color: var(--text); }
   background: var(--card-bg);
   border: 1px solid var(--card-border);
   border-radius: 20px;
-  padding: 6px 12px 6px 10px;
+  padding: 8px 14px 8px 12px;
   cursor: pointer;
   transition: border-color var(--transition);
   white-space: nowrap;
+  min-height: 44px;
 }
 .fab-action:hover { border-color: var(--text3); }
 .fab-action-icon { width: 20px; height: 20px; }
@@ -1457,6 +1494,7 @@ select.profile-input option { background: var(--card-bg); color: var(--text); }
   transition: all var(--transition);
   text-decoration: none;
   flex-shrink: 0;
+  margin-left: auto;
 }
 .verify-btn:hover { background: var(--accent); color: var(--on-accent); border-color: var(--accent); }
 .verify-btn::after { content: ''; display: inline-block; width: 10px; height: 10px; background: currentColor; mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M19 19H5V5h7V3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z'/%3E%3C/svg%3E") center/contain no-repeat; -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M19 19H5V5h7V3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z'/%3E%3C/svg%3E") center/contain no-repeat; }
@@ -1956,6 +1994,10 @@ select.profile-input option { background: var(--card-bg); color: var(--text); }
   cursor: pointer;
   opacity: 0.5;
   transition: all var(--transition);
+  border: 0;
+  font: inherit;
+  color: inherit;
+  width: 100%;
 }
 .water-glass.filled { opacity: 1; background: var(--water-bg); }
 .water-glass:hover { opacity: 0.75; background: var(--accent-bg); }
@@ -1967,6 +2009,10 @@ select.profile-input option { background: var(--card-bg); color: var(--text); }
   background: var(--bg-accent);
   cursor: pointer;
   transition: all var(--transition);
+  border: 0;
+  font: inherit;
+  color: inherit;
+  width: 100%;
 }
 .meal-item.eaten { background: var(--green-bg); border: 1px solid var(--green-border); }
 .meal-item:hover { background: var(--accent-bg); }
@@ -2482,6 +2528,77 @@ select.profile-input option { background: var(--card-bg); color: var(--text); }
 .skip-link:focus { top: 0; }
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
 .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+
+/* Enhanced focus styles for interactive elements */
+button:focus-visible,
+[role="button"]:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px var(--accent-bg);
+}
+
+/* Focus styles for navigation */
+.bnav-btn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}
+
+/* Focus styles for cards */
+.card-grid .card-item:focus-visible,
+.vol-card:focus-visible,
+.deed-card:focus-visible,
+.quest-row:focus-visible,
+.shop-card:focus-visible,
+.prayer-card:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px var(--accent-bg);
+}
+
+/* Focus styles for form elements */
+.profile-input:focus-visible,
+.global-search:focus-visible,
+.quran-search:focus-visible {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-bg);
+}
+
+/* Focus styles for toggle elements */
+.theme-toggle:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 12px;
+}
+
+/* Focus styles for FAB */
+.fab-main:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px var(--accent-bg);
+}
+
+/* Focus styles for modals and overlays */
+.modal-box:focus-visible,
+.muh-card:focus-visible,
+.onboarding-card:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* High contrast mode support */
+@media (forced-colors: active) {
+  :focus-visible {
+    outline: 2px solid ButtonText;
+    outline-offset: 2px;
+  }
+}
+
+/* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
 }

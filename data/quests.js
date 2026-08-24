@@ -1,3 +1,22 @@
+function countSitTaps(s, dateStr) {
+  if (!s.situationalXp) return 0;
+  let total = 0;
+  Object.keys(s.situationalXp).forEach(function(k) {
+    if (k.endsWith('|' + dateStr)) total += s.situationalXp[k];
+  });
+  return total;
+}
+function countSitTapsRange(s, start, end) {
+  if (!s.situationalXp) return 0;
+  let total = 0;
+  Object.keys(s.situationalXp).forEach(function(k) {
+    const parts = k.split('|');
+    const date = parts[parts.length - 1];
+    if (date >= start && date <= end) total += s.situationalXp[k];
+  });
+  return total;
+}
+
 const DQUESTS = [
   { id:'dq1', d:'Complete Fajr & Isha',          c: (s,l) => l.p?.fajr && l.p?.isha, xp:55 },
   { id:'dq2', d:'Do 3 extra deeds',               c: (s,l) => Object.values(l.d||{}).filter(v=>v).length>=3, xp:50 },
@@ -13,7 +32,9 @@ const DQUESTS = [
   { id:'dq12',d:'Smile (Sunnah)',                 c: (s,l) => l.d?.smile, xp:25 },
   { id:'dq13',d:'Help parents/family',            c: (s,l) => l.d?.family, xp:40 },
   { id:'dq14',d:'Avoid useless talk',             c: (s,l) => l.d?.silence, xp:55 },
-  { id:'dq15',d:'Make specific dua for others',   c: (s,l) => l.d?.dua, xp:50 }
+  { id:'dq15',d:'Make specific dua for others',   c: (s,l) => l.d?.dua, xp:50 },
+  { id:'dq16',d:'Tap 5 situational dhikr',        c: (s,l) => countSitTaps(s,today())>=5, xp:45 },
+  { id:'dq17',d:'Use 3 different dhikr categories', c: (s,l) => { if(!s.situationalXp) return false; const cats=new Set(); Object.keys(s.situationalXp).forEach(k=>{if(k.endsWith('|'+today()))cats.add(k.split('_')[0]);}); return cats.size>=3; }, xp:50 }
 ];
 
 const WQUESTS = [
@@ -24,7 +45,9 @@ const WQUESTS = [
   { id:'w5', d:'Pray Witr 5 times',        c: s => cvl(s,'witr',ws(),we())>=5, xp:250 },
   { id:'w6', d:'Fasting 1 day (Mon/Thu)',  c: s => Object.keys(s.fastingDays||{}).filter(dk=>dk>=ws()&&dk<=we()&&s.fastingDays[dk]).length>=1, xp:350 },
   { id:'w7', d:'Read Surah Kahf (Friday)', c: s => cvl(s,'kahf',ws(),we())>=1, xp:250 },
-  { id:'w8', d:'Maintain 7-day streak',    c: s => s.cs >= 7, xp:300 }
+  { id:'w8', d:'Maintain 7-day streak',    c: s => s.cs >= 7, xp:300 },
+  { id:'w9', d:'Tap 30 situational dhikr', c: s => countSitTapsRange(s,ws(),we())>=30, xp:350 },
+  { id:'w10',d:'Use all situational categories', c: s => { if(!s.situationalXp) return false; const cats=new Set(); Object.keys(s.situationalXp).forEach(k=>{const d=k.split('|')[1]; if(d>=ws()&&d<=we()) cats.add(k.split('_')[0]);}); return cats.size>=10; }, xp:400 }
 ];
 
 const MQUESTS = [

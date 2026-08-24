@@ -4,6 +4,7 @@ Offline-first Islamic worship tracker PWA. Vanilla JavaScript, no build step, no
 
 ## Before you finish any task
 
+- Maintain a live todo list (todowrite) while working; keep it updated as tasks start/finish.
 - Run `node --test` from the project root (~337 tests). All must pass.
 - Syntax-check every JS file you touched: `node --check <file>`.
 - If you changed any asset with a `?v=` version in index.html: bump the `?v=`, bump `CACHE_NAME` in sw.js, and update the pinned version in tests/html.test.js.

@@ -289,7 +289,7 @@ function renderAll() {
   }
   function renderProfile() {
     const achCnt = Object.keys(S.ua).length;
-    const avatar = S.avatar || '';
+    const avatar = String(S.avatar || '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
     const joinDate = S.joinDate ? new Date(S.joinDate).toLocaleDateString('en', { month: 'long', year: 'numeric' }) : null;
 
     let h = '<div class="section-title">Profile</div>';

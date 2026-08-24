@@ -1,4 +1,9 @@
 (function() {
+  function escapeHTML(value) {
+    return String(value == null ? '' : value).replace(/[&<>\"']/g, function(ch) {
+      return {'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',"'":'&#39;'}[ch];
+    });
+  }
   // -------------------------------------------------------
   // STATIC CONTENT RENDERING
   // -------------------------------------------------------
@@ -115,7 +120,22 @@
   function renderUmmah() { poolRender('ummahArea', iqIcon('globe') + ' The Muslim Ummah',UMMAH_POOL,'ummahIdx'); }
   function renderHajj() { poolRender('hajjArea', iqIcon('kaaba') + ' Hajj & Umrah',HAJJ_POOL,'hajjIdx'); }
   function renderAkhirah() { poolRender('akhirahArea', iqIcon('globe') + ' The Hereafter',AKHIRAH_POOL,'akhirahIdx'); }
-  function renderProphets() { poolRender('prophetsArea', iqIcon('book-open') + ' Stories of the Prophets',PROPHETS_POOL,'prophetsIdx',true); }
+  function renderProphets() {
+    const el = document.getElementById('prophetsArea');
+    if (!el) return;
+    let html = `<div class="section-title">${iqIcon('book-open')} Stories of the Prophets</div>`;
+    html += PROPHETS_POOL.map((o, i) => {
+      if (!o) return '';
+      const numBadge = `<span style="display:inline-block; background:var(--accent-bg); color:var(--accent-light); border:1px solid var(--accent-border); border-radius:12px; padding:0 8px; font-size:0.75rem; margin-right:8px; font-weight:800; height:22px; line-height:20px; white-space:nowrap; font-family:var(--font);">#${i + 1}</span>`;
+      return `<div class="content-card name-card">
+        <div style="align-self:flex-end; display:flex;">${numBadge}</div>
+        <div class="content-arabic name-an">${o.arabic || ''}</div>
+        <div class="name-roman">${o.name || ''}</div>
+        <div class="content-english" style="text-align:center;">${o.desc || ''}</div>
+      </div>`;
+    }).join('');
+    el.innerHTML = html;
+  }
   function renderWomen() { poolRender('womenArea', iqIcon('user') + ' Great Muslim Women',WOMEN_POOL,'womenIdx',true); }
   function renderKnowledge() { poolRender('knowledgeArea', iqIcon('book') + ' Seeking Knowledge',KNOWLEDGE_POOL,'knowledgeIdx'); }
   function renderHeart() { poolRender('heartArea', iqIcon('heart') + ' Diseases of the Heart',HEART_POOL,'heartIdx'); }
@@ -130,7 +150,7 @@
   function renderEnvironment() { poolRender('environmentArea', iqIcon('leaf') + ' Nature & Environment',ENVIRONMENT_POOL,'environmentIdx'); }
   function renderTravel() { poolRender('travelArea', iqIcon('plane') + ' Travel & Safar',TRAVEL_POOL,'travelIdx'); }
   function renderFiqh() { poolRender('fiqhArea', iqIcon('book-open') + ' Islamic Jurisprudence (Fiqh)',FIQH_POOL,'fiqhIdx'); }
-  function renderArabic() { poolRender('arabicArea', 'Learn Arabic',ARABIC_POOL,'arabicIdx',true); }
+  function renderArabic() { poolRender('arabicArea', iqIcon('book-open') + ' Arabic Alphabet',ARABIC_POOL.filter(function(o){return o.arabic && o.name;}),'arabicIdx',true); }
   function renderTawakkul() { poolRender('tawakkulArea', iqIcon('handshake') + ' Tawakkul · Trust in Allah',TAWAKKUL_POOL,'tawakkulIdx'); }
   function renderIkhlas() { poolRender('ikhlasArea', iqIcon('heart') + ' Ikhlas · Sincerity',IKHLAS_POOL,'ikhlasIdx'); }
   function renderZuhd() { poolRender('zuhdArea', iqIcon('sparkles') + ' Zuhd · Asceticism',ZUHD_POOL,'zuhdIdx'); }
@@ -230,13 +250,13 @@
   function renderSahaba() {
     const el = document.getElementById('sahabaArea');
     if (!el) return;
-    el.innerHTML = '<div class="section-title">' + iqIcon('users') + ' The Companions (Sahabah)</div>' + SAHABA_POOL.map(s => `<div class="content-card"><div style="font-weight:700;color:var(--accent-light);margin-bottom:6px;">${iqIcon('star')} ${s.title}</div><div class="content-english">${s.desc}</div></div>`).join('');
+    el.innerHTML = '<div class="section-title">' + iqIcon('users') + ' The Companions (Sahabah)</div>' + SAHABA_POOL.map((s,i) => `<div class="content-card"><div style="display:flex;align-items:flex-start;gap:10px;"><span style="display:inline-block;background:var(--accent-bg);color:var(--accent-light);border:1px solid var(--accent-border);border-radius:12px;padding:0 8px;font-size:0.75rem;font-weight:800;height:22px;line-height:20px;white-space:nowrap;font-family:var(--font);">#${i+1}</span><div style="flex:1;"><div style="font-weight:700;color:var(--accent-light);margin-bottom:6px;">${s.title}</div><div class="content-english">${s.desc}</div></div></div></div>`).join('');
   }
   function renderGratitude() {
     const dt = today(), entries = S.gratitudeLog[dt] || [];
     let h = '<div class="section-title">' + iqIcon('pencil') + ' Daily Gratitude Journal</div>';
     h += `<div style="background:var(--card2);border-radius:var(--radius);padding:16px;margin-bottom:16px;border:1px solid var(--border);">Today's entries (${entries.length}):</div>`;
-    entries.forEach((e,i) => h += `<div class="quest-row">${iqIcon('check')} ${i+1}. ${e}</div>`);
+    entries.forEach((e,i) => h += `<div class="quest-row">${iqIcon('check')} ${i+1}. ${escapeHTML(e)}</div>`);
     h += `<input class="profile-input" id="gratInput" placeholder="I am grateful for..."><button class="shop-card" onclick="App.addGratitude()" style="justify-content:center;width:100%;">${iqIcon('plus')} Add Entry</button>`;
     document.getElementById('gratitudeArea').innerHTML = h;
   }
@@ -268,7 +288,7 @@
     let h = '<div class="section-title">' + iqIcon('brain') + ' Memorization Tracker</div>';
     h += `<div class="stat-card" style="margin-bottom:16px;"><div class="stat-num">${S.memorized}</div><div>Surahs Memorized</div></div>`;
     h += `<input class="profile-input" id="memInput" placeholder="Surah name (e.g., Al-Fatiha)"><button class="shop-card" onclick="App.addMemorization()" style="justify-content:center;width:100%;">${iqIcon('plus')} Add Surah</button>`;
-    if (S.memorizationList.length) { h += '<div class="section-title" style="margin-top:20px;">' + iqIcon('clipboard') + ' Memorized List</div>'; S.memorizationList.forEach(s => h += `<div class="quest-row">${iqIcon('check')} ${s}</div>`); }
+    if (S.memorizationList.length) { h += '<div class="section-title" style="margin-top:20px;">' + iqIcon('clipboard') + ' Memorized List</div>'; S.memorizationList.forEach(s => h += `<div class="quest-row">${iqIcon('check')} ${escapeHTML(s)}</div>`); }
     document.getElementById('memorizationArea').innerHTML = h;
   }
   function addMemorization() { const inp=document.getElementById('memInput'); if(!inp?.value.trim()) return; S.memorizationList.push(inp.value.trim()); S.memorized++; inp.value=''; if (typeof window.grantCappedDailyXp === 'function') window.grantCappedDailyXp(3, 'memorization', 5); saveState(); renderMemorization(); checkA(); }
@@ -361,14 +381,27 @@
       let h = `<button class="quran-back-btn" onclick="App.situationalBack()">${iqIcon('arrow-left')} Back to Categories</button>`;
       h += `<div class="section-title">${iqIcon(cat.icon)} ${cat.label}</div>`;
       h += '<div style="display:flex;flex-direction:column;gap:12px;">';
-      cat.dhikr.forEach(function(item) {
-        h += `<div class="vol-card" style="cursor:default;">
-          <div class="prayer-info">
-            <div style="font-family:'Amiri',serif;font-size:1.3rem;margin-bottom:2px;color:var(--accent);line-height:1.4;">${item.arabic}</div>
-            ${item.roman ? '<div style="font-size:0.85rem;color:var(--text2);font-style:italic;margin-bottom:6px;opacity:0.9;">"' + item.roman + '"</div>' : ''}
-            <div class="prayer-name">${item.english}</div>
-            ${item.source ? '<div style="font-size:0.75rem;color:var(--text2);margin-top:4px;">' + iqIcon('book-open') + ' ' + item.source + '</div>' : ''}
-          </div>
+      const favs = S.sitFavs || [];
+      const sorted = cat.dhikr.map(function(item, idx) { return {item:item, idx:idx}; }).sort(function(a,b) {
+        const aFav = favs.includes(_situationalView + '_' + a.idx) ? 0 : 1;
+        const bFav = favs.includes(_situationalView + '_' + b.idx) ? 0 : 1;
+        return aFav - bFav;
+      });
+      sorted.forEach(function(entry) {
+        const item = entry.item, idx = entry.idx;
+        const dayKey = _situationalView + '_' + idx + '|' + today();
+        const tapCount = (S.situationalXp && S.situationalXp[dayKey]) || 0;
+        const maxed = tapCount >= 10;
+        const isFav = favs.includes(_situationalView + '_' + idx);
+        h += `<div class="vol-card" role="button" tabindex="0" aria-label="Tap ${escapeHTML(item.english)}" style="position:relative;cursor:pointer;${maxed ? 'opacity:0.6;' : ''}" onclick="App.tapSituationalDhikr('${_situationalView}',${idx})">
+            <button type="button" class="sit-fav-btn" aria-label="${isFav ? 'Remove from favorites' : 'Add to favorites'}" title="${isFav ? 'Unpin dhikr' : 'Pin dhikr'}" style="position:absolute;top:8px;right:8px;background:none;border:none;cursor:pointer;padding:6px;font-size:1rem;line-height:1;color:${isFav ? 'var(--accent)' : 'var(--text3)'};" onclick="event.stopPropagation();App.toggleSitFav('${_situationalView}',${idx})">${isFav ? iqIcon('star') : iqIcon('bookmark')}</button>
+            <div class="prayer-info">
+              <div style="font-family:'Amiri',serif;font-size:1.3rem;margin-bottom:2px;color:var(--accent);line-height:1.4;">${item.arabic}</div>
+              ${item.roman ? '<div style="font-size:0.85rem;color:var(--text2);font-style:italic;margin-bottom:6px;opacity:0.9;">"' + escapeHTML(item.roman) + '"</div>' : ''}
+              <div class="prayer-name">${escapeHTML(item.english)}</div>
+              ${item.source ? '<div style="font-size:0.75rem;color:var(--text2);margin-top:4px;">' + iqIcon('book-open') + ' ' + escapeHTML(item.source) + '</div>' : ''}
+            </div>
+            <div class="prayer-xp">+5 XP<br><span style="font-size:0.65rem;opacity:0.8;">${tapCount}/10</span></div>
         </div>`;
       });
       h += '</div>';
@@ -382,11 +415,18 @@
     h += '<div class="situational-grid">';
     keys.forEach(function(key) {
       const cat = SITUATIONAL_DHIKR[key];
-      h += '<div class="situational-card" onclick="App.openSituational(\'' + key + '\')">';
+      let totalTaps = 0;
+      if (S.situationalXp) {
+        cat.dhikr.forEach(function(_, idx) {
+          const dayKeys = Object.keys(S.situationalXp).filter(k => k.startsWith(key + '_' + idx + '|'));
+          dayKeys.forEach(function(dk) { totalTaps += S.situationalXp[dk]; });
+        });
+      }
+      h += '<button type="button" class="situational-card" onclick="App.openSituational(\'' + key + '\')" aria-label="Explore ' + cat.label + '">';
       h += '<div class="situational-icon">' + iqIcon(cat.icon) + '</div>';
       h += '<div class="situational-label">' + cat.label + '</div>';
-      h += '<div class="situational-count">' + cat.dhikr.length + ' dhikr</div>';
-      h += '</div>';
+      h += '<div class="situational-count">' + cat.dhikr.length + ' dhikr' + (totalTaps > 0 ? ' · ' + totalTaps + ' taps' : '') + '</div>';
+      h += '</button>';
     });
     h += '</div>';
     el.innerHTML = h;
@@ -574,4 +614,5 @@
   window.renderVolPrayers = renderVolPrayers;
   window.openVolPrayers = openVolPrayers;
   window.volPrayersBack = volPrayersBack;
+  window.escapeHTML = escapeHTML;
 })();

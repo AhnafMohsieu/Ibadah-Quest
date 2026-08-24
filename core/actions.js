@@ -10,10 +10,17 @@
     if(ms>0) ov._t=setTimeout(()=>{ ov.classList.remove('show'); setTimeout(()=>{ ov.style.display='none'; ov.innerHTML=''; },300); ov.style.pointerEvents='none'; },ms);
     ov.onclick=()=>{ ov.classList.remove('show'); setTimeout(()=>{ ov.style.display='none'; ov.innerHTML=''; },300); ov.style.pointerEvents='none'; if(ov._t) clearTimeout(ov._t); };
   }
+  window.toast = toast;
 
 
   function switchUser() { const inp=document.getElementById('usernameInput'); if(!inp?.value.trim()) return; saveState(); currentUser=inp.value.trim(); localStorage.setItem(USER_KEY,currentUser); S=window.loadState(); initApp(); }
-  function logout() { switchUser(); }
+  function logout() {
+    saveState();
+    currentUser = 'default';
+    try { localStorage.setItem(USER_KEY, currentUser); } catch (e) {}
+    S = window.loadState();
+    initApp();
+  }
   function resetAll() {
     if (!confirm(iqEmoji('alert-triangle') + ' Reset all data? This cannot be undone.')) return;
     const keys = [];
@@ -361,7 +368,7 @@ Object.keys(NEW_POOLS).forEach(k => {
 
   function initApp() {
   const overlay = document.getElementById('introOverlay');
-  const introSeen = S.introSeen;
+  const introSeen = S ? !!S.introSeen : true;
   if (overlay) {
     if (!introSeen) {
       overlay.style.display = 'flex';
@@ -370,6 +377,7 @@ Object.keys(NEW_POOLS).forEach(k => {
       overlay.classList.add('visible');
     } else {
       overlay.classList.remove('visible');
+      overlay.style.display = 'none';
       overlay.style.opacity = '0';
       overlay.style.pointerEvents = 'none';
     }
@@ -385,9 +393,17 @@ Object.keys(NEW_POOLS).forEach(k => {
   ];
 
     const t = today();
-    if (S.lad !== t) { S.lad=t; if(S.ab&&S.ab.exp<t) S.ab=null; window.recalc(); saveState(); }
+    if (S.lad !== t) { S.lad=t; if(S.ab&&S.ab.exp<t) S.ab=null; if (typeof window.recalc === 'function') window.recalc(); saveState(); }
     if (S.log && Object.keys(S.log).length > 400) compactLogs();
-    genDQ(); genWQ(); genMQ(); genYQ(); genLQ(); window.refreshContent(); window.recalc(); checkQ(); S.lv=lvFrom(S.xp); saveState(); initCalView(); renderAll();
+    if (typeof window.genDQ === 'function') window.genDQ();
+    if (typeof window.genWQ === 'function') window.genWQ();
+    if (typeof window.genMQ === 'function') window.genMQ();
+    if (typeof window.genYQ === 'function') window.genYQ();
+    if (typeof window.genLQ === 'function') window.genLQ();
+    if (typeof window.refreshContent === 'function') window.refreshContent();
+    if (typeof window.recalc === 'function') window.recalc();
+    if (typeof window.checkQ === 'function') window.checkQ();
+    S.lv=lvFrom(S.xp); saveState(); initCalView(); renderAll();
     if (window.renderDailyContent) window.renderDailyContent();
     const modalQueue = [];
     if (window.showWeeklySummary) modalQueue.push(window.showWeeklySummary);
@@ -396,11 +412,12 @@ Object.keys(NEW_POOLS).forEach(k => {
     function runModalQueue() {
       if (modalQueue.length === 0) return;
       const fn = modalQueue.shift();
-      fn();
+      try { fn(); } catch(e) { console.error('modal queue step failed:', e); }
       const overlay = document.getElementById('toastOverlay');
       if (overlay) {
         const checkClosed = setInterval(() => {
-          if (overlay.style.display === 'none' || overlay.style.opacity === '0' || !overlay.classList.contains('visible')) {
+          if (overlay.style.display === 'none' || overlay.style.opacity === '0' ||
+              (!overlay.classList.contains('show') && !overlay.classList.contains('visible'))) {
             clearInterval(checkClosed);
             setTimeout(runModalQueue, 300);
           }
@@ -429,12 +446,7 @@ Object.keys(NEW_POOLS).forEach(k => {
     } catch(e) { console.warn('Initial nav render failed:', e); }
   }
 
-  function init() {
-    try { resolveCurrentUser(); } catch(e) { console.error('Step 0 resolve user failed:', e); }
-    try { S = window.loadState(); } catch(e) { console.error('Step 1 loadState failed:', e); }
-    if (typeof window.isOnboardingComplete === 'function' && !window.isOnboardingComplete()) {
-      window.startOnboarding();
-    }
+  function finishInit() {
     try { window.applyTheme(); } catch(e) { console.error('Step 2 applyTheme failed:', e); }
     try { initApp(); } catch(e) { console.error('Step 3 initApp failed:', e); }
     try { if (window.initSearch) window.initSearch(); } catch(e) { console.error('Step 3b initSearch failed:', e); }
@@ -450,10 +462,10 @@ Object.keys(NEW_POOLS).forEach(k => {
         if (sr && !e.target.closest('.global-search-wrap')) sr.classList.remove('show');
       });
     } catch(e) { console.error('Step 6 clickOutside failed:', e); }
-    try { window.initTierTabKeyboardNav(); } catch(e) { console.error('Step 7 tier tab keyboard nav failed:', e); }
-    try { window.initTier2TabKeyboardNav(); } catch(e) { console.error('Step 8 tier2 tab keyboard nav failed:', e); }
-    try { window.initBnavKeyboardNav(); } catch(e) { console.error('Step 8c bnav keyboard nav failed:', e); }
-    try { window.populateTier1Icons(); } catch(e) { console.error('Step 8b tier1 icons failed:', e); }
+    try { if (window.initTierTabKeyboardNav) window.initTierTabKeyboardNav(); } catch(e) { console.error('Step 7 tier tab keyboard nav failed:', e); }
+    try { if (window.initTier2TabKeyboardNav) window.initTier2TabKeyboardNav(); } catch(e) { console.error('Step 8 tier2 tab keyboard nav failed:', e); }
+    try { if (window.initBnavKeyboardNav) window.initBnavKeyboardNav(); } catch(e) { console.error('Step 8c bnav keyboard nav failed:', e); }
+    try { if (window.populateTier1Icons) window.populateTier1Icons(); } catch(e) { console.error('Step 8b tier1 icons failed:', e); }
     try { initModalKeyboardHandlers(); } catch(e) { console.error('Step 9 modal keyboard handlers failed:', e); }
     try { initThemeToggleKeyboard(); } catch(e) { console.error('Step 10 theme toggle keyboard failed:', e); }
     try { _initHashRouting(); } catch(e) { console.error('Step 10b hash routing init failed:', e); }
@@ -463,6 +475,7 @@ Object.keys(NEW_POOLS).forEach(k => {
     try {
       document.addEventListener('DOMContentLoaded', function() {
         try { if (window.renderAll) window.renderAll(); } catch(e) { console.error('Post-defer re-render failed:', e); }
+        try { if (window.autoTrackJourneyProgress) window.autoTrackJourneyProgress(); } catch(e) { console.error('Post-defer journey tracking failed:', e); }
       });
     } catch(e) { console.error('Step 10c post-defer re-render hook failed:', e); }
     try {
@@ -473,20 +486,26 @@ Object.keys(NEW_POOLS).forEach(k => {
         }
       });
     } catch(e) { console.error('Step 11 card keyboard nav failed:', e); }
+    function appAction(name) {
+      return function() {
+        var fn = window[name];
+        return typeof fn === 'function' ? fn.apply(window, arguments) : undefined;
+      };
+    }
     window.App = {
       toggleP: window.toggleP, toggleV: window.toggleV, toggleD: window.toggleD, buy: window.buy,
       detail: (id) => toast(iqIcon('alert-triangle'), DETAILS[id]||'Voluntary Prayer', false, 4000),
       tip: (id) => toast(iqIcon('zap'), TIPS[id]||'A beautiful deed!', false, 4000),
       toggleQuest: window.toggleQuest, addGratitude: window.addGratitude, toggleFasting: window.toggleFasting, setCharityGoals: window.setCharityGoals,
       grantDailyXp: window.grantDailyXp, grantCappedDailyXp: window.grantCappedDailyXp,
-      logWater: typeof window.logWater === 'function' ? window.logWater : () => {},
-      logSleep: typeof window.logSleep === 'function' ? window.logSleep : () => {},
-      logExercise: typeof window.logExercise === 'function' ? window.logExercise : () => {},
-      toggleMeal: typeof window.toggleMeal === 'function' ? window.toggleMeal : () => {},
+      logWater: appAction('logWater'),
+      logSleep: appAction('logSleep'),
+      logExercise: appAction('logExercise'),
+      toggleMeal: appAction('toggleMeal'),
       addMemorization: window.addMemorization, toggleMorning: window.toggleMorning, toggleEvening: window.toggleEvening, switchUser, logout, resetAll, exportData, importData, toggleBookmark, isBookmarked, toggleVolCat: typeof window.toggleVolCat === 'function' ? window.toggleVolCat : () => {}, toggleDeedCat: typeof window.toggleDeedCat === 'function' ? window.toggleDeedCat : () => {},
-      openMuhasabah: typeof window.openMuhasabah === 'function' ? window.openMuhasabah : () => {},
-      dismissMuhasabah: typeof window.dismissMuhasabah === 'function' ? window.dismissMuhasabah : () => {},
-      joinJourney: typeof window.joinJourney === 'function' ? window.joinJourney : () => {},
+      openMuhasabah: appAction('openMuhasabah'),
+      dismissMuhasabah: appAction('dismissMuhasabah'),
+      joinJourney: appAction('joinJourney'),
       manualRefresh: window.manualRefreshContent, ensureQuranLoaded: window.ensureQuranLoaded, ensureHadithLoaded: window.ensureHadithLoaded,
       claimBonus: window.claimBonus,
       setQuranView: window.setQuranView, quranSearchFilter: window.quranSearchFilter, openQuranSurah: window.openQuranSurah, quranBack: window.quranBack, openQuranJuz: window.openQuranJuz,
@@ -494,7 +513,7 @@ Object.keys(NEW_POOLS).forEach(k => {
       playQuranVerse: window.playQuranVerse, playSurah: window.playSurah, stopSurah: window.stopSurah, setQuranReciter: window.setQuranReciter, playJuz: window.playJuz, updateJuzButton: window.updateJuzButton,
       calPrevMonth: window.calPrevMonth, calNextMonth: window.calNextMonth, calGoToday: window.calGoToday, selectAvatar, selectTitle, selectFrame,
       setTheme: window.setTheme, toggleTheme: window.toggleTheme,
-      toggleNotifications: typeof window.toggleNotifications === 'function' ? window.toggleNotifications : () => {},
+      toggleNotifications: appAction('toggleNotifications'),
       switchCategory: typeof window.switchCategory === 'function' ? window.switchCategory : () => {},
       activateTab: typeof window.activateTab === 'function' ? window.activateTab : () => {},
       tapDhikr: typeof window.tapDhikr === 'function' ? window.tapDhikr : () => {},
@@ -512,6 +531,23 @@ Object.keys(NEW_POOLS).forEach(k => {
     };
     window.closeToastOverlay = closeToastOverlay;
     console.log('Ibadah Quest initialized. window.App is set.');
+  }
+
+  function init() {
+    try { if (typeof window.resolveCurrentUser === 'function') window.resolveCurrentUser(); } catch(e) { console.error('Step 0 resolve user failed:', e); }
+    try { S = window.loadState(); } catch(e) { console.error('Step 1 loadState failed:', e); }
+    finishInit();
+  }
+
+  async function initAsync() {
+    try { if (typeof window.resolveCurrentUser === 'function') window.resolveCurrentUser(); } catch(e) { console.error('Step 0 resolve user failed:', e); }
+    try {
+      S = typeof window.loadStateAsync === 'function' ? await window.loadStateAsync() : window.loadState();
+    } catch(e) {
+      console.error('Step 1 async loadState failed:', e);
+      try { S = window.loadState(); } catch(fallbackError) { console.error('Step 1 fallback loadState failed:', fallbackError); }
+    }
+    finishInit();
   }
 
   function startJourney() {
@@ -548,10 +584,17 @@ Object.keys(NEW_POOLS).forEach(k => {
   }
   setupOfflineDetection();
 
-  try {
-    init();
-  } catch(e) {
-    console.error('Ibadah Quest init error:', e);
-    console.error('Stack:', e.stack);
+  if (window.storageReady) {
+    Promise.resolve(window.storageReady).then(initAsync).catch(function(e) {
+      console.error('Ibadah Quest async init error:', e);
+      console.error('Stack:', e.stack);
+    });
+  } else {
+    try {
+      init();
+    } catch(e) {
+      console.error('Ibadah Quest init error:', e);
+      console.error('Stack:', e.stack);
+    }
   }
 })();

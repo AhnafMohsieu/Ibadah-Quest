@@ -1,4 +1,8 @@
 (function() {
+  function escapeSearchText(value) {
+    return typeof window.escapeHTML === 'function' ? window.escapeHTML(value) : String(value == null ? '' : value).replace(/[&<>\"']/g, function(ch) { return {'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',"'":'&#39;'}[ch]; });
+  }
+
   function fuzzyMatch(query, text) {
     query = query.toLowerCase();
     text = text.toLowerCase();
@@ -123,21 +127,39 @@
   function showResults(term, box) {
     if (!term || term.length < 2) { box.classList.remove('show'); box.innerHTML = ''; return; }
     const results = searchAll(term);
-    if (!results.length) { box.innerHTML = `<div class="gs-item gs-empty">No results for "${term}"</div>`; box.classList.add('show'); return; }
+    if (!results.length) { box.innerHTML = `<div class="gs-item gs-empty">No results for "${escapeSearchText(term)}"</div>`; box.classList.add('show'); return; }
 
     saveRecent(term);
-    const recentHtml = _recent.length ? `<div class="gs-section">Recent</div>${_recent.map(r => `<div class="gs-item gs-recent" onclick="document.querySelector('.global-search').value='${r}';document.querySelector('.global-search').dispatchEvent(new Event('input'))">${iqIcon('clock')} ${r}</div>`).join('')}` : '';
+    const recentHtml = _recent.length ? `<div class="gs-section">Recent</div>${_recent.map((r, i) => `<button type="button" class="gs-item gs-recent" data-recent-index="${i}" aria-label="Search for ${escapeSearchText(r)}">${iqIcon('clock')} ${escapeSearchText(r)}</button>`).join('')}` : '';
 
     let html = recentHtml;
     const grouped = {};
     for (const r of results) { (grouped[r.section] = grouped[r.section] || []).push(r); }
     for (const [section, items] of Object.entries(grouped)) {
-      html += `<div class="gs-section">${section}</div>`;
+      html += `<div class="gs-section">${escapeSearchText(section)}</div>`;
       for (const r of items) {
-        html += `<div class="gs-item" onclick="App.activateTab('${r.tab}');document.getElementById('globalSearchResults').classList.remove('show');">${r.text}</div>`;
+        const resultIndex = results.indexOf(r);
+        html += `<button type="button" class="gs-item gs-result" data-result-index="${resultIndex}">${escapeSearchText(r.text)}</button>`;
       }
     }
     box.innerHTML = html;
+    box.querySelectorAll('.gs-recent').forEach(function(item) {
+      item.addEventListener('click', function() {
+        const input = document.querySelector('.global-search');
+        const term = _recent[Number(item.dataset.recentIndex)];
+        if (!input || typeof term !== 'string') return;
+        input.value = term;
+        input.dispatchEvent(new Event('input'));
+      });
+    });
+    box.querySelectorAll('.gs-result').forEach(function(item) {
+      item.addEventListener('click', function() {
+        const result = results[Number(item.dataset.resultIndex)];
+        if (!result) return;
+        App.activateTab(result.tab);
+        box.classList.remove('show');
+      });
+    });
     box.classList.add('show');
   }
 

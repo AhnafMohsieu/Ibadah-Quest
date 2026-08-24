@@ -157,6 +157,15 @@ test('toggleD: XP adjustment', () => {
   assert.strictEqual(s.S.xp, 35);
 });
 
+test('invalid prayer, voluntary prayer, and deed ids do not mutate logs', () => {
+  const s = setup();
+  s.toggleP('not-a-prayer');
+  s.toggleV('not-a-voluntary-prayer');
+  s.toggleD('not-a-deed');
+  assert.deepStrictEqual(s.S.log[today()], { p: {}, d: {}, v: {} });
+  assert.strictEqual(s.S.xp, 0);
+});
+
 test('recalc: calculates current streak correctly', () => {
   const s = setup();
   s.S.log[dateAgo(2)] = { p: allPrayers() };
@@ -185,4 +194,32 @@ test('recalc: counts perfect days', () => {
   s.S.log[today()] = { p: allPrayers() };
   s.recalc();
   assert.strictEqual(s.S.pd, 3);
+});
+
+test('recalc preserves archived perfect days', () => {
+  const s = setup();
+  s.S.pdArchived = 12;
+  s.S.log[today()] = { p: allPrayers() };
+  s.recalc();
+  assert.strictEqual(s.S.pd, 13);
+});
+
+test('fetchPrayerTimes uses the saved prayer location', async () => {
+  const requests = [];
+  const storage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
+  const sandbox = loadSandbox(['render/prayers.js'], {
+    S: { prayerSettings: { lat: 51.5072, lng: -0.1276, label: 'London', method: 2 } },
+    localStorage: storage,
+    fetch: async (url) => {
+      requests.push(url);
+      return { json: async () => ({ code: 200, data: { timings: {
+        Fajr: '04:00', Sunrise: '05:30', Dhuhr: '12:30', Asr: '16:00', Maghrib: '20:00', Isha: '21:30'
+      } } }) };
+    }
+  });
+  const times = await sandbox.fetchPrayerTimes();
+  assert.strictEqual(times.Fajr.h, 4);
+  assert.match(requests[0], /latitude=51\.5072/);
+  assert.match(requests[0], /longitude=-0\.1276/);
+  assert.match(requests[0], /method=2/);
 });
