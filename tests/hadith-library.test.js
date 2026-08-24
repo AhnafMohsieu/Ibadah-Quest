@@ -41,3 +41,18 @@ test('dhikr: speakers wired in static renderers with stopPropagation', () => {
   assert.match(st, /App\.dhikrPlayAll\('morning'\)/);
   assert.match(st, /event\.stopPropagation\(\);App\.dhikrSpeak/);
 });
+
+test('quran reader wires tafsir selector and panels', () => {
+  const dyn = fs.readFileSync(path.join(__dirname, '..', 'render', 'dynamic.js'), 'utf8');
+  assert.match(dyn, /App\.toggleTafsir\(/);
+  assert.match(dyn, /App\.setTafsirEdition\(/);
+  assert.match(dyn, /TafsirLibrary\.getTafsir\(/);
+  assert.match(dyn, /TafsirLibrary\.sanitizeRichText\(/);
+  assert.match(dyn, /EDITIONS\.forEach/);
+  assert.match(dyn, /openTafsir = \{\}/);
+  const st = fs.readFileSync(path.join(__dirname, '..', 'state', 'state.js'), 'utf8');
+  assert.match(st, /tafsirEdition:'ibnkathir'/);
+  const act = fs.readFileSync(path.join(__dirname, '..', 'core', 'actions.js'), 'utf8');
+  assert.match(act, /toggleTafsir/);
+  assert.match(act, /setTafsirEdition/);
+});

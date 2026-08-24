@@ -429,6 +429,7 @@ h += '</div>';
   let quranCurrentJuz = null;
   let quranViewMode = 'surah';
   let quranSearchTerm = '';
+  let openTafsir = {};
 
   function getQuranAudioUrl(reciterId, surah, verse) {
     const r = QURAN_RECITERS.find(x => x.id === reciterId);
@@ -714,6 +715,11 @@ h += '</div>';
     if (surahNum !== 1) {
       html += `<div style="text-align:center;font-size:1.6rem;color:var(--accent);font-family:'Amiri',serif;margin:16px 0;">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ</div>`;
     }
+    html += '<div class="tab-bar-quran" style="margin-bottom:10px;">';
+    if (typeof TafsirLibrary !== 'undefined') TafsirLibrary.EDITIONS.forEach(ed => {
+      html += `<button class="${(S.tafsirEdition || 'ibnkathir') === ed.id ? 'active' : ''}" onclick="App.setTafsirEdition('${ed.id}')">${ed.name}</button>`;
+    });
+    html += '</div>';
     if (verses.length === 0) {
       html += `<div class="quran-loading">No local verses available for this surah. ${s.ay} verses total.</div>`;
     } else {
@@ -726,10 +732,13 @@ h += '</div>';
           ${v.roman ? `<div style="font-size:0.85rem;color:var(--text2);font-style:italic;margin:6px 0;line-height:1.5;">${v.roman}</div>` : ''}
           <div class="verse-english">${v.english || ''}</div>
           <button class="verse-play-btn" data-surah="${surahNum}" data-verse="${vNum}" onclick="App.playQuranVerse(${surahNum},${vNum})">▶</button>
-        </div>`;
+          <button class="verse-tafsir-btn" aria-label="Tafsir" title="Tafsir" onclick="App.toggleTafsir(${surahNum},${vNum})">${iqIcon('book-open')}</button>
+        </div>
+        ${openTafsir[surahNum + ':' + vNum] ? `<div class="tafsir-panel" id="tafsir-panel-${surahNum}-${vNum}"></div>` : ''}`;
       });
     }
     el.innerHTML = html;
+    fillOpenTafsirs();
   }
 
   function renderQuranJuz(el, juzNum) {
@@ -754,6 +763,12 @@ h += '</div>';
     html += `<div style="text-align:center;margin:8px 0 12px;"><button id="juzPlayBtn" class="surah-play-btn" onclick="App.playJuz(${juzNum})">▶ Play Juz</button></div>`;
     if (startS.n !== 1) { html += `<div style="text-align:center;font-size:1.6rem;color:var(--accent);font-family:'Amiri',serif;margin:16px 0;">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ</div>`; }
 
+    html += '<div class="tab-bar-quran" style="margin-bottom:10px;">';
+    if (typeof TafsirLibrary !== 'undefined') TafsirLibrary.EDITIONS.forEach(ed => {
+      html += `<button class="${(S.tafsirEdition || 'ibnkathir') === ed.id ? 'active' : ''}" onclick="App.setTafsirEdition('${ed.id}')">${ed.name}</button>`;
+    });
+    html += '</div>';
+
     const verses = [];
     QURAN_POOL.forEach(v => {
       if (!v.source) return;
@@ -775,19 +790,51 @@ h += '</div>';
           ${v.roman ? `<div style="font-size:0.85rem;color:var(--text2);font-style:italic;margin:6px 0;line-height:1.5;">${v.roman}</div>` : ''}
           <div class="verse-english">${v.english || ''}</div>
           <button class="verse-play-btn" data-surah="${surah}" data-verse="${ayah}" onclick="App.playQuranVerse(${surah},${ayah})">▶</button>
-        </div>`;
+          <button class="verse-tafsir-btn" aria-label="Tafsir" title="Tafsir" onclick="App.toggleTafsir(${surah},${ayah})">${iqIcon('book-open')}</button>
+        </div>
+        ${openTafsir[surah + ':' + ayah] ? `<div class="tafsir-panel" id="tafsir-panel-${surah}-${ayah}"></div>` : ''}`;
       });
     }
     el.innerHTML = html;
     updateAudioButtons();
     updateJuzButton();
+    fillOpenTafsirs();
+  }
+
+  function fillOpenTafsirs() {
+    if (typeof TafsirLibrary === 'undefined') return;
+    document.querySelectorAll('.tafsir-panel').forEach(p => {
+      const parts = p.id.replace('tafsir-panel-', '').split('-');
+      const sN = parseInt(parts[0]), aN = parseInt(parts[1]);
+      p.innerHTML = '<div class="quran-loading">Loading tafsir…</div>';
+      TafsirLibrary.getTafsir(S.tafsirEdition || 'ibnkathir', sN, aN).then(t => {
+        if (!openTafsir[sN + ':' + aN]) return;
+        const style = t.dir === 'rtl'
+          ? 'dir="rtl" style="font-family:\'Amiri\',serif;font-size:1.05rem;line-height:2;color:var(--text);"'
+          : 'style="font-size:0.92rem;line-height:1.8;color:var(--text);"';
+        p.innerHTML = '<div ' + style + '>' + TafsirLibrary.sanitizeRichText(t.text) + '</div>';
+      }).catch(() => {
+        p.innerHTML = '<div class="quran-loading">Couldn&#39;t load tafsir — check connection.</div>';
+      });
+    });
+  }
+  function toggleTafsir(surahNum, ayahNum) {
+    const k = surahNum + ':' + ayahNum;
+    if (openTafsir[k]) delete openTafsir[k]; else openTafsir[k] = true;
+    renderQuran();
+  }
+  function setTafsirEdition(id) {
+    S.tafsirEdition = id;
+    saveState();
+    renderQuran();
   }
 
   function setQuranView(mode) { quranViewMode = mode; quranSearchTerm = ''; renderQuran(); }
   function quranSearchFilter(term) { quranSearchTerm = term; renderQuran(); }
-  function openQuranSurah(num) { quranCurrentSurah = num; quranCurrentJuz = null; renderQuran(); }
-  function quranBack() { quranCurrentSurah = null; quranCurrentJuz = null; renderQuran(); }
+  function openQuranSurah(num) { openTafsir = {}; quranCurrentSurah = num; quranCurrentJuz = null; renderQuran(); }
+  function quranBack() { openTafsir = {}; quranCurrentSurah = null; quranCurrentJuz = null; renderQuran(); }
   function openQuranJuz(juzNum) {
+    openTafsir = {};
     quranCurrentJuz = juzNum;
     quranCurrentSurah = null;
     renderQuran();
@@ -1021,6 +1068,9 @@ h += '</div>';
   window.openQuranSurah = openQuranSurah;
   window.quranBack = quranBack;
   window.openQuranJuz = openQuranJuz;
+  window.fillOpenTafsirs = fillOpenTafsirs;
+  window.toggleTafsir = toggleTafsir;
+  window.setTafsirEdition = setTafsirEdition;
   window.openHadithCollection = openHadithCollection;
   window.openHadithBook = openHadithBook;
   window.hadithBack = hadithBack;
