@@ -64,5 +64,11 @@
     }).catch(() => col);
   }
 
-  window.HadithLibrary = { REMOTE_COLLECTIONS, ensureHadithCollection, ensureBundledArabic };
+  function preloadRemoteCollections() {
+    REMOTE_COLLECTIONS.forEach(function(c) { ensureHadithCollection(c.id); });
+  }
+
+  document.addEventListener('DOMContentLoaded', preloadRemoteCollections);
+
+  window.HadithLibrary = { REMOTE_COLLECTIONS, ensureHadithCollection, ensureBundledArabic, preloadRemoteCollections };
 })();
