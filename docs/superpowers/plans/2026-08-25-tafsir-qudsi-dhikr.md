@@ -82,7 +82,7 @@ In `features/hadith-library.js` REMOTE_COLLECTIONS, after the malik line add (sa
     { id: 'qudsi', name: 'Forty Hadith Qudsi', desc: 'Forty narrations in which the Prophet \uFDFA transmits meanings from Allah directly' }
 ```
 
-(add comma after the malik object; `\uFDFA` is the ﷺ ligature, keeping the file pure ASCII like Task 3's fixture convention)
+(add comma after the malik object; `\uFDFA` is the ﷺ ligature, keeping the file pure ASCII like Task 3's fixture convention. Formatting note that overrides the snippet above: write `id:'qudsi'` with NO space after `id:`, matching sibling entries and the pinned regex `/id:'([a-z]+)', name:/g`.)
 
 - [ ] **Step 4: Run test — PASS; commit** `feat: add Forty Hadith Qudsi remote collection`
 
