@@ -34,3 +34,18 @@ test('audio: exports complete surface', () => {
     assert.equal(typeof AppAudio[k], 'function', k + ' is a function');
   });
 });
+
+test('audio: source tracking lifecycle', () => {
+  const AppAudio = evalModule();
+  assert.equal(typeof AppAudio.currentId, 'function');
+  assert.equal(typeof AppAudio.setOnChange, 'function');
+  assert.equal(AppAudio.currentId(), null);
+});
+
+test('audio: playRecording accepts options object with id (signature shape)', () => {
+  const src2 = fs.readFileSync(path.join(__dirname, '..', 'core', 'audio.js'), 'utf8');
+  assert.match(src2, /function playRecording\(url, opts\)/);
+  assert.match(src2, /function currentId\(\)/);
+  assert.match(src2, /function setOnChange\(fn\)/);
+  assert.match(src2, /_fireChange\(\);/, 'state changes fire the change callback');
+});

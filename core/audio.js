@@ -4,6 +4,18 @@
   let seqIdx = 0;
   let seqActive = false;
   let _voices = [];
+  let _currentId = null;
+  let _onChangeFn = null;
+
+  function _fireChange() { if (_onChangeFn) { try { _onChangeFn(); } catch (e) {} } }
+
+  function _applyOpts(opts) {
+    if (typeof opts === 'function') return { onended: opts };
+    return opts || {};
+  }
+
+  function currentId() { return _currentId; }
+  function setOnChange(fn) { _onChangeFn = typeof fn === 'function' ? fn : null; }
 
   function pickArabicVoice(voices) {
     const arabic = (voices || []).filter(v => /^ar/i.test(v.lang));
@@ -37,11 +49,13 @@
     seqIdx = 0;
     stopTTS();
     stopRecording();
+    _currentId = null;
+    _fireChange();
   }
 
   function isBusy() { return seqActive || isSpeaking() || !!recAudio; }
 
-  function speak(text, lang, onend) {
+  function speak(text, lang, onend, id) {
     if (!ttsAvailable() || !text) return false;
     stopRecording();
     const u = new SpeechSynthesisUtterance(String(text));
@@ -55,26 +69,40 @@
       u.lang = v.lang;
       u.rate = 0.9;
     }
-    if (onend) u.onend = onend;
+    u.onend = function() {
+      if (_currentId === (id || null)) _currentId = null;
+      if (onend) onend();
+      _fireChange();
+    };
+    u.onerror = function() { if (_currentId === (id || null)) _currentId = null; _fireChange(); };
     window.speechSynthesis.cancel();
     window.speechSynthesis.speak(u);
+    _currentId = id || null;
+    _fireChange();
     return true;
   }
 
-  function playTTS(text, lang) { return speak(text, lang); }
+  function playTTS(text, lang, opts) { return speak(text, lang, null, opts && opts.id); }
 
-  function toggleTTS(text, lang) {
+  function toggleTTS(text, lang, opts) {
     if (isSpeaking()) { stopTTS(); return true; }
-    return speak(text, lang);
+    return speak(text, lang, null, opts && opts.id);
   }
 
-  function playRecording(url, onended) {
+  function playRecording(url, opts) {
+    opts = _applyOpts(opts);
     stopTTS();
     if (typeof window.stopSurah === 'function') window.stopSurah();
     stopRecording();
     recAudio = new Audio(url);
-    if (onended) recAudio.onended = onended;
+    recAudio.onended = function() {
+      _currentId = null;
+      if (opts.onended) opts.onended();
+      _fireChange();
+    };
+    _currentId = opts.id || null;
     recAudio.play().catch(() => {});
+    _fireChange();
     return recAudio;
   }
 
@@ -83,9 +111,9 @@
     const it = seqQueue[seqIdx++];
     const advance = () => { if (seqActive) setTimeout(_seqNext, 400); };
     if (it.url) {
-      playRecording(it.url, advance);
+      playRecording(it.url, { id: it.id, onended: advance });
     } else {
-      const ok = speak(it.tts, it.lang || 'ar', advance);
+      const ok = speak(it.tts, it.lang || 'ar', advance, it.id);
       if (!ok) setTimeout(_seqNext, 0);
     }
   }
@@ -99,5 +127,5 @@
     _seqNext();
   }
 
-  window.AppAudio = { pickArabicVoice, playTTS, toggleTTS, stopTTS, playRecording, playSequence, stopAllAudio, isBusy, isSpeaking };
+  window.AppAudio = { pickArabicVoice, playTTS, toggleTTS, stopTTS, playRecording, playSequence, stopAllAudio, isBusy, isSpeaking, currentId, setOnChange };
 })();
