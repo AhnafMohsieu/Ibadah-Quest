@@ -81,7 +81,6 @@ test('hadith/dhikr audio modules wired with versions and load order', () => {
   assert.ok(html.includes('<script src="core/content-cache.js?v=1"></script>'));
   assert.ok(html.includes('<script src="core/audio.js?v=2"></script>'));
   assert.ok(html.includes('<script src="data/hadith-normalize.js?v=1"></script>'));
-  assert.ok(html.includes('<script src="data/dhikr-audio-map.js?v=1"></script>'));
   assert.ok(html.includes('<script src="features/hadith-library.js?v=1" defer></script>'));
   assert.ok(html.indexOf('core/content-cache.js') < html.indexOf('state/state.js'), 'cache module loads before state');
   assert.ok(html.indexOf('core/audio.js') < html.indexOf('render/static.js'), 'audio module loads before renderers');

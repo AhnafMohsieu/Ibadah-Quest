@@ -503,7 +503,7 @@ Object.keys(NEW_POOLS).forEach(k => {
       logExercise: appAction('logExercise'),
       toggleMeal: appAction('toggleMeal'),
       addMemorization: window.addMemorization, toggleMorning: window.toggleMorning, toggleEvening: window.toggleEvening,
-      dhikrSpeak: typeof window.dhikrSpeak === 'function' ? window.dhikrSpeak : () => {}, dhikrPlayAll: typeof window.dhikrPlayAll === 'function' ? window.dhikrPlayAll : () => {}, toggleTafsir: typeof window.toggleTafsir === 'function' ? window.toggleTafsir : () => {}, setTafsirEdition: typeof window.setTafsirEdition === 'function' ? window.setTafsirEdition : () => {}, switchUser, logout, resetAll, exportData, importData, toggleBookmark, isBookmarked, toggleVolCat: typeof window.toggleVolCat === 'function' ? window.toggleVolCat : () => {}, toggleDeedCat: typeof window.toggleDeedCat === 'function' ? window.toggleDeedCat : () => {},
+      toggleTafsir: typeof window.toggleTafsir === 'function' ? window.toggleTafsir : () => {}, setTafsirEdition: typeof window.setTafsirEdition === 'function' ? window.setTafsirEdition : () => {}, switchUser, logout, resetAll, exportData, importData, toggleBookmark, isBookmarked, toggleVolCat: typeof window.toggleVolCat === 'function' ? window.toggleVolCat : () => {}, toggleDeedCat: typeof window.toggleDeedCat === 'function' ? window.toggleDeedCat : () => {},
       openMuhasabah: appAction('openMuhasabah'),
       dismissMuhasabah: appAction('dismissMuhasabah'),
       joinJourney: appAction('joinJourney'),

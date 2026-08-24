@@ -33,15 +33,6 @@ test('renderer: hadith UI wires library + audio', () => {
   assert.match(dyn, /Online<\/span>/, 'remote cards carry an Online badge');
 });
 
-test('dhikr: speakers wired in static renderers with stopPropagation', () => {
-  const st = fs.readFileSync(path.join(__dirname, '..', 'render', 'static.js'), 'utf8');
-  assert.match(st, /App\.dhikrSpeak\('morning'/);
-  assert.match(st, /App\.dhikrSpeak\('evening'/);
-  assert.match(st, /App\.dhikrSpeak\('situational'/);
-  assert.match(st, /App\.dhikrPlayAll\('morning'\)/);
-  assert.match(st, /event\.stopPropagation\(\);App\.dhikrSpeak/);
-});
-
 test('quran reader wires tafsir selector and panels', () => {
   const dyn = fs.readFileSync(path.join(__dirname, '..', 'render', 'dynamic.js'), 'utf8');
   assert.match(dyn, /App\.toggleTafsir\(/);
