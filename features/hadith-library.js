@@ -6,7 +6,8 @@
     { id:'tirmidhi', name: 'Jami at-Tirmidhi', desc: 'One of the Kutub al-Sittah, compiled by at-Tirmidhi (d. 892 CE)' },
     { id:'nasai', name: "Sunan an-Nasa'i", desc: 'One of the Kutub al-Sittah, compiled by an-Nasa\u2019i (d. 915 CE)' },
     { id:'ibnmajah', name: 'Sunan Ibn Majah', desc: 'One of the Kutub al-Sittah, compiled by Ibn Majah (d. 887 CE)' },
-    { id:'malik', name: 'Muwatta Imam Malik', desc: 'The earliest written collection of hadith, by Malik ibn Anas (d. 795 CE)' }
+    { id:'malik', name: 'Muwatta Imam Malik', desc: 'The earliest written collection of hadith, by Malik ibn Anas (d. 795 CE)' },
+    { id:'qudsi', name: 'Forty Hadith Qudsi', desc: 'Forty narrations in which the Prophet \uFDFA transmits meanings from Allah directly' }
   ];
 
   const BUNDLED_IDS = ['bukhari', 'muslim'];

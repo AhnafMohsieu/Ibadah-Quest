@@ -11,9 +11,9 @@ test('library: targets verified CDN and minified editions', () => {
   assert.ok(src.includes("ara-' + id + '.min.json'"));
 });
 
-test('library: exactly the five remote collections, Musnad Ahmad absent', () => {
+test('library: exactly the six remote collections, Musnad Ahmad absent', () => {
   const ids = [...src.matchAll(/id:'([a-z]+)', name:/g)].map(m => m[1]);
-  assert.deepEqual(ids, ['abudawud', 'tirmidhi', 'nasai', 'ibnmajah', 'malik']);
+  assert.deepEqual(ids, ['abudawud', 'tirmidhi', 'nasai', 'ibnmajah', 'malik', 'qudsi']);
   assert.ok(!src.toLowerCase().includes('musnad'));
 });
 
