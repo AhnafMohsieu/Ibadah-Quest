@@ -25,7 +25,7 @@
   }
 
   function _jalalaynIndex(surah, ayah) {
-    if (!Array.isArray(QURAN_SURAHS)) return null;
+    if (typeof QURAN_SURAHS === 'undefined' || !Array.isArray(QURAN_SURAHS)) return null;
     let cum = 0;
     for (let i = 0; i < surah - 1; i++) cum += QURAN_SURAHS[i].ay;
     return cum + ayah - 1;

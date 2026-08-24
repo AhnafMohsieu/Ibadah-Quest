@@ -807,8 +807,10 @@ h += '</div>';
       const parts = p.id.replace('tafsir-panel-', '').split('-');
       const sN = parseInt(parts[0]), aN = parseInt(parts[1]);
       p.innerHTML = '<div class="quran-loading">Loading tafsir…</div>';
-      TafsirLibrary.getTafsir(S.tafsirEdition || 'ibnkathir', sN, aN).then(t => {
+      const wantEdition = S.tafsirEdition || 'ibnkathir';
+      TafsirLibrary.getTafsir(wantEdition, sN, aN).then(t => {
         if (!openTafsir[sN + ':' + aN]) return;
+        if ((S.tafsirEdition || 'ibnkathir') !== wantEdition) return;
         const style = t.dir === 'rtl'
           ? 'dir="rtl" style="font-family:\'Amiri\',serif;font-size:1.05rem;line-height:2;color:var(--text);"'
           : 'style="font-size:0.92rem;line-height:1.8;color:var(--text);"';

@@ -85,7 +85,12 @@
   function playTTS(text, lang, opts) { return speak(text, lang, null, opts && opts.id); }
 
   function toggleTTS(text, lang, opts) {
-    if (isSpeaking()) { stopTTS(); return true; }
+    if (isSpeaking()) {
+      stopTTS();
+      _currentId = null;
+      _fireChange();
+      return true;
+    }
     return speak(text, lang, null, opts && opts.id);
   }
 
@@ -96,6 +101,11 @@
     stopRecording();
     recAudio = new Audio(url);
     recAudio.onended = function() {
+      _currentId = null;
+      if (opts.onended) opts.onended();
+      _fireChange();
+    };
+    recAudio.onerror = function() {
       _currentId = null;
       if (opts.onended) opts.onended();
       _fireChange();
