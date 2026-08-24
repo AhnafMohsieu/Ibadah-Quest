@@ -364,6 +364,8 @@
 <script src="data/quests.js?v=4"></script>
 <script src="data/achievements.js?v=4"></script>
 <script src="data/morning-evening.js?v=3"></script>
+<script src="data/dhikr-audio-map.js?v=1"></script>
+<script src="data/hadith-normalize.js?v=1"></script>
 <script src="data/relatable-dhikr.js?v=1"></script>
 <script src="data/extra-deeds.js?v=1"></script>
 <script src="data/vol-prayers.js?v=1"></script>
@@ -429,7 +431,9 @@
 
 <!-- State -->
 <script src="core/storage.js"></script>
-<script src="state/state.js?v=4"></script>
+<script src="core/content-cache.js?v=1"></script>
+<script src="core/audio.js?v=1"></script>
+<script src="state/state.js?v=5"></script>
 <script>
   window.storageReady = window.Storage && window.Storage.init
     ? window.Storage.init().catch(function(e) {
@@ -441,7 +445,7 @@
 <!-- Render engine (split modules) -->
 <script src="render/calendar.js?v=1"></script>
 <script src="render/prayers.js?v=2"></script>
-<script src="render/static.js?v=2"></script>
+<script src="render/static.js?v=3"></script>
 <script src="render/dynamic.js?v=4"></script>
 <script src="render/tabs.js?v=3"></script>
 
@@ -508,6 +512,7 @@
 <script src="features/spiritual-growth/ramadan.js?v=1" defer></script>
 <script src="features/spiritual-growth/laylat.js?v=1" defer></script>
 <script src="features/search.js?v=3" defer></script>
+<script src="features/hadith-library.js?v=1" defer></script>
 <script src="features/fab.js?v=1" defer></script>
 <script src="features/streak-milestones.js" defer></script>
 <script src="features/pull-refresh.js" defer></script>
@@ -537,7 +542,7 @@
 <script src="core/shop.js?v=1"></script>
 <script src="core/dhikr.js?v=2"></script>
 <script src="core/content.js?v=1"></script>
-<script src="core/actions.js?v=16"></script>
+<script src="core/actions.js?v=17"></script>
 
 <!-- PWA: Service Worker registration + update banner -->
 <script>
@@ -561,7 +566,7 @@
     });
   }
   window.addEventListener('load', function() {
-    navigator.serviceWorker.register('sw.js?v=19').then(function(reg) {
+    navigator.serviceWorker.register('sw.js?v=20').then(function(reg) {
       if (reg.waiting) { showUpdateBanner(reg); return; }
       reg.addEventListener('updatefound', function() {
         var sw = reg.installing;
