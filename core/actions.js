@@ -45,6 +45,23 @@
     URL.revokeObjectURL(url);
   }
 
+  function _collectExportExtras(data) {
+    try { const th = localStorage.getItem('iqTheme'); if (th !== null && th !== undefined) data.iqTheme = th; } catch (e) {}
+    try {
+      const zi = JSON.parse(localStorage.getItem('iq_zakat_inputs') || 'null');
+      if (zi && typeof zi === 'object' && !Array.isArray(zi)) data.iq_zakat_inputs = zi;
+    } catch (e) {}
+    return data;
+  }
+  function _finalizeExport(data) {
+    _collectExportExtras(data);
+    if (window.Backup && typeof window.Backup.buildExport === 'function') return window.Backup.buildExport(data);
+    // Backup module unavailable: keep the legacy envelope rather than fail.
+    if (!data._exported) data._exported = new Date().toISOString();
+    if (!data._version) data._version = '1.0';
+    return data;
+  }
+
   function exportDataLS() {
     const data = {};
     for (let i = 0; i < localStorage.length; i++) {
@@ -53,19 +70,15 @@
         try { data[k] = JSON.parse(localStorage.getItem(k)); } catch(e) { data[k] = localStorage.getItem(k); }
       }
     }
-    data._exported = new Date().toISOString();
-    data._version = '1.0';
-    _downloadBackup(data);
-    toast(iqIcon('download'), 'Data exported successfully!', false, 2000);
+    _downloadBackup(_finalizeExport(data));
+    toast(iqIcon('download'), 'Backup exported (v2.1)', false, 2000);
   }
 
   function exportData() {
     if (window.Storage && window.Storage.exportAll) {
       window.Storage.exportAll().then(function(data) {
-        data._exported = new Date().toISOString();
-        data._version = '2.0';
-        _downloadBackup(data);
-        toast(iqIcon('download'), 'Data exported successfully!', false, 2000);
+        _downloadBackup(_finalizeExport(data));
+        toast(iqIcon('download'), 'Backup exported (v2.1)', false, 2000);
       }).catch(function() {
         exportDataLS();
       });
@@ -82,7 +95,7 @@
     }
     keys.forEach(k => localStorage.removeItem(k));
     Object.keys(data).forEach(k => {
-      if (k === '_exported' || k === '_version') return;
+      if (k === '_exported' || k === '_version' || k === '_appVersion' || k === '_checksum') return;
       try { localStorage.setItem(k, typeof data[k] === 'string' ? data[k] : JSON.stringify(data[k])); } catch(e) {}
     });
     _completeImport();
@@ -92,11 +105,13 @@
   // recovery, recoverImport swaps in finishInit so the post-import boot gets
   // the full wiring (window.App, listeners, deferred re-render).
   var _postImportHook = null;
+  var _undoPending = false; // set by a validated import; consumed once on completion
   function _completeImport() {
     S = window.loadState();
     const hook = _postImportHook; _postImportHook = null;
     if (typeof hook === 'function') hook(); else initApp();
-    toast(iqIcon('upload'), 'Data imported successfully!', false, 2000);
+    if (_undoPending) { _undoPending = false; showUndoImportBar(); }
+    toast(iqIcon('upload'), 'Backup imported!', false, 2000);
   }
 
   function importData() {
@@ -110,22 +125,27 @@
       if (!file) return;
       const reader = new FileReader();
       reader.onload = function(ev) {
-        try {
-          const data = JSON.parse(ev.target.result);
-          if (!data || typeof data !== 'object') throw new Error('Invalid file');
-          delete data._exported;
-          delete data._version;
-          if (window.Storage && window.Storage.importAll) {
-            window.Storage.importAll(data).then(function() {
-              _completeImport();
-            }).catch(function() {
-              importDataLS(data);
-            });
-          } else {
+        let data;
+        try { data = JSON.parse(ev.target.result); } catch (e) {
+          toast(iqIcon('alert-triangle'), 'Not a valid JSON backup.', false, 2400); return;
+        }
+        const verdict = (window.Backup && typeof window.Backup.validateBackup === 'function')
+          ? window.Backup.validateBackup(data)
+          : { ok: !!(data && typeof data === 'object' && !Array.isArray(data)) };
+        if (!verdict.ok) { toast(iqIcon('alert-triangle'), verdict.error || 'Invalid backup file.', false, 3200); return; }
+        delete data._exported; delete data._version; delete data._appVersion; delete data._checksum;
+        if (window.Backup && typeof window.Backup.snapshotBeforeImport === 'function') {
+          try { window.Backup.snapshotBeforeImport(localStorage); } catch (e) {}
+        }
+        _undoPending = true;
+        if (window.Storage && window.Storage.importAll) {
+          window.Storage.importAll(data).then(function() {
+            _completeImport();
+          }).catch(function() {
             importDataLS(data);
-          }
-        } catch(e) {
-          toast(iqIcon('alert-triangle'), 'Invalid backup file.', false, 2000);
+          });
+        } else {
+          importDataLS(data);
         }
       };
       reader.readAsText(file);
@@ -134,6 +154,33 @@
   }
   window.exportData = exportData;
   window.importData = importData;
+
+  // ── Post-import undo bar (uses recoveryOverlay container — free real estate) ──
+  function showUndoImportBar() {
+    var ov = document.getElementById('recoveryOverlay');
+    if (!ov) return;
+    ov.innerHTML = '<div class="recovery-box"><h2>Import finished</h2>' +
+      '<p>Your previous data was snapshotted. Keep the import?</p>' +
+      '<div class="recovery-actions">' +
+      '<button class="btn btn-primary" data-action="keep">Keep imported data</button>' +
+      '<button class="btn" data-action="undo">Undo — restore my previous data</button>' +
+      '</div></div>';
+    ov.style.display = 'flex';
+    ov.querySelectorAll('[data-action]').forEach(function(b) {
+      b.addEventListener('click', function() {
+        if (b.getAttribute('data-action') === 'undo') {
+          var n = (window.Backup && typeof window.Backup.rollbackSnapshot === 'function')
+            ? window.Backup.rollbackSnapshot(localStorage) : 0;
+          S = window.loadState();
+          initApp();
+          toast(n ? iqIcon('refresh-cw') : iqIcon('info'),
+                n ? 'Previous data restored!' : 'No snapshot found.', false, 2200);
+        }
+        ov.style.display = 'none'; ov.innerHTML = '';
+      });
+    });
+  }
+  window.showUndoImportBar = showUndoImportBar;
 
   // ── Corruption recovery overlay (consumes window.__iqCorruption from Task 9) ──
   function _hide(el) { el.style.display = 'none'; el.innerHTML = ''; el.classList.remove('show'); el.style.pointerEvents = ''; }
