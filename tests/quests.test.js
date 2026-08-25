@@ -151,29 +151,38 @@ test('generated quests contain no functions (IndexedDB clone-safe)', () => {
 
 test('genDQ shuffles quest order', () => {
   const { sandbox, S } = createSandbox();
-  const originalRandom = Math.random;
-  let callCount = 0;
-  Math.random = () => {
-    callCount++;
-    // Return different values to test shuffling
-    return callCount % 2 === 0 ? 0.1 : 0.9;
-  };
-  
-  S.dq = [];
-  S.qd = '';
-  sandbox.genDQ();
-  const firstOrder = S.dq.map(q => q.id);
-  
-  Math.random = () => 0.5; // Different pattern
-  S.dq = [];
-  S.qd = '';
-  sandbox.genDQ();
-  const secondOrder = S.dq.map(q => q.id);
-  
-  Math.random = originalRandom;
-  
-  // At least one quest should be in different position
-  assert.notDeepStrictEqual(firstOrder, secondOrder, 'Quest order should be shuffled');
+  const ctxMath = vm.runInNewContext('Math', sandbox);
+  const originalRandom = ctxMath.random;
+  try {
+    ctxMath.random = () => 0.42;
+
+    S.dq = [];
+    S.qd = '';
+    sandbox.genDQ();
+    const firstOrder = S.dq.map(q => q.id);
+
+    S.dq = [];
+    S.qd = '';
+    sandbox.genDQ();
+    const secondOrder = S.dq.map(q => q.id);
+
+    assert.deepStrictEqual(firstOrder, secondOrder,
+      'Same fixed Math.random stub must produce identical quest order');
+
+    const expectedPool = [...sandbox.DQUESTS]
+      .sort(() => ctxMath.random() - 0.5)
+      .slice(0, 4)
+      .map(q => q.id);
+
+    assert.strictEqual(firstOrder.length, expectedPool.length,
+      'Should generate exactly 4 quests');
+    assert.deepStrictEqual([...firstOrder].sort(), [...expectedPool].sort(),
+      'Generated ids must be exactly the shuffled fixture pool (order-insensitive)');
+    assert.strictEqual(new Set(firstOrder).size, firstOrder.length,
+      'No duplicate quest ids');
+  } finally {
+    ctxMath.random = originalRandom;
+  }
 });
 
 test('genWQ generates 3 weekly quests', () => {
