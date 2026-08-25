@@ -111,6 +111,9 @@ function resolveCurrentUser() {
     var raw = readRawLocal();
     var parsed = parseMaybeJunk(raw);
     if (raw && parsed === undefined) { flagCorrupt('ls', raw); return null; }
+    // raw that parses to JSON null (literal string "null") must not escape as a
+    // clean boot: treat it like junk so it gets quarantined and flagged.
+    if (raw && parsed === null) { flagCorrupt('ls', raw, parsed); return null; }
     if (parsed !== null && parsed !== undefined &&
         window.Recovery && window.Recovery.isJunkState && window.Recovery.isJunkState(parsed)) {
       flagCorrupt('ls', raw, parsed);
@@ -120,8 +123,10 @@ function resolveCurrentUser() {
   }
   // Synchronous compatibility path for callers outside the async boot sequence.
   function loadState() {
-    var corrupt = typeof window !== 'undefined' ? !!window.__iqCorruption : false;
+    // Run detection FIRST: reading the flag before loadLocalState() would miss
+    // a corruption flagged by this very call and overwrite the damaged key.
     var state = normalizeState(loadLocalState());
+    var corrupt = typeof window !== 'undefined' ? !!window.__iqCorruption : false;
     if (!corrupt) {
       try { localStorage.setItem(PREFIX + currentUser, JSON.stringify(state)); } catch (e) {}
     }

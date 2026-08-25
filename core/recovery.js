@@ -51,7 +51,9 @@
     catch (e) { return null; }
     if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) return null;
     Object.keys(parsed).forEach(function(k) {
-      if (!(k in fresh)) return;
+      // Own-property check: `'k in fresh'` would match inherited keys like
+      // __proto__ and let a payload reassign the template's prototype.
+      if (!Object.prototype.hasOwnProperty.call(fresh, k)) return;
       var fv = fresh[k], pv = parsed[k];
       if (Array.isArray(fv)) { if (Array.isArray(pv)) fresh[k] = pv; return; }
       if (fv && typeof fv === 'object') {
@@ -63,5 +65,38 @@
     return fresh;
   }
 
-  window.Recovery = { isJunkState: isJunkState, quarantine: quarantine, salvageInto: salvageInto };
+  var FRESH_TOKEN = 'RESET';
+
+  function decideBootRoute(win) {
+    return (win && win.__iqCorruption) ? 'recovery' : 'normal';
+  }
+
+  function freshStartAllowed(input, token) {
+    return typeof input === 'string' && input.trim() === (token || FRESH_TOKEN);
+  }
+
+  function buildRecoveryHtml(info) {
+    var src = info && info.source === 'idb' ? 'device storage (IndexedDB)' : 'browser storage (localStorage)';
+    var btnBase = 'padding:12px 16px;border-radius:10px;font-size:1rem;cursor:pointer;border:1px solid #d1d5db;background:#fff;';
+    return '<div class="recovery-box" role="alertdialog" aria-modal="true" aria-label="Data recovery">' +
+      '<div style="font-size:2rem;">🛟</div>' +
+      '<h2>Your saved data looks corrupted</h2>' +
+      '<p>A copy of the damaged data was saved safely (quarantine). Nothing has been deleted.</p>' +
+      '<p class="recovery-src">Source: ' + src + '</p>' +
+      '<div class="recovery-actions">' +
+      '<button class="btn btn-primary" style="' + btnBase + '" data-action="salvage">Try to recover my data</button>' +
+      '<button class="btn" style="' + btnBase + '" data-action="import">Restore from backup file</button>' +
+      '<button class="btn btn-danger" style="' + btnBase + 'color:#b91c1c;border-color:#fca5a5;" data-action="fresh">Start fresh</button>' +
+      '</div></div>';
+  }
+
+  window.Recovery = {
+    isJunkState: isJunkState,
+    quarantine: quarantine,
+    salvageInto: salvageInto,
+    FRESH_TOKEN: FRESH_TOKEN,
+    decideBootRoute: decideBootRoute,
+    freshStartAllowed: freshStartAllowed,
+    buildRecoveryHtml: buildRecoveryHtml
+  };
 })();

@@ -85,14 +85,26 @@
       if (k === '_exported' || k === '_version') return;
       try { localStorage.setItem(k, typeof data[k] === 'string' ? data[k] : JSON.stringify(data[k])); } catch(e) {}
     });
+    _completeImport();
+  }
+
+  // Shared import completion: normally just initApp(); during corruption
+  // recovery, recoverImport swaps in finishInit so the post-import boot gets
+  // the full wiring (window.App, listeners, deferred re-render).
+  var _postImportHook = null;
+  function _completeImport() {
     S = window.loadState();
-    initApp();
+    const hook = _postImportHook; _postImportHook = null;
+    if (typeof hook === 'function') hook(); else initApp();
     toast(iqIcon('upload'), 'Data imported successfully!', false, 2000);
   }
 
   function importData() {
     const inp = document.createElement('input');
     inp.type = 'file'; inp.accept = '.json';
+    // If the user cancels the picker during a recovery import, drop the pending
+    // boot hook so a later ordinary import can't double-run boot wiring.
+    try { inp.addEventListener('cancel', function() { _postImportHook = null; }); } catch(e) {}
     inp.onchange = function(e) {
       const file = e.target.files[0];
       if (!file) return;
@@ -105,9 +117,7 @@
           delete data._version;
           if (window.Storage && window.Storage.importAll) {
             window.Storage.importAll(data).then(function() {
-              S = window.loadState();
-              initApp();
-              toast(iqIcon('upload'), 'Data imported successfully!', false, 2000);
+              _completeImport();
             }).catch(function() {
               importDataLS(data);
             });
@@ -124,6 +134,67 @@
   }
   window.exportData = exportData;
   window.importData = importData;
+
+  // ── Corruption recovery overlay (consumes window.__iqCorruption from Task 9) ──
+  function _hide(el) { el.style.display = 'none'; el.innerHTML = ''; el.classList.remove('show'); el.style.pointerEvents = ''; }
+  function showRecoveryModal() {
+    var ov = document.getElementById('recoveryOverlay');
+    if (!ov) return;
+    ov.innerHTML = window.Recovery.buildRecoveryHtml(window.__iqCorruption);
+    ov.style.display = 'flex';
+    ov.style.pointerEvents = 'auto';
+    ov.classList.add('show');
+    ov.querySelectorAll('[data-action]').forEach(function(b) {
+      b.addEventListener('click', function() {
+        var a = b.getAttribute('data-action');
+        if (a === 'salvage') recoverSalvage();
+        else if (a === 'import') recoverImport();
+        else if (a === 'fresh') recoverFresh();
+      });
+    });
+  }
+  function continueBootAfterRecovery() {
+    var ov = document.getElementById('recoveryOverlay');
+    if (ov) _hide(ov);
+    window.__iqCorruption = null; // subsequent saveState calls are safe again
+    finishInit();
+  }
+  function recoverSalvage() {
+    var raw = null;
+    try { raw = localStorage.getItem(PREFIX + currentUser); } catch (e) {}
+    if ((!raw || raw === 'undefined') && window.Storage && window.Storage.getRaw && window.__iqCorruption && window.__iqCorruption.source === 'idb') {
+      window.Storage.getRaw(PREFIX + currentUser).then(function(v) {
+        applySalvage(window.Recovery.salvageInto(window.freshState(), v));
+      }).catch(function() { applySalvage(null); });
+      return;
+    }
+    applySalvage(window.Recovery.salvageInto(window.freshState(), raw));
+  }
+  function applySalvage(result) {
+    if (result) { S = normalizeState(result); saveState(); toast(iqIcon('sparkles'), 'Recovered your data!'); }
+    else toast(iqIcon('alert-triangle'), 'Could not recover — choose another option.');
+    if (result) continueBootAfterRecovery(); // failure stays on the modal
+  }
+  function recoverImport() {
+    var ov = document.getElementById('recoveryOverlay');
+    if (ov) _hide(ov);
+    window.__iqCorruption = null; // cleared BEFORE importData so post-import saveState is safe
+    _postImportHook = finishInit;
+    importData();
+  }
+  function recoverFresh() {
+    var token = prompt('Type RESET to erase corrupted data and start fresh:');
+    if (!window.Recovery.freshStartAllowed(token)) { toast(iqIcon('info'), 'Confirmation did not match. Nothing was erased.'); return; }
+    S = window.freshState();
+    saveState();
+    toast(iqIcon('sprout'), 'Fresh start ready.');
+    continueBootAfterRecovery();
+  }
+  window.showRecoveryModal = showRecoveryModal;
+  window.continueBootAfterRecovery = continueBootAfterRecovery;
+  window.recoverSalvage = recoverSalvage;
+  window.recoverFresh = recoverFresh;
+  window.recoverImport = recoverImport;
   function toggleBookmark(id) {
     if (!S.bookmarks) S.bookmarks = [];
     const idx = S.bookmarks.indexOf(id);
@@ -521,6 +592,7 @@ Object.keys(NEW_POOLS).forEach(k => {
       joinJourney: appAction('joinJourney'),
       manualRefresh: window.manualRefreshContent, ensureQuranLoaded: window.ensureQuranLoaded, ensureHadithLoaded: window.ensureHadithLoaded,
       claimBonus: window.claimBonus,
+      recoverSalvage, recoverFresh, recoverImport,
       setQuranView: window.setQuranView, quranSearchFilter: window.quranSearchFilter, openQuranSurah: window.openQuranSurah, quranBack: window.quranBack, openQuranJuz: window.openQuranJuz,
       openHadithCollection: window.openHadithCollection, openHadithBook: window.openHadithBook, hadithBack: window.hadithBack,
       playQuranVerse: window.playQuranVerse, playSurah: window.playSurah, stopSurah: window.stopSurah, setQuranReciter: window.setQuranReciter, playJuz: window.playJuz, updateJuzButton: window.updateJuzButton,
@@ -550,6 +622,12 @@ Object.keys(NEW_POOLS).forEach(k => {
   function init() {
     try { if (typeof window.resolveCurrentUser === 'function') window.resolveCurrentUser(); } catch(e) { console.error('Step 0 resolve user failed:', e); }
     try { S = window.loadState(); } catch(e) { console.error('Step 1 loadState failed:', e); }
+    // Corrupt boot: hold the app on the recovery modal; finishInit (and its
+    // saveState calls) must not run until the user resolves the corruption.
+    if (window.Recovery && window.Recovery.decideBootRoute(window) === 'recovery') {
+      showRecoveryModal();
+      return;
+    }
     finishInit();
   }
 
@@ -560,6 +638,11 @@ Object.keys(NEW_POOLS).forEach(k => {
     } catch(e) {
       console.error('Step 1 async loadState failed:', e);
       try { S = window.loadState(); } catch(fallbackError) { console.error('Step 1 fallback loadState failed:', fallbackError); }
+    }
+    // Corrupt boot: same gate as init() — never reach finishInit while flagged.
+    if (window.Recovery && window.Recovery.decideBootRoute(window) === 'recovery') {
+      showRecoveryModal();
+      return;
     }
     finishInit();
   }
