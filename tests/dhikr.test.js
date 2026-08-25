@@ -71,3 +71,24 @@ test('removeCustomDhikr: does nothing if id not found', () => {
   s.window.removeCustomDhikr('custom_999');
   assert.strictEqual(s.S.dhikrCustom.length, 1);
 });
+
+test('toggleDhikrHaptic flips S.dhikrSettings.haptic and persists', () => {
+  let savedCalls = 0;
+  const s = setup({
+    saveState: () => { savedCalls++; },
+    navigator: {}
+  });
+  s.S.dhikrSettings = { haptic: true };
+  s.window.toggleDhikrHaptic();
+  assert.strictEqual(s.S.dhikrSettings.haptic, false);
+  assert.strictEqual(savedCalls, 1);
+  s.window.toggleDhikrHaptic();
+  assert.strictEqual(s.S.dhikrSettings.haptic, true);
+});
+
+test('toggleDhikrHaptic: creates dhikrSettings if missing (legacy state)', () => {
+  const s = setup();
+  delete s.S.dhikrSettings;
+  s.window.toggleDhikrHaptic();
+  assert.strictEqual(s.S.dhikrSettings.haptic, true);
+});

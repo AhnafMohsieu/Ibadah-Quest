@@ -34,13 +34,13 @@
     const idx = S.dhikrCounters._active || 0;
     const oldLv = S.lv;
     S.dhikrCounters[idx] = (S.dhikrCounters[idx] || 0) + 1;
-    if (S.dhikrSettings?.haptic && navigator.vibrate) { navigator.vibrate(10); }
+    if (S.dhikrSettings && S.dhikrSettings.haptic && navigator.vibrate) { navigator.vibrate(10); }
     const d = DHIKR_COUNTER_DATA[idx % DHIKR_COUNTER_DATA.length];
     S.xp += 1;
     const cycleCount = S.dhikrCounters[idx];
     if (S.dhikrCounters[idx] >= d.target) {
       toast(iqIcon('sparkles'), 'Target reached! SubhanAllah!', false, 2000);
-      if (S.dhikrSettings?.haptic && navigator.vibrate) { navigator.vibrate([50, 50, 50]); }
+      if (S.dhikrSettings && S.dhikrSettings.haptic && navigator.vibrate) { navigator.vibrate([50, 50, 50]); }
       S.xp += 20;
       S.dhikrCounters[idx] = 0;
     }
@@ -73,6 +73,12 @@
   }
   function resetDhikr() { if (!S.dhikrCounters) S.dhikrCounters={}; const idx=S.dhikrCounters._active||0; S.dhikrCounters[idx]=0; saveState(); renderDhikrCounter(); }
   function nextDhikr() { if (!S.dhikrCounters) S.dhikrCounters={}; S.dhikrCounters._active=((S.dhikrCounters._active||0)+1)%DHIKR_COUNTER_DATA.length; saveState(); renderDhikrCounter(); }
+  function toggleDhikrHaptic() {
+    if (!S.dhikrSettings || typeof S.dhikrSettings !== 'object') S.dhikrSettings = {};
+    S.dhikrSettings.haptic = !S.dhikrSettings.haptic;
+    saveState();
+    renderDhikrCounter();
+  }
   function addCustomDhikr(arabic, roman, english, target) {
     const clean = value => String(value == null ? '' : value).trim().slice(0, 500);
     arabic = clean(arabic);
@@ -114,6 +120,7 @@
   window.checkDhikrBadges = checkDhikrBadges;
   window.resetDhikr = resetDhikr;
   window.nextDhikr = nextDhikr;
+  window.toggleDhikrHaptic = toggleDhikrHaptic;
   window.addCustomDhikr = addCustomDhikr;
   window.removeCustomDhikr = removeCustomDhikr;
   function tapSituationalDhikr(category, index) {

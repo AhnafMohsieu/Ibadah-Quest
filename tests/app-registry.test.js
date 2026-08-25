@@ -20,7 +20,7 @@ const expected = [
   'quranSearchFilter','openQuranSurah','quranBack','openQuranJuz','openHadithCollection','openHadithBook',
   'hadithBack','playQuranVerse','playSurah','stopSurah','setQuranReciter','playJuz','updateJuzButton',
   'calPrevMonth','calNextMonth','calGoToday','selectAvatar','selectTitle','selectFrame','setTheme',
-  'toggleTheme','toggleNotifications','buy','tapDhikr','resetDhikr','nextDhikr','activateTab',
+  'toggleTheme','toggleNotifications','buy','tapDhikr','resetDhikr','nextDhikr','toggleDhikrHaptic','activateTab',
   'switchCategory','toggleAvatarPicker'
 ];
 

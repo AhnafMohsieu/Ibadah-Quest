@@ -238,6 +238,7 @@
         <div style="margin-top:12px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
           <button class="dhikr-reset-btn" onclick="App.resetDhikr()">${iqIcon('refresh-cw')} Reset</button>
           <button class="dhikr-reset-btn" onclick="App.nextDhikr()">Next ▶</button>
+          <button class="dhikr-reset-btn" onclick="App.toggleDhikrHaptic()" aria-pressed="${!!(S.dhikrSettings && S.dhikrSettings.haptic)}">${iqIcon('zap')} Vibration ${S.dhikrSettings && S.dhikrSettings.haptic ? 'On' : 'Off'}</button>
         </div>
       </div>
     `;

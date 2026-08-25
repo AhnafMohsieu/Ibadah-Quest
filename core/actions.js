@@ -510,6 +510,7 @@ Object.keys(NEW_POOLS).forEach(k => {
       switchCategory: typeof window.switchCategory === 'function' ? window.switchCategory : () => {},
       activateTab: typeof window.activateTab === 'function' ? window.activateTab : () => {},
       tapDhikr: typeof window.tapDhikr === 'function' ? window.tapDhikr : () => {},
+      toggleDhikrHaptic: appAction('toggleDhikrHaptic'),
       resetDhikr: typeof window.resetDhikr === 'function' ? window.resetDhikr : () => {},
       nextDhikr: typeof window.nextDhikr === 'function' ? window.nextDhikr : () => {},
       openSituational: typeof window.openSituational === 'function' ? window.openSituational : () => {},
