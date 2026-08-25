@@ -399,6 +399,7 @@ Object.keys(NEW_POOLS).forEach(k => {
         try { if (window.checkWeeklyConsistency) window.checkWeeklyConsistency(); } catch(e) {}
       }
     }
+    try { if (typeof window.syncSeason === 'function') window.syncSeason(t); } catch(e) { console.warn('seasonal sync failed:', e); }
     if (S.log && Object.keys(S.log).length > 400) compactLogs();
     if (typeof window.genDQ === 'function') window.genDQ();
     if (typeof window.genWQ === 'function') window.genWQ();

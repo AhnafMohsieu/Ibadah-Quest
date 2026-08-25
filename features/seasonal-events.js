@@ -31,6 +31,26 @@
     renderSeasonalBanner();
   }
 
+  function seasonForDate(d) {
+    if (!d || typeof d.getTime !== 'function' || isNaN(d.getTime())) return null;
+    var h = (typeof window !== 'undefined' && window.gregorianToHijri)
+      ? window.gregorianToHijri(d.getFullYear(), d.getMonth() + 1, d.getDate())
+      : null;
+    if (!h) return null;
+    if (h.month === 9) return 'ramadan';
+    if (h.month === 12 && h.day <= 10) return 'hajj';
+    return null;
+  }
+
+  function syncSeason(dateStr) {
+    if (!dateStr) return;
+    var target = seasonForDate(new Date(dateStr + 'T00:00:00'));
+    var cur = S.seasonal && S.seasonal.active ? S.seasonal.active : null;
+    if (target === cur) return;
+    if (target) activateSeason(target);
+    else deactivateSeason();
+  }
+
   function renderSeasonalBanner() {
     const area = document.getElementById('seasonalBanner');
     if (!area) return;
@@ -71,6 +91,8 @@
   window.renderSeasonalBanner = renderSeasonalBanner;
   window.activateSeason = activateSeason;
   window.deactivateSeason = deactivateSeason;
+  window.seasonForDate = seasonForDate;
+  window.syncSeason = syncSeason;
   window.claimEidReward = claimEidReward;
   window.trackHajjDay = trackHajjDay;
   window.isRamadan = isRamadan;
