@@ -383,14 +383,6 @@ Object.keys(NEW_POOLS).forEach(k => {
     }
   }
   try { window.applyTheme(); } catch(e) { console.error('applyTheme in initApp failed:', e); }
-  // Profile as main tab
-  TAB_GROUPS.profile_main = [
-    { id: 'profile', icon: 'user', label: 'Profile' },
-    { id: 'trophies', icon: 'trophy', label: 'Trophies' },
-    { id: 'progress', icon: 'bar-chart-3', label: 'Progress' },
-    { id: 'stats', icon: 'trending-up', label: 'Analytics' },
-    { id: 'rewards', icon: 'gift', label: 'Rewards' }
-  ];
 
     const t = today();
     if (S.lad !== t) { S.lad=t; if(S.ab&&S.ab.exp<t) S.ab=null; if (typeof window.recalc === 'function') window.recalc(); saveState(); }

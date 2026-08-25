@@ -157,6 +157,14 @@ const TAB_GROUPS = {
     { id: 'women', label: 'Great Women' }
   ],
 
+  profile_main: [
+    { id: 'profile', icon: 'user', label: 'Profile' },
+    { id: 'trophies', icon: 'trophy', label: 'Trophies' },
+    { id: 'progress', icon: 'bar-chart-3', label: 'Progress' },
+    { id: 'stats', icon: 'trending-up', label: 'Analytics' },
+    { id: 'rewards', icon: 'gift', label: 'Rewards' }
+  ],
+
   // -- LIBRARY (categorized -- reference shelves) --
   library: [
     {
