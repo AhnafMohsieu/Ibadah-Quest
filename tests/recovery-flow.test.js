@@ -196,6 +196,18 @@ test('source: init() and initAsync() intercept before finishInit()', () => {
   }
 });
 
+// ── Cold-boot seasonal wiring pin ─────────────────────────────────────────────
+
+test('postDeferHook retries seasonal sync (cold-boot wiring pin)', () => {
+  const src = fs.readFileSync(path.join(__dirname, '..', 'core', 'actions.js'), 'utf8');
+  const hookIdx = src.indexOf('postDeferHook = function');
+  assert.ok(hookIdx > -1, 'postDeferHook must exist');
+  const hookEnd = src.indexOf('\n      };', hookIdx);
+  assert.ok(hookEnd > -1, 'postDeferHook body must be closed');
+  const body = src.slice(hookIdx, hookEnd);
+  assert.ok(body.includes('syncSeason'), 'postDeferHook must retry syncSeason for cold boots');
+});
+
 // ── Integration: corrupted boot shows modal and blocks normal init ───────────
 
 function corruptBootSandbox() {

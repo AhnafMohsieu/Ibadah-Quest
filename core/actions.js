@@ -671,6 +671,7 @@ Object.keys(NEW_POOLS).forEach(k => {
         try { if (window.autoTrackJourneyProgress) window.autoTrackJourneyProgress(); } catch(e) { console.error('Post-defer journey tracking failed:', e); }
         try { if (window.checkConsistency) window.checkConsistency(); } catch(e) { console.error('Post-defer consistency check failed:', e); }
         try { if (window.checkWeeklyConsistency) window.checkWeeklyConsistency(); } catch(e) { console.error('Post-defer weekly consistency failed:', e); }
+        try { if (typeof window.syncSeason === 'function') window.syncSeason(today()); } catch(e) { console.error('Post-defer seasonal sync failed:', e); }
       };
       if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', postDeferHook);
