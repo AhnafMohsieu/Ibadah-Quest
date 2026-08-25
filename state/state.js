@@ -88,16 +88,43 @@ function resolveCurrentUser() {
     }
     return migrateState(p, sourceVersion);
   }
-  function loadLocalState() {
+  function readRawLocal() {
+    try { return localStorage.getItem(PREFIX + currentUser); } catch (e) { return null; }
+  }
+  function parseMaybeJunk(raw) {
+    if (!raw) return null;
+    try { return JSON.parse(raw); } catch (e) { return undefined; } // undefined = unparseable
+  }
+  function flagCorrupt(source, raw, parsed) {
+    var key = null;
     try {
-      var raw = localStorage.getItem(PREFIX + currentUser);
-      return raw ? JSON.parse(raw) : null;
-    } catch(e) { return null; }
+      key = (window.Recovery && window.Recovery.quarantine)
+        ? window.Recovery.quarantine(currentUser, raw) : null;
+    } catch (e) {}
+    if (typeof window !== 'undefined') {
+      window.__iqCorruption = { user: currentUser, source: source, quarantineKey: key };
+    }
+    console.warn('Corrupt state detected (' + source + '); quarantined before any overwrite.');
+    return key;
+  }
+  function loadLocalState() {
+    var raw = readRawLocal();
+    var parsed = parseMaybeJunk(raw);
+    if (raw && parsed === undefined) { flagCorrupt('ls', raw); return null; }
+    if (parsed !== null && parsed !== undefined &&
+        window.Recovery && window.Recovery.isJunkState && window.Recovery.isJunkState(parsed)) {
+      flagCorrupt('ls', raw, parsed);
+      return null;
+    }
+    return parsed || null;
   }
   // Synchronous compatibility path for callers outside the async boot sequence.
   function loadState() {
+    var corrupt = typeof window !== 'undefined' ? !!window.__iqCorruption : false;
     var state = normalizeState(loadLocalState());
-    try { localStorage.setItem(PREFIX + currentUser, JSON.stringify(state)); } catch(e) {}
+    if (!corrupt) {
+      try { localStorage.setItem(PREFIX + currentUser, JSON.stringify(state)); } catch (e) {}
+    }
     return state;
   }
   async function loadStateAsync() {
@@ -105,6 +132,10 @@ function resolveCurrentUser() {
     if (window.Storage && window.Storage.load) {
       try {
         var stored = await window.Storage.load(currentUser);
+        if (stored && window.Recovery && window.Recovery.isJunkState(stored)) {
+          flagCorrupt('idb', stored);
+          stored = null; // fall through to localStorage path
+        }
         if (stored) {
           var storedVersion = Number(stored.schemaVersion) || 1;
           var normalized = normalizeState(stored);

@@ -41,6 +41,22 @@
     });
   }
 
+  function saveRaw(key, value) {
+    return new Promise(function(resolve, reject) {
+      var req = getStore('readwrite').put(value, key);
+      req.onsuccess = function() { resolve(); };
+      req.onerror = function() { reject(req.error); };
+    });
+  }
+
+  function getRaw(key) {
+    return new Promise(function(resolve, reject) {
+      var req = getStore('readonly').get(key);
+      req.onsuccess = function() { resolve(req.result); };
+      req.onerror = function() { reject(req.error); };
+    });
+  }
+
   function destroy(user) {
     return new Promise(function(resolve, reject) {
       var req = getStore('readwrite').delete(user);
@@ -97,5 +113,5 @@
     });
   }
 
-  window.Storage = { init: init, load: load, save: save, destroy: destroy, exportAll: exportAll, importAll: importAll, migrate: migrate };
+  window.Storage = { init: init, load: load, save: save, saveRaw: saveRaw, getRaw: getRaw, destroy: destroy, exportAll: exportAll, importAll: importAll, migrate: migrate };
 })();
