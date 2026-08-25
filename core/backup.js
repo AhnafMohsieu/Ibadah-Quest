@@ -50,24 +50,33 @@
     return { ok: true };
   }
 
-  function snapshotBeforeImport(ls) {
+  function snapshotBeforeImport(ls, idbExport) {
     try {
       var prev = ls.getItem('iq9_preimport_1');
       if (prev !== null) ls.setItem('iq9_preimport_2', prev);
+      // Capture EVERY profile key (multi-profile safety) plus theme/zakat
+      // inputs and the active-user pointer.
+      var wanted = { 'iq9_active_user': true, 'iqTheme': true, 'iq_zakat_inputs': true };
       var keys = {};
-      [USER_PREFIX + 'default', 'iq9_active_user'].forEach(function(k) {
-        var v = ls.getItem(k);
-        if (v !== null) keys[k] = v;
-      });
-      // include the ACTIVE user's key even when it isn't 'default'
-      var activeUser = ls.getItem('iq9_active_user');
-      if (activeUser) {
-        var ak = USER_PREFIX + activeUser;
-        var av = ls.getItem(ak);
-        if (av !== null) keys[ak] = av;
+      for (var i = 0; i < ls.length; i++) {
+        var k = ls.key(i);
+        if (!k) continue;
+        if (k.indexOf(USER_PREFIX) === 0 || wanted[k]) {
+          var v = ls.getItem(k);
+          if (v !== null) keys[k] = v;
+        }
       }
-      ls.setItem('iq9_preimport_1', JSON.stringify({ at: new Date().toISOString(), keys: keys }));
+      ls.setItem('iq9_preimport_1', JSON.stringify({ at: new Date().toISOString(), keys: keys, idb: idbExport || null }));
     } catch (e) { console.warn('pre-import snapshot failed:', e); }
+  }
+
+  function readSnapshot(ls) {
+    try {
+      var raw = ls.getItem('iq9_preimport_1');
+      if (!raw) return null;
+      var snap = JSON.parse(raw);
+      return (snap && typeof snap === 'object') ? snap : null;
+    } catch (e) { return null; }
   }
 
   function rollbackSnapshot(ls) {
@@ -87,6 +96,6 @@
   window.Backup = {
     checksum: checksum, stableStringify: stableStringify, buildExport: buildExport,
     validateBackup: validateBackup, snapshotBeforeImport: snapshotBeforeImport,
-    rollbackSnapshot: rollbackSnapshot
+    rollbackSnapshot: rollbackSnapshot, readSnapshot: readSnapshot
   };
 })();

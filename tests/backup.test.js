@@ -61,15 +61,49 @@ test('validateBackup rejects junk shapes with reasons', () => {
 test('snapshot rotation keeps newest 2 and rollback restores bytes', () => {
   const ls = mkLS({ iq9_user_default: '{"xp":1}', iq9_active_user: 'default' });
   const B = loadBackup(ls);
-  B.snapshotBeforeImport(ls);
+  B.snapshotBeforeImport(ls, null);
   ls.setItem('iq9_user_default', '{"xp":222}');           // simulate import overwrite
-  B.snapshotBeforeImport(ls);                              // second import
+  B.snapshotBeforeImport(ls, null);                        // second import
   ls.setItem('iq9_user_default', '{"xp":333}');
-  B.snapshotBeforeImport(ls);                              // third → oldest evicted
+  B.snapshotBeforeImport(ls, null);                        // third → oldest evicted
   const snapKeys = [];
   for (let i = 0; i < ls.length; i++) { const k = ls.key(i); if (k && k.indexOf('iq9_preimport_') === 0) snapKeys.push(k); }
   assert.strictEqual(snapKeys.length, 2, 'rotation cap');
   const n = B.rollbackSnapshot(ls);
   assert.strictEqual(n >= 1, true);
   assert.strictEqual(JSON.parse(ls.getItem('iq9_user_default')).xp, 333); // most recent snapshot (pre_1 = third capture)
+});
+
+test('snapshot captures every profile key plus theme and zakat inputs', () => {
+  const ls = mkLS({
+    iq9_user_default: '{"xp":1}',
+    iq9_user_amina: '{"xp":9}',
+    iq9_user_yusuf: '{"xp":4}',
+    iq9_active_user: 'amina',
+    iqTheme: 'emara',
+    iq_zakat_inputs: '{"zkGold":"10"}'
+  });
+  const B = loadBackup(ls);
+  B.snapshotBeforeImport(ls, null);
+  const rec = B.readSnapshot(ls);
+  for (const k of ['iq9_user_default', 'iq9_user_amina', 'iq9_user_yusuf', 'iq9_active_user', 'iqTheme', 'iq_zakat_inputs']) {
+    assert.strictEqual(rec.keys[k], ls.getItem(k), 'captured: ' + k);
+  }
+});
+
+test('snapshot embeds the idb export verbatim for dual-store rollback', () => {
+  const ls = mkLS({ iq9_user_default: '{"xp":1}' });
+  const B = loadBackup(ls);
+  const idbStub = { iq9_user_default: { xp: 1 }, iq9_user_second: { xp: 2 } };
+  B.snapshotBeforeImport(ls, idbStub);
+  // JSON compare: readSnapshot parses in the module's own vm realm, so
+  // deepStrictEqual's prototype check would false-fail across realms.
+  assert.strictEqual(JSON.stringify(B.readSnapshot(ls).idb), JSON.stringify(idbStub));
+  B.snapshotBeforeImport(ls, null);
+  assert.strictEqual(B.readSnapshot(ls).idb, null, 'missing idb export stored as null');
+});
+
+test('readSnapshot returns null when no snapshot exists', () => {
+  const B = loadBackup(mkLS({}));
+  assert.strictEqual(B.readSnapshot(mkLS({})), null);
 });

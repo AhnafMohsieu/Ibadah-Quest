@@ -134,18 +134,27 @@
           : { ok: !!(data && typeof data === 'object' && !Array.isArray(data)) };
         if (!verdict.ok) { toast(iqIcon('alert-triangle'), verdict.error || 'Invalid backup file.', false, 3200); return; }
         delete data._exported; delete data._version; delete data._appVersion; delete data._checksum;
-        if (window.Backup && typeof window.Backup.snapshotBeforeImport === 'function') {
-          try { window.Backup.snapshotBeforeImport(localStorage); } catch (e) {}
-        }
         _undoPending = true;
-        if (window.Storage && window.Storage.importAll) {
-          window.Storage.importAll(data).then(function() {
-            _completeImport();
-          }).catch(function() {
+        // Snapshot BOTH stores before anything is touched: LS keys plus the
+        // current IndexedDB contents (so IDB-path imports are fully revertible).
+        var snapAndGo = function(idbExport) {
+          if (window.Backup && typeof window.Backup.snapshotBeforeImport === 'function') {
+            try { window.Backup.snapshotBeforeImport(localStorage, idbExport); } catch (e) {}
+          }
+          if (window.Storage && window.Storage.importAll) {
+            window.Storage.importAll(data).then(function() {
+              _completeImport();
+            }).catch(function() {
+              importDataLS(data);
+            });
+          } else {
             importDataLS(data);
-          });
+          }
+        };
+        if (window.Storage && window.Storage.exportAll) {
+          window.Storage.exportAll().then(snapAndGo).catch(function() { snapAndGo(null); });
         } else {
-          importDataLS(data);
+          snapAndGo(null);
         }
       };
       reader.readAsText(file);
@@ -165,17 +174,27 @@
       '<button class="btn btn-primary" data-action="keep">Keep imported data</button>' +
       '<button class="btn" data-action="undo">Undo — restore my previous data</button>' +
       '</div></div>';
+    // Mirror showRecoveryModal's visibility treatment: without .show + explicit
+    // pointerEvents the overlay stays opacity:0 and hit-test-dead.
+    ov.classList.add('show');
     ov.style.display = 'flex';
+    ov.style.pointerEvents = 'auto';
     ov.querySelectorAll('[data-action]').forEach(function(b) {
       b.addEventListener('click', function() {
         if (b.getAttribute('data-action') === 'undo') {
           var n = (window.Backup && typeof window.Backup.rollbackSnapshot === 'function')
             ? window.Backup.rollbackSnapshot(localStorage) : 0;
+          var rec = (window.Backup && typeof window.Backup.readSnapshot === 'function')
+            ? window.Backup.readSnapshot(localStorage) : null;
+          if (rec && rec.idb && window.Storage && window.Storage.importAll) {
+            try { window.Storage.importAll(rec.idb).catch(function() {}); } catch (e) {}
+          }
           S = window.loadState();
           initApp();
           toast(n ? iqIcon('refresh-cw') : iqIcon('info'),
                 n ? 'Previous data restored!' : 'No snapshot found.', false, 2200);
         }
+        ov.classList.remove('show'); ov.style.pointerEvents = '';
         ov.style.display = 'none'; ov.innerHTML = '';
       });
     });
