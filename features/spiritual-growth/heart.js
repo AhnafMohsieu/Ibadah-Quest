@@ -47,7 +47,7 @@
   }
 
   function renderHeartRefinement() {
-    const el = document.getElementById('heartArea');
+    const el = document.getElementById('growthHeartArea');
     if (!el || !SpiritualGrowth.isVisible('heart')) {
       if (el) el.innerHTML = '';
       return;

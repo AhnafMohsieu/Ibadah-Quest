@@ -212,7 +212,9 @@ test('growth tab + settings render icons through iqIcon, no mojibake separator',
 
 test('index.html declares armor/heart growth areas and loads their scripts', () => {
   assert.ok(html.includes('id="armorArea"'), 'armorArea missing');
-  assert.ok(html.includes('id="heartArea"'), 'heartArea missing');
+  assert.ok(html.includes('id="heartArea"'), 'knowledge heartArea missing');
+  assert.ok(html.includes('id="growthHeartArea"'), 'growthHeartArea missing');
+  assert.ok((html.match(/id="heartArea"/g) || []).length === 1, 'heartArea must appear exactly once');
   assert.ok(html.includes('features/spiritual-growth/armor.js'), 'armor script missing');
   assert.ok(html.includes('features/spiritual-growth/heart.js'), 'heart script missing');
 });
@@ -465,4 +467,10 @@ test('situational dhikr tab is wired correctly', () => {
   assert.ok(relatable.includes('SITUATIONAL_DHIKR'), 'SITUATIONAL_DHIKR data must exist');
   assert.ok(css.includes('.situational-grid'), 'situational-grid CSS missing');
   assert.ok(css.includes('.situational-card'), 'situational-card CSS missing');
+});
+
+test('index.html has no duplicate element ids', () => {
+  const ids = [...html.matchAll(/\bid="([^"]+)"/g)].map(m => m[1]);
+  const dupes = [...new Set(ids.filter((id, i) => ids.indexOf(id) !== i))];
+  assert.deepEqual(dupes, [], 'duplicate ids found: ' + dupes.join(', '));
 });
