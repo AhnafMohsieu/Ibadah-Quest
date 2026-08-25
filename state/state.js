@@ -49,7 +49,7 @@ function resolveCurrentUser() {
       dailyRatings:{}, dailyReflections:{},
       lastDailyRitual:null, lastDailySummary:null, lastWeeklySummary:null, lastWeeklyConsistency:null,
       healthXpClaimed:{}, ownedTitles:[], activeTitle:null, ownedFrames:[], activeFrame:null,
-      lastAllPrayersSurprise:null, dhikrSettings:{haptic:true}, lastActiveDate:null,
+      lastAllPrayersSurprise:null, dhikrSettings:{haptic:true},
       schemaVersion:STATE_SCHEMA_VERSION, bookmarks:[]
     };
   }

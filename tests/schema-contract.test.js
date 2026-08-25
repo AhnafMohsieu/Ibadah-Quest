@@ -37,8 +37,7 @@ const EXPECTED = {
   ownedFrames: [],
   activeFrame: null,
   lastAllPrayersSurprise: null,
-  dhikrSettings: { haptic: true },
-  lastActiveDate: null
+  dhikrSettings: { haptic: true }
 };
 
 test('freshState declares every formerly-ad-hoc field', () => {

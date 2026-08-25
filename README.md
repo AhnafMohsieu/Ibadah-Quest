@@ -11,6 +11,7 @@ Track your five daily prayers, dhikr, Quran reading, voluntary acts, and more. E
 - **Combo Streaks** — Maintain consistency across multiple worship categories
 - **Achievement Showcase** — Unlock badges and milestones as you progress
 - **Seasonal Events** — Ramadan tracker, Laylat al-Qadr guidance, and themed content
+- **Automatic Seasons** — Ramadan and Dhul Hijjah modes activate automatically by Hijri date
 - **Analytics Dashboard** — Weekly comparisons, trend charts, and smart insights
 - **Personal Goals** — Set and track custom worship targets
 - **Spiritual Growth** — Progressive content system with themed journeys
