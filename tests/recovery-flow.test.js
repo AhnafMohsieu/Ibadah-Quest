@@ -332,6 +332,71 @@ test('recoverFresh with exact RESET token wipes to fresh state and continues boo
   assert.ok(sb.window.App, 'boot continued after fresh start');
 });
 
+// ── Fix round 1 (I1): corrupt LS + healthy IDB must never be destructive ─────
+
+test('salvage falls back to healthy IDB copy when LS salvage fails', async () => {
+  const sb = suppressedBootSandbox({ getItem: (k) => (k === 'iq9_user_default' ? '{junk' : null) });
+  loadModule(sb, 'core/actions.js');
+  sb.window.__iqCorruption = { user: 'default', source: 'ls', quarantineKey: 'q1' };
+  sb.window.showRecoveryModal();
+  sb.window.Storage = { getRaw: () => Promise.resolve({ xp: 7, log: {} }) };
+  sb.window.recoverSalvage();
+  await new Promise(r => setTimeout(r, 20));
+  assert.strictEqual(sb.S.xp, 7, 'healthy IDB copy recovered');
+  assert.ok(sb._saves >= 1, 'recovered IDB state persisted');
+  assert.strictEqual(sb.window.__iqCorruption, null, 'flag cleared after resolution (GATE 2)');
+  assert.strictEqual(sb._els.recoveryOverlay.style.display, 'none', 'overlay closed');
+  assert.ok(sb.window.App, 'boot continued via recovered IDB state');
+});
+
+test('salvage stays on modal when both LS and IDB copies are unusable', async () => {
+  const sb = suppressedBootSandbox({ getItem: (k) => (k === 'iq9_user_default' ? '{junk' : null) });
+  loadModule(sb, 'core/actions.js');
+  sb.window.__iqCorruption = { user: 'default', source: 'ls', quarantineKey: 'q1' };
+  sb.window.showRecoveryModal();
+  sb.window.Storage = { getRaw: () => Promise.resolve({}) }; // junk: no log/xp/schemaVersion
+  sb.window.recoverSalvage();
+  await new Promise(r => setTimeout(r, 20));
+  assert.strictEqual(sb._saves, 0, 'nothing saved from junk');
+  assert.ok(sb.window.__iqCorruption, 'flag intact — still on modal');
+  assert.strictEqual(typeof sb.window.App, 'undefined', 'boot NOT continued');
+  assert.ok(sb._els.toastOverlay.innerHTML.includes('Could not recover'), 'failure toast shown');
+});
+
+test('recoverFresh recovers healthy IDB copy instead of wiping (prompt never shown)', async () => {
+  const sb = suppressedBootSandbox();
+  loadModule(sb, 'core/actions.js');
+  sb.window.__iqCorruption = { user: 'default', source: 'ls', quarantineKey: 'q1' };
+  let promptCalls = 0;
+  sb.prompt = () => { promptCalls++; throw new Error('prompt must not be called'); };
+  const baseFresh = sb.window.freshState;
+  let freshCalls = 0;
+  sb.window.freshState = () => { freshCalls++; return baseFresh(); };
+  sb.window.Storage = { load: () => Promise.resolve({ xp: 11, log: {} }) };
+  sb.window.recoverFresh();
+  await new Promise(r => setTimeout(r, 20));
+  assert.strictEqual(promptCalls, 0, 'typed confirmation never requested');
+  assert.strictEqual(freshCalls, 0, 'freshState never generated — nothing wiped');
+  assert.strictEqual(sb.S.xp, 11, 'IDB state recovered instead');
+  assert.ok(sb._saves >= 1, 'recovered state persisted');
+  assert.strictEqual(sb.window.__iqCorruption, null, 'flag cleared (GATE 2)');
+  assert.ok(sb.window.App, 'boot continued with recovered data');
+});
+
+test('recoverFresh proceeds to typed prompt when IDB holds only junk', async () => {
+  const sb = suppressedBootSandbox();
+  loadModule(sb, 'core/actions.js');
+  sb.window.__iqCorruption = { user: 'default', source: 'ls', quarantineKey: 'q1' };
+  sb.prompt = () => 'RESET';
+  sb.window.Storage = { load: () => Promise.resolve({}) }; // junk: no log/xp/schemaVersion
+  sb.window.recoverFresh();
+  await new Promise(r => setTimeout(r, 20));
+  assert.strictEqual(sb.S.xp, 0, 'fresh state written after typed confirm');
+  assert.ok(sb._saves >= 1);
+  assert.strictEqual(sb.window.__iqCorruption, null);
+  assert.ok(sb.window.App);
+});
+
 // ── Import backup path ────────────────────────────────────────────────────────
 
 test('recoverImport clears flag BEFORE invoking importer and closes overlay', () => {

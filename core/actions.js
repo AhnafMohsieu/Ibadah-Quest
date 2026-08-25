@@ -168,7 +168,22 @@
       }).catch(function() { applySalvage(null); });
       return;
     }
-    applySalvage(window.Recovery.salvageInto(window.freshState(), raw));
+    var lsResult = window.Recovery.salvageInto(window.freshState(), raw);
+    if (lsResult) { applySalvage(lsResult); return; }
+    // LS unusable — fall back to the IndexedDB copy before offering
+    // destructive options (never leave the user stuck / force a wipe).
+    if (window.Storage && window.Storage.getRaw) {
+      window.Storage.getRaw(PREFIX + currentUser).then(function(v) {
+        var idbResult = (v && !window.Recovery.isJunkState(v))
+          ? window.Recovery.salvageInto(window.freshState(), v) : null;
+        if (idbResult) { applySalvage(idbResult); }
+        else { showRecoveryModal(); toast(iqIcon('alert-triangle'), 'Could not recover — choose another option.'); }
+      }).catch(function() {
+        toast(iqIcon('alert-triangle'), 'Could not recover — choose another option.');
+      });
+      return;
+    }
+    toast(iqIcon('alert-triangle'), 'Could not recover — choose another option.');
   }
   function applySalvage(result) {
     if (result) { S = normalizeState(result); saveState(); toast(iqIcon('sparkles'), 'Recovered your data!'); }
@@ -183,12 +198,30 @@
     importData();
   }
   function recoverFresh() {
-    var token = prompt('Type RESET to erase corrupted data and start fresh:');
-    if (!window.Recovery.freshStartAllowed(token)) { toast(iqIcon('info'), 'Confirmation did not match. Nothing was erased.'); return; }
-    S = window.freshState();
-    saveState();
-    toast(iqIcon('sprout'), 'Fresh start ready.');
-    continueBootAfterRecovery();
+    var proceed = function() {
+      var token = prompt('Type RESET to erase corrupted data and start fresh:');
+      if (!window.Recovery.freshStartAllowed(token)) { toast(iqIcon('info'), 'Confirmation did not match. Nothing was erased.'); return; }
+      S = window.freshState();
+      saveState();
+      toast(iqIcon('sprout'), 'Fresh start ready.');
+      continueBootAfterRecovery();
+    };
+    // A typed wipe must never destroy the only healthy copy of user data.
+    if (window.Storage && window.Storage.load) {
+      window.Storage.load(currentUser).then(function(stored) {
+        if (stored && !window.Recovery.isJunkState(stored)) {
+          // Healthy copy survives in IndexedDB - recover it instead.
+          toast(iqIcon('sparkles'), 'Healthy data found on device - recovering that instead.');
+          S = normalizeState(stored);
+          saveState();
+          continueBootAfterRecovery();
+          return;
+        }
+        proceed();
+      }).catch(proceed);
+      return;
+    }
+    proceed();
   }
   window.showRecoveryModal = showRecoveryModal;
   window.continueBootAfterRecovery = continueBootAfterRecovery;
