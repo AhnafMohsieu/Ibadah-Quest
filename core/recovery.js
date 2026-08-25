@@ -29,6 +29,9 @@
     var ls = lsNow(lsOverride);
     var stamp = new Date().toISOString().replace(/[:.]/g, '-');
     var key = QUARANTINE_PREFIX + user + '_' + stamp;
+    // Guarantee uniqueness even for same-ms double-quarantines (ls + idb in one boot).
+    var suffix = 0;
+    while (ls && ls.getItem(key) !== null) key = QUARANTINE_PREFIX + user + '_' + stamp + '_' + (++suffix);
     var payload = typeof raw === 'string' ? raw : JSON.stringify(raw);
     if (ls) {
       try { ls.setItem(key, payload); pruneQuarantines(user, ls); }

@@ -4,12 +4,8 @@ const assert = require('node:assert');
 const path = require('path');
 const { loadFile } = require('./helpers/load.js');
 
-function loadRecovery(lsStore, storageStub) {
+function loadRecovery(lsStore, storageStub, extraOverrides) {
   const store = Object.assign({}, lsStore);
-  // Harness tweak: real Date has ms resolution, so rapid synchronous quarantine()
-  // calls collide on the same timestamp key. Inject a monotonic Date so every
-  // quarantine gets a distinct, chronologically sortable ISO stamp.
-  let seq = 0;
   const ls = {
     getItem: k => (k in store ? store[k] : null),
     setItem: (k, v) => { store[k] = String(v); },
@@ -17,14 +13,11 @@ function loadRecovery(lsStore, storageStub) {
     key: i => Object.keys(store)[i] ?? null,
     get length() { return Object.keys(store).length; }
   };
-  const sb = loadFile(path.join(__dirname, '..', 'core', 'recovery.js'), {
+  const sb = loadFile(path.join(__dirname, '..', 'core', 'recovery.js'), Object.assign({
     localStorage: ls,
     console,
-    window: storageStub || {},
-    Date: function () {
-      return { toISOString: () => new Date(1700000000000 + (++seq) * 1000).toISOString() };
-    }
-  });
+    window: storageStub || {}
+  }, extraOverrides || {}));
   if (!sb.window.Recovery && sb.Recovery) sb.window = { Recovery: sb.Recovery };
   return { sb, store };
 }
@@ -54,6 +47,18 @@ test('quarantine writes timestamped copy and prunes to newest 3 per user', () =>
   assert.strictEqual(qKeys.length, 3, 'retention cap');
   assert.ok(store[qKeys[2]].includes('5'), 'newest retained');
   assert.ok(!store[qKeys[0]].includes('"xp:1"') || qKeys.length === 3);
+});
+
+test('quarantine yields two distinct keys when both stores flag in the same millisecond', () => {
+  const FrozenDate = function () {
+    return { toISOString: () => '2026-08-26T00:00:00.000Z' };
+  };
+  const { sb, store } = loadRecovery({}, {}, { Date: FrozenDate });
+  const k1 = sb.window.Recovery.quarantine('default', '{"source":"ls"}');
+  const k2 = sb.window.Recovery.quarantine('default', '{"source":"idb"}');
+  assert.notStrictEqual(k1, k2, 'same-ms quarantines must not collide');
+  assert.strictEqual(store[k1], '{"source":"ls"}');
+  assert.strictEqual(store[k2], '{"source":"idb"}');
 });
 
 test('salvageInto copies type-compatible known keys onto fresh template', () => {
