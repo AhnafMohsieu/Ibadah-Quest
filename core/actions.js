@@ -577,6 +577,25 @@ Object.keys(NEW_POOLS).forEach(k => {
     try { initModalKeyboardHandlers(); } catch(e) { console.error('Step 9 modal keyboard handlers failed:', e); }
     try { initThemeToggleKeyboard(); } catch(e) { console.error('Step 10 theme toggle keyboard failed:', e); }
     try { _initHashRouting(); } catch(e) { console.error('Step 10b hash routing init failed:', e); }
+    // Quota-failure banner: show on 'iq:quota', wire dismiss (re-arms the flag),
+    // and cover a quota failure that happened before init finished.
+    try {
+      window.showStorageBanner = function() {
+        var b = document.getElementById('storageBanner');
+        if (b) b.style.display = 'flex';
+      };
+      function dismissStorageBanner() {
+        var b = document.getElementById('storageBanner');
+        if (b) b.style.display = 'none';
+        try { window.__iqQuotaFailed = false; } catch(err) {}   // re-arm
+      }
+      if (typeof window.addEventListener === 'function') {
+        window.addEventListener('iq:quota', function() { window.showStorageBanner(); });
+      }
+      var sbClose = document.getElementById('storageBannerClose');
+      if (sbClose) sbClose.addEventListener('click', dismissStorageBanner);
+      if (window.__iqQuotaFailed) window.showStorageBanner();
+    } catch(e) { console.error('Step 10d storage banner init failed:', e); }
     // Deferred feature scripts (health, goals, spiritual-growth, etc.) execute after
     // init()/renderAll() has already run, so re-render once they have loaded to populate
     // their panels (DOMContentLoaded fires after all defer scripts execute).

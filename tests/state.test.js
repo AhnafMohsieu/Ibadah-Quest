@@ -95,3 +95,30 @@ test('loadStateAsync prefers IndexedDB when it has a saved state', async () => {
   assert.strictEqual(p.xp, 900);
   assert.deepEqual(p.log, {});
 });
+
+test('saveState surfaces quota failure via flag and event, does not throw', () => {
+  const events = [];
+  const quotaErr = Object.assign(new Error('full'), { name: 'QuotaExceededError' });
+  const lsStore = {};
+  const ls = {
+    getItem: k => lsStore[k] || null,
+    setItem: (k, v) => { throw quotaErr; },
+    removeItem: k => { delete lsStore[k]; }
+  };
+  let listeners = {};
+  const win = {
+    Storage: { save: () => Promise.resolve() },
+    dispatchEvent: (ev) => { events.push(ev.type); return true; },
+    addEventListener: (t, fn) => { listeners[t] = fn; }
+  };
+  const sb = loadFile(path.join(__dirname, '..', 'state', 'state.js'), { localStorage: ls, window: win });
+  sb.S = { xp: 1, lv: 1, log: {}, td: {}, vc: {} };
+  sb.saveState();                       // must not throw
+  assert.strictEqual(sb.window.__iqQuotaFailed, true);
+  assert.deepStrictEqual(events, ['iq:quota']);
+  sb.saveState();                       // second failure stays quiet
+  assert.deepStrictEqual(events, ['iq:quota'], 'event fires once until re-armed');
+  sb.window.__iqQuotaFailed = false;    // re-arm
+  sb.saveState();
+  assert.deepStrictEqual(events, ['iq:quota', 'iq:quota']);
+});

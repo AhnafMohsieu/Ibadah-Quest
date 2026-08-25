@@ -2793,3 +2793,7 @@ html[data-theme="emara"] .global-search { background: var(--card-bg); }
 .recovery-box { background: var(--bg1, #fff); border-radius: 16px; padding: 24px; max-width: 420px; text-align: center; box-shadow: 0 12px 40px rgba(0,0,0,.25); }
 .recovery-actions { display: flex; flex-direction: column; gap: 10px; margin-top: 16px; }
 .recovery-actions .btn-danger { color: #b91c1c; border-color: #fca5a5; }
+
+/* -- Storage quota banner (reuses .offline-banner positioning) -- */
+.storage-banner { justify-content: space-between; background: #fef3c7; color: #78350f; }
+.storage-banner button { background: transparent; border: 0; font-size: 1.2rem; cursor: pointer; color: inherit; padding: 0 8px; }

@@ -167,7 +167,20 @@ function saveState() {
     // Also save to localStorage (fallback / backward compat)
     localStorage.setItem(PREFIX + currentUser, JSON.stringify(S));
   } catch (e) {
-    if (e.name === 'QuotaExceededError' || e.code === 22) console.warn('localStorage quota exceeded');
+    var isQuota = e && (e.name === 'QuotaExceededError' || e.code === 22 || e.name === 'NS_ERROR_DOM_QUOTA_REACHED');
+    if (isQuota) {
+      var first = typeof window === 'undefined' || !window.__iqQuotaFailed;
+      if (typeof window !== 'undefined') window.__iqQuotaFailed = true;
+      console.warn('Storage full — saves are failing. Export a backup.');
+      if (first && typeof window !== 'undefined' && typeof window.dispatchEvent === 'function') {
+        try {
+          var ev = typeof Event === 'function' ? new Event('iq:quota') : { type: 'iq:quota' };
+          window.dispatchEvent(ev);
+        } catch (err) {}
+      }
+    } else {
+      console.warn('localStorage save failed:', e);
+    }
   }
 }
 function today(d) { const d2 = d || new Date(); return d2.getFullYear() + '-' + (d2.getMonth()+1).toString().padStart(2,'0') + '-' + d2.getDate().toString().padStart(2,'0'); }
