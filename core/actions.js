@@ -385,7 +385,13 @@ Object.keys(NEW_POOLS).forEach(k => {
   try { window.applyTheme(); } catch(e) { console.error('applyTheme in initApp failed:', e); }
 
     const t = today();
-    if (S.lad !== t) { S.lad=t; if(S.ab&&S.ab.exp<t) S.ab=null; if (typeof window.recalc === 'function') window.recalc(); saveState(); }
+    if (S.lad !== t) {
+      window._iqPrevLad = S.lad;
+      S.lad = t;
+      if (S.ab && S.ab.exp < t) S.ab = null;
+      if (typeof window.recalc === 'function') window.recalc();
+      saveState();
+    }
     if (S.log && Object.keys(S.log).length > 400) compactLogs();
     if (typeof window.genDQ === 'function') window.genDQ();
     if (typeof window.genWQ === 'function') window.genWQ();
@@ -420,8 +426,6 @@ Object.keys(NEW_POOLS).forEach(k => {
       }
     }
     runModalQueue();
-    if (window.checkConsistency) window.checkConsistency();
-    if (window.checkWeeklyConsistency) window.checkWeeklyConsistency();
     try {
       if (!_parseHashAndNavigate()) {
         const savedCat = S ? S.lastCat : null;
@@ -468,6 +472,8 @@ Object.keys(NEW_POOLS).forEach(k => {
       document.addEventListener('DOMContentLoaded', function() {
         try { if (window.renderAll) window.renderAll(); } catch(e) { console.error('Post-defer re-render failed:', e); }
         try { if (window.autoTrackJourneyProgress) window.autoTrackJourneyProgress(); } catch(e) { console.error('Post-defer journey tracking failed:', e); }
+        try { if (window.checkConsistency) window.checkConsistency(); } catch(e) { console.error('Post-defer consistency check failed:', e); }
+        try { if (window.checkWeeklyConsistency) window.checkWeeklyConsistency(); } catch(e) { console.error('Post-defer weekly consistency failed:', e); }
       });
     } catch(e) { console.error('Step 10c post-defer re-render hook failed:', e); }
     try {

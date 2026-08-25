@@ -1,12 +1,12 @@
 (function() {
   function checkConsistency() {
     const t = today();
-    const last = S.lastActiveDate;
+    // Boot captures yesterday's lad BEFORE rolling it forward; we consume it here.
+    // Fall back to S.lad when boot didn't capture (direct calls, older flows).
+    const last = (typeof window !== 'undefined' && window._iqPrevLad) || S.lad;
+    if (typeof window !== 'undefined') window._iqPrevLad = null;
 
-    // Update last active date
-    S.lastActiveDate = t;
-
-    // Comeback bonus
+    // Comeback bonus — compares the captured previous day against today.
     if (last && last !== t) {
       const lastDate = new Date(last + 'T00:00:00');
       const todayDate = new Date(t + 'T00:00:00');
@@ -24,6 +24,9 @@
         saveState();
       }
     }
+
+    // Single canonical field from here on (declared in freshState).
+    S.lad = t;
   }
 
   function checkWeeklyConsistency() {

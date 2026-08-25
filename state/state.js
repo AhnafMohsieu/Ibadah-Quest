@@ -76,6 +76,10 @@ function resolveCurrentUser() {
         if (!p.growthSettings.visible.includes(f)) p.growthSettings.visible.push(f);
       }
     }
+    if (p.lastActiveDate && typeof p.lastActiveDate === 'string') {
+      if (!p.lad || p.lastActiveDate > p.lad) p.lad = p.lastActiveDate;
+      delete p.lastActiveDate;
+    }
     if (typeof p.log !== 'object' || typeof p.td !== 'object') return migrateState(p, sourceVersion);
     for (var dk in p.log) {
       var e = p.log[dk];
