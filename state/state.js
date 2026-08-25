@@ -43,6 +43,13 @@ function resolveCurrentUser() {
       onboarding:{complete:false,step:0},
       notificationsEnabled:false, notificationLog:{},
       prayerSettings:{lat:23.8103,lng:90.4125,label:'Dhaka',method:1},
+      personalGoals:[],
+      seasonal:{active:null,ramadanQuests:[],hajjDays:0,eidRewards:[],arafahDone:false},
+      xpDaily:{}, combos:{}, milestones:[], achievementShowcase:{featured:[],unlockedAt:{}},
+      dailyRatings:{}, dailyReflections:{},
+      lastDailyRitual:null, lastDailySummary:null, lastWeeklySummary:null, lastWeeklyConsistency:null,
+      healthXpClaimed:{}, ownedTitles:[], activeTitle:null, ownedFrames:[], activeFrame:null,
+      lastAllPrayersSurprise:null, dhikrSettings:{haptic:true}, lastActiveDate:null,
       schemaVersion:STATE_SCHEMA_VERSION, bookmarks:[]
     };
   }
