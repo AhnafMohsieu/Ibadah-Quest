@@ -143,3 +143,32 @@ test('lad is updated after checkConsistency and prev is consumed', () => {
   assert.strictEqual(sandbox.S.lad, '2026-08-11');
   assert.strictEqual(sandbox.window._iqPrevLad, null);
 });
+
+test('mid-session rollover pays comeback bonus exactly once and consumes prev', () => {
+  const sandbox = loadSandbox(['features/consistency-bonuses.js'], {
+    S: {
+      lad: '2026-08-10',
+      xp: 100,
+      lv: 1,
+      log: {}
+    },
+    today: () => '2026-08-11',
+    lvFrom: () => 1,
+    toast: () => {},
+    saveState: () => {},
+    iqIcon: () => '⭐'
+  });
+
+  // initApp rollover-capture step (mid-session path): capture prev, roll forward.
+  sandbox.window._iqPrevLad = sandbox.S.lad;
+  sandbox.S.lad = '2026-08-11';
+
+  // Deferred features are already loaded mid-session, so checkConsistency runs now.
+  sandbox.checkConsistency();
+  assert.strictEqual(sandbox.S.xp, 150);
+  assert.strictEqual(sandbox.window._iqPrevLad, null);
+
+  // Consume-once semantics: a repeat invocation must not pay the bonus again.
+  sandbox.checkConsistency();
+  assert.strictEqual(sandbox.S.xp, 150);
+});

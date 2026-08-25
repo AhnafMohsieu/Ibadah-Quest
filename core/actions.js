@@ -391,6 +391,13 @@ Object.keys(NEW_POOLS).forEach(k => {
       if (S.ab && S.ab.exp < t) S.ab = null;
       if (typeof window.recalc === 'function') window.recalc();
       saveState();
+      // Mid-session boots (switch user / import / logout): deferred features are
+      // already loaded, so run consistency checks now instead of waiting for a
+      // DOMContentLoaded hook that already fired.
+      if (typeof window.checkConsistency === 'function') {
+        try { window.checkConsistency(); } catch(e) { console.warn('consistency check failed:', e); }
+        try { if (window.checkWeeklyConsistency) window.checkWeeklyConsistency(); } catch(e) {}
+      }
     }
     if (S.log && Object.keys(S.log).length > 400) compactLogs();
     if (typeof window.genDQ === 'function') window.genDQ();
@@ -469,12 +476,18 @@ Object.keys(NEW_POOLS).forEach(k => {
     // init()/renderAll() has already run, so re-render once they have loaded to populate
     // their panels (DOMContentLoaded fires after all defer scripts execute).
     try {
-      document.addEventListener('DOMContentLoaded', function() {
+      var postDeferHook = function() {
         try { if (window.renderAll) window.renderAll(); } catch(e) { console.error('Post-defer re-render failed:', e); }
         try { if (window.autoTrackJourneyProgress) window.autoTrackJourneyProgress(); } catch(e) { console.error('Post-defer journey tracking failed:', e); }
         try { if (window.checkConsistency) window.checkConsistency(); } catch(e) { console.error('Post-defer consistency check failed:', e); }
         try { if (window.checkWeeklyConsistency) window.checkWeeklyConsistency(); } catch(e) { console.error('Post-defer weekly consistency failed:', e); }
-      });
+      };
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', postDeferHook);
+      } else {
+        // Deferred scripts have executed by now even if we missed the event.
+        postDeferHook();
+      }
     } catch(e) { console.error('Step 10c post-defer re-render hook failed:', e); }
     try {
       document.addEventListener('keydown', (e) => {
