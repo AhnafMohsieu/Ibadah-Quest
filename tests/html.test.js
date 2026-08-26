@@ -269,11 +269,10 @@ test('dhikr tap grants per-tap XP, completion bonus, and auto-resets counter', (
   const fnIdx = dhikr.indexOf('function tapDhikr');
   assert.ok(fnIdx > -1, 'tapDhikr must exist in core/dhikr.js');
   const body = dhikr.slice(fnIdx, fnIdx + 1600);
-  assert.ok(body.includes('S.xp += 1;') || body.includes('S.xp+=1;'), 'per-tap dhikr XP +1 missing');
-  assert.ok(body.includes('S.xp += 20') || body.includes('S.xp+=20'), 'dhikr completion bonus +20 missing');
+  assert.ok(body.includes('let gain = 1'), 'per-tap dhikr XP +1 missing');
+  assert.ok(body.includes('gain += 20'), 'dhikr completion bonus +20 missing');
   assert.ok(body.includes('S.dhikrCounters[idx] = 0'), 'counter must auto-reset on completion');
-  assert.ok(body.includes('checkLevelUp'), 'level up must be evaluated after xp');
-  assert.ok(body.includes('S.lv = lvFrom(S.xp)'), 'level recomputed after xp');
+  assert.ok(body.includes('applyXpDelta(gain'), 'xp must flow through applyXpDelta (level recompute lives there)');
 });
 
 test('fasting toggle grants 50 XP on day checked and revokes on uncheck', () => {

@@ -32,16 +32,15 @@
   function tapDhikr() {
     if (!S.dhikrCounters) S.dhikrCounters = {};
     const idx = S.dhikrCounters._active || 0;
-    const oldLv = S.lv;
     S.dhikrCounters[idx] = (S.dhikrCounters[idx] || 0) + 1;
     if (S.dhikrSettings && S.dhikrSettings.haptic && navigator.vibrate) { navigator.vibrate(10); }
     const d = DHIKR_COUNTER_DATA[idx % DHIKR_COUNTER_DATA.length];
-    S.xp += 1;
+    let gain = 1;
     const cycleCount = S.dhikrCounters[idx];
     if (S.dhikrCounters[idx] >= d.target) {
       toast(iqIcon('sparkles'), 'Target reached! SubhanAllah!', false, 2000);
       if (S.dhikrSettings && S.dhikrSettings.haptic && navigator.vibrate) { navigator.vibrate([50, 50, 50]); }
-      S.xp += 20;
+      gain += 20;
       S.dhikrCounters[idx] = 0;
     }
     if (!S.dhikrSessions) S.dhikrSessions = [];
@@ -52,24 +51,25 @@
     if (!S.dhikrStats.daily[t]) S.dhikrStats.daily[t] = {};
     S.dhikrStats.daily[t][idx] = (S.dhikrStats.daily[t][idx] || 0) + 1;
     updateDhikrStreak();
-    checkDhikrBadges();
-    S.lv = lvFrom(S.xp);
-    checkLevelUp(oldLv);
+    const badgeGained = checkDhikrBadges();
+    applyXpDelta(gain + (badgeGained ? 25 * badgeGained : 0));
     saveState(); renderDhikrCounter();
     if (typeof window !== 'undefined' && window.renderLv) window.renderLv();
     if (typeof window !== 'undefined' && window.renderTopBar) window.renderTopBar();
   }
   function checkDhikrBadges() {
-    if (!S.dhikrStats) return;
+    if (!S.dhikrStats) return 0;
     const badges = S.dhikrStats.badges || [];
+    let gained = 0;
     DHIKR_BADGES.forEach(badge => {
       if (!badges.includes(badge.id) && badge.check(S)) {
         badges.push(badge.id);
         toast(iqIcon('trophy'), `Badge unlocked: ${badge.name}!`);
-        S.xp += 25;
+        gained++;
       }
     });
     S.dhikrStats.badges = badges;
+    return gained;
   }
   function resetDhikr() { if (!S.dhikrCounters) S.dhikrCounters={}; const idx=S.dhikrCounters._active||0; S.dhikrCounters[idx]=0; saveState(); renderDhikrCounter(); }
   function nextDhikr() { if (!S.dhikrCounters) S.dhikrCounters={}; S.dhikrCounters._active=((S.dhikrCounters._active||0)+1)%DHIKR_COUNTER_DATA.length; saveState(); renderDhikrCounter(); }
@@ -135,10 +135,7 @@
     const count = S.situationalXp[dayKey];
     if (count >= 10) { toast(iqIcon('info'), 'Daily limit reached for this dhikr (10)'); return; }
     S.situationalXp[dayKey] = count + 1;
-    const oldLv = S.lv;
-    S.xp += 5;
-    S.lv = lvFrom(S.xp);
-    checkLevelUp(oldLv);
+    applyXpDelta(5);
     playSound('pop');
     saveState();
     if (typeof renderLv === 'function') renderLv();

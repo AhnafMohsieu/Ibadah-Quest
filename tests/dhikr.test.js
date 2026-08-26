@@ -2,6 +2,8 @@
 const { test } = require('node:test');
 const assert = require('node:assert');
 const path = require('path');
+const fs = require('fs');
+const vm = require('vm');
 const { loadFile } = require('./helpers/load.js');
 
 function setup(overrides) {
@@ -32,6 +34,11 @@ function setup(overrides) {
     document: { getElementById: () => null },
     iqIcon: () => ''
   }, overrides || {}));
+  // dhikr.js now grants xp via applyXpDelta; load the real primitive into the
+  // same sandbox so its closures see this harness's S/lvFrom.
+  const xpSrc = fs.readFileSync(path.join(__dirname, '..', 'core', 'xp.js'), 'utf8');
+  vm.runInNewContext(xpSrc, sandbox, { filename: 'core/xp.js' });
+  for (const key of Object.keys(sandbox.window)) sandbox[key] = sandbox.window[key];
   return sandbox;
 }
 

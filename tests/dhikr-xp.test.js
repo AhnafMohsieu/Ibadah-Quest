@@ -28,7 +28,7 @@ const DHIKR_COUNTER_DATA = [
   { arabic: 'الْحَمْدُ لِلَّهِ', transliteration: 'Alhamdulillah', english: 'All praise is for Allah', target: 5, color: '#f59e0b' }
 ];
 
-const sandbox = loadSandbox([], {
+const sandbox = loadSandbox(['core/xp.js'], {
   S: {
     lv: 1, xp: 0,
     dhikrCounters: { _active: 0 },
@@ -47,7 +47,6 @@ const sandbox = loadSandbox([], {
   lvTitle: (lv) => 'Tier' + lv,
   checkLevelUp: () => {},
   updateDhikrStreak: () => {},
-  checkDhikrBadges: () => {},
   renderDhikrCounter: () => {},
   navigator: {},
   document: { getElementById: () => null },
@@ -75,12 +74,16 @@ function extractFunction(src, name) {
   throw new Error('could not extract ' + name);
 }
 
+// xp.js's IIFE-internal checkLevelUp/playSound shadow these sandbox stubs once
+// loaded; the real checkDhikrBadges is extracted below like tapDhikr.
 const tapSrc = extractFunction(dhikrSrc, 'tapDhikr');
+const badgeSrc = extractFunction(dhikrSrc, 'checkDhikrBadges');
 
-const wrapped = tapSrc + '\nthis.__tap = tapDhikr;';
+const wrapped = tapSrc + '\n' + badgeSrc + '\nthis.__tap = tapDhikr;\nthis.__checkBadges = checkDhikrBadges;';
 vm.runInNewContext(wrapped, sandbox, { filename: 'tapDhikr' });
 
 const tap = sandbox.__tap;
+const checkBadges = sandbox.__checkBadges;
 
 test('dhikr: each tap grants +1 XP', () => {
   S.xp = 0; S.dhikrCounters = { _active: 0, 0: 0 };
@@ -104,4 +107,25 @@ test('dhikr: session records completed cycle count', () => {
   tap();
   assert.strictEqual(S.dhikrSessions.length, 1, 'a session is recorded');
   assert.strictEqual(S.dhikrSessions[0].count, 5, 'session records the full count reached');
+});
+
+test('badge xp participates in the same level recompute as tap xp', () => {
+  // arrange: counter one tap away from target; first badge threshold reachable this tap
+  const realBadges = sandbox.DHIKR_BADGES;
+  sandbox.DHIKR_BADGES = [
+    { id: 'first_dhikr', name: 'First Dhikr', check: (S) => Object.keys((S.dhikrStats && S.dhikrStats.daily) || {}).length > 0 }
+  ];
+  S.xp = 0;
+  S.dhikrCounters = { _active: 1, 1: 4 }; // budget 5 (test data), one tap to reach
+  S.dhikrSessions = [];
+  S.dhikrStats = { total: {}, daily: {}, streak: 0, bestStreak: 0, lastSessionDate: null, badges: [], achievements: [] };
+  try {
+    tap();
+    // target(+20)+tap(+1)+badge(+25): level must reflect ALL of it immediately
+    assert.strictEqual(S.xp, 46, 'xp should sum tap, completion bonus, and badge reward');
+    assert.strictEqual(S.lv, sandbox.lvFrom(S.xp), 'level recomputed over the full xp delta');
+    assert.deepStrictEqual(S.dhikrStats.badges, ['first_dhikr'], 'badge unlocked exactly once');
+  } finally {
+    sandbox.DHIKR_BADGES = realBadges;
+  }
 });
