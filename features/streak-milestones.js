@@ -16,7 +16,7 @@
     for (const m of MILESTONES) {
       if (streak >= m.days && !S.milestones.includes(m.days)) {
         S.milestones.push(m.days);
-        applyXpDelta(m.xp);
+        applyXpDelta(m.xp, { skipLevelToast: true });
         toast(m.badge, `Milestone Unlocked: ${m.label}<br>+${m.xp} XP!`, true, 4000);
         newMilestone = true;
       }

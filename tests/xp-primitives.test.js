@@ -66,3 +66,37 @@ test('saveAndRenderDirty saves once and marks the four standard panels', () => {
   assert.deepEqual([...sb.__calls.markDirty].sort(), ['lv', 'progress', 'today', 'topbar']);
   assert.strictEqual(sb.__calls.renders, 1);
 });
+
+test('applyXpDelta fires the level-up toast by default; skipLevelToast suppresses it (spendXp forwards opts)', () => {
+  // Capture the innerHTML written to any fake element, mirroring mk()'s DOM stubs
+  // (checkLevelUp is IIFE-internal in xp.js, so the toast is observed via its DOM side effect).
+  const written = [];
+  function capture(sb) {
+    sb.document.getElementById = () => {
+      const el = { style: {}, classList: { add() {}, remove() {} }, onclick: null };
+      Object.defineProperty(el, 'innerHTML', {
+        get() { return this._html || ''; },
+        set(v) { this._html = v; written.push(String(v)); }
+      });
+      return el;
+    };
+    return sb;
+  }
+
+  const def = capture(mk({ S: { xp: 350, lv: 2 } }));
+  const rDef = def.window.applyXpDelta(150); // crosses quadratic threshold -> lv 3
+  assert.strictEqual(rDef.leveledUp, true, 'default call must still report leveledUp');
+  assert.ok(written.some(h => h.includes('LEVEL UP')), 'default call must run the real checkLevelUp toast path');
+
+  written.length = 0;
+  const skip = capture(mk({ S: { xp: 350, lv: 2 } }));
+  const rSkip = skip.window.applyXpDelta(150, { skipLevelToast: true });
+  assert.strictEqual(rSkip.leveledUp, true, 'skip flag must not change the returned info');
+  assert.strictEqual(skip.S.xp, 500, 'skip flag must not change the xp mutation');
+  assert.strictEqual(written.length, 0, 'skipLevelToast must not execute the toast path');
+
+  const spend = capture(mk({ S: { xp: 350, lv: 2 } }));
+  spend.window.spendXp(-150, { skipLevelToast: true }); // clamped delta -150 -> same crossing
+  assert.strictEqual(spend.S.xp, 500);
+  assert.strictEqual(written.length, 0, 'spendXp must forward opts to applyXpDelta');
+});

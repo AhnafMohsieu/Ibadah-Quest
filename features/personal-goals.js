@@ -36,7 +36,8 @@
 
     if (goal.current >= goal.target) {
       goal.completed = true;
-      applyXpDelta(reward);
+      const healedBase = Math.max(0, Number(S.xp) || 0);
+      applyXpDelta(healedBase - Number(S.xp) + reward, { skipLevelToast: true });
       toast(iqIcon('target'), `Goal Complete! +${reward} XP!`, true);
     }
     

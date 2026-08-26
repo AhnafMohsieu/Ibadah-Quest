@@ -7,18 +7,18 @@
     }
   }
 
-  function applyXpDelta(delta) {
+  function applyXpDelta(delta, opts) {
     var oldLv = S.lv;
     S.xp += delta;
     S.lv = lvFrom(S.xp);
-    checkLevelUp(oldLv);
+    if (!(opts && opts.skipLevelToast)) checkLevelUp(oldLv);
     return { oldLv: oldLv, newLv: S.lv, leveledUp: S.lv > oldLv };
   }
 
-  function spendXp(amount) {
+  function spendXp(amount, opts) {
     var clamped = Math.max(0, S.xp - amount);
     var delta = clamped - S.xp; // <= 0
-    return applyXpDelta(delta);
+    return applyXpDelta(delta, opts);
   }
 
   function saveAndRenderDirty() {

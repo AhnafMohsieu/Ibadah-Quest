@@ -28,7 +28,7 @@
     
     if (chosen.type === 'xp') {
       const amt = chosen.min + Math.floor(Math.random() * (chosen.max - chosen.min + 1));
-      applyXpDelta(amt);
+      applyXpDelta(amt, { skipLevelToast: true });
       toast(iqIcon('sparkles'), `Surprise! +${amt} XP!`, true);
     } else if (chosen.type === 'reroll') {
       genDQ();
