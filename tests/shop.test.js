@@ -265,7 +265,7 @@ test('selectFrame sets active frame', () => {
 
 test('buy with enough XP succeeds', () => {
   const S = { xp: 200, ur: {}, lv: 1 };
-  const sandbox = loadFile(path.join(__dirname, '..', 'core', 'shop.js'), {
+  const sandbox = loadSandbox(['core/xp.js', 'core/shop.js'], {
     S,
     SHOP: [{ id: 'r1', name: 'Title', cost: 100 }],
     today: () => '2026-08-11',
@@ -290,7 +290,7 @@ test('buy with enough XP succeeds', () => {
 test('buy with not enough XP shows toast', () => {
   let toastCalled = false;
   const S = { xp: 50, ur: {}, lv: 1 };
-  const sandbox = loadFile(path.join(__dirname, '..', 'core', 'shop.js'), {
+  const sandbox = loadSandbox(['core/xp.js', 'core/shop.js'], {
     S,
     SHOP: [{ id: 'r1', name: 'Title', cost: 100 }],
     today: () => '2026-08-11',
@@ -312,7 +312,7 @@ test('buy with not enough XP shows toast', () => {
 
 test('mystery box activates correctly', () => {
   const S = { xp: 1000, ur: {}, lv: 1 };
-  const sandbox = loadFile(path.join(__dirname, '..', 'core', 'shop.js'), {
+  const sandbox = loadSandbox(['core/xp.js', 'core/shop.js'], {
     S,
     SHOP: [{ id: 'r3', name: 'Mystery Box', cost: 350, t: 'mystery' }],
     today: () => '2026-08-11',

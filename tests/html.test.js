@@ -345,7 +345,8 @@ test('hero renderers are real and wired into renderDynamic', () => {
 });
 
 test('hero+topbar refresh on theme change and home tab', () => {
-  assert.ok(actions.includes('renderDynamic();'), 'setTheme must call renderDynamic');
+  assert.ok(themes.includes('window.updateTopBar()'), 'setTheme must refresh the topbar');
+  assert.ok(themes.includes('window.renderTab(tab)'), 'setTheme must re-render the active panel');
   const homeCall = actions.slice(actions.indexOf("name === 'home'"));
   assert.ok(homeCall.includes('window.renderTopBar();') || renderTabs.includes('window.renderTopBar();'), 'renderTab(home) calls renderTopBar');
 });

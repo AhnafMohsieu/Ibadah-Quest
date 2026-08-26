@@ -45,7 +45,7 @@ function setup() {
     if (!S.log[t]) S.log[t] = { p: {}, d: {}, v: {} };
     return S.log[t];
   }
-  const sandbox = loadSandbox(['core/prayers.js'], {
+  const sandbox = loadSandbox(['core/xp.js', 'core/prayers.js'], {
     S,
     tlog,
     PRAYERS: [

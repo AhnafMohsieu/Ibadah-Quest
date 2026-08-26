@@ -86,7 +86,7 @@ function setupPrayerEnv() {
     if (!S.log[t2]) S.log[t2] = { p: {}, d: {}, v: {} };
     return S.log[t2];
   }
-  const sandbox = loadSandbox(['core/prayers.js'], {
+  const sandbox = loadSandbox(['core/xp.js', 'core/prayers.js'], {
     S,
     tlog,
     PRAYERS: [
@@ -127,7 +127,7 @@ function setupQuestEnv() {
     lbd: null, tdismiss: false, wq: [], mq: [], yq: [], lq: [], wqd: '', mqd: '', yqd: '', lqd: '',
     questXP: { daily: 0, weekly: 0, monthly: 0, yearly: 0, lifetime: 0 }
   };
-  const sandbox = loadSandbox(['core/quests.js'], {
+  const sandbox = loadSandbox(['core/xp.js', 'core/quests.js'], {
     S,
     DQUESTS: [
       { id: 'dq1', xp: 10, c: () => true },

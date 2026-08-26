@@ -57,7 +57,7 @@ function createSandbox(overrides) {
   
   // Don't load state.js or data/quests.js - their const declarations
   // leak into the quests.js context and shadow our mocks.
-  const sandbox = loadSandbox(['core/quests.js'], {
+  const sandbox = loadSandbox(['core/xp.js', 'core/quests.js'], {
     S,
     DQUESTS: [
       { id: 'dq1', xp: 10, c: (S, l) => true },
@@ -314,20 +314,33 @@ test('toggleQuest does not go below 0 total quests', () => {
   assert.strictEqual(S.tq, 0, 'Total quests should not go below 0');
 });
 
-test('checkQ calls saveState and checkLevelUp on completion', () => {
+test('checkQ calls saveState and recomputes level on completion', () => {
   const { sandbox, S } = createSandbox();
   let saveStateCalled = false;
-  let checkLevelUpCalled = false;
-  
+
   sandbox.saveState = () => { saveStateCalled = true; };
-  sandbox.checkLevelUp = () => { checkLevelUpCalled = true; };
-  
+  // xp.js's IIFE-internal checkLevelUp shadows any sandbox spy, so observe the
+  // level evaluation through lvFrom instead (see task-1-report.md).
+  sandbox.lvFrom = (xp) => (xp >= 10 ? 2 : 1);
+  // A real level-up now fires the genuine levelUpToast path; stub its DOM deps.
+  sandbox.lvTitle = () => 'Test';
+  sandbox.iqIcon = () => '';
+  sandbox.iqEmoji = () => '*';
+  sandbox.document = {
+    activeElement: null,
+    getElementById: () => ({ style: {}, classList: { add() {}, remove() {} }, innerHTML: '', onclick: null }),
+    createElement: () => ({ style: { setProperty() {} }, className: '', textContent: '', setAttribute() {}, appendChild() {}, remove() {} }),
+    body: { appendChild() {} }
+  };
+  sandbox.setTimeout = () => {};
+  sandbox.clearTimeout = () => {};
+
   S.dq = [{ id: 'dq1', xp: 10, done: false }];
-  
+
   sandbox.checkQ();
-  
+
   assert.strictEqual(saveStateCalled, true, 'saveState should be called');
-  assert.strictEqual(checkLevelUpCalled, true, 'checkLevelUp should be called');
+  assert.strictEqual(S.lv, 2, 'level should be recomputed from XP via applyXpDelta');
 });
 
 test('toggleQuest calls saveState, markDirty, renderDynamic', () => {

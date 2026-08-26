@@ -304,7 +304,7 @@
   function isBookmarked(id) { return S.bookmarks && S.bookmarks.indexOf(id) !== -1; }
   window.toggleBookmark = toggleBookmark;
   window.isBookmarked = isBookmarked;
-  function claimBonus() { const t=today(); if(S.lbd===t) return; const oldLv=S.lv; const b=S.cs>=7?75:30; S.xp+=b; S.lbd=t; S.lv=lvFrom(S.xp); checkLevelUp(oldLv); saveState(); markDirty('today'); markDirty('topbar'); markDirty('lv'); markDirty('progress'); renderDynamic(); toast(iqIcon('gift'),'Daily Bonus: +'+b+' XP!'); }
+  function claimBonus() { const t=today(); if(S.lbd===t) return; const b=S.cs>=7?75:30; applyXpDelta(b); S.lbd=t; saveAndRenderDirty(); toast(iqIcon('gift'),'Daily Bonus: +'+b+' XP!'); }
   window.claimBonus = claimBonus;
   function selectAvatar(emoji) {
     S.avatar = emoji;
