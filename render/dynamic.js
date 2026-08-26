@@ -832,7 +832,12 @@ h += '</div>';
   }
 
   function setQuranView(mode) { quranViewMode = mode; quranSearchTerm = ''; renderQuran(); }
-  function quranSearchFilter(term) { quranSearchTerm = term; renderQuran(); }
+  var _quranSearchDebounce = null;
+  function quranSearchFilter(term) {
+    quranSearchTerm = term;
+    clearTimeout(_quranSearchDebounce);
+    _quranSearchDebounce = setTimeout(function() { renderQuran(); }, 200);
+  }
   function openQuranSurah(num) { openTafsir = {}; quranCurrentSurah = num; quranCurrentJuz = null; renderQuran(); }
   function quranBack() { openTafsir = {}; quranCurrentSurah = null; quranCurrentJuz = null; renderQuran(); }
   function openQuranJuz(juzNum) {
