@@ -804,6 +804,11 @@ Object.keys(NEW_POOLS).forEach(k => {
     Promise.resolve(window.storageReady).then(initAsync).catch(function(e) {
       console.error('Ibadah Quest async init error:', e);
       console.error('Stack:', e.stack);
+      try {
+        init();
+      } catch(initError) {
+        console.error('Ibadah Quest sync fallback init error:', initError);
+      }
     });
   } else {
     try {
