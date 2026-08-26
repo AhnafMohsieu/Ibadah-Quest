@@ -581,6 +581,7 @@ Object.keys(NEW_POOLS).forEach(k => {
     if (typeof window.refreshContent === 'function') window.refreshContent();
     if (typeof window.recalc === 'function') window.recalc();
     if (typeof window.checkQ === 'function') window.checkQ();
+    if (typeof window.compactStorage === 'function') window.compactStorage();
     S.lv=lvFrom(S.xp); saveState(); initCalView(); renderAll();
     if (window.renderDailyContent) window.renderDailyContent();
     const modalQueue = [];

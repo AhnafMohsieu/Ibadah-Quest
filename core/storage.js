@@ -113,5 +113,65 @@
     });
   }
 
+  // --- Storage compaction ---
+  function compactDhikrSessions() {
+    var sessions = window.S && window.S.dhikrSessions;
+    if (!Array.isArray(sessions) || sessions.length < 100) return;
+    var cutoff = Date.now() - 7 * 86400000;
+    var recent = sessions.filter(function(s) { return s.ts >= cutoff; });
+    var old = sessions.filter(function(s) { return s.ts < cutoff; });
+    if (old.length === 0) return;
+    var aggregates = {};
+    for (var i = 0; i < old.length; i++) {
+      var s = old[i];
+      var dateKey = new Date(s.ts).toISOString().slice(0, 10);
+      var key = dateKey + ':' + (s.type || 'unknown');
+      if (!aggregates[key]) aggregates[key] = { date: dateKey, type: s.type, count: 0 };
+      aggregates[key].count += (s.count || 1);
+    }
+    window.S.dhikrSessions = recent.concat(Object.values(aggregates));
+  }
+
+  function compactXpDaily() {
+    var daily = window.S && window.S.xpDaily;
+    if (!daily || typeof daily !== 'object') return;
+    var cutoff = Date.now() - 14 * 86400000;
+    var keep = {};
+    var archived = 0;
+    var keys = Object.keys(daily);
+    for (var i = 0; i < keys.length; i++) {
+      var key = keys[i];
+      if (key.charAt(0) === '_') continue;
+      var dateStr = key.split(':')[0];
+      var dateMs = new Date(dateStr).getTime();
+      if (dateMs >= cutoff) {
+        keep[key] = daily[key];
+      } else {
+        archived += (typeof daily[key] === 'number' ? daily[key] : 0);
+      }
+    }
+    if (archived > 0) keep._archived = (keep._archived || 0) + archived;
+    window.S.xpDaily = keep;
+  }
+
+  function compactStorage() {
+    compactDhikrSessions();
+    compactXpDaily();
+  }
+
+  function getStorageSize() {
+    var total = 0;
+    var ls = window.localStorage;
+    for (var i = 0; i < ls.length; i++) {
+      var key = ls.key(i);
+      if (key && key.indexOf('iq9_') === 0) {
+        total += ls.getItem(key).length;
+      }
+    }
+    return total;
+  }
+
   window.Storage = { init: init, load: load, save: save, saveRaw: saveRaw, getRaw: getRaw, destroy: destroy, exportAll: exportAll, importAll: importAll, migrate: migrate };
+  window.compactStorage = compactStorage;
+  window.getStorageSize = getStorageSize;
 })();

@@ -141,3 +141,98 @@ test('Storage.destroy removes user data', async () => {
   const loaded = await Storage.load('user1');
   assert.strictEqual(loaded, null);
 });
+
+// --- Storage compaction tests ---
+
+function makeCompactionSandbox() {
+  const store = {};
+  const sb = {
+    window: {
+      Storage: null,
+      compactStorage: null,
+      getStorageSize: null,
+      S: { dhikrSessions: [], xpDaily: {} }
+    },
+    localStorage: {
+      getItem(k) { return k in store ? store[k] : null; },
+      setItem(k, v) { store[k] = String(v); },
+      removeItem(k) { delete store[k]; },
+      get length() { return Object.keys(store).length; },
+      key(i) { return Object.keys(store)[i]; }
+    }
+  };
+  sb.window.localStorage = sb.localStorage;
+  vm.runInNewContext(
+    fs.readFileSync(path.join(__dirname, '..', 'core', 'storage.js'), 'utf8'),
+    sb,
+    { filename: 'storage.js' }
+  );
+  return sb;
+}
+
+test('compactDhikrSessions aggregates old entries', () => {
+  const sb = makeCompactionSandbox();
+  const now = Date.now();
+  const day = 86400000;
+  const sessions = [];
+  for (let i = 0; i < 150; i++) {
+    const dayOffset = 8 + (i % 10);
+    sessions.push({ type: 'morning', count: 1, ts: now - dayOffset * day });
+  }
+  for (let i = 0; i < 50; i++) {
+    sessions.push({ type: 'evening', count: 2, ts: now - i });
+  }
+  sb.window.S.dhikrSessions = sessions;
+  sb.window.compactStorage();
+  const result = sb.window.S.dhikrSessions;
+  assert.ok(result.length < 200, 'should compact: ' + result.length);
+  const recentCount = result.filter(s => s.ts >= now - 7 * day).length;
+  assert.equal(recentCount, 50);
+});
+
+test('compactDhikrSessions skips if fewer than 100', () => {
+  const sb = makeCompactionSandbox();
+  sb.window.S.dhikrSessions = [{ type: 'morning', count: 1, ts: Date.now() }];
+  const before = JSON.stringify(sb.window.S.dhikrSessions);
+  sb.window.compactStorage();
+  assert.equal(JSON.stringify(sb.window.S.dhikrSessions), before);
+});
+
+test('compactXpDaily keeps 14 days and archives older', () => {
+  const sb = makeCompactionSandbox();
+  const now = Date.now();
+  const day = 86400000;
+  const daily = {};
+  for (let i = 0; i < 30; i++) {
+    const d = new Date(now - i * day);
+    const key = d.toISOString().slice(0, 10) + ':prayer:fajr';
+    daily[key] = 5;
+  }
+  sb.window.S.xpDaily = daily;
+  sb.window.compactStorage();
+  const result = sb.window.S.xpDaily;
+  assert.ok(result._archived > 0, 'should have archived XP');
+  const kept = Object.keys(result).filter(k => !k.startsWith('_')).length;
+  assert.ok(kept <= 14 * 2, 'should keep ~14 days: ' + kept);
+});
+
+test('getStorageSize returns positive number', () => {
+  const sb = makeCompactionSandbox();
+  sb.window.localStorage.setItem('iq9_user_test', '{"xp":100}');
+  const size = sb.window.getStorageSize();
+  assert.ok(size > 0);
+});
+
+test('compactStorage is idempotent', () => {
+  const sb = makeCompactionSandbox();
+  const now = Date.now();
+  const day = 86400000;
+  for (let i = 0; i < 200; i++) {
+    sb.window.S.dhikrSessions.push({ type: 'a', count: 1, ts: now - (8 + (i % 5)) * day });
+  }
+  sb.window.compactStorage();
+  const after1 = JSON.stringify(sb.window.S.dhikrSessions);
+  sb.window.compactStorage();
+  const after2 = JSON.stringify(sb.window.S.dhikrSessions);
+  assert.equal(after1, after2);
+});
