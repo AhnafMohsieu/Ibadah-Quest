@@ -31,7 +31,7 @@
       if (typeof onDone === 'function') onDone();
       return;
     }
-    const t = today.toISOString().slice(0, 10);
+    const t = getTodayKey();
     if (S.lastWeeklySummary === t) {
       if (typeof onDone === 'function') onDone();
       return;

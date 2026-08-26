@@ -110,7 +110,7 @@
     for (let i = 6; i >= 0; i--) {
       const d = new Date(now);
       d.setDate(d.getDate() - i);
-      const key = d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+      const key = today(d);
       const dayNames = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
       const entry = (S.financeLog || {})[key] || { income:0, expenses:{}, charity:{} };
       const exp = Object.values(entry.expenses || {}).reduce((a,b)=>a+b, 0);

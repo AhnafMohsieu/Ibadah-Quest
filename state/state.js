@@ -184,6 +184,9 @@ function saveState() {
   }
 }
 function today(d) { const d2 = d || new Date(); return d2.getFullYear() + '-' + (d2.getMonth()+1).toString().padStart(2,'0') + '-' + d2.getDate().toString().padStart(2,'0'); }
+function getTodayKey() { return today(); }
+function getYesterdayKey() { var d = new Date(); d.setDate(d.getDate() - 1); return today(d); }
+function getWeekAgoKey() { var d = new Date(); d.setDate(d.getDate() - 7); return today(d); }
 function tlog() { const t = today(); if (!S.log[t]) S.log[t] = {p:{},d:{},v:{}}; return S.log[t]; }
 function isFri() { return new Date().getDay() === 5; }
 function xpFor(lv) { if (lv <= 1) return 0; return Math.floor(100 * Math.pow(lv, 1.5)); }
@@ -226,3 +229,6 @@ function compactLogs() {
   window.loadStateAsync = loadStateAsync;
   window.saveState = saveState;
   window.resolveCurrentUser = resolveCurrentUser;
+  window.getTodayKey = getTodayKey;
+  window.getYesterdayKey = getYesterdayKey;
+  window.getWeekAgoKey = getWeekAgoKey;

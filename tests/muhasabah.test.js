@@ -4,7 +4,12 @@ const assert = require('node:assert');
 const path = require('path');
 const { loadFile } = require('./helpers/load.js');
 
-const w = loadFile(path.join(__dirname, '..', 'features', 'muhasabah.js')).window;
+const w = loadFile(path.join(__dirname, '..', 'features', 'muhasabah.js'), {
+  today: function(d) {
+    var d2 = d || new Date();
+    return d2.getFullYear() + '-' + (d2.getMonth()+1).toString().padStart(2,'0') + '-' + d2.getDate().toString().padStart(2,'0');
+  }
+}).window;
 
 const log = {
   '2026-08-03': { p: { Fajr: true, Dhuhr: true }, d: { istighfar: true } },

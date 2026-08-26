@@ -121,7 +121,10 @@ test('streak calendar widget returns correct structure', () => {
       cs: 2,
       bs: 5
     },
-    today: () => '2026-08-12'
+    today: function(d) {
+      var d2 = d || new Date();
+      return d2.getFullYear() + '-' + (d2.getMonth()+1).toString().padStart(2,'0') + '-' + d2.getDate().toString().padStart(2,'0');
+    }
   });
 
   const result = sandbox.window.renderStreakCalendarWidget();
@@ -143,7 +146,10 @@ test('streak calendar widget handles empty state', () => {
       cs: 0,
       bs: 0
     },
-    today: () => '2026-08-12'
+    today: function(d) {
+      var d2 = d || new Date();
+      return d2.getFullYear() + '-' + (d2.getMonth()+1).toString().padStart(2,'0') + '-' + d2.getDate().toString().padStart(2,'0');
+    }
   });
 
   const result = sandbox.window.renderStreakCalendarWidget();
@@ -161,7 +167,10 @@ test('streak calendar widget marks partial days as incomplete', () => {
       cs: 1,
       bs: 1
     },
-    today: () => '2026-08-12'
+    today: function(d) {
+      var d2 = d || new Date();
+      return d2.getFullYear() + '-' + (d2.getMonth()+1).toString().padStart(2,'0') + '-' + d2.getDate().toString().padStart(2,'0');
+    }
   });
 
   const result = sandbox.window.renderStreakCalendarWidget();

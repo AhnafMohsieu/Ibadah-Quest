@@ -12,7 +12,7 @@
 
       const yesterday = new Date();
       yesterday.setDate(yesterday.getDate() - 1);
-      const yesterdayStr = yesterday.getFullYear() + '-' + (yesterday.getMonth()+1).toString().padStart(2,'0') + '-' + yesterday.getDate().toString().padStart(2,'0');
+      const yesterdayStr = yesterdayKey();
 
       if (S.dhikrStats.lastSessionDate === yesterdayStr) {
         S.dhikrStats.streak++;

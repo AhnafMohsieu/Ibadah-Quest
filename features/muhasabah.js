@@ -3,10 +3,6 @@
 // ═══════════════════════════════════════════════════════
 (function() {
   const SUGGEST_POOL = ['charity', 'fasting', 'istighfar', 'sadaqah_jariyah', 'dua_others'];
-  function fmt(d) {
-    const m = d.getMonth() + 1, day = d.getDate();
-    return d.getFullYear() + '-' + (m < 10 ? '0' + m : m) + '-' + (day < 10 ? '0' + day : day);
-  }
   function muhasabahMetrics(log, startDate, endDate) {
     let prayers = 0, daysPrayed = 0, deeds = 0;
     for (const dk in log) {
@@ -22,7 +18,7 @@
   function computeDeedCounts(log, pool, endDate, windowDays) {
     const start = new Date(endDate + 'T00:00:00');
     start.setDate(start.getDate() - (windowDays - 1));
-    const startDate = fmt(start);
+    const startDate = today(start);
     return pool.map(id => {
       let count = 0;
       for (const dk in log) {

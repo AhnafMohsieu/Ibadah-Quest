@@ -10,7 +10,7 @@
     var streakDays = [];
 
     for (var d = 1; d <= daysInMonth; d++) {
-      var dateStr = year + '-' + String(month + 1).padStart(2, '0') + '-' + String(d).padStart(2, '0');
+      var dateStr = today(new Date(year, month, d));
       var log = S.log[dateStr];
       var prayed = !!(log && Object.values(log.p || {}).filter(function(v) { return v; }).length >= 5);
       streakDays.push({ day: d, date: dateStr, completed: prayed });

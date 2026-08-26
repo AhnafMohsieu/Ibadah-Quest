@@ -23,6 +23,7 @@ function setup(overrides) {
     ],
     DHIKR_BADGES: [],
     today: () => '2026-08-11',
+    yesterdayKey: () => '2026-08-10',
     saveState: () => {},
     toast: () => {},
     playSound: () => {},

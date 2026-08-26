@@ -110,7 +110,7 @@
       </div>
       <div class="form-group">
         <label for="goalDeadline">Deadline</label>
-        <input type="date" id="goalDeadline" value="${new Date(Date.now()+30*86400000).toISOString().split('T')[0]}" />
+        <input type="date" id="goalDeadline" value="${today(new Date(Date.now()+30*86400000))}" />
       </div>
       <button class="dr-close" onclick="addPersonalGoal(document.getElementById('goalType').value, parseInt(document.getElementById('goalTarget').value)||10, document.getElementById('goalDeadline').value);closeToastOverlay();">Add</button>
     </div>`;
