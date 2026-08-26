@@ -11,6 +11,11 @@ function loadSandbox(files, globals) {
     console,
     localStorage: { getItem: () => null, setItem: () => {}, removeItem: () => {} }
   }, globals || {});
+  for (const key of Object.keys(sandbox)) {
+    if (key !== 'window' && typeof sandbox[key] !== 'undefined') {
+      sandbox.window[key] = sandbox[key];
+    }
+  }
   for (const f of files) {
     const code = fs.readFileSync(path.join(__dirname, '..', f), 'utf8');
     vm.runInNewContext(code, sandbox, { filename: f });
@@ -25,6 +30,7 @@ function loadSandbox(files, globals) {
 
 const sandbox = loadSandbox(['features/search.js'], {
   window: {
+    escapeHTML: (v) => String(v == null ? '' : v).replace(/[&<>\"']/g, function(ch) { return {'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',"'":'&#39;'}[ch]; }),
     DUA_POOL: [
       { title: 'Morning Adhkar', english: 'Morning remembrance', desc: 'Daily morning duas', text: 'SubhanAllah' },
       { title: 'Evening Adhkar', english: 'Evening remembrance', desc: 'Daily evening duas', text: 'Alhamdulillah' }

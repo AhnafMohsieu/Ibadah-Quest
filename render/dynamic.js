@@ -289,7 +289,7 @@ function renderAll() {
   }
   function renderProfile() {
     const achCnt = Object.keys(S.ua).length;
-    const avatar = String(S.avatar || '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    const avatar = window.escapeHTML(S.avatar || '');
     const joinDate = S.joinDate ? new Date(S.joinDate).toLocaleDateString('en', { month: 'long', year: 'numeric' }) : null;
 
     let h = '<div class="section-title">Profile</div>';
@@ -299,7 +299,7 @@ function renderAll() {
         <span class="profile-avatar" style="${S.activeFrame ? getFrameStyle(S.activeFrame) : ''}">${avatar}</span>
       </div>
       <div class="profile-info">
-        <h2 class="profile-name">${currentUser === 'default' ? 'Guest' : currentUser.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}</h2>
+        <h2 class="profile-name">${window.escapeHTML(currentUser === 'default' ? 'Guest' : currentUser)}</h2>
         <div class="profile-level">Level ${S.lv} · ${lvTitle(S.lv)}</div>
         ${S.activeTitle ? (() => { const t = (typeof SHOP !== 'undefined' ? SHOP : []).find(x => x.id === S.activeTitle); return t ? `<div class="profile-title" style="color:var(--accent);font-weight:600;margin-top:2px;">${t.name.replace('Title: ','')}</div>` : ''; })() : ''}
         ${joinDate ? `<div class="profile-join">Member since ${joinDate}</div>` : ''}

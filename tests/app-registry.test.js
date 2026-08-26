@@ -44,7 +44,9 @@ function makeEl() {
 }
 
 const sandbox = {
-  window: {},
+  window: {
+    escapeHTML: (v) => String(v == null ? '' : v).replace(/[&<>\"']/g, function(ch) { return {'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',"'":'&#39;'}[ch]; })
+  },
   document: { getElementById: () => makeEl(), querySelector: () => makeEl(), querySelectorAll: () => [], addEventListener: () => {}, createElement: () => makeEl(), createDocumentFragment: () => makeEl(), body: makeEl(), head: makeEl(), activeElement: makeEl() },
   console,
   setTimeout, clearTimeout, setInterval, clearInterval,
@@ -168,4 +170,12 @@ test('appAction warns loudly when target missing', () => {
   }
   assert.strictEqual(typeof sandbox.window.App.tapDhikr, 'function', 'facade call must not crash when target missing');
   assert.ok(warnings.some(w => w.includes('tapDhikr')), 'expected a console.warn mentioning tapDhikr when its handler is missing');
+});
+
+test('escape logic defined only in render/static.js and core/helpers.js', () => {
+  const files = ['render/dynamic.js','render/prayers.js','features/health.js','features/personal-goals.js','features/search.js'];
+  for (const f of files) {
+    const src = require('fs').readFileSync(path.join(__dirname, '..', f), 'utf8');
+    assert.ok(!src.includes('replace(/[&'), f + ' still hand-rolls escaping');
+  }
 });

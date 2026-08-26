@@ -1,6 +1,6 @@
 (function() {
   function safeText(value) {
-    return typeof window.escapeHTML === 'function' ? window.escapeHTML(value) : String(value == null ? '' : value).replace(/[&<>\"']/g, function(ch) { return {'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',"'":'&#39;'}[ch]; });
+    return window.escapeHTML(value);
   }
   const WATER_TARGET = HEALTH_PROMPTS.find(p => p.id === 'water').target;
   const SLEEP_TARGET = HEALTH_PROMPTS.find(p => p.id === 'sleep').target;

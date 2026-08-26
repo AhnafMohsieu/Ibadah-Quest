@@ -35,7 +35,9 @@ function makeSandbox() {
     error: (...args) => { errors.push(args); }
   };
   const sandbox = {
-    window: {},
+    window: {
+      escapeHTML: (v) => String(v == null ? '' : v).replace(/[&<>\"']/g, function(ch) { return {'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',"'":'&#39;'}[ch]; })
+    },
     document: { getElementById: () => makeEl(), querySelector: () => makeEl(), querySelectorAll: () => [], addEventListener: () => {}, createElement: () => makeEl(), createDocumentFragment: () => makeEl(), body: makeEl(), head: makeEl(), activeElement: makeEl(), readyState: 'complete' },
     console: spyConsole,
     setTimeout, clearTimeout, setInterval, clearInterval,

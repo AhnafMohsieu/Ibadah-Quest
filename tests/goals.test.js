@@ -11,6 +11,11 @@ function loadSandbox(files, globals) {
     console,
     localStorage: { getItem: () => null, setItem: () => {}, removeItem: () => {} }
   }, globals || {});
+  for (const key of Object.keys(sandbox)) {
+    if (key !== 'window' && typeof sandbox[key] !== 'undefined') {
+      sandbox.window[key] = sandbox[key];
+    }
+  }
   for (const f of files) {
     const code = fs.readFileSync(path.join(__dirname, '..', f), 'utf8');
     vm.runInNewContext(code, sandbox, { filename: f });
@@ -29,7 +34,8 @@ test('addPersonalGoal creates goal', () => {
     today: () => '2026-08-11',
     saveState: () => {},
     renderPersonalGoals: () => {},
-    document: { getElementById: () => null }
+    document: { getElementById: () => null },
+    escapeHTML: (v) => String(v == null ? '' : v).replace(/[&<>\"']/g, function(ch) { return {'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',"'":'&#39;'}[ch]; })
   });
   
   sandbox.addPersonalGoal('prayer', 30, '2026-08-31');
@@ -48,7 +54,8 @@ test('updateGoalProgress increments progress', () => {
     toast: () => {},
     lvFrom: () => 1,
     iqIcon: () => '⭐',
-    document: { getElementById: () => null }
+    document: { getElementById: () => null },
+    escapeHTML: (v) => String(v == null ? '' : v).replace(/[&<>\"']/g, function(ch) { return {'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',"'":'&#39;'}[ch]; })
   });
   
   sandbox.updateGoalProgress('g1');
@@ -67,7 +74,8 @@ test('updateGoalProgress completes goal at target', () => {
     toast: () => {},
     lvFrom: () => 1,
     iqIcon: () => '⭐',
-    document: { getElementById: () => null }
+    document: { getElementById: () => null },
+    escapeHTML: (v) => String(v == null ? '' : v).replace(/[&<>\"']/g, function(ch) { return {'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',"'":'&#39;'}[ch]; })
   });
   
   sandbox.updateGoalProgress('g1');

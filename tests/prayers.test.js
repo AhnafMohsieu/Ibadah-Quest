@@ -11,6 +11,11 @@ function loadSandbox(files, globals) {
     console,
     localStorage: { getItem: () => null, setItem: () => {}, removeItem: () => {} }
   }, globals || {});
+  for (const key of Object.keys(sandbox)) {
+    if (key !== 'window' && typeof sandbox[key] !== 'undefined') {
+      sandbox.window[key] = sandbox[key];
+    }
+  }
   for (const f of files) {
     const code = fs.readFileSync(path.join(__dirname, '..', f), 'utf8');
     vm.runInNewContext(code, sandbox, { filename: f });
@@ -215,7 +220,8 @@ test('fetchPrayerTimes uses the saved prayer location', async () => {
       return { json: async () => ({ code: 200, data: { timings: {
         Fajr: '04:00', Sunrise: '05:30', Dhuhr: '12:30', Asr: '16:00', Maghrib: '20:00', Isha: '21:30'
       } } }) };
-    }
+    },
+    escapeHTML: (v) => String(v == null ? '' : v).replace(/[&<>\"']/g, function(ch) { return {'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',"'":'&#39;'}[ch]; })
   });
   const times = await sandbox.fetchPrayerTimes();
   assert.strictEqual(times.Fajr.h, 4);

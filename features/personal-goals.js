@@ -1,6 +1,6 @@
 (function() {
   function safeText(value) {
-    return typeof window.escapeHTML === 'function' ? window.escapeHTML(value) : String(value == null ? '' : value).replace(/[&<>\"']/g, function(ch) { return {'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',"'":'&#39;'}[ch]; });
+    return window.escapeHTML(value);
   }
   function addPersonalGoal(type, target, deadline) {
     if (!S.personalGoals) S.personalGoals = [];

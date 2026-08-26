@@ -11,6 +11,11 @@ function loadSandbox(files, globals) {
     console,
     localStorage: { getItem: () => null, setItem: () => {}, removeItem: () => {} }
   }, globals || {});
+  for (const key of Object.keys(sandbox)) {
+    if (key !== 'window' && typeof sandbox[key] !== 'undefined') {
+      sandbox.window[key] = sandbox[key];
+    }
+  }
   for (const f of files) {
     const code = fs.readFileSync(path.join(__dirname, '..', f), 'utf8');
     vm.runInNewContext(code, sandbox, { filename: f });
@@ -40,7 +45,8 @@ const sandbox = loadSandbox([
   saveState: () => {},
   lvFrom: (xp) => { let lv = 1; while (xp >= 100 * Math.pow(lv + 1, 1.5)) lv++; return lv; },
   lvTitle: (lv) => 'Tier' + lv,
-  document: { getElementById: () => null }
+  document: { getElementById: () => null },
+  escapeHTML: (v) => String(v == null ? '' : v).replace(/[&<>\"']/g, function(ch) { return {'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',"'":'&#39;'}[ch]; })
 });
 
 const w = sandbox.window;
