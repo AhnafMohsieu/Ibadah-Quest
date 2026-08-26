@@ -14,10 +14,7 @@
     ];
     const quote = quotes[Math.floor(Math.random() * quotes.length)];
 
-    const ov = document.getElementById('toastOverlay');
-    if (!ov) return;
-
-    ov.innerHTML = `<div class="daily-ritual">
+    const ov = openToastModal(`<div class="daily-ritual">
       <div class="dr-title">${iqIcon('moon')} Daily Reflection</div>
       <div class="dr-stats">
         <span>${prayers}/5 prayers</span>
@@ -36,11 +33,8 @@
       </div>
       <div class="dr-quote">"${quote}"</div>
       <button class="dr-close" onclick="saveDailyRitual(window._drRating||0, document.getElementById('drReflection').value)">Save & Close</button>
-    </div>`;
-
-    ov.style.display = 'flex';
-    ov.classList.add('show');
-    ov.style.pointerEvents = 'auto';
+    </div>`);
+    if (!ov) return;
 
     window._drRating = 0;
   }
@@ -56,12 +50,7 @@
 
     saveState();
 
-    const ov = document.getElementById('toastOverlay');
-    if (ov) {
-      ov.classList.remove('show');
-      setTimeout(() => { ov.style.display = 'none'; ov.innerHTML = ''; }, 300);
-      ov.style.pointerEvents = 'none';
-    }
+    closeToastOverlay();
 
     toast(iqIcon('check-circle'), 'Daily reflection saved!');
   }

@@ -18,6 +18,13 @@ test('showDailyRitual shows modal without setting lastDailyRitual', () => {
     S,
     today: () => '2026-08-11',
     saveState: () => {},
+    openToastModal: function(html) {
+      ov.innerHTML = html;
+      ov.style.display = 'flex';
+      ov.classList.add('show');
+      ov.style.pointerEvents = 'auto';
+      return ov;
+    },
     document: { getElementById: () => ov }
   });
 
@@ -40,6 +47,13 @@ test('showDailyRitual does not show again on same day', () => {
     S,
     today: () => '2026-08-11',
     saveState: () => {},
+    openToastModal: function(html) {
+      ov.innerHTML = html;
+      ov.style.display = 'flex';
+      ov.classList.add('show');
+      ov.style.pointerEvents = 'auto';
+      return ov;
+    },
     document: { getElementById: () => ov }
   });
 
@@ -53,13 +67,19 @@ test('saveDailyRitual saves rating and reflection', () => {
     dailyReflections: {},
     lastDailyRitual: null
   };
+  const field = { value: 'Alhamdulillah for a productive day', style: {}, classList: { add: () => {}, remove: () => {} } };
   const sandbox = loadFile(path.join(__dirname, '..', 'features', 'daily-ritual.js'), {
     S,
     today: () => '2026-08-11',
     saveState: () => {},
     toast: () => {},
-    setTimeout: (fn) => { fn(); },
-    document: { getElementById: () => ({ value: 'Alhamdulillah for a productive day', style: {}, classList: { add: () => {}, remove: () => {} } }) }
+    closeToastOverlay: function() {
+      field.classList.remove('show');
+      field.style.display = 'none';
+      field.innerHTML = '';
+      field.style.pointerEvents = 'none';
+    },
+    document: { getElementById: () => field }
   });
 
   sandbox.window.saveDailyRitual(4, 'Alhamdulillah for a productive day');
@@ -88,6 +108,13 @@ test('showDailyRitual displays stats and quote', () => {
     S,
     today: () => '2026-08-11',
     saveState: () => {},
+    openToastModal: function(html) {
+      ov.innerHTML = html;
+      ov.style.display = 'flex';
+      ov.classList.add('show');
+      ov.style.pointerEvents = 'auto';
+      return ov;
+    },
     document: { getElementById: () => ov }
   });
 
@@ -119,7 +146,12 @@ test('saveDailyRitual closes overlay', () => {
     today: () => '2026-08-11',
     saveState: () => {},
     toast: () => {},
-    setTimeout: (fn) => { fn(); },
+    closeToastOverlay: function() {
+      ov.classList.remove('show');
+      ov.style.display = 'none';
+      ov.innerHTML = '';
+      ov.style.pointerEvents = 'none';
+    },
     document: { getElementById: () => ov }
   });
 

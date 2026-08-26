@@ -16,6 +16,10 @@ test('showDailySummary shows once per day', () => {
     today: () => '2026-08-11',
     toast: () => {},
     saveState: () => {},
+    openToastModal: function(html) {
+      var el = { innerHTML: html, style: {}, classList: { add: () => {} } };
+      return el;
+    },
     document: { getElementById: () => ({ innerHTML: '', style: {}, classList: { add: () => {} } }) }
   });
 
@@ -35,6 +39,10 @@ test('showDailySummary does not show twice same day', () => {
     today: () => '2026-08-11',
     toast: () => {},
     saveState: () => {},
+    openToastModal: function(html) {
+      var el = { innerHTML: html, style: {}, classList: { add: () => {} } };
+      return el;
+    },
     document: { getElementById: () => ({ innerHTML: '', style: {}, classList: { add: () => {} } }) }
   });
 

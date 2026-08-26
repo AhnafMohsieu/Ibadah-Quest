@@ -33,6 +33,7 @@ function createSandbox(cs, bs, milestones) {
     },
     lvFrom: () => 1,
     toast: () => {},
+    openToastModal: () => null,
     saveState: () => {}
   });
   return sandbox;
@@ -106,6 +107,7 @@ test('initializes S.milestones if missing', () => {
     S: { cs: 7, bs: 0, xp: 0 },
     lvFrom: () => 1,
     toast: () => {},
+    openToastModal: () => null,
     saveState: () => {}
   });
   assert.strictEqual(S.milestones, undefined);

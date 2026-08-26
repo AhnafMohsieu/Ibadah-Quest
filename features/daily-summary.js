@@ -15,10 +15,7 @@
     ];
     const quote = quotes[Math.floor(Math.random() * quotes.length)];
 
-    const ov = document.getElementById('toastOverlay');
-    if (!ov) return;
-
-    ov.innerHTML = `<div class="daily-summary">
+    const ov = openToastModal(`<div class="daily-summary">
       <div class="ds-title">${iqIcon('calendar')} Daily Summary</div>
       <div class="ds-grid">
         <div class="ds-stat"><div class="ds-val">${prayers}/5</div><div class="ds-label">Prayers</div></div>
@@ -28,11 +25,8 @@
       </div>
       <div class="ds-quote">"${quote}"</div>
       <button class="ds-close" onclick="closeToastOverlay()">Alhamdulillah</button>
-    </div>`;
-
-    ov.style.display = 'flex';
-    ov.classList.add('show');
-    ov.style.pointerEvents = 'auto';
+    </div>`);
+    if (!ov) return;
 
     S.lastDailySummary = t;
     saveState();

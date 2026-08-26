@@ -166,19 +166,13 @@
 
   // ── Post-import undo bar (uses recoveryOverlay container — free real estate) ──
   function showUndoImportBar() {
-    var ov = document.getElementById('recoveryOverlay');
-    if (!ov) return;
-    ov.innerHTML = '<div class="recovery-box"><h2>Import finished</h2>' +
+    var ov = openToastModal('<div class="recovery-box"><h2>Import finished</h2>' +
       '<p>Your previous data was snapshotted. Keep the import?</p>' +
       '<div class="recovery-actions">' +
       '<button class="btn btn-primary" data-action="keep">Keep imported data</button>' +
       '<button class="btn" data-action="undo">Undo — restore my previous data</button>' +
-      '</div></div>';
-    // Mirror showRecoveryModal's visibility treatment: without .show + explicit
-    // pointerEvents the overlay stays opacity:0 and hit-test-dead.
-    ov.classList.add('show');
-    ov.style.display = 'flex';
-    ov.style.pointerEvents = 'auto';
+      '</div></div>', 'recoveryOverlay');
+    if (!ov) return;
     ov.querySelectorAll('[data-action]').forEach(function(b) {
       b.addEventListener('click', function() {
         if (b.getAttribute('data-action') === 'undo') {
@@ -204,12 +198,8 @@
   // ── Corruption recovery overlay (consumes window.__iqCorruption from Task 9) ──
   function _hide(el) { el.style.display = 'none'; el.innerHTML = ''; el.classList.remove('show'); el.style.pointerEvents = ''; }
   function showRecoveryModal() {
-    var ov = document.getElementById('recoveryOverlay');
+    var ov = openToastModal(window.Recovery.buildRecoveryHtml(window.__iqCorruption), 'recoveryOverlay');
     if (!ov) return;
-    ov.innerHTML = window.Recovery.buildRecoveryHtml(window.__iqCorruption);
-    ov.style.display = 'flex';
-    ov.style.pointerEvents = 'auto';
-    ov.classList.add('show');
     ov.querySelectorAll('[data-action]').forEach(function(b) {
       b.addEventListener('click', function() {
         var a = b.getAttribute('data-action');
@@ -461,6 +451,17 @@ Object.keys(NEW_POOLS).forEach(k => {
       });
     }
   }
+  function openToastModal(html, overlayId) {
+    var ov = document.getElementById(overlayId || 'toastOverlay');
+    if (!ov) return null;
+    window._modalTriggerEl = document.activeElement;
+    ov.innerHTML = html;
+    ov.style.display = 'flex';
+    ov.classList.add('show');
+    ov.style.pointerEvents = 'auto';
+    return ov;
+  }
+  window.openToastModal = openToastModal;
   function closeToastOverlay() {
     var toastOverlay = document.getElementById('toastOverlay');
     if (!toastOverlay) return;

@@ -45,9 +45,7 @@
     ];
     const quote = quotes[Math.floor(Math.random() * quotes.length)];
 
-    const ov = document.getElementById('toastOverlay');
-    if (!ov) return;
-    ov.innerHTML = `<div class="weekly-summary">
+    openToastModal(`<div class="weekly-summary">
       <div class="ws-title">📊 Weekly Summary</div>
       <div class="ws-grid">
         <div class="ws-stat"><div class="ws-val">${prayers}</div><div class="ws-label">Prayers</div></div>
@@ -57,10 +55,7 @@
       </div>
       <div class="ws-quote">"${quote}"</div>
       <button class="ws-close" onclick="closeToastOverlay()">Jazak Allahu Khairan</button>
-    </div>`;
-    ov.style.display = 'flex';
-    ov.classList.add('show');
-    ov.style.pointerEvents = 'auto';
+    </div>`);
   }
 
   window.checkMilestones = checkMilestones;
