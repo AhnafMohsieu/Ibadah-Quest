@@ -46,6 +46,120 @@
   // -------------------------------------------------------
   // DYNAMIC CONTENT RENDERING
   // -------------------------------------------------------
+  const safe = (fn, name) => { try { fn(); } catch(e) { console.warn('Static ' + name + ' failed:', e.message); } };
+
+  // Static renderers grouped by tab ID
+  // Only the active tab's renderer fires on boot; _lazyRender in activateTab handles the rest.
+  var TAB_STATIC_RENDERERS = {
+    today: function() { safe(renderQuran,'Quran'); safe(renderSunnahs,'Sunnahs'); safe(renderDhikr,'Dhikr'); safe(renderDhikrCounter,'DhikrCounter'); safe(renderStories,'Stories'); safe(renderHadith,'Hadith'); safe(renderNames,'Names'); safe(renderInspirations,'Inspirations'); safe(renderGratitude,'Gratitude'); safe(renderFasting,'Fasting'); safe(renderCharity,'Charity'); safe(renderMemorization,'Memorization'); },
+    morning: function() { safe(renderMorning,'Morning'); },
+    evening: function() { safe(renderEvening,'Evening'); },
+    dhikr: function() { safe(renderDhikr,'Dhikr'); },
+    situational: function() { safe(renderSituationalDhikr,'SituationalDhikr'); },
+    sins: function() { safe(renderSins,'Sins'); },
+    punishments: function() { safe(renderPunishments,'Punishments'); },
+    repentance: function() { safe(renderRepentance,'Repentance'); },
+    sahaba: function() { safe(renderSahaba,'Sahaba'); },
+    seerah: function() { safe(renderSeerah,'Seerah'); },
+    tafsir: function() { safe(renderTafsir,'Tafsir'); },
+    manners: function() { safe(renderManners,'Manners'); },
+    family: function() { safe(renderFamily,'Family'); },
+    health: function() { safe(renderHealth,'Health'); safe(function() { window.renderHealthLog && window.renderHealthLog(); },'HealthLog'); },
+    finance: function() { safe(renderFinance,'Finance'); safe(function() { window.renderFinanceTab && window.renderFinanceTab(); },'FinanceTab'); },
+    ummah: function() { safe(renderUmmah,'Ummah'); },
+    hajj: function() { safe(renderHajj,'Hajj'); },
+    akhirah: function() { safe(renderAkhirah,'Akhirah'); },
+    prophets: function() { safe(renderProphets,'Prophets'); },
+    women: function() { safe(renderWomen,'Women'); },
+    heart: function() { safe(renderHeart,'Heart'); },
+    marriage: function() { safe(renderMarriage,'Marriage'); },
+    science: function() { safe(renderScience,'Science'); },
+    wudu: function() { safe(renderWudu,'Wudu'); },
+    scholars: function() { safe(renderScholars,'Scholars'); },
+    patience: function() { safe(renderPatience,'Patience'); },
+    work: function() { safe(renderWork,'Work'); },
+    community: function() { safe(renderCommunity,'Community'); },
+    environment: function() { safe(renderEnvironment,'Environment'); },
+    travel: function() { safe(renderTravel,'Travel'); },
+    fiqh: function() { safe(renderFiqh,'Fiqh'); },
+    arabic: function() { safe(renderArabic,'Arabic'); },
+    tawakkul: function() { safe(renderTawakkul,'Tawakkul'); },
+    ikhlas: function() { safe(renderIkhlas,'Ikhlas'); },
+    zuhd: function() { safe(renderZuhd,'Zuhd'); },
+    dawah: function() { safe(renderDawah,'Dawah'); },
+    aqeedah: function() { safe(renderAqeedah,'Aqeedah'); },
+    knowledge: function() { safe(renderKnowledge,'Knowledge'); },
+    civilisation: function() { safe(renderCivilisation,'Civilisation'); },
+    jumuah: function() { safe(renderJumuah,'Jumuah'); },
+    battles: function() { safe(renderBattles,'Battles'); },
+    jannah: function() { safe(renderJannah,'Jannah'); },
+    jahannam: function() { safe(renderJahannam,'Jahannam'); },
+    grave: function() { safe(renderGrave,'Grave'); },
+    signs: function() { safe(renderSigns,'Signs'); },
+    dreams: function() { safe(renderDreams,'Dreams'); },
+    parenting: function() { safe(renderParenting,'Parenting'); },
+    food: function() { safe(renderFood,'Food'); },
+    tibb: function() { safe(renderTibb,'Tibb'); },
+    youth: function() { safe(renderYouth,'Youth'); },
+    tech: function() { safe(renderTech,'Tech'); },
+    neighbors: function() { safe(renderNeighbors,'Neighbors'); },
+    allah_names: function() { safe(renderNames,'Names'); },
+    scholars_names: function() { safe(renderScholars,'Scholars'); },
+    fasting: function() { safe(renderFasting,'Fasting'); },
+    charity: function() { safe(renderCharity,'Charity'); },
+    memorization: function() { safe(renderMemorization,'Memorization'); },
+    gratitude: function() { safe(renderGratitude,'Gratitude'); },
+    // Library tabs
+    umayyads: function() { safe(renderUmayyads,'Umayyads'); },
+    abbasids: function() { safe(renderAbbasids,'Abbasids'); },
+    andalus: function() { safe(renderAndalus,'Andalus'); },
+    ottomans: function() { safe(renderOttomans,'Ottomans'); },
+    mamluks: function() { safe(renderMamluks,'Mamluks'); },
+    seljuks: function() { safe(renderSeljuks,'Seljuks'); },
+    fatimids: function() { safe(renderFatimids,'Fatimids'); },
+    ayyubids: function() { safe(renderAyyubids,'Ayyubids'); },
+    modernhist: function() { safe(renderModernhist,'Modernhist'); },
+    ancientprophets: function() { safe(renderAncientprophets,'Ancientprophets'); },
+    mecca: function() { safe(renderMecca,'Mecca'); },
+    medina: function() { safe(renderMedina,'Medina'); },
+    jerusalem: function() { safe(renderJerusalem,'Jerusalem'); },
+    damascus: function() { safe(renderDamascus,'Damascus'); },
+    baghdad: function() { safe(renderBaghdad,'Baghdad'); },
+    cairo: function() { safe(renderCairo,'Cairo'); },
+    cordoba: function() { safe(renderCordoba,'Cordoba'); },
+    istanbul: function() { safe(renderIstanbul,'Istanbul'); },
+    bukhara: function() { safe(renderBukhara,'Bukhara'); },
+    samarkand: function() { safe(renderSamarkand,'Samarkand'); },
+    calligraphy: function() { safe(renderCalligraphy,'Calligraphy'); },
+    architecture: function() { safe(renderArchitecture,'Architecture'); },
+    geometry: function() { safe(renderGeometry,'Geometry'); },
+    poetryart: function() { safe(renderPoetryart,'Poetryart'); },
+    literature: function() { safe(renderLiterature,'Literature'); },
+    nasheeds: function() { safe(renderNasheeds,'Nasheeds'); },
+    illumination: function() { safe(renderIllumination,'Illumination'); },
+    textiles: function() { safe(renderTextiles,'Textiles'); },
+    ceramics: function() { safe(renderCeramics,'Ceramics'); },
+    woodwork: function() { safe(renderWoodwork,'Woodwork'); },
+    arabicgrammar: function() { safe(renderArabicgrammar,'Arabicgrammar'); },
+    vocab: function() { safe(renderVocab,'Vocab'); },
+    rhetoric: function() { safe(renderRhetoric,'Rhetoric'); },
+    morphology: function() { safe(renderMorphology,'Morphology'); },
+    pronunciation: function() { safe(renderPronunciation,'Pronunciation'); },
+    poetry: function() { safe(renderPoetry,'Poetry'); },
+    proverbs: function() { safe(renderProverbs,'Proverbs'); },
+    etymology: function() { safe(renderEtymology,'Etymology'); },
+    dialects: function() { safe(renderDialects,'Dialects'); },
+    scripts: function() { safe(renderScripts,'Scripts'); },
+    epistemology: function() { safe(renderEpistemology,'Epistemology'); },
+    ontology: function() { safe(renderOntology,'Ontology'); },
+    logic: function() { safe(renderLogic,'Logic'); },
+    kalam: function() { safe(renderKalam,'Kalam'); },
+    reason: function() { safe(renderReason,'Reason'); },
+    freewill: function() { safe(renderFreewill,'Freewill'); },
+    problemofevil: function() { safe(renderProblemofevil,'Problemofevil'); },
+    prophethood: function() { safe(renderProphethood,'Prophethood'); },
+    existence: function() { safe(renderExistence,'Existence'); }
+  };
 
   function renderDynamic() {
     if (dirtyPanels.size === 0) return;
@@ -59,10 +173,10 @@
     const deedScroll = deedArea ? deedArea.scrollTop : 0;
     const questScroll = questArea ? questArea.scrollTop : 0;
 
-    const safe = (fn, name) => { try { fn(); } catch(e) { console.warn('Render ' + name + ' failed:', e.message); } };
+    const renderSafe = (fn, name) => { try { fn(); } catch(e) { console.warn('Render ' + name + ' failed:', e.message); } };
     for (const panel of dirtyPanels) {
       const fn = PANEL_RENDERERS[panel];
-      if (fn) safe(fn, panel);
+      if (fn) renderSafe(fn, panel);
     }
     clearDirty();
 
@@ -74,12 +188,14 @@
   }
 
   function renderStatic() {
-    const safe = (fn, name) => { try { fn(); } catch(e) { console.warn('Static ' + name + ' failed:', e.message); } };
-    safe(renderQuran,'Quran'); safe(renderSunnahs,'Sunnahs'); safe(renderDhikr,'Dhikr'); safe(renderDhikrCounter,'DhikrCounter'); safe(renderStories,'Stories'); safe(renderHadith,'Hadith'); safe(renderNames,'Names'); safe(renderInspirations,'Inspirations'); safe(renderGratitude,'Gratitude'); safe(renderFasting,'Fasting'); safe(renderCharity,'Charity'); safe(renderMemorization,'Memorization'); safe(renderMorning,'Morning'); safe(renderEvening,'Evening'); safe(renderSituationalDhikr,'SituationalDhikr'); safe(renderSins,'Sins'); safe(renderPunishments,'Punishments'); safe(renderRepentance,'Repentance'); safe(renderSahaba,'Sahaba'); safe(renderSeerah,'Seerah'); safe(renderTafsir,'Tafsir'); safe(renderManners,'Manners'); safe(renderFamily,'Family'); safe(renderHealth,'Health'); safe(() => window.renderHealthLog && window.renderHealthLog(), 'HealthLog'); safe(renderFinance,'Finance'); safe(() => window.renderFinanceTab && window.renderFinanceTab(), 'FinanceTab'); safe(renderUmmah,'Ummah'); safe(renderHajj,'Hajj'); safe(renderAkhirah,'Akhirah'); safe(renderProphets,'Prophets'); safe(renderWomen,'Women'); safe(renderHeart,'Heart'); safe(renderMarriage,'Marriage'); safe(renderScience,'Science'); safe(renderWudu,'Wudu'); safe(renderScholars,'Scholars'); safe(renderPatience,'Patience'); safe(renderWork,'Work'); safe(renderCommunity,'Community'); safe(renderEnvironment,'Environment'); safe(renderTravel,'Travel'); safe(renderFiqh,'Fiqh'); safe(renderArabic,'Arabic'); safe(renderTawakkul,'Tawakkul'); safe(renderIkhlas,'Ikhlas'); safe(renderZuhd,'Zuhd'); safe(renderDawah,'Dawah'); safe(renderAqeedah,'Aqeedah'); safe(renderKnowledge,'Knowledge'); safe(renderCivilisation,'Civilisation'); safe(renderJumuah,'Jumuah'); safe(renderBattles,'Battles'); safe(renderJannah,'Jannah'); safe(renderJahannam,'Jahannam'); safe(renderGrave,'Grave'); safe(renderSigns,'Signs'); safe(renderDreams,'Dreams'); safe(renderParenting,'Parenting'); safe(renderFood,'Food'); safe(renderTibb,'Tibb'); safe(renderYouth,'Youth'); safe(renderTech,'Tech'); safe(renderNeighbors,'Neighbors'); safe(renderSalah,'Salah'); safe(() => window.renderPersonalGoals && window.renderPersonalGoals(), 'PersonalGoals');
-    if (typeof NEW_POOLS !== 'undefined') Object.keys(NEW_POOLS).forEach(k => {
-      if(window['render'+k]) safe(window['render'+k], k);
+    var activeTab = (window.S && window.S.lastSub) || 'today';
+    var fn = TAB_STATIC_RENDERERS[activeTab];
+    if (fn) fn();
+    if (typeof NEW_POOLS !== 'undefined') Object.keys(NEW_POOLS).forEach(function(k) {
+      if (NEW_POOLS[k] && NEW_POOLS[k].length) {
+        safe(function() { poolRender(k + 'Area', iqIcon('book-open') + ' ' + k, NEW_POOLS[k], k + 'Idx'); }, k);
+      }
     });
-    refreshLucideIcons();
   }
 
 function renderAll() {
