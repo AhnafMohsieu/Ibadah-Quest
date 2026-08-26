@@ -24,7 +24,7 @@ function loadSandbox(files, globals) {
 }
 
 test('comeback bonus after 1 day missed', () => {
-  const sandbox = loadSandbox(['features/consistency-bonuses.js'], {
+  const sandbox = loadSandbox(['core/xp.js', 'features/consistency-bonuses.js'], {
     S: {
       lad: '2026-08-10',
       xp: 100,
@@ -44,7 +44,7 @@ test('comeback bonus after 1 day missed', () => {
 });
 
 test('comeback bonus after 2+ days missed', () => {
-  const sandbox = loadSandbox(['features/consistency-bonuses.js'], {
+  const sandbox = loadSandbox(['core/xp.js', 'features/consistency-bonuses.js'], {
     S: {
       lad: '2026-08-08',
       xp: 100,
@@ -64,7 +64,7 @@ test('comeback bonus after 2+ days missed', () => {
 });
 
 test('comeback bonus if logged yesterday', () => {
-  const sandbox = loadSandbox(['features/consistency-bonuses.js'], {
+  const sandbox = loadSandbox(['core/xp.js', 'features/consistency-bonuses.js'], {
     S: {
       lad: '2026-08-10',
       xp: 100,
@@ -84,7 +84,7 @@ test('comeback bonus if logged yesterday', () => {
 });
 
 test('no bonus if same day', () => {
-  const sandbox = loadSandbox(['features/consistency-bonuses.js'], {
+  const sandbox = loadSandbox(['core/xp.js', 'features/consistency-bonuses.js'], {
     S: {
       lad: '2026-08-11',
       xp: 100,
@@ -104,7 +104,7 @@ test('no bonus if same day', () => {
 });
 
 test('no bonus if no previous active date', () => {
-  const sandbox = loadSandbox(['features/consistency-bonuses.js'], {
+  const sandbox = loadSandbox(['core/xp.js', 'features/consistency-bonuses.js'], {
     S: {
       lad: null,
       xp: 100,
@@ -124,7 +124,7 @@ test('no bonus if no previous active date', () => {
 });
 
 test('lad is updated after checkConsistency and prev is consumed', () => {
-  const sandbox = loadSandbox(['features/consistency-bonuses.js'], {
+  const sandbox = loadSandbox(['core/xp.js', 'features/consistency-bonuses.js'], {
     S: {
       lad: '2026-08-09',
       xp: 100,
@@ -145,7 +145,7 @@ test('lad is updated after checkConsistency and prev is consumed', () => {
 });
 
 test('mid-session rollover pays comeback bonus exactly once and consumes prev', () => {
-  const sandbox = loadSandbox(['features/consistency-bonuses.js'], {
+  const sandbox = loadSandbox(['core/xp.js', 'features/consistency-bonuses.js'], {
     S: {
       lad: '2026-08-10',
       xp: 100,

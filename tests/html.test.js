@@ -279,10 +279,8 @@ test('fasting toggle grants 50 XP on day checked and revokes on uncheck', () => 
   const fnIdx = renderAll.indexOf('function toggleFasting');
   assert.ok(fnIdx > -1, 'toggleFasting must exist');
   const body = renderAll.slice(fnIdx, fnIdx + 700);
-  assert.ok(body.includes('S.xp += 50') || body.includes('S.xp+=50'), 'fasting day must grant 50 XP');
-  assert.ok(body.includes('S.xp = Math.max(0'), 'unchecking must revoke XP without going negative');
-  assert.ok(body.includes('levelUpToast'), 'level up must be evaluated after fasting XP');
-  assert.ok(body.includes('S.lv = lvFrom(S.xp)'), 'level recomputed after fasting XP');
+  assert.ok(body.includes('applyXpDelta(50)'), 'fasting day must grant 50 XP via applyXpDelta');
+  assert.ok(body.includes('spendXp(50)'), 'unchecking must revoke XP clamped at zero via spendXp');
 });
 
 test('health logging grants 25 XP once per day per reached milestone', () => {
@@ -290,7 +288,7 @@ test('health logging grants 25 XP once per day per reached milestone', () => {
   assert.ok(health.includes('xp += 25') || health.includes('xp+=25'), 'milestone must grant 25 XP');
   assert.ok(health.includes('S.healthXpClaimed') || health.includes('_xp'), 'claimed milestones must be tracked to avoid repeat grants');
   assert.ok(health.includes('saveState'), 'state saved after XP grant');
-  assert.ok(health.includes('levelUpToast'), 'level up evaluated after health XP');
+  assert.ok(health.includes('applyXpDelta(xp)'), 'XP flows through applyXpDelta (level-up lives there)');
 });
 
 test('prayer timer tab renders its countdown and times grid', () => {

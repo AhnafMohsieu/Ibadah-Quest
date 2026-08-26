@@ -24,7 +24,7 @@ function loadSandbox(files, globals) {
 }
 
 test('checkSurpriseReward is a function', () => {
-  const sandbox = loadSandbox(['features/surprise-rewards.js'], {
+  const sandbox = loadSandbox(['core/xp.js', 'features/surprise-rewards.js'], {
     S: { xp: 100, lv: 1, sfu: false },
     today: () => '2026-08-11',
     lvFrom: () => 1,
@@ -39,7 +39,7 @@ test('checkSurpriseReward is a function', () => {
 });
 
 test('surprise reward can grant XP', () => {
-  const sandbox = loadSandbox(['features/surprise-rewards.js'], {
+  const sandbox = loadSandbox(['core/xp.js', 'features/surprise-rewards.js'], {
     S: { xp: 100, lv: 1, sfu: false },
     today: () => '2026-08-11',
     lvFrom: () => 1,

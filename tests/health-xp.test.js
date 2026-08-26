@@ -25,6 +25,7 @@ function loadSandbox(files, globals) {
 
 const levelTitles = [100, 250, 500, 1000, 2000, 3500, 6000, 10000, 15000, 25000, 40000, 60000, 100000];
 const sandbox = loadSandbox([
+  'core/xp.js',
   'data/pools/health.js',
   'features/health.js'
 ], {

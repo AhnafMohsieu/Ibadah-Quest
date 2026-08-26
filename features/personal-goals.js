@@ -36,8 +36,7 @@
 
     if (goal.current >= goal.target) {
       goal.completed = true;
-      S.xp = Math.max(0, Number(S.xp) || 0) + reward;
-      S.lv = lvFrom(S.xp);
+      applyXpDelta(reward);
       toast(iqIcon('target'), `Goal Complete! +${reward} XP!`, true);
     }
     

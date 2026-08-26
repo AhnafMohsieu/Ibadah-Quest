@@ -271,7 +271,7 @@
     h += `<div class="content-card"><div class="content-english">${iqIcon('calendar')} ${cnt} fasting days this month</div><div class="content-english" style="font-size:0.85rem;color:var(--text2);">Monday & Thursday are most recommended (Sunnah)</div></div>`;
     document.getElementById('fastingArea').innerHTML = h;
   }
-  function toggleFasting() { const dt=today(); S.fastingDays[dt]=!S.fastingDays[dt]; const oldLv=S.lv; if(S.fastingDays[dt]) { S.td.fasting=(S.td.fasting||0)+1; S.xp += 50; window.playSound('pop'); } else { S.td.fasting=Math.max(0,(S.td.fasting||0)-1); S.xp = Math.max(0,S.xp-50); } S.lv = lvFrom(S.xp); if(S.lv>oldLv && window.levelUpToast) window.levelUpToast(S.lv, lvTitle(S.lv)); saveState(); renderFasting(); if (typeof window !== 'undefined' && window.renderLv) window.renderLv(); if (typeof window !== 'undefined' && window.renderTopBar) window.renderTopBar(); }
+  function toggleFasting() { const dt=today(); S.fastingDays[dt]=!S.fastingDays[dt]; if(S.fastingDays[dt]) { S.td.fasting=(S.td.fasting||0)+1; applyXpDelta(50); window.playSound('pop'); } else { S.td.fasting=Math.max(0,(S.td.fasting||0)-1); spendXp(50); } saveState(); renderFasting(); if (typeof window !== 'undefined' && window.renderLv) window.renderLv(); if (typeof window !== 'undefined' && window.renderTopBar) window.renderTopBar(); }
   function renderCharity() {
     const cm = S.charity; if (cm.monthStart !== ms()) { cm.monthStart=ms(); cm.given=0; }
     let h = '<div class="section-title">' + iqIcon('wallet') + ' Charity Tracker</div>';
@@ -321,13 +321,10 @@
   function toggleMorning(idx, xp) { 
     const dt=today(); if(!S.morningDone[dt]) S.morningDone[dt]={}; 
     const w = !!S.morningDone[dt][idx];
-    const oldLv=S.lv;
     S.morningDone[dt][idx] = !w; 
     if(xp){
-      if(!w) { S.xp+=xp; window.playSound('pop'); }
-      else S.xp=Math.max(0, S.xp-xp);
-      S.lv=lvFrom(S.xp);
-      if(S.lv>oldLv){ const t=lvTitle(S.lv); window.levelUpToast(S.lv, t); }
+      if(!w) { applyXpDelta(xp); window.playSound('pop'); }
+      else spendXp(xp);
     }
     saveState(); renderAll(); 
   }
@@ -359,13 +356,10 @@
   function toggleEvening(idx, xp) { 
     const dt=today(); if(!S.eveningDone[dt]) S.eveningDone[dt]={}; 
     const w = !!S.eveningDone[dt][idx];
-    const oldLv=S.lv;
     S.eveningDone[dt][idx] = !w; 
     if(xp){
-      if(!w) { S.xp+=xp; window.playSound('pop'); }
-      else S.xp=Math.max(0, S.xp-xp);
-      S.lv=lvFrom(S.xp);
-      if(S.lv>oldLv){ const t=lvTitle(S.lv); window.levelUpToast(S.lv, t); }
+      if(!w) { applyXpDelta(xp); window.playSound('pop'); }
+      else spendXp(xp);
     }
     saveState(); renderAll(); 
   }

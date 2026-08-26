@@ -24,7 +24,7 @@ function loadSandbox(files, globals) {
 }
 
 function createSandbox(cs, bs, milestones) {
-  const sandbox = loadSandbox(['features/streak-milestones.js'], {
+  const sandbox = loadSandbox(['core/xp.js', 'features/streak-milestones.js'], {
     S: {
       cs: cs || 0,
       bs: bs || 0,
@@ -102,7 +102,7 @@ test('uses max of cs and bs', () => {
 });
 
 test('initializes S.milestones if missing', () => {
-  const { checkMilestones, S } = loadSandbox(['features/streak-milestones.js'], {
+  const { checkMilestones, S } = loadSandbox(['core/xp.js', 'features/streak-milestones.js'], {
     S: { cs: 7, bs: 0, xp: 0 },
     lvFrom: () => 1,
     toast: () => {},

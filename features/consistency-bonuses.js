@@ -13,13 +13,11 @@
       const diffDays = Math.round((todayDate - lastDate) / 86400000);
 
       if (diffDays === 1) {
-        S.xp += 50;
-        S.lv = lvFrom(S.xp);
+        applyXpDelta(50);
         toast(iqIcon('arrow-left'), 'Comeback Bonus: +50 XP!');
         saveState();
       } else if (diffDays > 1) {
-        S.xp += 100;
-        S.lv = lvFrom(S.xp);
+        applyXpDelta(100);
         toast(iqIcon('arrow-left'), 'Welcome Back! +100 XP!');
         saveState();
       }
@@ -55,8 +53,7 @@
     else if (daysLogged >= 5) bonus = 100;
 
     if (bonus > 0) {
-      S.xp += bonus;
-      S.lv = lvFrom(S.xp);
+      applyXpDelta(bonus);
       const label = daysLogged >= 7 ? 'Perfect Week!' : `${daysLogged} Days Strong!`;
       toast(iqIcon('calendar'), `${label} +${bonus} XP!`);
       saveState();

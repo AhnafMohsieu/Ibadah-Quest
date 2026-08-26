@@ -40,7 +40,7 @@
     } else if (p.type === 'charity') {
       f.charity[p.charityType] = (f.charity[p.charityType] || 0) + amount;
       const xp = Math.floor(amount / 10);
-      if (xp > 0) { S.xp += xp; S.lv = lvFrom(S.xp); }
+      if (xp > 0) { applyXpDelta(xp); }
     }
     _pendingAction = null;
     saveState();
@@ -57,7 +57,7 @@
       const amt = f.charity[key] || 0;
       const xp = Math.floor(amt / 10);
       f.charity[key] = 0;
-      if (xp > 0) { S.xp = Math.max(0, S.xp - xp); S.lv = lvFrom(S.xp); }
+      if (xp > 0) { spendXp(xp); }
     } else if (type === 'expense') {
       f.expenses[key] = 0;
     }

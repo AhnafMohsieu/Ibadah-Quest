@@ -72,7 +72,6 @@
     if (!S.healthXpClaimed) S.healthXpClaimed = {};
     if (!S.healthXpClaimed[t]) S.healthXpClaimed[t] = [];
     const claimed = S.healthXpClaimed[t];
-    const oldLv = S.lv;
     let xp = 0;
     const grant = (key, reached) => {
       if (reached && !claimed.includes(key)) {
@@ -85,9 +84,7 @@
     grant('exercise', h.exercise.length > 0);
     grant('meals', Object.values(h.meals).filter(v => v).length >= 3);
     if (xp > 0) {
-      S.xp += xp;
-      S.lv = lvFrom(S.xp);
-      if (S.lv > oldLv && window.levelUpToast) window.levelUpToast(S.lv, lvTitle(S.lv));
+      applyXpDelta(xp);
       if (typeof window !== 'undefined' && window.renderLv) window.renderLv();
       if (typeof window !== 'undefined' && window.renderTopBar) window.renderTopBar();
     }

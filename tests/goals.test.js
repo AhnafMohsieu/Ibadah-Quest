@@ -24,7 +24,7 @@ function loadSandbox(files, globals) {
 }
 
 test('addPersonalGoal creates goal', () => {
-  const sandbox = loadSandbox(['features/personal-goals.js'], {
+  const sandbox = loadSandbox(['core/xp.js', 'features/personal-goals.js'], {
     S: { personalGoals: [] },
     today: () => '2026-08-11',
     saveState: () => {},
@@ -41,7 +41,7 @@ test('addPersonalGoal creates goal', () => {
 });
 
 test('updateGoalProgress increments progress', () => {
-  const sandbox = loadSandbox(['features/personal-goals.js'], {
+  const sandbox = loadSandbox(['core/xp.js', 'features/personal-goals.js'], {
     S: { personalGoals: [{ id: 'g1', type: 'prayer', target: 30, current: 0, deadline: '2026-08-31', xpReward: 300, completed: false }] },
     today: () => '2026-08-11',
     saveState: () => {},
@@ -56,7 +56,7 @@ test('updateGoalProgress increments progress', () => {
 });
 
 test('updateGoalProgress completes goal at target', () => {
-  const sandbox = loadSandbox(['features/personal-goals.js'], {
+  const sandbox = loadSandbox(['core/xp.js', 'features/personal-goals.js'], {
     S: { 
       xp: 100,
       lv: 1,
