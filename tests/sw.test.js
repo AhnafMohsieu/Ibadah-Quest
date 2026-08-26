@@ -49,3 +49,26 @@ test('sw registers install, activate, fetch, and message handlers', () => {
     assert.ok(listeners[ev] && listeners[ev].length === 1, ev + ' handler missing');
   }
 });
+
+test('sw: PRECACHE_LIST contains core assets', () => {
+  const swSource = fs.readFileSync(path.join(__dirname, '..', 'sw.js'), 'utf8');
+  assert.ok(swSource.includes("'index.html'"), 'should precache index.html');
+  assert.ok(swSource.includes("'offline.html'"), 'should precache offline.html');
+  assert.ok(swSource.includes("'core/xp.js'"), 'should precache core/xp.js');
+  assert.ok(swSource.includes("'core/actions.js'"), 'should precache core/actions.js');
+});
+
+test('sw: CDN_CACHE is separate from core cache', () => {
+  const swSource = fs.readFileSync(path.join(__dirname, '..', 'sw.js'), 'utf8');
+  assert.ok(swSource.includes("'iq-cdn-v1'"), 'should have CDN cache name');
+  assert.ok(swSource.includes('CDN_CACHE'), 'should use CDN_CACHE variable');
+});
+
+test('sw: offline.html exists', () => {
+  assert.ok(fs.existsSync(path.join(__dirname, '..', 'offline.html')), 'offline.html should exist');
+});
+
+test('sw: CACHE_NAME bumped to v27', () => {
+  const swSource = fs.readFileSync(path.join(__dirname, '..', 'sw.js'), 'utf8');
+  assert.ok(swSource.includes('iq-cache-v27'), 'CACHE_NAME should be v27');
+});
