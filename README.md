@@ -107,6 +107,21 @@ The app uses an IIFE-per-module pattern with `window.*` exports. No bundler — 
 - `getTodayKey()` / `getYesterdayKey()` / `getWeekAgoKey()` — consistent local-date keys
 - `escapeHTML(str)` — XSS-safe rendering
 - `weightedPick(pool)` — weighted random selection
+- `__iqErrorTap` — global error/rejection tap: records every runtime error, logs it, and surfaces a one-time toast (sees errors that would otherwise fail silently)
+
+## Quality & Tooling
+
+- **CI (`.github/workflows/ci.yml`)** — runs on push/PR to `main` and feature branches. Gates: (1) `node scripts/check-syntax.js` parses every JS file as a classic script, (2) `node --test` runs the full suite.
+- **`scripts/check-syntax.js`** — fast in-process syntax gate over every repo JS file (faster than per-file `node --check`, service-worker-safe). Local check: `node scripts/check-syntax.js`.
+- **Global error tap (`core/error-tap.js`)** — installed early in `<head>`; catches `window.onerror` + `unhandledrejection`, buffers the last 25, logs details, and shows a single non-intrusive toast per session.
+- **No-silent-stub enforcement** — `tests/app-registry.test.js` scans the `App` facade for `() => {}` / `function () {}` no-op stubs (now a real, matching scan).
+
+## Agent skills (`.opencode/skills/`)
+
+- **`caveman`** — terse, broken-English explanation voice for "explain it like what it is" requests.
+- **`ponytail`** — no-nonsense senior-engineer mode: read first, smallest correct change, prove it green.
+- **`superpower`** — the spec-first → executable-plan → subagent-implement workflow used by `docs/superpowers/`.
+- **`ibadah-quest-dev`** — repo conventions (tab wiring, state schema, cache discipline, testing).
 
 ## Development
 

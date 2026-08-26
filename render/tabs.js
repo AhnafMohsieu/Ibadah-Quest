@@ -170,6 +170,11 @@
       situational:'renderSituationalDhikr', extradeeds:'renderExtraDeeds', volprayers:'renderVolPrayers',
       timer:'renderPrayerTimes', stats:'renderStats', goals:'renderPersonalGoals', zakatcalc:'renderZakatCalc'
     };
+    // Release the prayer-countdown interval when leaving the Timer tab so it
+    // does not keep ticking in the background (Phase 3 leak fix).
+    if (tabId !== 'timer' && typeof window.stopPrayerTimer === 'function') {
+      window.stopPrayerTimer();
+    }
     if (_lazyRender[tabId] && window[_lazyRender[tabId]]) {
       try { window[_lazyRender[tabId]](); } catch(e) { console.warn('Lazy render ' + tabId + ' failed:', e.message); }
     }

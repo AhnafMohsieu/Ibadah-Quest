@@ -298,5 +298,8 @@
   window.fetchPrayerTimes = fetchPrayerTimes;
   window.renderPrayerTimes = renderPrayerTimes;
   window.renderTimer = renderTimer;
+  window.stopPrayerTimer = function() {
+    if (window.timerInt) { clearInterval(window.timerInt); window.timerInt = null; }
+  };
   window.useCurrentPrayerLocation = useCurrentPrayerLocation;
 })();

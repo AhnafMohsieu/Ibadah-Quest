@@ -1,0 +1,37 @@
+name: CI
+
+on:
+  push:
+    branches: [main, 'phase*', 'feat/*']
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Print versions
+        run: node --version
+
+      # Gate 1: every tracked JS file must parse as a classic <script>
+      # (IIFE/window.* style). Catches syntax errors before they ship.
+      - name: Syntax-check all JS
+        run: node scripts/check-syntax.js
+
+      # Gate 2: the full unit/integration suite. Also enforces the
+      # "no silent no-op App stubs" scan in tests/app-registry.test.js and
+      # the "no hand-rolled escaping" checks — one command, everything.
+      - name: Run test suite
+        run: node --test

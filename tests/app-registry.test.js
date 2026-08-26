@@ -152,7 +152,7 @@ test('facade has no silent no-op stubs', () => {
   const facadeEnd = src.indexOf('};', facadeIdx);
   assert.ok(facadeEnd > facadeIdx, 'window.App literal must terminate');
   const facade = src.slice(facadeIdx, facadeEnd);
-  assert.ok(!/\(\)\s*=>\s*\{\}/.test(facade), 'no-op arrow stubs found in App facade');
+    assert.ok(!/\(\)\s*=>\s*\{\}/.test(facade) && !/function\s*[A-Za-z$_]*\s*\(\s*\)\s*\{\s*\}/.test(facade), 'no-op stubs found in App facade');
 });
 
 test('appAction warns loudly when target missing', () => {

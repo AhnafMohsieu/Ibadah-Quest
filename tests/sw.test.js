@@ -68,7 +68,12 @@ test('sw: offline.html exists', () => {
   assert.ok(fs.existsSync(path.join(__dirname, '..', 'offline.html')), 'offline.html should exist');
 });
 
-test('sw: CACHE_NAME bumped to v27', () => {
+test('sw: CACHE_NAME bumped to v29', () => {
   const swSource = fs.readFileSync(path.join(__dirname, '..', 'sw.js'), 'utf8');
-  assert.ok(swSource.includes('iq-cache-v27'), 'CACHE_NAME should be v27');
+  assert.ok(swSource.includes('iq-cache-v29'), 'CACHE_NAME should be v29');
+});
+
+test('sw: error-tap.js is precached', () => {
+  const swSource = fs.readFileSync(path.join(__dirname, '..', 'sw.js'), 'utf8');
+  assert.ok(swSource.includes("'core/error-tap.js'"), 'PRECACHE_LIST must include core/error-tap.js');
 });

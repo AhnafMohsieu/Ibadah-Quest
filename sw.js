@@ -1,5 +1,5 @@
 (function() {
-  const CACHE_NAME = 'iq-cache-v27';
+  const CACHE_NAME = 'iq-cache-v29';
   const CDN_CACHE = 'iq-cdn-v1';
 
   const PRECACHE_LIST = [
@@ -19,6 +19,7 @@
     'core/storage.js',
     'core/audio.js',
     'core/themes.js',
+    'core/error-tap.js',
     'core/content-cache.js',
     'core/content.js',
     'state/state.js',

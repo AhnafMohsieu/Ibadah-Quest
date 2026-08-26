@@ -229,3 +229,28 @@ test('fetchPrayerTimes uses the saved prayer location', async () => {
   assert.match(requests[0], /longitude=-0\.1276/);
   assert.match(requests[0], /method=2/);
 });
+test('stopPrayerTimer clears and nulls the running countdown interval', () => {
+  const cleared = [];
+  const storage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
+  const sandbox = loadSandbox(['render/prayers.js'], {
+    S: { prayerSettings: { lat: 51.5072, lng: -0.1276, label: 'London', method: 2 } },
+    localStorage: storage,
+    fetch: async () => ({ json: async () => ({ code: 200, data: { timings: {} } }) }),
+    escapeHTML: (v) => String(v == null ? '' : v).replace(/[&<>"']/g, function(ch) { return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]; }),
+    clearInterval: (id) => { cleared.push(id); }
+  });
+  assert.strictEqual(typeof sandbox.stopPrayerTimer, 'function');
+  assert.strictEqual(sandbox.window.timerInt, undefined);
+  sandbox.stopPrayerTimer(); // no-op when nothing running
+  assert.deepStrictEqual(cleared, []);
+  sandbox.window.timerInt = 1234;
+  sandbox.stopPrayerTimer();
+  assert.deepStrictEqual(cleared, [1234]);
+  assert.strictEqual(sandbox.window.timerInt, null);
+});
+
+test('activateTab releases the prayer timer when leaving the Timer tab', () => {
+  const tabsSource = fs.readFileSync(path.join(__dirname, '..', 'render', 'tabs.js'), 'utf8');
+  assert.match(tabsSource, /stopPrayerTimer/);
+  assert.match(tabsSource, /tabId !== 'timer'/);
+});
