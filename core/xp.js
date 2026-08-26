@@ -7,6 +7,26 @@
     }
   }
 
+  function applyXpDelta(delta) {
+    var oldLv = S.lv;
+    S.xp += delta;
+    S.lv = lvFrom(S.xp);
+    checkLevelUp(oldLv);
+    return { oldLv: oldLv, newLv: S.lv, leveledUp: S.lv > oldLv };
+  }
+
+  function spendXp(amount) {
+    var clamped = Math.max(0, S.xp - amount);
+    var delta = clamped - S.xp; // <= 0
+    return applyXpDelta(delta);
+  }
+
+  function saveAndRenderDirty() {
+    saveState();
+    markDirty('today'); markDirty('topbar'); markDirty('lv'); markDirty('progress');
+    renderDynamic();
+  }
+
   function grantDailyXp(amount, key) {
     if (!S.xpDaily) S.xpDaily = {};
     var dk = key + '|' + today();
@@ -104,6 +124,10 @@
       }
     } catch (e) {}
   }
+
+  window.applyXpDelta = applyXpDelta;
+  window.spendXp = spendXp;
+  window.saveAndRenderDirty = saveAndRenderDirty;
 
   window.grantDailyXp = grantDailyXp;
   window.grantCappedDailyXp = grantCappedDailyXp;
