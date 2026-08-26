@@ -473,6 +473,7 @@ Object.keys(NEW_POOLS).forEach(k => {
       window._modalTriggerEl.focus();
       window._modalTriggerEl = null;
     }
+    if (typeof window._iqModalDone === 'function') { var cb = window._iqModalDone; window._iqModalDone = null; setTimeout(cb, 300); }
   }
 
   // Theme toggle keyboard support
@@ -586,25 +587,25 @@ Object.keys(NEW_POOLS).forEach(k => {
     if (window.showWeeklySummary) modalQueue.push(window.showWeeklySummary);
     if (window.showDailySummary) modalQueue.push(window.showDailySummary);
     if (window.showDailyRitual) modalQueue.push(window.showDailyRitual);
-    function runModalQueue() {
+    let queueTimer = null;
+    function runNextModal() {
       if (modalQueue.length === 0) return;
       const fn = modalQueue.shift();
-      try { fn(); } catch(e) { console.error('modal queue step failed:', e); }
-      const overlay = document.getElementById('toastOverlay');
-      if (overlay) {
-        const checkClosed = setInterval(() => {
-          if (overlay.style.display === 'none' || overlay.style.opacity === '0' ||
-              (!overlay.classList.contains('show') && !overlay.classList.contains('visible'))) {
-            clearInterval(checkClosed);
-            setTimeout(runModalQueue, 300);
-          }
-        }, 200);
-        setTimeout(() => { clearInterval(checkClosed); runModalQueue(); }, 10000);
-      } else {
-        runModalQueue();
-      }
+      try { fn(runNextModal); } catch(e) { console.error('modal queue step failed:', e); runNextModal(); }
+      clearTimeout(queueTimer);
+      // Watchdog: force-advance only if THIS step's callback is still armed.
+      // If the modal already closed, closeToastOverlay consumed _iqModalDone
+      // and its 300ms delayed callback owns the advance — consuming first
+      // nulls it, so whichever path wins, the queue advances exactly once.
+      const watched = window._iqModalDone;
+      queueTimer = setTimeout(() => {
+        if (typeof watched === 'function' && window._iqModalDone === watched) {
+          window._iqModalDone = null;
+          runNextModal();
+        }
+      }, 10000);
     }
-    runModalQueue();
+    runNextModal();
     try {
       if (!_parseHashAndNavigate()) {
         const savedCat = S ? S.lastCat : null;

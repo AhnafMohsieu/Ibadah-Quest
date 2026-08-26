@@ -1,7 +1,10 @@
 (function() {
-  function showDailySummary() {
+  function showDailySummary(onDone) {
     const t = today();
-    if (S.lastDailySummary === t) return;
+    if (S.lastDailySummary === t) {
+      if (typeof onDone === 'function') onDone();
+      return;
+    }
 
     const l = S.log[t] || {};
     const prayers = Object.values(l.p || {}).filter(v => v).length;
@@ -15,6 +18,8 @@
     ];
     const quote = quotes[Math.floor(Math.random() * quotes.length)];
 
+    window._iqModalDone = typeof onDone === 'function' ? onDone : null;
+
     const ov = openToastModal(`<div class="daily-summary">
       <div class="ds-title">${iqIcon('calendar')} Daily Summary</div>
       <div class="ds-grid">
@@ -26,7 +31,11 @@
       <div class="ds-quote">"${quote}"</div>
       <button class="ds-close" onclick="closeToastOverlay()">Alhamdulillah</button>
     </div>`);
-    if (!ov) return;
+    if (!ov) {
+      window._iqModalDone = null;
+      if (typeof onDone === 'function') onDone();
+      return;
+    }
 
     S.lastDailySummary = t;
     saveState();

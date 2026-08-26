@@ -24,12 +24,18 @@
     if (newMilestone) saveState();
   }
 
-  function showWeeklySummary() {
+  function showWeeklySummary(onDone) {
     const today = new Date();
     const dayOfWeek = today.getDay();
-    if (dayOfWeek !== 0) return;
+    if (dayOfWeek !== 0) {
+      if (typeof onDone === 'function') onDone();
+      return;
+    }
     const t = today.toISOString().slice(0, 10);
-    if (S.lastWeeklySummary === t) return;
+    if (S.lastWeeklySummary === t) {
+      if (typeof onDone === 'function') onDone();
+      return;
+    }
     S.lastWeeklySummary = t;
     saveState();
 
@@ -45,7 +51,9 @@
     ];
     const quote = quotes[Math.floor(Math.random() * quotes.length)];
 
-    openToastModal(`<div class="weekly-summary">
+    window._iqModalDone = typeof onDone === 'function' ? onDone : null;
+
+    const ov = openToastModal(`<div class="weekly-summary">
       <div class="ws-title">📊 Weekly Summary</div>
       <div class="ws-grid">
         <div class="ws-stat"><div class="ws-val">${prayers}</div><div class="ws-label">Prayers</div></div>
@@ -56,6 +64,10 @@
       <div class="ws-quote">"${quote}"</div>
       <button class="ws-close" onclick="closeToastOverlay()">Jazak Allahu Khairan</button>
     </div>`);
+    if (!ov) {
+      window._iqModalDone = null;
+      if (typeof onDone === 'function') onDone();
+    }
   }
 
   window.checkMilestones = checkMilestones;

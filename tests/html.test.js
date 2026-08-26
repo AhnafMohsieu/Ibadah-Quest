@@ -89,9 +89,10 @@ test('hadith/dhikr audio modules wired with versions and load order', () => {
   assert.ok(html.indexOf('features/tafsir-library.js') > html.indexOf('render/static.js'), 'deferred features load after renderers');
 });
 
-test('modal queue waits for both overlay visibility styles to close', () => {
-  assert.ok(actions.includes("overlay.classList.contains('show')"));
-  assert.ok(actions.includes("overlay.classList.contains('visible')"));
+test('modal queue advances via callback contract, not dom polling', () => {
+  assert.ok(actions.includes('fn(runNextModal)'), 'each queued modal receives its continuation');
+  assert.ok(actions.includes('window._iqModalDone = null; setTimeout(cb, 300)'), 'closeToastOverlay consumes the done-hook after the ~300ms gap');
+  assert.ok(actions.includes(', 10000)'), '10s watchdog force-advance retained');
 });
 
 test('shell surfaces use clean borders and rounded corners', () => {

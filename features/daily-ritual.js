@@ -1,7 +1,10 @@
 (function() {
-  function showDailyRitual() {
+  function showDailyRitual(onDone) {
     const t = today();
-    if (S.lastDailyRitual === t) return;
+    if (S.lastDailyRitual === t) {
+      if (typeof onDone === 'function') onDone();
+      return;
+    }
 
     const l = S.log[t] || {};
     const prayers = Object.values(l.p || {}).filter(v => v).length;
@@ -13,6 +16,8 @@
       'Take advantage of five before five.'
     ];
     const quote = quotes[Math.floor(Math.random() * quotes.length)];
+
+    window._iqModalDone = typeof onDone === 'function' ? onDone : null;
 
     const ov = openToastModal(`<div class="daily-ritual">
       <div class="dr-title">${iqIcon('moon')} Daily Reflection</div>
@@ -34,7 +39,11 @@
       <div class="dr-quote">"${quote}"</div>
       <button class="dr-close" onclick="saveDailyRitual(window._drRating||0, document.getElementById('drReflection').value)">Save & Close</button>
     </div>`);
-    if (!ov) return;
+    if (!ov) {
+      window._iqModalDone = null;
+      if (typeof onDone === 'function') onDone();
+      return;
+    }
 
     window._drRating = 0;
   }
