@@ -172,3 +172,102 @@ test('mid-session rollover pays comeback bonus exactly once and consumes prev', 
   sandbox.checkConsistency();
   assert.strictEqual(sandbox.S.xp, 150);
 });
+
+test('checkWeeklyConsistency awards 500 XP for 7 perfect days on Sunday', () => {
+  const SUNDAY = new Date(2026, 7, 9); // Aug 9 2026 is Sunday
+  const FixedDate = function(...args) {
+    if (args.length === 0) return new Date(SUNDAY.getTime());
+    return new (Function.prototype.bind.apply(Date, [null].concat(Array.from(arguments))))();
+  };
+  FixedDate.now = Date.now;
+  const log = {};
+  for (let i = 0; i < 7; i++) {
+    const dk = '2026-08-' + (9 - i).toString().padStart(2, '0');
+    log[dk] = { p: { fajr: true, dhuhr: true, asr: true, maghrib: true, isha: true } };
+  }
+  const sandbox = loadSandbox(['core/xp.js', 'features/consistency-bonuses.js'], {
+    S: { lad: '2026-08-09', xp: 100, lv: 1, log, lastWeeklyConsistency: null },
+    today: (d) => {
+      if (d) return d.getFullYear() + '-' + (d.getMonth()+1).toString().padStart(2,'0') + '-' + d.getDate().toString().padStart(2,'0');
+      return '2026-08-09';
+    },
+    Date: FixedDate,
+    lvFrom: () => 1,
+    toast: () => {},
+    saveState: () => {},
+    iqIcon: () => '⭐'
+  });
+  sandbox.window.Date = FixedDate;
+  sandbox.checkWeeklyConsistency();
+  assert.strictEqual(sandbox.S.xp, 600);
+  assert.strictEqual(sandbox.S.lastWeeklyConsistency, '2026-08-09');
+});
+
+test('checkWeeklyConsistency awards 200 XP for 6 days on Sunday', () => {
+  const SUNDAY = new Date(2026, 7, 9); // Aug 9 2026 is Sunday
+  const FixedDate = function(...args) {
+    if (args.length === 0) return new Date(SUNDAY.getTime());
+    return new (Function.prototype.bind.apply(Date, [null].concat(Array.from(arguments))))();
+  };
+  FixedDate.now = Date.now;
+  const log = {};
+  for (let i = 0; i < 6; i++) {
+    const dk = '2026-08-' + (9 - i).toString().padStart(2, '0');
+    log[dk] = { p: { fajr: true, dhuhr: true, asr: true, maghrib: true, isha: true } };
+  }
+  const sandbox = loadSandbox(['core/xp.js', 'features/consistency-bonuses.js'], {
+    S: { lad: '2026-08-09', xp: 100, lv: 1, log, lastWeeklyConsistency: null },
+    today: (d) => {
+      if (d) return d.getFullYear() + '-' + (d.getMonth()+1).toString().padStart(2,'0') + '-' + d.getDate().toString().padStart(2,'0');
+      return '2026-08-09';
+    },
+    Date: FixedDate,
+    lvFrom: () => 1,
+    toast: () => {},
+    saveState: () => {},
+    iqIcon: () => '⭐'
+  });
+  sandbox.window.Date = FixedDate;
+  sandbox.checkWeeklyConsistency();
+  assert.strictEqual(sandbox.S.xp, 300);
+});
+
+test('checkWeeklyConsistency skips if not Sunday', () => {
+  const FixedDate = function(...args) {
+    if (args.length === 0) return { getDay: () => 3 };
+    return new (Function.prototype.bind.apply(Date, [null].concat(Array.from(arguments))))();
+  };
+  FixedDate.now = Date.now;
+  const sandbox = loadSandbox(['core/xp.js', 'features/consistency-bonuses.js'], {
+    S: { lad: '2026-08-11', xp: 100, lv: 1, log: {}, lastWeeklyConsistency: null },
+    today: () => '2026-08-11',
+    Date: FixedDate,
+    lvFrom: () => 1,
+    toast: () => {},
+    saveState: () => {},
+    iqIcon: () => '⭐'
+  });
+  sandbox.window.Date = FixedDate;
+  sandbox.checkWeeklyConsistency();
+  assert.strictEqual(sandbox.S.xp, 100);
+});
+
+test('checkWeeklyConsistency skips if already run today', () => {
+  const FixedDate = function(...args) {
+    if (args.length === 0) return { getDay: () => 0 };
+    return new (Function.prototype.bind.apply(Date, [null].concat(Array.from(arguments))))();
+  };
+  FixedDate.now = Date.now;
+  const sandbox = loadSandbox(['core/xp.js', 'features/consistency-bonuses.js'], {
+    S: { lad: '2026-08-11', xp: 100, lv: 1, log: {}, lastWeeklyConsistency: '2026-08-11' },
+    today: () => '2026-08-11',
+    Date: FixedDate,
+    lvFrom: () => 1,
+    toast: () => {},
+    saveState: () => {},
+    iqIcon: () => '⭐'
+  });
+  sandbox.window.Date = FixedDate;
+  sandbox.checkWeeklyConsistency();
+  assert.strictEqual(sandbox.S.xp, 100);
+});

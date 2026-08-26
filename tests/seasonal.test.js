@@ -279,3 +279,55 @@ test('syncSeason activates on range entry, is idempotent, deactivates on exit', 
   sbx.window.syncSeason('2026-07-15');            // off-season
   assert.strictEqual(sbx.S.seasonal.active, null);
 });
+
+test('isRamadan returns true when active is ramadan', () => {
+  const sandbox = loadSandbox(['features/seasonal-events.js'], {
+    S: { seasonal: { active: 'ramadan', ramadanQuests: [], hajjDays: 0, eidRewards: [] } },
+    today: () => '2026-08-12',
+    saveState: () => {},
+    toast: () => {},
+    iqIcon: () => '⭐',
+    grantDailyXp: () => true,
+    checkA: () => {}
+  });
+  assert.strictEqual(sandbox.isRamadan(), true);
+});
+
+test('isRamadan returns false when active is not ramadan', () => {
+  const sandbox = loadSandbox(['features/seasonal-events.js'], {
+    S: { seasonal: { active: 'hajj', ramadanQuests: [], hajjDays: 0, eidRewards: [] } },
+    today: () => '2026-08-12',
+    saveState: () => {},
+    toast: () => {},
+    iqIcon: () => '⭐',
+    grantDailyXp: () => true,
+    checkA: () => {}
+  });
+  assert.strictEqual(sandbox.isRamadan(), false);
+});
+
+test('isHajjSeason returns true when active is hajj', () => {
+  const sandbox = loadSandbox(['features/seasonal-events.js'], {
+    S: { seasonal: { active: 'hajj', ramadanQuests: [], hajjDays: 0, eidRewards: [] } },
+    today: () => '2026-08-12',
+    saveState: () => {},
+    toast: () => {},
+    iqIcon: () => '⭐',
+    grantDailyXp: () => true,
+    checkA: () => {}
+  });
+  assert.strictEqual(sandbox.isHajjSeason(), true);
+});
+
+test('isHajjSeason returns false when active is not hajj', () => {
+  const sandbox = loadSandbox(['features/seasonal-events.js'], {
+    S: { seasonal: { active: 'ramadan', ramadanQuests: [], hajjDays: 0, eidRewards: [] } },
+    today: () => '2026-08-12',
+    saveState: () => {},
+    toast: () => {},
+    iqIcon: () => '⭐',
+    grantDailyXp: () => true,
+    checkA: () => {}
+  });
+  assert.strictEqual(sandbox.isHajjSeason(), false);
+});
