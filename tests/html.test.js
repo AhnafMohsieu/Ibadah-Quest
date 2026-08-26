@@ -72,7 +72,7 @@ test('main.css uses modern light tokens', () => {
 });
 
 test('index.html registers the service worker and update banner', () => {
-  assert.ok(html.includes("navigator.serviceWorker.register('sw.js?v=27')"));
+  assert.ok(html.includes("navigator.serviceWorker.register('sw.js?v=29')"));
   assert.ok(html.includes("'SKIP_WAITING'"));
   assert.ok(html.includes('swUpdateBanner'));
 });
@@ -414,6 +414,20 @@ test('bottom nav exists with five category buttons', () => {
   assert.ok(html.includes('class="bnav-btn'), 'bnav-btn class missing');
   assert.ok(css.includes('.bnav'), 'bnav styles missing');
   assert.ok(css.includes('.bnav-btn'), 'bnav-btn styles missing');
+});
+
+test('boot post-defer hook re-renders only deferred panels (no full double-render)', () => {
+  // render/dynamic.js must define + export a deferred-only renderer.
+  assert.ok(renderDynamic.includes('function renderDeferred'), 'renderDeferred must exist');
+  assert.ok(renderDynamic.includes('window.renderDeferred = renderDeferred'), 'renderDeferred must be exported');
+  assert.ok(renderDynamic.includes('DEFERRED_PANELS'), 'renderDeferred must use a deferred-panel list');
+  // actions.js postDeferHook must call renderDeferred, not renderAll (which would
+  // re-render the ~13 already-correct direct panels a second time).
+  assert.ok(actions.includes('window.renderDeferred'), "actions must call window.renderDeferred in postDeferHook");
+  const hookIdx = actions.indexOf('postDeferHook = function');
+  const hookEnd = actions.indexOf('\n      };', hookIdx);
+  const body = actions.slice(hookIdx, hookEnd);
+  assert.ok(body.includes('renderDeferred'), 'postDeferHook must use renderDeferred');
 });
 
 test('focus-visible and reduced-motion polish present', () => {

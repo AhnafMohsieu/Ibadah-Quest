@@ -199,11 +199,27 @@
   }
 
 function renderAll() {
-  document.body.classList.remove('loading');
-  for (const panel of Object.keys(PANEL_RENDERERS)) dirtyPanels.add(panel);
-  renderDynamic();
-  renderStatic();
-}
+    document.body.classList.remove('loading');
+    for (const panel of Object.keys(PANEL_RENDERERS)) dirtyPanels.add(panel);
+    renderDynamic();
+    renderStatic();
+  }
+
+  // Panels rendered exclusively by deferred feature scripts (health, personal
+  // goals, spiritual-growth, combos, journeys, seasonal, etc.). At init-time
+  // their `window.* && window.*()` guards hit a not-yet-loaded renderer and
+  // render nothing, so the post-defer hook must re-render these. The direct
+  // panels (topbar/lv/today/...) are already correct after init's renderAll() —
+  // re-rendering them a second time is pure waste (boot double-render).
+  const DEFERRED_PANELS = [
+    'garden', 'lantern', 'muhasabah', 'journeys', 'boat', 'keys', 'mosque',
+    'achievementshowcase', 'ramadan', 'laylat', 'heartrefinement', 'armor',
+    'growthtab', 'combos', 'autotrack'
+  ];
+  function renderDeferred() {
+    for (const panel of DEFERRED_PANELS) dirtyPanels.add(panel);
+    return renderDynamic();
+  }
   function renderToday() { const s=(fn,n)=>{try{fn();}catch(e){console.warn('Today render '+n+' failed:',e.message);}}; s(renderBonus,'bonus'); s(renderPrayers,'prayers'); s(renderVol,'vol'); s(renderDeeds,'deeds'); }
 
   function renderLv() {
@@ -1171,6 +1187,7 @@ h += '</div>';
   window.renderDynamic = renderDynamic;
   window.renderStatic = renderStatic;
   window.renderAll = renderAll;
+  window.renderDeferred = renderDeferred;
   window.markDirty = markDirty;
   window.clearDirty = clearDirty;
   window.renderToday = renderToday;
