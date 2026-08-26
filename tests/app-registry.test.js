@@ -142,3 +142,30 @@ test('populateTier1Icons is re-invoked after DOM ready for bnav', () => {
   const dclBlock = tabsSrc.slice(dclIdx, dclIdx + 200);
   assert.ok(dclBlock.includes('populateTier1Icons'), 'DOMContentLoaded handler must call populateTier1Icons');
 });
+
+test('facade has no silent no-op stubs', () => {
+  const src = fs.readFileSync(path.join(__dirname, '..', 'core', 'actions.js'), 'utf8');
+  const facadeIdx = src.indexOf('window.App = {');
+  assert.ok(facadeIdx > -1, 'window.App literal must exist in actions.js');
+  const facadeEnd = src.indexOf('};', facadeIdx);
+  assert.ok(facadeEnd > facadeIdx, 'window.App literal must terminate');
+  const facade = src.slice(facadeIdx, facadeEnd);
+  assert.ok(!/\(\)\s*=>\s*\{\}/.test(facade), 'no-op arrow stubs found in App facade');
+});
+
+test('appAction warns loudly when target missing', () => {
+  const warnings = [];
+  const origWarn = console.warn;
+  const realTapDhikr = sandbox.window.tapDhikr;
+  // sandbox shares this file's `console` object, so the spy is visible inside actions.js
+  console.warn = (...args) => { warnings.push(args.map(String).join(' ')); };
+  try {
+    delete sandbox.window.tapDhikr;
+    sandbox.window.App.tapDhikr();
+  } finally {
+    console.warn = origWarn;
+    if (realTapDhikr !== undefined) sandbox.window.tapDhikr = realTapDhikr;
+  }
+  assert.strictEqual(typeof sandbox.window.App.tapDhikr, 'function', 'facade call must not crash when target missing');
+  assert.ok(warnings.some(w => w.includes('tapDhikr')), 'expected a console.warn mentioning tapDhikr when its handler is missing');
+});

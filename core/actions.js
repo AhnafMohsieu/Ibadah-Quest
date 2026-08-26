@@ -691,7 +691,9 @@ Object.keys(NEW_POOLS).forEach(k => {
     function appAction(name) {
       return function() {
         var fn = window[name];
-        return typeof fn === 'function' ? fn.apply(window, arguments) : undefined;
+        if (typeof fn === 'function') return fn.apply(window, arguments);
+        console.warn('[App] ' + name + ' called but feature not loaded');
+        return undefined;
       };
     }
     window.App = {
@@ -705,7 +707,7 @@ Object.keys(NEW_POOLS).forEach(k => {
       logExercise: appAction('logExercise'),
       toggleMeal: appAction('toggleMeal'),
       addMemorization: window.addMemorization, toggleMorning: window.toggleMorning, toggleEvening: window.toggleEvening,
-      toggleTafsir: typeof window.toggleTafsir === 'function' ? window.toggleTafsir : () => {}, setTafsirEdition: typeof window.setTafsirEdition === 'function' ? window.setTafsirEdition : () => {}, switchUser, logout, resetAll, exportData, importData, toggleBookmark, isBookmarked, toggleVolCat: typeof window.toggleVolCat === 'function' ? window.toggleVolCat : () => {}, toggleDeedCat: typeof window.toggleDeedCat === 'function' ? window.toggleDeedCat : () => {},
+      toggleTafsir: appAction('toggleTafsir'), setTafsirEdition: appAction('setTafsirEdition'), switchUser, logout, resetAll, exportData, importData, toggleBookmark, isBookmarked, toggleVolCat: appAction('toggleVolCat'), toggleDeedCat: appAction('toggleDeedCat'),
       openMuhasabah: appAction('openMuhasabah'),
       dismissMuhasabah: appAction('dismissMuhasabah'),
       joinJourney: appAction('joinJourney'),
@@ -718,20 +720,20 @@ Object.keys(NEW_POOLS).forEach(k => {
       calPrevMonth: window.calPrevMonth, calNextMonth: window.calNextMonth, calGoToday: window.calGoToday, selectAvatar, selectTitle, selectFrame,
       setTheme: window.setTheme, toggleTheme: window.toggleTheme,
       toggleNotifications: appAction('toggleNotifications'),
-      switchCategory: typeof window.switchCategory === 'function' ? window.switchCategory : () => {},
-      activateTab: typeof window.activateTab === 'function' ? window.activateTab : () => {},
-      tapDhikr: typeof window.tapDhikr === 'function' ? window.tapDhikr : () => {},
+      switchCategory: appAction('switchCategory'),
+      activateTab: appAction('activateTab'),
+      tapDhikr: appAction('tapDhikr'),
       toggleDhikrHaptic: appAction('toggleDhikrHaptic'),
-      resetDhikr: typeof window.resetDhikr === 'function' ? window.resetDhikr : () => {},
-      nextDhikr: typeof window.nextDhikr === 'function' ? window.nextDhikr : () => {},
-      openSituational: typeof window.openSituational === 'function' ? window.openSituational : () => {},
-      situationalBack: typeof window.situationalBack === 'function' ? window.situationalBack : () => {},
-      tapSituationalDhikr: typeof window.tapSituationalDhikr === 'function' ? window.tapSituationalDhikr : () => {},
-      toggleSitFav: typeof window.toggleSitFav === 'function' ? window.toggleSitFav : () => {},
-      openExtraDeeds: typeof window.openExtraDeeds === 'function' ? window.openExtraDeeds : () => {},
-      extraDeedsBack: typeof window.extraDeedsBack === 'function' ? window.extraDeedsBack : () => {},
-      openVolPrayers: typeof window.openVolPrayers === 'function' ? window.openVolPrayers : () => {},
-      volPrayersBack: typeof window.volPrayersBack === 'function' ? window.volPrayersBack : () => {},
+      resetDhikr: appAction('resetDhikr'),
+      nextDhikr: appAction('nextDhikr'),
+      openSituational: appAction('openSituational'),
+      situationalBack: appAction('situationalBack'),
+      tapSituationalDhikr: appAction('tapSituationalDhikr'),
+      toggleSitFav: appAction('toggleSitFav'),
+      openExtraDeeds: appAction('openExtraDeeds'),
+      extraDeedsBack: appAction('extraDeedsBack'),
+      openVolPrayers: appAction('openVolPrayers'),
+      volPrayersBack: appAction('volPrayersBack'),
       toggleAvatarPicker: () => toast(iqIcon('user'), 'Avatar picker coming soon!', false, 2000)
     };
     window.closeToastOverlay = closeToastOverlay;
