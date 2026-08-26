@@ -39,7 +39,7 @@ function docStub() {
 
 function createSandbox(overrides) {
   const S = Object.assign({ xp: 1000, ur: {}, lv: 1, cs: 0, tp: 0, dq: [], wq: [], mq: [], yq: [], lq: [], lad: '2026-08-11', ua: {} }, overrides);
-  const sandbox = loadSandbox(['core/themes.js', 'data/pools/new-pools.js', 'data/shop.js', 'core/xp.js', 'core/shop.js', 'core/actions.js'], {
+  const sandbox = loadSandbox(['core/themes.js', 'data/pools/new-pools.js', 'data/shop.js', 'core/xp.js', 'core/random.js', 'core/shop.js', 'core/actions.js'], {
     S,
     SHOP: [],
     DQUESTS: [], WQUESTS: [], MQUESTS: [], YQUESTS: [], LQUESTS: [],
@@ -265,7 +265,7 @@ test('selectFrame sets active frame', () => {
 
 test('buy with enough XP succeeds', () => {
   const S = { xp: 200, ur: {}, lv: 1 };
-  const sandbox = loadSandbox(['core/xp.js', 'core/shop.js'], {
+  const sandbox = loadSandbox(['core/xp.js', 'core/random.js', 'core/shop.js'], {
     S,
     SHOP: [{ id: 'r1', name: 'Title', cost: 100 }],
     today: () => '2026-08-11',
@@ -290,7 +290,7 @@ test('buy with enough XP succeeds', () => {
 test('buy with not enough XP shows toast', () => {
   let toastCalled = false;
   const S = { xp: 50, ur: {}, lv: 1 };
-  const sandbox = loadSandbox(['core/xp.js', 'core/shop.js'], {
+  const sandbox = loadSandbox(['core/xp.js', 'core/random.js', 'core/shop.js'], {
     S,
     SHOP: [{ id: 'r1', name: 'Title', cost: 100 }],
     today: () => '2026-08-11',
@@ -312,7 +312,7 @@ test('buy with not enough XP shows toast', () => {
 
 test('mystery box activates correctly', () => {
   const S = { xp: 1000, ur: {}, lv: 1 };
-  const sandbox = loadSandbox(['core/xp.js', 'core/shop.js'], {
+  const sandbox = loadSandbox(['core/xp.js', 'core/random.js', 'core/shop.js'], {
     S,
     SHOP: [{ id: 'r3', name: 'Mystery Box', cost: 350, t: 'mystery' }],
     today: () => '2026-08-11',
@@ -342,7 +342,7 @@ test('mystery box activates correctly', () => {
 test('net-zero purchase does not trigger level-up toast', () => {
   const overlay = { innerHTML: '' };
   const S = { xp: 150, ur: {}, lv: 2 };
-  const sandbox = loadSandbox(['core/xp.js', 'core/shop.js'], {
+  const sandbox = loadSandbox(['core/xp.js', 'core/random.js', 'core/shop.js'], {
     S,
     SHOP: [{ id: 'x1', name: 'XP', cost: 100, t: 'xp', v: 100 }],
     today: () => '2026-08-11',

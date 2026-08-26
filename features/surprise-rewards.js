@@ -18,13 +18,7 @@
       { type: 'boost', weight: 5 }
     ];
     
-    const total = pool.reduce((s, p) => s + p.weight, 0);
-    let roll = Math.random() * total;
-    let chosen = pool[0];
-    for (const p of pool) {
-      roll -= p.weight;
-      if (roll <= 0) { chosen = p; break; }
-    }
+    var chosen = weightedPick(pool);
     
     if (chosen.type === 'xp') {
       const amt = chosen.min + Math.floor(Math.random() * (chosen.max - chosen.min + 1));
