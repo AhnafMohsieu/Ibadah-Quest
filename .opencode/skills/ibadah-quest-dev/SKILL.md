@@ -40,7 +40,7 @@ Skipping this = users stuck on stale assets until cache expires.
 
 ## 5. Overlays and modals
 
-All toast-style modals share `#toastOverlay`: show via `classList.add('show')` + `style.display='flex'`; hide via `classList.remove('show')` then delayed `display='none'`. The daily modal queue in `core/actions.js initApp()` waits for `'show'` AND `'visible'` classes to clear — don't introduce a third visibility mechanism. Intro overlay uses `.visible` class and is gated on `S.introSeen`.
+All toast-style modals share `#toastOverlay`: show via `classList.add('show')` + `style.display='flex'`; hide via `classList.remove('show')` then delayed `display='none'`. The daily modal queue in `core/actions.js initApp()` is callback-driven (no DOM polling) — don't reintroduce a setInterval/polling mechanism. Intro overlay uses `.visible` class and is gated on `S.introSeen`.
 
 ## 6. XSS escaping
 

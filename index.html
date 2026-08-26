@@ -452,9 +452,9 @@
 
 <!-- Render engine (split modules) -->
 <script src="render/calendar.js?v=1"></script>
-<script src="render/prayers.js?v=2"></script>
-<script src="render/static.js?v=4"></script>
-<script src="render/dynamic.js?v=7"></script>
+<script src="render/prayers.js?v=3"></script>
+<script src="render/static.js?v=5"></script>
+<script src="render/dynamic.js?v=8"></script>
 <script src="render/tabs.js?v=4"></script>
 
 <!-- Chart.js CDN (lazy loaded) -->
@@ -504,11 +504,11 @@
 <!-- Spiritual Growth Features -->
 <script src="data/journeys.js?v=3"></script>
 <script src="features/garden.js?v=2" defer></script>
-<script src="features/muhasabah.js?v=4" defer></script>
-<script src="features/journeys.js?v=5" defer></script>
-<script src="features/health.js?v=6" defer></script>
-<script src="features/finance.js?v=5" defer></script>
-<script src="features/personal-goals.js?v=3" defer></script>
+<script src="features/muhasabah.js?v=5" defer></script>
+<script src="features/journeys.js?v=6" defer></script>
+<script src="features/health.js?v=7" defer></script>
+<script src="features/finance.js?v=6" defer></script>
+<script src="features/personal-goals.js?v=4" defer></script>
 <script src="features/spiritual-growth/data.js?v=2" defer></script>
 <script src="features/spiritual-growth/index.js?v=2" defer></script>
 <script src="features/spiritual-growth/armor.js?v=1" defer></script>
@@ -519,18 +519,18 @@
 <script src="features/spiritual-growth/boat.js?v=1" defer></script>
 <script src="features/spiritual-growth/ramadan.js?v=1" defer></script>
 <script src="features/spiritual-growth/laylat.js?v=1" defer></script>
-<script src="features/search.js?v=3" defer></script>
+<script src="features/search.js?v=4" defer></script>
 <script src="features/hadith-library.js?v=3" defer></script>
 <script src="features/tafsir-library.js?v=2" defer></script>
 <script src="features/fab.js?v=1" defer></script>
-<script src="features/streak-milestones.js" defer></script>
+<script src="features/streak-milestones.js?v=1" defer></script>
 <script src="features/pull-refresh.js" defer></script>
-<script src="features/surprise-rewards.js" defer></script>
-<script src="features/daily-summary.js" defer></script>
-<script src="features/consistency-bonuses.js" defer></script>
+<script src="features/surprise-rewards.js?v=1" defer></script>
+<script src="features/daily-summary.js?v=1" defer></script>
+<script src="features/consistency-bonuses.js?v=1" defer></script>
 <script src="features/combo-streaks.js" defer></script>
 <script src="features/achievement-showcase.js" defer></script>
-<script src="features/daily-ritual.js" defer></script>
+<script src="features/daily-ritual.js?v=1" defer></script>
 <script src="features/notifications.js?v=2" defer></script>
 
 <script src="features/seasonal-events.js" defer></script>
@@ -544,16 +544,16 @@
 
 <!-- Actions (core logic, navigation, init, window.App) -->
 <script src="core/themes.js?v=1"></script>
-<script src="core/xp.js?v=1"></script>
-<script src="core/prayers.js?v=2"></script>
-<script src="core/quests.js?v=3"></script>
+<script src="core/xp.js?v=2"></script>
+<script src="core/prayers.js?v=3"></script>
+<script src="core/quests.js?v=4"></script>
 <script src="core/achievements.js?v=1"></script>
 <script src="core/random.js?v=1"></script>
-<script src="core/shop.js?v=1"></script>
-<script src="core/dhikr.js?v=3"></script>
+<script src="core/shop.js?v=2"></script>
+<script src="core/dhikr.js?v=4"></script>
 <script src="core/content.js?v=1"></script>
 <script src="core/backup.js?v=1"></script>
-<script src="core/actions.js?v=19"></script>
+<script src="core/actions.js?v=20"></script>
 
 <!-- PWA: Service Worker registration + update banner -->
 <script>
@@ -577,7 +577,7 @@
     });
   }
   window.addEventListener('load', function() {
-    navigator.serviceWorker.register('sw.js?v=25').then(function(reg) {
+    navigator.serviceWorker.register('sw.js?v=26').then(function(reg) {
       if (reg.waiting) { showUpdateBanner(reg); return; }
       reg.addEventListener('updatefound', function() {
         var sw = reg.installing;
