@@ -338,3 +338,34 @@ test('mystery box activates correctly', () => {
   assert.ok(S.ur.r3);
   Math.random = origRandom;
 });
+
+test('net-zero purchase does not trigger level-up toast', () => {
+  const overlay = { innerHTML: '' };
+  const S = { xp: 150, ur: {}, lv: 2 };
+  const sandbox = loadSandbox(['core/xp.js', 'core/shop.js'], {
+    S,
+    SHOP: [{ id: 'x1', name: 'XP', cost: 100, t: 'xp', v: 100 }],
+    today: () => '2026-08-11',
+    toast: () => {},
+    saveState: () => {},
+    renderAll: () => {},
+    renderDynamic: () => {},
+    markDirty: () => {},
+    clearDirty: () => {},
+    checkA: () => {},
+    lvFrom: (xp) => (xp >= 100 ? 2 : 1),
+    iqIcon: () => '',
+    iqEmoji: () => '',
+    document: {
+      querySelectorAll: () => [],
+      getElementById: () => overlay,
+      createElement: () => ({ style: { setProperty() {} }, className: '', textContent: '', setAttribute() {}, appendChild() {}, remove() {} }),
+      body: { appendChild() {} }
+    },
+    setTimeout: () => {}
+  });
+  sandbox.window.buy('x1');
+  assert.strictEqual(S.xp, 150, 'net-zero purchase restores starting XP');
+  assert.strictEqual(S.lv, 2, 'level ends where it started');
+  assert.ok(!overlay.innerHTML.includes('LEVEL UP'), 'no level-up toast when a purchase dips below a boundary and returns');
+});

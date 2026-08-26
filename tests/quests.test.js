@@ -377,9 +377,21 @@ test('toggleQuest with invalid quest type does nothing', () => {
   const { sandbox, S } = createSandbox();
   const initialXp = S.xp;
   S.dq = [{ id: 'dq1', xp: 10, done: false }];
-  
+
   sandbox.toggleQuest('dq1', 'invalid_type', 10);
-  
+
   assert.strictEqual(S.xp, initialXp, 'XP should not change');
   assert.strictEqual(S.dq[0].done, false, 'Quest should remain undone');
+});
+
+test('toggleQuest refreshes the quests panel via original dirty-mark set', () => {
+  const { sandbox, S } = createSandbox();
+  const marked = [];
+  sandbox.markDirty = (panel) => { marked.push(panel); };
+
+  S.dq = [{ id: 'dq1', xp: 10, done: false }];
+
+  sandbox.toggleQuest('dq1', 'daily', 10);
+
+  assert.ok(marked.includes('quests'), 'quests panel must be marked dirty');
 });
