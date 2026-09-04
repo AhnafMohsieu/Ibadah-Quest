@@ -72,7 +72,7 @@ test('main.css uses modern light tokens', () => {
 });
 
 test('index.html registers the service worker and update banner', () => {
-  assert.ok(html.includes("navigator.serviceWorker.register('sw.js?v=31')"));
+  assert.ok(html.includes("navigator.serviceWorker.register('sw.js?v=32')"));
   assert.ok(html.includes("'SKIP_WAITING'"));
   assert.ok(html.includes('swUpdateBanner'));
 });
@@ -83,7 +83,7 @@ test('hadith/dhikr audio modules wired with versions and load order', () => {
   assert.ok(html.includes('<script src="data/hadith-normalize.js?v=1"></script>'));
   assert.ok(html.includes('<script src="features/hadith-library.js?v=3" defer></script>'));
   assert.ok(html.includes('<script src="features/tafsir-library.js?v=2" defer></script>'));
-  assert.ok(html.includes('styles/main.css?v=21'));
+  assert.ok(html.includes('styles/main.css?v=22'));
   assert.ok(html.indexOf('core/content-cache.js') < html.indexOf('state/state.js'), 'cache module loads before state');
   assert.ok(html.indexOf('core/audio.js') < html.indexOf('render/static.js'), 'audio module loads before renderers');
   assert.ok(html.indexOf('features/tafsir-library.js') > html.indexOf('render/static.js'), 'deferred features load after renderers');
@@ -144,7 +144,7 @@ test('theme: light-family palette blocks exist in main.css', () => {
 test('theme: index.html pre-paint script sets data-theme from localStorage', () => {
   assert.ok(html.includes("localStorage.getItem('iqTheme')"));
   assert.ok(html.includes("setAttribute('data-theme'"));
-  assert.ok(html.includes('styles/main.css?v=21'));
+  assert.ok(html.includes('styles/main.css?v=22'));
 });
 
 test('theme: picker references metadata and setTheme wiring', () => {
@@ -455,6 +455,34 @@ test('phone nav rows wrap with zero horizontal scroll', () => {
     'tier2/tier3 must wrap instead of snap-scrolling on phones');
   assert.ok(phoneBlock.includes('overflow-x:clip'),
     'phone layout must clip horizontal overflow');
+});
+
+test('phone sweep: 44px touch floor and component target bumps', () => {
+  const phoneBlock = css.slice(css.lastIndexOf('@media (max-width: 600px)'));
+  assert.ok(phoneBlock.includes('button:not(.carousel-dot):not(.t3-btn):not(.bnav-btn){min-height:44px;min-width:44px'),
+    'global 44px interactive floor missing');
+  assert.ok(phoneBlock.includes('.verify-btn{min-height:44px;padding:10px 16px}'),
+    'verify buttons must reach 44px');
+  assert.ok(phoneBlock.includes('.quest-check{width:40px;height:40px}'),
+    'fasting checkbox must reach 40px');
+  assert.ok(phoneBlock.includes('.cal-nav button{min-width:44px;min-height:44px}'),
+    'calendar nav buttons must reach 44px');
+  assert.ok(phoneBlock.includes('.filter-btn{min-height:40px}'),
+    'stats range chips must reach 40px');
+  assert.ok(phoneBlock.includes('.growth-tab-toggle{min-height:36px}'),
+    'growth toggles must reach 36px');
+});
+
+test('phone sweep: calendar, theme picker, and finance labels stop overflowing', () => {
+  const phoneBlock = css.slice(css.lastIndexOf('@media (max-width: 600px)'));
+  assert.ok(phoneBlock.includes('.cal-grid{grid-template-columns:repeat(7,minmax(0,1fr))'),
+    'calendar grid must squeeze to viewport');
+  assert.ok(phoneBlock.includes('.cal-day{min-height:36px;font-size:0.72rem}'),
+    'calendar day cells must fit');
+  assert.ok(phoneBlock.includes('.theme-picker{flex-wrap:wrap;overflow-x:visible}'),
+    'theme picker must wrap, not scroll');
+  assert.ok(phoneBlock.includes('.finance-item-label{white-space:normal;overflow-wrap:break-word}'),
+    'finance labels must wrap');
 });
 
 test('Mood feature is fully removed', () => {

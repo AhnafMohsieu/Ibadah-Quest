@@ -2669,6 +2669,19 @@ button,.t1-btn,.t2-btn,.cat-chip{font-size:16px;}
   .tier2-tabs,.tier3-tabs{grid-template-columns:repeat(4,minmax(0,1fr));}
   .card-grid{grid-template-columns:repeat(3,minmax(0,1fr));}
   .tab-content,.tier-nav-container{overflow-x:clip;}
+  button:not(.carousel-dot):not(.t3-btn):not(.bnav-btn){min-height:44px;min-width:44px}
+  .verify-btn{min-height:44px;padding:10px 16px}
+  .quest-check{width:40px;height:40px}
+  .cal-nav button{min-width:44px;min-height:44px}
+  .filter-btn{min-height:40px}
+  .growth-tab-toggle{min-height:36px}
+  input[type="text"],input[type="number"],input[type="search"],select,textarea,.profile-input,.amount-custom-input,.quran-search{font-size:16px;min-height:44px}
+  .cal-grid{grid-template-columns:repeat(7,minmax(0,1fr))}
+  .cal-day{min-height:36px;font-size:0.72rem}
+  .cal-weekday{min-width:0;font-size:0.6rem;padding:2px 0}
+  .cal-weekday.rom{display:none}
+  .theme-picker{flex-wrap:wrap;overflow-x:visible}
+  .finance-item-label{white-space:normal;overflow-wrap:break-word}
 }
 
 /* ── Theme Overrides ── */
