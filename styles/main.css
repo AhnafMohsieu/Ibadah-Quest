@@ -2660,6 +2660,17 @@ button,.t1-btn,.t2-btn,.cat-chip{font-size:16px;}
 .stat-label,.bnav-label{font-size:12px;color:var(--text2);}
 .card-item,.vol-card,.deed-card,.content-card,.prayer-card{border-radius:16px;}
 
+/* ── Phone: wrap nav rows, zero horizontal scroll ── */
+@media (max-width: 600px) {
+  .tier1-tabs{flex-wrap:wrap;justify-content:center;}
+  .tier1-tabs .t1-btn{flex:1 1 28%;min-width:0;max-width:none;white-space:normal;line-height:1.25;}
+  #tier2Tabs,#tier3Tabs{flex-wrap:wrap;overflow-x:visible;}
+  #tier2Tabs .t2-btn,#tier3Tabs .t2-btn,#tier2Tabs .cat-chip{flex:1 1 auto;min-width:0;white-space:normal;}
+  .tier2-tabs,.tier3-tabs{grid-template-columns:repeat(4,minmax(0,1fr));}
+  .card-grid{grid-template-columns:repeat(3,minmax(0,1fr));}
+  .tab-content,.tier-nav-container{overflow-x:clip;}
+}
+
 /* ── Theme Overrides ── */
 html[data-theme="serene"] {
   --bg: #f5f7f4; --bg-accent: #eef1ec;

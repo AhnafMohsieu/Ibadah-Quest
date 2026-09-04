@@ -23,7 +23,7 @@
     .tab-panel.active{display:block;animation:fadeIn 0.2s ease}
     @keyframes fadeIn{from{opacity:0}to{opacity:1}}
   </style>
-  <link rel="preload" href="styles/main.css?v=20" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <link rel="preload" href="styles/main.css?v=21" as="style" onload="this.onload=null;this.rel='stylesheet'">
   <script>
     (function () {
       try { var t = localStorage.getItem('iqTheme'); if (t && t !== 'light') document.documentElement.setAttribute('data-theme', t); } catch (e) {}
@@ -578,7 +578,7 @@
     });
   }
   window.addEventListener('load', function() {
-    navigator.serviceWorker.register('sw.js?v=30').then(function(reg) {
+    navigator.serviceWorker.register('sw.js?v=31').then(function(reg) {
       if (reg.waiting) { showUpdateBanner(reg); return; }
       reg.addEventListener('updatefound', function() {
         var sw = reg.installing;

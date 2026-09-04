@@ -72,7 +72,7 @@ test('main.css uses modern light tokens', () => {
 });
 
 test('index.html registers the service worker and update banner', () => {
-  assert.ok(html.includes("navigator.serviceWorker.register('sw.js?v=30')"));
+  assert.ok(html.includes("navigator.serviceWorker.register('sw.js?v=31')"));
   assert.ok(html.includes("'SKIP_WAITING'"));
   assert.ok(html.includes('swUpdateBanner'));
 });
@@ -83,7 +83,7 @@ test('hadith/dhikr audio modules wired with versions and load order', () => {
   assert.ok(html.includes('<script src="data/hadith-normalize.js?v=1"></script>'));
   assert.ok(html.includes('<script src="features/hadith-library.js?v=3" defer></script>'));
   assert.ok(html.includes('<script src="features/tafsir-library.js?v=2" defer></script>'));
-  assert.ok(html.includes('styles/main.css?v=20'));
+  assert.ok(html.includes('styles/main.css?v=21'));
   assert.ok(html.indexOf('core/content-cache.js') < html.indexOf('state/state.js'), 'cache module loads before state');
   assert.ok(html.indexOf('core/audio.js') < html.indexOf('render/static.js'), 'audio module loads before renderers');
   assert.ok(html.indexOf('features/tafsir-library.js') > html.indexOf('render/static.js'), 'deferred features load after renderers');
@@ -144,7 +144,7 @@ test('theme: light-family palette blocks exist in main.css', () => {
 test('theme: index.html pre-paint script sets data-theme from localStorage', () => {
   assert.ok(html.includes("localStorage.getItem('iqTheme')"));
   assert.ok(html.includes("setAttribute('data-theme'"));
-  assert.ok(html.includes('styles/main.css?v=20'));
+  assert.ok(html.includes('styles/main.css?v=21'));
 });
 
 test('theme: picker references metadata and setTheme wiring', () => {
@@ -446,6 +446,15 @@ test('mobile tab strips use centered flex layout (tier1 5-across, tier2/tier3 fl
   assert.ok(selIdx > -1, 'tier2/tier3 combined selector must exist');
   const ptGridIdx = css.indexOf('.prayer-times-grid');
   assert.ok(ptGridIdx > -1, '.prayer-times-grid must exist');
+});
+
+test('phone nav rows wrap with zero horizontal scroll', () => {
+  const phoneBlock = css.slice(css.lastIndexOf('@media (max-width: 600px)'));
+  assert.ok(phoneBlock.includes('.tier1-tabs{flex-wrap:wrap'), 'tier1 must wrap on phones');
+  assert.ok(phoneBlock.includes('#tier2Tabs,#tier3Tabs{flex-wrap:wrap;overflow-x:visible'),
+    'tier2/tier3 must wrap instead of snap-scrolling on phones');
+  assert.ok(phoneBlock.includes('overflow-x:clip'),
+    'phone layout must clip horizontal overflow');
 });
 
 test('Mood feature is fully removed', () => {
