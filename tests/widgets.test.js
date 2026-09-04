@@ -122,7 +122,7 @@ test('streak calendar widget returns correct structure', () => {
       bs: 5
     },
     today: function(d) {
-      var d2 = d || new Date();
+      var d2 = d || new Date(2026, 7, 12);
       return d2.getFullYear() + '-' + (d2.getMonth()+1).toString().padStart(2,'0') + '-' + d2.getDate().toString().padStart(2,'0');
     }
   });
@@ -147,7 +147,7 @@ test('streak calendar widget handles empty state', () => {
       bs: 0
     },
     today: function(d) {
-      var d2 = d || new Date();
+      var d2 = d || new Date(2026, 7, 12);
       return d2.getFullYear() + '-' + (d2.getMonth()+1).toString().padStart(2,'0') + '-' + d2.getDate().toString().padStart(2,'0');
     }
   });
@@ -168,7 +168,7 @@ test('streak calendar widget marks partial days as incomplete', () => {
       bs: 1
     },
     today: function(d) {
-      var d2 = d || new Date();
+      var d2 = d || new Date(2026, 7, 12);
       return d2.getFullYear() + '-' + (d2.getMonth()+1).toString().padStart(2,'0') + '-' + d2.getDate().toString().padStart(2,'0');
     }
   });
