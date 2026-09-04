@@ -72,7 +72,7 @@ test('main.css uses modern light tokens', () => {
 });
 
 test('index.html registers the service worker and update banner', () => {
-  assert.ok(html.includes("navigator.serviceWorker.register('sw.js?v=29')"));
+  assert.ok(html.includes("navigator.serviceWorker.register('sw.js?v=30')"));
   assert.ok(html.includes("'SKIP_WAITING'"));
   assert.ok(html.includes('swUpdateBanner'));
 });
@@ -486,4 +486,13 @@ test('index.html has no duplicate element ids', () => {
   const ids = [...html.matchAll(/\bid="([^"]+)"/g)].map(m => m[1]);
   const dupes = [...new Set(ids.filter((id, i) => ids.indexOf(id) !== i))];
   assert.deepEqual(dupes, [], 'duplicate ids found: ' + dupes.join(', '));
+});
+
+test('healthlog tab is wired correctly (4 touchpoints)', () => {
+  const health = fs.readFileSync(path.join(root, 'features', 'health.js'), 'utf8');
+  assert.ok(tabs.includes("id: 'healthlog'"), 'healthlog tab missing from tab-groups');
+  assert.ok(html.includes('id="panel-healthlog"'), 'panel-healthlog missing from index.html');
+  assert.ok(html.includes('id="healthlogArea"'), 'healthlogArea div missing');
+  assert.ok(renderTabs.includes("healthlog:'renderHealthLog'"), 'lazy render must map healthlog');
+  assert.ok(health.includes('window.renderHealthLog'), 'renderHealthLog must be exported');
 });

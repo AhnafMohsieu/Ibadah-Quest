@@ -1,9 +1,17 @@
 (function() {
   var _activeCategoryId = null;
 
+  function _escAttr(s){ return String(s).replace(/\\/g,'\\\\').replace(/"/g,'\\"'); }
+  function _findByTabId(tabId){
+    var esc = _escAttr(tabId);
+    // Use escaped selector; fallback to manual scan if selector throws
+    try { return document.querySelector('[data-tab="' + esc + '"]'); }
+    catch(e){ var els=document.querySelectorAll('[data-tab]'); for(var i=0;i<els.length;i++) if(els[i].getAttribute('data-tab')===tabId) return els[i]; return null; }
+  }
+
   function _pushTabState(catId, tabId) {
     if (tabId) {
-      var hash = '#/' + catId + '/' + tabId;
+      var hash = '#/' + encodeURIComponent(catId) + '/' + encodeURIComponent(tabId);
       history.pushState({ cat: catId, tab: tabId }, '', hash);
     }
   }
@@ -15,11 +23,11 @@
       for (var i = 0; i < group.length; i++) {
         var found = group[i].tabs.find(function(t) { return t.id === tabId; });
         if (found) {
-          return { catObj: group[i], tabBtn: document.querySelector('[data-tab="' + tabId + '"]') };
+          return { catObj: group[i], tabBtn: _findByTabId(tabId) };
         }
       }
     }
-    return { catObj: null, tabBtn: document.querySelector('[data-tab="' + tabId + '"]') };
+    return { catObj: null, tabBtn: _findByTabId(tabId) };
   }
 
   function switchCategory(catId, btn) {
@@ -35,12 +43,12 @@
       btn.classList.add('active');
       btn.setAttribute('aria-selected', 'true');
     }
-    var bnavMatch = document.querySelector('.bnav-btn[data-cat="' + catId + '"]');
+    var bnavMatch = (function(cid){ try { return document.querySelector('.bnav-btn[data-cat="' + _escAttr(cid) + '"]'); } catch(e){ var els=document.querySelectorAll('.bnav-btn'); for(var i=0;i<els.length;i++) if(els[i].getAttribute('data-cat')===cid) return els[i]; return null; } })(catId);
     if (bnavMatch) {
       bnavMatch.classList.add('active');
       bnavMatch.setAttribute('aria-selected', 'true');
     }
-    var t1Match = document.querySelector('.t1-btn[data-cat="' + catId + '"]');
+    var t1Match = (function(cid){ try { return document.querySelector('.t1-btn[data-cat="' + _escAttr(cid) + '"]'); } catch(e){ var els=document.querySelectorAll('.t1-btn'); for(var i=0;i<els.length;i++) if(els[i].getAttribute('data-cat')===cid) return els[i]; return null; } })(catId);
     if (t1Match) {
       t1Match.classList.add('active');
       t1Match.setAttribute('aria-selected', 'true');
@@ -126,7 +134,7 @@
       quran:'renderQuran', hadith:'renderHadith', sunnahs:'renderSunnahs', dhikr:'renderDhikr',
       stories:'renderStories', names:'renderNames', inspirations:'renderInspirations', gratitude:'renderGratitude',
       allah_names:'renderNames', scholars_names:'renderScholars',
-      fasting:'renderFasting', charity:'renderCharity', memorization:'renderMemorization',
+      fasting:'renderFasting', charity:'renderCharity', memorization:'renderMemorization', healthlog:'renderHealthLog',
       morning:'renderMorning', evening:'renderEvening', sins:'renderSins', punishments:'renderPunishments',
       repentance:'renderRepentance', sahaba:'renderSahaba', seerah:'renderSeerah', tafsir:'renderTafsir',
       manners:'renderManners', family:'renderFamily', health:'renderHealth', finance:'renderFinance',

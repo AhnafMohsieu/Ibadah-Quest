@@ -456,7 +456,7 @@
 <script src="render/prayers.js?v=4"></script>
 <script src="render/static.js?v=5"></script>
 <script src="render/dynamic.js?v=9"></script>
-<script src="render/tabs.js?v=5"></script>
+<script src="render/tabs.js?v=6"></script>
 
 <!-- Chart.js CDN (lazy loaded) -->
 <script>
@@ -578,7 +578,7 @@
     });
   }
   window.addEventListener('load', function() {
-    navigator.serviceWorker.register('sw.js?v=29').then(function(reg) {
+    navigator.serviceWorker.register('sw.js?v=30').then(function(reg) {
       if (reg.waiting) { showUpdateBanner(reg); return; }
       reg.addEventListener('updatefound', function() {
         var sw = reg.installing;
