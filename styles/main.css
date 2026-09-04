@@ -97,12 +97,15 @@ body.loading { opacity: 0; }
 /* ── App Shell ── */
 .app {
   position: relative;
+  z-index: 1;
   display: flex;
   flex-direction: column;
-  max-width: 720px;
+  max-width: 480px;
   margin: 0 auto;
-  padding: 0 16px 80px;
+  padding: 0 16px calc(96px + env(safe-area-inset-bottom, 0px));
+  background: var(--bg);
 }
+@media (min-width: 520px){body{background:var(--bg-accent)} .app{box-shadow:var(--shadow-md);border-left:1px solid var(--border);border-right:1px solid var(--border);min-height:100vh}}
 
 /* ── Top Bar ── */
 .top-bar {
@@ -2603,20 +2606,7 @@ textarea:focus-visible {
   *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
 }
 
-/* ── Mobile Bottom Navigation ── */
-.bnav {
-  display: flex;
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: 150;
-  background: var(--glass-bg-heavy);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border-top: 1px solid var(--border);
-  padding: 4px 6px calc(4px + env(safe-area-inset-bottom, 0px));
-}
+/* ── Mobile Bottom Navigation (sticky bar defined below, after focus-visible) ── */
 .bnav-btn {
   flex: 1 1 0;
   display: flex;
@@ -2636,17 +2626,25 @@ textarea:focus-visible {
   transition: color var(--transition);
 }
 .bnav-btn .bnav-icon { font-size: 1.35rem; line-height: 1; }
-.bnav-btn .bnav-icon .iq-icon { width: 20px; height: 20px; }
 .bnav-btn:active { transform: scale(0.96); }
 .bnav-btn:hover { color: var(--accent-dark); background: var(--accent-bg); }
 .bnav-btn.active { color: var(--accent-dark); background: var(--accent-bg); }
 .bnav-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+.bnav{position:sticky;bottom:0;z-index:120;display:flex;background:var(--card-bg);border-top:1px solid var(--border);padding:8px 8px calc(8px + env(safe-area-inset-bottom, 0px));}
+.bnav-btn{min-height:60px;min-width:48px;flex:1;font-size:11px;}
+.bnav-btn .bnav-icon .iq-icon { width: 22px; height: 22px; }
+.top-bar{min-height:56px;}
 @media (min-width: 768px) { .bnav { display: none; } }
 @media (max-width: 767px) {
-  .fab-container { bottom: calc(76px + env(safe-area-inset-bottom, 0px)); }
-  .app { padding-bottom: calc(88px + env(safe-area-inset-bottom, 0px)); }
+  .fab-container { bottom: calc(84px + env(safe-area-inset-bottom, 0px)); }
+  .app { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
 }
 
+#tier2Tabs,#tier3Tabs{display:flex;gap:8px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;padding-bottom:4px;}
+#tier2Tabs::-webkit-scrollbar,#tier3Tabs::-webkit-scrollbar{display:none;}
+#tier2Tabs .t2-btn,#tier3Tabs .t2-btn,#tier2Tabs .cat-chip{flex:0 0 auto;scroll-snap-align:start;min-height:44px;font-size:16px;}
+.prayer-card,.deed-card,.vol-card{min-height:48px;}
+button,.t1-btn,.t2-btn,.cat-chip{font-size:16px;}
 /* ── Responsive ── */
 @media (min-width: 768px) {
   .hero-strip .header { padding: 20px 0 8px; }
@@ -2655,6 +2653,12 @@ textarea:focus-visible {
   #deedArea { flex-direction: row; flex-wrap: wrap; }
   #deedArea .deed-card { flex: 1 1 calc(50% - 4px); }
 }
+.hero-strip .header{padding:16px 0 8px;}
+.insights-cards{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;}
+.chart-row{display:grid;grid-template-columns:1fr;gap:12px;}
+.stat-num,.tb-stat{font-size:20px;}
+.stat-label,.bnav-label{font-size:12px;color:var(--text2);}
+.card-item,.vol-card,.deed-card,.content-card,.prayer-card{border-radius:16px;}
 
 /* ── Theme Overrides ── */
 html[data-theme="serene"] {
