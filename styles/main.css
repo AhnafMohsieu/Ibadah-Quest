@@ -1599,7 +1599,7 @@ select.profile-input option { background: var(--card-bg); color: var(--text); }
   transition: all var(--transition);
 }
 .verse-play-btn:hover { background: var(--accent); color: var(--on-accent); border-color: var(--accent); }
-.verse-play-btn.playing { background: var(--accent); color: var(--on-accent); border-color: var(--accent); animation: pulse 1.2s infinite; }
+.verse-play-btn.playing { background: var(--accent); color: var(--on-accent); border-color: var(--accent); animation: pulse 1.2s 3; }
 .surah-play-btn {
   background: var(--accent-bg);
   border: 1px solid var(--accent-border);
@@ -1612,7 +1612,7 @@ select.profile-input option { background: var(--card-bg); color: var(--text); }
   transition: all var(--transition);
 }
 .surah-play-btn:hover { background: var(--accent); color: var(--on-accent); border-color: var(--accent); }
-.surah-play-btn.playing { background: var(--accent); color: var(--on-accent); border-color: var(--accent); animation: pulse 1.2s infinite; }
+.surah-play-btn.playing { background: var(--accent); color: var(--on-accent); border-color: var(--accent); animation: pulse 1.2s 3; }
 @keyframes pulse { 0%, 100% { box-shadow: 0 0 0 0 var(--accent-pulse); } 50% { box-shadow: 0 0 0 6px rgba(201,168,76,0); } }
 .bismillah { font-family: var(--font-arabic); font-size: 1.4rem; color: var(--text); text-align: center; padding: 14px; direction: rtl; line-height: 1.8; }
 .quran-loading { text-align: center; padding: 32px; color: var(--text2); font-size: 0.85rem; }
@@ -1832,7 +1832,7 @@ select.profile-input option { background: var(--card-bg); color: var(--text); }
   transition: all var(--transition);
 }
 .muh-entry:hover { background: var(--accent-fill); }
-.muh-entry.muh-pending { animation: muhPulse 2s ease-in-out infinite; }
+.muh-entry.muh-pending { animation: muhPulse 2s ease-in-out 3; }
 @keyframes muhPulse { 0%, 100% { box-shadow: 0 0 0 0 var(--accent-border); } 50% { box-shadow: 0 0 0 6px rgba(201,168,76,0); } }
 .muh-overlay {
   position: fixed;
@@ -2793,7 +2793,7 @@ html[data-theme="emara"] .global-search { background: var(--card-bg); }
 .verse-tafsir-btn:hover{color:var(--accent);}
 .tafsir-panel{margin-top:10px;padding:12px;background:rgba(201,168,76,.07);border-radius:10px;border:1px solid rgba(201,168,76,.18);}
 /* Dhikr play/stop */
-.dhikr-play-btn.playing{color:var(--accent-light)!important;animation:pulseGlow 1.6s ease-in-out infinite;}
+.dhikr-play-btn.playing{color:var(--accent-light)!important;animation:pulseGlow 1.6s ease-in-out 3;}
 @keyframes pulseGlow{0%,100%{opacity:1}50%{opacity:.55}}
 
 /* -- Recovery overlay (corruption boot gate) -- */
