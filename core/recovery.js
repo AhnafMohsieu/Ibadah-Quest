@@ -25,13 +25,17 @@
     while (keys.length > MAX_QUARANTINES) ls.removeItem(keys.shift());
   }
 
+  var _usedStamps = {};
   function quarantine(user, raw, lsOverride) {
     var ls = lsNow(lsOverride);
     var stamp = new Date().toISOString().replace(/[:.]/g, '-');
     var key = QUARANTINE_PREFIX + user + '_' + stamp;
     // Guarantee uniqueness even for same-ms double-quarantines (ls + idb in one boot).
+    // Never reuse a bare stamp freed by pruning: a reused bare key sorts BEFORE its
+    // suffixed siblings, so prune would evict the newest entry instead of the oldest.
     var suffix = 0;
-    while (ls && ls.getItem(key) !== null) key = QUARANTINE_PREFIX + user + '_' + stamp + '_' + (++suffix);
+    while (ls && (ls.getItem(key) !== null || _usedStamps[key])) key = QUARANTINE_PREFIX + user + '_' + stamp + '_' + (++suffix);
+    _usedStamps[key] = 1;
     var payload = typeof raw === 'string' ? raw : JSON.stringify(raw);
     if (ls) {
       try { ls.setItem(key, payload); pruneQuarantines(user, ls); }
