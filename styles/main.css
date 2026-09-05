@@ -278,11 +278,13 @@ html[data-theme="light"] .theme-toggle-thumb { transform: translateX(20px); }
 }
 .tier1-tabs {
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
   gap: 4px;
 }
 .t1-btn {
-  flex: 1;
+  flex: 1 1 0;
+  min-width: 0;
   max-width: 140px;
   background: transparent;
   color: var(--text2);
@@ -297,7 +299,9 @@ html[data-theme="light"] .theme-toggle-thumb { transform: translateX(20px); }
   align-items: center;
   justify-content: center;
   gap: 6px;
-  white-space: nowrap;
+  white-space: normal;
+  text-align: center;
+  line-height: 1.3;
   user-select: none;
 }
 .t1-btn:hover { color: var(--text); background: var(--bg-accent); }
@@ -310,7 +314,7 @@ html[data-theme="light"] .theme-toggle-thumb { transform: translateX(20px); }
 
 /* ── Tier 2 & 3 Navigation ── */
 .tier2-scroll { width: 100%; overflow-x: auto; }
-.tier2-tabs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-top: 8px; padding: 4px 0; }
+.tier2-tabs { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 6px; margin-top: 8px; padding: 4px 0; }
 .t2-btn {
   background: var(--bg-accent);
   border: 1px solid var(--border);
@@ -334,7 +338,7 @@ html[data-theme="light"] .theme-toggle-thumb { transform: translateX(20px); }
 .t2-btn:hover { color: var(--text); border-color: var(--text3); }
 .t2-btn.active { color: var(--accent-dark); background: var(--accent-bg); border-color: var(--accent-border); }
 
-.tier2-tabs.cat-chips { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-top: 12px; padding-bottom: 8px; }
+.tier2-tabs.cat-chips { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 6px; margin-top: 12px; padding-bottom: 8px; }
 .cat-chip {
   background: var(--bg-accent);
   border: 1px solid var(--border);
@@ -357,7 +361,7 @@ html[data-theme="light"] .theme-toggle-thumb { transform: translateX(20px); }
 .cat-chip.active { color: var(--accent-dark); background: var(--accent-bg); border-color: var(--accent-border); }
 
 .tier3-scroll { width: 100%; overflow-x: auto; }
-.tier3-tabs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-top: 8px; padding: 4px 0; }
+.tier3-tabs { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 6px; margin-top: 8px; padding: 4px 0; }
 .t3-btn {
   background: var(--bg-accent);
   border: 1px solid var(--border);
@@ -438,7 +442,8 @@ html[data-theme="light"] .theme-toggle-thumb { transform: translateX(20px); }
 }
 
 /* ── Card Grid ── */
-.card-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin-bottom: 8px; }
+.t2-btn,.t3-btn,.cat-chip{white-space:normal;}
+.card-grid { display: grid; grid-template-columns: repeat(5, minmax(0,1fr)); gap: 8px; margin-bottom: 8px; }
 .card-grid .card-item {
   min-width: 0;
   background: var(--card-bg);

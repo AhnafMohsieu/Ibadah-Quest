@@ -72,7 +72,7 @@ test('main.css uses modern light tokens', () => {
 });
 
 test('index.html registers the service worker and update banner', () => {
-  assert.ok(html.includes("navigator.serviceWorker.register('sw.js?v=32')"));
+  assert.ok(html.includes("navigator.serviceWorker.register('sw.js?v=33')"));
   assert.ok(html.includes("'SKIP_WAITING'"));
   assert.ok(html.includes('swUpdateBanner'));
 });
@@ -83,7 +83,7 @@ test('hadith/dhikr audio modules wired with versions and load order', () => {
   assert.ok(html.includes('<script src="data/hadith-normalize.js?v=1"></script>'));
   assert.ok(html.includes('<script src="features/hadith-library.js?v=3" defer></script>'));
   assert.ok(html.includes('<script src="features/tafsir-library.js?v=2" defer></script>'));
-  assert.ok(html.includes('styles/main.css?v=22'));
+  assert.ok(html.includes('styles/main.css?v=23'));
   assert.ok(html.indexOf('core/content-cache.js') < html.indexOf('state/state.js'), 'cache module loads before state');
   assert.ok(html.indexOf('core/audio.js') < html.indexOf('render/static.js'), 'audio module loads before renderers');
   assert.ok(html.indexOf('features/tafsir-library.js') > html.indexOf('render/static.js'), 'deferred features load after renderers');
@@ -144,7 +144,7 @@ test('theme: light-family palette blocks exist in main.css', () => {
 test('theme: index.html pre-paint script sets data-theme from localStorage', () => {
   assert.ok(html.includes("localStorage.getItem('iqTheme')"));
   assert.ok(html.includes("setAttribute('data-theme'"));
-  assert.ok(html.includes('styles/main.css?v=22'));
+  assert.ok(html.includes('styles/main.css?v=23'));
 });
 
 test('theme: picker references metadata and setTheme wiring', () => {
@@ -483,6 +483,23 @@ test('phone sweep: calendar, theme picker, and finance labels stop overflowing',
     'theme picker must wrap, not scroll');
   assert.ok(phoneBlock.includes('.finance-item-label{white-space:normal;overflow-wrap:break-word}'),
     'finance labels must wrap');
+});
+
+test('tier1 nav wraps at every viewport width (no breakpoint gap)', () => {
+  const t1Idx = css.indexOf('.tier1-tabs {');
+  assert.ok(t1Idx > -1, 'base tier1 rule missing');
+  assert.ok(t1Idx < css.indexOf('@media (max-width: 600px)'),
+    'tier1 wrap must live in base CSS, not only the phone query');
+  const t1Block = css.slice(t1Idx, t1Idx + 250);
+  assert.ok(t1Block.includes('flex-wrap:wrap') || t1Block.includes('flex-wrap: wrap'),
+    'base tier1 must wrap so 601-767px viewports never clip');
+  const btnIdx = css.indexOf('.t1-btn {');
+  assert.ok(btnIdx > -1, 'base t1-btn rule missing');
+  const btnBlock = css.slice(btnIdx, btnIdx + 700);
+  assert.ok(btnBlock.includes('min-width: 0') || btnBlock.includes('min-width:0'),
+    'base t1-btn must allow shrinking below content width');
+  assert.ok(!btnBlock.includes('white-space: nowrap') && !btnBlock.includes('white-space:nowrap'),
+    'base t1-btn must not force nowrap');
 });
 
 test('Mood feature is fully removed', () => {
