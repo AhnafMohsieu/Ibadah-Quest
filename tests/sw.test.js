@@ -70,7 +70,7 @@ test('sw: offline.html exists', () => {
 
 test('sw: CACHE_NAME bumped to v40', () => {
   const swSource = fs.readFileSync(path.join(__dirname, '..', 'sw.js'), 'utf8');
-  assert.ok(swSource.includes('iq-cache-v41'), 'CACHE_NAME should be v40');
+  assert.ok(swSource.includes('iq-cache-v42'), 'CACHE_NAME should be v40');
 });
 
 test('sw: error-tap.js is precached', () => {

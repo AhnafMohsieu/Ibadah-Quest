@@ -72,7 +72,7 @@ test('main.css uses modern light tokens', () => {
 });
 
 test('index.html registers the service worker and update banner', () => {
-  assert.ok(html.includes("navigator.serviceWorker.register('sw.js?v=41')"));
+  assert.ok(html.includes("navigator.serviceWorker.register('sw.js?v=42')"));
   assert.ok(html.includes("'SKIP_WAITING'"));
   assert.ok(html.includes('swUpdateBanner'));
 });
@@ -695,6 +695,8 @@ test('intro subtitle is centered like the bismillah', () => {
   const body = css.slice(i, i + 400);
   assert.ok(body.includes('text-align:center') || body.includes('text-align: center'),
     'intro subtitle must be centered');
+  assert.ok(html.includes('In the Name of Allah,<br>The Most Merciful'),
+    'intro subtitle must break after Allah so THE MOST MERCIFUL sits on its own line');
 });
 
 test('prayer card icons sit in fixed boxes so rows align', () => {

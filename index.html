@@ -92,7 +92,7 @@
     <div class="intro-content">
       <div class="intro-glow" aria-hidden="true"></div>
       <div id="introBismillah" class="intro-bismillah">بِسْمِ ٱللَّهِ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ</div>
-      <div id="introSub" class="intro-subtitle">In the Name of Allah, the Most Merciful</div>
+      <div id="introSub" class="intro-subtitle">In the Name of Allah,<br>The Most Merciful</div>
       <button id="introBtn" class="intro-btn" onclick="window.startJourney()" aria-label="Begin Your Quest">Begin Your Quest</button>
     </div>
 </div>
@@ -610,7 +610,7 @@
     });
   }
   window.addEventListener('load', function() {
-    navigator.serviceWorker.register('sw.js?v=41').then(function(reg) {
+    navigator.serviceWorker.register('sw.js?v=42').then(function(reg) {
       if (reg.waiting) { showUpdateBanner(reg); return; }
       reg.addEventListener('updatefound', function() {
         var sw = reg.installing;
