@@ -72,7 +72,7 @@ test('main.css uses modern light tokens', () => {
 });
 
 test('index.html registers the service worker and update banner', () => {
-  assert.ok(html.includes("navigator.serviceWorker.register('sw.js?v=43')"));
+  assert.ok(html.includes("navigator.serviceWorker.register('sw.js?v=44')"));
   assert.ok(html.includes("'SKIP_WAITING'"));
   assert.ok(html.includes('swUpdateBanner'));
 });
@@ -82,7 +82,7 @@ test('hadith/dhikr audio modules wired with versions and load order', () => {
   assert.ok(html.includes('<script src="core/audio.js?v=4"></script>'));
   assert.ok(html.includes('<script src="data/hadith-normalize.js?v=1"></script>'));
   assert.ok(html.includes('<script src="features/hadith-library.js?v=3" defer></script>'));
-  assert.ok(html.includes('<script src="features/tafsir-library.js?v=2" defer></script>'));
+  assert.ok(html.includes('<script src="features/tafsir-library.js?v=3" defer></script>'));
   assert.ok(html.includes('styles/main.css?v=31'));
   assert.ok(html.indexOf('core/content-cache.js') < html.indexOf('state/state.js'), 'cache module loads before state');
   assert.ok(html.indexOf('core/audio.js') < html.indexOf('render/static.js'), 'audio module loads before renderers');
@@ -711,4 +711,17 @@ test('prayer card icons sit in fixed boxes so rows align', () => {
   const body = css.slice(i, i + 250);
   assert.ok(body.includes('height:44px') || body.includes('height: 44px'),
     'card icon box must have a fixed height');
+});
+
+test('quran tafsir panels explain, retry, and hint offline', () => {
+  assert.ok(renderDynamic.includes('needs connection once'),
+    'offline tafsir note missing');
+  assert.ok(renderDynamic.includes('App.retryTafsir'),
+    'tafsir retry entry missing');
+  assert.ok(renderDynamic.includes('window.retryTafsir'),
+    'retryTafsir must be exported');
+  assert.ok(renderDynamic.includes('Select an edition above, then tap the book icon'),
+    'edition hint missing');
+  assert.ok(actions.includes("retryTafsir: appAction('retryTafsir')"),
+    'App facade must expose retryTafsir');
 });

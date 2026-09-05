@@ -18,10 +18,20 @@
   }
 
   function fetchJSON(url) {
-    return fetch(url).then(r => {
+    var ctl = null, timer = null;
+    try {
+      if (typeof AbortController !== 'undefined') {
+        ctl = new AbortController();
+        timer = setTimeout(function() { try { ctl.abort(); } catch (e) {} }, 12000);
+      }
+    } catch (e) {}
+    var req = ctl ? fetch(url, { signal: ctl.signal }) : fetch(url);
+    function done() { if (timer) { try { clearTimeout(timer); } catch (e) {} } }
+    return req.then(function(r) {
+      done();
       if (!r.ok) throw new Error('HTTP ' + r.status);
       return r.json();
-    });
+    }, function(err) { done(); throw err; });
   }
 
   function _jalalaynIndex(surah, ayah) {

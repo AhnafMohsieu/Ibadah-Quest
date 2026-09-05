@@ -1644,6 +1644,8 @@ select.profile-input option { background: var(--card-bg); color: var(--text); }
   transition: all var(--transition);
 }
 .tab-bar-quran button.active, .tab-bar-quran button:hover { background: var(--accent-bg); color: var(--accent-dark); border-color: var(--accent-border); }
+.tafsir-hint { text-align: center; font-size: 0.78rem; color: var(--text2); margin: 6px 0 4px; }
+.quran-retry-btn { background: var(--accent-bg); border: 1px solid var(--accent-border); color: var(--accent-dark); border-radius: var(--radius-sm); padding: 6px 14px; font-size: 0.8rem; font-weight: 600; cursor: pointer; margin-top: 8px; min-height: 44px; }
 
 /* ── Intro Overlay ── */
 .intro-overlay {

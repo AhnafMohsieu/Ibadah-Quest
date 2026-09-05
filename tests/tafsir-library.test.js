@@ -43,3 +43,9 @@ test('wiring pins: CDN endpoints and cache keys', () => {
   assert.match(SRC, /_jalalaynPromise/, 'in-flight dedup present');
   assert.match(SRC, /window\.TafsirLibrary = \{/);
 });
+
+test('fetchJSON aborts hung requests (offline-first timeout)', () => {
+  assert.match(SRC, /AbortController/);
+  assert.match(SRC, /12000/);
+  assert.match(SRC, /signal/);
+});

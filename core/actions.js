@@ -722,7 +722,7 @@ Object.keys(NEW_POOLS).forEach(k => {
       logExercise: appAction('logExercise'),
       toggleMeal: appAction('toggleMeal'),
       addMemorization: window.addMemorization, toggleMorning: window.toggleMorning, toggleEvening: window.toggleEvening,
-      toggleTafsir: appAction('toggleTafsir'), setTafsirEdition: appAction('setTafsirEdition'), switchUser, logout, resetAll, exportData, importData, toggleBookmark, isBookmarked, toggleVolCat: appAction('toggleVolCat'), toggleDeedCat: appAction('toggleDeedCat'),
+      toggleTafsir: appAction('toggleTafsir'), retryTafsir: appAction('retryTafsir'), setTafsirEdition: appAction('setTafsirEdition'), switchUser, logout, resetAll, exportData, importData, toggleBookmark, isBookmarked, toggleVolCat: appAction('toggleVolCat'), toggleDeedCat: appAction('toggleDeedCat'),
       openMuhasabah: appAction('openMuhasabah'),
       dismissMuhasabah: appAction('dismissMuhasabah'),
       joinJourney: appAction('joinJourney'),

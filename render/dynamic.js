@@ -852,6 +852,7 @@ h += '</div>';
       html += `<button class="${(S.tafsirEdition || 'ibnkathir') === ed.id ? 'active' : ''}" onclick="App.setTafsirEdition('${ed.id}')">${ed.name}</button>`;
     });
     html += '</div>';
+    html += '<div class="tafsir-hint">Select an edition above, then tap the book icon on any verse to load its tafsir.</div>';
     if (verses.length === 0) {
       html += `<div class="quran-loading">No local verses available for this surah. ${s.ay} verses total.</div>`;
     } else {
@@ -900,6 +901,7 @@ h += '</div>';
       html += `<button class="${(S.tafsirEdition || 'ibnkathir') === ed.id ? 'active' : ''}" onclick="App.setTafsirEdition('${ed.id}')">${ed.name}</button>`;
     });
     html += '</div>';
+    html += '<div class="tafsir-hint">Select an edition above, then tap the book icon on any verse to load its tafsir.</div>';
 
     const verses = [];
     QURAN_POOL.forEach(v => {
@@ -933,24 +935,37 @@ h += '</div>';
     fillOpenTafsirs();
   }
 
+  function loadTafsirInto(p, sN, aN) {
+    p.innerHTML = '<div class="quran-loading">Loading tafsir…</div>';
+    const wantEdition = S.tafsirEdition || 'ibnkathir';
+    TafsirLibrary.getTafsir(wantEdition, sN, aN).then(t => {
+      if (!openTafsir[sN + ':' + aN]) return;
+      if ((S.tafsirEdition || 'ibnkathir') !== wantEdition) return;
+      const p2 = document.getElementById('tafsir-panel-' + sN + '-' + aN);
+      if (!p2) return;
+      const style = t.dir === 'rtl'
+        ? 'dir="rtl" style="font-family:\'Amiri\',serif;font-size:1.05rem;line-height:2;color:var(--text);"'
+        : 'style="font-size:0.92rem;line-height:1.8;color:var(--text);"';
+      p2.innerHTML = '<div ' + style + '>' + TafsirLibrary.sanitizeRichText(t.text) + '</div>';
+    }).catch(() => {
+      const p3 = document.getElementById('tafsir-panel-' + sN + '-' + aN);
+      if (!p3 || !openTafsir[sN + ':' + aN]) return;
+      const offline = (typeof navigator !== 'undefined' && navigator && navigator.onLine === false);
+      p3.innerHTML = '<div class="quran-loading">' + (offline ? 'You are offline — tafsir needs connection once, then it is saved for offline use.' : 'Couldn&#39;t load tafsir — check connection.') + ' <button class="quran-retry-btn" onclick="App.retryTafsir(' + sN + ',' + aN + ')">Retry</button></div>';
+    });
+  }
   function fillOpenTafsirs() {
     if (typeof TafsirLibrary === 'undefined') return;
     document.querySelectorAll('.tafsir-panel').forEach(p => {
       const parts = p.id.replace('tafsir-panel-', '').split('-');
-      const sN = parseInt(parts[0]), aN = parseInt(parts[1]);
-      p.innerHTML = '<div class="quran-loading">Loading tafsir…</div>';
-      const wantEdition = S.tafsirEdition || 'ibnkathir';
-      TafsirLibrary.getTafsir(wantEdition, sN, aN).then(t => {
-        if (!openTafsir[sN + ':' + aN]) return;
-        if ((S.tafsirEdition || 'ibnkathir') !== wantEdition) return;
-        const style = t.dir === 'rtl'
-          ? 'dir="rtl" style="font-family:\'Amiri\',serif;font-size:1.05rem;line-height:2;color:var(--text);"'
-          : 'style="font-size:0.92rem;line-height:1.8;color:var(--text);"';
-        p.innerHTML = '<div ' + style + '>' + TafsirLibrary.sanitizeRichText(t.text) + '</div>';
-      }).catch(() => {
-        p.innerHTML = '<div class="quran-loading">Couldn&#39;t load tafsir — check connection.</div>';
-      });
+      loadTafsirInto(p, parseInt(parts[0]), parseInt(parts[1]));
     });
+  }
+  function retryTafsir(surahNum, ayahNum) {
+    if (typeof TafsirLibrary === 'undefined') return;
+    var p = document.getElementById('tafsir-panel-' + surahNum + '-' + ayahNum);
+    if (!p) { openTafsir[surahNum + ':' + ayahNum] = true; renderQuran(); return; }
+    loadTafsirInto(p, surahNum, ayahNum);
   }
   function toggleTafsir(surahNum, ayahNum) {
     const k = surahNum + ':' + ayahNum;
@@ -1210,6 +1225,7 @@ h += '</div>';
   window.openQuranJuz = openQuranJuz;
   window.fillOpenTafsirs = fillOpenTafsirs;
   window.toggleTafsir = toggleTafsir;
+  window.retryTafsir = retryTafsir;
   window.setTafsirEdition = setTafsirEdition;
   window.openHadithCollection = openHadithCollection;
   window.openHadithBook = openHadithBook;
