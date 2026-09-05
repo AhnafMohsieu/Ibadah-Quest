@@ -29,6 +29,7 @@
       if (k && (k.startsWith(PREFIX) || k === USER_KEY)) keys.push(k);
     }
     keys.forEach(k => localStorage.removeItem(k));
+    try { localStorage.removeItem('iq_intro_seen'); } catch (e) {}
     if (window.Storage && window.Storage.destroy) {
       window.Storage.destroy(currentUser).catch(function() {});
     }
@@ -94,6 +95,7 @@
       if (k && (k.startsWith(PREFIX) || k === USER_KEY)) keys.push(k);
     }
     keys.forEach(k => localStorage.removeItem(k));
+    try { localStorage.removeItem('iq_intro_seen'); } catch (e) {}
     Object.keys(data).forEach(k => {
       if (k === '_exported' || k === '_version' || k === '_appVersion' || k === '_checksum') return;
       try { localStorage.setItem(k, typeof data[k] === 'string' ? data[k] : JSON.stringify(data[k])); } catch(e) {}
@@ -545,7 +547,9 @@ Object.keys(NEW_POOLS).forEach(k => {
 
   function initApp() {
   const overlay = document.getElementById('introOverlay');
-  const introSeen = S ? !!S.introSeen : true;
+  var mirrorSeen = false;
+  try { mirrorSeen = localStorage.getItem('iq_intro_seen') === '1'; } catch (e) {}
+  const introSeen = (S ? !!S.introSeen : true) || mirrorSeen;
   if (overlay) {
     if (!introSeen) {
       overlay.style.display = 'flex';
@@ -781,6 +785,9 @@ Object.keys(NEW_POOLS).forEach(k => {
   }
 
   function startJourney() {
+    try { S.introSeen = true; } catch (e) {}
+    try { localStorage.setItem('iq_intro_seen', '1'); } catch (e) {}
+    try { saveState(); } catch (e) {}
     var overlay = document.getElementById('introOverlay');
     if (overlay) {
       overlay.style.transition = 'opacity 0.8s ease-in-out';

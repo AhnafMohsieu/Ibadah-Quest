@@ -72,7 +72,7 @@ test('main.css uses modern light tokens', () => {
 });
 
 test('index.html registers the service worker and update banner', () => {
-  assert.ok(html.includes("navigator.serviceWorker.register('sw.js?v=34')"));
+  assert.ok(html.includes("navigator.serviceWorker.register('sw.js?v=36')"));
   assert.ok(html.includes("'SKIP_WAITING'"));
   assert.ok(html.includes('swUpdateBanner'));
 });
@@ -83,7 +83,7 @@ test('hadith/dhikr audio modules wired with versions and load order', () => {
   assert.ok(html.includes('<script src="data/hadith-normalize.js?v=1"></script>'));
   assert.ok(html.includes('<script src="features/hadith-library.js?v=3" defer></script>'));
   assert.ok(html.includes('<script src="features/tafsir-library.js?v=2" defer></script>'));
-  assert.ok(html.includes('styles/main.css?v=24'));
+  assert.ok(html.includes('styles/main.css?v=26'));
   assert.ok(html.indexOf('core/content-cache.js') < html.indexOf('state/state.js'), 'cache module loads before state');
   assert.ok(html.indexOf('core/audio.js') < html.indexOf('render/static.js'), 'audio module loads before renderers');
   assert.ok(html.indexOf('features/tafsir-library.js') > html.indexOf('render/static.js'), 'deferred features load after renderers');
@@ -144,7 +144,7 @@ test('theme: light-family palette blocks exist in main.css', () => {
 test('theme: index.html pre-paint script sets data-theme from localStorage', () => {
   assert.ok(html.includes("localStorage.getItem('iqTheme')"));
   assert.ok(html.includes("setAttribute('data-theme'"));
-  assert.ok(html.includes('styles/main.css?v=24'));
+  assert.ok(html.includes('styles/main.css?v=26'));
 });
 
 test('theme: picker references metadata and setTheme wiring', () => {
@@ -596,4 +596,59 @@ test('display type scales fluidly', () => {
   }
   assert.ok(html.includes('font-size:clamp(2rem,12vw,3rem)'),
     'timer countdown must be fluid');
+});
+
+test('coarse pointers force the mobile shell', () => {
+  const i = css.indexOf('@media (pointer:coarse)');
+  assert.ok(i > -1, 'coarse block missing');
+  const hideIdx = css.indexOf('@media (min-width: 768px)');
+  assert.ok(hideIdx > -1 && hideIdx < i, 'coarse block must come after the bnav hide rule');
+  const b = css.slice(i, i + 1400);
+  assert.ok(b.includes('nav.bnav{display:flex;}'), 'coarse must force bnav visible');
+  assert.ok(b.includes('.tier1-tabs{display:none;}'), 'coarse must hide tier1');
+  assert.ok(b.includes('#dateLine{display:block;}'), 'coarse must show date line');
+  assert.ok(b.includes('#tier2Tabs{justify-content:center;}'), 'coarse must center orphan chips');
+});
+
+test('tier1 hides on mobile in favor of the date line', () => {
+  assert.ok(html.includes('id="dateLine"'), 'dateLine div missing from index.html');
+  assert.ok(renderTabs.includes('window.renderDateLine'), 'renderDateLine must be exported');
+  assert.ok(renderTabs.includes('renderDateLine()'), 'switchCategory must refresh the date line');
+  assert.ok(css.indexOf('#dateLine{display:none') < css.indexOf('@media (max-width: 767px)'),
+    'base dateLine rule must precede the 767 block or cascade hides it');
+});
+
+test('intro dismissal persists synchronously with a mirror flag', () => {
+  assert.ok(actions.includes("localStorage.setItem('iq_intro_seen', '1')"),
+    'startJourney must write the mirror flag');
+  assert.ok(actions.includes("localStorage.getItem('iq_intro_seen')"),
+    'initApp must check the mirror flag');
+  assert.ok(css.includes('height:100dvh') || css.includes('height: 100dvh'),
+    'intro overlay must use dynamic viewport height');
+  assert.ok(css.includes('.intro-btn{min-height:48px') || css.includes('min-height:48px'),
+    'intro button must meet 48px target');
+  assert.ok(actions.includes("removeItem('iq_intro_seen')"),
+    'wipe/import paths must clear the mirror flag');
+});
+
+test('nav tiers share one sizing language', () => {
+  assert.ok(css.includes('.t2-btn,.t3-btn,.cat-chip{white-space:normal;}'),
+    'nav buttons must allow label wrapping');
+  assert.ok(css.includes('.tier3-tabs > :last-child:nth-child(4n+1){grid-column:1 / -1;}'),
+    'lone grid orphan must span full width');
+  assert.ok(css.includes('bottom:calc(104px + env(safe-area-inset-bottom,0px))'),
+    'FAB must clear the bottom nav');
+});
+
+test('boot watchdog offers force-refresh when stuck', () => {
+  assert.ok(html.includes('window.__iqBootT0'),
+    'boot timestamp marker missing');
+  assert.ok(html.includes('window.__iqReload'),
+    'reload handler missing');
+  assert.ok(html.includes('window.__iqFreshStart'),
+    'fresh-start handler missing');
+  assert.ok(html.includes('caches.delete') || html.includes('caches.keys'),
+    'fresh start must purge service-worker caches');
+  assert.ok(html.includes("ov.classList.remove('show')"),
+    'watchdog must retreat if boot lands late');
 });

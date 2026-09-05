@@ -30,7 +30,23 @@
     return { catObj: null, tabBtn: _findByTabId(tabId) };
   }
 
+  function renderDateLine() {
+    var el = document.getElementById('dateLine');
+    if (!el) return;
+    var d = new Date();
+    var g = d.getDate() + ' ' + ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][d.getMonth()] + ' ' + d.getFullYear();
+    var h = '';
+    try {
+      if (window.gregorianToHijri && window.HIJRI_MONTHS) {
+        var hd = window.gregorianToHijri(d.getFullYear(), d.getMonth() + 1, d.getDate());
+        if (hd) h = hd.day + ' ' + window.HIJRI_MONTHS[hd.month - 1] + ' ' + hd.year;
+      }
+    } catch (e) {}
+    el.textContent = h ? (g + ' · ' + h) : g;
+  }
+  window.renderDateLine = renderDateLine;
   function switchCategory(catId, btn) {
+    try { renderDateLine(); } catch (e) {}
     document.querySelectorAll('.t1-btn').forEach(function(el) {
       el.classList.remove('active');
       el.setAttribute('aria-selected', 'false');

@@ -22,11 +22,44 @@
     .tab-panel{display:none}
     .tab-panel.active{display:block}
   </style>
-  <link rel="preload" href="styles/main.css?v=24" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <link rel="preload" href="styles/main.css?v=26" as="style" onload="this.onload=null;this.rel='stylesheet'">
   <script>
     (function () {
       try { var t = localStorage.getItem('iqTheme'); if (t && t !== 'light') document.documentElement.setAttribute('data-theme', t); } catch (e) {}
     })();
+  </script>
+  <script>
+    window.__iqBootT0 = Date.now();
+    window.__iqReload = function() { location.reload(); };
+    window.__iqFreshStart = function() {
+      try {
+        if ('serviceWorker' in navigator) {
+          navigator.serviceWorker.getRegistrations().then(function(rs) {
+            rs.forEach(function(r) { try { r.unregister(); } catch (e) {} });
+          });
+        }
+        if (window.caches) {
+          caches.keys().then(function(ks) {
+            ks.forEach(function(k) { try { caches.delete(k); } catch (e) {} });
+          });
+        }
+      } catch (e) {}
+      setTimeout(function() { location.reload(); }, 600);
+    };
+    setTimeout(function() {
+      if (window.App) return;
+      var ov = document.getElementById('recoveryOverlay');
+      if (!ov) { location.reload(); return; }
+      ov.innerHTML = '<div class="toast-box"><h3>App seems stuck</h3><div class="toast-msg">Your data is safe. Reload to recover.</div><div style="display:flex;gap:8px;justify-content:center;margin-top:12px;"><button class="onboarding-btn" onclick="window.__iqReload()">Reload</button><button class="onboarding-btn" onclick="window.__iqFreshStart()">Clear cache &amp; reload</button></div></div>';
+      ov.classList.add('show');
+      ov.style.display = 'flex';
+      var iv = setInterval(function() {
+        if (window.App) {
+          try { ov.classList.remove('show'); ov.style.display = 'none'; } catch (e) {}
+          clearInterval(iv);
+        }
+      }, 1000);
+    }, 8000);
   </script>
   <script src="data/theme-meta.js?v=3"></script>
   <script src="core/error-tap.js?v=1"></script>
@@ -138,6 +171,7 @@
       <button class="t1-btn" data-cat="library" onclick="App.switchCategory('library', this)" role="tab" aria-selected="false" aria-controls="panel-quests"><span class="iq-inline"></span> Library</button>
       <button class="t1-btn" data-cat="profile_main" onclick="App.switchCategory('profile_main', this)" role="tab" aria-selected="false" aria-controls="panel-profile"><span class="iq-inline"></span> Profile</button>
     </div>
+    <div id="dateLine" class="date-line" aria-live="off"></div>
     <div class="tier2-scroll"><div class="tier2-tabs" id="tier2Tabs" role="tablist"></div></div>
     <div class="tier3-scroll" id="tier3Wrap" style="display:none;"><div class="tier3-tabs" id="tier3Tabs" role="tablist"></div></div>
   </div>
@@ -455,7 +489,7 @@
 <script src="render/prayers.js?v=4"></script>
 <script src="render/static.js?v=5"></script>
 <script src="render/dynamic.js?v=9"></script>
-<script src="render/tabs.js?v=6"></script>
+<script src="render/tabs.js?v=7"></script>
 
 <!-- Chart.js CDN (lazy loaded) -->
 <script>
@@ -553,7 +587,7 @@
 <script src="core/dhikr.js?v=4"></script>
 <script src="core/content.js?v=1"></script>
 <script src="core/backup.js?v=1"></script>
-<script src="core/actions.js?v=21"></script>
+<script src="core/actions.js?v=22"></script>
 
 <!-- PWA: Service Worker registration + update banner -->
 <script>
@@ -577,7 +611,7 @@
     });
   }
   window.addEventListener('load', function() {
-    navigator.serviceWorker.register('sw.js?v=34').then(function(reg) {
+    navigator.serviceWorker.register('sw.js?v=36').then(function(reg) {
       if (reg.waiting) { showUpdateBanner(reg); return; }
       reg.addEventListener('updatefound', function() {
         var sw = reg.installing;
