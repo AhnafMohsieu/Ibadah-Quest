@@ -108,6 +108,7 @@
   function renderCategoryTabs(cat) {
     var grid = document.getElementById('tier3Tabs');
     if (!grid) return;
+    grid.dataset.cat = cat.id;
     grid.innerHTML = cat.tabs.map(function(p, i) {
       return '<button data-tab="' + p.id + '" class="t2-btn ' + (i === 0 ? 'active' : '') + '" onclick="window.activateTab(\'' + p.id + '\', this)"><span>' + window.iqIcon(p.icon || p.id) + '</span> ' + p.label + '</button>';
     }).join('');

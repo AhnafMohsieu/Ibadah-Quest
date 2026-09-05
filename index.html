@@ -22,7 +22,7 @@
     .tab-panel{display:none}
     .tab-panel.active{display:block}
   </style>
-  <link rel="preload" href="styles/main.css?v=27" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <link rel="preload" href="styles/main.css?v=28" as="style" onload="this.onload=null;this.rel='stylesheet'">
   <script>
     (function () {
       try { var t = localStorage.getItem('iqTheme'); if (t && t !== 'light') document.documentElement.setAttribute('data-theme', t); } catch (e) {}
@@ -489,7 +489,7 @@
 <script src="render/prayers.js?v=4"></script>
 <script src="render/static.js?v=5"></script>
 <script src="render/dynamic.js?v=9"></script>
-<script src="render/tabs.js?v=7"></script>
+<script src="render/tabs.js?v=8"></script>
 
 <!-- Chart.js CDN (lazy loaded) -->
 <script>
@@ -611,7 +611,7 @@
     });
   }
   window.addEventListener('load', function() {
-    navigator.serviceWorker.register('sw.js?v=37').then(function(reg) {
+    navigator.serviceWorker.register('sw.js?v=38').then(function(reg) {
       if (reg.waiting) { showUpdateBanner(reg); return; }
       reg.addEventListener('updatefound', function() {
         var sw = reg.installing;

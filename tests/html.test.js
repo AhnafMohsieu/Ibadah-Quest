@@ -72,7 +72,7 @@ test('main.css uses modern light tokens', () => {
 });
 
 test('index.html registers the service worker and update banner', () => {
-  assert.ok(html.includes("navigator.serviceWorker.register('sw.js?v=37')"));
+  assert.ok(html.includes("navigator.serviceWorker.register('sw.js?v=38')"));
   assert.ok(html.includes("'SKIP_WAITING'"));
   assert.ok(html.includes('swUpdateBanner'));
 });
@@ -83,7 +83,7 @@ test('hadith/dhikr audio modules wired with versions and load order', () => {
   assert.ok(html.includes('<script src="data/hadith-normalize.js?v=1"></script>'));
   assert.ok(html.includes('<script src="features/hadith-library.js?v=3" defer></script>'));
   assert.ok(html.includes('<script src="features/tafsir-library.js?v=2" defer></script>'));
-  assert.ok(html.includes('styles/main.css?v=27'));
+  assert.ok(html.includes('styles/main.css?v=28'));
   assert.ok(html.indexOf('core/content-cache.js') < html.indexOf('state/state.js'), 'cache module loads before state');
   assert.ok(html.indexOf('core/audio.js') < html.indexOf('render/static.js'), 'audio module loads before renderers');
   assert.ok(html.indexOf('features/tafsir-library.js') > html.indexOf('render/static.js'), 'deferred features load after renderers');
@@ -144,7 +144,7 @@ test('theme: light-family palette blocks exist in main.css', () => {
 test('theme: index.html pre-paint script sets data-theme from localStorage', () => {
   assert.ok(html.includes("localStorage.getItem('iqTheme')"));
   assert.ok(html.includes("setAttribute('data-theme'"));
-  assert.ok(html.includes('styles/main.css?v=27'));
+  assert.ok(html.includes('styles/main.css?v=28'));
 });
 
 test('theme: picker references metadata and setTheme wiring', () => {
@@ -502,6 +502,13 @@ test('tier1 nav wraps at every viewport width (no breakpoint gap)', () => {
     'base t1-btn must allow shrinking below content width');
   assert.ok(!btnBlock.includes('white-space: nowrap') && !btnBlock.includes('white-space:nowrap'),
     'base t1-btn must not force nowrap');
+});
+
+test('core and adhkar tier3 tabs render 2 by 2 on phones', () => {
+  assert.ok(renderTabs.includes('grid.dataset.cat'), 'tier3 grid must carry category id');
+  const phoneBlock = css.slice(css.lastIndexOf('@media (max-width: 600px)'));
+  assert.ok(phoneBlock.includes('#tier3Tabs[data-cat="core"]'), 'core tier3 must be pinned 2-col');
+  assert.ok(phoneBlock.includes('#tier3Tabs[data-cat="adhkar"]'), 'adhkar tier3 must be pinned 2-col');
 });
 
 test('Mood feature is fully removed', () => {

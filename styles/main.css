@@ -2648,6 +2648,7 @@ textarea:focus-visible {
   #tier2Tabs,#tier3Tabs{flex-wrap:wrap;overflow-x:visible;}
   #tier2Tabs .t2-btn,#tier3Tabs .t2-btn,#tier2Tabs .cat-chip{flex:1 1 auto;min-width:0;white-space:normal;}
   #tier2Tabs{justify-content:center;}
+  #tier3Tabs[data-cat="core"] .t2-btn,#tier3Tabs[data-cat="adhkar"] .t2-btn{flex:1 1 45%;}
   button:not(.carousel-dot):not(.t3-btn):not(.bnav-btn){min-height:44px;min-width:44px}
   input[type="text"],input[type="number"],input[type="date"],input[type="search"],select,textarea,.profile-input,.amount-custom-input,.quran-search{font-size:16px;min-height:44px}
   .tier1-tabs{display:none;}
@@ -2682,6 +2683,7 @@ button,.t1-btn,.t2-btn,.cat-chip{font-size:16px;}
   #tier2Tabs{justify-content:center;}
   .tab-panel{padding-bottom:12px;}
   #tier2Tabs .t2-btn,#tier3Tabs .t2-btn,#tier2Tabs .cat-chip{flex:1 1 auto;min-width:0;white-space:normal;}
+  #tier3Tabs[data-cat="core"] .t2-btn,#tier3Tabs[data-cat="adhkar"] .t2-btn{flex:1 1 45%;}
   .tier2-tabs,.tier3-tabs{grid-template-columns:repeat(4,minmax(0,1fr));}
   .card-grid{grid-template-columns:repeat(3,minmax(0,1fr));}
   .tab-content,.tier-nav-container{overflow-x:clip;}
