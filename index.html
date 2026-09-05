@@ -22,7 +22,7 @@
     .tab-panel{display:none}
     .tab-panel.active{display:block}
   </style>
-  <link rel="preload" href="styles/main.css?v=34" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <link rel="preload" href="styles/main.css?v=35" as="style" onload="this.onload=null;this.rel='stylesheet'">
   <script>
     (function () {
       try { var t = localStorage.getItem('iqTheme'); if (t && t !== 'light') document.documentElement.setAttribute('data-theme', t); } catch (e) {}
@@ -471,7 +471,7 @@
 <script src="core/content-cache.js?v=1"></script>
 <script src="core/audio.js?v=4"></script>
 <script src="core/recovery.js?v=1"></script>
-<script src="state/state.js?v=8"></script>
+<script src="state/state.js?v=9"></script>
 <script>
   window.storageReady = window.Storage && window.Storage.init
     ? window.Storage.init().catch(function(e) {
@@ -607,7 +607,7 @@
     });
   }
   window.addEventListener('load', function() {
-    navigator.serviceWorker.register('sw.js?v=49').then(function(reg) {
+    navigator.serviceWorker.register('sw.js?v=51').then(function(reg) {
       if (reg.waiting) { showUpdateBanner(reg); return; }
       reg.addEventListener('updatefound', function() {
         var sw = reg.installing;

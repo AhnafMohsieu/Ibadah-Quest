@@ -2845,3 +2845,18 @@ html[data-theme="emara"] .global-search { background: var(--card-bg); }
 .hero-strip .streak-bar { grid-column: 1 / -1; }
 /* Calendar never stretches unreadably wide on large screens. */
 .cal-grid { width: 100%; max-width: 36rem; margin-left: auto; margin-right: auto; }
+/* -- Equal tabs system-wide: centered content, even row shares -- */
+/* Tier-1 and bottom-nav buttons already share space evenly; this extends the */
+/* same behavior to every tier-2 / tier-3 / category chip row so no tab is */
+/* sized by its label length. Earlier wrap/scroll/touch rules stay in place. */
+#tier2Tabs, #tier3Tabs { justify-content: center; }
+#tier2Tabs .t2-btn, #tier2Tabs .cat-chip,
+#tier3Tabs .t2-btn, #tier3Tabs .t3-btn {
+  flex: 1 1 6.5rem;
+  min-width: 0;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+}
+.tier2-tabs, .tier3-tabs { justify-items: stretch; }
+.bnav-btn { text-align: center; align-items: center; justify-content: center; }
