@@ -33,17 +33,19 @@ test('renderer: hadith UI wires library + audio', () => {
   assert.match(dyn, /Online<\/span>/, 'remote cards carry an Online badge');
 });
 
-test('quran reader wires tafsir selector and panels', () => {
+test('quran reader carries no tafsir UI (lives in interpretation browser)', () => {
   const dyn = fs.readFileSync(path.join(__dirname, '..', 'render', 'dynamic.js'), 'utf8');
-  assert.match(dyn, /App\.toggleTafsir\(/);
-  assert.match(dyn, /App\.setTafsirEdition\(/);
-  assert.match(dyn, /TafsirLibrary\.getTafsir\(/);
-  assert.match(dyn, /TafsirLibrary\.sanitizeRichText\(/);
-  assert.match(dyn, /EDITIONS\.forEach/);
-  assert.match(dyn, /openTafsir = \{\}/);
+  assert.ok(!dyn.includes('verse-tafsir-btn'), 'verse tafsir buttons must be gone');
+  assert.ok(!dyn.includes('tafsir-panel'), 'inline tafsir panels must be gone');
+  assert.ok(!dyn.includes('fillOpenTafsirs'), 'panel filler must be gone');
+  assert.ok(!dyn.includes('tafsir-hint'), 'edition hint must be gone');
+  assert.ok(!dyn.includes('openTafsir'), 'open-panel state must be gone');
+  assert.ok(dyn.includes('function setTafsirEdition'), 'edition writer stays for the browser');
   const st = fs.readFileSync(path.join(__dirname, '..', 'state', 'state.js'), 'utf8');
   assert.match(st, /tafsirEdition:'ibnkathir'/);
+  assert.match(st, /tafsirLookup:\{surah:1,ayah:1\}/);
   const act = fs.readFileSync(path.join(__dirname, '..', 'core', 'actions.js'), 'utf8');
-  assert.match(act, /toggleTafsir/);
-  assert.match(act, /setTafsirEdition/);
+  assert.ok(!act.includes("toggleTafsir: appAction"), 'facade must drop toggleTafsir');
+  assert.ok(!act.includes("retryTafsir: appAction"), 'facade must drop retryTafsir');
+  assert.ok(act.includes("setTafsirEdition: appAction('setTafsirEdition')"), 'facade keeps setTafsirEdition');
 });

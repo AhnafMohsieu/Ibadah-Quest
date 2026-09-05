@@ -2589,6 +2589,8 @@ textarea:focus-visible {
   nav.bnav{display:flex;}
   .app{padding-bottom:calc(96px + env(safe-area-inset-bottom,0px));}
   #tier2Tabs,#tier3Tabs{flex-wrap:wrap;overflow-x:visible;}
+  #prayerArea .card-grid{display:flex;flex-wrap:wrap;justify-content:center;}
+  #prayerArea .card-grid > .card-item{flex:1 1 28%;}
   #tier2Tabs .t2-btn,#tier3Tabs .t2-btn,#tier2Tabs .cat-chip{flex:1 1 auto;min-width:0;white-space:normal;}
   #tier2Tabs{justify-content:center;}
   #tier3Tabs[data-cat="core"] .t2-btn,#tier3Tabs[data-cat="adhkar"] .t2-btn{flex:1 1 45%;}
@@ -2623,6 +2625,8 @@ button,.t1-btn,.t2-btn,.cat-chip{font-size:16px;}
   .tier1-tabs{flex-wrap:wrap;justify-content:center;}
   .tier1-tabs .t1-btn{flex:1 1 28%;min-width:0;max-width:none;white-space:normal;line-height:1.25;}
   #tier2Tabs,#tier3Tabs{flex-wrap:wrap;overflow-x:visible;}
+  #prayerArea .card-grid{display:flex;flex-wrap:wrap;justify-content:center;}
+  #prayerArea .card-grid > .card-item{flex:1 1 28%;}
   #tier2Tabs{justify-content:center;}
   .tab-panel{padding-bottom:12px;}
   #tier2Tabs .t2-btn,#tier3Tabs .t2-btn,#tier2Tabs .cat-chip{flex:1 1 auto;min-width:0;white-space:normal;}

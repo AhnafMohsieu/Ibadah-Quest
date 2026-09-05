@@ -72,7 +72,7 @@ test('main.css uses modern light tokens', () => {
 });
 
 test('index.html registers the service worker and update banner', () => {
-  assert.ok(html.includes("navigator.serviceWorker.register('sw.js?v=44')"));
+  assert.ok(html.includes("navigator.serviceWorker.register('sw.js?v=45')"));
   assert.ok(html.includes("'SKIP_WAITING'"));
   assert.ok(html.includes('swUpdateBanner'));
 });
@@ -713,15 +713,22 @@ test('prayer card icons sit in fixed boxes so rows align', () => {
     'card icon box must have a fixed height');
 });
 
-test('quran tafsir panels explain, retry, and hint offline', () => {
-  assert.ok(renderDynamic.includes('needs connection once'),
-    'offline tafsir note missing');
-  assert.ok(renderDynamic.includes('App.retryTafsir'),
-    'tafsir retry entry missing');
-  assert.ok(renderDynamic.includes('window.retryTafsir'),
-    'retryTafsir must be exported');
-  assert.ok(renderDynamic.includes('Select an edition above, then tap the book icon'),
-    'edition hint missing');
-  assert.ok(actions.includes("retryTafsir: appAction('retryTafsir')"),
-    'App facade must expose retryTafsir');
+test('prayer last row centers under the grid', () => {
+  const i600 = css.lastIndexOf('@media (max-width: 600px)');
+  assert.ok(i600 > -1, 'phone block missing');
+  const phoneBlock = css.slice(i600, i600 + 2500);
+  assert.ok(phoneBlock.includes('#prayerArea .card-grid{display:flex;flex-wrap:wrap;justify-content:center'),
+    'prayer grid must center rows on phones');
+  const i = css.indexOf('@media (pointer:coarse)');
+  assert.ok(i > -1, 'coarse block missing');
+  assert.ok(css.slice(i, i + 1500).includes('#prayerArea .card-grid'),
+    'prayer grid must center rows on touch devices');
+});
+
+test('interpretation tab mounts the tafsir browser', () => {
+  assert.ok(html.includes('<script src="features/tafsir-browser.js?v=1" defer></script>'),
+    'browser script tag missing');
+  const st = fs.readFileSync(path.join(root, 'state', 'state.js'), 'utf8');
+  assert.ok(st.includes('tafsirLookup:{surah:1,ayah:1}'),
+    'freshState must carry the lookup');
 });

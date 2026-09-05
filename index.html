@@ -475,7 +475,7 @@
 <script src="core/content-cache.js?v=1"></script>
 <script src="core/audio.js?v=4"></script>
 <script src="core/recovery.js?v=1"></script>
-<script src="state/state.js?v=7"></script>
+<script src="state/state.js?v=8"></script>
 <script>
   window.storageReady = window.Storage && window.Storage.init
     ? window.Storage.init().catch(function(e) {
@@ -487,8 +487,8 @@
 <!-- Render engine (split modules) -->
 <script src="render/calendar.js?v=1"></script>
 <script src="render/prayers.js?v=4"></script>
-<script src="render/static.js?v=6"></script>
-<script src="render/dynamic.js?v=10"></script>
+<script src="render/static.js?v=7"></script>
+<script src="render/dynamic.js?v=11"></script>
 <script src="render/tabs.js?v=8"></script>
 
 <!-- Chart.js CDN (lazy loaded) -->
@@ -556,6 +556,7 @@
 <script src="features/search.js?v=4" defer></script>
 <script src="features/hadith-library.js?v=3" defer></script>
 <script src="features/tafsir-library.js?v=3" defer></script>
+<script src="features/tafsir-browser.js?v=1" defer></script>
 <script src="features/fab.js?v=1" defer></script>
 <script src="features/streak-milestones.js?v=1" defer></script>
 <script src="features/pull-refresh.js" defer></script>
@@ -610,7 +611,7 @@
     });
   }
   window.addEventListener('load', function() {
-    navigator.serviceWorker.register('sw.js?v=44').then(function(reg) {
+    navigator.serviceWorker.register('sw.js?v=45').then(function(reg) {
       if (reg.waiting) { showUpdateBanner(reg); return; }
       reg.addEventListener('updatefound', function() {
         var sw = reg.installing;
