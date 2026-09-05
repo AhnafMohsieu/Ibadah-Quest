@@ -489,19 +489,24 @@ Object.keys(NEW_POOLS).forEach(k => {
     });
   }
 
+  function _escAttr(s){ return String(s).replace(/\\/g,'\\\\').replace(/"/g,'\\"'); }
+  function _findT1ByCat(cat){ var esc=_escAttr(cat); try{return document.querySelector('.t1-btn[data-cat="' + esc + '"]');}catch(e){ var els=document.querySelectorAll('.t1-btn'); for(var i=0;i<els.length;i++) if(els[i].getAttribute('data-cat')===cat) return els[i]; return null; } }
+  function _findChipByCatId(catId){ var esc=_escAttr(catId); try{return document.querySelector('.cat-chip[onclick*="' + esc + '"]');}catch(e){ var els=document.querySelectorAll('.cat-chip'); for(var i=0;i<els.length;i++){ var oc=els[i].getAttribute('onclick')||''; if(oc.indexOf(catId)>-1) return els[i]; } return null; } }
+
   function _parseHashAndNavigate() {
     const hash = location.hash;
     if (hash && hash.startsWith('#/')) {
       const parts = hash.slice(2).split('/');
       if (parts.length === 2) {
-        const [cat, tab] = parts;
-        const btn = document.querySelector('.t1-btn[data-cat="' + cat + '"]');
+        const cat = decodeURIComponent(parts[0] || '');
+        const tab = decodeURIComponent(parts[1] || '');
+        const btn = _findT1ByCat(cat);
         if (btn) {
           window._hashNavigating = true;
           window.switchCategory(cat, btn);
           const { catObj, tabBtn } = window._findTabBtn(cat, tab);
           if (catObj) {
-            const chipBtn = document.querySelector('.cat-chip[onclick*="' + catObj.id + '"]');
+            const chipBtn = _findChipByCatId(catObj.id);
             if (chipBtn) window.selectCategory(catObj.id, chipBtn);
           }
           if (tabBtn) {
@@ -521,11 +526,11 @@ Object.keys(NEW_POOLS).forEach(k => {
     window.addEventListener('popstate', function(e) {
       if (e.state && e.state.cat && e.state.tab) {
         window._hashNavigating = true;
-        const btn = document.querySelector('.t1-btn[data-cat="' + e.state.cat + '"]');
+        const btn = _findT1ByCat(e.state.cat);
         if (btn) window.switchCategory(e.state.cat, btn);
         const { catObj, tabBtn } = window._findTabBtn(e.state.cat, e.state.tab);
         if (catObj) {
-          const chipBtn = document.querySelector('.cat-chip[onclick*="' + catObj.id + '"]');
+          const chipBtn = _findChipByCatId(catObj.id);
           if (chipBtn) window.selectCategory(catObj.id, chipBtn);
         }
         if (tabBtn) {
@@ -611,12 +616,13 @@ Object.keys(NEW_POOLS).forEach(k => {
       if (!_parseHashAndNavigate()) {
         const savedCat = S ? S.lastCat : null;
         const savedSub = S ? S.lastSub : null;
-        let activeBtn = savedCat ? document.querySelector('.t1-btn[data-cat="' + savedCat + '"]') : null;
+        let activeBtn = savedCat ? _findT1ByCat(savedCat) : null;
         if (!activeBtn) activeBtn = document.querySelector('.t1-btn.active');
         const activeCat = activeBtn ? activeBtn.getAttribute('data-cat') : 'ibadah';
         window.switchCategory(activeCat, activeBtn);
         if (savedSub) {
-          const subBtn = document.querySelector('[data-tab="' + savedSub + '"]');
+          var escSub = _escAttr(savedSub); var subBtn = null;
+          try { subBtn = document.querySelector('[data-tab="' + escSub + '"]'); } catch(e){ var els=document.querySelectorAll('[data-tab]'); for(var i=0;i<els.length;i++) if(els[i].getAttribute('data-tab')===savedSub){ subBtn=els[i]; break; } }
           if (subBtn) subBtn.click();
         }
       }

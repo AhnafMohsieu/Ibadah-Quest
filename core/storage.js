@@ -67,7 +67,12 @@
 
   function exportAll() {
     return new Promise(function(resolve, reject) {
-      var req = getStore('readonly').getAllKeys();
+      var tx, store;
+      try {
+        tx = db.transaction(STORE_NAME, 'readonly');
+        store = tx.objectStore(STORE_NAME);
+      } catch (e) { reject(e); return; }
+      var req = store.getAllKeys();
       req.onsuccess = function() {
         var keys = req.result;
         var results = {};
@@ -75,13 +80,14 @@
         if (pending === 0) { resolve(results); return; }
         for (var i = 0; i < keys.length; i++) {
           (function(key) {
-            var r = getStore('readonly').get(key);
+            var r = store.get(key);
             r.onsuccess = function() { results[key] = r.result; if (--pending === 0) resolve(results); };
             r.onerror = function() { reject(r.error); };
           })(keys[i]);
         }
       };
       req.onerror = function() { reject(req.error); };
+      tx.onerror = function() { reject(tx.error); };
     });
   }
 

@@ -1,5 +1,33 @@
 {
   "$schema": "https://opencode.ai/config.json",
+  "provider": {
+    "empero": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "Empero Free",
+      "options": {
+        "baseURL": "https://free.empero.org/v1",
+        "apiKey": "free"
+      },
+      "models": {
+        "glm-5.3-flash": {
+          "name": "GLM 5.3 Flash",
+          "tool_call": true,
+          "reasoning": true,
+          "attachment": true,
+          "temperature": true,
+          "limit": { "context": 131072, "output": 65536 }
+        },
+        "glm-5.3": {
+          "name": "GLM 5.3",
+          "tool_call": true,
+          "reasoning": true,
+          "attachment": true,
+          "temperature": true,
+          "limit": { "context": 131072, "output": 65536 }
+        }
+      }
+    }
+  },
   "mcp": {
     "playwright": {
       "type": "local",
@@ -9,6 +37,11 @@
     "context7": {
       "type": "remote",
       "url": "https://mcp.context7.com/mcp",
+      "enabled": true
+    },
+    "codebase-memory": {
+      "type": "local",
+      "command": ["cmd", "/c", "npx", "-y", "codebase-memory-mcp"],
       "enabled": true
     }
   }
