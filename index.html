@@ -487,7 +487,7 @@
 <!-- Render engine (split modules) -->
 <script src="render/calendar.js?v=1"></script>
 <script src="render/prayers.js?v=4"></script>
-<script src="render/static.js?v=5"></script>
+<script src="render/static.js?v=6"></script>
 <script src="render/dynamic.js?v=9"></script>
 <script src="render/tabs.js?v=8"></script>
 
@@ -541,7 +541,7 @@
 <script src="features/muhasabah.js?v=5" defer></script>
 <script src="features/journeys.js?v=6" defer></script>
 <script src="features/health.js?v=7" defer></script>
-<script src="features/finance.js?v=6" defer></script>
+<script src="features/finance.js?v=7" defer></script>
 <script src="features/personal-goals.js?v=4" defer></script>
 <script src="features/spiritual-growth/data.js?v=2" defer></script>
 <script src="features/spiritual-growth/index.js?v=2" defer></script>
@@ -611,7 +611,7 @@
     });
   }
   window.addEventListener('load', function() {
-    navigator.serviceWorker.register('sw.js?v=38').then(function(reg) {
+    navigator.serviceWorker.register('sw.js?v=39').then(function(reg) {
       if (reg.waiting) { showUpdateBanner(reg); return; }
       reg.addEventListener('updatefound', function() {
         var sw = reg.installing;

@@ -162,7 +162,7 @@
     h += '</div>';
 
     // Income section
-    h += `<div class="section-title" style="margin-top:16px">${iqIcon('dollar-sign')} Log Income</div>`;
+    h += `<div class="section-title">${iqIcon('dollar-sign')} Log Income</div>`;
     h += '<div class="finance-grid">';
     INCOME_SOURCES.forEach(s => {
       h += `<div class="finance-item" onclick="financeTracker.logIncome('${s.id}')">
@@ -174,7 +174,7 @@
 
     // Charity section
     const charityTypes = FINANCE_PROMPTS.filter(p => p.id !== 'zakat_fitr');
-    h += `<div class="section-title" style="margin-top:16px">${iqIcon('heart')} Charity</div>`;
+    h += `<div class="section-title">${iqIcon('heart')} Charity</div>`;
     h += '<div class="finance-grid">';
     charityTypes.forEach(p => {
       const amt = f.charity[p.id] || 0;
@@ -187,7 +187,7 @@
     h += '</div>';
 
     // Expense section
-    h += `<div class="section-title" style="margin-top:16px">${iqIcon('bar-chart-3')} Expenses</div>`;
+    h += `<div class="section-title">${iqIcon('bar-chart-3')} Expenses</div>`;
     h += '<div class="finance-grid">';
     EXPENSE_CATEGORIES.forEach(c => {
       const amt = f.expenses[c.id] || 0;
@@ -208,7 +208,7 @@
 
     // Islamic finance knowledge
     if (typeof FINANCE_POOL !== 'undefined' && FINANCE_POOL.length) {
-      h += `<div class="section-title" style="margin-top:20px">${iqIcon('book-open')} Islamic Finance Wisdom</div>`;
+      h += `<div class="section-title">${iqIcon('book-open')} Islamic Finance Wisdom</div>`;
       const finIdx = S.financeIdx || [];
       let indices = finIdx.length ? finIdx : [];
       if (!indices.length) { indices = Array.from({length: Math.min(5, FINANCE_POOL.length)}, (_, i) => i); S.financeIdx = indices; }

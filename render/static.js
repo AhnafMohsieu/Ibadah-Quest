@@ -183,8 +183,7 @@
       { name:'Tashahud', desc:'Sit between rakats reciting At-Tahiyyatu lillahi... and send Salawat on the Prophet ﷺ.' },
       { name:'Tasleem', desc:'End prayer by turning head right then left saying As-Salamu Alaykum wa rahmatullah.' }
     ].map((s, i) => {
-      const numBadge = `<span style="display:inline-block; background:var(--accent-bg); color:var(--accent-light); border:1px solid var(--accent-border); border-radius:12px; padding:0 8px; font-size:0.75rem; margin-right:8px; font-weight:800; height:22px; line-height:20px; white-space:nowrap; font-family:var(--font);">#${i + 1}</span>`;
-      return `<div class="content-card" style="flex-direction:row;align-items:flex-start;"><div style="margin-top:2px;">${numBadge}</div><div style="flex:1;"><div style="font-weight:700;color:var(--accent-light);margin-bottom:6px;">${s.name}</div><div class="content-english">${s.desc}</div></div></div>`;
+      return `<div class="content-card"><div style="display:flex;align-items:flex-start;gap:10px;"><span style="display:inline-block;background:var(--accent-bg);color:var(--accent-light);border:1px solid var(--accent-border);border-radius:12px;padding:0 8px;font-size:0.75rem;font-weight:800;height:22px;line-height:20px;white-space:nowrap;font-family:var(--font);">#${i + 1}</span><div style="flex:1;"><div style="font-weight:700;color:var(--accent-light);margin-bottom:6px;">${s.name}</div><div class="content-english">${s.desc}</div></div></div></div>`;
     }).join('');
   }
 
@@ -256,7 +255,7 @@
   function renderGratitude() {
     const dt = today(), entries = S.gratitudeLog[dt] || [];
     let h = '<div class="section-title">' + iqIcon('pencil') + ' Daily Gratitude Journal</div>';
-    h += `<div style="background:var(--card2);border-radius:var(--radius);padding:16px;margin-bottom:16px;border:1px solid var(--border);">Today's entries (${entries.length}):</div>`;
+    h += `<div class="content-card"><div class="content-english">Today's entries (${entries.length}):</div></div>`;
     entries.forEach((e,i) => h += `<div class="quest-row">${iqIcon('check')} ${i+1}. ${escapeHTML(e)}</div>`);
     h += `<input class="profile-input" id="gratInput" placeholder="I am grateful for..."><button class="shop-card" onclick="App.addGratitude()" style="justify-content:center;width:100%;">${iqIcon('plus')} Add Entry</button>`;
     document.getElementById('gratitudeArea').innerHTML = h;
@@ -289,7 +288,7 @@
     let h = '<div class="section-title">' + iqIcon('brain') + ' Memorization Tracker</div>';
     h += `<div class="stat-card" style="margin-bottom:16px;"><div class="stat-num">${S.memorized}</div><div>Surahs Memorized</div></div>`;
     h += `<input class="profile-input" id="memInput" placeholder="Surah name (e.g., Al-Fatiha)"><button class="shop-card" onclick="App.addMemorization()" style="justify-content:center;width:100%;">${iqIcon('plus')} Add Surah</button>`;
-    if (S.memorizationList.length) { h += '<div class="section-title" style="margin-top:20px;">' + iqIcon('clipboard') + ' Memorized List</div>'; S.memorizationList.forEach(s => h += `<div class="quest-row">${iqIcon('check')} ${escapeHTML(s)}</div>`); }
+    if (S.memorizationList.length) { h += '<div class="section-title">' + iqIcon('clipboard') + ' Memorized List</div>'; S.memorizationList.forEach(s => h += `<div class="quest-row">${iqIcon('check')} ${escapeHTML(s)}</div>`); }
     document.getElementById('memorizationArea').innerHTML = h;
   }
   function addMemorization() { const inp=document.getElementById('memInput'); if(!inp?.value.trim()) return; S.memorizationList.push(inp.value.trim()); S.memorized++; inp.value=''; if (typeof window.grantCappedDailyXp === 'function') window.grantCappedDailyXp(3, 'memorization', 5); saveState(); renderMemorization(); checkA(); }
@@ -525,7 +524,7 @@
       cat.deeds.forEach(function(item) {
         h += '<div class="vol-card" style="cursor:default;">';
         h += '<div class="prayer-info">';
-        h += '<div class="prayer-name" style="font-size:1rem;font-weight:700;color:var(--accent);">' + item.name + '</div>';
+        h += '<div class="prayer-name" style="font-size:1rem;font-weight:700;color:var(--accent-light);">' + item.name + '</div>';
         h += '<div style="font-size:0.85rem;color:var(--text2);margin-top:4px;line-height:1.5;">"' + item.virtue + '"</div>';
         if (item.source) h += '<div style="font-size:0.75rem;color:var(--text2);margin-top:4px;">' + iqIcon('book-open') + ' ' + item.source + '</div>';
         h += '</div>';
@@ -571,7 +570,7 @@
       cat.prayers.forEach(function(item) {
         h += '<div class="vol-card" style="cursor:default;">';
         h += '<div class="prayer-info">';
-        h += '<div class="prayer-name" style="font-size:1rem;font-weight:700;color:var(--accent);">' + item.name + '</div>';
+        h += '<div class="prayer-name" style="font-size:1rem;font-weight:700;color:var(--accent-light);">' + item.name + '</div>';
         h += '<div style="font-size:0.85rem;color:var(--text);margin-top:4px;line-height:1.5;">' + item.desc + '</div>';
         h += '<div style="font-size:0.8rem;color:var(--accent-light);margin-top:4px;font-weight:600;">' + item.rakat + '</div>';
         if (item.source) h += '<div style="font-size:0.75rem;color:var(--text2);margin-top:4px;">' + iqIcon('book-open') + ' ' + item.source + '</div>';

@@ -1,5 +1,5 @@
 (function() {
-  const CACHE_NAME = 'iq-cache-v38';
+  const CACHE_NAME = 'iq-cache-v39';
   const CDN_CACHE = 'iq-cdn-v1';
 
   const PRECACHE_LIST = [

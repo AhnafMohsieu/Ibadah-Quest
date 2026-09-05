@@ -72,7 +72,7 @@ test('main.css uses modern light tokens', () => {
 });
 
 test('index.html registers the service worker and update banner', () => {
-  assert.ok(html.includes("navigator.serviceWorker.register('sw.js?v=38')"));
+  assert.ok(html.includes("navigator.serviceWorker.register('sw.js?v=39')"));
   assert.ok(html.includes("'SKIP_WAITING'"));
   assert.ok(html.includes('swUpdateBanner'));
 });
@@ -660,4 +660,31 @@ test('boot watchdog offers force-refresh when stuck', () => {
     'fresh start must purge service-worker caches');
   assert.ok(html.includes("ov.classList.remove('show')"),
     'watchdog must retreat if boot lands late');
+});
+
+test('guide detail rows share one card language', () => {
+  function fnBody(src, name) { const i = src.indexOf('function ' + name); assert.ok(i > -1, name + ' must exist'); let j = src.indexOf('\n  function ', i + 10); if (j === -1) j = src.length; return src.slice(i, j); }
+  const salah = fnBody(renderStatic, 'renderSalah');
+  assert.ok(salah.includes('<div class="content-card"><div style="display:flex;align-items:flex-start;gap:10px;">'), 'salah rows must use the shared numbered-row structure');
+  assert.ok(!salah.includes('flex-direction:row;align-items:flex-start'), 'salah must not keep its bespoke row style');
+  const ed = fnBody(renderStatic, 'renderExtraDeeds');
+  const vp = fnBody(renderStatic, 'renderVolPrayers');
+  assert.ok(ed.includes('font-weight:700;color:var(--accent-light);'), 'extradeeds titles use shared gold');
+  assert.ok(vp.includes('font-weight:700;color:var(--accent-light);'), 'volprayers titles use shared gold');
+  assert.ok(!ed.includes('font-weight:700;color:var(--accent);'), 'no darker gold titles remain in extradeeds');
+  assert.ok(!vp.includes('font-weight:700;color:var(--accent);'), 'no darker gold titles remain in volprayers');
+});
+
+test('tracking rows share one card and header language', () => {
+  function fnBody2(src, name) { const i = src.indexOf('function ' + name); assert.ok(i > -1, name + ' must exist'); let j = src.indexOf('\n  function ', i + 10); if (j === -1) j = src.length; return src.slice(i, j); }
+  const grat = fnBody2(renderStatic, 'renderGratitude');
+  assert.ok(!grat.includes('var(--card2)'), 'gratitude must not use undefined --card2');
+  assert.ok(grat.includes("Today's entries"), 'gratitude count header kept');
+  const mem = fnBody2(renderStatic, 'renderMemorization');
+  assert.ok(!mem.includes('margin-top:20px'), 'memorization header uses shared spacing');
+  const finance = fs.readFileSync(path.join(root, 'features', 'finance.js'), 'utf8');
+  assert.ok(!finance.includes('margin-top:16px'), 'finance headers use shared spacing');
+  assert.ok(!finance.includes('margin-top:20px'), 'finance wisdom header uses shared spacing');
+  assert.ok(css.includes('.fin-balance-amount { font-size: 1.8rem; font-weight: 800; color: var(--accent-dark);'),
+    'finance balance joins the shared stat rhythm');
 });

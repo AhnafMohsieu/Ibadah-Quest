@@ -1982,7 +1982,7 @@ select.profile-input option { background: var(--card-bg); color: var(--text); }
   background: var(--card-bg);
   border: 1px solid var(--card-border);
   border-radius: var(--radius);
-  padding: 14px;
+  padding: 16px;
   margin-bottom: 10px;
 }
 .health-card-header { font-weight: 600; margin-bottom: 10px; color: var(--text); font-size: 0.9rem; }
@@ -2057,7 +2057,7 @@ select.profile-input option { background: var(--card-bg); color: var(--text); }
   text-align: center;
 }
 .fin-balance-label { font-size: 0.78rem; color: var(--text2); margin-bottom: 4px; }
-.fin-balance-amount { font-size: 1.8rem; font-weight: 800; margin-bottom: 10px; }
+.fin-balance-amount { font-size: 1.8rem; font-weight: 800; color: var(--accent-dark); margin-bottom: 10px; }
 .fin-balance-amount.pos { color: var(--green); }
 .fin-balance-amount.neg { color: var(--red); }
 .fin-balance-row { display: flex; justify-content: center; gap: 14px; }
