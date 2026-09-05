@@ -72,7 +72,7 @@ test('main.css uses modern light tokens', () => {
 });
 
 test('index.html registers the service worker and update banner', () => {
-  assert.ok(html.includes("navigator.serviceWorker.register('sw.js?v=39')"));
+  assert.ok(html.includes("navigator.serviceWorker.register('sw.js?v=40')"));
   assert.ok(html.includes("'SKIP_WAITING'"));
   assert.ok(html.includes('swUpdateBanner'));
 });
@@ -83,7 +83,7 @@ test('hadith/dhikr audio modules wired with versions and load order', () => {
   assert.ok(html.includes('<script src="data/hadith-normalize.js?v=1"></script>'));
   assert.ok(html.includes('<script src="features/hadith-library.js?v=3" defer></script>'));
   assert.ok(html.includes('<script src="features/tafsir-library.js?v=2" defer></script>'));
-  assert.ok(html.includes('styles/main.css?v=28'));
+  assert.ok(html.includes('styles/main.css?v=29'));
   assert.ok(html.indexOf('core/content-cache.js') < html.indexOf('state/state.js'), 'cache module loads before state');
   assert.ok(html.indexOf('core/audio.js') < html.indexOf('render/static.js'), 'audio module loads before renderers');
   assert.ok(html.indexOf('features/tafsir-library.js') > html.indexOf('render/static.js'), 'deferred features load after renderers');
@@ -144,7 +144,7 @@ test('theme: light-family palette blocks exist in main.css', () => {
 test('theme: index.html pre-paint script sets data-theme from localStorage', () => {
   assert.ok(html.includes("localStorage.getItem('iqTheme')"));
   assert.ok(html.includes("setAttribute('data-theme'"));
-  assert.ok(html.includes('styles/main.css?v=28'));
+  assert.ok(html.includes('styles/main.css?v=29'));
 });
 
 test('theme: picker references metadata and setTheme wiring', () => {
@@ -687,4 +687,20 @@ test('tracking rows share one card and header language', () => {
   assert.ok(!finance.includes('margin-top:20px'), 'finance wisdom header uses shared spacing');
   assert.ok(css.includes('.fin-balance-amount { font-size: 1.8rem; font-weight: 800; color: var(--accent-dark);'),
     'finance balance joins the shared stat rhythm');
+});
+
+test('intro subtitle is centered like the bismillah', () => {
+  const i = css.indexOf('\n.intro-subtitle {');
+  assert.ok(i > -1, 'intro-subtitle rule missing');
+  const body = css.slice(i, i + 400);
+  assert.ok(body.includes('text-align:center') || body.includes('text-align: center'),
+    'intro subtitle must be centered');
+});
+
+test('prayer card icons sit in fixed boxes so rows align', () => {
+  const i = css.indexOf('.card-grid .card-item .card-icon {');
+  assert.ok(i > -1, 'card-icon rule missing');
+  const body = css.slice(i, i + 250);
+  assert.ok(body.includes('height:44px') || body.includes('height: 44px'),
+    'card icon box must have a fixed height');
 });
