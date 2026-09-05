@@ -2389,66 +2389,6 @@ select.profile-input option { background: var(--card-bg); color: var(--text); }
 .add-goal-btn:active { background: var(--bg-accent); }
 .add-goal-btn:hover { background: var(--accent-bg); border-color: var(--accent-border); }
 
-/* ── Daily Ritual Modal ── */
-.daily-ritual {
-  background: var(--card-bg);
-  border: 1px solid var(--card-border);
-  border-radius: var(--radius-lg);
-  padding: 20px;
-  max-width: 320px;
-  width: 90%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 12px;
-  text-align: center;
-}
-.dr-title { font-size: 1.1rem; font-weight: 700; color: var(--text); }
-.dr-stats { display: flex; gap: 14px; font-size: 0.85rem; font-weight: 600; color: var(--text2); }
-.dr-rating { width: 100%; }
-.dr-label { font-size: 0.82rem; font-weight: 600; color: var(--text2); margin-bottom: 4px; }
-.dr-stars { display: flex; justify-content: center; gap: 6px; }
-.dr-star {
-  background: none;
-  border: none;
-  font-size: 1.6rem;
-  color: var(--accent);
-  cursor: pointer;
-  padding: 2px 4px;
-  border-radius: 6px;
-  transition: transform 0.15s;
-}
-.dr-star:hover, .dr-star:active { transform: scale(1.15); }
-.dr-reflection { width: 100%; }
-.dr-textarea {
-  width: 100%;
-  min-height: 60px;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  padding: 8px;
-  font-family: var(--font);
-  font-size: 0.85rem;
-  color: var(--text);
-  background: var(--card-bg);
-  resize: vertical;
-}
-.dr-textarea::placeholder { color: var(--text3); }
-.dr-quote { font-size: 0.78rem; color: var(--text2); line-height: 1.4; }
-.dr-close {
-  background: var(--accent);
-  color: var(--on-accent);
-  border: none;
-  border-radius: var(--radius-sm);
-  padding: 8px 20px;
-  font-size: 0.88rem;
-  font-weight: 600;
-  cursor: pointer;
-  width: 100%;
-  transition: transform var(--transition);
-}
-.dr-close:active { transform: scale(0.97); }
-.dr-close:hover { opacity: 0.9; }
-
 /* Seasonal Events Banner */
 .seasonal-banner {
   display: flex;

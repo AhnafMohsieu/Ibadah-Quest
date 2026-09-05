@@ -596,7 +596,6 @@ Object.keys(NEW_POOLS).forEach(k => {
     const modalQueue = [];
     if (window.showWeeklySummary) modalQueue.push(window.showWeeklySummary);
     if (window.showDailySummary) modalQueue.push(window.showDailySummary);
-    if (window.showDailyRitual) modalQueue.push(window.showDailyRitual);
     let queueTimer = null;
     function runNextModal() {
       if (modalQueue.length === 0) return;
