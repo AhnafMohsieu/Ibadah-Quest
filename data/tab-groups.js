@@ -3,7 +3,7 @@ const TAB_GROUPS = {
   // -- DAILY (categorized — core habit loop, always visible) --
   ibadah: [
     {
-      id: 'core', label: 'Core',
+      id: 'core', label: 'Core', icon: 'home',
       tabs: [
         { id: 'today', label: 'Today' },
         { id: 'timer', label: 'Prayer Times' },
@@ -21,7 +21,7 @@ const TAB_GROUPS = {
       ]
     },
     {
-      id: 'worship', label: 'Guide',
+      id: 'worship', label: 'Guide', icon: 'mosque',
       tabs: [
         { id: 'wudu', label: 'Ablution' },
         { id: 'salah', label: 'Prayer Guide' },
@@ -31,7 +31,7 @@ const TAB_GROUPS = {
       ]
     },
     {
-      id: 'tracking', label: 'Self-Tracking',
+      id: 'tracking', label: 'Self-Tracking', icon: 'bar-chart-3',
       tabs: [
         { id: 'fasting', label: 'Fasting' },
         { id: 'healthlog', label: 'Health' },
@@ -172,7 +172,7 @@ const TAB_GROUPS = {
       tabs: [
         { id: 'umayyads', label: 'Umayyads' }, { id: 'abbasids', label: 'Abbasids' }, { id: 'andalus', label: 'Andalus' }, { id: 'ottomans', label: 'Ottomans' },
         { id: 'mamluks', label: 'Mamluks' }, { id: 'seljuks', label: 'Seljuks' }, { id: 'fatimids', label: 'Fatimids' }, { id: 'ayyubids', label: 'Ayyubids' },
-        { id: 'modernhist', label: 'Modern Hist.' }, { id: 'ancientprophets', label: 'Ancient' }, { id: 'battles', label: 'Battles' }, { id: 'civilisation', label: 'Civilisation' }
+        { id: 'modernhist', label: 'Modern Hist.' }, { id: 'ancientprophets', label: 'Ancient' }, { id: 'battles', label: 'Battles' }, { id: 'civilisation', label: 'Civilisation', icon: 'landmark' }
       ]
     },
     {

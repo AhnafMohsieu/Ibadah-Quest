@@ -338,15 +338,17 @@ function renderAll() {
     const now = new Date();
     const tk = today();
     const calY = window.calViewYear, calM = window.calViewMonth;
-    const dim = new Date(calY, calM + 1, 0).getDate();
-    const fd = new Date(calY, calM, 1).getDay();
-    const gMonthName = now.toLocaleString('en', { month: 'long' });
+    const vY = (calY == null ? now.getFullYear() : calY);
+    const vM = (calM == null ? now.getMonth() : calM);
+    const dim = new Date(vY, vM + 1, 0).getDate();
+    const fd = new Date(vY, vM, 1).getDay();
+    const gMonthName = new Date(vY, vM, 1).toLocaleString('en', { month: 'long' });
     const isCurrentMonth = calY === now.getFullYear() && calM === now.getMonth();
 
     let cal = '<div class="cal-header">';
     cal += '<div class="cal-nav"><button onclick="App.calPrevMonth()">◀</button></div>';
     cal += '<div class="cal-header-info">';
-    cal += `<h3>${gMonthName} ${window.calViewYear}</h3>`;
+    cal += `<h3>${gMonthName} ${vY}</h3>`;
     cal += `<div class="cal-hijri-title">${HIJRI_MONTHS_AR[window.calViewHijriM - 1]} ${window.calViewHijriY} AH</div>`;
     cal += '</div>';
     cal += '<div class="cal-nav"><button onclick="App.calNextMonth()">▶</button>';
@@ -367,7 +369,7 @@ function renderAll() {
       let cls = cnt >= 5 ? 'good' : (cnt > 0 ? 'ok' : (dk < tk ? 'bad' : ''));
       if (dk === tk) cls += ' now';
 
-      const h = gregorianToHijri(calViewYear, calViewMonth + 1, d);
+      const h = gregorianToHijri(window.calViewYear, window.calViewMonth + 1, d);
       const hDay = h.day;
 
       cal += `<div class="cal-day ${cls}"><span class="g-date">${d}</span><span class="h-date">${hDay}</span></div>`;
@@ -529,6 +531,13 @@ h += '</div>';
     if (title) title.textContent = lvTitle(S.lv);
     if (xp) xp.innerHTML = iqIcon('zap') + ' ' + (S.xp||0).toLocaleString() + ' XP';
     if (streak) streak.innerHTML = iqIcon('flame') + ' ' + (S.cs||0);
+    const themeBtn = document.getElementById('themeToggle');
+    if (themeBtn) {
+      let cur = 'light';
+      try { cur = document.documentElement.getAttribute('data-theme') || 'light'; } catch (e) {}
+      themeBtn.setAttribute('aria-label', 'Change color theme (current: ' + cur + ')');
+      themeBtn.title = 'Theme: ' + cur + ' — tap to change';
+    }
   }
 
   // -------------------------------------------------------

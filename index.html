@@ -13,7 +13,7 @@
     *{margin:0;padding:0;box-sizing:border-box}
     body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;-webkit-tap-highlight-color:transparent;line-height:1.6;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;opacity:1;transition:background 200ms ease,color 200ms ease}
     body.loading{opacity:0}
-    .app{position:relative;z-index:1;max-width:720px;margin:0 auto;padding:0 16px 80px}
+    .app{position:relative;z-index:1;max-width:720px;margin:0 auto;padding:0 16px 16px}
     .top-bar{position:sticky;top:0;z-index:100;display:flex;justify-content:space-between;align-items:center;padding:10px 16px;background:rgba(255,255,255,0.85);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--border);margin:0 -16px 12px}
     .header{text-align:center;padding:24px 0 12px}
     .header h1{font-family:var(--font-heading);font-size:clamp(1.4rem,4vw,2rem);font-weight:700;color:var(--text);letter-spacing:1px;margin:0}
@@ -22,7 +22,7 @@
     .tab-panel{display:none}
     .tab-panel.active{display:block}
   </style>
-  <link rel="preload" href="styles/main.css?v=31" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <link rel="preload" href="styles/main.css?v=34" as="style" onload="this.onload=null;this.rel='stylesheet'">
   <script>
     (function () {
       try { var t = localStorage.getItem('iqTheme'); if (t && t !== 'light') document.documentElement.setAttribute('data-theme', t); } catch (e) {}
@@ -112,11 +112,7 @@
 <div class="tb-right">
   <span class="tb-stat" id="tbXP">0 XP</span>
   <span class="tb-stat" id="tbStreak">0</span>
-  <div class="theme-toggle" id="themeToggle" onclick="App.toggleTheme()" role="button" tabindex="0" aria-label="Toggle theme">
-        <div class="theme-toggle-track">
-          <div class="theme-toggle-thumb" id="themeThumb"></div>
-        </div>
-      </div>
+    <button class="theme-btn" id="themeToggle" onclick="App.toggleTheme()" aria-label="Change color theme"><span class="theme-btn-icon" aria-hidden="true">🎨</span></button>
     </div>
   </header>
 
@@ -409,7 +405,7 @@
 <script src="data/relatable-dhikr.js?v=1"></script>
 <script src="data/extra-deeds.js?v=1"></script>
 <script src="data/vol-prayers.js?v=1"></script>
-<script src="data/tab-groups.js?v=8"></script>
+<script src="data/tab-groups.js?v=9"></script>
 <script src="data/panel-sections.js?v=1"></script>
 
 <!-- Content Pools (extracted from content-pools.js) -->
@@ -488,7 +484,7 @@
 <script src="render/calendar.js?v=1"></script>
 <script src="render/prayers.js?v=4"></script>
 <script src="render/static.js?v=7"></script>
-<script src="render/dynamic.js?v=11"></script>
+<script src="render/dynamic.js?v=13"></script>
 <script src="render/tabs.js?v=8"></script>
 
 <!-- Chart.js CDN (lazy loaded) -->
@@ -587,7 +583,7 @@
 <script src="core/dhikr.js?v=4"></script>
 <script src="core/content.js?v=1"></script>
 <script src="core/backup.js?v=1"></script>
-<script src="core/actions.js?v=22"></script>
+<script src="core/actions.js?v=23"></script>
 
 <!-- PWA: Service Worker registration + update banner -->
 <script>
@@ -611,7 +607,7 @@
     });
   }
   window.addEventListener('load', function() {
-    navigator.serviceWorker.register('sw.js?v=45').then(function(reg) {
+    navigator.serviceWorker.register('sw.js?v=49').then(function(reg) {
       if (reg.waiting) { showUpdateBanner(reg); return; }
       reg.addEventListener('updatefound', function() {
         var sw = reg.installing;

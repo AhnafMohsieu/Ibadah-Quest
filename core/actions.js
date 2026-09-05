@@ -478,18 +478,7 @@ Object.keys(NEW_POOLS).forEach(k => {
     if (typeof window._iqModalDone === 'function') { var cb = window._iqModalDone; window._iqModalDone = null; setTimeout(cb, 300); }
   }
 
-  // Theme toggle keyboard support
-  function initThemeToggleKeyboard() {
-    const themeToggle = document.getElementById('themeToggle');
-    if (!themeToggle) return;
-    
-    themeToggle.addEventListener('keydown', function(e) {
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        window.toggleTheme();
-      }
-    });
-  }
+  // Theme button is a native <button>: keyboard activation is built in.
 
   function _escAttr(s){ return String(s).replace(/\\/g,'\\\\').replace(/"/g,'\\"'); }
   function _findT1ByCat(cat){ var esc=_escAttr(cat); try{return document.querySelector('.t1-btn[data-cat="' + esc + '"]');}catch(e){ var els=document.querySelectorAll('.t1-btn'); for(var i=0;i<els.length;i++) if(els[i].getAttribute('data-cat')===cat) return els[i]; return null; } }
@@ -653,7 +642,6 @@ Object.keys(NEW_POOLS).forEach(k => {
     try { if (window.initBnavKeyboardNav) window.initBnavKeyboardNav(); } catch(e) { console.error('Step 8c bnav keyboard nav failed:', e); }
     try { if (window.populateTier1Icons) window.populateTier1Icons(); } catch(e) { console.error('Step 8b tier1 icons failed:', e); }
     try { initModalKeyboardHandlers(); } catch(e) { console.error('Step 9 modal keyboard handlers failed:', e); }
-    try { initThemeToggleKeyboard(); } catch(e) { console.error('Step 10 theme toggle keyboard failed:', e); }
     try { _initHashRouting(); } catch(e) { console.error('Step 10b hash routing init failed:', e); }
     // Quota-failure banner: show on 'iq:quota', wire dismiss (re-arms the flag),
     // and cover a quota failure that happened before init finished.

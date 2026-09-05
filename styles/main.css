@@ -102,7 +102,7 @@ body.loading { opacity: 0; }
   flex-direction: column;
   max-width: 480px;
   margin: 0 auto;
-  padding: 0 16px calc(96px + env(safe-area-inset-bottom, 0px));
+  padding: 0 16px calc(16px + env(safe-area-inset-bottom, 0px));
   background: var(--bg);
 }
 @media (min-width: 520px){body{background:var(--bg-accent)} .app{box-shadow:var(--shadow-md);border-left:1px solid var(--border);border-right:1px solid var(--border);min-height:100vh}}
@@ -129,45 +129,63 @@ body.loading { opacity: 0; }
 .tb-right { display: flex; gap: 14px; align-items: center; }
 .tb-stat { font-size: 0.75rem; color: var(--text2); font-weight: 600; }
 
-/* ── Theme Toggle ── */
-.theme-toggle { cursor: pointer; user-select: none; transition: opacity var(--transition); }
-.theme-toggle-track {
-  width: 44px;
-  height: 24px;
-  border-radius: 12px;
-  background: var(--border);
-  position: relative;
-  transition: background var(--transition);
-}
-.theme-toggle-thumb {
-  width: 20px;
-  height: 20px;
+/* ── Theme Button (cycles the color themes) ── */
+.theme-btn {
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
+  border: 1px solid var(--border);
   background: var(--card-bg);
-  position: absolute;
-  top: 2px;
-  left: 2px;
-  transition: transform var(--transition);
-  box-shadow: var(--shadow-sm);
+  color: var(--text);
+  font-size: 1.15rem;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform var(--transition), border-color var(--transition);
 }
-html[data-theme="light"] .theme-toggle-track { background: var(--accent); }
-html[data-theme="light"] .theme-toggle-thumb { transform: translateX(20px); }
+.theme-btn:hover { border-color: var(--accent); transform: scale(1.06); }
+.theme-btn:active { transform: scale(0.94); }
+.theme-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.theme-btn-icon { display: inline-flex; }
 
 /* ── Hero Header ── */
 .hero-strip { margin-bottom: 16px; }
-.header { text-align: center; padding: 24px 0 12px; }
-.header-crescent { display: none; }
+.header { text-align: center; padding: 28px 0 14px; position: relative; }
+.header-crescent { display: flex; justify-content: center; margin-bottom: 6px; }
+.header-crescent .iq-icon {
+  width: 46px;
+  height: 46px;
+  filter: drop-shadow(0 0 10px rgba(201,168,76,0.55));
+}
 .header h1 {
   font-family: var(--font-heading);
-  font-size: clamp(1.4rem, 4vw, 2rem);
-  font-weight: 700;
-  color: var(--text);
-  letter-spacing: 1px;
+  font-size: clamp(1.9rem, 8vw, 2.6rem);
+  font-weight: 800;
+  letter-spacing: 2px;
   margin: 0;
+  color: var(--accent-dark);
+  background: linear-gradient(135deg, var(--accent-dark) 10%, var(--accent) 50%, var(--accent-light) 90%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 .header-deco {
-  display: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 8px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--text2);
 }
+.header-deco .iq-icon { width: 14px; height: 14px; }
 
 /* ── Level & XP ── */
 .level-row {
@@ -443,7 +461,7 @@ html[data-theme="light"] .theme-toggle-thumb { transform: translateX(20px); }
 }
 
 /* ── Card Grid ── */
-.card-grid { display: grid; grid-template-columns: repeat(5, minmax(0,1fr)); gap: 8px; margin-bottom: 8px; }
+.card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 8.5rem), 1fr)); gap: 8px; margin-bottom: 8px; }
 .card-grid .card-item {
   min-width: 0;
   background: var(--card-bg);
@@ -2512,11 +2530,9 @@ textarea:focus-visible {
   box-shadow: 0 0 0 3px var(--accent-bg);
 }
 
-/* Focus styles for toggle elements */
-.theme-toggle:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 2px;
-  border-radius: 12px;
+/* Focus styles for the theme button (base rule already covers focus-visible) */
+.theme-btn:focus-visible {
+  border-radius: 50%;
 }
 
 /* Focus styles for FAB */
@@ -2580,7 +2596,7 @@ textarea:focus-visible {
 @media (min-width: 768px) { .bnav { display: none; } }
 @media (max-width: 767px) {
   .fab-container { bottom:calc(104px + env(safe-area-inset-bottom,0px)); }
-  .app { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
+  .app { padding-bottom: calc(16px + env(safe-area-inset-bottom, 0px)); }
   .tier1-tabs{display:none;}
   #dateLine{display:block;}
 }
@@ -2810,3 +2826,22 @@ html[data-theme="emara"] .global-search { background: var(--card-bg); }
 /* -- Storage quota banner (reuses .offline-banner positioning) -- */
 .storage-banner { justify-content: space-between; background: #fef3c7; color: #78350f; }
 .storage-banner button { background: transparent; border: 0; font-size: 1.2rem; cursor: pointer; color: inherit; padding: 0 8px; }
+/* -- Fluid shell: one flexible layout for every device, no fixed breakpoints -- */
+/* The shell fills small screens edge-to-edge and fluidly caps on large ones. */
+.app {
+  width: 100%;
+  max-width: min(62rem, 100%);
+  padding-left: clamp(12px, 4vw, 28px);
+  padding-right: clamp(12px, 4vw, 28px);
+}
+/* Hero sections share whatever space exists: stacked on narrow screens, */
+/* side-by-side automatically when the container fits two columns. */
+.hero-strip {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 19rem), 1fr));
+  gap: 0 20px;
+  align-items: center;
+}
+.hero-strip .streak-bar { grid-column: 1 / -1; }
+/* Calendar never stretches unreadably wide on large screens. */
+.cal-grid { width: 100%; max-width: 36rem; margin-left: auto; margin-right: auto; }
