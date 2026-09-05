@@ -41,11 +41,19 @@ test('getWeekAgoKey returns 7 days ago local date', () => {
   assert.strictEqual(key, expected);
 });
 
-test('milestone keys follow LOCAL date, not UTC (UTC+6 scenario)', () => {
-  class FixedDate extends Date {
+test('milestone keys follow LOCAL date, not UTC (Sunday scenario)', () => {
+  const RealDate = Date;
+  function lastSunday2am() {
+    const n = new RealDate();
+    const d = new RealDate(n.getFullYear(), n.getMonth(), n.getDate(), 2, 0, 0, 0);
+    d.setDate(d.getDate() - d.getDay()); // rewind to Sunday (no-op if already Sunday)
+    return d.getTime();
+  }
+  const PINNED = lastSunday2am();
+  class FixedDate extends RealDate {
     constructor(...a) {
       if (a.length === 0) {
-        super(1786824000000);
+        super(PINNED);
       } else {
         super(...a);
       }
@@ -72,7 +80,8 @@ test('milestone keys follow LOCAL date, not UTC (UTC+6 scenario)', () => {
 
   sandbox.window.showWeeklySummary();
 
-  const expectedKey = '2026-08-16';
+  const ref = new FixedDate();
+  const expectedKey = ref.getFullYear() + '-' + (ref.getMonth()+1).toString().padStart(2,'0') + '-' + ref.getDate().toString().padStart(2,'0');
   const stored = sandbox.S.lastWeeklySummary;
   assert.strictEqual(stored, expectedKey,
     `Expected local date key '${expectedKey}' but got '${stored}' — UTC mismatch`);
