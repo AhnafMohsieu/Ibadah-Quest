@@ -20,10 +20,9 @@
     .level-row{display:flex;align-items:center;justify-content:center;gap:16px;margin:12px auto 16px;flex-wrap:wrap;max-width:480px}
     .streak-bar{background:var(--card-bg);border:1px solid var(--card-border);border-radius:var(--radius);padding:14px 20px;display:flex;align-items:center;gap:14px;margin-bottom:16px}
     .tab-panel{display:none}
-    .tab-panel.active{display:block;animation:fadeIn 0.2s ease}
-    @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+    .tab-panel.active{display:block}
   </style>
-  <link rel="preload" href="styles/main.css?v=23" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <link rel="preload" href="styles/main.css?v=24" as="style" onload="this.onload=null;this.rel='stylesheet'">
   <script>
     (function () {
       try { var t = localStorage.getItem('iqTheme'); if (t && t !== 'light') document.documentElement.setAttribute('data-theme', t); } catch (e) {}
@@ -158,7 +157,7 @@
 </div>
   <div class="tab-panel" role="tabpanel" id="panel-timer">
     <div class="section-title"> Next Prayer Countdown</div>
-    <div id="timerArea" style="text-align:center;font-size:3rem;font-weight:bold;color:var(--accent);margin:30px 0;text-shadow:0 0 20px rgba(201,168,76,0.5);font-family:var(--font-heading);letter-spacing:2px;"></div>
+    <div id="timerArea" style="text-align:center;font-size:clamp(2rem,12vw,3rem);font-weight:bold;color:var(--accent);margin:30px 0;text-shadow:0 0 20px rgba(201,168,76,0.5);font-family:var(--font-heading);letter-spacing:2px;"></div>
     <div id="prayerNamesArea" style="text-align:center;color:var(--text2);font-size:1rem;letter-spacing:0.5px;"></div>
     <div class="section-title"> Prayer Times</div>
     <div id="prayerTimesArea"></div>
@@ -578,7 +577,7 @@
     });
   }
   window.addEventListener('load', function() {
-    navigator.serviceWorker.register('sw.js?v=33').then(function(reg) {
+    navigator.serviceWorker.register('sw.js?v=34').then(function(reg) {
       if (reg.waiting) { showUpdateBanner(reg); return; }
       reg.addEventListener('updatefound', function() {
         var sw = reg.installing;

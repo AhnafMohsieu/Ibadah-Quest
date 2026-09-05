@@ -72,7 +72,7 @@ test('main.css uses modern light tokens', () => {
 });
 
 test('index.html registers the service worker and update banner', () => {
-  assert.ok(html.includes("navigator.serviceWorker.register('sw.js?v=33')"));
+  assert.ok(html.includes("navigator.serviceWorker.register('sw.js?v=34')"));
   assert.ok(html.includes("'SKIP_WAITING'"));
   assert.ok(html.includes('swUpdateBanner'));
 });
@@ -83,7 +83,7 @@ test('hadith/dhikr audio modules wired with versions and load order', () => {
   assert.ok(html.includes('<script src="data/hadith-normalize.js?v=1"></script>'));
   assert.ok(html.includes('<script src="features/hadith-library.js?v=3" defer></script>'));
   assert.ok(html.includes('<script src="features/tafsir-library.js?v=2" defer></script>'));
-  assert.ok(html.includes('styles/main.css?v=23'));
+  assert.ok(html.includes('styles/main.css?v=24'));
   assert.ok(html.indexOf('core/content-cache.js') < html.indexOf('state/state.js'), 'cache module loads before state');
   assert.ok(html.indexOf('core/audio.js') < html.indexOf('render/static.js'), 'audio module loads before renderers');
   assert.ok(html.indexOf('features/tafsir-library.js') > html.indexOf('render/static.js'), 'deferred features load after renderers');
@@ -144,7 +144,7 @@ test('theme: light-family palette blocks exist in main.css', () => {
 test('theme: index.html pre-paint script sets data-theme from localStorage', () => {
   assert.ok(html.includes("localStorage.getItem('iqTheme')"));
   assert.ok(html.includes("setAttribute('data-theme'"));
-  assert.ok(html.includes('styles/main.css?v=23'));
+  assert.ok(html.includes('styles/main.css?v=24'));
 });
 
 test('theme: picker references metadata and setTheme wiring', () => {
@@ -549,4 +549,51 @@ test('healthlog tab is wired correctly (4 touchpoints)', () => {
   assert.ok(html.includes('id="healthlogArea"'), 'healthlogArea div missing');
   assert.ok(renderTabs.includes("healthlog:'renderHealthLog'"), 'lazy render must map healthlog');
   assert.ok(health.includes('window.renderHealthLog'), 'renderHealthLog must be exported');
+});
+
+test('small phones get compact stacked nav', () => {
+  const i = css.indexOf('@media (max-width: 360px)');
+  assert.ok(i > -1, '360px block missing');
+  const b = css.slice(i, i + 900);
+  assert.ok(b.includes('.tier1-tabs .t1-btn{flex-direction:column;gap:2px;padding:8px 4px;}'),
+    'tier1 must stack icon-above-label on small phones');
+  assert.ok(b.includes('.bnav-label{font-size:0.62rem;}'),
+    'bnav labels must shrink on small phones');
+  assert.ok(b.includes('.streak-bar{padding:10px 12px;}'),
+    'hero must tighten on small phones');
+});
+
+test('calm rendering: no fade replay, finite shimmers, no layout transitions', () => {
+  const i = css.indexOf('.tab-panel.active {');
+  assert.ok(i > -1, 'tab-panel.active rule missing');
+  assert.ok(!css.slice(i, i + 120).includes('animation'),
+    'tab switch must not replay a fade animation');
+  assert.ok(!html.includes('animation:fadeIn'),
+    'inline critical CSS must not replay fade either');
+  assert.ok(css.includes('xpShimmer 2s ease-in-out 3'),
+    'xp shimmer must be finite');
+  assert.ok(css.includes('skeleton-shimmer 1.5s ease-in-out 3'),
+    'skeleton shimmer must be finite');
+  assert.ok(css.includes('.skeleton, .xp-inner::after { animation: none !important; }'),
+    'reduced-motion must kill shimmers');
+  assert.ok(css.includes('transition: background 120ms ease, color 120ms ease;'),
+    'body transition must be 120ms');
+  for (const sel of ['.t1-btn {', '.t2-btn {', '.cat-chip {', '.t3-btn {']) {
+    const j = css.indexOf(sel);
+    assert.ok(j > -1, sel + ' rule missing');
+    const body = css.slice(j, j + 800);
+    assert.ok(!body.includes('transition: all') && !body.includes('transition:all'),
+      sel + ' must not use transition:all');
+  }
+});
+
+test('display type scales fluidly', () => {
+  for (const s of ['.stat-num{font-size:clamp(1.4rem,7vw,2rem)}',
+    '.insight-card-num{font-size:clamp(1.15rem,6vw,1.6rem)}',
+    '.best-num{font-size:clamp(1rem,5vw,1.3rem)}',
+    '.stat-num,.tb-stat{font-size:clamp(1rem,5vw,1.25rem)}']) {
+    assert.ok(css.includes(s), 'missing fluid rule ' + s);
+  }
+  assert.ok(html.includes('font-size:clamp(2rem,12vw,3rem)'),
+    'timer countdown must be fluid');
 });
