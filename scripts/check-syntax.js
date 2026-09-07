@@ -3,10 +3,10 @@
 /**
  * Syntax gate for Ibadah Quest.
  *
- * Every JS file in the repo is loaded by the browser as a classic <script>
- * (IIFE + window.* exports — no ES modules, no build step). So the faithful
- * syntax check is "does this parse as a script?", which node:vm.Script gives us
- * in-process (faster and web-worker-safe vs spawning `node --check` per file).
+ * Classic browser scripts must parse as scripts (node:vm.Script).
+ * ESM sources (src/** plus root vite.config.js) must parse as modules via
+ * `node --input-type=module --check` over stdin — vm.SourceTextModule does
+ * not exist on Node 22+, so in-process module parsing is not available.
  *
  * Usage:  node scripts/check-syntax.js
  * Exits:  0 on success, 1 if any file fails to parse.
@@ -15,19 +15,38 @@
 const fs = require('node:fs');
 const path = require('node:path');
 const vm = require('node:vm');
+const { execFileSync } = require('node:child_process');
 
 const root = path.join(__dirname, '..');
-// Tooling / vendored dirs that are not shipped as browser scripts.
+// Tooling / vendored / generated dirs that are not shipped as browser scripts.
 const EXCLUDED = new Set([
   'node_modules',
   '.git',
   '.github',
   '.playwright-mcp',
-  '.opencode'
+  '.opencode',
+  '.worktrees',
+  'dist'
 ]);
 
 const failures = [];
 let fileCount = 0;
+
+function isModuleFile(rel) {
+  return rel.startsWith('src/') || rel === 'vite.config.js';
+}
+
+function checkModule(abs, rel) {
+  const code = fs.readFileSync(abs, 'utf8');
+  try {
+    execFileSync(process.execPath, ['--input-type=module', '--check'], {
+      input: code, stdio: ['pipe', 'pipe', 'pipe']
+    });
+  } catch (err) {
+    const msg = ((err.stderr || err.message || String(err)).toString().split('\n'))[0];
+    failures.push(rel + ': ' + msg);
+  }
+}
 
 function walk(dir) {
   for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
@@ -37,6 +56,7 @@ function walk(dir) {
     } else if (entry.name.endsWith('.js')) {
       fileCount++;
       const rel = path.relative(root, abs).replace(/\\/g, '/');
+      if (isModuleFile(rel)) { checkModule(abs, rel); continue; }
       try {
         const code = fs.readFileSync(abs, 'utf8');
         new vm.Script(code, { filename: rel });
