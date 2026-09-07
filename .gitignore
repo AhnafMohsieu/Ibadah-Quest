@@ -2,3 +2,11 @@
 .worktrees
 .playwright-mcp/
 dist/
+
+# Debug / test artifacts
+screenshots/
+test-*.png
+test-debug.mjs
+test-responsive.mjs
+test-visual.py
+test-output.txt
