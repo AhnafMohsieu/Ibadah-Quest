@@ -1,3 +1,4 @@
 *.log
 .worktrees
 .playwright-mcp/
+dist/
