@@ -568,7 +568,7 @@ test('small phones get compact stacked nav', () => {
   const b = css.slice(i, i + 900);
   assert.ok(b.includes('.tier1-tabs .t1-btn{flex-direction:column;gap:2px;padding:8px 4px;}'),
     'tier1 must stack icon-above-label on small phones');
-  assert.ok(b.includes('.bnav-label{font-size:0.62rem;}'),
+  assert.ok(b.includes('.bnav-label{font-size:var(--fs-2xs);}'),
     'bnav labels must shrink on small phones');
   assert.ok(b.includes('.streak-bar{padding:10px 12px;}'),
     'hero must tighten on small phones');
@@ -693,7 +693,7 @@ test('tracking rows share one card and header language', () => {
   const finance = fs.readFileSync(path.join(root, 'features', 'finance.js'), 'utf8');
   assert.ok(!finance.includes('margin-top:16px'), 'finance headers use shared spacing');
   assert.ok(!finance.includes('margin-top:20px'), 'finance wisdom header uses shared spacing');
-  assert.ok(css.includes('.fin-balance-amount { font-size: 1.8rem; font-weight: 800; color: var(--accent-dark);'),
+  assert.ok(css.includes('.fin-balance-amount { font-size: var(--fs-2xl); font-weight: 800; color: var(--accent-dark);'),
     'finance balance joins the shared stat rhythm');
 });
 
