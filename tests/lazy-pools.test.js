@@ -16,3 +16,12 @@ test('pool loader resolves known pools only', async () => {
   const { loadPool } = await import('../src/data/pools.js');
   await assert.rejects(() => loadPool('nope'), /unknown pool/);
 });
+
+test('pool loader needs DOM for known pools, rejects unknown anywhere', async () => {
+  const { loadPool, poolURL } = await import('../src/data/pools.js');
+  await assert.rejects(() => loadPool('nope'), /unknown pool/);
+  await assert.rejects(() => loadPool('quran-verses'), /browser DOM/);
+  assert.match(poolURL('quran-verses'), /quran-verses\.js$/);
+  assert.match(poolURL('hadiths'), /hadiths\.js$/);
+  assert.throws(() => poolURL('nope'), /unknown pool/);
+});

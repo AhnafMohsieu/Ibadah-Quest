@@ -11,9 +11,13 @@ function loadSW() {
   const listeners = {};
   const fakeSelf = {
     location: { href: 'https://iq.test/', origin: 'https://iq.test' },
+    __PRECACHE: [],
     addEventListener: (type, fn) => { (listeners[type] = listeners[type] || []).push(fn); }
   };
-  vm.runInNewContext(src, { self: fakeSelf, URL }, { filename: 'sw.js' });
+  // Manifest-driven SW calls importScripts('./precache-manifest.js') at load;
+  // stub it like the vite-emitted manifest would (seeds self.__PRECACHE).
+  const importScripts = () => { fakeSelf.__PRECACHE = []; };
+  vm.runInNewContext(src, { self: fakeSelf, URL, importScripts }, { filename: 'sw.js' });
   return { helpers: fakeSelf.swHelpers, listeners };
 }
 
@@ -50,12 +54,10 @@ test('sw registers install, activate, fetch, and message handlers', () => {
   }
 });
 
-test('sw: PRECACHE_LIST contains core assets', () => {
+test('sw: manifest-driven precache wiring', () => {
   const swSource = fs.readFileSync(path.join(__dirname, '..', 'sw.js'), 'utf8');
-  assert.ok(swSource.includes("'index.html'"), 'should precache index.html');
-  assert.ok(swSource.includes("'offline.html'"), 'should precache offline.html');
-  assert.ok(swSource.includes("'core/xp.js'"), 'should precache core/xp.js');
-  assert.ok(swSource.includes("'core/actions.js'"), 'should precache core/actions.js');
+  assert.ok(swSource.includes("importScripts('./precache-manifest.js')"), 'should load the vite-emitted precache manifest');
+  assert.ok(swSource.includes('self.__PRECACHE'), 'install handler should precache the manifest list');
 });
 
 test('sw: CDN_CACHE is separate from core cache', () => {
@@ -68,12 +70,12 @@ test('sw: offline.html exists', () => {
   assert.ok(fs.existsSync(path.join(__dirname, '..', 'offline.html')), 'offline.html should exist');
 });
 
-test('sw: CACHE_NAME bumped to v51', () => {
+test('sw: CACHE_NAME tracks the precache manifest', () => {
   const swSource = fs.readFileSync(path.join(__dirname, '..', 'sw.js'), 'utf8');
-  assert.ok(swSource.includes('iq-cache-v51'), 'CACHE_NAME should be v51');
+  assert.ok(swSource.includes('iq-cache-manifest'), 'CACHE_NAME should be iq-cache-manifest');
 });
 
-test('sw: error-tap.js is precached', () => {
+test('sw: install handler precaches the manifest list', () => {
   const swSource = fs.readFileSync(path.join(__dirname, '..', 'sw.js'), 'utf8');
-  assert.ok(swSource.includes("'core/error-tap.js'"), 'PRECACHE_LIST must include core/error-tap.js');
+  assert.ok(swSource.includes('c.addAll(self.__PRECACHE)'), 'install handler must addAll self.__PRECACHE');
 });

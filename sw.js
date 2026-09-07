@@ -1,37 +1,11 @@
 (function() {
-  const CACHE_NAME = 'iq-cache-v51';
+  // Manifest-driven precache (precache-manifest.js is emitted by `vite build`).
+  const CACHE_NAME = 'iq-cache-manifest';
   const CDN_CACHE = 'iq-cdn-v1';
-
-  const PRECACHE_LIST = [
-    './',
-    'index.html',
-    'styles/main.css',
-    'core/xp.js',
-    'core/actions.js',
-    'core/dhikr.js',
-    'core/quests.js',
-    'core/shop.js',
-    'core/prayers.js',
-    'core/helpers.js',
-    'core/random.js',
-    'core/backup.js',
-    'core/recovery.js',
-    'core/storage.js',
-    'core/audio.js',
-    'core/themes.js',
-    'core/error-tap.js',
-    'core/content-cache.js',
-    'core/content.js',
-    'state/state.js',
-    'render/static.js',
-    'render/dynamic.js',
-    'render/tabs.js',
-    'render/prayers.js',
-    'render/calendar.js',
-    'data/panel-sections.js',
-    'data/tab-groups.js',
-    'offline.html'
-  ];
+  importScripts('./precache-manifest.js');
+  self.addEventListener('install', (event) => {
+    event.waitUntil(caches.open(CACHE_NAME).then((c) => c.addAll(self.__PRECACHE)).then(() => self.skipWaiting()));
+  });
 
   function cacheKey(urlString) {
     const url = new URL(urlString, self.location.href);
@@ -52,14 +26,6 @@
   if (typeof self === 'undefined' || typeof self.addEventListener !== 'function') return;
 
   self.swHelpers = { cacheKey, shouldCache, isSameOrigin, isCoreCache };
-
-  self.addEventListener('install', (event) => {
-    event.waitUntil(
-      caches.open(CACHE_NAME)
-        .then(cache => cache.addAll(PRECACHE_LIST))
-        .then(() => self.skipWaiting())
-    );
-  });
 
   self.addEventListener('activate', (event) => {
     event.waitUntil((async () => {

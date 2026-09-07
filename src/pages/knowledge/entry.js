@@ -8,6 +8,11 @@ const S = loadState();
 document.getElementById('shell').innerHTML = renderShell('knowledge');
 const main = document.getElementById('page');
 main.innerHTML = '<p>Loading library…</p>';
-const mod = await loadPool('quran-verses');
-main.innerHTML = `<p>Verses loaded: ${Object.keys(mod).length} exports.</p>`;
+try {
+  const data = await loadPool('quran-verses');
+  const count = Array.isArray(data) ? data.length : Object.keys(data || {}).length;
+  main.innerHTML = `<p>Verses loaded: ${count}.</p>`;
+} catch (err) {
+  main.innerHTML = `<p>Library failed to load. ${String((err && err.message) || err)}</p>`;
+}
 void S;
