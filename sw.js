@@ -8,7 +8,15 @@
   const CDN_CACHE = 'iq-cdn-v1';
   importScripts('./precache-manifest.js');
   self.addEventListener('install', (event) => {
-    event.waitUntil(caches.open(CACHE_NAME).then((c) => c.addAll(self.__PRECACHE)).then(() => self.skipWaiting()));
+    event.waitUntil(caches.open(CACHE_NAME).then(async (c) => {
+      try {
+        await c.addAll(self.__PRECACHE);
+      } catch (e) {
+        // addAll is atomic: one 404 fails the whole install. Fall back to
+        // per-URL adds so a single missing asset cannot break offline install.
+        for (const u of self.__PRECACHE) { try { await c.add(u); } catch (err) {} }
+      }
+    }).then(() => self.skipWaiting()));
   });
 
   function cacheKey(urlString) {

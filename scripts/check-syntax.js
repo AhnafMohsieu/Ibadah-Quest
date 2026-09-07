@@ -51,11 +51,13 @@ function checkModule(abs, rel) {
 function walk(dir) {
   for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
     const abs = path.join(dir, entry.name);
+    const rel = path.relative(root, abs).replace(/\\/g, '/');
     if (entry.isDirectory()) {
-      if (!EXCLUDED.has(entry.name)) walk(abs);
+      // Match on the top-level segment only, so a nested directory that
+      // happens to share a name (e.g. src/dist/) is still scanned.
+      if (!EXCLUDED.has(rel.split('/')[0])) walk(abs);
     } else if (entry.name.endsWith('.js')) {
       fileCount++;
-      const rel = path.relative(root, abs).replace(/\\/g, '/');
       if (isModuleFile(rel)) { checkModule(abs, rel); continue; }
       try {
         const code = fs.readFileSync(abs, 'utf8');
