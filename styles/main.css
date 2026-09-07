@@ -2826,13 +2826,38 @@ html[data-theme="emara"] .global-search { background: var(--card-bg); }
 /* -- Storage quota banner (reuses .offline-banner positioning) -- */
 .storage-banner { justify-content: space-between; background: #fef3c7; color: #78350f; }
 .storage-banner button { background: transparent; border: 0; font-size: 1.2rem; cursor: pointer; color: inherit; padding: 0 8px; }
-/* -- Fluid shell: one flexible layout for every device, no fixed breakpoints -- */
-/* The shell fills small screens edge-to-edge and fluidly caps on large ones. */
+/* -- Fluid shell: progressive container, full coverage on laptop/desktop -- */
+/* Mobile: edge-to-edge single column. Tablet: wider. Desktop: full-bleed
+   fluid up to a wide cap with body bg matched so no grey gutters show. */
 .app {
   width: 100%;
   max-width: min(62rem, 100%);
   padding-left: clamp(12px, 4vw, 28px);
   padding-right: clamp(12px, 4vw, 28px);
+}
+@media (min-width: 1024px) {
+  body { background: var(--bg); }
+  .app {
+    max-width: min(80rem, 100%);
+    padding-left: clamp(20px, 3vw, 40px);
+    padding-right: clamp(20px, 3vw, 40px);
+    border-left: none;
+    border-right: none;
+    box-shadow: none;
+  }
+  .top-bar {
+    margin-left: calc(-1 * clamp(20px, 3vw, 40px));
+    margin-right: calc(-1 * clamp(20px, 3vw, 40px));
+  }
+  .level-row { max-width: none; }
+  .xp-wrap { max-width: 420px; }
+  .global-search-wrap { max-width: 560px; }
+  .card-grid { grid-template-columns: repeat(auto-fill, minmax(min(100%, 10rem), 1fr)); gap: 12px; }
+  .tier2-tabs, .tier2-tabs.cat-chips, .tier3-tabs { grid-template-columns: repeat(auto-fit, minmax(min(100%, 9rem), 1fr)); }
+  .tab-content { max-width: none; }
+}
+@media (min-width: 1440px) {
+  .app { max-width: 80rem; }
 }
 /* Hero sections share whatever space exists: stacked on narrow screens, */
 /* side-by-side automatically when the container fits two columns. */

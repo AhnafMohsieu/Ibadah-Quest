@@ -9,7 +9,7 @@ Two tracks coexist. Legacy SPA: index.html + classic <script> IIFEs on window.* 
 - Maintain a live todo list (todowrite) while working; keep it updated as tasks start/finish.
 - Run `node --test` from the project root. All must pass (baseline 521 + track tests).
 - Syntax-check every JS file you touched: classic files `node --check <file>`; src/** ESM is covered by `node scripts/check-syntax.js`.
-- New track needs no manual `?v=` / `CACHE_NAME` bumps (hashed build assets + precache-manifest.js). Legacy track keeps the old discipline.
+- New track needs no manual `?v=` / `CACHE_NAME` bumps (hashed build assets + precache-manifest.js). Legacy track keeps the old `?v=` discipline; when precache-manifest.js changes, bump MANIFEST_REV in sw.js so browsers install the new worker.
 
 ## Critical contracts — legacy SPA (still binding for legacy files)
 

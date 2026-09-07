@@ -79,3 +79,8 @@ test('sw: install handler precaches the manifest list', () => {
   const swSource = fs.readFileSync(path.join(__dirname, '..', 'sw.js'), 'utf8');
   assert.ok(swSource.includes('c.addAll(self.__PRECACHE)'), 'install handler must addAll self.__PRECACHE');
 });
+
+test('sw: manifest revision present for cache invalidation', () => {
+  const swSource = fs.readFileSync(path.join(__dirname, '..', 'sw.js'), 'utf8');
+  assert.ok(swSource.includes('MANIFEST_REV'), 'sw.js must carry MANIFEST_REV (bump it whenever precache-manifest.js changes)');
+});
