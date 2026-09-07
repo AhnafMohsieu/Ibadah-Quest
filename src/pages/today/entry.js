@@ -2,10 +2,11 @@
 import '../../core/error-tap.js'; // FIRST import on every page — installs the error tap
 import { renderShell } from '../../shell/layout.js';
 import { loadState, saveState } from '../../core/storage.js';
+import { getTodayKey } from '../../core/state.js';
 import { renderToday, togglePrayer } from '../../render/prayers.js';
 
 const S = loadState();
-const dayKey = new Date().toISOString().slice(0, 10);
+const dayKey = getTodayKey();
 document.getElementById('shell').innerHTML = renderShell('today');
 const main = document.getElementById('page');
 function draw() { main.innerHTML = renderToday(S, dayKey); }

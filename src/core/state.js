@@ -2,6 +2,13 @@
 export const STATE_SCHEMA_VERSION = 2;
 export const PREFIX = 'iq9_user_';
 
+// Local-date key (YYYY-MM-DD), mirroring legacy today(). Never use
+// toISOString() (UTC) for log keys — it splits the day near midnight.
+export function getTodayKey(d) {
+  const d2 = d || new Date();
+  return d2.getFullYear() + '-' + String(d2.getMonth() + 1).padStart(2, '0') + '-' + String(d2.getDate()).padStart(2, '0');
+}
+
 export function freshState(todayKey) {
   return {
     log: { [todayKey]: { p: {}, d: {}, v: {} } },

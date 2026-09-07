@@ -12,6 +12,7 @@ test('all 5 pages exist with module entries and shell nav', () => {
     const entry = fs.readFileSync(path.join(__dirname, '..', `src/pages/${p}/entry.js`), 'utf8');
     assert.match(entry, new RegExp("renderShell\\(['\"]" + p + "['\"]\\)"));
     assert.match(entry, /import ['"]\.\.\/\.\.\/core\/error-tap\.js['"]/);
+    assert.ok(entry.indexOf('error-tap') < entry.indexOf('renderShell'), p + ': error-tap must be the FIRST import');
   }
   const sw = fs.readFileSync(path.join(__dirname, '..', 'sw.js'), 'utf8');
   assert.match(sw, /precache-manifest|PRECACHE/);

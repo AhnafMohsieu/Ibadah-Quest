@@ -15,12 +15,17 @@ export function renderToday(S, dayKey) {
     return `<button data-prayer="${id}" aria-pressed="${done}">${escapeHTML(label)}${done ? ' ✓' : ''}</button>`;
   }).join('');
   const note = day.p && day.p.note ? `<p>${escapeHTML(day.p.note)}</p>` : '';
-  return `<section><h2>Today</h2><div>${items}</div>${note}<p>XP: ${S.xp} · Level ${S.lv}</p></section>`;
+  const xp = Number(S.xp) || 0;
+  const lv = Number(S.lv) || 1;
+  return `<section><h2>Today</h2><div>${items}</div>${note}<p>XP: ${xp} · Level ${lv}</p></section>`;
 }
 
 export function togglePrayer(S, dayKey, id) {
+  if (!PRAYERS.includes(id)) return { done: false };
+  if (!S.log || typeof S.log !== 'object') S.log = {};
   if (!S.log[dayKey]) S.log[dayKey] = { p: {}, d: {}, v: {} };
   const day = S.log[dayKey];
+  if (!day.p || typeof day.p !== 'object') day.p = {};
   const done = !day.p[id];
   if (done) { day.p[id] = true; applyXpDelta(S, 10, { skipLevelToast: true }); }
   else { delete day.p[id]; applyXpDelta(S, -10, { skipLevelToast: true }); }

@@ -80,6 +80,29 @@ test('sw: install handler precaches the manifest list', () => {
   assert.ok(swSource.includes('c.addAll(self.__PRECACHE)'), 'install handler must addAll self.__PRECACHE');
 });
 
+test('sw: install precaches a non-empty manifest via cache.addAll', async () => {
+  const listeners = {};
+  const added = {};
+  const fakeSelf = {
+    location: { href: 'https://iq.test/', origin: 'https://iq.test' },
+    __PRECACHE: ['index.html', 'offline.html'],
+    skipWaiting: () => {},
+    addEventListener: (type, fn) => { (listeners[type] = listeners[type] || []).push(fn); }
+  };
+  const fakeCaches = {
+    open: async (name) => ({
+      addAll: async (list) => { added[name] = list; }
+    })
+  };
+  const importScripts = () => {};
+  vm.runInNewContext(src, { self: fakeSelf, URL, caches: fakeCaches, importScripts }, { filename: 'sw.js' });
+  assert.ok(listeners.install && listeners.install.length === 1, 'install handler missing');
+  let waited = null;
+  await listeners.install[0]({ waitUntil: (p) => { waited = p; } });
+  await waited;
+  assert.deepEqual(added['iq-cache-manifest'], ['index.html', 'offline.html']);
+});
+
 test('sw: manifest revision present for cache invalidation', () => {
   const swSource = fs.readFileSync(path.join(__dirname, '..', 'sw.js'), 'utf8');
   assert.ok(swSource.includes('MANIFEST_REV'), 'sw.js must carry MANIFEST_REV (bump it whenever precache-manifest.js changes)');
