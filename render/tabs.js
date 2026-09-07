@@ -78,7 +78,7 @@
       _activeCategoryId = null;
       container.classList.add('cat-chips');
       container.innerHTML = group.map(function(c, i) {
-        return '<button class="cat-chip ' + (i === 0 ? 'active' : '') + '" onclick="window.selectCategory(\'' + c.id + '\', this)"><span>' + window.iqIcon(c.icon || c.id) + '</span> ' + c.label + '</button>';
+        return `<button class="cat-chip ${i === 0 ? 'active' : ''}" onclick="window.selectCategory('${c.id}', this)"><span>${window.iqIcon(c.icon || c.id)}</span> ${t(c.label)}</button>`;
       }).join('');
       if (tier3Wrap) tier3Wrap.style.display = '';
       var firstCat = group[0];
@@ -87,7 +87,7 @@
     } else {
       container.classList.remove('cat-chips');
       container.innerHTML = group.map(function(p, i) {
-        return '<button data-tab="' + p.id + '" class="t2-btn ' + (i === 0 ? 'active' : '') + '" onclick="window.activateTab(\'' + p.id + '\', this)"><span>' + window.iqIcon(p.icon || p.id) + '</span> ' + p.label + '</button>';
+        return `<button data-tab="${p.id}" class="t2-btn ${i === 0 ? 'active' : ''}" onclick="window.activateTab('${p.id}', this)"><span>${window.iqIcon(p.icon || p.id)}</span> ${t(p.label)}</button>`;
       }).join('');
       if (tier3Wrap) tier3Wrap.style.display = 'none';
       if (group.length > 0) activateTab(group[0].id, container.firstElementChild);
@@ -110,7 +110,7 @@
     if (!grid) return;
     grid.dataset.cat = cat.id;
     grid.innerHTML = cat.tabs.map(function(p, i) {
-      return '<button data-tab="' + p.id + '" class="t2-btn ' + (i === 0 ? 'active' : '') + '" onclick="window.activateTab(\'' + p.id + '\', this)"><span>' + window.iqIcon(p.icon || p.id) + '</span> ' + p.label + '</button>';
+      return `<button data-tab="${p.id}" class="t2-btn ${i === 0 ? 'active' : ''}" onclick="window.activateTab('${p.id}', this)"><span>${window.iqIcon(p.icon || p.id)}</span> ${t(p.label)}</button>`;
     }).join('');
     if (cat.tabs.length > 0) activateTab(cat.tabs[0].id, grid.firstElementChild);
   }

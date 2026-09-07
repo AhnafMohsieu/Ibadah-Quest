@@ -188,10 +188,12 @@ test('theme families have animation transitions in CSS', () => {
   assert.ok(css.includes('var(--transition)') || css.includes('transition:'), 'transition token missing');
 });
 
-test('FEATURE_ICONS are populated with iqIcon output for all 9 features', () => {
+test('FEATURE_ICONS are populated with emoji strings for all features', () => {
   for (const f of ['garden','lantern','keys','mosque','boat','heart','armor','ramadan','laylat']) {
-    assert.ok(spiritual.includes(`iqIcon('`), 'data.js must call iqIcon() for FEATURE_ICONS');
-    assert.ok(spiritual.includes(`${f}: iqIcon(`), `missing populated icon for ${f}`);
+    assert.ok(spiritual.includes(`${f}: `), `missing icon key for ${f}`);
+    const iconBlock = spiritual.slice(spiritual.indexOf(`${f}: `), spiritual.indexOf(`${f}: `) + 40);
+    assert.ok(!iconBlock.includes("iqIcon("), `FEATURE_ICONS should use emoji strings, not iqIcon() — ${f}`);
+    assert.ok(!iconBlock.includes("''"), `icon must not be empty string — ${f}`);
   }
 });
 
@@ -202,13 +204,13 @@ test('FEATURE_STAGES includes heart with 7 stages', () => {
   assert.strictEqual(names.length, 7);
 });
 
-test('growth tab + settings render icons through iqIcon, no mojibake separator', () => {
-  assert.ok(spiritualGrowth.indexOf('iqIcon(progress.icon') > -1,
-    'growth tab stage emoji must be wrapped in iqIcon()');
+test('growth tab + settings render emoji icons, no mojibake separator', () => {
+  assert.ok(spiritualGrowth.indexOf('progress.icon') > -1 || spiritualGrowth.indexOf('FEATURE_ICONS') > -1,
+    'growth tab stage emoji must use progress.icon or FEATURE_ICONS');
   assert.ok(!spiritualGrowth.includes(' ? Stage'),
     'growth tab stage label must not contain mojibake " ? "');
-  assert.ok(spiritualGrowth.indexOf('iqIcon(progress.icon || f)') > -1,
-    'growth settings icon fallback must be wrapped in iqIcon()');
+  assert.ok(spiritualGrowth.indexOf('FEATURE_ICONS[f]') > -1 || spiritualGrowth.indexOf('progress.icon') > -1,
+    'growth settings icon fallback must use FEATURE_ICONS or progress.icon');
 });
 
 test('index.html declares armor/heart growth areas and loads their scripts', () => {

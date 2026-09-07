@@ -18,18 +18,6 @@
     return settings.visible.includes(featureName);
   }
   
-  const RENDERER_MAP = {
-    garden: 'renderGarden',
-    lantern: 'renderLantern',
-    boat: 'renderBoat',
-    armor: 'renderArmor',
-    heart: 'renderHeartRefinement',
-    keys: 'renderKeys',
-    mosque: 'renderMosque',
-    ramadan: 'renderRamadan',
-    laylat: 'renderLaylat'
-  };
-
   function toggleFeature(featureName) {
     const settings = getSettings();
     const idx = settings.visible.indexOf(featureName);
@@ -39,10 +27,7 @@
       settings.visible.push(featureName);
     }
     saveSettings(settings);
-    const fnName = RENDERER_MAP[featureName];
-    if (fnName && typeof window[fnName] === 'function') {
-      try { window[fnName](); } catch(e) { console.warn('Re-render ' + featureName + ' failed:', e.message); }
-    }
+    renderGrowthSettings();
   }
   
   function renderGrowthSettings() {
@@ -52,14 +37,14 @@
     const settings = getSettings();
     const features = Object.keys(FEATURE_STAGES);
     
-    let h = '<div class="section-title">' + iqIcon('sprout') + ' Spiritual Growth Features</div>';
+    let h = '<div class="section-title">🌱 Spiritual Growth Features</div>';
     h += '<div class="growth-settings">';
     
     features.forEach(f => {
       const visible = settings.visible.includes(f);
       const stages = FEATURE_STAGES[f];
       const progress = SpiritualGrowth.getProgress(f);
-      const icon = SpiritualGrowth.FEATURE_ICONS[f] || iqIcon(progress.icon || f);
+      const icon = SpiritualGrowth.FEATURE_ICONS[f] || progress.icon;
       const label = SpiritualGrowth.FEATURE_LABELS[f] || f;
 
       h += `<div class="growth-setting-item ${visible ? 'active' : ''}" onclick="SpiritualGrowth.toggle('${f}')">
@@ -68,7 +53,7 @@
           <div class="growth-setting-name">${label}</div>
           <div class="growth-setting-stage">${progress.name} (${progress.stage}/${progress.totalStages})</div>
         </div>
-        <div class="growth-setting-toggle">${visible ? iqIcon('eye') : iqIcon('lock')}</div>
+        <div class="growth-setting-toggle">${visible ? '👁️' : '🙈'}</div>
       </div>`;
     });
     
@@ -78,7 +63,7 @@
   
   // Add to Profile tab
   if (TAB_GROUPS.profile_main) {
-    TAB_GROUPS.profile_main.push({ id: 'growth', icon: 'sprout', label: 'Growth' });
+    TAB_GROUPS.profile_main.push({ id: 'growth', icon: '🌱', label: 'Growth' });
   }
 
   function renderSpiritualGrowthTab() {
@@ -96,7 +81,7 @@
       const progress = SpiritualGrowth.getProgress(f);
       const icon = SpiritualGrowth.FEATURE_ICONS[f] || '';
       const label = SpiritualGrowth.FEATURE_LABELS[f] || f;
-      const stageEmoji = iqIcon(progress.icon || f);
+      const stageEmoji = progress.icon || '';
       const pct = Math.round(progress.progress * 100);
       const progressText = progress.xpForNext
         ? `${progress.xp.toLocaleString()} / ${progress.xpForNext.toLocaleString()} XP`

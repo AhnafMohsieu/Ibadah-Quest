@@ -1,211 +1,195 @@
-const TAB_GROUPS = {
+﻿const TAB_GROUPS = {
 
-  // -- DAILY (categorized — core habit loop, always visible) --
+  // ── DAILY (flat — core habit loop, always visible) ──
   ibadah: [
-    {
-      id: 'core', label: 'Core', icon: 'home',
-      tabs: [
-        { id: 'today', label: 'Today' },
-        { id: 'timer', label: 'Prayer Times' },
-        { id: 'quests', label: 'Quests' },
-        { id: 'journeys', label: 'Journeys' }
-      ]
-    },
-    {
-      id: 'adhkar', label: 'Adhkar',
-      tabs: [
-        { id: 'morning', label: 'Morning' },
-        { id: 'evening', label: 'Evening' },
-        { id: 'dhikr', label: 'Remembrance' },
-        { id: 'situational', label: 'Situational' }
-      ]
-    },
-    {
-      id: 'worship', label: 'Guide', icon: 'mosque',
-      tabs: [
-        { id: 'wudu', label: 'Ablution' },
-        { id: 'salah', label: 'Prayer Guide' },
-        { id: 'sunnahs', label: 'Prophetic Ways' },
-        { id: 'extradeeds', label: 'Extra Deeds' },
-        { id: 'volprayers', label: 'Vol. Prayers' }
-      ]
-    },
-    {
-      id: 'tracking', label: 'Self-Tracking', icon: 'bar-chart-3',
-      tabs: [
-        { id: 'fasting', label: 'Fasting' },
-        { id: 'healthlog', label: 'Health' },
-        { id: 'finance', label: 'Finance' },
-        { id: 'memorization', label: 'Memorization' },
-        { id: 'gratitude', label: 'Gratitude' },
-        { id: 'charity', label: 'Charity' },
-        { id: 'zakatcalc', label: 'Zakat' }
-      ]
-    }
+    { id: 'today',      icon: '🕌', label: 'Today' },
+    { id: 'timer',      icon: '⏳', label: 'Prayer Times' },
+    { id: 'quests',     icon: '🎯', label: 'Quests' },
+    { id: 'journeys', icon: '🌱', label: 'Journeys' },
+    { id: 'morning',    icon: '🌞', label: 'Morning' },
+    { id: 'evening',    icon: '🌆', label: 'Evening' },
+    { id: 'dhikr',      icon: '📿', label: 'Remembrance' },
+    { id: 'wudu',       icon: '💧', label: 'Ablution' },
+    { id: 'salah',      icon: '🛐', label: 'Prayer Guide' },
+    { id: 'fasting',    icon: '🌙', label: 'Fasting' },
+    { id: 'healthlog', icon: '🍎', label: 'Health' },
+    { id: 'finance',   icon: '💰', label: 'Finance' },
+    { id: 'situational', icon: '💚', label: 'Situational' }
   ],
 
-  // -- KNOWLEDGE (categorized � religious learning) --
+  // ── KNOWLEDGE (categorized — religious learning) ──
   knowledge: [
     {
-      id: 'quran_sunnah', label: "Qur'an & Sunnah",
+      id: 'quran_sunnah', icon: '📖', label: "Qur'an & Sunnah",
       tabs: [
-        { id: 'quran', label: 'Quran' },
-        { id: 'hadith', label: 'Hadith' },
-        { id: 'tafsir', label: 'Interpretation' },
-        { id: 'seerah', label: 'Biography' }
+        { id: 'quran',       icon: '📖', label: 'Quran' },
+        { id: 'tafsir',      icon: '📜', label: 'Interpretation' },
+        { id: 'hadith',      icon: '💭', label: 'Hadith' },
+        { id: 'sunnahs',     icon: '☀️', label: 'Prophetic Ways' },
+        { id: 'memorization', icon: '📗', label: 'Memorization' }
       ]
     },
     {
-      id: 'fiqh', label: 'Fiqh & Rulings',
+      id: 'fiqh', icon: '⚖️', label: 'Fiqh & Rulings',
       tabs: [
-        { id: 'fiqh', label: 'Jurisprudence' },
-        { id: 'purification', label: 'Purification' },
-        { id: 'salahrules', label: 'Salah' },
-        { id: 'zakatrules', label: 'Zakat' },
-        { id: 'sawmrules', label: 'Sawm' },
-        { id: 'hajjrules', label: 'Hajj' },
-        { id: 'trade', label: 'Trade' },
-        { id: 'inheritance', label: 'Inheritance' },
-        { id: 'oaths', label: 'Oaths' }
+        { id: 'fiqh',        icon: '⚖️', label: 'Jurisprudence' },
+        { id: 'purification', icon: '💧', label: 'Purification' },
+        { id: 'salahrules',  icon: '🕌', label: 'Salah' },
+        { id: 'zakatrules',  icon: '🪙', label: 'Zakat' },
+        { id: 'sawmrules',   icon: '🌙', label: 'Sawm' },
+        { id: 'hajjrules',   icon: '🕋', label: 'Hajj' },
+        { id: 'trade',       icon: '⚖️', label: 'Trade' },
+        { id: 'inheritance', icon: '📜', label: 'Inheritance' },
+        { id: 'oaths',       icon: '✋', label: 'Oaths' }
       ]
     },
     {
-      id: 'heart', label: 'Heart & Soul',
+      id: 'creed', icon: '🔤', label: 'Arabic',
       tabs: [
-        { id: 'aqeedah', label: 'Aqeedah' },
-        { id: 'heart', label: 'Heart Diseases' },
-        { id: 'ikhlas', label: 'Sincerity' },
-        { id: 'tawakkul', label: 'Reliance' },
-        { id: 'manners', label: 'Manners' },
-        { id: 'patience', label: 'Patience' },
-        { id: 'sins', label: 'Major Sins' },
-        { id: 'repentance', label: 'Repentance' },
-        { id: 'zuhd', label: 'Asceticism' },
-        { id: 'inspirations', label: 'Inspirations' },
-        { id: 'stories', label: 'Stories' },
-        { id: 'sufism', label: 'Sufism' },
-        { id: 'tazkiyah', label: 'Tazkiyah' },
-        { id: 'fear', label: 'Fear of Allah' },
-        { id: 'hope', label: 'Hope' },
-        { id: 'loveofallah', label: 'Love of Allah' },
-        { id: 'contentment', label: 'Contentment' },
-        { id: 'reflection', label: 'Reflection' },
-        { id: 'dreams', label: 'Dreams' }
+        { id: 'arabic',      icon: '🔤', label: 'Arabic' }
       ]
     },
     {
-      id: 'society', label: 'Dealings & Society',
+      id: 'heart', icon: '🤍', label: 'Heart & Soul',
       tabs: [
-        { id: 'family', label: 'Family' },
-        { id: 'marriage', label: 'Marriage' },
-        { id: 'parenting', label: 'Parenting' },
-        { id: 'work', label: 'Career' },
-        { id: 'neighbors', label: 'Neighbors' },
-        { id: 'community', label: 'Community' },
-        { id: 'ummah', label: 'Global Nation' },
-        { id: 'dawah', label: 'Invitation' },
-        { id: 'punishments', label: 'Justice' },
-        { id: 'brotherhood', label: 'Brotherhood' },
-        { id: 'sisterhood', label: 'Sisterhood' },
-        { id: 'orphans2', label: 'Orphans' },
-        { id: 'elderly', label: 'Elderly' },
-        { id: 'disabled', label: 'Disabled' },
-        { id: 'antiracism', label: 'Anti-Racism' },
-        { id: 'poverty', label: 'Poverty' },
-        { id: 'volunteering', label: 'Volunteering' }
+        { id: 'heart',       icon: '🤍', label: 'Heart Diseases' },
+        { id: 'ikhlas',      icon: '✨', label: 'Sincerity' },
+        { id: 'tawakkul',    icon: '🌿', label: 'Reliance' },
+        { id: 'manners',     icon: '🤝', label: 'Manners' },
+        { id: 'patience',    icon: '🏔️', label: 'Patience & Gratitude' },
+        { id: 'gratitude',   icon: '🙌', label: 'Gratitude' },
+        { id: 'sins',        icon: '🚫', label: 'Major Sins' },
+        { id: 'repentance',  icon: '💧', label: 'Repentance' },
+        { id: 'zuhd',        icon: '🌾', label: 'Asceticism' },
+        { id: 'inspirations', icon: '💬', label: 'Inspirations' },
+        { id: 'sufism',      icon: '🤍', label: 'Sufism' },
+        { id: 'tazkiyah',    icon: '✨', label: 'Tazkiyah' },
+        { id: 'fear',        icon: '😨', label: 'Fear of Allah' },
+        { id: 'hope',        icon: '🕊️', label: 'Hope' },
+        { id: 'loveofallah', icon: '❤️', label: 'Love of Allah' },
+        { id: 'contentment', icon: '😌', label: 'Contentment' },
+        { id: 'reflection',  icon: '🪞', label: 'Reflection' }
       ]
     },
     {
-      id: 'life', label: 'Life & Modern',
+      id: 'society', icon: '🌍', label: 'Dealings & Society',
       tabs: [
-        { id: 'health', label: 'Health' },
-        { id: 'tibb', label: 'Prophetic Medicine' },
-        { id: 'food', label: 'Halal Food' },
-        { id: 'environment', label: 'Environment' },
-        { id: 'travel', label: 'Travel' },
-        { id: 'youth', label: 'Youth' },
-        { id: 'tech', label: 'Tech & Islam' },
-        { id: 'technology', label: 'Technology' },
-        { id: 'socialmedia', label: 'Social Media' },
-        { id: 'ethics', label: 'Ethics' },
-        { id: 'bioethics', label: 'Bioethics' },
-        { id: 'modfinance', label: 'Mod. Finance' },
-        { id: 'politics', label: 'Politics' },
-        { id: 'green', label: 'Green Islam' },
-        { id: 'mentalhealth', label: 'Mental Health' },
-        { id: 'education', label: 'Education' },
-        { id: 'science', label: 'Science' }
+        { id: 'family',      icon: '👨‍👩‍👧‍👦', label: 'Family' },
+        { id: 'marriage',    icon: '💍', label: 'Marriage' },
+        { id: 'parenting',   icon: '👶', label: 'Parenting' },
+        { id: 'charity',     icon: '🤲', label: 'Charity' },
+        { id: 'work',        icon: '💼', label: 'Career' },
+        { id: 'neighbors',   icon: '🏡', label: 'Neighbors' },
+        { id: 'community',   icon: '🏘️', label: 'Community' },
+        { id: 'ummah',       icon: '🌍', label: 'Global Nation' },
+        { id: 'dawah',       icon: '📢', label: 'Invitation' },
+        { id: 'punishments', icon: '⚖️', label: 'Justice' },
+        { id: 'brotherhood', icon: '🤝', label: 'Brotherhood' },
+        { id: 'sisterhood',  icon: '🌸', label: 'Sisterhood' },
+        { id: 'orphans2',    icon: '🧸', label: 'Orphans' },
+        { id: 'elderly',     icon: '🧓', label: 'Elderly' },
+        { id: 'disabled',    icon: '♿', label: 'Disabled' },
+        { id: 'antiracism',  icon: '🌍', label: 'Anti-Racism' },
+        { id: 'poverty',     icon: '🍞', label: 'Poverty' },
+        { id: 'volunteering', icon: '✋', label: 'Volunteering' }
       ]
     },
     {
-      id: 'hereafter', label: 'Hereafter',
+      id: 'life', icon: '🌱', label: 'Life & Modern',
       tabs: [
-        { id: 'akhirah', label: 'Hereafter' },
-        { id: 'jannah', label: 'Paradise' },
-        { id: 'jahannam', label: 'Hellfire' },
-        { id: 'grave', label: 'The Grave' },
-        { id: 'signs', label: 'Signs of Qiyamah' }
+        { id: 'health',      icon: '🍎', label: 'Health' },
+        { id: 'tibb',        icon: '🌿', label: 'Prophetic Medicine' },
+        { id: 'food',        icon: '🍽️', label: 'Halal Food' },
+        { id: 'environment', icon: '🌱', label: 'Environment' },
+        { id: 'travel',      icon: '✈️', label: 'Travel' },
+        { id: 'youth',       icon: '🎓', label: 'Youth' },
+        { id: 'tech',        icon: '📱', label: 'Tech & Islam' },
+        { id: 'technology',  icon: '📱', label: 'Technology' },
+        { id: 'socialmedia', icon: '🌐', label: 'Social Media' },
+        { id: 'ethics',      icon: '🤝', label: 'Ethics' },
+        { id: 'bioethics',   icon: '🧬', label: 'Bioethics' },
+        { id: 'modfinance',  icon: '💳', label: 'Mod. Finance' },
+        { id: 'politics',    icon: '🏛️', label: 'Politics' },
+        { id: 'green',       icon: '🌱', label: 'Green Islam' },
+        { id: 'mentalhealth', icon: '🧠', label: 'Mental Health' },
+        { id: 'education',   icon: '📚', label: 'Education' }
+      ]
+    },
+    {
+      id: 'history', icon: '📜', label: 'History & Seerah',
+      tabs: [
+        { id: 'seerah',       icon: '🐪', label: 'Biography' },
+        { id: 'sahaba',       icon: '⭐', label: 'Companions' },
+        { id: 'prophets',     icon: '📜', label: 'Prophets' },
+        { id: 'women',        icon: '🧕', label: 'Great Women' },
+        { id: 'stories',      icon: '📚', label: 'Stories' },
+        { id: 'battles',      icon: '🗡️', label: 'Battles' },
+        { id: 'science',      icon: '🔭', label: 'Science' }
+      ]
+    },
+    {
+      id: 'hereafter', icon: '🌌', label: 'Hereafter',
+      tabs: [
+        { id: 'akhirah',  icon: '🌌', label: 'Hereafter' },
+        { id: 'jannah',   icon: '🌴', label: 'Paradise' },
+        { id: 'jahannam', icon: '🔥', label: 'Hellfire' },
+        { id: 'grave',    icon: '🪦', label: 'The Grave' },
+        { id: 'signs',    icon: '🔮', label: 'Signs of Qiyamah' },
+        { id: 'hajj',     icon: '🕋', label: 'Pilgrimage' },
+        { id: 'dreams',   icon: '🌙', label: 'Islamic Dreams' }
       ]
     }
   ],
 
-  names_main: [
-    { id: 'allah_names', label: "Allah's Names" },
-    { id: 'prophets', label: 'Prophets' },
-    { id: 'scholars_names', label: 'Great Scholars' },
-    { id: 'sahaba', label: 'Companions' },
-    { id: 'women', label: 'Great Women' }
-  ],
-
+  // ── PROFILE ──
   profile_main: [
-    { id: 'profile', icon: 'user', label: 'Profile' },
-    { id: 'trophies', icon: 'trophy', label: 'Trophies' },
-    { id: 'progress', icon: 'bar-chart-3', label: 'Progress' },
-    { id: 'stats', icon: 'trending-up', label: 'Analytics' },
-    { id: 'rewards', icon: 'gift', label: 'Rewards' }
+    { id: 'profile', icon: '👤', label: 'Profile' },
+    { id: 'trophies', icon: '🏆', label: 'Trophies' },
+    { id: 'progress', icon: '📊', label: 'Progress' },
+    { id: 'stats', icon: '📈', label: 'Analytics' },
+    { id: 'rewards', icon: '🎁', label: 'Rewards' }
   ],
 
-  // -- LIBRARY (categorized -- reference shelves) --
+  // ── LIBRARY (categorized — reference shelves) ──
   library: [
     {
-      id: 'dynasties', label: 'Dynasties & Battles',
+      id: 'dynasties', icon: '🏛️', label: 'Dynasties',
       tabs: [
-        { id: 'umayyads', label: 'Umayyads' }, { id: 'abbasids', label: 'Abbasids' }, { id: 'andalus', label: 'Andalus' }, { id: 'ottomans', label: 'Ottomans' },
-        { id: 'mamluks', label: 'Mamluks' }, { id: 'seljuks', label: 'Seljuks' }, { id: 'fatimids', label: 'Fatimids' }, { id: 'ayyubids', label: 'Ayyubids' },
-        { id: 'modernhist', label: 'Modern Hist.' }, { id: 'ancientprophets', label: 'Ancient' }, { id: 'battles', label: 'Battles' }, { id: 'civilisation', label: 'Civilisation', icon: 'landmark' }
+        { id: 'umayyads', icon: '🏛️', label: 'Umayyads' }, { id: 'abbasids', icon: '📜', label: 'Abbasids' }, { id: 'andalus', icon: '🏰', label: 'Andalus' }, { id: 'ottomans', icon: '🕌', label: 'Ottomans' },
+        { id: 'mamluks', icon: '⚔️', label: 'Mamluks' }, { id: 'seljuks', icon: '🏇', label: 'Seljuks' }, { id: 'fatimids', icon: '🌙', label: 'Fatimids' }, { id: 'ayyubids', icon: '🛡️', label: 'Ayyubids' },
+        { id: 'modernhist', icon: '🌍', label: 'Modern Hist.' }, { id: 'ancientprophets', icon: '⏳', label: 'Ancient' }
       ]
     },
     {
-      id: 'cities', label: 'Cities & Lands',
+      id: 'cities', icon: '🗺️', label: 'Cities & Lands',
       tabs: [
-        { id: 'mecca', label: 'Mecca' }, { id: 'medina', label: 'Medina' }, { id: 'jerusalem', label: 'Jerusalem' }, { id: 'damascus', label: 'Damascus' },
-        { id: 'baghdad', label: 'Baghdad' }, { id: 'cairo', label: 'Cairo' }, { id: 'cordoba', label: 'Cordoba' }, { id: 'istanbul', label: 'Istanbul' },
-        { id: 'bukhara', label: 'Bukhara' }, { id: 'samarkand', label: 'Samarkand' }
+        { id: 'mecca', icon: '🕋', label: 'Mecca' }, { id: 'medina', icon: '🕌', label: 'Medina' }, { id: 'jerusalem', icon: '🕌', label: 'Jerusalem' }, { id: 'damascus', icon: '🏛️', label: 'Damascus' },
+        { id: 'baghdad', icon: '📜', label: 'Baghdad' }, { id: 'cairo', icon: '🏛️', label: 'Cairo' }, { id: 'cordoba', icon: '🏰', label: 'Cordoba' }, { id: 'istanbul', icon: '🕌', label: 'Istanbul' },
+        { id: 'bukhara', icon: '🕌', label: 'Bukhara' }, { id: 'samarkand', icon: '🗺️', label: 'Samarkand' }
       ]
     },
     {
-      id: 'arts', label: 'Arts & Crafts',
+      id: 'arts', icon: '🎨', label: 'Arts & Crafts',
       tabs: [
-        { id: 'calligraphy', label: 'Calligraphy' }, { id: 'architecture', label: 'Architecture' }, { id: 'geometry', label: 'Geometry' }, { id: 'poetryart', label: 'Poetry' },
-        { id: 'literature', label: 'Literature' }, { id: 'nasheeds', label: 'Nasheeds' }, { id: 'illumination', label: 'Illumination' }, { id: 'textiles', label: 'Textiles' },
-        { id: 'ceramics', label: 'Ceramics' }, { id: 'woodwork', label: 'Woodwork' }
+        { id: 'calligraphy', icon: '🖋️', label: 'Calligraphy' }, { id: 'architecture', icon: '🏛️', label: 'Architecture' }, { id: 'geometry', icon: '💠', label: 'Geometry' }, { id: 'poetryart', icon: '📜', label: 'Poetry' },
+        { id: 'literature', icon: '📚', label: 'Literature' }, { id: 'nasheeds', icon: '🎵', label: 'Nasheeds' }, { id: 'illumination', icon: '✨', label: 'Illumination' }, { id: 'textiles', icon: '🧵', label: 'Textiles' },
+        { id: 'ceramics', icon: '🏺', label: 'Ceramics' }, { id: 'woodwork', icon: '🪵', label: 'Woodwork' }
       ]
     },
     {
-      id: 'arabic_lang', label: 'Arabic Language',
+      id: 'arabic_lang', icon: '🔤', label: 'Arabic Language',
       tabs: [
-        { id: 'arabic', label: 'Alphabet' },
-        { id: 'arabicgrammar', label: 'Grammar' }, { id: 'vocab', label: 'Vocab' }, { id: 'rhetoric', label: 'Rhetoric' }, { id: 'morphology', label: 'Morphology' },
-        { id: 'pronunciation', label: 'Tajweed' }, { id: 'poetry', label: 'Poetry' }, { id: 'proverbs', label: 'Proverbs' }, { id: 'etymology', label: 'Etymology' },
-        { id: 'dialects', label: 'Dialects' }, { id: 'scripts', label: 'Scripts' }
+        { id: 'arabicgrammar', icon: '📖', label: 'Grammar' }, { id: 'vocab', icon: '🔤', label: 'Vocab' }, { id: 'rhetoric', icon: '🗣️', label: 'Rhetoric' }, { id: 'morphology', icon: '🧩', label: 'Morphology' },
+        { id: 'pronunciation', icon: '🎙️', label: 'Tajweed' }, { id: 'poetry', icon: '📜', label: 'Poetry' }, { id: 'proverbs', icon: '💡', label: 'Proverbs' }, { id: 'etymology', icon: '🔍', label: 'Etymology' },
+        { id: 'dialects', icon: '🌍', label: 'Dialects' }, { id: 'scripts', icon: '✍️', label: 'Scripts' }
       ]
     },
     {
-      id: 'philosophy', label: 'Philosophy & Thought',
+      id: 'philosophy', icon: '🧠', label: 'Philosophy & Thought',
       tabs: [
-        { id: 'epistemology', label: 'Epistemology' }, { id: 'ontology', label: 'Ontology' }, { id: 'logic', label: 'Logic' }, { id: 'kalam', label: 'Kalam' },
-        { id: 'reason', label: 'Reason' }, { id: 'freewill', label: 'Free Will' }, { id: 'problemofevil', label: 'Prob of Evil' },
-        { id: 'prophethood', label: 'Prophethood' }, { id: 'existence', label: 'Existence' }
+        { id: 'epistemology', icon: '🧠', label: 'Epistemology' }, { id: 'ontology', icon: '🌌', label: 'Ontology' }, { id: 'logic', icon: '🧩', label: 'Logic' }, { id: 'kalam', icon: '🗣️', label: 'Kalam' },
+        { id: 'reason', icon: '💡', label: 'Reason' }, { id: 'freewill', icon: '⚖️', label: 'Free Will' }, { id: 'problemofevil', icon: '🌑', label: 'Prob of Evil' },
+        { id: 'prophethood', icon: '📜', label: 'Prophethood' }, { id: 'existence', icon: '✨', label: 'Existence' }
       ]
     }
   ]
