@@ -732,3 +732,10 @@ test('interpretation tab mounts the tafsir browser', () => {
   assert.ok(st.includes('tafsirLookup:{surah:1,ayah:1}'),
     'freshState must carry the lookup');
 });
+
+test('MPA track: all 5 pages reference module entries', () => {
+  for (const p of ['today', 'ibadah', 'knowledge', 'library', 'profile']) {
+    const page = fs.readFileSync(path.join(root, 'src', 'pages', p, p + '.html'), 'utf8');
+    assert.ok(page.includes('type="module"'), p + ' must load its entry as a module');
+  }
+});
