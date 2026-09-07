@@ -83,3 +83,6 @@ export function installErrorTap() {
   });
   w.addEventListener('unhandledrejection', onUnhandledRejection);
 }
+
+// Auto-install in browsers; Node imports stay side-effect-free.
+if (typeof window !== 'undefined' && typeof window.addEventListener === 'function') installErrorTap();

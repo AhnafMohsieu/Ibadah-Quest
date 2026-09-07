@@ -16,3 +16,8 @@ test('all 5 pages exist with module entries and shell nav', () => {
   const sw = fs.readFileSync(path.join(__dirname, '..', 'sw.js'), 'utf8');
   assert.match(sw, /precache-manifest|PRECACHE/);
 });
+
+test('error-tap auto-installs in browsers', () => {
+  const tap = fs.readFileSync(path.join(__dirname, '..', 'src/core/error-tap.js'), 'utf8');
+  assert.match(tap, /if \(typeof window !== 'undefined' && typeof window\.addEventListener === 'function'\) installErrorTap\(\);/);
+});

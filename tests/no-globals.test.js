@@ -15,6 +15,7 @@ function walk(dir, out) {
 
 test('src/ contains zero window.* writes', () => {
   const files = walk(path.join(__dirname, '..', 'src'), []);
-  const offenders = files.filter((f) => /window\.[A-Za-z_$][\w$]*\s*=/.test(fs.readFileSync(f, 'utf8')));
+  // Match true writes only: '=' not part of '=='/'==='/'=>' and not '<=' / '>=' / '!='. Reads like 'typeof window.x ===' must pass.
+  const offenders = files.filter((f) => /window\.[A-Za-z_$][\w$]*\s*(?<![=!<>])=(?![=>])/.test(fs.readFileSync(f, 'utf8')));
   assert.deepEqual(offenders, []);
 });
