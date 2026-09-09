@@ -71,6 +71,40 @@ export function normalizeState(value) {
   const p = value && typeof value === 'object' ? value : d;
   const sourceVersion = Number(p.schemaVersion) || 1;
   for (const k of Object.keys(d)) { if (!(k in p)) p[k] = d[k]; }
+  // Tab consolidation (parity with legacy state/state.js): remap retired tab
+  // ids to their combined parents. Keys verified against data/tab-groups.js;
+  // still-live ids ('community', 'prophets'/'sahaba'/'women', 'science',
+  // 'dreams', 'modernhist', 'ancientprophets') are deliberately absent.
+  const TAB_REMAP = {
+    purification:'worship-rulings', salahrules:'worship-rulings', sawmrules:'worship-rulings', hajjrules:'worship-rulings', hajj:'worship-rulings',
+    zakatrules:'wealth-oaths', trade:'wealth-oaths', inheritance:'wealth-oaths', oaths:'wealth-oaths',
+    ikhlas:'virtues', tawakkul:'virtues', patience:'virtues', hope:'virtues', fear:'virtues', loveofallah:'virtues', contentment:'virtues',
+    heart:'vices-return', sins:'vices-return', repentance:'vices-return',
+    manners:'character-path', zuhd:'character-path', sufism:'character-path', tazkiyah:'character-path', inspirations:'character-path', reflection:'character-path',
+    family:'family-life', marriage:'family-life', parenting:'family-life',
+    neighbors:'community', brotherhood:'community', sisterhood:'community', ummah:'community', antiracism:'community',
+    orphans2:'service', elderly:'service', disabled:'service', poverty:'service', volunteering:'service', dawah:'service',
+    work:'work-justice', punishments:'work-justice',
+    health:'wellness', tibb:'wellness', mentalhealth:'wellness',
+    food:'earth-living', environment:'earth-living', green:'earth-living', travel:'earth-living',
+    youth:'youth-tech', tech:'youth-tech', technology:'youth-tech', socialmedia:'youth-tech', education:'youth-tech',
+    ethics:'ethics-finance', bioethics:'ethics-finance', modfinance:'ethics-finance', politics:'ethics-finance',
+    mecca:'holy-cities', medina:'holy-cities', jerusalem:'holy-cities',
+    damascus:'capitals', baghdad:'capitals', cairo:'capitals', cordoba:'capitals', istanbul:'capitals',
+    bukhara:'east', samarkand:'east',
+    calligraphy:'pattern', illumination:'pattern',
+    architecture:'sacred-space', geometry:'sacred-space',
+    textiles:'living-crafts', ceramics:'living-crafts', woodwork:'living-crafts', nasheeds:'living-crafts',
+    literature:'word',
+    arabicgrammar:'structure', morphology:'structure', rhetoric:'structure', etymology:'structure',
+    pronunciation:'sound-script', scripts:'sound-script', dialects:'sound-script',
+    vocab:'words-poetry', proverbs:'words-poetry', poetry:'words-poetry', poetryart:'words-poetry',
+    ontology:'being', existence:'being', prophethood:'being',
+    epistemology:'knowing', logic:'knowing', reason:'knowing', kalam:'knowing',
+    freewill:'will-evil', problemofevil:'will-evil'
+  };
+  if (p.lastTab && TAB_REMAP[p.lastTab]) p.lastTab = TAB_REMAP[p.lastTab];
+  if (p.lastCat === 'creed') p.lastCat = 'arabic';
   if (p.growthSettings && Array.isArray(p.growthSettings.visible)) {
     for (const f of d.growthSettings.visible) {
       if (!p.growthSettings.visible.includes(f)) p.growthSettings.visible.push(f);

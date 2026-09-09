@@ -16,7 +16,7 @@ test('PANEL_SECTIONS covers every section incl. ones only activateTab knew about
   for (const key of ['home','quests','stats','growth','profile','knowledge_quran','knowledge_fiqh',
                      'knowledge_creed','knowledge_heart','knowledge_society','knowledge_life',
                      'knowledge_history','knowledge_hereafter','library_dynasties','library_cities',
-                     'library_arts','library_arabic','library_philosophy']) {
+                     'library_arts','library_arabic','library_philosophy','names']) {
     assert.ok(Array.isArray(s[key]) && s[key].length > 0, 'missing section: ' + key);
   }
 });
@@ -38,4 +38,21 @@ test('tabs.js consumes PANEL_SECTIONS and no second literal map remains', () => 
   assert.ok(src.includes('PANEL_SECTIONS'), 'tabs.js must use PANEL_SECTIONS');
   assert.ok(!/var\s+panelLookup/.test(src), 'inline panelLookup literal must be deleted');
   assert.ok(!/var sections = \{/.test(src), 'local sections literal must be deleted');
+});
+
+test('consolidated panels exist, retired panels gone', () => {
+  const html = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
+  for (const p of ['panel-virtues', 'panel-vices-return', 'panel-character-path',
+      'panel-worship-rulings', 'panel-wealth-oaths', 'panel-family-life',
+      'panel-community', 'panel-service', 'panel-work-justice', 'panel-wellness',
+      'panel-earth-living', 'panel-youth-tech', 'panel-ethics-finance',
+      'panel-holy-cities', 'panel-capitals', 'panel-east', 'panel-pattern',
+      'panel-sacred-space', 'panel-living-crafts', 'panel-word',
+      'panel-structure', 'panel-sound-script', 'panel-words-poetry',
+      'panel-being', 'panel-knowing', 'panel-will-evil']) {
+    assert.ok(html.includes(`id="${p}"`), 'missing ' + p);
+  }
+  for (const p of ['panel-purification', 'panel-technology', 'panel-poetryart']) {
+    assert.ok(!html.includes(`id="${p}"`), 'retired ' + p + ' still present');
+  }
 });

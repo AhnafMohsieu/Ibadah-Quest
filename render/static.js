@@ -436,6 +436,45 @@
     renderSituationalDhikr();
   }
 
+  // ── Combined renderers (Task 4 + Amendment A) ──
+  // Each combined renderer calls the dedicated render<X>() where one is
+  // defined in this file, else renderPoolMember('<id>') for NEW_POOLS-only
+  // members (titles identical to the generic loop in render/dynamic.js).
+  function renderPoolMember(k) {
+    if (typeof NEW_POOLS !== 'undefined' && NEW_POOLS[k] && NEW_POOLS[k].length) {
+      poolRender(k + 'Area', iqIcon('book-open') + ' ' + k, NEW_POOLS[k], k + 'Idx');
+    }
+  }
+  function renderVirtues() { renderIkhlas(); renderTawakkul(); renderPatience(); renderPoolMember('hope'); renderPoolMember('fear'); renderPoolMember('loveofallah'); renderPoolMember('contentment'); }
+  function renderVicesreturn() { renderHeart(); renderSins(); renderRepentance(); }
+  function renderCharacterpath() { renderManners(); renderZuhd(); renderPoolMember('sufism'); renderPoolMember('tazkiyah'); renderInspirations(); renderPoolMember('reflection'); }
+  function renderWorshiprulings() { renderPoolMember('purification'); renderPoolMember('salahrules'); renderPoolMember('sawmrules'); renderPoolMember('hajjrules'); renderHajj(); }
+  function renderWealthoaths() { renderPoolMember('zakatrules'); renderPoolMember('trade'); renderPoolMember('inheritance'); renderPoolMember('oaths'); }
+  function renderFamilylife() { renderFamily(); renderMarriage(); renderParenting(); }
+  // NOTE: combined renderCommunity overwrites the single-area renderer above.
+  // The original communityArea body is inlined (not a self-call) to avoid
+  // infinite recursion; title/pool/idxKey are identical to the original.
+  function renderCommunity() { renderNeighbors(); poolRender('communityArea', iqIcon('building') + ' Community & Society',COMMUNITY_POOL,'communityIdx'); renderPoolMember('brotherhood'); renderPoolMember('sisterhood'); renderUmmah(); renderPoolMember('antiracism'); }
+  function renderService() { renderPoolMember('orphans2'); renderPoolMember('elderly'); renderPoolMember('disabled'); renderPoolMember('poverty'); renderPoolMember('volunteering'); renderDawah(); }
+  function renderWorkjustice() { renderWork(); renderPunishments(); }
+  function renderWellness() { renderHealth(); renderTibb(); renderPoolMember('mentalhealth'); }
+  function renderEarthliving() { renderFood(); renderEnvironment(); renderPoolMember('green'); renderTravel(); }
+  function renderYouthtech() { renderYouth(); renderTech(); renderPoolMember('technology'); renderPoolMember('socialmedia'); renderPoolMember('education'); }
+  function renderEthicsfinance() { renderPoolMember('ethics'); renderPoolMember('bioethics'); renderPoolMember('modfinance'); renderPoolMember('politics'); }
+  function renderHolycities() { renderPoolMember('mecca'); renderPoolMember('medina'); renderPoolMember('jerusalem'); }
+  function renderCapitals() { renderPoolMember('damascus'); renderPoolMember('baghdad'); renderPoolMember('cairo'); renderPoolMember('cordoba'); renderPoolMember('istanbul'); }
+  function renderEast() { renderPoolMember('bukhara'); renderPoolMember('samarkand'); }
+  function renderPattern() { renderPoolMember('calligraphy'); renderPoolMember('illumination'); }
+  function renderSacredspace() { renderPoolMember('architecture'); renderPoolMember('geometry'); }
+  function renderLivingcrafts() { renderPoolMember('textiles'); renderPoolMember('ceramics'); renderPoolMember('woodwork'); renderPoolMember('nasheeds'); }
+  function renderWord() { renderPoolMember('literature'); }
+  function renderStructure() { renderPoolMember('arabicgrammar'); renderPoolMember('morphology'); renderPoolMember('rhetoric'); renderPoolMember('etymology'); }
+  function renderSoundscript() { renderPoolMember('pronunciation'); renderPoolMember('scripts'); renderPoolMember('dialects'); }
+  function renderWordspoetry() { renderPoolMember('vocab'); renderPoolMember('proverbs'); renderPoolMember('poetry'); renderPoolMember('poetryart'); }
+  function renderBeing() { renderPoolMember('ontology'); renderPoolMember('existence'); renderPoolMember('prophethood'); }
+  function renderKnowing() { renderPoolMember('epistemology'); renderPoolMember('logic'); renderPoolMember('reason'); renderPoolMember('kalam'); }
+  function renderWillevil() { renderPoolMember('freewill'); renderPoolMember('problemofevil'); }
+
   window.getSourceLink = getSourceLink;
   window.poolRender = poolRender;
   window.renderDuas = renderDuas;
@@ -489,6 +528,31 @@
   window.renderYouth = renderYouth;
   window.renderTech = renderTech;
   window.renderNeighbors = renderNeighbors;
+  window.renderVirtues = renderVirtues;
+  window.renderVicesreturn = renderVicesreturn;
+  window.renderCharacterpath = renderCharacterpath;
+  window.renderWorshiprulings = renderWorshiprulings;
+  window.renderWealthoaths = renderWealthoaths;
+  window.renderFamilylife = renderFamilylife;
+  window.renderService = renderService;
+  window.renderWorkjustice = renderWorkjustice;
+  window.renderWellness = renderWellness;
+  window.renderEarthliving = renderEarthliving;
+  window.renderYouthtech = renderYouthtech;
+  window.renderEthicsfinance = renderEthicsfinance;
+  window.renderHolycities = renderHolycities;
+  window.renderCapitals = renderCapitals;
+  window.renderEast = renderEast;
+  window.renderPattern = renderPattern;
+  window.renderSacredspace = renderSacredspace;
+  window.renderLivingcrafts = renderLivingcrafts;
+  window.renderWord = renderWord;
+  window.renderStructure = renderStructure;
+  window.renderSoundscript = renderSoundscript;
+  window.renderWordspoetry = renderWordspoetry;
+  window.renderBeing = renderBeing;
+  window.renderKnowing = renderKnowing;
+  window.renderWillevil = renderWillevil;
   window.renderSalah = renderSalah;
   window.renderDhikrCounter = renderDhikrCounter;
   window.renderInspirations = renderInspirations;

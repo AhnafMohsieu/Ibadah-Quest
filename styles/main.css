@@ -2946,6 +2946,7 @@ html[data-theme="emara"] .global-search { background: var(--card-bg); }
   .card-grid { grid-template-columns: repeat(auto-fill, minmax(min(100%, 10rem), 1fr)); gap: 12px; }
   .tier2-tabs, .tier2-tabs.cat-chips, .tier3-tabs { gap: 10px; }
   .tab-content { max-width: none; }
+  .hero-strip .header { grid-column: 1 / -1; }
 }
 @media (min-width: 1440px) {
   .app { max-width: 80rem; }
@@ -2959,6 +2960,7 @@ html[data-theme="emara"] .global-search { background: var(--card-bg); }
   align-items: center;
 }
 .hero-strip .streak-bar { grid-column: 1 / -1; }
+.hero-strip .header, .hero-strip .level-row { grid-column: 1 / -1; }
 /* Calendar never stretches unreadably wide on large screens. */
 .cal-grid { width: 100%; max-width: 36rem; margin-left: auto; margin-right: auto; }
 /* -- Equal tabs system-wide: centered content, even row shares -- */

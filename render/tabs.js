@@ -193,7 +193,15 @@
       problemofevil:'renderProblemofevil', prophethood:'renderProphethood', existence:'renderExistence',
       keys:'renderKeys', mosque:'renderMosque', ramadan:'renderRamadan', laylat:'renderLaylat',
       situational:'renderSituationalDhikr', extradeeds:'renderExtraDeeds', volprayers:'renderVolPrayers',
-      timer:'renderPrayerTimes', stats:'renderStats', goals:'renderPersonalGoals', zakatcalc:'renderZakatCalc'
+      timer:'renderPrayerTimes', stats:'renderStats', goals:'renderPersonalGoals', zakatcalc:'renderZakatCalc',
+      virtues:'renderVirtues', 'vices-return':'renderVicesreturn', 'character-path':'renderCharacterpath',
+      'worship-rulings':'renderWorshiprulings', 'wealth-oaths':'renderWealthoaths', 'family-life':'renderFamilylife',
+      service:'renderService', 'work-justice':'renderWorkjustice', wellness:'renderWellness',
+      'earth-living':'renderEarthliving', 'youth-tech':'renderYouthtech', 'ethics-finance':'renderEthicsfinance',
+      'holy-cities':'renderHolycities', capitals:'renderCapitals', east:'renderEast', pattern:'renderPattern',
+      'sacred-space':'renderSacredspace', 'living-crafts':'renderLivingcrafts', word:'renderWord',
+      structure:'renderStructure', 'sound-script':'renderSoundscript', 'words-poetry':'renderWordspoetry',
+      being:'renderBeing', knowing:'renderKnowing', 'will-evil':'renderWillevil'
     };
     // Release the prayer-countdown interval when leaving the Timer tab so it
     // does not keep ticking in the background (Phase 3 leak fix).

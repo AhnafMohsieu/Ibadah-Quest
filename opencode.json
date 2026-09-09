@@ -43,6 +43,11 @@
       "type": "local",
       "command": ["cmd", "/c", "npx", "-y", "codebase-memory-mcp"],
       "enabled": true
+    },
+    "mindsdb": {
+      "type": "local",
+      "command": ["cmd", "/c", "npx", "-y", "@modelcontextprotocol/server-mindsdb"],
+      "enabled": true
     }
   }
 }

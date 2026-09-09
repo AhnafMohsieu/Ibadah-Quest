@@ -96,6 +96,56 @@ test('loadStateAsync prefers IndexedDB when it has a saved state', async () => {
   assert.deepEqual(p.log, {});
 });
 
+test('normalizeState remaps retired tab ids to combined parents', () => {
+  // One retired member per combined group (retired -> combined parent).
+  // Keys verified against data/tab-groups.js: no key here is a live tab id
+  // ('community' is a live combined tab itself and is deliberately absent).
+  const cases = [
+    ['purification', 'worship-rulings'],
+    ['zakatrules', 'wealth-oaths'],
+    ['ikhlas', 'virtues'],
+    ['heart', 'vices-return'],
+    ['manners', 'character-path'],
+    ['family', 'family-life'],
+    ['neighbors', 'community'],
+    ['orphans2', 'service'],
+    ['work', 'work-justice'],
+    ['health', 'wellness'],
+    ['food', 'earth-living'],
+    ['tech', 'youth-tech'],
+    ['ethics', 'ethics-finance'],
+    ['mecca', 'holy-cities'],
+    ['damascus', 'capitals'],
+    ['bukhara', 'east'],
+    ['calligraphy', 'pattern'],
+    ['architecture', 'sacred-space'],
+    ['textiles', 'living-crafts'],
+    ['literature', 'word'],
+    ['arabicgrammar', 'structure'],
+    ['pronunciation', 'sound-script'],
+    ['vocab', 'words-poetry'],
+    ['ontology', 'being'],
+    ['epistemology', 'knowing'],
+    ['freewill', 'will-evil']
+  ];
+  for (const [oldId, expected] of cases) {
+    const old = JSON.stringify({ log: {}, lastTab: oldId, lastCat: 'creed' });
+    const { localStorage } = makeStore({ iq9_user_default: old });
+    const sb = loadFile(path.join(__dirname, '..', 'state', 'state.js'), { localStorage });
+    const p = sb.loadState();
+    assert.strictEqual(p.lastTab, expected, oldId + ' should remap to ' + expected);
+    assert.strictEqual(p.lastCat, 'arabic', 'lastCat creed should remap to arabic');
+  }
+  // Still-live tab ids must never be rewritten.
+  for (const live of ['community', 'science', 'prophets', 'dreams', 'youth-tech']) {
+    const old = JSON.stringify({ log: {}, lastTab: live, lastCat: 'creed' });
+    const { localStorage } = makeStore({ iq9_user_default: old });
+    const sb = loadFile(path.join(__dirname, '..', 'state', 'state.js'), { localStorage });
+    const p = sb.loadState();
+    assert.strictEqual(p.lastTab, live, 'live tab ' + live + ' must not be remapped');
+  }
+});
+
 test('saveState surfaces quota failure via flag and event, does not throw', () => {
   const events = [];
   const quotaErr = Object.assign(new Error('full'), { name: 'QuotaExceededError' });

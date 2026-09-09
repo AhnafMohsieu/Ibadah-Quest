@@ -1,7 +1,7 @@
 (function() {
   // Pull all content renderers from window into local scope so renderStatic() and
   // renderToday() can call them as bare names without window. prefix.
-  const { renderSunnahs, renderDhikr, renderDhikrCounter, renderStories, renderNames, renderInspirations, renderGratitude, renderFasting, renderCharity, renderMemorization, renderMorning, renderEvening, renderSins, renderPunishments, renderRepentance, renderSahaba, renderSeerah, renderTafsir, renderManners, renderFamily, renderHealth, renderUmmah, renderHajj, renderAkhirah, renderProphets, renderWomen, renderHeart, renderMarriage, renderScience, renderWudu, renderScholars, renderPatience, renderWork, renderCommunity, renderEnvironment, renderTravel, renderFiqh, renderArabic, renderTawakkul, renderIkhlas, renderZuhd, renderDawah, renderAqeedah, renderKnowledge, renderCivilisation, renderJumuah, renderBattles, renderJannah, renderJahannam, renderGrave, renderSigns, renderDreams, renderParenting, renderFood, renderTibb, renderYouth, renderTech, renderNeighbors, renderArabicgrammar, renderVocab, renderRhetoric, renderMorphology, renderPronunciation, renderPoetry, renderProverbs, renderEtymology, renderDialects, renderScripts, renderBrotherhood, renderSisterhood, renderOrphans2, renderElderly, renderDisabled, renderAntiracism, renderPoverty, renderVolunteering, renderEpistemology, renderOntology, renderLogic, renderKalam, renderReason, renderFreewill, renderProblemofevil, renderProphethood, renderExistence, renderUmayyads, renderAbbasids, renderAndalus, renderOttomans, renderMamluks, renderSeljuks, renderFatimids, renderAyyubids, renderModernhist, renderAncientprophets, renderMecca, renderMedina, renderJerusalem, renderDamascus, renderBaghdad, renderCairo, renderCordoba, renderIstanbul, renderBukhara, renderSamarkand, renderCalligraphy, renderArchitecture, renderGeometry, renderPoetryart, renderLiterature, renderNasheeds, renderIllumination, renderTextiles, renderCeramics, renderWoodwork, renderPrayers, renderVol, renderDeeds, renderTimer, renderPrayerTimes } = window;
+  const { renderSunnahs, renderDhikr, renderDhikrCounter, renderStories, renderNames, renderInspirations, renderGratitude, renderFasting, renderCharity, renderMemorization, renderMorning, renderEvening, renderSins, renderPunishments, renderRepentance, renderSahaba, renderSeerah, renderTafsir, renderManners, renderFamily, renderHealth, renderUmmah, renderHajj, renderAkhirah, renderProphets, renderWomen, renderHeart, renderMarriage, renderScience, renderWudu, renderScholars, renderPatience, renderWork, renderCommunity, renderEnvironment, renderTravel, renderFiqh, renderArabic, renderTawakkul, renderIkhlas, renderZuhd, renderDawah, renderAqeedah, renderKnowledge, renderCivilisation, renderJumuah, renderBattles, renderJannah, renderJahannam, renderGrave, renderSigns, renderDreams, renderParenting, renderFood, renderTibb, renderYouth, renderTech, renderNeighbors, renderArabicgrammar, renderVocab, renderRhetoric, renderMorphology, renderPronunciation, renderPoetry, renderProverbs, renderEtymology, renderDialects, renderScripts, renderBrotherhood, renderSisterhood, renderOrphans2, renderElderly, renderDisabled, renderAntiracism, renderPoverty, renderVolunteering, renderEpistemology, renderOntology, renderLogic, renderKalam, renderReason, renderFreewill, renderProblemofevil, renderProphethood, renderExistence, renderUmayyads, renderAbbasids, renderAndalus, renderOttomans, renderMamluks, renderSeljuks, renderFatimids, renderAyyubids, renderModernhist, renderAncientprophets, renderMecca, renderMedina, renderJerusalem, renderDamascus, renderBaghdad, renderCairo, renderCordoba, renderIstanbul, renderBukhara, renderSamarkand, renderCalligraphy, renderArchitecture, renderGeometry, renderPoetryart, renderLiterature, renderNasheeds, renderIllumination, renderTextiles, renderCeramics, renderWoodwork, renderPrayers, renderVol, renderDeeds, renderTimer, renderPrayerTimes, renderVirtues, renderVicesreturn, renderCharacterpath, renderWorshiprulings, renderWealthoaths, renderFamilylife, renderService, renderWorkjustice, renderWellness, renderEarthliving, renderYouthtech, renderEthicsfinance, renderHolycities, renderCapitals, renderEast, renderPattern, renderSacredspace, renderLivingcrafts, renderWord, renderStructure, renderSoundscript, renderWordspoetry, renderBeing, renderKnowing, renderWillevil } = window;
   // Lucide removed — no-op stub
   function refreshLucideIcons() {}
 
@@ -78,7 +78,6 @@
     scholars: function() { safe(renderScholars,'Scholars'); },
     patience: function() { safe(renderPatience,'Patience'); },
     work: function() { safe(renderWork,'Work'); },
-    community: function() { safe(renderCommunity,'Community'); },
     environment: function() { safe(renderEnvironment,'Environment'); },
     travel: function() { safe(renderTravel,'Travel'); },
     fiqh: function() { safe(renderFiqh,'Fiqh'); },
@@ -158,7 +157,33 @@
     freewill: function() { safe(renderFreewill,'Freewill'); },
     problemofevil: function() { safe(renderProblemofevil,'Problemofevil'); },
     prophethood: function() { safe(renderProphethood,'Prophethood'); },
-    existence: function() { safe(renderExistence,'Existence'); }
+    existence: function() { safe(renderExistence,'Existence'); },
+    virtues: function() { safe(renderVirtues,'Virtues'); },
+    'vices-return': function() { safe(renderVicesreturn,'Vicesreturn'); },
+    'character-path': function() { safe(renderCharacterpath,'Characterpath'); },
+    'worship-rulings': function() { safe(renderWorshiprulings,'Worshiprulings'); },
+    'wealth-oaths': function() { safe(renderWealthoaths,'Wealthoaths'); },
+    'family-life': function() { safe(renderFamilylife,'Familylife'); },
+    community: function() { safe(renderCommunity,'Community'); },
+    service: function() { safe(renderService,'Service'); },
+    'work-justice': function() { safe(renderWorkjustice,'Workjustice'); },
+    wellness: function() { safe(renderWellness,'Wellness'); },
+    'earth-living': function() { safe(renderEarthliving,'Earthliving'); },
+    'youth-tech': function() { safe(renderYouthtech,'Youthtech'); },
+    'ethics-finance': function() { safe(renderEthicsfinance,'Ethicsfinance'); },
+    'holy-cities': function() { safe(renderHolycities,'Holycities'); },
+    capitals: function() { safe(renderCapitals,'Capitals'); },
+    east: function() { safe(renderEast,'East'); },
+    pattern: function() { safe(renderPattern,'Pattern'); },
+    'sacred-space': function() { safe(renderSacredspace,'Sacredspace'); },
+    'living-crafts': function() { safe(renderLivingcrafts,'Livingcrafts'); },
+    word: function() { safe(renderWord,'Word'); },
+    structure: function() { safe(renderStructure,'Structure'); },
+    'sound-script': function() { safe(renderSoundscript,'Soundscript'); },
+    'words-poetry': function() { safe(renderWordspoetry,'Wordspoetry'); },
+    being: function() { safe(renderBeing,'Being'); },
+    knowing: function() { safe(renderKnowing,'Knowing'); },
+    'will-evil': function() { safe(renderWillevil,'Willevil'); }
   };
 
   function renderDynamic() {
