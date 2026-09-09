@@ -1248,7 +1248,7 @@ select.profile-input option { background: var(--card-bg); color: var(--text); }
   opacity: 0;
   transition: opacity 0.2s ease;
 }
-.toast-overlay.show { opacity: 1; }
+.toast-overlay.show { opacity: 1; pointer-events: auto; }
 .toast-box {
   background: var(--card-bg);
   border: 1px solid var(--card-border);
@@ -2915,7 +2915,8 @@ html[data-theme="emara"] .global-search { background: var(--card-bg); }
 .recovery-actions .btn-danger { color: #b91c1c; border-color: #fca5a5; }
 
 /* -- Storage quota banner (reuses .offline-banner positioning) -- */
-.storage-banner { justify-content: space-between; background: #fef3c7; color: #78350f; }
+/* Stacked below the offline banner so both visible => no overlap. */
+.storage-banner { justify-content: space-between; background: #fef3c7; color: #78350f; top: 37px; }
 .storage-banner button { background: transparent; border: 0; font-size: 1.2rem; cursor: pointer; color: inherit; padding: 0 8px; }
 /* -- Fluid shell: progressive container, full coverage on laptop/desktop -- */
 /* Mobile: edge-to-edge single column. Tablet: wider. Desktop: full-bleed

@@ -180,7 +180,17 @@ const IQ_IDS = {
   'r13':'star', 'r14':'heart', 'r15':'sparkles', 'r16':'sword',
   'r17':'hand-heart', 'r18':'moon', 'r19':'gem', 'r20':'award',
   'r21':'crown', 'r22':'star', 'r23':'heart', 'r24':'sparkles',
-  'r25':'kaaba', 'r26':'hand-heart', 'r27':'star'
+  'r25':'kaaba', 'r26':'hand-heart', 'r27':'star',
+
+  /* Compat aliases — keys used in code that previously resolved to '' (empty icon).
+     Values reuse existing codepoints so the offline PNG set is unchanged. */
+  'alert':'alert-triangle', 'arrow-left':'log-out',
+  'bell':'megaphone', 'bell-off':'x',
+  'download':'save', 'upload':'refresh-cw',
+  'snowflake':'snow',
+  /* Category-id safety nets (generic renderers fall back to the id as icon key) */
+  'core':'home', 'worship':'mosque', 'tracking':'bar-chart-3',
+  'names':'sparkles'
 };
 
 /* fallback KEY used when nothing matches */

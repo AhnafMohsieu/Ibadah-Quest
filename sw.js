@@ -42,8 +42,11 @@
   self.addEventListener('activate', (event) => {
     event.waitUntil((async () => {
       const keys = await caches.keys();
+      // Keep CDN_CACHE persistent across activations: deleting it on every
+      // activate forces re-download of CDN assets (Chart.js) and breaks
+      // offline. Only old versioned core caches are purged.
       await Promise.all(keys
-        .filter((k) => (isCoreCache(k) && k !== CACHE_NAME) || k === CDN_CACHE)
+        .filter((k) => isCoreCache(k) && k !== CACHE_NAME)
         .map((k) => caches.delete(k)));
       await self.clients.claim();
     })());
@@ -100,7 +103,18 @@
 
       // Static assets: CACHE FIRST (JS, CSS, images, data)
       if (isJS || isCSS || isImage || isData) {
-        const cached = await cache.match(key);
+        let cached = await cache.match(key);
+        // Legacy `?v=` discipline vs unversioned precache manifest: the
+        // manifest lists bare paths (e.g. styles/main.css) while the page
+        // requests versioned URLs (?v=37). Fall back to a query-stripped
+        // match so precached assets actually serve offline instead of
+        // always going to network (unstyled flash / offline failure).
+        if (!cached) {
+          try {
+            const bare = new URL(req.url, self.location.href).pathname;
+            if (bare !== key) cached = await cache.match(bare);
+          } catch (e) {}
+        }
         if (cached) {
           fetch(req).then(fresh => {
             if (fresh && fresh.ok) cache.put(key, fresh.clone()).catch(() => {});

@@ -136,6 +136,8 @@
       if (sections[sec].indexOf(target) > -1) { sectionName = sec; break; }
     }
     var sectionPanels = sectionName ? getSectionPanels(sectionName) : null;
+    // Single section-aware clear (was: section clear + unconditional global
+    // clear, doubling DOM thrash and causing tab-switch flicker).
     if (sectionPanels) {
       sectionPanels.forEach(function(id) {
         var el = document.getElementById(id);
@@ -145,9 +147,11 @@
       document.querySelectorAll('.tab-panel').forEach(function(p) { p.classList.remove('active'); });
     }
     var panel = document.getElementById('panel-' + tabId);
-    document.querySelectorAll('.tab-panel').forEach(function(p) { p.classList.remove('active'); });
     if (panel) panel.classList.add('active');
     var _lazyRender = {
+      today:'renderToday', quests:'renderQ', journeys:'renderJourneys',
+      profile:'renderProfile', trophies:'renderAch', progress:'renderProg',
+      rewards:'renderShop', duas:'renderDuas', growth:'renderSpiritualGrowthTab',
       quran:'renderQuran', hadith:'renderHadith', sunnahs:'renderSunnahs', dhikr:'renderDhikr',
       stories:'renderStories', inspirations:'renderInspirations', gratitude:'renderGratitude',
       allah_names:'renderNames', scholars_names:'renderScholars',
@@ -155,6 +159,8 @@
       morning:'renderMorning', evening:'renderEvening', sins:'renderSins', punishments:'renderPunishments',
       repentance:'renderRepentance', sahaba:'renderSahaba', seerah:'renderSeerah', tafsir:'renderTafsir',
       manners:'renderManners', family:'renderFamily', health:'renderHealth', finance:'renderFinance',
+      // NOTE: finance pool + finance tracker both render below (single key;
+      // a duplicate `finance:` key here previously shadowed renderFinance).
       ummah:'renderUmmah', hajj:'renderHajj', akhirah:'renderAkhirah', prophets:'renderProphets',
       women:'renderWomen', heart:'renderHeart', marriage:'renderMarriage', science:'renderScience',
       wudu:'renderWudu', patience:'renderPatience', work:'renderWork',
@@ -163,7 +169,7 @@
       zuhd:'renderZuhd', dawah:'renderDawah', battles:'renderBattles', jannah:'renderJannah',
       jahannam:'renderJahannam', grave:'renderGrave', signs:'renderSigns', dreams:'renderDreams',
       parenting:'renderParenting', food:'renderFood', tibb:'renderTibb', youth:'renderYouth',
-      tech:'renderTech', neighbors:'renderNeighbors', salah:'renderSalah', finance:'renderFinanceTab',
+      tech:'renderTech', neighbors:'renderNeighbors', salah:'renderSalah',
       aqeedah:'renderAqeedah', civilisation:'renderCivilisation', jumuah:'renderJumuah',
       umayyads:'renderUmayyads', abbasids:'renderAbbasids', andalus:'renderAndalus',
       ottomans:'renderOttomans', mamluks:'renderMamluks', seljuks:'renderSeljuks',
@@ -188,6 +194,17 @@
     }
     if (_lazyRender[tabId] && window[_lazyRender[tabId]]) {
       try { window[_lazyRender[tabId]](); } catch(e) { console.warn('Lazy render ' + tabId + ' failed:', e.message); }
+    }
+    // Finance tab owns two renderers: the static pool (renderFinance) via
+    // _lazyRender above plus the interactive tracker (renderFinanceTab).
+    if (tabId === 'finance' && typeof window.renderFinanceTab === 'function') {
+      try { window.renderFinanceTab(); } catch(e) { console.warn('Lazy render financeTab failed:', e.message); }
+    }
+    // Journeys panel owns two areas: journeyArea (renderJourneys, deferred)
+    // plus boatArea (renderBoat, deferred). Both guards tolerate the
+    // not-yet-loaded case; the post-defer hook covers first paint.
+    if (tabId === 'journeys' && typeof window.renderBoat === 'function') {
+      try { window.renderBoat(); } catch(e) { console.warn('Lazy render boat failed:', e.message); }
     }
     if (tabId === 'hadith' && typeof HADITH_COLLECTIONS_DATA === 'undefined') {
       if (typeof window.ensureHadithLoaded === 'function') {

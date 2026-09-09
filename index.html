@@ -23,7 +23,7 @@
     .tab-panel{display:none}
     .tab-panel.active{display:block}
   </style>
-  <link rel="preload" href="styles/main.css?v=37" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <link rel="preload" href="styles/main.css?v=38" as="style" onload="this.onload=null;this.rel='stylesheet'">
   <script>
     (function () {
       try { var t = localStorage.getItem('iqTheme'); if (t && t !== 'light') document.documentElement.setAttribute('data-theme', t); } catch (e) {}
@@ -49,11 +49,15 @@
     };
     setTimeout(function() {
       if (window.App) return;
+      // Failsafe: never leave the page invisible behind body.loading when
+      // boot stalled — otherwise even the recovery UI is hidden (blank page).
+      try { document.body.classList.remove('loading'); } catch (e) {}
       var ov = document.getElementById('recoveryOverlay');
       if (!ov) { location.reload(); return; }
       ov.innerHTML = '<div class="toast-box"><h3>App seems stuck</h3><div class="toast-msg">Your data is safe. Reload to recover.</div><div style="display:flex;gap:8px;justify-content:center;margin-top:12px;"><button class="onboarding-btn" onclick="window.__iqReload()">Reload</button><button class="onboarding-btn" onclick="window.__iqFreshStart()">Clear cache &amp; reload</button></div></div>';
       ov.classList.add('show');
       ov.style.display = 'flex';
+      ov.style.pointerEvents = 'auto';
       var iv = setInterval(function() {
         if (window.App) {
           try { ov.classList.remove('show'); ov.style.display = 'none'; } catch (e) {}
@@ -313,7 +317,7 @@
 
 <!-- Core Data Files (must load in dependency order) -->
 <script src="data/prayers.js?v=3"></script>
-<script src="data/icons.js?v=4"></script>
+<script src="data/icons.js?v=5"></script>
 <script>
   if (typeof iqIcon !== 'function') { function iqIcon(){return '';} function iqEmoji(){return '';} }
   document.querySelectorAll('.tier1-tabs .t1-btn').forEach(function (b) {
@@ -417,7 +421,7 @@
 <script src="render/prayers.js?v=4"></script>
 <script src="render/static.js?v=7"></script>
 <script src="render/dynamic.js?v=13"></script>
-<script src="render/tabs.js?v=8"></script>
+<script src="render/tabs.js?v=10"></script>
 
 <!-- Chart.js CDN (lazy loaded) -->
 <script>
@@ -540,7 +544,7 @@
     });
   }
   window.addEventListener('load', function() {
-    navigator.serviceWorker.register('sw.js?v=52').then(function(reg) {
+    navigator.serviceWorker.register('sw.js?v=53').then(function(reg) {
       if (reg.waiting) { showUpdateBanner(reg); return; }
       reg.addEventListener('updatefound', function() {
         var sw = reg.installing;
