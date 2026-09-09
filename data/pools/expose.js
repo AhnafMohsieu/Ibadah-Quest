@@ -1,0 +1,60 @@
+// data/pools/expose.js
+// Bridges legacy const-declared pools onto window for window[] lookups
+// (notably features/search.js). Top-level const in a classic script does
+// NOT create a window property, so without this search sees every pool
+// as []. Guarded per-pool: a removed pool file cannot break the rest.
+// Coverage vs SEARCH_POOLS is pinned by tests/search.test.js.
+if (typeof DUA_POOL !== 'undefined') window.DUA_POOL = DUA_POOL;
+if (typeof SUNNAH_POOL !== 'undefined') window.SUNNAH_POOL = SUNNAH_POOL;
+if (typeof DHIKR_POOL !== 'undefined') window.DHIKR_POOL = DHIKR_POOL;
+if (typeof STORIES !== 'undefined') window.STORIES = STORIES;
+if (typeof NAMES !== 'undefined') window.NAMES = NAMES;
+if (typeof HADITHS !== 'undefined') window.HADITHS = HADITHS;
+if (typeof INSPIRATIONS_POOL !== 'undefined') window.INSPIRATIONS_POOL = INSPIRATIONS_POOL;
+if (typeof SINS_POOL !== 'undefined') window.SINS_POOL = SINS_POOL;
+if (typeof FINANCE_POOL !== 'undefined') window.FINANCE_POOL = FINANCE_POOL;
+if (typeof FAMILY_POOL !== 'undefined') window.FAMILY_POOL = FAMILY_POOL;
+if (typeof HEART_POOL !== 'undefined') window.HEART_POOL = HEART_POOL;
+if (typeof PUNISHMENTS_POOL !== 'undefined') window.PUNISHMENTS_POOL = PUNISHMENTS_POOL;
+if (typeof REPENTANCE_POOL !== 'undefined') window.REPENTANCE_POOL = REPENTANCE_POOL;
+if (typeof SAHABA_POOL !== 'undefined') window.SAHABA_POOL = SAHABA_POOL;
+if (typeof SEERAH_POOL !== 'undefined') window.SEERAH_POOL = SEERAH_POOL;
+if (typeof TAFSIR_POOL !== 'undefined') window.TAFSIR_POOL = TAFSIR_POOL;
+if (typeof MANNERS_POOL !== 'undefined') window.MANNERS_POOL = MANNERS_POOL;
+if (typeof AQEEDAH_POOL !== 'undefined') window.AQEEDAH_POOL = AQEEDAH_POOL;
+if (typeof HEALTH_POOL !== 'undefined') window.HEALTH_POOL = HEALTH_POOL;
+if (typeof UMMAH_POOL !== 'undefined') window.UMMAH_POOL = UMMAH_POOL;
+if (typeof HAJJ_POOL !== 'undefined') window.HAJJ_POOL = HAJJ_POOL;
+if (typeof AKHIRAH_POOL !== 'undefined') window.AKHIRAH_POOL = AKHIRAH_POOL;
+if (typeof PROPHETS_POOL !== 'undefined') window.PROPHETS_POOL = PROPHETS_POOL;
+if (typeof WOMEN_POOL !== 'undefined') window.WOMEN_POOL = WOMEN_POOL;
+if (typeof KNOWLEDGE_POOL !== 'undefined') window.KNOWLEDGE_POOL = KNOWLEDGE_POOL;
+if (typeof JUMUAH_POOL !== 'undefined') window.JUMUAH_POOL = JUMUAH_POOL;
+if (typeof MARRIAGE_POOL !== 'undefined') window.MARRIAGE_POOL = MARRIAGE_POOL;
+if (typeof SCIENCE_POOL !== 'undefined') window.SCIENCE_POOL = SCIENCE_POOL;
+if (typeof WUDU_POOL !== 'undefined') window.WUDU_POOL = WUDU_POOL;
+if (typeof SCHOLARS_POOL !== 'undefined') window.SCHOLARS_POOL = SCHOLARS_POOL;
+if (typeof PATIENCE_POOL !== 'undefined') window.PATIENCE_POOL = PATIENCE_POOL;
+if (typeof WORK_POOL !== 'undefined') window.WORK_POOL = WORK_POOL;
+if (typeof COMMUNITY_POOL !== 'undefined') window.COMMUNITY_POOL = COMMUNITY_POOL;
+if (typeof ENVIRONMENT_POOL !== 'undefined') window.ENVIRONMENT_POOL = ENVIRONMENT_POOL;
+if (typeof TRAVEL_POOL !== 'undefined') window.TRAVEL_POOL = TRAVEL_POOL;
+if (typeof FIQH_POOL !== 'undefined') window.FIQH_POOL = FIQH_POOL;
+if (typeof ARABIC_POOL !== 'undefined') window.ARABIC_POOL = ARABIC_POOL;
+if (typeof TAWAKKUL_POOL !== 'undefined') window.TAWAKKUL_POOL = TAWAKKUL_POOL;
+if (typeof IKHLAS_POOL !== 'undefined') window.IKHLAS_POOL = IKHLAS_POOL;
+if (typeof ZUHD_POOL !== 'undefined') window.ZUHD_POOL = ZUHD_POOL;
+if (typeof DAWAH_POOL !== 'undefined') window.DAWAH_POOL = DAWAH_POOL;
+if (typeof CIVILISATION_POOL !== 'undefined') window.CIVILISATION_POOL = CIVILISATION_POOL;
+if (typeof BATTLES_POOL !== 'undefined') window.BATTLES_POOL = BATTLES_POOL;
+if (typeof JANNAH_POOL !== 'undefined') window.JANNAH_POOL = JANNAH_POOL;
+if (typeof JAHANNAM_POOL !== 'undefined') window.JAHANNAM_POOL = JAHANNAM_POOL;
+if (typeof GRAVE_POOL !== 'undefined') window.GRAVE_POOL = GRAVE_POOL;
+if (typeof SIGNS_POOL !== 'undefined') window.SIGNS_POOL = SIGNS_POOL;
+if (typeof DREAMS_POOL !== 'undefined') window.DREAMS_POOL = DREAMS_POOL;
+if (typeof PARENTING_POOL !== 'undefined') window.PARENTING_POOL = PARENTING_POOL;
+if (typeof FOOD_POOL !== 'undefined') window.FOOD_POOL = FOOD_POOL;
+if (typeof TIBB_POOL !== 'undefined') window.TIBB_POOL = TIBB_POOL;
+if (typeof YOUTH_POOL !== 'undefined') window.YOUTH_POOL = YOUTH_POOL;
+if (typeof TECH_POOL !== 'undefined') window.TECH_POOL = TECH_POOL;
+if (typeof NEIGHBORS_POOL !== 'undefined') window.NEIGHBORS_POOL = NEIGHBORS_POOL;

@@ -11,8 +11,9 @@ export default {
       input: {
         today: resolve(__dirname, 'src/pages/today/today.html'),
         ibadah: resolve(__dirname, 'src/pages/ibadah/ibadah.html'),
-        knowledge: resolve(__dirname, 'src/pages/knowledge/knowledge.html'),
-        library: resolve(__dirname, 'src/pages/library/library.html'),
+      knowledge: resolve(__dirname, 'src/pages/knowledge/knowledge.html'),
+      names: resolve(__dirname, 'src/pages/names/names.html'),
+      library: resolve(__dirname, 'src/pages/library/library.html'),
         profile: resolve(__dirname, 'src/pages/profile/profile.html')
       }
     }

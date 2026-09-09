@@ -139,3 +139,59 @@ test('search renderer escapes user-entered recent terms', () => {
   assert.ok(source.includes('data-result-index'), 'search results must use data-bound buttons');
   assert.ok(!source.includes('onclick="App.activateTab'), 'search results must not use inline JavaScript');
 });
+
+test('search: every index tab resolves to an existing panel', () => {
+  const source = fs.readFileSync(path.join(__dirname, '..', 'features', 'search.js'), 'utf8');
+  const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
+  const tabs = [...source.matchAll(/tab:\s*'([^']+)'/g)].map(m => m[1]);
+  assert.ok(tabs.length > 0, 'search index must declare tabs');
+  const missing = [...new Set(tabs)].filter(t => !html.includes(`id="panel-${t}"`));
+  assert.deepEqual(missing, [], 'search tabs without a panel (blank-screen on click): ' + missing.join(', '));
+});
+
+test('search: expose.js covers every SEARCH_POOLS var (const pools are invisible on window)', () => {
+  const source = fs.readFileSync(path.join(__dirname, '..', 'features', 'search.js'), 'utf8');
+  const expose = fs.readFileSync(path.join(__dirname, '..', 'data', 'pools', 'expose.js'), 'utf8');
+  const vars = [...source.matchAll(/var:\s*'([^']+)'/g)].map(m => m[1]);
+  assert.ok(vars.length > 0, 'search index must declare pool vars');
+  const missing = [...new Set(vars)].filter(v => !expose.includes(`window.${v} = ${v}`));
+  assert.deepEqual(missing, [], 'pools missing from expose.js (search would see them as []): ' + missing.join(', '));
+});
+
+test('search: initSearch wires the input listener (boot-time call misses deferred script)', async () => {
+  const listeners = {};
+  const boxCalls = { html: '', classes: new Set() };
+  const fakeBox = {
+    set innerHTML(v) { boxCalls.html = v; },
+    get innerHTML() { return boxCalls.html; },
+    classList: { add: (c) => boxCalls.classes.add(c), remove: (c) => boxCalls.classes.delete(c), contains: (c) => boxCalls.classes.has(c) },
+    querySelectorAll: () => []
+  };
+  const fakeInput = {
+    value: '',
+    addEventListener: (ev, fn) => { listeners[ev] = fn; }
+  };
+  const fakeDocument = {
+    readyState: 'complete',
+    querySelector: (sel) => sel === '.global-search' ? fakeInput : null,
+    getElementById: (id) => id === 'globalSearchResults' ? fakeBox : null,
+    addEventListener: () => {}
+  };
+  const sb = loadSandbox(['features/search.js'], {
+    window: {
+      iqIcon: () => '',
+      escapeHTML: (v) => String(v == null ? '' : v).replace(/[&<>"']/g, function(ch) { return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]; }),
+      DUA_POOL: [{ title: 'X', english: 'Y', desc: 'Z', text: 'W' }]
+    },
+    document: fakeDocument,
+    setTimeout,
+    clearTimeout
+  });
+  assert.ok(listeners.input, 'initSearch must attach an input listener (self-init on script load)');
+  assert.ok(listeners.keydown && listeners.focus, 'initSearch must attach keydown + focus listeners');
+  // simulate typing: 'this' is the input element
+  listeners.input.call({ value: 'NoSuchTermZZZ' });
+  await new Promise(r => setTimeout(r, 350));
+  assert.ok(boxCalls.classes.has('show'), 'dropdown must show after input');
+  assert.ok(boxCalls.html.includes('No results'), 'empty result must render notice, got: ' + boxCalls.html.slice(0, 80));
+});

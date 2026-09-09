@@ -14,8 +14,8 @@ test('today page entry imports shell and no heavy pools', () => {
   assert.match(html, /type="module"/);
 });
 
-test('knowledge/library bridges resolve every tab (scripts + renderer)', () => {
-  for (const [page, group] of [['knowledge', 'KNOWLEDGE_GROUPS'], ['library', 'LIBRARY_GROUPS']]) {
+test('knowledge/library/names bridges resolve every tab (scripts + renderer)', () => {
+  for (const [page, group] of [['knowledge', 'KNOWLEDGE_GROUPS'], ['library', 'LIBRARY_GROUPS'], ['names', 'NAMES_GROUPS']]) {
     const entry = fs.readFileSync(path.join(__dirname, '..', `src/pages/${page}/entry.js`), 'utf8');
     const gm = entry.match(new RegExp('const ' + group + '\\s*=\\s*(\\[[\\s\\S]*?\\n\\]);'));
     assert.ok(gm, group + ' must exist in ' + page + '/entry.js');

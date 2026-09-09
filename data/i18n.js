@@ -54,6 +54,8 @@ const I18N = {
     'Trade': { ar: 'al-Tijara', bn: 'বাণিজ্য' },
     'Inheritance': { ar: 'al-Mirath', bn: 'উত্তরাধিকার' },
     'Oaths': { ar: 'al-Ayman', bn: 'শপথ' },
+    'Worship Rulings': { ar: 'Ahkam al-Ibadat', bn: 'ইবাদতের বিধান' },
+    'Wealth & Oaths': { ar: 'al-Amwal wa al-Ayman', bn: 'সম্পদ ও শপথ' },
 
     // heart
     'Heart Diseases': { ar: 'Amrad al-Qulub', bn: 'হৃদয়ের রোগ' },
@@ -73,6 +75,9 @@ const I18N = {
     'Love of Allah': { ar: 'Hubb Allah', bn: 'আল্লাহর ভালোবাসা' },
     'Contentment': { ar: 'al-Rida', bn: 'সন্তুষ্টি' },
     'Reflection': { ar: 'al-Tafakkur', bn: 'চিন্তা' },
+    'Virtues': { ar: 'al-Fadail', bn: 'সদগুণ' },
+    'Vices & Repentance': { ar: 'al-Radhail wa al-Tawba', bn: 'কুঅভ্যাস ও তওবা' },
+    'Character & Path': { ar: 'al-Akhlaq wa al-Tariq', bn: 'চরিত্র ও পথ' },
 
     // society
     'Family': { ar: 'al-Usra', bn: 'পরিবার' },
@@ -93,6 +98,9 @@ const I18N = {
     'Anti-Racism': { ar: 'Mukafahat al-Unsuriyya', bn: 'বর্ণবাদ-বিরোধী' },
     'Poverty': { ar: 'al-Faqr', bn: 'দারিদ্র্য' },
     'Volunteering': { ar: 'al-Tatawwu', bn: 'স্বেচ্ছাসেবা' },
+    'Family Life': { ar: 'al-Hayat al-Usariyya', bn: 'পারিবারিক জীবন' },
+    'Service & Care': { ar: 'al-Khidma wa al-Riaya', bn: 'সেবা ও যত্ন' },
+    'Work & Justice': { ar: 'al-Amal wa al-Adl', bn: 'কর্ম ও ন্যায়বিচার' },
 
     // life
     'Prophetic Medicine': { ar: 'al-Tibb al-Nabawi', bn: 'নববী চিকিৎসা' },
@@ -110,6 +118,10 @@ const I18N = {
     'Green Islam': { ar: 'al-Islam al-Akhdar', bn: 'সবুজ ইসলাম' },
     'Mental Health': { ar: 'al-Sihha al-Nafsiyya', bn: 'মানসিক স্বাস্থ্য' },
     'Education': { ar: 'al-Talim', bn: 'শিক্ষা' },
+    'Wellness': { ar: 'al-Afiya', bn: 'সুস্থতা' },
+    'Earth & Living': { ar: 'al-Ard wa al-Maisha', bn: 'পৃথিবী ও জীবিকা' },
+    'Youth & Tech': { ar: 'al-Shabab wa al-Tiqniyya', bn: 'যুব ও প্রযুক্তি' },
+    'Ethics & Finance': { ar: 'al-Akhlaq wa al-Mal', bn: 'নৈতিকতা ও অর্থ' },
 
     // history
     'Biography': { ar: 'al-Seerah', bn: 'সীরাত' },
@@ -158,6 +170,9 @@ const I18N = {
     'Istanbul': { ar: 'Istanbul', bn: 'ইস্তাম্বুল' },
     'Bukhara': { ar: 'Bukhara', bn: 'বুখারা' },
     'Samarkand': { ar: 'Samarqand', bn: 'সমরকন্দ' },
+    'Holy Cities': { ar: 'al-Mudun al-Muqaddasa', bn: 'পবিত্র শহর' },
+    'Capitals': { ar: 'al-Awasim', bn: 'রাজধানী' },
+    'Lands of the East': { ar: 'Bilad al-Mashriq', bn: 'প্রাচ্যের দেশ' },
 
     // arts
     'Calligraphy': { ar: 'al-Khatt', bn: 'চারুকলা' },
@@ -170,6 +185,9 @@ const I18N = {
     'Textiles': { ar: 'al-Mansujat', bn: 'বস্ত্র' },
     'Ceramics': { ar: 'al-Khazaf', bn: 'মৃৎশিল্প' },
     'Woodwork': { ar: 'al-Amal al-Khashabiyya', bn: 'কাঠশিল্প' },
+    'Pattern & Illumination': { ar: 'al-Zakharfa wa al-Tadhhib', bn: 'নকশা ও অলংকরণ' },
+    'Sacred Space': { ar: 'al-Makan al-Muqaddas', bn: 'পবিত্র স্থান' },
+    'Crafts & Nasheeds': { ar: 'al-Hiraf wa al-Anashid', bn: 'হস্তশিল্প ও নাশিদ' },
 
     // arabic language
     'Grammar': { ar: 'al-Nahw', bn: 'ব্যাকরণ' },
@@ -181,6 +199,9 @@ const I18N = {
     'Etymology': { ar: 'al-Ishtiqaq', bn: 'ব্যুৎপত্তি' },
     'Dialects': { ar: 'al-Lahajat', bn: 'উপভাষা' },
     'Scripts': { ar: 'al-Khutut', bn: 'লিপি' },
+    'Structure': { ar: 'Binyat al-Lugha', bn: 'ভাষার গঠন' },
+    'Sound & Script': { ar: 'al-Sawt wa al-Khatt', bn: 'ধ্বনি ও লিপি' },
+    'Words & Poetry': { ar: 'al-Kalimat wa al-Shir', bn: 'শব্দ ও কবিতা' },
 
     // philosophy
     'Epistemology': { ar: 'Nazariyyat al-Maarifa', bn: 'জ্ঞানতত্ত্ব' },
@@ -192,6 +213,9 @@ const I18N = {
     'Prob of Evil': { ar: 'Mushkilat al-Sharr', bn: 'মন্দের সমস্যা' },
     'Prophethood': { ar: 'al-Nubuwwa', bn: 'নবুয়ত' },
     'Existence': { ar: 'al-Wujud', bn: 'অস্তিত্ব' },
+    'Being': { ar: 'al-Wujud', bn: 'অস্তিত্ব' },
+    'Reason & Knowing': { ar: 'al-Aql wa al-Marifa', bn: 'যুক্তি ও জ্ঞান' },
+    'Will & Evil': { ar: 'al-Irada wa al-Sharr', bn: 'ইচ্ছা ও মন্দ' },
 
     // names_main subtabs
     '99 Names of Allah': { ar: 'Asma Allah al-Husna', bn: 'আল্লাহর ৯৯ নাম' },

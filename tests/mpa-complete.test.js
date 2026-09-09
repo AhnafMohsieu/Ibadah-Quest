@@ -5,8 +5,8 @@ const assert = require('node:assert');
 const fs = require('node:fs');
 const path = require('node:path');
 
-test('all 5 pages exist with module entries and shell nav', () => {
-  for (const p of ['today', 'ibadah', 'knowledge', 'library', 'profile']) {
+test('all 6 pages exist with module entries and shell nav', () => {
+  for (const p of ['today', 'ibadah', 'knowledge', 'names', 'library', 'profile']) {
     const html = fs.readFileSync(path.join(__dirname, '..', `src/pages/${p}/${p}.html`), 'utf8');
     assert.match(html, /type="module"/);
     const entry = fs.readFileSync(path.join(__dirname, '..', `src/pages/${p}/entry.js`), 'utf8');
@@ -53,4 +53,11 @@ test('library MPA entry mirrors consolidated TAB_GROUPS.library ids', () => {
   assert.deepEqual(tabs('arts'), ['pattern', 'sacred-space', 'living-crafts', 'word']);
   assert.deepEqual(tabs('arabic_lang'), ['structure', 'sound-script', 'words-poetry']);
   assert.deepEqual(tabs('philosophy'), ['being', 'knowing', 'will-evil']);
+});
+
+test('names MPA entry mirrors consolidated TAB_GROUPS.names_main ids', () => {
+  const groups = extractGroups('src/pages/names/entry.js', 'NAMES_GROUPS');
+  assert.deepEqual(groups.map(gr => gr.id), ['names']);
+  assert.deepEqual(groups[0].tabs.map(t => t.id),
+    ['allah_names', 'prophets', 'sahaba', 'women', 'scholars_names']);
 });
