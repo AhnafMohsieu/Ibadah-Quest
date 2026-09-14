@@ -34,6 +34,12 @@
   function isCoreCache(name) {
     return typeof name === 'string' && name.indexOf('iq-cache-') === 0;
   }
+  function isCdnResponseValid(response) {
+    if (!response || !response.ok) return false;
+    const ct = response.headers.get('content-type') || '';
+    if (response.status === 200 && ct.includes('text/html')) return false;
+    return true;
+  }
 
   if (typeof self === 'undefined' || typeof self.addEventListener !== 'function') return;
 
@@ -72,13 +78,13 @@
         const cached = await cdnCache.match(req.url);
         if (cached) {
           fetch(req).then(fresh => {
-            if (fresh && fresh.ok) cdnCache.put(req.url, fresh.clone()).catch(() => {});
+            if (fresh && fresh.ok && isCdnResponseValid(fresh)) cdnCache.put(req.url, fresh.clone()).catch(() => {});
           }).catch(() => {});
           return cached;
         }
         try {
           const fresh = await fetch(req);
-          if (fresh && fresh.ok) cdnCache.put(req.url, fresh.clone()).catch(() => {});
+          if (fresh && fresh.ok && isCdnResponseValid(fresh)) cdnCache.put(req.url, fresh.clone()).catch(() => {});
           return fresh;
         } catch (e) {
           return new Response('', { status: 503, statusText: 'Offline' });
@@ -147,6 +153,7 @@
   });
 
   self.addEventListener('message', (event) => {
+    if (event.origin && event.origin !== self.location.origin) return;
     if (event.data && event.data.type === 'SKIP_WAITING') self.skipWaiting();
   });
 })();

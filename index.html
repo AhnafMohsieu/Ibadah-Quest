@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; worker-src 'self'">
   <title>Ibadah Quest</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -145,6 +146,13 @@
     <div class="streak-info"><h3 id="strDays" aria-live="polite">0 Day Streak</h3><p id="strMsg">Start your journey!</p></div>
     <div class="streak-best"><div class="best-num" id="bestStr">0</div><div class="best-label">BEST</div></div>
   </div>
+
+  <div class="global-search-wrap">
+    <span class="global-search-icon" aria-hidden="true">&#128269;</span>
+    <input class="global-search" placeholder="Search anything..." autocomplete="off" aria-label="Search anything">
+    <button type="button" class="global-search-clear" aria-label="Clear search" style="display:none;">&times;</button>
+    <div class="global-search-results" id="globalSearchResults"></div>
+  </div>
   </div><!-- /hero-strip -->
 
   <div id="dailyCarousel" class="daily-carousel"></div>
@@ -157,12 +165,6 @@
     <div class="pull-refresh-text">Pull to refresh</div>
   </div>
   <div id="bonusArea"></div>
-
-  <div class="global-search-wrap">
-    <span class="global-search-icon"></span>
-    <input class="global-search" placeholder="Search anything..." autocomplete="off" aria-label="Search anything">
-    <div class="global-search-results" id="globalSearchResults"></div>
-  </div>
 
   <div class="tier-nav-container">
     <div class="tier1-tabs" role="tablist" aria-label="Main navigation">
@@ -485,7 +487,7 @@
 <script src="features/spiritual-growth/boat.js?v=1" defer></script>
 <script src="features/spiritual-growth/ramadan.js?v=1" defer></script>
 <script src="features/spiritual-growth/laylat.js?v=1" defer></script>
-<script src="features/search.js?v=4" defer></script>
+<script src="features/search.js?v=5" defer></script>
 <script src="features/hadith-library.js?v=3" defer></script>
 <script src="features/tafsir-library.js?v=3" defer></script>
 <script src="features/tafsir-browser.js?v=1" defer></script>

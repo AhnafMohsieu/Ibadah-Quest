@@ -649,7 +649,7 @@ test('intro dismissal persists synchronously with a mirror flag', () => {
 });
 
 test('nav tiers share one sizing language', () => {
-  assert.ok(css.includes('.t2-btn,.t3-btn,.cat-chip{white-space:normal;}'),
+  assert.ok(css.includes('.t2-btn,.t3-btn{white-space:normal;}'),
     'nav buttons must allow label wrapping');
   assert.ok(css.includes('.tier3-tabs > :last-child:nth-child(4n+1){grid-column:1 / -1;}'),
     'lone grid orphan must span full width');

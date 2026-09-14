@@ -87,8 +87,34 @@
     stories: { icon:'book-open', title:'Read Inspiring Stories', desc:'Indeed, in their stories is a lesson for those of understanding.', cta:'Read Stories', tab:'stories' }
   };
 
-  function renderSunnahs() { poolRender('sunnahArea', iqIcon('sun') + ' Daily Sunnahs',SUNNAH_POOL,'sunnahIdx'); }
-  function renderDhikr() { poolRender('dhikrArea', iqIcon('beads') + ' Dhikr Collection',DHIKR_POOL,'dhikrIdx'); }
+  function renderSunnahs() {
+    const el = document.getElementById('sunnahArea');
+    if (!el) return;
+    const cats = ['All', ...new Set(SUNNAH_POOL.map(s => s.cat).filter(Boolean))];
+    const cur = (S._sunnahCat || 'All');
+    let html = '<div class="section-title">' + iqIcon('sun') + ' Daily Sunnahs</div>';
+    html += '<div class="tier2-tabs cat-chips">';
+    cats.forEach(function(c) {
+      const active = c === cur ? ' active' : '';
+      html += '<button class="cat-chip' + active + '" onclick="S._sunnahCat=\'' + c + '\';renderSunnahs()">' + c + '</button>';
+    });
+    html += '</div>';
+    const filtered = cur === 'All' ? SUNNAH_POOL : SUNNAH_POOL.filter(function(s) { return s.cat === cur; });
+    html += filtered.map(function(o, i) {
+      const numBadge = '<span style="display:inline-block;background:var(--accent-bg);color:var(--accent-light);border:1px solid var(--accent-border);border-radius:12px;padding:0 8px;font-size:0.75rem;margin-right:8px;font-weight:800;height:22px;line-height:20px;white-space:nowrap;font-family:var(--font);">#' + (i + 1) + '</span>';
+      let inner = '';
+      if (o.arabic) inner += '<div class="content-arabic">' + o.arabic + '</div>';
+      if (o.roman) inner += '<div style="font-size:0.9rem;color:var(--text2);opacity:0.9;font-style:italic;margin-bottom:6px;text-align:right;">' + o.roman + '</div>';
+      inner += '<div class="content-english">' + o.text + '</div>';
+      if (o.source) inner += '<div class="content-source">' + iqIcon('book-open') + ' ' + o.source + '<a class="verify-btn" href="' + getSourceLink(o.source) + '" target="_blank" rel="noopener noreferrer" title="Verify this source">Verify</a></div>';
+      return '<div class="content-card" onclick="if(typeof window.grantDailyXp===\'function\')window.grantDailyXp(2,\'read|sunnahArea|' + i + '\')"><div style="display:flex;align-items:flex-start;gap:10px;"><div style="margin-top:2px;">' + numBadge + '</div><div style="flex:1;">' + inner + '</div></div></div>';
+    }).join('');
+    el.innerHTML = html;
+  }
+  function renderDhikr() {
+    if (typeof window.renderDhikrCounter === 'function') window.renderDhikrCounter();
+    poolRender('dhikrArea', iqIcon('beads') + ' Dhikr Collection',DHIKR_POOL,'dhikrIdx');
+  }
   function renderStories() { poolRender('storiesArea', iqIcon('book-open') + ' Inspiring Stories',STORIES,'storiesIdx',true); }
   function renderNames() {
     const el = document.getElementById('namesArea');
@@ -149,7 +175,25 @@
   function renderCommunity() { poolRender('communityArea', iqIcon('building') + ' Community & Society',COMMUNITY_POOL,'communityIdx'); }
   function renderEnvironment() { poolRender('environmentArea', iqIcon('leaf') + ' Nature & Environment',ENVIRONMENT_POOL,'environmentIdx'); }
   function renderTravel() { poolRender('travelArea', iqIcon('plane') + ' Travel & Safar',TRAVEL_POOL,'travelIdx'); }
-  function renderFiqh() { poolRender('fiqhArea', iqIcon('book-open') + ' Islamic Jurisprudence (Fiqh)',FIQH_POOL,'fiqhIdx'); }
+  function renderFiqh() {
+    const el = document.getElementById('fiqhArea');
+    if (!el) return;
+    const cats = [...new Set(FIQH_POOL.map(s => s.cat).filter(Boolean))];
+    const cur = (S._fiqhCat || cats[0]);
+    let html = '<div class="section-title">' + iqIcon('book-open') + ' Islamic Jurisprudence (Fiqh)</div>';
+    html += '<div class="tier2-tabs cat-chips">';
+    cats.forEach(function(c) {
+      const active = c === cur ? ' active' : '';
+      html += '<button class="cat-chip' + active + '" onclick="S._fiqhCat=\'' + c + '\';renderFiqh()">' + c + '</button>';
+    });
+    html += '</div>';
+    const filtered = FIQH_POOL.filter(function(s) { return s.cat === cur; });
+    html += filtered.map(function(o, i) {
+      const numBadge = '<span style="display:inline-block;background:var(--accent-bg);color:var(--accent-light);border:1px solid var(--accent-border);border-radius:12px;padding:0 8px;font-size:0.75rem;margin-right:8px;font-weight:800;height:22px;line-height:20px;white-space:nowrap;font-family:var(--font);">#' + (i + 1) + '</span>';
+      return '<div class="content-card" onclick="if(typeof window.grantDailyXp===\'function\')window.grantDailyXp(2,\'read|fiqhArea|' + i + '\')"><div style="font-weight:700;margin-bottom:6px;color:var(--accent-light);display:flex;align-items:flex-start;"><div style="margin-top:1px;">' + numBadge + '</div><span style="line-height:1.4;">' + o.title + '</span></div><div class="content-english">' + o.desc + '</div></div>';
+    }).join('');
+    el.innerHTML = html;
+  }
   function renderArabic() { poolRender('arabicArea', iqIcon('book-open') + ' Arabic Alphabet',ARABIC_POOL.filter(function(o){return o.arabic && o.name;}),'arabicIdx',true); }
   function renderTawakkul() { poolRender('tawakkulArea', iqIcon('handshake') + ' Tawakkul · Trust in Allah',TAWAKKUL_POOL,'tawakkulIdx'); }
   function renderIkhlas() { poolRender('ikhlasArea', iqIcon('heart') + ' Ikhlas · Sincerity',IKHLAS_POOL,'ikhlasIdx'); }

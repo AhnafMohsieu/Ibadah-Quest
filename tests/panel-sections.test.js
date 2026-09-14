@@ -14,7 +14,7 @@ function loadSections() {
 test('PANEL_SECTIONS covers every section incl. ones only activateTab knew about', () => {
   const s = loadSections();
   for (const key of ['home','quests','stats','growth','profile','knowledge_quran','knowledge_fiqh',
-                     'knowledge_creed','knowledge_heart','knowledge_society','knowledge_life',
+                     'knowledge_creed','knowledge_heart',
                      'knowledge_history','knowledge_hereafter','library_dynasties','library_cities',
                      'library_arts','library_arabic','library_philosophy','names']) {
     assert.ok(Array.isArray(s[key]) && s[key].length > 0, 'missing section: ' + key);

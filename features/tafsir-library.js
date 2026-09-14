@@ -1,9 +1,12 @@
 (function() {
-  const QURAN_API = 'https://api.quran.com/api/v4/tafsirs/169/by_ayah/';
+  const QURAN_API_BASE = 'https://api.quran.com/api/v4/tafsirs/';
   const JALALAYN_URL = 'https://cdn.jsdelivr.net/gh/fawazahmed0/quran-api@1/editions/ara-jalaladdinalmah.json';
   const EDITIONS = [
-    { id: 'ibnkathir', name: 'Ibn Kathir', lang: 'en', dir: 'ltr' },
-    { id: 'jalalayn', name: 'Tafsir al-Jalalayn', lang: 'ar', dir: 'rtl' }
+    { id: 'ibnkathir', name: 'Ibn Kathir', lang: 'en', dir: 'ltr', apiId: 169 },
+    { id: 'jalalayn', name: 'Tafsir al-Jalalayn', lang: 'ar', dir: 'rtl', apiId: 10 },
+    { id: 'saadi', name: 'Saadi (English)', lang: 'en', dir: 'ltr', apiId: 19 },
+    { id: 'maududi', name: 'Maududi (English)', lang: 'en', dir: 'ltr', apiId: 156 },
+    { id: 'asad', name: 'Muhammad Asad', lang: 'en', dir: 'ltr', apiId: 20 }
   ];
   let _jalalaynData = null;
   let _jalalaynPromise = null;
@@ -59,16 +62,6 @@
 
   function getTafsir(editionId, surah, ayah) {
     const key = surah + ':' + ayah;
-    if (editionId === 'ibnkathir') {
-      return ContentCache.get('taf-ibnkathir-' + key).then(cached => {
-        if (cached) return { text: cached, lang: 'en', dir: 'ltr' };
-        return fetchJSON(QURAN_API + key).then(j => {
-          const text = j && j.tafsir && j.tafsir.text;
-          if (!text) throw new Error('No tafsir');
-          return ContentCache.put('taf-ibnkathir-' + key, text).then(() => ({ text: text, lang: 'en', dir: 'ltr' }));
-        });
-      });
-    }
     if (editionId === 'jalalayn') {
       return loadJalalayn().then(arr => {
         const idx = _jalalaynIndex(surah, ayah);
@@ -77,7 +70,17 @@
         return { text: item.text, lang: 'ar', dir: 'rtl' };
       });
     }
-    return Promise.reject(new Error('Unknown edition'));
+    const ed = EDITIONS.find(e => e.id === editionId && e.apiId);
+    if (!ed) return Promise.reject(new Error('Unknown edition'));
+    const url = QURAN_API_BASE + ed.apiId + '/by_ayah/' + key;
+    return ContentCache.get('taf-' + editionId + '-' + key).then(cached => {
+      if (cached) return { text: cached, lang: ed.lang, dir: ed.dir };
+      return fetchJSON(url).then(j => {
+        const text = j && j.tafsir && j.tafsir.text;
+        if (!text) throw new Error('No tafsir');
+        return ContentCache.put('taf-' + editionId + '-' + key, text).then(() => ({ text: text, lang: ed.lang, dir: ed.dir }));
+      });
+    });
   }
 
   window.TafsirLibrary = { EDITIONS: EDITIONS, getTafsir: getTafsir, sanitizeRichText: sanitizeRichText };

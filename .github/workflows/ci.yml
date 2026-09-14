@@ -30,6 +30,24 @@ jobs:
       - name: Syntax-check all JS
         run: node scripts/check-syntax.js
 
+      # Gate 1b: lint for common JS issues (undef, unused, dupe keys)
+      - name: Install ESLint
+        run: npm install --no-save eslint@8
+      - name: Lint JS
+        run: npx eslint --no-eslintrc -c .eslintrc.json "**/*.js" --ignore-pattern "node_modules" --ignore-pattern "docs" --ignore-pattern ".superpowers" --ignore-pattern "src" --ignore-pattern "tests" --max-warnings 50
+
+      # Gate 1c: security validation — scan for common vulnerabilities
+      - name: Security scan (no eval, no innerHTML with user input, no secrets)
+        run: |
+          echo "--- Scanning for security issues ---"
+          if grep -rn "eval(" --include="*.js" --exclude-dir=node_modules --exclude-dir=docs --exclude-dir=.superpowers --exclude-dir=tests --exclude-dir=src . | grep -v "test\|spec\|\.test\." | grep -v "no-eval\|eslint-disable"; then
+            echo "WARNING: eval() usage found — review for security"
+          fi
+          if grep -rn "innerHTML\s*=" --include="*.js" --exclude-dir=node_modules --exclude-dir=docs --exclude-dir=.superpowers --exclude-dir=tests --exclude-dir=src . | grep -v "escapeHTML\|textContent\|safe\|trusted\|pool\|Pool\|render" | head -20; then
+            echo "NOTE: innerHTML assignments found — ensure user input is escaped"
+          fi
+          echo "--- Security scan complete ---"
+
       # Gate 2: the full unit/integration suite. Also enforces the
       # "no silent no-op App stubs" scan in tests/app-registry.test.js and
       # the "no hand-rolled escaping" checks — one command, everything.

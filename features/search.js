@@ -30,7 +30,6 @@
     { var: 'REPENTANCE_POOL', cat: 'Repentance', tab: 'vices-return', fields: ['title','desc','text'] },
     { var: 'SAHABA_POOL', cat: 'Sahaba', tab: 'sahaba', fields: ['title','desc','name'] },
     { var: 'SEERAH_POOL', cat: 'Seerah', tab: 'seerah', fields: ['title','desc','text'] },
-    { var: 'TAFSIR_POOL', cat: 'Tafsir', tab: 'tafsir', fields: ['title','desc','text'] },
     { var: 'MANNERS_POOL', cat: 'Manners', tab: 'character-path', fields: ['title','desc','text'] },
     { var: 'AQEEDAH_POOL', cat: 'Creed', tab: 'aqeedah', fields: ['title','desc','text'] },
     { var: 'HEALTH_POOL', cat: 'Health', tab: 'wellness', fields: ['title','desc','text'] },
@@ -104,10 +103,27 @@
     if (!input || !box) return;
     init._done = true;
 
+    const clearBtn = input.parentElement ? input.parentElement.querySelector('.global-search-clear') : null;
+
+    function updateClear() {
+      if (clearBtn) clearBtn.classList.toggle('visible', input.value.length > 0);
+    }
+
     input.addEventListener('input', function() {
+      updateClear();
       clearTimeout(_debounce);
       _debounce = setTimeout(() => showResults(this.value, box), 200);
     });
+
+    if (clearBtn) {
+      clearBtn.addEventListener('click', function() {
+        input.value = '';
+        updateClear();
+        box.classList.remove('show');
+        box.innerHTML = '';
+        input.focus();
+      });
+    }
 
     input.addEventListener('keydown', function(e) {
       const items = box.querySelectorAll('.gs-item');
@@ -119,7 +135,7 @@
       else if (e.key === 'Escape') { box.classList.remove('show'); input.blur(); }
     });
 
-    input.addEventListener('focus', function() { if (this.value.length >= 2) showResults(this.value, box); });
+    input.addEventListener('focus', function() { updateClear(); if (this.value.length >= 2) showResults(this.value, box); });
   }
 
   function setActive(items, idx) {

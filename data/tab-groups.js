@@ -50,40 +50,36 @@
       { id: 'tafsir', icon: 'scroll', label: 'Interpretation' },
       { id: 'hadith', icon: 'bookmarks', label: 'Hadith' },
       { id: 'sunnahs', icon: 'star', label: 'Prophetic Ways' } ] },
-    { id: 'fiqh', icon: 'scales', label: 'Fiqh & Rulings', tabs: [
-      { id: 'fiqh', icon: 'scales', label: 'Jurisprudence' },
-      { id: 'worship-rulings', icon: 'droplets', label: 'Worship Rulings' },
-      { id: 'wealth-oaths', icon: 'wallet', label: 'Wealth & Oaths' } ] },
-    { id: 'arabic', icon: 'pencil', label: 'Arabic', tabs: [
-      { id: 'arabic', icon: 'pencil', label: 'Arabic' } ] },
-    { id: 'heart', icon: 'heart', label: 'Heart & Soul', tabs: [
-      { id: 'virtues', icon: 'sparkles', label: 'Virtues' },
-      { id: 'vices-return', icon: 'alert-triangle', label: 'Vices & Repentance' },
-      { id: 'character-path', icon: 'handshake', label: 'Character & Path' } ] },
-    { id: 'society', icon: 'users', label: 'Dealings & Society', tabs: [
-      { id: 'family-life', icon: 'family', label: 'Family Life' },
-      { id: 'community', icon: 'users', label: 'Community' },
-      { id: 'service', icon: 'hand-heart', label: 'Service & Care' },
-      { id: 'work-justice', icon: 'briefcase', label: 'Work & Justice' } ] },
-    { id: 'life', icon: 'leaf', label: 'Life & Modern', tabs: [
-      { id: 'wellness', icon: 'heartbeat', label: 'Wellness' },
-      { id: 'earth-living', icon: 'tree', label: 'Earth & Living' },
-      { id: 'youth-tech', icon: 'zap', label: 'Youth & Tech' },
-      { id: 'ethics-finance', icon: 'scales', label: 'Ethics & Finance' } ] },
-    { id: 'history', icon: 'scroll', label: 'History & Seerah', tabs: [
-      { id: 'seerah', icon: 'scroll', label: 'Biography' },
-      { id: 'stories', icon: 'book-open', label: 'Stories' },
-      { id: 'battles', icon: 'sword', label: 'Battles' },
-      { id: 'science', icon: 'monitor', label: 'Science' },
-      { id: 'modernhist', icon: 'trending-up', label: 'Modern Hist.' },
-      { id: 'ancientprophets', icon: 'scroll', label: 'Ancient' } ] },
-    { id: 'hereafter', icon: 'moon', label: 'Hereafter', tabs: [
-      { id: 'akhirah', icon: 'moon', label: 'Hereafter' },
-      { id: 'jannah', icon: 'sparkles', label: 'Paradise' },
-      { id: 'jahannam', icon: 'flame', label: 'Hellfire' },
-      { id: 'grave', icon: 'coffin', label: 'The Grave' },
-      { id: 'signs', icon: 'clock', label: 'Signs of Qiyamah' },
-      { id: 'dreams', icon: 'moon', label: 'Islamic Dreams' } ] }
+    { id: 'fiqh', icon: 'scales', label: 'Fiqh & Rulings', grid: true, tabs: [
+      { id: 'fiqh', icon: 'scales', label: 'Jurisprudence', desc: 'Core rulings on worship, transactions, and daily life', poolKey: 'FIQH_POOL' },
+      { id: 'worship-rulings', icon: 'droplets', label: 'Worship Rulings', desc: 'Purification, prayer, fasting, and Hajj specifics', poolKeys: ['PURIFICATION','SALAHRULES','SAWMRULES','HAJJRULES','HAJJ_POOL'] },
+      { id: 'wealth-oaths', icon: 'wallet', label: 'Wealth & Oaths', desc: 'Zakat, trade, inheritance, and vows', poolKeys: ['ZAKATRULES','TRADE','INHERITANCE','OATHS'] } ] },
+    { id: 'faith_life', icon: 'heart', label: 'Faith & Life', grid: true, tabs: [
+      { id: 'virtues', icon: 'sparkles', label: 'Virtues', desc: 'Sincerity, patience, trust, and hope in Allah', poolKeys: ['IKHLAS_POOL','TAWAKKUL_POOL','PATIENCE_POOL','HOPE','FEAR','LOVEOFALLAH','CONTENTMENT'] },
+      { id: 'vices-return', icon: 'alert-triangle', label: 'Vices & Repentance', desc: 'Heart diseases, sins, and turning back to Allah', poolKeys: ['HEART_POOL','SINS_POOL','REPENTANCE_POOL'] },
+      { id: 'character-path', icon: 'handshake', label: 'Character & Path', desc: 'Manners, sufism, and spiritual purification', poolKeys: ['MANNERS_POOL','ZUHD_POOL','SUFISM','TAZKIYAH','INSPIRATIONS_POOL','REFLECTION'] },
+      { id: 'family-life', icon: 'family', label: 'Family Life', desc: 'Marriage, parenting, and household bonds', poolKeys: ['FAMILY_POOL','MARRIAGE_POOL','PARENTING_POOL'] },
+      { id: 'community', icon: 'users', label: 'Community', desc: 'Brotherhood, sisterhood, and social ties', poolKeys: ['NEIGHBORS_POOL','COMMUNITY_POOL','BROTHERHOOD','SISTERHOOD','UMMAH_POOL','ANTIRACISM'] },
+      { id: 'service', icon: 'hand-heart', label: 'Service & Care', desc: 'Orphans, elderly, poverty, and volunteering', poolKeys: ['ORPHANS2','ELDERLY','DISABLED','POVERTY','VOLUNTEERING','DAWAH_POOL'] },
+      { id: 'work-justice', icon: 'briefcase', label: 'Work & Justice', desc: 'Career ethics, fairness, and accountability', poolKeys: ['WORK_POOL','PUNISHMENTS_POOL'] },
+      { id: 'wellness', icon: 'heartbeat', label: 'Wellness', desc: 'Health, medicine, and mental well-being', poolKeys: ['HEALTH_POOL','TIBB_POOL','MENTALHEALTH'] },
+      { id: 'earth-living', icon: 'tree', label: 'Earth & Living', desc: 'Food, nature, travel, and green living', poolKeys: ['FOOD_POOL','ENVIRONMENT_POOL','GREEN','TRAVEL_POOL'] },
+      { id: 'youth-tech', icon: 'zap', label: 'Youth & Tech', desc: 'Education, social media, and digital life', poolKeys: ['YOUTH_POOL','TECH_POOL','TECHNOLOGY','SOCIALMEDIA','EDUCATION'] },
+      { id: 'ethics-finance', icon: 'scales', label: 'Ethics & Finance', desc: 'Modern finance, bioethics, and politics', poolKeys: ['ETHICS','BIOETHICS','MODFINANCE','POLITICS'] } ] },
+    { id: 'history', icon: 'scroll', label: 'History & Seerah', grid: true, tabs: [
+      { id: 'seerah', icon: 'scroll', label: 'Biography', desc: 'The life and mission of Prophet Muhammad' },
+      { id: 'stories', icon: 'book-open', label: 'Stories', desc: 'Inspiring narratives from Islamic tradition', poolKey: 'STORIES' },
+      { id: 'battles', icon: 'sword', label: 'Battles', desc: 'Key military campaigns and their lessons' },
+      { id: 'science', icon: 'monitor', label: 'Science', desc: 'Scientific discoveries in Islamic civilisation' },
+      { id: 'modernhist', icon: 'trending-up', label: 'Modern Hist.', desc: 'Recent Islamic history and movements' },
+      { id: 'ancientprophets', icon: 'scroll', label: 'Ancient', desc: 'Stories of earlier prophets and nations' } ] },
+    { id: 'hereafter', icon: 'moon', label: 'Hereafter', grid: true, tabs: [
+      { id: 'akhirah', icon: 'moon', label: 'Hereafter', desc: 'The unseen world and life after death' },
+      { id: 'jannah', icon: 'sparkles', label: 'Paradise', desc: 'Descriptions of Jannah and its blessings' },
+      { id: 'jahannam', icon: 'flame', label: 'Hellfire', desc: 'Warnings about Jahannam and its horrors' },
+      { id: 'grave', icon: 'coffin', label: 'The Grave', desc: 'Life in the barzakh between death and resurrection' },
+      { id: 'signs', icon: 'clock', label: 'Signs of Qiyamah', desc: 'Major and minor signs before the Day of Judgment' },
+      { id: 'dreams', icon: 'moon', label: 'Islamic Dreams', desc: 'Prophetic dream interpretation and vision' } ] }
   ],
 
   // ── PROFILE ──
@@ -116,6 +112,7 @@
       { id: 'living-crafts', icon: 'palette', label: 'Crafts & Nasheeds' },
       { id: 'word', icon: 'book-open', label: 'Literature' } ] },
     { id: 'arabic_lang', icon: 'pencil', label: 'Arabic Language', tabs: [
+      { id: 'arabic', icon: 'pencil', label: 'Arabic' },
       { id: 'structure', icon: 'pencil', label: 'Structure' },
       { id: 'sound-script', icon: 'megaphone', label: 'Sound & Script' },
       { id: 'words-poetry', icon: 'book-open', label: 'Words & Poetry' } ] },

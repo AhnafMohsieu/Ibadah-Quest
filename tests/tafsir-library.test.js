@@ -28,18 +28,20 @@ test('global ayah index math matches revelation-order cumulative counts', () => 
   assert.match(SRC, /cum \+ ayah - 1/);
 });
 
-test('editions list exposes both editions with correct lang/dir', () => {
+test('editions list exposes all editions with correct lang/dir', () => {
   const T = loadModule([]);
-  assert.deepEqual(T.EDITIONS.map(e => e.id), ['ibnkathir', 'jalalayn']);
+  assert.deepEqual(T.EDITIONS.map(e => e.id), ['ibnkathir', 'jalalayn', 'saadi', 'maududi', 'asad']);
   assert.equal(T.EDITIONS[0].lang, 'en');
   assert.equal(T.EDITIONS[1].dir, 'rtl');
+  assert.equal(T.EDITIONS[2].id, 'saadi');
+  assert.equal(T.EDITIONS[4].id, 'asad');
 });
 
 test('wiring pins: CDN endpoints and cache keys', () => {
-  assert.ok(SRC.includes('https://api.quran.com/api/v4/tafsirs/169/by_ayah/'));
+  assert.ok(SRC.includes('https://api.quran.com/api/v4/tafsirs/'));
   assert.ok(SRC.includes('ara-jalaladdinalmah.json'));
   assert.match(SRC, /ContentCache\.get\('taf-jalalayn-ar'\)/);
-  assert.match(SRC, /ContentCache\.get\('taf-ibnkathir-' \+/);
+  assert.match(SRC, /ContentCache\.get\('taf-' \+ editionId/);
   assert.match(SRC, /_jalalaynPromise/, 'in-flight dedup present');
   assert.match(SRC, /window\.TafsirLibrary = \{/);
 });

@@ -98,21 +98,107 @@
     document.querySelectorAll('.cat-chip').forEach(function(el) { el.classList.remove('active'); });
     if (btn) btn.classList.add('active');
     _activeCategoryId = catId;
-    var group = Object.values(window.TAB_GROUPS).find(function(g) {
-      return Array.isArray(g[0] && g[0].tabs) && g.some(function(c) { return c.id === catId; });
-    }) || [];
-    var cat = group.find(function(c) { return c.id === catId; });
+    // Search only the CURRENT top-level category group (not all TAB_GROUPS)
+    // to avoid matching the same id in a different parent.
+    var currentCat = (window.S && window.S.lastCat) || 'ibadah';
+    var currentGroup = window.TAB_GROUPS[currentCat] || [];
+    var cat = currentGroup.find(function(c) { return c.id === catId; });
     if (cat) renderCategoryTabs(cat);
+  }
+
+  function drillDown(tabId, btn) {
+    var grid = document.getElementById('tier3Tabs');
+    var wrap = document.getElementById('tier3Wrap');
+    if (!grid || !wrap) { activateTab(tabId, btn); return; }
+    grid.classList.remove('surah-grid');
+    wrap.style.display = 'none';
+    activateTab(tabId, btn);
+    var panel = document.getElementById('panel-' + tabId);
+    if (panel) {
+      var existing = panel.querySelector('.drill-back');
+      if (!existing) {
+        var back = document.createElement('button');
+        back.className = 'drill-back';
+        back.textContent = '\u2190 Back';
+        back.onclick = function() { drillUp(); };
+        panel.insertBefore(back, panel.firstChild);
+      }
+    }
+  }
+
+  function drillUp() {
+    var wrap = document.getElementById('tier3Wrap');
+    var catEl = document.querySelector('.t1-btn.active');
+    if (wrap) wrap.style.display = '';
+    document.querySelectorAll('.tab-panel').forEach(function(p) { p.classList.remove('active'); });
+    if (catEl) {
+      var catId = catEl.getAttribute('data-cat');
+      var currentCat = (window.S && window.S.lastCat) || 'ibadah';
+      var groups = window.TAB_GROUPS[currentCat] || [];
+      var cat = groups.find(function(c) { return c.id === catId; });
+      if (cat && cat.grid) {
+        var grid = document.getElementById('tier3Tabs');
+        if (grid) {
+          grid.classList.add('surah-grid');
+          grid.innerHTML = cat.tabs.map(function(p) {
+            var icon = window.iqIcon(p.icon || p.id);
+            var desc = p.desc ? '<div style="font-size:0.72rem;color:var(--text2);margin-top:4px;line-height:1.4;">' + p.desc + '</div>' : '';
+            var count = poolCount(p);
+            var countHtml = count ? '<div style="font-size:0.68rem;color:var(--accent-light);margin-top:6px;font-weight:600;">' + count + ' entries</div>' : '';
+            return '<div class="surah-card" data-tab="' + p.id + '" onclick="window.drillDown(\'' + p.id + '\', this)">' +
+              '<div class="surah-num">' + icon + '</div>' +
+              '<div class="surah-name-en">' + t(p.label) + '</div>' +
+              desc + countHtml +
+            '</div>';
+          }).join('');
+        }
+      }
+    }
+  }
+
+  function poolCount(tab) {
+    var count = 0;
+    if (tab.poolKeys) {
+      tab.poolKeys.forEach(function(k) {
+        var p = window[k] || (window.NEW_POOLS && NEW_POOLS[k]);
+        if (p && p.length) count += p.length;
+      });
+      return count;
+    }
+    var key = tab.poolKey || (tab.id.toUpperCase() + '_POOL');
+    var pool = window[key];
+    if (!pool && window.NEW_POOLS) pool = NEW_POOLS[tab.id];
+    if (pool && pool.length) count = pool.length;
+    return count;
   }
 
   function renderCategoryTabs(cat) {
     var grid = document.getElementById('tier3Tabs');
     if (!grid) return;
     grid.dataset.cat = cat.id;
-    grid.innerHTML = cat.tabs.map(function(p, i) {
-      return `<button data-tab="${p.id}" class="t2-btn ${i === 0 ? 'active' : ''}" onclick="window.activateTab('${p.id}', this)"><span>${window.iqIcon(p.icon || p.id)}</span> ${t(p.label)}</button>`;
-    }).join('');
-    if (cat.tabs.length > 0) activateTab(cat.tabs[0].id, grid.firstElementChild);
+    if (cat.grid) {
+      grid.classList.add('surah-grid');
+      grid.classList.remove('tier3-grid');
+      var catIcon = cat.icon || cat.id;
+      grid.innerHTML = cat.tabs.map(function(p, i) {
+        var icon = window.iqIcon(p.icon || p.id);
+        var desc = p.desc ? '<div style="font-size:0.72rem;color:var(--text2);margin-top:4px;line-height:1.4;">' + p.desc + '</div>' : '';
+        var count = poolCount(p);
+        var countHtml = count ? '<div style="font-size:0.68rem;color:var(--accent-light);margin-top:6px;font-weight:600;">' + count + ' entries</div>' : '';
+        return '<div class="surah-card" data-tab="' + p.id + '" onclick="window.drillDown(\'' + p.id + '\', this)">' +
+          '<div class="surah-num">' + icon + '</div>' +
+          '<div class="surah-name-en">' + t(p.label) + '</div>' +
+          desc +
+          countHtml +
+        '</div>';
+      }).join('');
+    } else {
+      grid.classList.remove('surah-grid');
+      grid.innerHTML = cat.tabs.map(function(p, i) {
+        return `<button data-tab="${p.id}" class="t2-btn ${i === 0 ? 'active' : ''}" onclick="window.activateTab('${p.id}', this)"><span>${window.iqIcon(p.icon || p.id)}</span> ${t(p.label)}</button>`;
+      }).join('');
+    }
+    if (cat.tabs.length > 0 && !cat.grid) activateTab(cat.tabs[0].id, grid.firstElementChild);
   }
 
   function getSectionPanels(sectionName) {
@@ -122,6 +208,7 @@
 
   function activateTab(tabId, btn) {
     document.querySelectorAll('.t2-btn').forEach(function(b) { b.classList.remove('active'); });
+    document.querySelectorAll('.surah-card').forEach(function(b) { b.classList.remove('active'); });
     if (btn) btn.classList.add('active');
     if (window.S) { window.S.lastSub = tabId; window.saveState(); }
     if (!window._hashNavigating) {
@@ -135,17 +222,11 @@
     for (var sec in sections) {
       if (sections[sec].indexOf(target) > -1) { sectionName = sec; break; }
     }
-    var sectionPanels = sectionName ? getSectionPanels(sectionName) : null;
-    // Single section-aware clear (was: section clear + unconditional global
-    // clear, doubling DOM thrash and causing tab-switch flicker).
-    if (sectionPanels) {
-      sectionPanels.forEach(function(id) {
-        var el = document.getElementById(id);
-        if (el) el.classList.remove('active');
-      });
-    } else {
-      document.querySelectorAll('.tab-panel').forEach(function(p) { p.classList.remove('active'); });
-    }
+    // Global panel clear: always hide every panel first.
+    // Previous section-aware clear broke cross-section tabs (e.g. panel-quran
+    // belongs to both 'home' and 'knowledge_quran' — switching sections left
+    // stale panels visible).
+    document.querySelectorAll('.tab-panel').forEach(function(p) { p.classList.remove('active'); });
     var panel = document.getElementById('panel-' + tabId);
     if (panel) panel.classList.add('active');
     var _lazyRender = {
@@ -376,6 +457,8 @@
   window.renderCategoryTabs = renderCategoryTabs;
   window.getSectionPanels = getSectionPanels;
   window.activateTab = activateTab;
+  window.drillDown = drillDown;
+  window.drillUp = drillUp;
   window.switchTab = switchTab;
   window.renderTab = renderTab;
   window.initTierTabKeyboardNav = initTierTabKeyboardNav;

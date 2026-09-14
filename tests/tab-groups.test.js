@@ -35,11 +35,12 @@ test('knowledge groups match consolidated IA (31 subtabs)', () => {
   const tabs = id => g.knowledge.find(gr => gr.id === id).tabs.map(t => t.id);
   assert.deepEqual(tabs('quran_sunnah'), ['quran', 'tafsir', 'hadith', 'sunnahs']);
   assert.deepEqual(tabs('fiqh'), ['fiqh', 'worship-rulings', 'wealth-oaths']);
-  assert.deepEqual(tabs('arabic'), ['arabic']);
+  assert.ok(!('arabic' in Object.fromEntries(g.knowledge.map(gr => [gr.id, 1]))), 'arabic moved to library');
   assert.ok(!('creed' in Object.fromEntries(g.knowledge.map(gr => [gr.id, 1]))), 'creed id gone');
-  assert.deepEqual(tabs('heart'), ['virtues', 'vices-return', 'character-path']);
-  assert.deepEqual(tabs('society'), ['family-life', 'community', 'service', 'work-justice']);
-  assert.deepEqual(tabs('life'), ['wellness', 'earth-living', 'youth-tech', 'ethics-finance']);
+  assert.deepEqual(tabs('faith_life'), ['virtues', 'vices-return', 'character-path', 'family-life', 'community', 'service', 'work-justice', 'wellness', 'earth-living', 'youth-tech', 'ethics-finance']);
+  assert.ok(!('heart' in Object.fromEntries(g.knowledge.map(gr => [gr.id, 1]))), 'heart merged into faith_life');
+  assert.ok(!('society' in Object.fromEntries(g.knowledge.map(gr => [gr.id, 1]))), 'society merged into faith_life');
+  assert.ok(!('life' in Object.fromEntries(g.knowledge.map(gr => [gr.id, 1]))), 'life merged into faith_life');
   assert.deepEqual(tabs('history'), ['seerah', 'stories', 'battles', 'science', 'modernhist', 'ancientprophets']);
   assert.deepEqual(tabs('hereafter'), ['akhirah', 'jannah', 'jahannam', 'grave', 'signs', 'dreams']);
 });
@@ -50,7 +51,7 @@ test('library groups match consolidated IA (21 subtabs) + names_main exists', ()
   assert.deepEqual(tabs('dynasties'), ['umayyads', 'abbasids', 'andalus', 'ottomans', 'mamluks', 'seljuks', 'fatimids', 'ayyubids']);
   assert.deepEqual(tabs('cities'), ['holy-cities', 'capitals', 'east']);
   assert.deepEqual(tabs('arts'), ['pattern', 'sacred-space', 'living-crafts', 'word']);
-  assert.deepEqual(tabs('arabic_lang'), ['structure', 'sound-script', 'words-poetry']);
+  assert.deepEqual(tabs('arabic_lang'), ['arabic', 'structure', 'sound-script', 'words-poetry']);
   assert.deepEqual(tabs('philosophy'), ['being', 'knowing', 'will-evil']);
   assert.ok(Array.isArray(g.names_main), 'names_main group must exist');
   assert.deepEqual(g.names_main[0].tabs.map(t => t.id),

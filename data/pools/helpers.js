@@ -28,7 +28,7 @@ const SEARCH_INDEX = [
   {cat:"Knowledge",title:"99 Names of Allah",desc:"Al-Asma ul-Husna",action:"switchCategory",args:["names_main","allah_names"]},
   {cat:"Knowledge",title:"Tafsir",desc:"Quran interpretation",action:"switchCategory",args:["knowledge","tafsir"]},
   {cat:"Knowledge",title:"Scholars",desc:"Great Islamic scholars",action:"switchCategory",args:["names_main","scholars_names"]},
-  {cat:"Knowledge",title:"Arabic",desc:"Learn Arabic",action:"switchCategory",args:["knowledge","arabic"]},
+  {cat:"Knowledge",title:"Arabic",desc:"Learn Arabic",action:"switchCategory",args:["library","arabic_lang"]},
   {cat:"Knowledge",title:"Fiqh",desc:"Islamic jurisprudence",action:"switchCategory",args:["knowledge","fiqh"]},
   {cat:"Heart",title:"Sins",desc:"Major sins to avoid",action:"switchCategory",args:["knowledge","sins"]},
   {cat:"Heart",title:"Repentance",desc:"Seeking forgiveness",action:"switchCategory",args:["knowledge","repentance"]},

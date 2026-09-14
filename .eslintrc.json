@@ -1,0 +1,30 @@
+{
+  "env": { "browser": true, "es2021": true, "node": true },
+  "parserOptions": { "ecmaVersion": "latest", "sourceType": "script" },
+  "globals": {
+    "S": "readonly", "IQ": "readonly", "App": "readonly",
+    "escapeHTML": "readonly", "iqIcon": "readonly", "today": "readonly",
+    "DHIKR_POOL": "readonly", "DHIKR_COUNTER_DATA": "readonly",
+    "SUNNAH_POOL": "readonly", "STORIES": "readonly", "NAMES": "readonly",
+    "HADITHS": "readonly", "INSPIRATIONS_POOL": "readonly",
+    "SINS_POOL": "readonly", "FINANCE_POOL": "readonly", "FAMILY_POOL": "readonly",
+    "HEART_POOL": "readonly", "SEERAH_POOL": "readonly", "SAHABA_POOL": "readonly",
+    "TAFSIR_POOL": "readonly", "MANNERS_POOL": "readonly", "AQEEDAH_POOL": "readonly",
+    "PUNISHMENTS_POOL": "readonly", "REPENTANCE_POOL": "readonly",
+    "poolRender": "readonly", "renderPoolCard": "readonly",
+    "loadState": "readonly", "saveState": "readonly",
+    "Storage": "readonly"
+  },
+  "rules": {
+    "no-undef": "warn",
+    "no-unused-vars": ["warn", { "args": "none", "varsIgnorePattern": "^_" }],
+    "no-redeclare": "error",
+    "no-dupe-keys": "error",
+    "no-constant-condition": "warn",
+    "no-empty": "warn",
+    "no-extra-semi": "warn",
+    "no-unreachable": "error",
+    "eqeqeq": "warn",
+    "no-debugger": "warn"
+  }
+}
