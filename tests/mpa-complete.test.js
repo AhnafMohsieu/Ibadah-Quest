@@ -52,7 +52,6 @@ test('library MPA entry mirrors consolidated TAB_GROUPS.library ids', () => {
   assert.deepEqual(tabs('cities'), ['holy-cities', 'capitals', 'east']);
   assert.deepEqual(tabs('arts'), ['pattern', 'sacred-space', 'living-crafts', 'word']);
   assert.deepEqual(tabs('arabic_lang'), ['structure', 'sound-script', 'words-poetry']);
-  assert.deepEqual(tabs('philosophy'), ['being', 'knowing', 'will-evil']);
 });
 
 test('names MPA entry mirrors consolidated TAB_GROUPS.names_main ids', () => {

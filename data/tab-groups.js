@@ -93,7 +93,7 @@
 
   // ── LIBRARY (categorized — reference shelves) ──
   library: [
-    { id: 'dynasties', icon: 'landmark', label: 'Dynasties', tabs: [
+    { id: 'dynasties', icon: 'landmark', label: 'Dynasties', grid: true, tabs: [
       { id: 'umayyads', icon: 'crescent', label: 'Umayyads' },
       { id: 'abbasids', icon: 'book-open', label: 'Abbasids' },
       { id: 'andalus', icon: 'palette', label: 'Andalus' },
@@ -102,24 +102,20 @@
       { id: 'seljuks', icon: 'moon', label: 'Seljuks' },
       { id: 'fatimids', icon: 'star', label: 'Fatimids' },
       { id: 'ayyubids', icon: 'sword', label: 'Ayyubids' } ] },
-    { id: 'cities', icon: 'building', label: 'Cities & Lands', tabs: [
+    { id: 'cities', icon: 'building', label: 'Cities & Lands', grid: true, tabs: [
       { id: 'holy-cities', icon: 'kaaba', label: 'Holy Cities' },
       { id: 'capitals', icon: 'building', label: 'Capitals' },
       { id: 'east', icon: 'globe', label: 'Lands of the East' } ] },
-    { id: 'arts', icon: 'palette', label: 'Arts & Crafts', tabs: [
+    { id: 'arts', icon: 'palette', label: 'Arts & Crafts', grid: true, tabs: [
       { id: 'pattern', icon: 'pen-tool', label: 'Pattern & Illumination' },
       { id: 'sacred-space', icon: 'mosque', label: 'Sacred Space' },
       { id: 'living-crafts', icon: 'palette', label: 'Crafts & Nasheeds' },
       { id: 'word', icon: 'book-open', label: 'Literature' } ] },
-    { id: 'arabic_lang', icon: 'pencil', label: 'Arabic Language', tabs: [
+    { id: 'arabic_lang', icon: 'pencil', label: 'Arabic Language', grid: true, tabs: [
       { id: 'arabic', icon: 'pencil', label: 'Arabic' },
       { id: 'structure', icon: 'pencil', label: 'Structure' },
       { id: 'sound-script', icon: 'megaphone', label: 'Sound & Script' },
-      { id: 'words-poetry', icon: 'book-open', label: 'Words & Poetry' } ] },
-    { id: 'philosophy', icon: 'brain', label: 'Philosophy & Thought', tabs: [
-      { id: 'being', icon: 'globe', label: 'Being' },
-      { id: 'knowing', icon: 'brain', label: 'Reason & Knowing' },
-      { id: 'will-evil', icon: 'shield', label: 'Will & Evil' } ] }
+      { id: 'words-poetry', icon: 'book-open', label: 'Words & Poetry' } ] }
   ],
   names_main: [
     { id: 'names', icon: 'sparkles', label: 'Names', tabs: [

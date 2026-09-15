@@ -35,11 +35,6 @@ const LIBRARY_GROUPS = [
     { id: 'sound-script', label: 'Sound & Script' },
     { id: 'words-poetry', label: 'Words & Poetry' },
   ]},
-  { id: 'philosophy', label: 'Philosophy & Thought', tabs: [
-    { id: 'being', label: 'Being' },
-    { id: 'knowing', label: 'Reason & Knowing' },
-    { id: 'will-evil', label: 'Will & Evil' },
-  ]},
 ];
 
 const TAB_SCRIPTS = {
@@ -53,8 +48,6 @@ const TAB_SCRIPTS = {
   'living-crafts': ['render/static.js'], word: ['render/static.js'],
   structure: ['render/static.js'], 'sound-script': ['render/static.js'],
   'words-poetry': ['render/static.js'],
-  being: ['render/static.js'], knowing: ['render/static.js'],
-  'will-evil': ['render/static.js'],
 };
 
 const CORE_SCRIPTS = ['core/xp.js', 'core/random.js', 'core/dhikr.js', 'core/content.js'];
@@ -87,8 +80,6 @@ function fireRenderers(tabId) {
     'living-crafts': 'renderLivingcrafts', word: 'renderWord',
     structure: 'renderStructure', 'sound-script': 'renderSoundscript',
     'words-poetry': 'renderWordspoetry',
-    being: 'renderBeing', knowing: 'renderKnowing',
-    'will-evil': 'renderWillevil',
   };
   const fnName = RENDERERS[tabId];
   if (fnName && window[fnName]) { try { window[fnName](); } catch {} }

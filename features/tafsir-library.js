@@ -1,15 +1,8 @@
 (function() {
   const QURAN_API_BASE = 'https://api.quran.com/api/v4/tafsirs/';
-  const JALALAYN_URL = 'https://cdn.jsdelivr.net/gh/fawazahmed0/quran-api@1/editions/ara-jalaladdinalmah.json';
   const EDITIONS = [
-    { id: 'ibnkathir', name: 'Ibn Kathir', lang: 'en', dir: 'ltr', apiId: 169 },
-    { id: 'jalalayn', name: 'Tafsir al-Jalalayn', lang: 'ar', dir: 'rtl', apiId: 10 },
-    { id: 'saadi', name: 'Saadi (English)', lang: 'en', dir: 'ltr', apiId: 19 },
-    { id: 'maududi', name: 'Maududi (English)', lang: 'en', dir: 'ltr', apiId: 156 },
-    { id: 'asad', name: 'Muhammad Asad', lang: 'en', dir: 'ltr', apiId: 20 }
+    { id: 'ibnkathir', name: 'Ibn Kathir', lang: 'en', dir: 'ltr', apiId: 169 }
   ];
-  let _jalalaynData = null;
-  let _jalalaynPromise = null;
 
   function sanitizeRichText(html) {
     return String(html || '')
@@ -37,39 +30,8 @@
     }, function(err) { done(); throw err; });
   }
 
-  function _jalalaynIndex(surah, ayah) {
-    if (typeof QURAN_SURAHS === 'undefined' || !Array.isArray(QURAN_SURAHS)) return null;
-    let cum = 0;
-    for (let i = 0; i < surah - 1; i++) cum += QURAN_SURAHS[i].ay;
-    return cum + ayah - 1;
-  }
-
-  function loadJalalayn() {
-    if (_jalalaynData) return Promise.resolve(_jalalaynData);
-    if (_jalalaynPromise) return _jalalaynPromise;
-    const p = _jalalaynPromise = ContentCache.get('taf-jalalayn-ar').then(cached => {
-      if (cached) { _jalalaynData = cached; return _jalalaynData; }
-      return fetchJSON(JALALAYN_URL).then(j => {
-        const arr = j && j.quran;
-        if (!Array.isArray(arr)) throw new Error('Bad edition');
-        _jalalaynData = arr;
-        return ContentCache.put('taf-jalalayn-ar', arr).then(() => arr);
-      });
-    });
-    p.then(() => { _jalalaynPromise = null; }, () => { _jalalaynPromise = null; });
-    return p;
-  }
-
   function getTafsir(editionId, surah, ayah) {
     const key = surah + ':' + ayah;
-    if (editionId === 'jalalayn') {
-      return loadJalalayn().then(arr => {
-        const idx = _jalalaynIndex(surah, ayah);
-        const item = (idx != null && idx >= 0) ? arr[idx] : null;
-        if (!item || !item.text) throw new Error('No tafsir');
-        return { text: item.text, lang: 'ar', dir: 'rtl' };
-      });
-    }
     const ed = EDITIONS.find(e => e.id === editionId && e.apiId);
     if (!ed) return Promise.reject(new Error('Unknown edition'));
     const url = QURAN_API_BASE + ed.apiId + '/by_ayah/' + key;

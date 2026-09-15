@@ -720,7 +720,6 @@ main#page {
 .cat-card {
   flex: 1 1 0;
   min-width: 100px;
-  max-width: 140px;
   background: var(--card-bg);
   border: 1px solid var(--card-border);
   border-radius: var(--radius);
@@ -3000,7 +2999,6 @@ html[data-theme="emara"] .global-search { background: var(--card-bg); }
 /* Tier-1 and bottom-nav buttons already share space evenly; this extends the */
 /* same behavior to every tier-2 / tier-3 / category chip row so no tab is */
 /* sized by its label length. Earlier wrap/scroll/touch rules stay in place. */
-#tier2Tabs, #tier3Tabs { justify-content: center; }
 #tier2Tabs .t2-btn, #tier2Tabs .cat-chip,
 #tier3Tabs .t2-btn, #tier3Tabs .t3-btn {
   flex: 1 1 6.5rem;
@@ -3055,106 +3053,41 @@ html[data-theme="emara"] .global-search { background: var(--card-bg); }
    CENTERING SYSTEM — Tabs, Cards, Content — all orientations
    ══════════════════════════════════════════════════════════════ */
 
-/* ── All tab rows: centered, even spacing ── */
-.tier1-tabs {
-  justify-content: center;
-  gap: 6px;
-}
-.tier1-tabs .t1-btn {
-  flex: 0 1 auto;
-  min-width: 80px;
-  max-width: 160px;
-}
-
-/* ── Tier 2 tabs: centered pill row ── */
-.tier2-tabs {
-  justify-content: center;
-  flex-wrap: wrap;
-}
-.tier2-tabs .t2-btn {
-  flex: 0 1 auto;
-  min-width: 70px;
-  max-width: 180px;
-}
-
-/* ── Category chips: centered, even grid ── */
+/* ── Category chips: centered grid ── */
 .tier2-tabs.cat-chips {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   gap: 6px;
-  grid-template-columns: unset;
-}
-.tier2-tabs.cat-chips .cat-chip {
-  flex: 0 1 auto;
-  min-width: 70px;
-  max-width: 160px;
 }
 
 /* ── Tier 3 tabs: centered grid ── */
 .tier3-tabs {
-  display: flex;
-  flex-wrap: wrap;
+  justify-items: center;
   justify-content: center;
-  gap: 6px;
-  grid-template-columns: unset;
-}
-.tier3-tabs .t3-btn {
-  flex: 0 1 auto;
-  min-width: 70px;
-  max-width: 140px;
 }
 
-/* ── Bottom nav: centered, even distribution ── */
-nav.bnav {
-  justify-content: center;
-  gap: 0;
-}
-.bnav-btn {
-  flex: 1 1 0;
-  max-width: 100px;
-}
-
-/* ── Card grids: centered, fluid ── */
+/* ── Card grids: fluid stretch ── */
 .surah-grid {
-  justify-items: center;
-}
-.card-grid {
-  justify-items: center;
-  justify-content: center;
+  justify-items: stretch;
 }
 
-/* ── Content cards: centered max-width ── */
+/* ── Content cards: centered ── */
 .content-card {
-  max-width: 600px;
   margin-left: auto;
   margin-right: auto;
 }
 .prayer-card {
-  max-width: 480px;
   margin-left: auto;
   margin-right: auto;
 }
 .deed-card {
-  max-width: 400px;
   margin-left: auto;
   margin-right: auto;
 }
 .vol-card {
-  max-width: 400px;
   margin-left: auto;
   margin-right: auto;
-}
-
-/* ── Tab panels: centered content ── */
-.tab-panel {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-.tab-panel > * {
-  width: 100%;
-  max-width: 720px;
 }
 
 /* ── Hero strip: always centered ── */
@@ -3162,24 +3095,24 @@ nav.bnav {
   text-align: center;
 }
 .hero-strip .level-row {
-  max-width: 480px;
+  width: 100%;
   margin-left: auto;
   margin-right: auto;
 }
 .hero-strip .streak-bar {
-  max-width: 480px;
+  width: 100%;
   margin-left: auto;
   margin-right: auto;
 }
 .hero-strip .global-search-wrap {
-  max-width: 560px;
+  width: 100%;
   margin-left: auto;
   margin-right: auto;
 }
 
-/* ── Top bar: centered content ── */
+/* ── Top bar: keep items on opposite sides ── */
 .top-bar {
-  justify-content: center;
+  justify-content: space-between;
 }
 
 /* ── Calendar: centered ── */
@@ -3431,7 +3364,7 @@ button, a, .surah-card, .card-item, .cat-chip, .t2-btn, .t3-btn, .t1-btn, .bnav-
 }
 
 /* ── Android: smooth fade for page transitions ── */
-.tab-panel {
+.tab-panel.active {
   animation: none;
   opacity: 1;
 }

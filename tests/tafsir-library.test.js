@@ -20,29 +20,17 @@ test('sanitizeRichText strips scripts, styles, handlers, javascript: urls', () =
   assert.equal(T.sanitizeRichText(null), '');
 });
 
-test('global ayah index math matches revelation-order cumulative counts', () => {
-  const FAKE = [{ n:1, ay:7 },{ n:2, ay:286 },{ n:3, ay:200 }];
-  const T = loadModule(FAKE);
-  // internal: expose via getTafsir jalalayn path is async; instead pin through source contract:
-  assert.match(SRC, /cum \+= QURAN_SURAHS\[i\]\.ay/);
-  assert.match(SRC, /cum \+ ayah - 1/);
-});
-
-test('editions list exposes all editions with correct lang/dir', () => {
+test('editions list exposes only Ibn Kathir', () => {
   const T = loadModule([]);
-  assert.deepEqual(T.EDITIONS.map(e => e.id), ['ibnkathir', 'jalalayn', 'saadi', 'maududi', 'asad']);
+  assert.deepEqual(T.EDITIONS.map(e => e.id), ['ibnkathir']);
   assert.equal(T.EDITIONS[0].lang, 'en');
-  assert.equal(T.EDITIONS[1].dir, 'rtl');
-  assert.equal(T.EDITIONS[2].id, 'saadi');
-  assert.equal(T.EDITIONS[4].id, 'asad');
+  assert.equal(T.EDITIONS[0].dir, 'ltr');
+  assert.equal(T.EDITIONS[0].apiId, 169);
 });
 
-test('wiring pins: CDN endpoints and cache keys', () => {
+test('wiring pins: CDN endpoint and cache key', () => {
   assert.ok(SRC.includes('https://api.quran.com/api/v4/tafsirs/'));
-  assert.ok(SRC.includes('ara-jalaladdinalmah.json'));
-  assert.match(SRC, /ContentCache\.get\('taf-jalalayn-ar'\)/);
   assert.match(SRC, /ContentCache\.get\('taf-' \+ editionId/);
-  assert.match(SRC, /_jalalaynPromise/, 'in-flight dedup present');
   assert.match(SRC, /window\.TafsirLibrary = \{/);
 });
 

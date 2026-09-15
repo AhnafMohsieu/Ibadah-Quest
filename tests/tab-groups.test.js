@@ -45,14 +45,13 @@ test('knowledge groups match consolidated IA (31 subtabs)', () => {
   assert.deepEqual(tabs('hereafter'), ['akhirah', 'jannah', 'jahannam', 'grave', 'signs', 'dreams']);
 });
 
-test('library groups match consolidated IA (21 subtabs) + names_main exists', () => {
+test('library groups match consolidated IA (18 subtabs) + names_main exists', () => {
   const g = loadGroups();
   const tabs = id => g.library.find(gr => gr.id === id).tabs.map(t => t.id);
   assert.deepEqual(tabs('dynasties'), ['umayyads', 'abbasids', 'andalus', 'ottomans', 'mamluks', 'seljuks', 'fatimids', 'ayyubids']);
   assert.deepEqual(tabs('cities'), ['holy-cities', 'capitals', 'east']);
   assert.deepEqual(tabs('arts'), ['pattern', 'sacred-space', 'living-crafts', 'word']);
   assert.deepEqual(tabs('arabic_lang'), ['arabic', 'structure', 'sound-script', 'words-poetry']);
-  assert.deepEqual(tabs('philosophy'), ['being', 'knowing', 'will-evil']);
   assert.ok(Array.isArray(g.names_main), 'names_main group must exist');
   assert.deepEqual(g.names_main[0].tabs.map(t => t.id),
     ['allah_names', 'prophets', 'sahaba', 'women', 'scholars_names']);

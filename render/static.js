@@ -90,8 +90,8 @@
   function renderSunnahs() {
     const el = document.getElementById('sunnahArea');
     if (!el) return;
-    const cats = ['All', ...new Set(SUNNAH_POOL.map(s => s.cat).filter(Boolean))];
-    const cur = (S._sunnahCat || 'All');
+    const cats = [...new Set(SUNNAH_POOL.map(s => s.cat).filter(Boolean))];
+    const cur = (S._sunnahCat || cats[0]);
     let html = '<div class="section-title">' + iqIcon('sun') + ' Daily Sunnahs</div>';
     html += '<div class="tier2-tabs cat-chips">';
     cats.forEach(function(c) {
@@ -99,7 +99,7 @@
       html += '<button class="cat-chip' + active + '" onclick="S._sunnahCat=\'' + c + '\';renderSunnahs()">' + c + '</button>';
     });
     html += '</div>';
-    const filtered = cur === 'All' ? SUNNAH_POOL : SUNNAH_POOL.filter(function(s) { return s.cat === cur; });
+    const filtered = cur === cats[0] ? SUNNAH_POOL : SUNNAH_POOL.filter(function(s) { return s.cat === cur; });
     html += filtered.map(function(o, i) {
       const numBadge = '<span style="display:inline-block;background:var(--accent-bg);color:var(--accent-light);border:1px solid var(--accent-border);border-radius:12px;padding:0 8px;font-size:0.75rem;margin-right:8px;font-weight:800;height:22px;line-height:20px;white-space:nowrap;font-family:var(--font);">#' + (i + 1) + '</span>';
       let inner = '';

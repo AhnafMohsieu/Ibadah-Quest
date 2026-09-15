@@ -15,7 +15,7 @@ function loadBrowser() {
   const saveState = () => { saved++; };
   const QURAN_SURAHS = [{ n: 1, en: 'Al-Fatihah', ar: 'x', ay: 7, type: 'Meccan' }, { n: 2, en: 'Al-Baqarah', ar: 'y', ay: 286, type: 'Medinan' }];
   const TafsirLibrary = {
-    EDITIONS: [{ id: 'ibnkathir', name: 'Ibn Kathir', lang: 'en', dir: 'ltr' }, { id: 'jalalayn', name: 'Jalalayn', lang: 'ar', dir: 'rtl' }],
+    EDITIONS: [{ id: 'ibnkathir', name: 'Ibn Kathir', lang: 'en', dir: 'ltr' }],
     getTafsir: (ed, s, a) => { return Promise.resolve({ text: 'T', dir: 'ltr' }); },
     sanitizeRichText: (s) => s
   };
@@ -56,5 +56,5 @@ test('render writes picker with select, options, editions and result panel', () 
   assert.ok(html.includes('<select'), 'surah picker missing');
   assert.ok(html.includes('Al-Baqarah'), 'surah options missing');
   assert.ok(html.includes('tafsirBrowserResult'), 'result panel missing');
-  assert.ok(html.includes('ibnkathir') && html.includes('jalalayn'), 'edition buttons missing');
+  assert.ok(html.includes('ibnkathir'), 'Ibn Kathir edition button missing');
 });
