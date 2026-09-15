@@ -1,6 +1,6 @@
 ---
 name: ibadah-quest-dev
-description: Ibadah Quest (IQ) project conventions — use when editing any file in this repo, especially index.html, state/state.js, data/tab-groups.js, render/tabs.js, render/static.js, render/dynamic.js, core/*.js, sw.js, or adding tabs/content pools/state fields. Covers the tab wiring contract, state schema rules, cache versioning, script load order, and testing conventions.
+description: Ibadah Quest (IQ) project conventions — use when editing any file in this repo, especially index.html, core/state.js, data/tab-groups.js, core/tabs.js, core/static.js, core/dynamic.js, core/*.js, sw.js, or adding tabs/content pools/state fields. Covers the tab wiring contract, state schema rules, cache versioning, script load order, and testing conventions.
 ---
 
 # Ibadah Quest Development Conventions
@@ -9,7 +9,7 @@ Vanilla JS PWA. No build step, no bundler, no framework. Scripts load as plain `
 
 ## 1. Script load order matters
 
-`index.html` loads scripts in strict order: data files → pools → `core/storage.js` → `state/state.js` → render modules → feature scripts (`defer`) → `core/actions.js` last (it calls `init()`). A file may only reference globals from files loaded BEFORE it. Feature scripts with `defer` run after `initApp()`, so `finishInit` re-renders on DOMContentLoaded to pick them up.
+`index.html` loads scripts in strict order: data files → pools → `core/storage.js` → `core/state.js` → render modules → feature scripts (`defer`) → `core/actions.js` last (it calls `init()`). A file may only reference globals from files loaded BEFORE it. Feature scripts with `defer` run after `initApp()`, so `finishInit` re-renders on DOMContentLoaded to pick them up.
 
 ## 2. Adding a new tab — all 4 touchpoints required
 
@@ -17,16 +17,16 @@ A tab silently renders blank if ANY is missing:
 
 1. **Entry** in `data/tab-groups.js` under the right category/group
 2. **Panel div** in `index.html`: `<div class="tab-panel" role="tabpanel" id="panel-<id>"><div id="<id>Area"></div></div>`
-3. **Lazy render mapping** in `render/tabs.js` `_lazyRender`: `<id>:'render<Name>'`
+3. **Lazy render mapping** in `core/tabs.js` `_lazyRender`: `<id>:'render<Name>'`
 4. **Renderer function** exists and is exported: `window.render<Name> = ...`
 
-For pool-backed content tabs, also add the pool key to `data/pools/new-pools.js` (auto-generates `window['render'+k]`) plus a title in `NEW_POOL_TITLES` in `core/actions.js`, and the panel id to `getSectionPanels`/`panelLookup` sections in `render/tabs.js`.
+For pool-backed content tabs, also add the pool key to `data/pools/new-pools.js` (auto-generates `window['render'+k]`) plus a title in `NEW_POOL_TITLES` in `core/actions.js`, and the panel id to `getSectionPanels`/`panelLookup` sections in `core/tabs.js`.
 
 Icons: every icon key must resolve in `data/icons.js` (`IQ_IDS` aliases map keys → canonical ids). Unknown keys silently render empty.
 
 ## 3. State schema rules
 
-New fields MUST be added to `freshState()` in `state/state.js`. Existing users' saves are backfilled by `normalizeState()` copying freshState defaults for missing keys — so a field absent from freshState only ever exists after its runtime guard fires (fragile; never rely on it). Bump `STATE_SCHEMA_VERSION` + extend `migrateState()` only when transforming old data shapes. Never store per-user flags as separate localStorage keys — consolidate into `S`.
+New fields MUST be added to `freshState()` in `core/state.js`. Existing users' saves are backfilled by `normalizeState()` copying freshState defaults for missing keys — so a field absent from freshState only ever exists after its runtime guard fires (fragile; never rely on it). Bump `STATE_SCHEMA_VERSION` + extend `migrateState()` only when transforming old data shapes. Never store per-user flags as separate localStorage keys — consolidate into `S`.
 
 ## 4. Cache versioning discipline
 
@@ -44,7 +44,7 @@ All toast-style modals share `#toastOverlay`: show via `classList.add('show')` +
 
 ## 6. XSS escaping
 
-User-entered strings rendered via innerHTML MUST pass through `escapeHTML` (defined in render/static.js; features duplicate it locally as safeText/safePrayerText/escapeSearchText). Static pool data from `data/` is trusted and conventionally unescaped. New user-input surfaces must follow the escape-on-render pattern.
+User-entered strings rendered via innerHTML MUST pass through `escapeHTML` (defined in core/static.js; features duplicate it locally as safeText/safePrayerText/escapeSearchText). Static pool data from `data/` is trusted and conventionally unescaped. New user-input surfaces must follow the escape-on-render pattern.
 
 ## 7. Testing
 

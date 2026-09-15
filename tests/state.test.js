@@ -17,7 +17,7 @@ function makeStore(initial) {
 
 test('freshState includes muhWeek and journeys', () => {
   const { localStorage } = makeStore({});
-  const sb = loadFile(path.join(__dirname, '..', 'state', 'state.js'), { localStorage });
+  const sb = loadFile(path.join(__dirname, '..', 'core', 'state.js'), { localStorage });
   const p = sb.loadState();
   assert.strictEqual(p.muhWeek, '');
   assert.deepEqual(p.journeys, {});
@@ -26,7 +26,7 @@ test('freshState includes muhWeek and journeys', () => {
 test('loadState migrates into existing saves', () => {
   const old = JSON.stringify({ log: { '2026-08-03': { p: { Fajr: true }, d: {}, v: {} } }, xp: 500 });
   const { localStorage } = makeStore({ iq9_user_default: old });
-  const sb = loadFile(path.join(__dirname, '..', 'state', 'state.js'), { localStorage });
+  const sb = loadFile(path.join(__dirname, '..', 'core', 'state.js'), { localStorage });
   const p = sb.loadState();
   assert.strictEqual(p.muhWeek, '');
   assert.deepEqual(p.journeys, {});
@@ -50,7 +50,7 @@ test('saveState writes to both IDB and localStorage', () => {
     save: (user, state) => { idbSaved = state; return Promise.resolve(); },
     migrate: () => Promise.resolve(null),
   };
-  const sb = loadFile(path.join(__dirname, '..', 'state', 'state.js'), { localStorage: ls, window: { Storage: fakeStorage } });
+  const sb = loadFile(path.join(__dirname, '..', 'core', 'state.js'), { localStorage: ls, window: { Storage: fakeStorage } });
   sb.window.Storage = fakeStorage;
   // Set S via the module
   sb.S = { xp: 42, lv: 2, log: {}, td: {}, vc: {} };
@@ -69,7 +69,7 @@ test('loadState merges new growthSettings.visible items into existing saves', ()
     growthSettings: { visible: ['garden', 'lantern'] }
   });
   const { localStorage } = makeStore({ iq9_user_default: old });
-  const sb = loadFile(path.join(__dirname, '..', 'state', 'state.js'), { localStorage });
+  const sb = loadFile(path.join(__dirname, '..', 'core', 'state.js'), { localStorage });
   const p = sb.loadState();
   assert.ok(p.growthSettings.visible.includes('garden'), 'keeps existing');
   assert.ok(p.growthSettings.visible.includes('ramadan'), 'adds new ramadan');
@@ -86,7 +86,7 @@ test('loadStateAsync prefers IndexedDB when it has a saved state', async () => {
     save: async () => {}
   };
   const { localStorage } = makeStore({ iq9_user_default: JSON.stringify({ xp: 10 }) });
-  const sb = loadFile(path.join(__dirname, '..', 'state', 'state.js'), {
+  const sb = loadFile(path.join(__dirname, '..', 'core', 'state.js'), {
     localStorage,
     window: { Storage: fakeStorage }
   });
@@ -131,7 +131,7 @@ test('normalizeState remaps retired tab ids to combined parents', () => {
   for (const [oldId, expected] of cases) {
     const old = JSON.stringify({ log: {}, lastTab: oldId, lastCat: 'creed' });
     const { localStorage } = makeStore({ iq9_user_default: old });
-    const sb = loadFile(path.join(__dirname, '..', 'state', 'state.js'), { localStorage });
+    const sb = loadFile(path.join(__dirname, '..', 'core', 'state.js'), { localStorage });
     const p = sb.loadState();
     assert.strictEqual(p.lastTab, expected, oldId + ' should remap to ' + expected);
     assert.strictEqual(p.lastCat, 'arabic', 'lastCat creed should remap to arabic');
@@ -140,7 +140,7 @@ test('normalizeState remaps retired tab ids to combined parents', () => {
   for (const live of ['community', 'science', 'prophets', 'dreams', 'youth-tech']) {
     const old = JSON.stringify({ log: {}, lastTab: live, lastCat: 'creed' });
     const { localStorage } = makeStore({ iq9_user_default: old });
-    const sb = loadFile(path.join(__dirname, '..', 'state', 'state.js'), { localStorage });
+    const sb = loadFile(path.join(__dirname, '..', 'core', 'state.js'), { localStorage });
     const p = sb.loadState();
     assert.strictEqual(p.lastTab, live, 'live tab ' + live + ' must not be remapped');
   }
@@ -161,7 +161,7 @@ test('saveState surfaces quota failure via flag and event, does not throw', () =
     dispatchEvent: (ev) => { events.push(ev.type); return true; },
     addEventListener: (t, fn) => { listeners[t] = fn; }
   };
-  const sb = loadFile(path.join(__dirname, '..', 'state', 'state.js'), { localStorage: ls, window: win });
+  const sb = loadFile(path.join(__dirname, '..', 'core', 'state.js'), { localStorage: ls, window: win });
   sb.S = { xp: 1, lv: 1, log: {}, td: {}, vc: {} };
   sb.saveState();                       // must not throw
   assert.strictEqual(sb.window.__iqQuotaFailed, true);

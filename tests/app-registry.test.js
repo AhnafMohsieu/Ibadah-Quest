@@ -69,8 +69,8 @@ const files = [
   'data/shop.js','data/journeys.js','data/achievements.js','data/tab-groups.js','data/icons.js',
   'data/tips-details.js','data/hadith-collections.js','data/theme-meta.js','data/streak-msgs.js',
   'data/pools/new-pools.js','data/pools/helpers.js',
-  'state/state.js',
-  'render/calendar.js','render/prayers.js','render/static.js','render/dynamic.js','render/tabs.js','render/render.js',
+  'core/state.js',
+  'core/calendar.js','core/render-prayers.js','core/static.js','core/dynamic.js','core/tabs.js','core/render.js',
   'core/themes.js','core/xp.js','core/prayers.js','core/quests.js','core/achievements.js','core/shop.js','core/dhikr.js','core/content.js',
   'core/actions.js'
 ];
@@ -107,14 +107,14 @@ test('deferred App actions resolve handlers loaded after startup', () => {
 });
 
 test('switchCategory syncs bottom nav active state', () => {
-  const tabsSrc = require('fs').readFileSync(require('path').join(__dirname, '..', 'render', 'tabs.js'), 'utf8');
+  const tabsSrc = require('fs').readFileSync(require('path').join(__dirname, '..', 'core', 'tabs.js'), 'utf8');
   const fnIdx = tabsSrc.indexOf('function switchCategory');
   const body = tabsSrc.slice(fnIdx, fnIdx + 1400);
   assert.ok(body.includes('.bnav-btn'), 'switchCategory must sync .bnav-btn');
 });
 
 test('initBnavKeyboardNav is defined and wired', () => {
-  const tabsSrc = require('fs').readFileSync(require('path').join(__dirname, '..', 'render', 'tabs.js'), 'utf8');
+  const tabsSrc = require('fs').readFileSync(require('path').join(__dirname, '..', 'core', 'tabs.js'), 'utf8');
   assert.ok(tabsSrc.includes('function initBnavKeyboardNav'), 'initBnavKeyboardNav must exist');
   assert.ok(tabsSrc.includes('window.initBnavKeyboardNav = initBnavKeyboardNav'), 'initBnavKeyboardNav must be exported');
   const actionsSrc = require('fs').readFileSync(require('path').join(__dirname, '..', 'core', 'actions.js'), 'utf8');
@@ -122,7 +122,7 @@ test('initBnavKeyboardNav is defined and wired', () => {
 });
 
 test('populateTier1Icons fills bnav icons too', () => {
-  const tabsSrc = require('fs').readFileSync(require('path').join(__dirname, '..', 'render', 'tabs.js'), 'utf8');
+  const tabsSrc = require('fs').readFileSync(require('path').join(__dirname, '..', 'core', 'tabs.js'), 'utf8');
   const fnIdx = tabsSrc.indexOf('function populateTier1Icons');
   assert.ok(fnIdx > -1, 'populateTier1Icons must exist');
   const body = tabsSrc.slice(fnIdx, fnIdx + 600);
@@ -138,7 +138,7 @@ test('populateFABIcons exists and is exported', () => {
 });
 
 test('populateTier1Icons is re-invoked after DOM ready for bnav', () => {
-  const tabsSrc = require('fs').readFileSync(require('path').join(__dirname, '..', 'render', 'tabs.js'), 'utf8');
+  const tabsSrc = require('fs').readFileSync(require('path').join(__dirname, '..', 'core', 'tabs.js'), 'utf8');
   assert.ok(tabsSrc.includes('DOMContentLoaded'), 'tabs.js must re-run populateTier1Icons on DOMContentLoaded');
   const dclIdx = tabsSrc.indexOf('DOMContentLoaded');
   const dclBlock = tabsSrc.slice(dclIdx, dclIdx + 200);
@@ -172,8 +172,8 @@ test('appAction warns loudly when target missing', () => {
   assert.ok(warnings.some(w => w.includes('tapDhikr')), 'expected a console.warn mentioning tapDhikr when its handler is missing');
 });
 
-test('escape logic defined only in render/static.js and core/helpers.js', () => {
-  const files = ['render/dynamic.js','render/prayers.js','features/health.js','features/personal-goals.js','features/search.js'];
+test('escape logic defined only in core/static.js and core/helpers.js', () => {
+  const files = ['core/dynamic.js','core/render-prayers.js','features/health.js','features/personal-goals.js','features/search.js'];
   for (const f of files) {
     const src = require('fs').readFileSync(path.join(__dirname, '..', f), 'utf8');
     assert.ok(!src.includes('replace(/[&'), f + ' still hand-rolls escaping');

@@ -5,7 +5,7 @@ const path = require('path');
 const { loadFile } = require('./helpers/load.js');
 
 test('daily progress widget returns correct structure', () => {
-  const sandbox = loadFile(path.join(__dirname, '..', 'widgets', 'daily-progress.js'), {
+  const sandbox = loadFile(path.join(__dirname, '..', 'features', 'widgets', 'daily-progress.js'), {
     S: {
       log: {
         '2026-08-12': { p: { fajr: true, dhuhr: true, asr: false, maghrib: false, isha: false } }
@@ -29,7 +29,7 @@ test('daily progress widget returns correct structure', () => {
 });
 
 test('daily progress widget handles empty state', () => {
-  const sandbox = loadFile(path.join(__dirname, '..', 'widgets', 'daily-progress.js'), {
+  const sandbox = loadFile(path.join(__dirname, '..', 'features', 'widgets', 'daily-progress.js'), {
     S: {
       log: {},
       xp: 0,
@@ -48,7 +48,7 @@ test('daily progress widget handles empty state', () => {
 });
 
 test('daily progress widget all prayers logged', () => {
-  const sandbox = loadFile(path.join(__dirname, '..', 'widgets', 'daily-progress.js'), {
+  const sandbox = loadFile(path.join(__dirname, '..', 'features', 'widgets', 'daily-progress.js'), {
     S: {
       log: {
         '2026-08-12': { p: { fajr: true, dhuhr: true, asr: true, maghrib: true, isha: true } }
@@ -66,7 +66,7 @@ test('daily progress widget all prayers logged', () => {
 });
 
 test('dhikr counter widget returns correct structure', () => {
-  const sandbox = loadFile(path.join(__dirname, '..', 'widgets', 'dhikr-counter.js'), {
+  const sandbox = loadFile(path.join(__dirname, '..', 'features', 'widgets', 'dhikr-counter.js'), {
     S: {
       dhikrSessions: [
         { date: '2026-08-11', count: 100 },
@@ -83,7 +83,7 @@ test('dhikr counter widget returns correct structure', () => {
 });
 
 test('dhikr counter widget handles empty state', () => {
-  const sandbox = loadFile(path.join(__dirname, '..', 'widgets', 'dhikr-counter.js'), {
+  const sandbox = loadFile(path.join(__dirname, '..', 'features', 'widgets', 'dhikr-counter.js'), {
     S: {
       dhikrSessions: []
     },
@@ -96,7 +96,7 @@ test('dhikr counter widget handles empty state', () => {
 });
 
 test('dhikr counter widget no sessions today', () => {
-  const sandbox = loadFile(path.join(__dirname, '..', 'widgets', 'dhikr-counter.js'), {
+  const sandbox = loadFile(path.join(__dirname, '..', 'features', 'widgets', 'dhikr-counter.js'), {
     S: {
       dhikrSessions: [
         { date: '2026-08-11', count: 100 }
@@ -111,7 +111,7 @@ test('dhikr counter widget no sessions today', () => {
 });
 
 test('streak calendar widget returns correct structure', () => {
-  const sandbox = loadFile(path.join(__dirname, '..', 'widgets', 'streak-calendar.js'), {
+  const sandbox = loadFile(path.join(__dirname, '..', 'features', 'widgets', 'streak-calendar.js'), {
     S: {
       log: {
         '2026-08-01': { p: { fajr: true, dhuhr: true, asr: true, maghrib: true, isha: true } },
@@ -140,7 +140,7 @@ test('streak calendar widget returns correct structure', () => {
 });
 
 test('streak calendar widget handles empty state', () => {
-  const sandbox = loadFile(path.join(__dirname, '..', 'widgets', 'streak-calendar.js'), {
+  const sandbox = loadFile(path.join(__dirname, '..', 'features', 'widgets', 'streak-calendar.js'), {
     S: {
       log: {},
       cs: 0,
@@ -159,7 +159,7 @@ test('streak calendar widget handles empty state', () => {
 });
 
 test('streak calendar widget marks partial days as incomplete', () => {
-  const sandbox = loadFile(path.join(__dirname, '..', 'widgets', 'streak-calendar.js'), {
+  const sandbox = loadFile(path.join(__dirname, '..', 'features', 'widgets', 'streak-calendar.js'), {
     S: {
       log: {
         '2026-08-05': { p: { fajr: true, dhuhr: true } }

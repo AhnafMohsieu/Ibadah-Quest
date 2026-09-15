@@ -27,14 +27,14 @@ test('freshState has full legacy parity + normalize extras', async () => {
   const path = require('node:path');
   // Execute the real legacy module in a sandbox and diff key sets — no
   // hand-maintained list to rot, no regex heuristics over nested keys.
-  const code = fs.readFileSync(path.join(__dirname, '..', 'state', 'state.js'), 'utf8');
+  const code = fs.readFileSync(path.join(__dirname, '..', 'core', 'state.js'), 'utf8');
   const sandbox = {
     window: {},
     console,
     localStorage: { getItem: () => null, setItem: () => {}, removeItem: () => {} }
   };
   vm.createContext(sandbox);
-  vm.runInContext(code, sandbox, { filename: 'state/state.js' });
+  vm.runInContext(code, sandbox, { filename: 'core/state.js' });
   const legacyKeys = Object.keys(sandbox.window.freshState());
   const d = freshState('2026-09-07');
   const missing = legacyKeys.filter((k) => !(k in d));

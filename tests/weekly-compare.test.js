@@ -15,7 +15,7 @@ const day0 = shift(weekStart, 0);
 const day1 = shift(weekStart, 1);
 const day2 = shift(weekStart, 2);
 
-const sandbox = loadFile(path.join(__dirname, '..', 'analytics', 'weekly-compare.js'), {
+const sandbox = loadFile(path.join(__dirname, '..', 'features', 'analytics', 'weekly-compare.js'), {
   S: {
     log: {
       [shift(weekStart, -6)]: { p: { fajr: true, dhuhr: true, asr: true, maghrib: true, isha: true }, d: { deed1: true } },
@@ -92,7 +92,7 @@ test('getWeekStats handles previous week offset', () => {
 });
 
 test('getWeekStats returns empty stats when no data', () => {
-  const emptySandbox = loadFile(path.join(__dirname, '..', 'analytics', 'weekly-compare.js'), {
+  const emptySandbox = loadFile(path.join(__dirname, '..', 'features', 'analytics', 'weekly-compare.js'), {
     S: { log: {}, dq: [], wq: [] },
     PRAYERS: [],
     DEEDS: [],
@@ -118,7 +118,7 @@ test('renderWeeklyCompare renders cards when container exists', () => {
     set innerHTML(val) { innerHTML = val; },
     get innerHTML() { return innerHTML; }
   };
-  const testSandbox = loadFile(path.join(__dirname, '..', 'analytics', 'weekly-compare.js'), {
+  const testSandbox = loadFile(path.join(__dirname, '..', 'features', 'analytics', 'weekly-compare.js'), {
     S: {
       log: {
         '2026-08-06': { p: { fajr: true, dhuhr: true, asr: true, maghrib: true, isha: true }, d: {} },

@@ -23,7 +23,7 @@ function makeTapSandbox() {
     toast: () => {},
     iqIcon: () => ''
   };
-  for (const f of ['state/state.js', 'data/pools/dhikr.js', 'core/dhikr.js']) {
+  for (const f of ['core/state.js', 'data/pools/dhikr.js', 'core/dhikr.js']) {
     const code = fs.readFileSync(path.join(__dirname, '..', f), 'utf8');
     vm.runInNewContext(code, sandbox, { filename: f });
   }

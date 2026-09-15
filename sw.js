@@ -6,7 +6,7 @@
   // (Replaces the old CACHE_NAME v51/v52 bump discipline.)
   const MANIFEST_REV = 6;
   const CDN_CACHE = 'iq-cdn-v1';
-  importScripts('./precache-manifest.js');
+  importScripts('./core/precache-manifest.js');
   self.addEventListener('install', (event) => {
     event.waitUntil(caches.open(CACHE_NAME).then(async (c) => {
       try {
@@ -102,7 +102,7 @@
         } catch (e) {
           const cached = await cache.match(key);
           if (cached) return cached;
-          const fallback = await cache.match('offline.html');
+          const fallback = await cache.match('core/offline.html');
           return fallback || new Response('Offline', { status: 503 });
         }
       }

@@ -9,7 +9,7 @@ function loadWith(raw) {
     getItem: k => (k === 'iq9_user_default' ? raw : null),
     setItem: () => {}, removeItem: () => {}
   };
-  return loadFile(path.join(__dirname, '..', 'state', 'state.js'), { localStorage: store });
+  return loadFile(path.join(__dirname, '..', 'core', 'state.js'), { localStorage: store });
 }
 
 test('legacy lastActiveDate newer than lad migrates into lad and is deleted', () => {

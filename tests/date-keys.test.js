@@ -5,7 +5,7 @@ const path = require('path');
 const { loadFile } = require('./helpers/load.js');
 
 function loadStateModule() {
-  return loadFile(path.join(__dirname, '..', 'state', 'state.js'), {
+  return loadFile(path.join(__dirname, '..', 'core', 'state.js'), {
     localStorage: {
       getItem: () => null,
       setItem: () => {},

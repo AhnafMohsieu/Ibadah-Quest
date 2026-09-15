@@ -20,7 +20,7 @@ function makeState(logOverride) {
 
 function loadSmartInsights(overrides) {
   const state = (overrides && overrides.S) || makeState();
-  const sandbox = loadFile(path.join(__dirname, '..', 'analytics', 'smart-insights.js'), Object.assign({
+  const sandbox = loadFile(path.join(__dirname, '..', 'features', 'analytics', 'smart-insights.js'), Object.assign({
     S: state,
     PRAYERS: [
       { id: 'fajr', xp: 10 },

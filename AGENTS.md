@@ -8,13 +8,13 @@ Two tracks coexist. Legacy SPA: index.html + classic <script> IIFEs on window.* 
 
 - Maintain a live todo list (todowrite) while working; keep it updated as tasks start/finish.
 - Run `node --test` from the project root. All must pass (baseline 521 + track tests).
-- Syntax-check every JS file you touched: classic files `node --check <file>`; src/** ESM is covered by `node scripts/check-syntax.js`.
+- Syntax-check every JS file you touched: classic files `node --check <file>`; src/** ESM is covered by `node core/check-syntax.js`.
 - New track needs no manual `?v=` / `CACHE_NAME` bumps (hashed build assets + precache-manifest.js). Legacy track keeps the old `?v=` discipline; when precache-manifest.js changes, bump MANIFEST_REV in sw.js so browsers install the new worker.
 
 ## Critical contracts — legacy SPA (still binding for legacy files)
 
-1. **New tab = 4 touchpoints**: entry in data/tab-groups.js + panel div in index.html + mapping in render/tabs.js `_lazyRender` + exported renderer function. Missing one = silently blank panel.
-2. **New state field** goes in `freshState()` in state/state.js (normalizeState backfills it for existing users).
+1. **New tab = 4 touchpoints**: entry in data/tab-groups.js + panel div in index.html + mapping in core/tabs.js `_lazyRender` + exported renderer function. Missing one = silently blank panel.
+2. **New state field** goes in `freshState()` in core/state.js (normalizeState backfills it for existing users).
 3. **Script load order in index.html matters**; feature scripts use `defer`.
 4. **Escape user input on render** (`escapeHTML` pattern) — never trust strings from S.
 

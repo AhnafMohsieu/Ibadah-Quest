@@ -42,7 +42,7 @@ function makeDoc(captured) {
 
 function makeProgSandbox() {
   const captured = {};
-  return { captured, sandbox: loadSandbox(['render/calendar.js', 'render/dynamic.js'], {
+  return { captured, sandbox: loadSandbox(['core/calendar.js', 'core/dynamic.js'], {
     document: makeDoc(captured),
     iqIcon: () => '',
     today: (d) => (d instanceof Date ? fmtKey(d) : '2026-09-06'),
@@ -74,7 +74,7 @@ test('calendar header follows month navigation', () => {
 
 test('calendar prev/next month update the view and re-render', () => {
   let renders = 0;
-  const sandbox = loadSandbox(['render/calendar.js'], {
+  const sandbox = loadSandbox(['core/calendar.js'], {
     renderProg: () => { renders++; }
   });
   sandbox.window.initCalView();

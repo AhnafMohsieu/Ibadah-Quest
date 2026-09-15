@@ -5,7 +5,7 @@ const path = require('path');
 const { loadFile } = require('./helpers/load.js');
 
 function loadStateModule(store) {
-  return loadFile(path.join(__dirname, '..', 'state', 'state.js'), { localStorage: store });
+  return loadFile(path.join(__dirname, '..', 'core', 'state.js'), { localStorage: store });
 }
 function plain(v) {
   return v === undefined ? undefined : JSON.parse(JSON.stringify(v));

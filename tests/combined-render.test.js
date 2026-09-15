@@ -19,12 +19,12 @@ const PAIRS = [['virtues','renderVirtues'],['vices-return','renderVicesreturn'],
 ['being','renderBeing'],['knowing','renderKnowing'],['will-evil','renderWillevil']];
 
 test('every combined renderer is exported on window', () => {
-  const sb = loadFile(path.join(__dirname, '..', 'render', 'static.js'), {});
+  const sb = loadFile(path.join(__dirname, '..', 'core', 'static.js'), {});
   for (const [, r] of PAIRS) assert.equal(typeof sb.window[r], 'function', r);
 });
 
 test('every combined id has a _lazyRender mapping', () => {
-  const src = fs.readFileSync(path.join(__dirname, '..', 'render', 'tabs.js'), 'utf8');
+  const src = fs.readFileSync(path.join(__dirname, '..', 'core', 'tabs.js'), 'utf8');
   const norm = src.replace(/["']/g, '');
   for (const [id, r] of PAIRS) assert.ok(norm.includes(id + ':' + r), 'missing ' + id);
 });

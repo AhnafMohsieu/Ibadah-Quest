@@ -23,7 +23,7 @@ function bootBrowserLike(extra) {
   Object.assign(sb, extra || {});
   sb.window = sb;
   vm.runInNewContext(
-    fs.readFileSync(path.join(__dirname, '..', 'state', 'state.js'), 'utf8'),
+    fs.readFileSync(path.join(__dirname, '..', 'core', 'state.js'), 'utf8'),
     sb, { filename: 'state.js' }
   );
   return { sb, store };

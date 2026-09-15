@@ -56,7 +56,7 @@ test('sw registers install, activate, fetch, and message handlers', () => {
 
 test('sw: manifest-driven precache wiring', () => {
   const swSource = fs.readFileSync(path.join(__dirname, '..', 'sw.js'), 'utf8');
-  assert.ok(swSource.includes("importScripts('./precache-manifest.js')"), 'should load the vite-emitted precache manifest');
+  assert.ok(swSource.includes("importScripts('./core/precache-manifest.js')"), 'should load the vite-emitted precache manifest');
   assert.ok(swSource.includes('self.__PRECACHE'), 'install handler should precache the manifest list');
 });
 
@@ -67,7 +67,7 @@ test('sw: CDN_CACHE is separate from core cache', () => {
 });
 
 test('sw: offline.html exists', () => {
-  assert.ok(fs.existsSync(path.join(__dirname, '..', 'offline.html')), 'offline.html should exist');
+  assert.ok(fs.existsSync(path.join(__dirname, '..', 'core', 'offline.html')), 'offline.html should exist at core/offline.html');
 });
 
 test('sw: CACHE_NAME tracks the precache manifest', () => {

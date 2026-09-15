@@ -409,7 +409,7 @@
 <script src="core/content-cache.js?v=1"></script>
 <script src="core/audio.js?v=4"></script>
 <script src="core/recovery.js?v=1"></script>
-<script src="state/state.js?v=9"></script>
+<script src="core/state.js?v=9"></script>
 <script>
   window.storageReady = window.Storage && window.Storage.init
     ? window.Storage.init().catch(function(e) {
@@ -419,11 +419,11 @@
 </script>
 
 <!-- Render engine (split modules) -->
-<script src="render/calendar.js?v=1"></script>
-<script src="render/prayers.js?v=4"></script>
-<script src="render/static.js?v=7"></script>
-<script src="render/dynamic.js?v=13"></script>
-<script src="render/tabs.js?v=10"></script>
+<script src="core/calendar.js?v=1"></script>
+<script src="core/render-prayers.js?v=4"></script>
+<script src="core/static.js?v=7"></script>
+<script src="core/dynamic.js?v=13"></script>
+<script src="core/tabs.js?v=10"></script>
 
 <!-- Chart.js CDN (lazy loaded) -->
 <script>
@@ -451,7 +451,7 @@
     if(_analyticsLoaded)return Promise.resolve();
     _analyticsLoaded=true;
     return window._loadChart().then(function(){
-      var scripts=['analytics/analytics.js','analytics/charts.js','analytics/dashboard.js','analytics/trend-charts.js','analytics/weekly-compare.js','analytics/smart-insights.js'];
+      var scripts=['features/analytics/analytics.js','features/analytics/charts.js','features/analytics/dashboard.js','features/analytics/trend-charts.js','features/analytics/weekly-compare.js','features/analytics/smart-insights.js'];
       var i=0;
       function next(){
         if(i>=scripts.length)return Promise.resolve();
@@ -502,9 +502,9 @@
 <script src="features/notifications.js?v=2" defer></script>
 
 <script src="features/seasonal-events.js" defer></script>
-<script src="widgets/daily-progress.js" defer></script>
-<script src="widgets/dhikr-counter.js" defer></script>
-<script src="widgets/streak-calendar.js" defer></script>
+<script src="features/widgets/daily-progress.js" defer></script>
+<script src="features/widgets/dhikr-counter.js" defer></script>
+<script src="features/widgets/streak-calendar.js" defer></script>
 <script src="features/zakat-calc.js" defer></script>
 
 <div id="onboardingOverlay" style="display:none"></div>

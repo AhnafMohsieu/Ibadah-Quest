@@ -25,7 +25,7 @@ test('library: cache-first with shared in-flight promise and arabic backfill', (
 });
 
 test('renderer: hadith UI wires library + audio', () => {
-  const dyn = fs.readFileSync(path.join(__dirname, '..', 'render', 'dynamic.js'), 'utf8');
+  const dyn = fs.readFileSync(path.join(__dirname, '..', 'core', 'dynamic.js'), 'utf8');
   assert.match(dyn, /HadithLibrary\.ensureHadithCollection\(/);
   assert.match(dyn, /HadithLibrary\.ensureBundledArabic\(/);
   assert.match(dyn, /AppAudio\.toggleTTS\(/);
@@ -34,14 +34,14 @@ test('renderer: hadith UI wires library + audio', () => {
 });
 
 test('quran reader carries no tafsir UI (lives in interpretation browser)', () => {
-  const dyn = fs.readFileSync(path.join(__dirname, '..', 'render', 'dynamic.js'), 'utf8');
+  const dyn = fs.readFileSync(path.join(__dirname, '..', 'core', 'dynamic.js'), 'utf8');
   assert.ok(!dyn.includes('verse-tafsir-btn'), 'verse tafsir buttons must be gone');
   assert.ok(!dyn.includes('tafsir-panel'), 'inline tafsir panels must be gone');
   assert.ok(!dyn.includes('fillOpenTafsirs'), 'panel filler must be gone');
   assert.ok(!dyn.includes('tafsir-hint'), 'edition hint must be gone');
   assert.ok(!dyn.includes('openTafsir'), 'open-panel state must be gone');
   assert.ok(dyn.includes('function setTafsirEdition'), 'edition writer stays for the browser');
-  const st = fs.readFileSync(path.join(__dirname, '..', 'state', 'state.js'), 'utf8');
+  const st = fs.readFileSync(path.join(__dirname, '..', 'core', 'state.js'), 'utf8');
   assert.match(st, /tafsirEdition:'ibnkathir'/);
   assert.match(st, /tafsirLookup:\{surah:1,ayah:1\}/);
   const act = fs.readFileSync(path.join(__dirname, '..', 'core', 'actions.js'), 'utf8');

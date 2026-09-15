@@ -157,7 +157,7 @@ test('loadLocalState treats literal "null" raw as corrupt junk (flagged, quarant
     setItem: (k, v) => writes.push([k, v])
   });
   loadModule(sb, 'core/recovery.js');
-  loadModule(sb, 'state/state.js');
+  loadModule(sb, 'core/state.js');
   const st = sb.window.loadState();
   assert.ok(st && typeof st === 'object', 'normalized fallback state still returned');
   assert.strictEqual(writes.filter(w => w[0] === 'iq9_user_default').length, 0, 'corrupt-flagged boot must not overwrite the main key');
@@ -172,7 +172,7 @@ test('healthy raw still loads and persists normally (non-regression)', () => {
     setItem: (k, v) => writes.push([k, v])
   });
   loadModule(sb, 'core/recovery.js');
-  loadModule(sb, 'state/state.js');
+  loadModule(sb, 'core/state.js');
   sb.window.loadState();
   assert.strictEqual(sb.window.__iqCorruption, undefined, 'no corruption flag for valid JSON');
   assert.strictEqual(writes.length, 1, 'write-back happened exactly once');

@@ -4,7 +4,7 @@ const assert = require('node:assert');
 const path = require('path');
 const { loadFile } = require(path.join(__dirname, 'helpers', 'load.js'));
 
-const sandbox = loadFile(path.join(__dirname, '..', 'analytics', 'trend-charts.js'), {
+const sandbox = loadFile(path.join(__dirname, '..', 'features', 'analytics', 'trend-charts.js'), {
   Analytics: {
     getPrayerStats: (days) => ({
       total: 10, possible: 15, rate: 67, fajrRate: 80,
@@ -58,7 +58,7 @@ test('getXPTrend returns labels and values', () => {
 });
 
 test('getPrayerTrend returns empty arrays when no data', () => {
-  const emptySandbox = loadFile(path.join(__dirname, '..', 'analytics', 'trend-charts.js'), {
+  const emptySandbox = loadFile(path.join(__dirname, '..', 'features', 'analytics', 'trend-charts.js'), {
     Analytics: {
       getPrayerStats: () => ({ total: 0, possible: 0, rate: 0, fajrRate: 0, daily: [] }),
       getXPStats: () => ({ daily: [] })

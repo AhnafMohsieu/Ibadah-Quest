@@ -212,7 +212,7 @@ test('recalc preserves archived perfect days', () => {
 test('fetchPrayerTimes uses the saved prayer location', async () => {
   const requests = [];
   const storage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
-  const sandbox = loadSandbox(['render/prayers.js'], {
+  const sandbox = loadSandbox(['core/render-prayers.js'], {
     S: { prayerSettings: { lat: 51.5072, lng: -0.1276, label: 'London', method: 2 } },
     localStorage: storage,
     fetch: async (url) => {
@@ -232,7 +232,7 @@ test('fetchPrayerTimes uses the saved prayer location', async () => {
 test('stopPrayerTimer clears and nulls the running countdown interval', () => {
   const cleared = [];
   const storage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
-  const sandbox = loadSandbox(['render/prayers.js'], {
+  const sandbox = loadSandbox(['core/render-prayers.js'], {
     S: { prayerSettings: { lat: 51.5072, lng: -0.1276, label: 'London', method: 2 } },
     localStorage: storage,
     fetch: async () => ({ json: async () => ({ code: 200, data: { timings: {} } }) }),
@@ -250,7 +250,7 @@ test('stopPrayerTimer clears and nulls the running countdown interval', () => {
 });
 
 test('activateTab releases the prayer timer when leaving the Timer tab', () => {
-  const tabsSource = fs.readFileSync(path.join(__dirname, '..', 'render', 'tabs.js'), 'utf8');
+  const tabsSource = fs.readFileSync(path.join(__dirname, '..', 'core', 'tabs.js'), 'utf8');
   assert.match(tabsSource, /stopPrayerTimer/);
   assert.match(tabsSource, /tabId !== 'timer'/);
 });

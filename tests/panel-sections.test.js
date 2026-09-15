@@ -34,7 +34,7 @@ test('every listed panel id exists in index.html', () => {
 });
 
 test('tabs.js consumes PANEL_SECTIONS and no second literal map remains', () => {
-  const src = fs.readFileSync(path.join(ROOT, 'render', 'tabs.js'), 'utf8');
+  const src = fs.readFileSync(path.join(ROOT, 'core', 'tabs.js'), 'utf8');
   assert.ok(src.includes('PANEL_SECTIONS'), 'tabs.js must use PANEL_SECTIONS');
   assert.ok(!/var\s+panelLookup/.test(src), 'inline panelLookup literal must be deleted');
   assert.ok(!/var sections = \{/.test(src), 'local sections literal must be deleted');

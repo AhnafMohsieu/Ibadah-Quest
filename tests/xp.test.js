@@ -5,7 +5,7 @@ const path = require('path');
 const { loadFile } = require('./helpers/load');
 
 function setup() {
-  const ctx = loadFile(path.join(__dirname, '..', 'state', 'state.js'));
+  const ctx = loadFile(path.join(__dirname, '..', 'core', 'state.js'));
   const S = ctx.freshState();
   ctx.S = S;
   ctx.saveState = () => {};

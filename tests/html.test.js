@@ -8,12 +8,12 @@ const root = path.join(__dirname, '..');
 const html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
 const tabs = fs.readFileSync(path.join(root, 'data', 'tab-groups.js'), 'utf8');
 const css = fs.readFileSync(path.join(root, 'styles', 'main.css'), 'utf8');
-const render = fs.readFileSync(path.join(root, 'render', 'render.js'), 'utf8');
-const renderDynamic = fs.readFileSync(path.join(root, 'render', 'dynamic.js'), 'utf8');
-const renderStatic = fs.readFileSync(path.join(root, 'render', 'static.js'), 'utf8');
-const renderPrayers = fs.readFileSync(path.join(root, 'render', 'prayers.js'), 'utf8');
-const renderCalendar = fs.readFileSync(path.join(root, 'render', 'calendar.js'), 'utf8');
-const renderTabs = fs.readFileSync(path.join(root, 'render', 'tabs.js'), 'utf8');
+const render = fs.readFileSync(path.join(root, 'core', 'render.js'), 'utf8');
+const renderDynamic = fs.readFileSync(path.join(root, 'core', 'dynamic.js'), 'utf8');
+const renderStatic = fs.readFileSync(path.join(root, 'core', 'static.js'), 'utf8');
+const renderPrayers = fs.readFileSync(path.join(root, 'core', 'render-prayers.js'), 'utf8');
+const renderCalendar = fs.readFileSync(path.join(root, 'core', 'calendar.js'), 'utf8');
+const renderTabs = fs.readFileSync(path.join(root, 'core', 'tabs.js'), 'utf8');
 const renderAll = render + renderDynamic + renderStatic + renderPrayers + renderCalendar;
 const spiritual = fs.readFileSync(path.join(root, 'features', 'spiritual-growth', 'data.js'), 'utf8');
 const spiritualGrowth = fs.readFileSync(path.join(root, 'features', 'spiritual-growth', 'index.js'), 'utf8');
@@ -84,9 +84,9 @@ test('hadith/dhikr audio modules wired with versions and load order', () => {
   assert.ok(html.includes('<script src="features/hadith-library.js?v=3" defer></script>'));
   assert.ok(html.includes('<script src="features/tafsir-library.js?v=3" defer></script>'));
   assert.ok(html.includes('styles/main.css?v=41'));
-  assert.ok(html.indexOf('core/content-cache.js') < html.indexOf('state/state.js'), 'cache module loads before state');
-  assert.ok(html.indexOf('core/audio.js') < html.indexOf('render/static.js'), 'audio module loads before renderers');
-  assert.ok(html.indexOf('features/tafsir-library.js') > html.indexOf('render/static.js'), 'deferred features load after renderers');
+  assert.ok(html.indexOf('core/content-cache.js') < html.indexOf('core/state.js'), 'cache module loads before state');
+  assert.ok(html.indexOf('core/audio.js') < html.indexOf('core/static.js'), 'audio module loads before renderers');
+  assert.ok(html.indexOf('features/tafsir-library.js') > html.indexOf('core/static.js'), 'deferred features load after renderers');
 });
 
 test('modal queue advances via callback contract, not dom polling', () => {
@@ -515,7 +515,7 @@ test('core and adhkar tier3 tabs render 2 by 2 on phones', () => {
 
 test('Mood feature is fully removed', () => {
   const achievements = fs.readFileSync(path.join(root, 'data', 'achievements.js'), 'utf8');
-  const stateSrc = fs.readFileSync(path.join(root, 'state', 'state.js'), 'utf8');
+  const stateSrc = fs.readFileSync(path.join(root, 'core', 'state.js'), 'utf8');
   const iconsSrc = fs.readFileSync(path.join(root, 'data', 'icons.js'), 'utf8');
   assert.ok(!tabs.includes("label: 'Mood'"), 'tab-groups must not list a Mood tab');
   assert.ok(!html.includes('panel-mood'), 'index.html must not have panel-mood');
@@ -730,7 +730,7 @@ test('prayer last row centers under the grid', () => {
 test('interpretation tab mounts the tafsir browser', () => {
   assert.ok(html.includes('<script src="features/tafsir-browser.js?v=1" defer></script>'),
     'browser script tag missing');
-  const st = fs.readFileSync(path.join(root, 'state', 'state.js'), 'utf8');
+  const st = fs.readFileSync(path.join(root, 'core', 'state.js'), 'utf8');
   assert.ok(st.includes('tafsirLookup:{surah:1,ayah:1}'),
     'freshState must carry the lookup');
 });

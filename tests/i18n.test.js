@@ -8,7 +8,7 @@ const root = path.join(__dirname, '..');
 const html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
 const i18n = fs.readFileSync(path.join(root, 'data', 'i18n.js'), 'utf8');
 const actions = fs.readFileSync(path.join(root, 'core', 'actions.js'), 'utf8');
-const tabs = fs.readFileSync(path.join(root, 'render', 'tabs.js'), 'utf8');
+const tabs = fs.readFileSync(path.join(root, 'core', 'tabs.js'), 'utf8');
 
 // Stub a minimal global so the i18n module's top-level code runs under node.
 global.localStorage = {
