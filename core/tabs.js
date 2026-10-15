@@ -90,6 +90,7 @@
         }).join('');
         if (tier3Wrap) tier3Wrap.style.display = 'none';
       } else {
+        container.classList.remove('surah-grid');
         container.classList.add('cat-chips');
         container.innerHTML = group.map(function(c, i) {
           return `<button class="cat-chip ${i === 0 ? 'active' : ''}" onclick="window.selectCategory('${c.id}', this)"><span>${window.iqIcon(c.icon || c.id)}</span> ${t(c.label)}</button>`;
@@ -101,6 +102,7 @@
       if (catId !== 'library') renderCategoryTabs(firstCat);
     } else {
       container.classList.remove('cat-chips');
+      container.classList.remove('surah-grid');
       container.innerHTML = group.map(function(p, i) {
         return `<button data-tab="${p.id}" class="t2-btn ${i === 0 ? 'active' : ''}" onclick="window.activateTab('${p.id}', this)"><span>${window.iqIcon(p.icon || p.id)}</span> ${t(p.label)}</button>`;
       }).join('');
@@ -118,11 +120,15 @@
     var currentGroup = window.TAB_GROUPS[currentCat] || [];
     var cat = currentGroup.find(function(c) { return c.id === catId; });
     if (cat) {
+      var tier3Wrap = document.getElementById('tier3Wrap');
       if (currentCat === 'library') {
         var tier2 = document.getElementById('tier2Tabs');
-        var tier3Wrap = document.getElementById('tier3Wrap');
         if (tier2) tier2.style.display = 'none';
         if (tier3Wrap) tier3Wrap.style.display = '';
+      } else if (tier3Wrap) {
+        // Re-show the tier-3 grid: a previous drill-down hid it, and the
+        // newly rendered category cards must be visible.
+        tier3Wrap.style.display = '';
       }
       renderCategoryTabs(cat);
     }
@@ -167,7 +173,6 @@
 
   function drillUp() {
     var wrap = document.getElementById('tier3Wrap');
-    var catEl = document.querySelector('.t1-btn.active');
     var currentCat = (window.S && window.S.lastCat) || 'ibadah';
     document.querySelectorAll('.tab-panel').forEach(function(p) { p.classList.remove('active'); });
     if (currentCat === 'library') {
@@ -177,28 +182,12 @@
       return;
     }
     if (wrap) wrap.style.display = '';
-    if (catEl) {
-      var catId = catEl.getAttribute('data-cat');
-      var groups = window.TAB_GROUPS[currentCat] || [];
-      var cat = groups.find(function(c) { return c.id === catId; });
-      if (cat && cat.grid) {
-        var grid = document.getElementById('tier3Tabs');
-        if (grid) {
-          grid.classList.add('surah-grid');
-          grid.innerHTML = cat.tabs.map(function(p) {
-            var icon = window.iqIcon(p.icon || p.id);
-            var desc = p.desc ? '<div style="font-size:0.72rem;color:var(--text2);margin-top:4px;line-height:1.4;">' + p.desc + '</div>' : '';
-            var count = poolCount(p);
-            var countHtml = count ? '<div style="font-size:0.68rem;color:var(--accent-light);margin-top:6px;font-weight:600;">' + count + ' entries</div>' : '';
-            return '<div class="surah-card" data-tab="' + p.id + '" onclick="window.drillDown(\'' + p.id + '\', this)">' +
-              '<div class="surah-num">' + icon + '</div>' +
-              '<div class="surah-name-en">' + t(p.label) + '</div>' +
-              desc + countHtml +
-            '</div>';
-          }).join('');
-        }
-      }
-    }
+    // The active group is tracked by selectCategory/switchCategory; the old
+    // `.t1-btn.active` lookup compared a tier-1 id against group ids and never
+    // matched, leaving the restored grid without its surah-grid layout.
+    var groups = window.TAB_GROUPS[currentCat] || [];
+    var cat = groups.find(function(c) { return c.id === _activeCategoryId; });
+    if (cat && cat.grid) renderCategoryTabs(cat);
   }
 
   function poolCount(tab) {

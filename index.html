@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; worker-src 'self'">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://api.aladhan.com https://cdn.jsdelivr.net https://api.quran.com; media-src 'self' https://verses.quran.com; worker-src 'self'">
   <title>Ibadah Quest</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -24,7 +24,7 @@
     .tab-panel{display:none}
     .tab-panel.active{display:block}
   </style>
-  <link rel="preload" href="styles/main.css?v=41" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <link rel="preload" href="styles/main.css?v=42" as="style" onload="this.onload=null;this.rel='stylesheet'">
   <script>
     (function () {
       try { var t = localStorage.getItem('iqTheme'); if (t && t !== 'light') document.documentElement.setAttribute('data-theme', t); } catch (e) {}
@@ -423,7 +423,7 @@
 <script src="core/render-prayers.js?v=4"></script>
 <script src="core/static.js?v=7"></script>
 <script src="core/dynamic.js?v=13"></script>
-<script src="core/tabs.js?v=10"></script>
+<script src="core/tabs.js?v=11"></script>
 
 <!-- Chart.js CDN (lazy loaded) -->
 <script>
@@ -546,7 +546,7 @@
     });
   }
   window.addEventListener('load', function() {
-    navigator.serviceWorker.register('sw.js?v=53').then(function(reg) {
+    navigator.serviceWorker.register('sw.js?v=55').then(function(reg) {
       if (reg.waiting) { showUpdateBanner(reg); return; }
       reg.addEventListener('updatefound', function() {
         var sw = reg.installing;

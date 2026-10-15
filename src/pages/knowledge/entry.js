@@ -51,31 +51,31 @@ const KNOWLEDGE_GROUPS = [
   ]},
 ];
 
-// Most knowledge tabs use poolRender from render/static.js via specific renderer functions.
-// quran and hadith use render/dynamic.js.
+// Most knowledge tabs use poolRender from core/static.js via specific renderer functions.
+// quran and hadith use core/dynamic.js.
 const TAB_SCRIPTS = {
-  quran: ['render/dynamic.js', 'data/pools/quran-verses.js'],
-  hadith: ['render/dynamic.js', 'data/pools/hadiths.js'],
-  tafsir: ['render/static.js'], sunnahs: ['render/static.js'],
-  fiqh: ['render/static.js'],
-  'worship-rulings': ['render/static.js'], 'wealth-oaths': ['render/static.js'],
-  arabic: ['render/static.js'],
-  virtues: ['render/static.js'],
-  'vices-return': ['render/static.js'], 'character-path': ['render/static.js'],
-  'family-life': ['render/static.js'], community: ['render/static.js'],
-  service: ['render/static.js'], 'work-justice': ['render/static.js'],
-  wellness: ['render/static.js'], 'earth-living': ['render/static.js'],
-  'youth-tech': ['render/static.js'], 'ethics-finance': ['render/static.js'],
-  seerah: ['render/static.js'],
-  stories: ['render/static.js'], battles: ['render/static.js'],
-  science: ['render/static.js'], modernhist: ['render/static.js'],
-  ancientprophets: ['render/static.js'],
-  akhirah: ['render/static.js'], jannah: ['render/static.js'],
-  jahannam: ['render/static.js'], grave: ['render/static.js'],
-  signs: ['render/static.js'], dreams: ['render/static.js'],
+  quran: ['/core/dynamic.js', '/data/pools/quran-verses.js'],
+  hadith: ['/core/dynamic.js', '/data/pools/hadiths.js'],
+  tafsir: ['/core/static.js'], sunnahs: ['/core/static.js'],
+  fiqh: ['/core/static.js'],
+  'worship-rulings': ['/core/static.js'], 'wealth-oaths': ['/core/static.js'],
+  arabic: ['/core/static.js'],
+  virtues: ['/core/static.js'],
+  'vices-return': ['/core/static.js'], 'character-path': ['/core/static.js'],
+  'family-life': ['/core/static.js'], community: ['/core/static.js'],
+  service: ['/core/static.js'], 'work-justice': ['/core/static.js'],
+  wellness: ['/core/static.js'], 'earth-living': ['/core/static.js'],
+  'youth-tech': ['/core/static.js'], 'ethics-finance': ['/core/static.js'],
+  seerah: ['/core/static.js'],
+  stories: ['/core/static.js'], battles: ['/core/static.js'],
+  science: ['/core/static.js'], modernhist: ['/core/static.js'],
+  ancientprophets: ['/core/static.js'],
+  akhirah: ['/core/static.js'], jannah: ['/core/static.js'],
+  jahannam: ['/core/static.js'], grave: ['/core/static.js'],
+  signs: ['/core/static.js'], dreams: ['/core/static.js'],
 };
 
-const CORE_SCRIPTS = ['core/xp.js', 'core/random.js', 'core/dhikr.js', 'core/content.js'];
+const CORE_SCRIPTS = ['/core/xp.js', '/core/random.js', '/core/dhikr.js', '/core/content.js'];
 
 const _loaded = new Set();
 function loadScripts(urls) {

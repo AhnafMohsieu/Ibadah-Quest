@@ -18,14 +18,14 @@ const PROFILE_TABS = [
 ];
 
 const TAB_SCRIPTS = {
-  profile: ['render/dynamic.js', 'core/achievements.js', 'features/spiritual-growth/keys.js', 'features/spiritual-growth/mosque.js'],
-  trophies: ['render/dynamic.js', 'core/achievements.js', 'features/achievement-showcase.js'],
-  progress: ['render/dynamic.js'],
-  stats: ['analytics/dashboard.js', 'analytics/charts.js', 'analytics/trend-charts.js', 'analytics/weekly-compare.js', 'analytics/smart-insights.js'],
-  rewards: ['core/shop.js', 'core/xp.js'],
+  profile: ['/core/dynamic.js', '/core/achievements.js', '/features/spiritual-growth/keys.js', '/features/spiritual-growth/mosque.js'],
+  trophies: ['/core/dynamic.js', '/core/achievements.js', '/features/achievement-showcase.js'],
+  progress: ['/core/dynamic.js'],
+  stats: ['/features/analytics/dashboard.js', '/features/analytics/charts.js', '/features/analytics/trend-charts.js', '/features/analytics/weekly-compare.js', '/features/analytics/smart-insights.js'],
+  rewards: ['/core/shop.js', '/core/xp.js'],
 };
 
-const CORE_SCRIPTS = ['core/xp.js', 'core/random.js'];
+const CORE_SCRIPTS = ['/core/xp.js', '/core/random.js'];
 
 const _loaded = new Set();
 function loadScripts(urls) {

@@ -38,19 +38,19 @@ const LIBRARY_GROUPS = [
 ];
 
 const TAB_SCRIPTS = {
-  umayyads: ['render/static.js'], abbasids: ['render/static.js'],
-  andalus: ['render/static.js'], ottomans: ['render/static.js'],
-  mamluks: ['render/static.js'], seljuks: ['render/static.js'],
-  fatimids: ['render/static.js'], ayyubids: ['render/static.js'],
-  'holy-cities': ['render/static.js'], capitals: ['render/static.js'],
-  east: ['render/static.js'],
-  pattern: ['render/static.js'], 'sacred-space': ['render/static.js'],
-  'living-crafts': ['render/static.js'], word: ['render/static.js'],
-  structure: ['render/static.js'], 'sound-script': ['render/static.js'],
-  'words-poetry': ['render/static.js'],
+  umayyads: ['/core/static.js'], abbasids: ['/core/static.js'],
+  andalus: ['/core/static.js'], ottomans: ['/core/static.js'],
+  mamluks: ['/core/static.js'], seljuks: ['/core/static.js'],
+  fatimids: ['/core/static.js'], ayyubids: ['/core/static.js'],
+  'holy-cities': ['/core/static.js'], capitals: ['/core/static.js'],
+  east: ['/core/static.js'],
+  pattern: ['/core/static.js'], 'sacred-space': ['/core/static.js'],
+  'living-crafts': ['/core/static.js'], word: ['/core/static.js'],
+  structure: ['/core/static.js'], 'sound-script': ['/core/static.js'],
+  'words-poetry': ['/core/static.js'],
 };
 
-const CORE_SCRIPTS = ['core/xp.js', 'core/random.js', 'core/dhikr.js', 'core/content.js'];
+const CORE_SCRIPTS = ['/core/xp.js', '/core/random.js', '/core/dhikr.js', '/core/content.js'];
 
 const _loaded = new Set();
 function loadScripts(urls) {

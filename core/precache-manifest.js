@@ -38,5 +38,6 @@ self.__PRECACHE = [
   'src/pages/ibadah/ibadah.html',
   'src/pages/knowledge/knowledge.html',
   'src/pages/library/library.html',
+  'src/pages/names/names.html',
   'src/pages/profile/profile.html'
 ];

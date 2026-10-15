@@ -1,9 +1,9 @@
 // mpa-bridge.js — Minimal legacy globals bridge for MPA pages.
-// Loaded AFTER core/storage.js + state/state.js via <script> tags in HTML.
-// Sets up the implicit globals that legacy renderers (render/static.js, render/dynamic.js) depend on.
+// Loaded AFTER core/storage.js + core/state.js via <script> tags in HTML.
+// Sets up the implicit globals that legacy renderers (core/static.js, core/dynamic.js) depend on.
 // NOT inside src/ so the no-globals test does not flag it.
 (function () {
-  // state/state.js defines: window.loadState, window.freshState, window.saveState,
+  // core/state.js defines: window.loadState, window.freshState, window.saveState,
   // window.getTodayKey, etc. But legacy renderers use the IMPLICIT GLOBAL `S`
   // (set by core/actions.js line 21: S = window.loadState()), plus currentUser, PREFIX, USER_KEY.
   // We replicate just that minimal setup here.

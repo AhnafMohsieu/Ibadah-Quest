@@ -2710,7 +2710,7 @@ textarea:focus-visible {
 .bnav-btn:hover { color: var(--accent-dark); background: var(--accent-bg); }
 .bnav-btn.active { color: var(--accent-dark); background: var(--accent-bg); }
 .bnav-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
-.bnav{position:sticky;bottom:0;z-index:120;display:flex;background:var(--card-bg);border-top:1px solid var(--border);padding:8px 8px calc(8px + env(safe-area-inset-bottom, 0px));}
+.bnav{position:fixed;left:0;right:0;bottom:0;z-index:120;display:flex;background:var(--card-bg);border-top:1px solid var(--border);padding:8px 8px calc(8px + env(safe-area-inset-bottom, 0px));}
 .bnav-btn{min-height:60px;min-width:48px;flex:1;font-size:11px;}
 .bnav-btn .bnav-icon .iq-icon { width: 22px; height: 22px; }
 .top-bar{min-height:56px;}
@@ -3312,6 +3312,15 @@ input[type="number"] {
   .top-bar { padding-top: env(safe-area-inset-top); }
   nav.bnav { padding-bottom: env(safe-area-inset-bottom); }
   .fab-container { bottom: calc(16px + env(safe-area-inset-bottom, 0px)); }
+}
+
+/* ── Fixed bottom-nav clearance (nav visible: portrait mobile + coarse pointers) ──
+   The bottom nav is position:fixed, so the shell scroller needs end padding or the
+   last content hides behind it, and the FAB must float above the bar. Placed last
+   to win the cascade over the desktop/landscape .fab-container offsets above. */
+@media (max-width: 767px) and (orientation: portrait), (pointer: coarse) and (orientation: portrait) {
+  .app { padding-bottom: calc(84px + env(safe-area-inset-bottom, 0px)); }
+  .fab-container { bottom: calc(104px + env(safe-area-inset-bottom, 0px)); }
 }
 
 /* ══════════════════════════════════════════════════════════════

@@ -76,29 +76,29 @@ const PANEL_HTML = {
 
 // --- 5. Script URLs to lazy-load per tab (classic IIFEs that register window.* renderers) ---
 const TAB_SCRIPTS = {
-  today: ['render/static.js', 'render/dynamic.js', 'features/garden.js', 'features/muhasabah.js', 'features/spiritual-growth/lantern.js'],
-  timer: ['core/prayers.js'],
-  quests: ['render/dynamic.js', 'core/quests.js', 'core/achievements.js'],
-  journeys: ['data/journeys.js', 'features/journeys.js', 'features/spiritual-growth/boat.js'],
-  morning: ['render/static.js'],
-  evening: ['render/static.js'],
-  dhikr: ['render/static.js', 'widgets/dhikr-counter.js'],
-  situational: ['render/static.js'],
-  wudu: ['render/static.js'],
-  salah: ['render/static.js'],
-  sunnahs: ['render/static.js'],
-  extradeeds: ['render/static.js'],
-  volprayers: ['render/static.js'],
-  fasting: ['render/static.js'],
-  healthlog: ['features/health.js'],
-  finance: ['features/finance.js'],
-  memorization: ['render/static.js'],
-  gratitude: ['render/static.js'],
-  charity: ['render/static.js'],
-  zakatcalc: ['features/zakat-calc.js'],
+  today: ['/core/static.js', '/core/dynamic.js', '/features/garden.js', '/features/muhasabah.js', '/features/spiritual-growth/lantern.js'],
+  timer: ['/core/prayers.js'],
+  quests: ['/core/dynamic.js', '/core/quests.js', '/core/achievements.js'],
+  journeys: ['/data/journeys.js', '/features/journeys.js', '/features/spiritual-growth/boat.js'],
+  morning: ['/core/static.js'],
+  evening: ['/core/static.js'],
+  dhikr: ['/core/static.js', '/features/widgets/dhikr-counter.js'],
+  situational: ['/core/static.js'],
+  wudu: ['/core/static.js'],
+  salah: ['/core/static.js'],
+  sunnahs: ['/core/static.js'],
+  extradeeds: ['/core/static.js'],
+  volprayers: ['/core/static.js'],
+  fasting: ['/core/static.js'],
+  healthlog: ['/features/health.js'],
+  finance: ['/features/finance.js'],
+  memorization: ['/core/static.js'],
+  gratitude: ['/core/static.js'],
+  charity: ['/core/static.js'],
+  zakatcalc: ['/features/zakat-calc.js'],
 };
 
-const CORE_SCRIPTS = ['core/xp.js', 'core/random.js', 'core/dhikr.js', 'core/content.js'];
+const CORE_SCRIPTS = ['/core/xp.js', '/core/random.js', '/core/dhikr.js', '/core/content.js'];
 
 const _loaded = new Set();
 function loadScripts(urls) {

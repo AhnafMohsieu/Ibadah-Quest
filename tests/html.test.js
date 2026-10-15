@@ -72,9 +72,21 @@ test('main.css uses modern light tokens', () => {
 });
 
 test('index.html registers the service worker and update banner', () => {
-  assert.ok(html.includes("navigator.serviceWorker.register('sw.js?v=53')"));
+  assert.ok(html.includes("navigator.serviceWorker.register('sw.js?v=55')"));
   assert.ok(html.includes("'SKIP_WAITING'"));
   assert.ok(html.includes('swUpdateBanner'));
+});
+
+test('index.html CSP permits the app\'s remote fetch and media hosts', () => {
+  const csp = html.match(/http-equiv="Content-Security-Policy" content="([^"]+)"/);
+  assert.ok(csp, 'CSP meta tag must exist');
+  const connect = csp[1].match(/connect-src ([^;]+)/);
+  assert.ok(connect, 'connect-src directive must exist');
+  for (const host of ['https://api.aladhan.com', 'https://cdn.jsdelivr.net', 'https://api.quran.com']) {
+    assert.ok(connect[1].includes(host), 'connect-src must allow ' + host);
+  }
+  assert.ok(/media-src [^;]*https:\/\/verses\.quran\.com/.test(csp[1]),
+    'media-src must allow verses.quran.com audio');
 });
 
 test('hadith/dhikr audio modules wired with versions and load order', () => {
@@ -83,7 +95,7 @@ test('hadith/dhikr audio modules wired with versions and load order', () => {
   assert.ok(html.includes('<script src="data/hadith-normalize.js?v=1"></script>'));
   assert.ok(html.includes('<script src="features/hadith-library.js?v=3" defer></script>'));
   assert.ok(html.includes('<script src="features/tafsir-library.js?v=3" defer></script>'));
-  assert.ok(html.includes('styles/main.css?v=41'));
+  assert.ok(html.includes('styles/main.css?v=42'));
   assert.ok(html.indexOf('core/content-cache.js') < html.indexOf('core/state.js'), 'cache module loads before state');
   assert.ok(html.indexOf('core/audio.js') < html.indexOf('core/static.js'), 'audio module loads before renderers');
   assert.ok(html.indexOf('features/tafsir-library.js') > html.indexOf('core/static.js'), 'deferred features load after renderers');
@@ -144,7 +156,7 @@ test('theme: light-family palette blocks exist in main.css', () => {
 test('theme: index.html pre-paint script sets data-theme from localStorage', () => {
   assert.ok(html.includes("localStorage.getItem('iqTheme')"));
   assert.ok(html.includes("setAttribute('data-theme'"));
-  assert.ok(html.includes('styles/main.css?v=41'));
+  assert.ok(html.includes('styles/main.css?v=42'));
 });
 
 test('theme: picker references metadata and setTheme wiring', () => {
@@ -416,6 +428,9 @@ test('bottom nav exists with five category buttons', () => {
   assert.ok(html.includes('class="bnav-btn'), 'bnav-btn class missing');
   assert.ok(css.includes('.bnav'), 'bnav styles missing');
   assert.ok(css.includes('.bnav-btn'), 'bnav-btn styles missing');
+  assert.ok(css.includes('.bnav{position:fixed'), 'bottom nav must be fixed so it is visible on phones');
+  assert.ok(css.includes('padding-bottom: calc(84px + env(safe-area-inset-bottom, 0px))'),
+    'shell must reserve clearance for the fixed bottom nav');
 });
 
 test('boot post-defer hook re-renders only deferred panels (no full double-render)', () => {

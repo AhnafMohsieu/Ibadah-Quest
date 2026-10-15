@@ -26,8 +26,20 @@ test('knowledge/library/names bridges resolve every tab (scripts + renderer)', (
     for (const id of tabIds) {
       assert.ok(entry.includes(`${id}: 'render`) || entry.includes(`'${id}': 'render`),
         `${page}: RENDERERS missing tab ${id}`);
-      assert.ok(entry.includes(`${id}: ['render`) || entry.includes(`'${id}': ['render`),
-        `${page}: TAB_SCRIPTS missing tab ${id}`);
+      assert.ok(entry.includes(`${id}: ['/`) || entry.includes(`'${id}': ['/`),
+        `${page}: TAB_SCRIPTS missing tab ${id} (script URLs must be root-absolute)`);
     }
+    assert.doesNotMatch(entry, /['"](?:core|data|features|render|analytics|widgets|state)\//,
+      `${page}: injected script URLs must be root-absolute (stale pre-reorg path)`);
+  }
+});
+
+test('MPA bridge pages load legacy state from its post-reorg path', () => {
+  for (const p of ['ibadah', 'knowledge', 'library', 'names', 'profile']) {
+    const html = fs.readFileSync(path.join(__dirname, '..', `src/pages/${p}/${p}.html`), 'utf8');
+    assert.match(html, /<script src="\/core\/state\.js"><\/script>/,
+      p + ': bridge must load /core/state.js');
+    assert.doesNotMatch(html, /src="\/state\//,
+      p + ': stale pre-reorg /state/ script path');
   }
 });

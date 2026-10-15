@@ -23,12 +23,12 @@ const NAMES_GROUPS = [
 ];
 
 const TAB_SCRIPTS = {
-  allah_names: ['render/static.js'],
-  prophets: ['render/static.js'], sahaba: ['render/static.js'],
-  women: ['render/static.js'], scholars_names: ['render/static.js'],
+  allah_names: ['/core/static.js'],
+  prophets: ['/core/static.js'], sahaba: ['/core/static.js'],
+  women: ['/core/static.js'], scholars_names: ['/core/static.js'],
 };
 
-const CORE_SCRIPTS = ['core/xp.js', 'core/random.js', 'core/dhikr.js', 'core/content.js'];
+const CORE_SCRIPTS = ['/core/xp.js', '/core/random.js', '/core/dhikr.js', '/core/content.js'];
 
 const _loaded = new Set();
 function loadScripts(urls) {
