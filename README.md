@@ -4,6 +4,19 @@
 
 Track your five daily prayers, dhikr, Quran reading, voluntary acts, and more. Earn XP, level up, unlock achievements, and build lasting streaks on your spiritual journey.
 
+<p align="center">
+  <a href="https://ahnafmohsieu.github.io/Ibadah-Quest/">
+    <img src="docs/screenshots/desktop.png" alt="Ibadah Quest dashboard with prayer tracking and XP progress" width="100%">
+  </a>
+</p>
+
+<details>
+  <summary>Mobile view</summary>
+  <p align="center">
+    <img src="docs/screenshots/mobile.png" alt="Ibadah Quest on mobile" width="320">
+  </p>
+</details>
+
 ## Features
 
 - **Daily Prayer Tracking** — Log Fajr, Dhuhr, Asr, Maghrib, and Isha with one tap
@@ -138,4 +151,5 @@ All user data is persisted in localStorage under the `iq9_user_` prefix. The sta
 
 ## License
 
-Personal use only.
+All rights reserved. See [LICENSE](LICENSE). The code and content are published
+for viewing and evaluation only.
