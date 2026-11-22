@@ -4093,3 +4093,196 @@ body[data-active-segment="profile_main"] #seasonalBanner {
   font-weight: 700;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
 }
+
+
+/* ══════════════════════════════════════════════════════════════
+   REMODELED MULTI-PAGE SEGMENT TAB SYSTEM
+   ══════════════════════════════════════════════════════════════ */
+
+/* Clean separation: Home hero-strip & daily carousel only appear on the Today dashboard */
+body[data-active-segment]:not([data-active-segment="ibadah"]) .hero-strip,
+body[data-active-segment]:not([data-active-segment="ibadah"]) #dailyCarousel,
+body[data-active-segment]:not([data-active-segment="ibadah"]) #seasonalBanner,
+body[data-active-tab]:not([data-active-tab="today"]) .hero-strip,
+body[data-active-tab]:not([data-active-tab="today"]) #dailyCarousel,
+body[data-active-tab]:not([data-active-tab="today"]) #seasonalBanner {
+  display: none !important;
+}
+
+/* Dynamic Segment Page Header */
+.segment-page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 900px;
+  margin: 12px auto 8px;
+  padding: 14px 18px;
+  border-radius: var(--radius);
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  box-sizing: border-box;
+}
+
+.segment-page-header .sph-content {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.segment-page-header .sph-icon {
+  font-size: 1.6rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: var(--accent-bg);
+  border: 1px solid var(--accent-border);
+  color: var(--accent-light);
+  flex-shrink: 0;
+}
+
+.segment-page-header .sph-title {
+  font-family: var(--font-heading);
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--accent-light);
+  line-height: 1.3;
+  margin: 0;
+}
+
+.segment-page-header .sph-desc {
+  font-size: 0.8rem;
+  color: var(--text2);
+  margin: 2px 0 0;
+  line-height: 1.4;
+}
+
+/* Tier Nav Container: Modern Sticky Segment Bar */
+.tier-nav-container {
+  max-width: 920px;
+  margin: 0 auto;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 4px 0 8px;
+}
+
+/* Tier 2 Tabs: Segmented Group Control */
+.tier2-tabs.cat-chips {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  padding: 6px;
+  border-radius: var(--radius);
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  margin: 6px auto 10px;
+  max-width: 900px;
+}
+
+.cat-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border-radius: var(--radius-sm);
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--text2);
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-height: 40px;
+}
+
+.cat-chip:hover {
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.cat-chip.active {
+  color: var(--accent-light) !important;
+  background: var(--accent-bg) !important;
+  border-color: var(--accent-border) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Tier 3 Tabs: Sub-item Pill Selector */
+.tier3-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px;
+  padding: 4px 0 10px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.tier3-tabs .t3-btn,
+.tier3-tabs .t2-btn,
+.tier2-tabs .t2-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 7px 14px;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  background: var(--card-bg);
+  color: var(--text2);
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-height: 38px;
+}
+
+.tier3-tabs .t3-btn:hover,
+.tier3-tabs .t2-btn:hover,
+.tier2-tabs .t2-btn:hover {
+  color: var(--text);
+  border-color: var(--text3);
+}
+
+.tier3-tabs .t3-btn.active,
+.tier3-tabs .t2-btn.active,
+.tier2-tabs .t2-btn.active {
+  color: var(--on-accent) !important;
+  background: var(--accent) !important;
+  border-color: var(--accent) !important;
+  box-shadow: 0 2px 10px var(--accent-glow);
+}
+
+/* Modern Breadcrumb / Drill-back Button */
+.drill-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  margin-bottom: 14px;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-sm);
+  color: var(--accent-light);
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.drill-back:hover {
+  background: var(--accent-bg);
+  border-color: var(--accent-border);
+  transform: translateX(-2px);
+}
+
+.drill-back .drill-back-arrow {
+  font-size: 1.1rem;
+  line-height: 1;
+}

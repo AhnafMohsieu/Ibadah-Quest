@@ -16,10 +16,20 @@
   function switchUser() { const inp=document.getElementById('usernameInput'); if(!inp?.value.trim()) return; saveState(); currentUser=inp.value.trim(); localStorage.setItem(USER_KEY,currentUser); S=window.loadState(); initApp(); }
   function logout() {
     saveState();
-    currentUser = 'default';
-    try { localStorage.setItem(USER_KEY, currentUser); } catch (e) {}
-    S = window.loadState();
-    initApp();
+    try {
+      sessionStorage.removeItem('iq_session_authenticated');
+      sessionStorage.removeItem('iq_unlocked_' + currentUser);
+    } catch(e) {}
+    if (window.Auth && typeof window.Auth.lockUser === 'function') {
+      window.Auth.lockUser();
+    } else if (window.Auth && typeof window.Auth.show === 'function') {
+      window.Auth.show('login');
+    } else {
+      currentUser = 'default';
+      try { localStorage.setItem(USER_KEY, currentUser); } catch (e) {}
+      S = window.loadState();
+      initApp();
+    }
   }
   function resetAll() {
     if (!confirm(iqEmoji('alert-triangle') + ' Reset all data? This cannot be undone.')) return;
@@ -553,7 +563,9 @@ Object.keys(NEW_POOLS).forEach(k => {
       overlay.style.pointerEvents = 'none';
     }
   }
-  if (window.Auth && typeof window.Auth.isLocked === 'function' && window.Auth.isLocked()) {
+  if (window.Auth && typeof window.Auth.checkStartupAuth === 'function') {
+    window.Auth.checkStartupAuth();
+  } else if (window.Auth && typeof window.Auth.isLocked === 'function' && window.Auth.isLocked()) {
     window.Auth.show('unlock');
   }
   try { window.applyTheme(); } catch(e) { console.error('applyTheme in initApp failed:', e); }

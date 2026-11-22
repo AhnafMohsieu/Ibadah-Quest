@@ -45,8 +45,60 @@
     el.textContent = h ? (g + ' · ' + h) : g;
   }
   window.renderDateLine = renderDateLine;
+    function _updateSegmentHeader(catId, subGroupLabel, tabId) {
+    try {
+      document.body.setAttribute('data-active-segment', catId);
+      var activeTab = tabId || (window.S && window.S.lastSub) || 'today';
+      document.body.setAttribute('data-active-tab', activeTab);
+      var sph = document.getElementById('segmentPageHeader');
+      var sphIcon = document.getElementById('sphIcon');
+      var sphTitle = document.getElementById('sphTitle');
+      var sphDesc = document.getElementById('sphDesc');
+      if (sph && sphIcon && sphTitle && sphDesc) {
+        if (catId === 'ibadah' && activeTab === 'today') {
+          sph.style.display = 'none';
+        } else {
+          sph.style.display = 'flex';
+          var headerMap = {
+            ibadah: {
+              icon: window.iqIcon('sun') || '🌅',
+              title: subGroupLabel ? ('Daily › ' + subGroupLabel) : 'Daily Ibadah & Adhkar',
+              desc: 'Habit tracking, morning & evening remembrance, and prophetic devotions'
+            },
+            knowledge: {
+              icon: window.iqIcon('book-open') || '📖',
+              title: subGroupLabel ? ('Knowledge › ' + subGroupLabel) : 'Islamic Knowledge',
+              desc: "Qur'an, Hadith, Fiqh rulings, character & prophetic wisdom"
+            },
+            names_main: {
+              icon: window.iqIcon('star') || '🌟',
+              title: '99 Names & Blessed Figures',
+              desc: 'Asma-ul-Husna, Prophets, Sahabah, and righteous classical scholars'
+            },
+            library: {
+              icon: window.iqIcon('landmark') || '📚',
+              title: subGroupLabel ? ('Library › ' + subGroupLabel) : 'Islamic Library',
+              desc: 'Dynasties, sacred cities, Islamic architecture, arts & Arabic language'
+            },
+            profile_main: {
+              icon: window.iqIcon('user') || '👤',
+              title: 'Account & Progress',
+              desc: 'Spiritual streaks, achievements, trophies & personal progress'
+            }
+          };
+          var cfg = headerMap[catId] || headerMap.ibadah;
+          sphIcon.innerHTML = cfg.icon;
+          sphTitle.textContent = cfg.title;
+          sphDesc.textContent = cfg.desc;
+        }
+      }
+    } catch(e) {}
+  }
+  window._updateSegmentHeader = _updateSegmentHeader;
+
   function switchCategory(catId, btn) {
     try { renderDateLine(); } catch (e) {}
+    _updateSegmentHeader(catId);
     document.querySelectorAll('.tab-panel').forEach(function(p) { p.classList.remove('active'); });
     document.querySelectorAll('.t1-btn').forEach(function(el) {
       el.classList.remove('active');
@@ -74,63 +126,62 @@
     var group = window.TAB_GROUPS[catId] || [];
     var container = document.getElementById('tier2Tabs');
     var tier3Wrap = document.getElementById('tier3Wrap');
-    var isCategorized = group.length > 0 && Array.isArray(group[0].tabs);
-    if (isCategorized) {
+    if (!container) return;
+
+    container.style.display = '';
+    container.classList.remove('surah-grid');
+
+    // Single-group categories (like names_main with 1 group) or flat categories (like profile_main):
+    // Flatten into clean, direct 1-level tabs to eliminate redundant chip levels!
+    var hasMultipleGroups = group.length > 1 && Array.isArray(group[0].tabs);
+    var isSingleGroupWithTabs = group.length === 1 && Array.isArray(group[0].tabs);
+
+    if (hasMultipleGroups) {
       _activeCategoryId = null;
-      if (catId === 'library') {
-        container.classList.remove('cat-chips');
-        container.classList.add('surah-grid');
-        container.innerHTML = group.map(function(c, i) {
-          var icon = window.iqIcon(c.icon || c.id);
-          return '<div class="surah-card" onclick="window.selectCategory(\'' + c.id + '\', this)">' +
-            '<div class="surah-num">' + icon + '</div>' +
-            '<div class="surah-name-en">' + t(c.label) + '</div>' +
-            '<div style="font-size:0.68rem;color:var(--text2);margin-top:4px;">' + c.tabs.length + ' sections</div>' +
-          '</div>';
-        }).join('');
-        if (tier3Wrap) tier3Wrap.style.display = 'none';
-      } else {
-        container.classList.remove('surah-grid');
-        container.classList.add('cat-chips');
-        container.innerHTML = group.map(function(c, i) {
-          return `<button class="cat-chip ${i === 0 ? 'active' : ''}" onclick="window.selectCategory('${c.id}', this)"><span>${window.iqIcon(c.icon || c.id)}</span> ${t(c.label)}</button>`;
-        }).join('');
-        if (tier3Wrap) tier3Wrap.style.display = '';
-      }
+      container.classList.remove('surah-grid');
+      container.classList.add('cat-chips');
+      container.innerHTML = group.map(function(c, i) {
+        return `<button class="cat-chip ${i === 0 ? 'active' : ''}" onclick="window.selectCategory('${c.id}', this)" role="tab" aria-selected="${i === 0 ? 'true' : 'false'}"><span>${window.iqIcon(c.icon || c.id)}</span> ${t(c.label)}</button>`;
+      }).join('');
+      if (tier3Wrap) tier3Wrap.style.display = '';
       var firstCat = group[0];
       _activeCategoryId = firstCat.id;
-      if (catId !== 'library') renderCategoryTabs(firstCat);
+      _updateSegmentHeader(catId, firstCat.label);
+      renderCategoryTabs(firstCat);
     } else {
       container.classList.remove('cat-chips');
       container.classList.remove('surah-grid');
-      container.innerHTML = group.map(function(p, i) {
-        return `<button data-tab="${p.id}" class="t2-btn ${i === 0 ? 'active' : ''}" onclick="window.activateTab('${p.id}', this)"><span>${window.iqIcon(p.icon || p.id)}</span> ${t(p.label)}</button>`;
+      var tabsList = isSingleGroupWithTabs ? group[0].tabs : group;
+      container.innerHTML = tabsList.map(function(p, i) {
+        return `<button data-tab="${p.id}" class="t2-btn ${i === 0 ? 'active' : ''}" onclick="window.activateTab('${p.id}', this)" role="tab" aria-selected="${i === 0 ? 'true' : 'false'}"><span>${window.iqIcon(p.icon || p.id)}</span> ${t(p.label)}</button>`;
       }).join('');
       if (tier3Wrap) tier3Wrap.style.display = 'none';
-      if (group.length > 0) activateTab(group[0].id, container.firstElementChild);
+      _updateSegmentHeader(catId, null);
+      if (tabsList.length > 0) activateTab(tabsList[0].id, container.firstElementChild);
     }
     var sc = document.querySelector('.app'); if (sc) sc.scrollTop = 0;
   }
 
   function selectCategory(catId, btn) {
-    document.querySelectorAll('.cat-chip').forEach(function(el) { el.classList.remove('active'); });
-    document.querySelectorAll('#tier2Tabs .surah-card').forEach(function(el) { el.classList.remove('active'); });
-    if (btn) btn.classList.add('active');
+    document.querySelectorAll('.cat-chip').forEach(function(el) {
+      el.classList.remove('active');
+      el.setAttribute('aria-selected', 'false');
+    });
+    document.querySelectorAll('#tier2Tabs .surah-card').forEach(function(el) {
+      el.classList.remove('active');
+    });
+    if (btn) {
+      btn.classList.add('active');
+      btn.setAttribute('aria-selected', 'true');
+    }
     _activeCategoryId = catId;
     var currentCat = (window.S && window.S.lastCat) || 'ibadah';
     var currentGroup = window.TAB_GROUPS[currentCat] || [];
     var cat = currentGroup.find(function(c) { return c.id === catId; });
     if (cat) {
       var tier3Wrap = document.getElementById('tier3Wrap');
-      if (currentCat === 'library') {
-        var tier2 = document.getElementById('tier2Tabs');
-        if (tier2) tier2.style.display = 'none';
-        if (tier3Wrap) tier3Wrap.style.display = '';
-      } else if (tier3Wrap) {
-        // Re-show the tier-3 grid: a previous drill-down hid it, and the
-        // newly rendered category cards must be visible.
-        tier3Wrap.style.display = '';
-      }
+      if (tier3Wrap) tier3Wrap.style.display = '';
+      _updateSegmentHeader(currentCat, cat.label);
       renderCategoryTabs(cat);
     }
     var sc = document.querySelector('.app'); if (sc) sc.scrollTop = 0;
@@ -140,34 +191,15 @@
     var grid = document.getElementById('tier3Tabs');
     var wrap = document.getElementById('tier3Wrap');
     if (!grid || !wrap) { activateTab(tabId, btn); return; }
-    var currentCat = (window.S && window.S.lastCat) || 'ibadah';
-    var panel, existing, back;
-    if (currentCat === 'library') {
-      wrap.style.display = 'none';
-      activateTab(tabId, btn);
-      panel = document.getElementById('panel-' + tabId);
-      if (panel) {
-        existing = panel.querySelector('.drill-back');
-        if (!existing) {
-          back = document.createElement('button');
-          back.className = 'drill-back';
-          back.textContent = '\u2190 Back';
-          back.onclick = function() { drillUp(); };
-          panel.insertBefore(back, panel.firstChild);
-        }
-      }
-      return;
-    }
-    grid.classList.remove('surah-grid');
     wrap.style.display = 'none';
     activateTab(tabId, btn);
-    panel = document.getElementById('panel-' + tabId);
+    var panel = document.getElementById('panel-' + tabId);
     if (panel) {
-      existing = panel.querySelector('.drill-back');
+      var existing = panel.querySelector('.drill-back');
       if (!existing) {
-        back = document.createElement('button');
+        var back = document.createElement('button');
         back.className = 'drill-back';
-        back.textContent = '\u2190 Back';
+        back.innerHTML = '<span class="drill-back-arrow">←</span> Back to Topics';
         back.onclick = function() { drillUp(); };
         panel.insertBefore(back, panel.firstChild);
       }
@@ -178,16 +210,7 @@
     var wrap = document.getElementById('tier3Wrap');
     var currentCat = (window.S && window.S.lastCat) || 'ibadah';
     document.querySelectorAll('.tab-panel').forEach(function(p) { p.classList.remove('active'); });
-    if (currentCat === 'library') {
-      var tier2 = document.getElementById('tier2Tabs');
-      if (wrap) wrap.style.display = 'none';
-      if (tier2) { tier2.style.display = ''; tier2.classList.add('surah-grid'); }
-      return;
-    }
     if (wrap) wrap.style.display = '';
-    // The active group is tracked by selectCategory/switchCategory; the old
-    // `.t1-btn.active` lookup compared a tier-1 id against group ids and never
-    // matched, leaving the restored grid without its surah-grid layout.
     var groups = window.TAB_GROUPS[currentCat] || [];
     var cat = groups.find(function(c) { return c.id === _activeCategoryId; });
     if (cat && cat.grid) renderCategoryTabs(cat);
@@ -244,10 +267,34 @@
   }
 
   function activateTab(tabId, btn) {
-    document.querySelectorAll('.t2-btn').forEach(function(b) { b.classList.remove('active'); });
+    document.querySelectorAll('.t2-btn, .t3-btn').forEach(function(b) {
+      if (b.getAttribute('data-tab') === tabId) {
+        b.classList.add('active');
+        b.setAttribute('aria-selected', 'true');
+      } else {
+        b.classList.remove('active');
+        b.setAttribute('aria-selected', 'false');
+      }
+    });
     document.querySelectorAll('.surah-card').forEach(function(b) { b.classList.remove('active'); });
-    if (btn) btn.classList.add('active');
+    if (btn) {
+      btn.classList.add('active');
+      btn.setAttribute('aria-selected', 'true');
+    }
     if (window.S) { window.S.lastSub = tabId; window.saveState(); }
+    document.body.setAttribute('data-active-tab', tabId);
+    var currentCat = (window.S && window.S.lastCat) || 'ibadah';
+    var catGroups = window.TAB_GROUPS[currentCat] || [];
+    var activeGrp = null;
+    if (Array.isArray(catGroups)) {
+      for (var gi = 0; gi < catGroups.length; gi++) {
+        if (catGroups[gi].tabs && catGroups[gi].tabs.some(function(t) { return t.id === tabId; })) {
+          activeGrp = catGroups[gi];
+          break;
+        }
+      }
+    }
+    _updateSegmentHeader(currentCat, activeGrp ? activeGrp.label : null, tabId);
     if (!window._hashNavigating) {
       var catEl = document.querySelector('.t1-btn.active');
       var catId = catEl ? catEl.getAttribute('data-cat') : null;

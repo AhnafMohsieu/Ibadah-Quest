@@ -262,7 +262,9 @@
     el.style.display = 'flex';
     el.classList.add('show');
 
-    if (mode === 'unlock') {
+    if (mode === 'login' || mode === 'initial') {
+      renderLoginGatewayView(el, targetUser, cred, lockoutSec);
+    } else if (mode === 'unlock') {
       renderUnlockView(el, targetUser, cred, lockoutSec);
     } else if (mode === 'profiles') {
       renderProfilesView(el);
@@ -270,6 +272,93 @@
       renderSecurityView(el, targetUser, cred);
     } else if (mode === 'avatar') {
       renderAvatarPickerView(el);
+    }
+  }
+
+  
+  function renderLoginGatewayView(container, user, cred, lockoutSec) {
+    const userLabel = user === 'default' ? 'Guest Profile' : user;
+    const userAvatar = (typeof S !== 'undefined' && S && S.avatar) ? S.avatar : '🌙';
+    const userLv = (typeof S !== 'undefined' && S && S.lv) ? S.lv : 1;
+    const hasPin = cred && cred.hasPin;
+
+    let h = `
+      <div class="auth-card" role="dialog" aria-modal="true" aria-labelledby="authLoginTitle">
+        <div class="auth-header">
+          <div class="auth-bismillah">بِسْمِ ٱللَّهِ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ</div>
+          <div class="auth-icon-crescent" style="font-size:2.2rem;margin:4px auto 10px;display:flex;align-items:center;justify-content:center;width:64px;height:64px;border-radius:50%;background:var(--accent-bg);border:2px solid var(--accent);box-shadow:0 0 16px var(--accent-glow);">
+            ${userAvatar}
+          </div>
+          <h2 id="authLoginTitle" class="auth-title">${hasPin ? 'Sign In / Unlock' : 'Welcome to Ibadah Quest'}</h2>
+          <div class="auth-badge">${window.escapeHTML(userLabel)} · Level ${userLv} ${hasPin ? '· 🔒 Protected' : '· 👤 Active'}</div>
+        </div>
+
+        ${hasPin ? `
+          <div id="authLockoutNotice" class="auth-lockout" style="${lockoutSec > 0 ? 'display:block;' : 'display:none;'}">
+            ⚠️ Too many failed attempts. Locked for <span id="authCountdown">${lockoutSec}</span>s
+          </div>
+
+          <div class="auth-pin-wrap">
+            <div class="auth-pin-display">
+              <input type="password" id="authPinInput" class="auth-pin-input" maxlength="8" placeholder="••••" autocomplete="off" ${lockoutSec > 0 ? 'disabled' : ''} autofocus />
+              <button type="button" class="auth-eye-btn" id="authToggleEye" aria-label="Toggle PIN visibility" onclick="window.Auth.togglePinVisibility()">
+                👁️
+              </button>
+            </div>
+            <div id="authErrorMsg" class="auth-error-msg" style="display:none;"></div>
+          </div>
+
+          <div class="auth-keypad">
+            ${[1,2,3,4,5,6,7,8,9].map(n => `<button type="button" class="auth-key" onclick="window.Auth.keypadInput('${n}')">${n}</button>`).join('')}
+            <button type="button" class="auth-key auth-key-action" onclick="window.Auth.keypadClear()">C</button>
+            <button type="button" class="auth-key" onclick="window.Auth.keypadInput('0')">0</button>
+            <button type="button" class="auth-key auth-key-action" onclick="window.Auth.keypadBackspace()">⌫</button>
+          </div>
+
+          <div class="auth-actions">
+            <button type="button" class="auth-btn auth-btn-primary" id="authUnlockBtn" onclick="window.Auth.submitUnlock('${window.escapeHTML(user)}')" ${lockoutSec > 0 ? 'disabled' : ''}>
+              Unlock &amp; Enter App
+            </button>
+            <button type="button" class="auth-btn auth-btn-secondary" onclick="window.Auth.show('profiles')">
+              Switch Account
+            </button>
+          </div>
+        ` : `
+          <p class="auth-sub" style="margin: 10px 0 16px; font-size: 0.95rem; line-height: 1.5; color: var(--text2);">
+            Sign in to track prayers, cultivate prophetic virtues, and ascend your spiritual quest.
+          </p>
+
+          <div class="auth-actions">
+            <button type="button" class="auth-btn auth-btn-primary" onclick="window.Auth.enterApp('${window.escapeHTML(user)}')">
+              Enter Ibadah Quest ➔
+            </button>
+            <button type="button" class="auth-btn auth-btn-secondary" onclick="window.Auth.show('profiles')">
+              Switch / Create Profile
+            </button>
+          </div>
+          <div style="margin-top: 12px; font-size: 0.8rem; text-align: center; color: var(--text3);">
+            <a href="javascript:void(0)" onclick="window.Auth.show('security')" style="color:var(--accent);text-decoration:none;font-weight:600;">🔒 Set up PIN Security</a>
+          </div>
+        `}
+      </div>
+    `;
+
+    container.innerHTML = h;
+
+    if (hasPin) {
+      const input = document.getElementById('authPinInput');
+      if (input) {
+        input.focus();
+        input.addEventListener('keydown', function(e) {
+          if (e.key === 'Enter') {
+            e.preventDefault();
+            window.Auth.submitUnlock(user);
+          }
+        });
+      }
+      if (lockoutSec > 0) {
+        startLockoutCountdown(user, lockoutSec);
+      }
     }
   }
 
@@ -508,6 +597,37 @@
     getProfiles,
     show: showAuthOverlay,
     close: closeAuthOverlay,
+
+    checkStartupAuth: function() {
+      let authed = false;
+      try { authed = sessionStorage.getItem('iq_session_authenticated') === '1'; } catch(e) {}
+      const activeUser = typeof currentUser !== 'undefined' ? currentUser : 'default';
+      if (!authed || isLocked(activeUser)) {
+        showAuthOverlay(isLocked(activeUser) ? 'unlock' : 'login');
+        return false;
+      }
+      return true;
+    },
+
+    enterApp: function(user) {
+      const target = user || (typeof currentUser !== 'undefined' ? currentUser : 'default');
+      try {
+        sessionStorage.setItem('iq_session_authenticated', '1');
+        sessionStorage.setItem(SESSION_UNLOCKED_PREFIX + target, '1');
+        localStorage.setItem('iq_intro_seen', '1');
+        if (typeof S !== 'undefined' && S) S.introSeen = true;
+      } catch(e) {}
+      var introOv = document.getElementById('introOverlay');
+      if (introOv) {
+        introOv.classList.remove('visible');
+        introOv.style.display = 'none';
+      }
+      closeAuthOverlay();
+      if (typeof window.toast === 'function') {
+        window.toast('✨', 'Welcome to Ibadah Quest!');
+      }
+      if (typeof window.renderAll === 'function') window.renderAll();
+    },
 
     togglePinVisibility: function() {
       const inp = document.getElementById('authPinInput');
