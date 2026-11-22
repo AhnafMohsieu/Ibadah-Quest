@@ -419,7 +419,7 @@
 Object.keys(NEW_POOLS).forEach(k => {
   window['render' + k] = function() {
     const title = NEW_POOL_TITLES[k] || (iqIcon('sparkles') + ' ' + k.charAt(0).toUpperCase() + k.slice(1));
-    poolRender(k + 'Area', title, NEW_POOLS[k], k + 'Idx');
+    if (typeof window.poolRender === 'function') window.poolRender(k + 'Area', title, NEW_POOLS[k], k + 'Idx');
   }
 });
 

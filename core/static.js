@@ -24,7 +24,7 @@
 
   function poolRender(areaId, title, pool, idxKey, showAll = false) {
     const el = document.getElementById(areaId);
-    if (!el) return;
+    if (!el || !pool || !Array.isArray(pool)) return;
     let html = '';
     html += `<div class="section-title">${title}</div>`;
     if (!showAll && idxKey && pool && (!S[idxKey] || !S[idxKey].length)) {
@@ -89,7 +89,7 @@
 
   function renderSunnahs() {
     const el = document.getElementById('sunnahArea');
-    if (!el) return;
+    if (!el || typeof SUNNAH_POOL === 'undefined' || !Array.isArray(SUNNAH_POOL)) return;
     const cats = [...new Set(SUNNAH_POOL.map(s => s.cat).filter(Boolean))];
     const cur = (S._sunnahCat || cats[0]);
     let html = '<div class="section-title">' + iqIcon('sun') + ' Daily Sunnahs</div>';
@@ -113,13 +113,12 @@
   }
   function renderDhikr() {
     if (typeof window.renderDhikrCounter === 'function') window.renderDhikrCounter();
-    poolRender('dhikrArea', iqIcon('beads') + ' Dhikr Collection',DHIKR_POOL,'dhikrIdx');
+    if (typeof DHIKR_POOL !== 'undefined') poolRender('dhikrArea', iqIcon('beads') + ' Dhikr Collection',DHIKR_POOL,'dhikrIdx');
   }
-  function renderStories() { poolRender('storiesArea', iqIcon('book-open') + ' Inspiring Stories',STORIES,'storiesIdx',true); }
+  function renderStories() { if (typeof STORIES !== 'undefined') poolRender('storiesArea', iqIcon('book-open') + ' Inspiring Stories',STORIES,'storiesIdx',true); }
   function renderNames() {
     const el = document.getElementById('namesArea');
-    if (!el) return;
-    if (!NAMES) return;
+    if (!el || typeof NAMES === 'undefined' || !Array.isArray(NAMES)) return;
     let html = `<div class="section-title">${iqIcon('mosque')} 99 Names of Allah</div>`;
     html += NAMES.map((o, i) => {
       if (!o) return '';
@@ -262,12 +261,14 @@
     if (!el) return;
     if (!S.dhikrCounters) S.dhikrCounters = {};
     const current = S.dhikrCounters._active || 0;
-    const d = DHIKR_COUNTER_DATA[current % DHIKR_COUNTER_DATA.length];
+    const pool = (typeof DHIKR_COUNTER_DATA !== 'undefined' && DHIKR_COUNTER_DATA) || (typeof window !== 'undefined' && window.DHIKR_COUNTER_DATA) || [];
+    if (!pool.length) return;
+    const d = pool[current % pool.length];
     const cnt = S.dhikrCounters[current] || 0;
     const pct = Math.min(100, Math.round((cnt / d.target) * 100));
     el.innerHTML = renderDhikrAnalytics() + `
       <div class="dhikr-counter-card">
-        <div style="font-size:0.75rem;color:var(--text2);margin-bottom:8px;">${current+1} / ${DHIKR_COUNTER_DATA.length}</div>
+        <div style="font-size:0.75rem;color:var(--text2);margin-bottom:8px;">${current+1} / ${pool.length}</div>
         <div class="dhikr-counter-arabic" style="color:${d.color}">${d.arabic}</div>
         <div style="font-style:italic;color:var(--text2);font-size:0.85rem;margin-bottom:4px;">${d.transliteration}</div>
         <div style="font-size:0.8rem;color:var(--text2);margin-bottom:12px;">${d.english}</div>
@@ -287,13 +288,19 @@
   }
 
   function renderInspirations() {
+    const el = document.getElementById('inspireArea');
+    if (!el) return;
+    const pool = (typeof INSPIRATIONS_POOL !== 'undefined' && INSPIRATIONS_POOL) || (typeof window !== 'undefined' && window.INSPIRATIONS_POOL) || [];
+    if (!pool.length) return;
     const idxs = S.inspireIdx && S.inspireIdx.length ? S.inspireIdx : [0,1,2,3,4];
-    document.getElementById('inspireArea').innerHTML = '<div class="section-title">' + iqIcon('sparkles') + ' Inspirations</div>' + idxs.map(i => `<div class="content-card"><div class="content-english" style="font-size:1rem;line-height:1.8;">${INSPIRATIONS_POOL[i%INSPIRATIONS_POOL.length]}</div></div>`).join('');
+    el.innerHTML = '<div class="section-title">' + iqIcon('sparkles') + ' Inspirations</div>' + idxs.map(i => `<div class="content-card"><div class="content-english" style="font-size:1rem;line-height:1.8;">${pool[i%pool.length]}</div></div>`).join('');
   }
   function renderSahaba() {
     const el = document.getElementById('sahabaArea');
     if (!el) return;
-    el.innerHTML = '<div class="section-title">' + iqIcon('users') + ' The Companions (Sahabah)</div>' + SAHABA_POOL.map((s,i) => `<div class="content-card"><div style="display:flex;align-items:flex-start;gap:10px;"><span style="display:inline-block;background:var(--accent-bg);color:var(--accent-light);border:1px solid var(--accent-border);border-radius:12px;padding:0 8px;font-size:0.75rem;font-weight:800;height:22px;line-height:20px;white-space:nowrap;font-family:var(--font);">#${i+1}</span><div style="flex:1;"><div style="font-weight:700;color:var(--accent-light);margin-bottom:6px;">${s.title}</div><div class="content-english">${s.desc}</div></div></div></div>`).join('');
+    const pool = (typeof SAHABA_POOL !== 'undefined' && SAHABA_POOL) || (typeof window !== 'undefined' && window.SAHABA_POOL) || [];
+    if (!pool.length) return;
+    el.innerHTML = '<div class="section-title">' + iqIcon('users') + ' The Companions (Sahabah)</div>' + pool.map((s,i) => `<div class="content-card"><div style="display:flex;align-items:flex-start;gap:10px;"><span style="display:inline-block;background:var(--accent-bg);color:var(--accent-light);border:1px solid var(--accent-border);border-radius:12px;padding:0 8px;font-size:0.75rem;font-weight:800;height:22px;line-height:20px;white-space:nowrap;font-family:var(--font);">#${i+1}</span><div style="flex:1;"><div style="font-weight:700;color:var(--accent-light);margin-bottom:6px;">${s.title}</div><div class="content-english">${s.desc}</div></div></div></div>`).join('');
   }
   function renderGratitude() {
     const dt = today(), entries = S.gratitudeLog[dt] || [];

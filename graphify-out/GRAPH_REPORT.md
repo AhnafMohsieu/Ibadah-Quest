@@ -1,7 +1,7 @@
 # Graph Report - IQ  (2026-11-22)
 
 ## Corpus Check
-- 317 files · ~1,111,529 words
+- 317 files · ~1,111,798 words
 - Verdict: corpus is large enough that graph structure adds value.
 - Unclassified: 7 file(s) not represented in the graph (top: .jfif 4, (none) 2, .css 1)
 
@@ -11,7 +11,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `78528acc`
+- Built from commit: `bb4fed36`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -292,16 +292,16 @@
 10. `Context` - 20 edges
 
 ## Surprising Connections (you probably didn't know these)
-- `Findings (evidence from source)` --references--> `poolRender()`  [INFERRED]
-  docs/superpowers/specs/2026-09-06-guide-tracking-polish-design.md → core/static.js
-- `2. Navigation` --references--> `switchCategory()`  [INFERRED]
-  docs/superpowers/specs/2026-08-17-modern-islamic-app-shell-redesign-design.md → core/tabs.js
-- `Contracts` --references--> `switchCategory()`  [INFERRED]
-  docs/superpowers/specs/2026-09-04-mobile-first-app-shell-design.md → core/tabs.js
-- `5. Risks` --references--> `drillUp()`  [INFERRED]
-  docs/superpowers/specs/2026-10-15-app-sweep-fixes-design.md → core/tabs.js
-- `6. Risks` --references--> `switchTab()`  [INFERRED]
-  docs/superpowers/specs/2026-09-09-tab-consolidation-design.md → core/tabs.js
+- `Task 25: Add URL-based tab routing` --references--> `initApp()`  [INFERRED]
+  docs/superpowers/plans/2026-08-16-comprehensive-improvement-plan.md → core/actions.js
+- `Task 3: Declare `profile_main` in data instead of fabricating it at boot` --references--> `initApp()`  [INFERRED]
+  docs/superpowers/plans/2026-08-26-phase1-correctness-data-safety.md → core/actions.js
+- `Section 4: Recovery + verify + ship (approved)` --references--> `initApp()`  [INFERRED]
+  docs/superpowers/specs/2026-09-06-adaptive-shell-design.md → core/actions.js
+- `Task 1: Remove Mood feature entirely` --references--> `renderDynamic()`  [INFERRED]
+  docs/superpowers/plans/2026-08-17-remove-mood-grid-tabs.md → core/dynamic.js
+- `5. render/render.js` --references--> `renderDynamic()`  [INFERRED]
+  docs/superpowers/specs/2026-08-10-spiritual-growth-icons-alignment-design.md → core/dynamic.js
 
 ## Import Cycles
 - None detected.
@@ -1079,16 +1079,16 @@ Nodes (7): Global Constraints, Phase 3 — Performance & PWA Quality: Implementa
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `loadFile()` connect `ref_node_test` to `ref_node_test`, `daily-summary.test.js`, `schema-contract.test.js`, `themes.test.js`, `shop.test.js`, ``core/actions.js` → 8 new files + gutted actions.js`, `date-keys.test.js`, `Ibadah Quest Comprehensive Improvement — Implementation Plan`, `ref_fs`, `journeys.test.js`, `ref_node_assert`, `loadLocalState`?**
-  _High betweenness centrality (0.203) - this node is a cross-community bridge._
+  _High betweenness centrality (0.182) - this node is a cross-community bridge._
 - **Are the 2 inferred relationships involving `poolRender()` (e.g. with `Findings (evidence from source)` and `Findings (evidence)`) actually correct?**
   _`poolRender()` has 2 INFERRED edges - model-reasoned connections that need verification._
 - **Should `ref_node_test` be split into smaller, more focused modules?**
   _Cohesion score 0.046153846153846156 - nodes in this community are weakly interconnected._
 - **Why does `Task 1: XP primitives in core/xp.js` connect ``core/actions.js` → 8 new files + gutted actions.js` to `renderDynamic`, `ref_node_test`?**
-  _High betweenness centrality (0.135) - this node is a cross-community bridge._
+  _High betweenness centrality (0.116) - this node is a cross-community bridge._
 - **Are the 4 inferred relationships involving `loadFile()` (e.g. with `Task 12: Create `tests/xp.test.js`` and `Task 9: `core/recovery.js` — junk-state detection, quarantine, salvage`) actually correct?**
   _`loadFile()` has 4 INFERRED edges - model-reasoned connections that need verification._
 - **Should `core/state.js` be split into smaller, more focused modules?**
   _Cohesion score 0.14285714285714285 - nodes in this community are weakly interconnected._
 - **Why does `renderDynamic()` connect `renderDynamic` to `core/state.js`, `renderTopBar`, ``core/actions.js` → 8 new files + gutted actions.js`, `renderAll`, `dynamic.js`, `Context`, `getSectionPanels`, `compactLogs`, `Changes by File`, `Global Constraints`?**
-  _High betweenness centrality (0.118) - this node is a cross-community bridge._
+  _High betweenness centrality (0.088) - this node is a cross-community bridge._

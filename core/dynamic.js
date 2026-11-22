@@ -218,7 +218,7 @@
     if (fn) fn();
     if (typeof NEW_POOLS !== 'undefined') Object.keys(NEW_POOLS).forEach(function(k) {
       if (NEW_POOLS[k] && NEW_POOLS[k].length) {
-        safe(function() { poolRender(k + 'Area', iqIcon('book-open') + ' ' + k, NEW_POOLS[k], k + 'Idx'); }, k);
+        safe(function() { if (typeof window.poolRender === 'function') window.poolRender(k + 'Area', iqIcon('book-open') + ' ' + k, NEW_POOLS[k], k + 'Idx'); }, k);
       }
     });
   }
@@ -376,7 +376,8 @@ function renderAll() {
     cal += '<div class="cal-nav"><button onclick="App.calPrevMonth()">◀</button></div>';
     cal += '<div class="cal-header-info">';
     cal += `<h3>${gMonthName} ${vY}</h3>`;
-    cal += `<div class="cal-hijri-title">${HIJRI_MONTHS_AR[window.calViewHijriM - 1]} ${window.calViewHijriY} AH</div>`;
+    const hMonth = (typeof window.HIJRI_MONTHS_AR !== 'undefined' && window.HIJRI_MONTHS_AR[window.calViewHijriM - 1]) || '';
+    cal += `<div class="cal-hijri-title">${hMonth} ${window.calViewHijriY || ''} AH</div>`;
     cal += '</div>';
     cal += '<div class="cal-nav"><button onclick="App.calNextMonth()">▶</button>';
     if (!isCurrentMonth) cal += ' <button class="cal-today-btn" onclick="App.calGoToday()">Today</button>';
@@ -384,7 +385,10 @@ function renderAll() {
 
     cal += '<div class="cal-grid">';
     for (let i = 0; i < 7; i++) {
-      cal += `<div class="cal-weekday">${WEEKDAYS_EN[i]}<br><span class="cal-weekday ar">${WEEKDAYS_AR[i]}</span><br><span class="cal-weekday rom">${WEEKDAYS_ROM[i]}</span></div>`;
+      const wEn = (typeof window.WEEKDAYS_EN !== 'undefined' && window.WEEKDAYS_EN[i]) || ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][i];
+      const wAr = (typeof window.WEEKDAYS_AR !== 'undefined' && window.WEEKDAYS_AR[i]) || '';
+      const wRom = (typeof window.WEEKDAYS_ROM !== 'undefined' && window.WEEKDAYS_ROM[i]) || '';
+      cal += `<div class="cal-weekday">${wEn}<br><span class="cal-weekday ar">${wAr}</span><br><span class="cal-weekday rom">${wRom}</span></div>`;
     }
 
     for (let i = 0; i < fd; i++) cal += '<div class="cal-day empty"></div>';
@@ -396,8 +400,8 @@ function renderAll() {
       let cls = cnt >= 5 ? 'good' : (cnt > 0 ? 'ok' : (dk < tk ? 'bad' : ''));
       if (dk === tk) cls += ' now';
 
-      const h = gregorianToHijri(window.calViewYear, window.calViewMonth + 1, d);
-      const hDay = h.day;
+      const h = (typeof gregorianToHijri === "function") ? gregorianToHijri(window.calViewYear, window.calViewMonth + 1, d) : ((typeof window !== "undefined" && typeof window.gregorianToHijri === "function") ? window.gregorianToHijri(window.calViewYear, window.calViewMonth + 1, d) : { day: d, month: 1, year: 1448 });
+      const hDay = (h && h.day) || d;
 
       cal += `<div class="cal-day ${cls}"><span class="g-date">${d}</span><span class="h-date">${hDay}</span></div>`;
     }
@@ -478,7 +482,7 @@ function renderAll() {
 
     h += '<div class="section-title">' + iqIcon('settings') + ' Settings</div>';
     h += '<div class="profile-settings">';
-    const curTheme = document.documentElement.getAttribute('data-theme') || 'light';
+    const curTheme = (typeof document !== 'undefined' && document.documentElement && document.documentElement.getAttribute && document.documentElement.getAttribute('data-theme')) || 'light';
     const themeChips = (window.Themes || []).map(m => `
       <button class="theme-chip${m.key === curTheme ? ' active' : ''}" data-key="${m.key}" role="switch" aria-checked="${m.key === curTheme}" onclick="App.setTheme('${m.key}')">
         <span class="theme-swatch" style="background:linear-gradient(135deg,${m.swatch.bg},${m.swatch.accent});"></span>
@@ -841,7 +845,7 @@ h += '</div>';
 
   function renderQuran() {
     const el = document.getElementById('quranArea');
-    if (!el) return;
+    if (!el || typeof QURAN_SURAHS === 'undefined') return;
 
     if (quranCurrentSurah !== null) {
       renderQuranSurah(el, quranCurrentSurah);
