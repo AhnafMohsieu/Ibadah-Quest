@@ -4,19 +4,22 @@
   const THRESHOLD = 60;
 
   function init() {
+    if (init._done) return;
+    init._done = true;
     if (!('ontouchstart' in window)) return;
     const content = document.getElementById('mainContent');
     const indicator = document.getElementById('pullRefreshIndicator');
     if (!content || !indicator) return;
+    const scroller = document.querySelector('.app') || document.scrollingElement;
 
     content.addEventListener('touchstart', function(e) {
-      if (window.scrollY === 0) { _startY = e.touches[0].clientY; _pulling = true; }
+      if (scroller.scrollTop <= 0) { _startY = e.touches[0].clientY; _pulling = true; }
     }, { passive: true });
 
     content.addEventListener('touchmove', function(e) {
       if (!_pulling) return;
       const diff = e.touches[0].clientY - _startY;
-      if (diff > 0 && window.scrollY === 0) {
+      if (diff > 0 && scroller.scrollTop <= 0) {
         const pull = Math.min(diff * 0.4, 100);
         indicator.style.transform = `translateY(${pull - 50}px)`;
         indicator.style.opacity = pull / THRESHOLD;
@@ -51,4 +54,5 @@
   }
 
   window.initPullRefresh = init;
+  init();
 })();

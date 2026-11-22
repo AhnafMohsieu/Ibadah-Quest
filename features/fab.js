@@ -6,7 +6,9 @@
     const actions = document.getElementById('fabActions');
     const main = document.getElementById('fabMain');
     if (!actions || !main) return;
+    main.setAttribute('aria-expanded', _open ? 'true' : 'false');
     if (_open) {
+      if (typeof window.iqHaptic === 'function') window.iqHaptic(6);
       actions.style.display = 'flex';
       main.classList.add('fab-open');
       setTimeout(() => {
@@ -37,12 +39,15 @@
   }
 
   function init() {
+    if (init._done) return;
+    init._done = true;
     let lastScroll = 0;
     const fab = document.getElementById('fab');
     if (!fab) return;
     populateFABIcons();
-    window.addEventListener('scroll', () => {
-      const cur = window.scrollY;
+    const scroller = document.querySelector('.app') || document.scrollingElement;
+    scroller.addEventListener('scroll', () => {
+      const cur = scroller.scrollTop;
       if (cur > lastScroll && cur > 100) { close(); }
       lastScroll = cur;
     }, { passive: true });
@@ -84,9 +89,11 @@
   window.populateFABIcons = populateFABIcons;
   window.initFAB = init;
 
-  // features/fab.js is a defer script: it loads after core/actions.js's
-  // synchronous init() has already run, so window.initFAB is never invoked
-  // from there. Populate the icon spans directly at module load (the DOM is
-  // fully parsed by now). Idempotent: populateFABIcons skips filled spans.
+  // features/fab.js is a defer script: core/actions.js's synchronous init()
+  // has already run by the time this file executes, so window.initFAB is
+  // never invoked from there (same for pull-refresh.js and the SP2 nav
+  // modules). Self-init at module load instead; init() is idempotent via
+  // init._done, and populateFABIcons skips already-filled spans.
   populateFABIcons();
+  init();
 })();

@@ -514,6 +514,7 @@ Object.keys(NEW_POOLS).forEach(k => {
   }
 
   function _initHashRouting() {
+    if (typeof window.addEventListener !== 'function') return;
     window.addEventListener('popstate', function(e) {
       if (e.state && e.state.cat && e.state.tab) {
         window._hashNavigating = true;
@@ -552,6 +553,9 @@ Object.keys(NEW_POOLS).forEach(k => {
       overlay.style.pointerEvents = 'none';
     }
   }
+  if (window.Auth && typeof window.Auth.isLocked === 'function' && window.Auth.isLocked()) {
+    window.Auth.show('unlock');
+  }
   try { window.applyTheme(); } catch(e) { console.error('applyTheme in initApp failed:', e); }
 
     const t = today();
@@ -580,7 +584,7 @@ Object.keys(NEW_POOLS).forEach(k => {
     if (typeof window.recalc === 'function') window.recalc();
     if (typeof window.checkQ === 'function') window.checkQ();
     if (typeof window.compactStorage === 'function') window.compactStorage();
-    S.lv=lvFrom(S.xp); saveState(); initCalView(); renderAll();
+    S.lv=lvFrom(S.xp); saveState(); (window.initCalView || (typeof initCalView === 'function' ? initCalView : function(){}))(); (window.renderAll || (typeof renderAll === 'function' ? renderAll : function(){}))();
     if (window.renderDailyContent) window.renderDailyContent();
     const modalQueue = [];
     if (window.showWeeklySummary) modalQueue.push(window.showWeeklySummary);
@@ -610,7 +614,7 @@ Object.keys(NEW_POOLS).forEach(k => {
         const savedSub = S ? S.lastSub : null;
         let activeBtn = savedCat ? _findT1ByCat(savedCat) : null;
         if (!activeBtn) activeBtn = document.querySelector('.t1-btn.active');
-        const activeCat = activeBtn ? activeBtn.getAttribute('data-cat') : 'ibadah';
+        const activeCat = (activeBtn && typeof activeBtn.getAttribute === 'function') ? activeBtn.getAttribute('data-cat') : 'ibadah';
         window.switchCategory(activeCat, activeBtn);
         if (savedSub) {
           var escSub = _escAttr(savedSub); var subBtn = null;
@@ -671,6 +675,9 @@ Object.keys(NEW_POOLS).forEach(k => {
         // rendered by init()'s renderAll() already; this eliminates the boot
         // double-render of the ~13 always-available panels.
         try { if (window.renderDeferred) window.renderDeferred(); } catch(e) { console.error('Post-defer re-render failed:', e); }
+        try { if (window.renderDailyContent) window.renderDailyContent(); } catch(e) {}
+        try { if (window.renderCombos) window.renderCombos(); } catch(e) {}
+        try { if (window.renderAchievementShowcase) window.renderAchievementShowcase(); } catch(e) {}
         try { if (window.autoTrackJourneyProgress) window.autoTrackJourneyProgress(); } catch(e) { console.error('Post-defer journey tracking failed:', e); }
         try { if (window.checkConsistency) window.checkConsistency(); } catch(e) { console.error('Post-defer consistency check failed:', e); }
         try { if (window.checkWeeklyConsistency) window.checkWeeklyConsistency(); } catch(e) { console.error('Post-defer weekly consistency failed:', e); }
@@ -685,7 +692,7 @@ Object.keys(NEW_POOLS).forEach(k => {
     } catch(e) { console.error('Step 10c post-defer re-render hook failed:', e); }
     try {
       document.addEventListener('keydown', (e) => {
-        if ((e.key === 'Enter' || e.key === ' ') && e.target.matches('.card-item, .vol-card, .shop-card')) {
+        if ((e.key === 'Enter' || e.key === ' ') && e.target.matches('.card-item, .vol-card, .shop-card, .card-info-btn')) {
           e.preventDefault();
           e.target.click();
         }
@@ -737,7 +744,28 @@ Object.keys(NEW_POOLS).forEach(k => {
       extraDeedsBack: appAction('extraDeedsBack'),
       openVolPrayers: appAction('openVolPrayers'),
       volPrayersBack: appAction('volPrayersBack'),
-      toggleAvatarPicker: () => toast(iqIcon('user'), 'Avatar picker coming soon!', false, 2000)
+      toggleAvatarPicker: function() {
+        if (window.Auth && typeof window.Auth.show === 'function') {
+          window.Auth.show('avatar');
+        } else {
+          toast(iqIcon('user'), 'Avatar picker unavailable', false, 2000);
+        }
+      },
+      lockApp: function() {
+        if (window.Auth && typeof window.Auth.lockUser === 'function') {
+          window.Auth.lockUser();
+        }
+      },
+      openSecuritySettings: function() {
+        if (window.Auth && typeof window.Auth.show === 'function') {
+          window.Auth.show('security');
+        }
+      },
+      openProfilePicker: function() {
+        if (window.Auth && typeof window.Auth.show === 'function') {
+          window.Auth.show('profiles');
+        }
+      }
     };
     window.closeToastOverlay = closeToastOverlay;
     console.log('Ibadah Quest initialized. window.App is set.');

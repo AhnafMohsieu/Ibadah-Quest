@@ -37,6 +37,7 @@
     S.lv = lvFrom(S.xp);
     checkLevelUp(oldLv);
     playSound('pop');
+    iqHaptic(10);
     saveState();
     if (typeof renderLv === 'function') renderLv();
     if (typeof renderTopBar === 'function') renderTopBar();
@@ -54,6 +55,7 @@
     S.lv = lvFrom(S.xp);
     checkLevelUp(oldLv);
     playSound('pop');
+    iqHaptic(10);
     saveState();
     if (typeof renderLv === 'function') renderLv();
     if (typeof renderTopBar === 'function') renderTopBar();
@@ -68,6 +70,7 @@
     ov.classList.add('show');
     ov.style.pointerEvents = 'auto';
     playSound('chime');
+    iqHaptic([30, 50, 30]);
     for (let i = 0; i < 50; i++) {
       const el = document.createElement('span');
       el.className = 'confetti';
@@ -133,5 +136,13 @@
   window.grantCappedDailyXp = grantCappedDailyXp;
   window.checkLevelUp = checkLevelUp;
   window.levelUpToast = levelUpToast;
+  function iqHaptic(pattern) {
+    try {
+      if (typeof S === 'undefined' || !S || !S.dhikrSettings || !S.dhikrSettings.haptic) return;
+      if (typeof navigator === 'undefined' || !navigator.vibrate) return;
+      navigator.vibrate(pattern == null ? 10 : pattern);
+    } catch (e) {}
+  }
+  window.iqHaptic = iqHaptic;
   window.playSound = playSound;
 })();

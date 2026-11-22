@@ -24,7 +24,7 @@
     .tab-panel{display:none}
     .tab-panel.active{display:block}
   </style>
-  <link rel="preload" href="styles/main.css?v=42" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <link rel="preload" href="styles/main.css?v=44" as="style" onload="this.onload=null;this.rel='stylesheet'">
   <script>
     (function () {
       try { var t = localStorage.getItem('iqTheme'); if (t && t !== 'light') document.documentElement.setAttribute('data-theme', t); } catch (e) {}
@@ -70,7 +70,9 @@
   <script src="data/theme-meta.js?v=3"></script>
   <script src="core/error-tap.js?v=1"></script>
   <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="assets/icons/favicon.png" type="image/png">
   <link rel="icon" href="assets/icons/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="assets/icons/app-icon-192.png">
   <meta name="theme-color" content="#f8f9fa">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -94,14 +96,17 @@
 
 <!-- INTRO OVERLAY -->
 <div id="introOverlay" class="intro-overlay">
-    <canvas id="introCanvas"></canvas>
+    
     <div class="intro-content">
       <div class="intro-glow" aria-hidden="true"></div>
-      <div id="introBismillah" class="intro-bismillah">بِسْمِ ٱللَّهِ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ</div>
+            <div id="introBismillah" class="intro-bismillah">بِسْمِ ٱللَّهِ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ</div>
       <div id="introSub" class="intro-subtitle">In the Name of Allah,<br>The Most Merciful</div>
       <button id="introBtn" class="intro-btn" onclick="window.startJourney()" aria-label="Begin Your Quest">Begin Your Quest</button>
     </div>
 </div>
+
+<!-- AUTH & SECURITY OVERLAY -->
+<div id="authOverlay" class="auth-overlay" style="display:none;"></div>
 
 <div class="toast-overlay" id="toastOverlay" style="display:none;"></div>
 <div class="toast-overlay" id="recoveryOverlay" style="display:none;"></div>
@@ -165,6 +170,7 @@
     <div class="pull-refresh-text">Pull to refresh</div>
   </div>
   <div id="bonusArea"></div>
+  <div id="comboDisplay"></div>
 
   <div class="tier-nav-container">
     <div class="tier1-tabs" role="tablist" aria-label="Main navigation">
@@ -214,7 +220,7 @@
   <div class="tab-panel" role="tabpanel" id="panel-sunnahs"><div id="sunnahArea"></div></div>
   <div class="tab-panel" role="tabpanel" id="panel-extradeeds"><div id="extraDeedsArea"></div></div>
   <div class="tab-panel" role="tabpanel" id="panel-volprayers"><div id="volPrayersArea"></div></div>
-  <div class="tab-panel" role="tabpanel" id="panel-fasting"><div id="fastingArea"></div></div>
+  <div class="tab-panel" role="tabpanel" id="panel-fasting"><div id="fastingArea"></div><div id="ramadanArea"></div><div id="laylatArea"></div></div>
   <div class="tab-panel" role="tabpanel" id="panel-healthlog"><div id="healthlogArea"></div></div>
   <div class="tab-panel" role="tabpanel" id="panel-finance"><div id="financeArea"></div></div>
   <div class="tab-panel" role="tabpanel" id="panel-zakatcalc"><div id="zakatcalcArea"></div></div>
@@ -265,6 +271,7 @@
   <div class="tab-panel" role="tabpanel" id="panel-profile"><div id="profileArea"></div><div id="mosqueArea"></div><div id="keysArea"></div></div>
   <div class="tab-panel" role="tabpanel" id="panel-goals"><div id="goalsArea"></div></div>
   <div class="tab-panel" role="tabpanel" id="panel-trophies">
+    <div id="achievementShowcase"></div>
     <div id="achArea"></div>
   </div>
   <div class="tab-panel" role="tabpanel" id="panel-progress">
@@ -311,7 +318,7 @@
   <div class="tab-panel" role="tabpanel" id="panel-being"><div id="ontologyArea"></div><div id="existenceArea"></div><div id="prophethoodArea"></div></div>
   <div class="tab-panel" role="tabpanel" id="panel-knowing"><div id="epistemologyArea"></div><div id="logicArea"></div><div id="reasonArea"></div><div id="kalamArea"></div></div>
   <div class="tab-panel" role="tabpanel" id="panel-will-evil"><div id="freewillArea"></div><div id="problemofevilArea"></div></div>
-<div class="tab-panel" role="tabpanel" id="panel-growth"><div id="growthStatArea"></div><div id="growthCalArea"></div><div id="growthArea"></div><div id="armorArea"></div><div id="growthHeartArea"></div></div>
+<div class="tab-panel" role="tabpanel" id="panel-growth"><div id="growthStatArea"></div><div id="growthCalArea"></div><div id="growthArea"></div><div id="armorArea"></div><div id="growthHeartArea"></div><div id="growthSettingsArea"></div></div>
   </main>
 
   <div class="copyright-footer">Copyright &copy; 2026 Md. Mahin Ahmed. All rights reserved.</div>
@@ -420,10 +427,10 @@
 
 <!-- Render engine (split modules) -->
 <script src="core/calendar.js?v=1"></script>
-<script src="core/render-prayers.js?v=4"></script>
-<script src="core/static.js?v=7"></script>
+<script src="core/render-prayers.js?v=5"></script>
+<script src="core/static.js?v=9"></script>
 <script src="core/dynamic.js?v=13"></script>
-<script src="core/tabs.js?v=11"></script>
+<script src="core/tabs.js?v=12"></script>
 
 <!-- Chart.js CDN (lazy loaded) -->
 <script>
@@ -491,14 +498,17 @@
 <script src="features/hadith-library.js?v=3" defer></script>
 <script src="features/tafsir-library.js?v=3" defer></script>
 <script src="features/tafsir-browser.js?v=1" defer></script>
-<script src="features/fab.js?v=1" defer></script>
+<script src="features/fab.js?v=3" defer></script>
 <script src="features/streak-milestones.js?v=1" defer></script>
-<script src="features/pull-refresh.js" defer></script>
+<script src="features/pull-refresh.js?v=1" defer></script>
+<script src="features/nav-collapse.js?v=1" defer></script>
+<script src="features/swipe-nav.js?v=1" defer></script>
 <script src="features/surprise-rewards.js?v=1" defer></script>
 <script src="features/daily-summary.js?v=1" defer></script>
 <script src="features/consistency-bonuses.js?v=1" defer></script>
 <script src="features/combo-streaks.js" defer></script>
 <script src="features/achievement-showcase.js" defer></script>
+<script src="features/daily-content.js?v=1" defer></script>
 <script src="features/notifications.js?v=2" defer></script>
 
 <script src="features/seasonal-events.js" defer></script>
@@ -511,10 +521,11 @@
 <script src="features/onboarding.js" defer></script>
 
 <!-- Actions (core logic, navigation, init, window.App) -->
+<script src="features/auth.js?v=1"></script>
 <script src="core/themes.js?v=1"></script>
-<script src="core/xp.js?v=2"></script>
-<script src="core/prayers.js?v=3"></script>
-<script src="core/quests.js?v=4"></script>
+<script src="core/xp.js?v=3"></script>
+<script src="core/prayers.js?v=4"></script>
+<script src="core/quests.js?v=5"></script>
 <script src="core/achievements.js?v=1"></script>
 <script src="core/random.js?v=1"></script>
 <script src="core/shop.js?v=2"></script>
@@ -522,7 +533,7 @@
 <script src="core/content.js?v=1"></script>
 <script src="core/backup.js?v=1"></script>
 <script src="data/i18n.js?v=2"></script>
-<script src="core/actions.js?v=23"></script>
+<script src="core/actions.js?v=24"></script>
 
 <!-- PWA: Service Worker registration + update banner -->
 <script>
@@ -546,7 +557,7 @@
     });
   }
   window.addEventListener('load', function() {
-    navigator.serviceWorker.register('sw.js?v=55').then(function(reg) {
+    navigator.serviceWorker.register('sw.js?v=57').then(function(reg) {
       if (reg.waiting) { showUpdateBanner(reg); return; }
       reg.addEventListener('updatefound', function() {
         var sw = reg.installing;
@@ -578,7 +589,7 @@
     <button class="fab-action" onclick="financeTracker.logCharity('sadaqah')" title="Charity"><span class="fab-action-icon"></span><span class="fab-action-label">Charity</span></button>
     <button class="fab-action" onclick="App.activateTab('quests')" title="Quests"><span class="fab-action-icon"></span><span class="fab-action-label">Quests</span></button>
   </div>
-  <button class="fab-main" id="fabMain" onclick="window.toggleFAB()">
+  <button class="fab-main" id="fabMain" onclick="window.toggleFAB()" aria-label="Quick actions" aria-expanded="false">
     <span class="fab-main-icon">✦</span>
   </button>
 </div>

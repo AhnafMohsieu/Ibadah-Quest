@@ -72,7 +72,7 @@ test('main.css uses modern light tokens', () => {
 });
 
 test('index.html registers the service worker and update banner', () => {
-  assert.ok(html.includes("navigator.serviceWorker.register('sw.js?v=55')"));
+  assert.ok(html.includes("navigator.serviceWorker.register('sw.js?v=57')"));
   assert.ok(html.includes("'SKIP_WAITING'"));
   assert.ok(html.includes('swUpdateBanner'));
 });
@@ -95,7 +95,7 @@ test('hadith/dhikr audio modules wired with versions and load order', () => {
   assert.ok(html.includes('<script src="data/hadith-normalize.js?v=1"></script>'));
   assert.ok(html.includes('<script src="features/hadith-library.js?v=3" defer></script>'));
   assert.ok(html.includes('<script src="features/tafsir-library.js?v=3" defer></script>'));
-  assert.ok(html.includes('styles/main.css?v=42'));
+  assert.ok(html.includes('styles/main.css?v=44'));
   assert.ok(html.indexOf('core/content-cache.js') < html.indexOf('core/state.js'), 'cache module loads before state');
   assert.ok(html.indexOf('core/audio.js') < html.indexOf('core/static.js'), 'audio module loads before renderers');
   assert.ok(html.indexOf('features/tafsir-library.js') > html.indexOf('core/static.js'), 'deferred features load after renderers');
@@ -156,7 +156,7 @@ test('theme: light-family palette blocks exist in main.css', () => {
 test('theme: index.html pre-paint script sets data-theme from localStorage', () => {
   assert.ok(html.includes("localStorage.getItem('iqTheme')"));
   assert.ok(html.includes("setAttribute('data-theme'"));
-  assert.ok(html.includes('styles/main.css?v=42'));
+  assert.ok(html.includes('styles/main.css?v=44'));
 });
 
 test('theme: picker references metadata and setTheme wiring', () => {
@@ -755,4 +755,64 @@ test('MPA track: all 5 pages reference module entries', () => {
     const page = fs.readFileSync(path.join(root, 'src', 'pages', p, p + '.html'), 'utf8');
     assert.ok(page.includes('type="module"'), p + ' must load its entry as a module');
   }
+});
+
+test('SP1: FAB gutters, equal prayer cards, info hit area, FAB a11y', () => {
+  const gutter = '#tier2Tabs,#tier3Tabs{flex-wrap:wrap;overflow-x:visible;padding-right:64px;}';
+  assert.strictEqual(css.split(gutter).length, 3, 'tier rows must reserve the FAB gutter in both phone blocks');
+  const calGutter = '.cal-header .cal-nav:last-child{padding-right:64px}';
+  assert.strictEqual(css.split(calGutter).length, 3, 'calendar header must reserve the FAB gutter in both phone blocks');
+  const thirds = '#prayerArea .card-grid > .card-item{flex:0 0 calc((100% - 16px)/3);}';
+  assert.strictEqual(css.split(thirds).length, 3, 'prayer cards must be equal thirds in both phone blocks');
+  assert.ok(css.includes(".card-grid .card-item .card-info-btn::after { content:''; position:absolute; top:-17px; right:-3px; bottom:-3px; left:-17px; }"),
+    'info button needs a 44px hit area');
+  assert.ok(html.includes('aria-label="Quick actions"'), 'FAB main button needs an accessible name');
+  assert.ok(html.includes('aria-expanded="false"'), 'FAB main button must expose its expanded state');
+  const fabSrc = fs.readFileSync(path.join(root, 'features', 'fab.js'), 'utf8');
+  assert.ok(fabSrc.includes("setAttribute('aria-expanded'"), 'toggleFAB must sync aria-expanded');
+});
+
+test('SP1: info buttons are labelled and keyboard-operable', () => {
+  const labelled = (renderPrayers + renderStatic).split('role="button" tabindex="0" aria-label="Details: ').length;
+  assert.strictEqual(labelled, 6, 'all five info-button templates must be labelled');
+  assert.ok(actions.includes("'.card-item, .vol-card, .shop-card, .card-info-btn'"),
+    'keydown handler must cover info buttons');
+});
+
+test('SP2: dormant features self-init and bind the real scroller', () => {
+  const fabSrc = fs.readFileSync(path.join(root, 'features', 'fab.js'), 'utf8');
+  const pullSrc = fs.readFileSync(path.join(root, 'features', 'pull-refresh.js'), 'utf8');
+  assert.ok(fabSrc.includes('init._done'), 'FAB init must be idempotent');
+  assert.ok(fabSrc.includes("document.querySelector('.app')"), 'FAB must bind the real scroller');
+  assert.ok(fabSrc.includes('\n  init();'), 'FAB must self-init at module load');
+  assert.ok(pullSrc.includes('init._done'), 'pull-refresh init must be idempotent');
+  assert.ok(pullSrc.includes("document.querySelector('.app')"), 'pull-refresh must resolve the real scroller');
+  assert.ok(!pullSrc.includes('window.scrollY'), 'pull-refresh must not gate on window.scrollY');
+  assert.ok(pullSrc.includes('\n  init();'), 'pull-refresh must self-init at module load');
+});
+
+test('SP2: compact nav + swipe nav are wired', () => {
+  assert.ok(html.includes('features/nav-collapse.js?v=1'), 'nav-collapse must be script-tagged');
+  assert.ok(html.includes('features/swipe-nav.js?v=1'), 'swipe-nav must be script-tagged');
+  assert.ok(html.indexOf('features/nav-collapse.js') > html.indexOf('features/fab.js'), 'nav-collapse must load after fab.js');
+  assert.ok(css.includes('.tier-nav-container { position: sticky; top: var(--topbar-h); z-index: 90; }'), 'sticky nav rule required');
+  assert.ok(css.includes('.nav-compact #tier2Tabs'), 'compact chip-row rule required');
+  assert.ok(css.includes('(max-width: 767px), (pointer: coarse)'), 'compact nav must be media-guarded');
+});
+
+test('SP2: scroll reset on category and group switches', () => {
+  const reset = "var sc = document.querySelector('.app'); if (sc) sc.scrollTop = 0;";
+  assert.strictEqual(renderTabs.split(reset).length, 3, 'both switch functions must reset scroller scrollTop');
+});
+
+test('SP2: haptics helper + call sites', () => {
+  const xpSrc = fs.readFileSync(path.join(root, 'core', 'xp.js'), 'utf8');
+  const prayersSrc = fs.readFileSync(path.join(root, 'core', 'prayers.js'), 'utf8');
+  const questsSrc = fs.readFileSync(path.join(root, 'core', 'quests.js'), 'utf8');
+  assert.ok(xpSrc.includes('window.iqHaptic = iqHaptic'), 'iqHaptic must be exported from xp.js');
+  assert.ok(xpSrc.includes('dhikrSettings'), 'iqHaptic must reuse the haptic setting');
+  assert.ok(xpSrc.includes('iqHaptic([30, 50, 30])'), 'level-up must use the triple buzz');
+  assert.ok(renderStatic.includes('window.iqHaptic(10)'), 'static toggles must fire haptics');
+  assert.ok(prayersSrc.includes('window.iqHaptic(10)'), 'prayer toggles must fire haptics');
+  assert.ok(questsSrc.includes('window.iqHaptic(10)'), 'quest toggle must fire haptics');
 });

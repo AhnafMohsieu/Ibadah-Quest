@@ -57,9 +57,12 @@
     const el = document.getElementById('dailyCarousel');
     if (!el || !_items.length) return;
     const item = _items[_current];
+    if (!item) return;
+    const esc = typeof escapeHTML === 'function' ? escapeHTML : (s => String(s == null ? '' : s));
+    const icon = typeof iqIcon === 'function' ? iqIcon(item.icon) : '';
     el.innerHTML = `<div class="carousel-card">
-      <div class="carousel-header">${iqIcon(item.icon)} ${item.source}</div>
-      <div class="carousel-text">${item.text}</div>
+      <div class="carousel-header">${icon} ${esc(item.source)}</div>
+      <div class="carousel-text">${esc(item.text)}</div>
       <div class="carousel-dots">${_items.map((_, i) => `<span class="carousel-dot${i === _current ? ' active' : ''}" onclick="window._carouselShow(${i})"></span>`).join('')}</div>
     </div>`;
   }
@@ -80,5 +83,9 @@
 
   window._carouselShow = show;
   window.renderDailyContent = render;
-  document.addEventListener('DOMContentLoaded', touchHandlers);
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', touchHandlers);
+  } else {
+    touchHandlers();
+  }
 })();

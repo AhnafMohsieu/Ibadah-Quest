@@ -208,7 +208,7 @@
     if (volArea) volArea.scrollTop = volScroll;
     if (deedArea) deedArea.scrollTop = deedScroll;
     if (questArea) questArea.scrollTop = questScroll;
-    window.scrollTo(0, pageScroll);
+    if (typeof window.scrollTo === 'function') window.scrollTo(0, pageScroll);
     refreshLucideIcons();
   }
 
@@ -342,7 +342,7 @@ function renderAll() {
     const u = !!S.ua[a.id];
     const tierStars = a.tier === 'jannah' ? iqIcon('star').repeat(10) : a.tier === 'mythic' ? iqIcon('gem').repeat(6) : a.tier === 'legendary' ? iqIcon('award').repeat(3) : a.tier === 'diamond' || a.tier === 'platinum' ? iqIcon('gem').repeat(2) : iqIcon('star');
     const tierIcon = a.tier === 'jannah' ? iqIcon('kaaba') : a.tier === 'mythic' ? iqIcon('crown') : a.tier === 'legendary' ? iqIcon('award') : a.tier === 'diamond' ? iqIcon('gem') : a.tier === 'platinum' ? iqIcon('gem') : a.tier === 'gold' ? iqIcon('trophy') : a.tier === 'silver' ? iqIcon('medal') : iqIcon('star');
-    return `<div class="ach-card${u ? ' unlocked' : ' locked'} tier-${a.tier}">
+    return `<div class="ach-card${u ? ' unlocked' : ' locked'} tier-${a.tier}" ${u ? `onclick="window.featureAchievement && window.featureAchievement('${a.id}')" role="button" tabindex="0" title="Tap to feature in showcase"` : ''}>
       <div class="ach-tier">${tierStars}</div>
       <div class="ach-icon">${u ? (iqIcon(a.icon || a.id || a.name) || tierIcon) : iqIcon('lock')}</div>
       <div class="ach-name">${a.name}</div>
@@ -355,7 +355,9 @@ function renderAll() {
     h += '<div class="ach-empty">No trophies yet. Start completing deeds to earn your first!</div>';
   }
 
-  document.getElementById('achArea').innerHTML = h;
+  var aEl = document.getElementById('achArea');
+  if (aEl) aEl.innerHTML = h;
+  if (typeof window.renderAchievementShowcase === 'function') window.renderAchievementShowcase();
 }
 
   // ── Progress / Calendar ──
@@ -488,7 +490,27 @@ h += '<div style="margin-bottom:10px;font-weight:700;color:var(--accent-dark);">
 h += '<div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">';
 h += '<button class="shop-card" onclick="App.toggleNotifications()" style="padding:10px 14px;border-radius:var(--radius-sm);font-weight:700;">' + (S.notificationsEnabled ? iqIcon('bell-off') + ' Disable' : iqIcon('bell') + ' Enable') + '</button>';
 h += '</div>';
-    h += '<div style="display:flex;gap:8px;margin-bottom:10px;"><input class="profile-input" id="usernameInput" placeholder="Switch user" style="margin-bottom:0;"><button class="shop-card" onclick="App.switchUser()" style="padding:10px 14px;border-radius:var(--radius-sm);">' + iqIcon('refresh-cw') + '</button></div>';
+    const isPinProtected = (function() {
+      try {
+        const c = JSON.parse(localStorage.getItem('iq_sec_' + currentUser) || '{}');
+        return !!c.hasPin;
+      } catch(e) { return false; }
+    })();
+
+    h += '<div style="margin-bottom:10px;font-weight:700;color:var(--accent-dark);">' + iqIcon('shield') + ' Account & Security</div>';
+    h += '<div class="account-security-card" style="background:var(--card-bg);border:1px solid var(--border);border-radius:var(--radius);padding:14px;margin-bottom:14px;">';
+    h += '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">';
+    h += '<span style="font-size:var(--fs-sm);font-weight:600;color:var(--text);">' + window.escapeHTML(currentUser === 'default' ? 'Guest Profile' : currentUser) + '</span>';
+    h += '<span style="font-size:var(--fs-xs);padding:3px 8px;border-radius:12px;background:' + (isPinProtected ? 'var(--green-bg);color:var(--green);font-weight:700;' : 'var(--accent-bg);color:var(--accent-dark);font-weight:600;') + '">' + (isPinProtected ? '🔒 PIN Protected' : '🔓 Unsecured') + '</span>';
+    h += '</div>';
+    h += '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px;">';
+    h += '<button class="shop-card" onclick="App.openProfilePicker()" style="justify-content:center;padding:9px;border-radius:var(--radius-sm);font-weight:600;font-size:0.85rem;">' + iqIcon('users') + ' Switch Profile</button>';
+    h += '<button class="shop-card" onclick="App.openSecuritySettings()" style="justify-content:center;padding:9px;border-radius:var(--radius-sm);font-weight:600;font-size:0.85rem;">' + iqIcon('shield') + (isPinProtected ? ' Change PIN' : ' Set PIN') + '</button>';
+    if (isPinProtected) {
+      h += '<button class="shop-card" onclick="App.lockApp()" style="justify-content:center;padding:9px;border-radius:var(--radius-sm);font-weight:600;font-size:0.85rem;">' + iqIcon('lock') + ' Lock Now</button>';
+    }
+    h += '</div>';
+    h += '</div>';
     h += '<button class="shop-card" style="width:100%;justify-content:center;margin-bottom:10px;font-weight:700;font-size:1rem;color:var(--accent);letter-spacing:0.5px;" onclick="App.logout()">' + iqIcon('log-out') + ' Logout</button>';
     h += '</div>';
 

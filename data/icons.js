@@ -109,7 +109,7 @@ const IQ_IDS = {
   'hadith':'bookmarks', 'sunnahs':'star', 'memorization':'brain',
 
   /* fiqh */
-  'fiqh':'scales', 'purification':'droplets', 'salah':'mosque',
+  'fiqh':'scales', 'purification':'droplets',
   'salahrules':'mosque',   'zakat':'wallet', 'zakatcalc':'coin', 'zakatrules':'wallet',
   'sawmrules':'crescent', 'hajj':'kaaba', 'hajjrules':'kaaba',
   'trade':'handshake', 'inheritance':'scroll', 'oaths':'handshake',
@@ -286,7 +286,7 @@ function iqIcon(key) {
   const f = _iqFile(key);
   if (!f) return '';
   const k = _iqResolve(key);
-  return '<img class="iq-icon" src="' + f + '" alt="' + (IQ_EMOJI[k] || '') + '" role="img" aria-label="' + key + '" loading="lazy">';
+  return '<img class="iq-icon" src="' + f + '" alt="' + (IQ_EMOJI[k] || '') + '" role="img" aria-label="' + key + '" width="24" height="24" loading="lazy" decoding="async">';
 }
 
 /* Plain-text context — the emoji character itself */

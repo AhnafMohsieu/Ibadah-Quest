@@ -109,6 +109,7 @@
       if (tier3Wrap) tier3Wrap.style.display = 'none';
       if (group.length > 0) activateTab(group[0].id, container.firstElementChild);
     }
+    var sc = document.querySelector('.app'); if (sc) sc.scrollTop = 0;
   }
 
   function selectCategory(catId, btn) {
@@ -132,6 +133,7 @@
       }
       renderCategoryTabs(cat);
     }
+    var sc = document.querySelector('.app'); if (sc) sc.scrollTop = 0;
   }
 
   function drillDown(tabId, btn) {
@@ -139,14 +141,15 @@
     var wrap = document.getElementById('tier3Wrap');
     if (!grid || !wrap) { activateTab(tabId, btn); return; }
     var currentCat = (window.S && window.S.lastCat) || 'ibadah';
+    var panel, existing, back;
     if (currentCat === 'library') {
       wrap.style.display = 'none';
       activateTab(tabId, btn);
-      var panel = document.getElementById('panel-' + tabId);
+      panel = document.getElementById('panel-' + tabId);
       if (panel) {
-        var existing = panel.querySelector('.drill-back');
+        existing = panel.querySelector('.drill-back');
         if (!existing) {
-          var back = document.createElement('button');
+          back = document.createElement('button');
           back.className = 'drill-back';
           back.textContent = '\u2190 Back';
           back.onclick = function() { drillUp(); };
@@ -158,11 +161,11 @@
     grid.classList.remove('surah-grid');
     wrap.style.display = 'none';
     activateTab(tabId, btn);
-    var panel = document.getElementById('panel-' + tabId);
+    panel = document.getElementById('panel-' + tabId);
     if (panel) {
-      var existing = panel.querySelector('.drill-back');
+      existing = panel.querySelector('.drill-back');
       if (!existing) {
-        var back = document.createElement('button');
+        back = document.createElement('button');
         back.className = 'drill-back';
         back.textContent = '\u2190 Back';
         back.onclick = function() { drillUp(); };

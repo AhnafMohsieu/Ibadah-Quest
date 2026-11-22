@@ -29,25 +29,31 @@
     }
   },
   "mcp": {
+    "timeout": {
+      "startup": 90000
+    },
     "playwright": {
       "type": "local",
       "command": ["cmd", "/c", "npx", "-y", "@playwright/mcp"],
       "enabled": true
     },
     "context7": {
-      "type": "remote",
-      "url": "https://mcp.context7.com/mcp",
+      "type": "local",
+      "command": ["cmd", "/c", "npx", "-y", "@upstash/context7-mcp"],
       "enabled": true
     },
-    "codebase-memory": {
+    "website-publisher": {
       "type": "local",
-      "command": ["cmd", "/c", "npx", "-y", "codebase-memory-mcp"],
+      "command": ["cmd", "/c", "npx", "-y", "code-sandbox-mcp@latest"],
       "enabled": true
     },
-    "mindsdb": {
+    "firecrawl": {
       "type": "local",
-      "command": ["cmd", "/c", "npx", "-y", "@modelcontextprotocol/server-mindsdb"],
-      "enabled": true
+      "command": ["cmd", "/c", "npx", "-y", "firecrawl-mcp"],
+      "enabled": true,
+      "env": {
+        "FIRECRAWL_API_KEY": ""
+      }
     }
   }
 }

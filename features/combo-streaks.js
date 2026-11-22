@@ -22,10 +22,11 @@
     var combo = S.combos[type];
     var t = today();
     var prevCount = combo.count;
+    var diff;
 
     if (completed) {
       if (combo.lastDate) {
-        var diff = daysBetween(combo.lastDate, t);
+        diff = daysBetween(combo.lastDate, t);
         if (diff === 0) {
           // same day — already tracked, do not increment again
         } else if (diff === 1) {
@@ -40,7 +41,7 @@
       if (combo.count > (combo.best || 0)) combo.best = combo.count;
     } else {
       if (combo.lastDate) {
-        var diff = daysBetween(combo.lastDate, t);
+        diff = daysBetween(combo.lastDate, t);
         if (diff > 1) {
           combo.count = 0;
         }

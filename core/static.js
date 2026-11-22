@@ -172,7 +172,6 @@
   function renderScholars() { poolRender('scholarsArea', iqIcon('award') + ' Great Islamic Scholars',SCHOLARS_POOL,'scholarsIdx'); }
   function renderPatience() { poolRender('patienceArea', iqIcon('gem') + ' Sabr & Shukr',PATIENCE_POOL,'patienceIdx'); }
   function renderWork() { poolRender('workArea', iqIcon('briefcase') + ' Career & Work Ethics',WORK_POOL,'workIdx'); }
-  function renderCommunity() { poolRender('communityArea', iqIcon('building') + ' Community & Society',COMMUNITY_POOL,'communityIdx'); }
   function renderEnvironment() { poolRender('environmentArea', iqIcon('leaf') + ' Nature & Environment',ENVIRONMENT_POOL,'environmentIdx'); }
   function renderTravel() { poolRender('travelArea', iqIcon('plane') + ' Travel & Safar',TRAVEL_POOL,'travelIdx'); }
   function renderFiqh() {
@@ -314,7 +313,7 @@
     h += `<div class="content-card"><div class="content-english">${iqIcon('calendar')} ${cnt} fasting days this month</div><div class="content-english" style="font-size:0.85rem;color:var(--text2);">Monday & Thursday are most recommended (Sunnah)</div></div>`;
     document.getElementById('fastingArea').innerHTML = h;
   }
-  function toggleFasting() { const dt=today(); S.fastingDays[dt]=!S.fastingDays[dt]; if(S.fastingDays[dt]) { S.td.fasting=(S.td.fasting||0)+1; applyXpDelta(50); window.playSound('pop'); } else { S.td.fasting=Math.max(0,(S.td.fasting||0)-1); spendXp(50); } saveState(); renderFasting(); if (typeof window !== 'undefined' && window.renderLv) window.renderLv(); if (typeof window !== 'undefined' && window.renderTopBar) window.renderTopBar(); }
+  function toggleFasting() { const dt=today(); S.fastingDays[dt]=!S.fastingDays[dt]; if(S.fastingDays[dt]) { S.td.fasting=(S.td.fasting||0)+1; applyXpDelta(50); window.playSound('pop'); if (typeof window.iqHaptic === 'function') window.iqHaptic(10); } else { S.td.fasting=Math.max(0,(S.td.fasting||0)-1); spendXp(50); } saveState(); renderFasting(); if (typeof window !== 'undefined' && window.renderLv) window.renderLv(); if (typeof window !== 'undefined' && window.renderTopBar) window.renderTopBar(); }
   function renderCharity() {
     const cm = S.charity; if (cm.monthStart !== ms()) { cm.monthStart=ms(); cm.given=0; }
     let h = '<div class="section-title">' + iqIcon('wallet') + ' Charity Tracker</div>';
@@ -366,7 +365,7 @@
     const w = !!S.morningDone[dt][idx];
     S.morningDone[dt][idx] = !w; 
     if(xp){
-      if(!w) { applyXpDelta(xp); window.playSound('pop'); }
+      if(!w) { applyXpDelta(xp); window.playSound('pop'); if (typeof window.iqHaptic === 'function') window.iqHaptic(10); }
       else spendXp(xp);
     }
     saveState(); renderAll(); 
@@ -401,7 +400,7 @@
     const w = !!S.eveningDone[dt][idx];
     S.eveningDone[dt][idx] = !w; 
     if(xp){
-      if(!w) { applyXpDelta(xp); window.playSound('pop'); }
+      if(!w) { applyXpDelta(xp); window.playSound('pop'); if (typeof window.iqHaptic === 'function') window.iqHaptic(10); }
       else spendXp(xp);
     }
     saveState(); renderAll(); 
@@ -636,7 +635,7 @@
         h += '<div style="font-size:0.85rem;color:var(--text2);margin-top:4px;line-height:1.5;">"' + item.virtue + '"</div>';
         if (item.source) h += '<div style="font-size:0.75rem;color:var(--text2);margin-top:4px;">' + iqIcon('book-open') + ' ' + item.source + '</div>';
         h += '</div>';
-        h += '<div class="card-info-btn" onclick="event.stopPropagation();App.detail(\'' + item.id + '\')">' + iqIcon('info') + '</div>';
+        h += '<div class="card-info-btn" role="button" tabindex="0" aria-label="Details: ' + item.name + '" onclick="event.stopPropagation();App.detail(\'' + item.id + '\')">' + iqIcon('info') + '</div>';
         h += '</div>';
       });
       h += '</div>';
@@ -683,7 +682,7 @@
         h += '<div style="font-size:0.8rem;color:var(--accent-light);margin-top:4px;font-weight:600;">' + item.rakat + '</div>';
         if (item.source) h += '<div style="font-size:0.75rem;color:var(--text2);margin-top:4px;">' + iqIcon('book-open') + ' ' + item.source + '</div>';
         h += '</div>';
-        h += '<div class="card-info-btn" onclick="event.stopPropagation();App.detail(\'' + item.id + '\')">' + iqIcon('info') + '</div>';
+        h += '<div class="card-info-btn" role="button" tabindex="0" aria-label="Details: ' + item.name + '" onclick="event.stopPropagation();App.detail(\'' + item.id + '\')">' + iqIcon('info') + '</div>';
         h += '</div>';
       });
       h += '</div>';
