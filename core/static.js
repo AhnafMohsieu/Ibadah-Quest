@@ -344,7 +344,7 @@
     let h = `<div class="section-title" style="display:flex;justify-content:space-between;align-items:center;">
       <span>${iqIcon('sunrise')} Morning Adhkar (After Fajr)</span>
       <span style="font-size:0.75rem;background:rgba(201,168,76,0.15);padding:3px 10px;border-radius:12px;color:var(--accent-light);font-weight:700;">${completed} / ${total}</span>
-    </div><div style="display:flex;flex-direction:column;gap:12px;">`;
+    </div><div class="adhkar-list" style="display:flex;flex-direction:column;gap:12px;width:100%;align-items:stretch;">`;
     MORNING_DHIKR.forEach((item, idx) => {
         const done = !!S.morningDone[dt][idx];
         h += `<div class="vol-card${done?' done':''}" tabindex="0" role="button" onclick="App.toggleMorning(${idx}, ${item.xp})" style="cursor:pointer;">
@@ -379,7 +379,7 @@
     let h = `<div class="section-title" style="display:flex;justify-content:space-between;align-items:center;">
       <span>${iqIcon('moon')} Evening Adhkar (After Asr)</span>
       <span style="font-size:0.75rem;background:rgba(201,168,76,0.15);padding:3px 10px;border-radius:12px;color:var(--accent-light);font-weight:700;">${completed} / ${total}</span>
-    </div><div style="display:flex;flex-direction:column;gap:12px;">`;
+    </div><div class="adhkar-list" style="display:flex;flex-direction:column;gap:12px;width:100%;align-items:stretch;">`;
     EVENING_DHIKR.forEach((item, idx) => {
         const done = !!S.eveningDone[dt][idx];
         h += `<div class="vol-card${done?' done':''}" tabindex="0" role="button" onclick="App.toggleEvening(${idx}, ${item.xp})" style="cursor:pointer;">
@@ -417,7 +417,7 @@
       const cat = SITUATIONAL_DHIKR[_situationalView];
       let h = `<button class="quran-back-btn" onclick="App.situationalBack()">${iqIcon('arrow-left')} Back to Categories</button>`;
       h += `<div class="section-title">${iqIcon(cat.icon)} ${cat.label}</div>`;
-      h += '<div style="display:flex;flex-direction:column;gap:12px;">';
+      h += '<div class="adhkar-list" style="display:flex;flex-direction:column;gap:12px;width:100%;align-items:stretch;">';
       const favs = S.sitFavs || [];
       const sorted = cat.dhikr.map(function(item, idx) { return {item:item, idx:idx}; }).sort(function(a,b) {
         const aFav = favs.includes(_situationalView + '_' + a.idx) ? 0 : 1;
@@ -627,7 +627,7 @@
       const cat = EXTRA_GOOD_DEEDS[_extraDeedsView];
       let h = '<button class="quran-back-btn" onclick="App.extraDeedsBack()">' + iqIcon('arrow-left') + ' Back to Categories</button>';
       h += '<div class="section-title">' + iqIcon(cat.icon) + ' ' + cat.label + '</div>';
-      h += '<div style="display:flex;flex-direction:column;gap:12px;">';
+      h += '<div class="adhkar-list" style="display:flex;flex-direction:column;gap:12px;width:100%;align-items:stretch;">';
       cat.deeds.forEach(function(item) {
         h += '<div class="vol-card" style="cursor:default;">';
         h += '<div class="prayer-info">';
@@ -673,7 +673,7 @@
       const cat = VOL_PRAYERS[_volPrayersView];
       let h = '<button class="quran-back-btn" onclick="App.volPrayersBack()">' + iqIcon('arrow-left') + ' Back to Categories</button>';
       h += '<div class="section-title">' + iqIcon(cat.icon) + ' ' + cat.label + '</div>';
-      h += '<div style="display:flex;flex-direction:column;gap:12px;">';
+      h += '<div class="adhkar-list" style="display:flex;flex-direction:column;gap:12px;width:100%;align-items:stretch;">';
       cat.prayers.forEach(function(item) {
         h += '<div class="vol-card" style="cursor:default;">';
         h += '<div class="prayer-info">';
