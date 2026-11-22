@@ -3163,8 +3163,15 @@ html[data-theme="emara"] .global-search { background: var(--card-bg); }
   .card-grid { grid-template-columns: repeat(auto-fill, minmax(min(100%, 14rem), 1fr)); gap: 16px; }
   .insights-cards { grid-template-columns: repeat(4, 1fr); }
   .deed-card { flex: 1 1 calc(33.333% - 8px); }
-  .content-card { max-width: 720px; }
-  .prayer-card { max-width: 480px; }
+  .content-card,
+  .prayer-card,
+  .vol-card,
+  .quest-row,
+  .shop-card {
+    max-width: 720px;
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
 }
 
 /* ── Wide desktop (≥1440px): cap at 80rem, center ── */
