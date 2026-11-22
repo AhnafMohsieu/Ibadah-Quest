@@ -347,7 +347,7 @@
     </div><div class="adhkar-list" style="display:flex;flex-direction:column;gap:12px;width:100%;align-items:stretch;">`;
     MORNING_DHIKR.forEach((item, idx) => {
         const done = !!S.morningDone[dt][idx];
-        h += `<div class="vol-card${done?' done':''}" tabindex="0" role="button" onclick="App.toggleMorning(${idx}, ${item.xp})" style="cursor:pointer;">
+        h += `<div class="vol-card${done?' done':''}" tabindex="0" role="button" onclick="App.toggleMorning(${idx}, ${item.xp})" style="cursor:pointer;width:100%;box-sizing:border-box;">
             <div class="prayer-check" style="font-size:1.2rem;">${done?iqIcon('check'):iqIcon('sun')}</div>
             <div class="prayer-info">
                 <div style="font-family:'Amiri',serif;font-size:1.3rem;margin-bottom:2px;color:var(--accent);line-height:1.4;">${item.arabic}</div>
@@ -382,7 +382,7 @@
     </div><div class="adhkar-list" style="display:flex;flex-direction:column;gap:12px;width:100%;align-items:stretch;">`;
     EVENING_DHIKR.forEach((item, idx) => {
         const done = !!S.eveningDone[dt][idx];
-        h += `<div class="vol-card${done?' done':''}" tabindex="0" role="button" onclick="App.toggleEvening(${idx}, ${item.xp})" style="cursor:pointer;">
+        h += `<div class="vol-card${done?' done':''}" tabindex="0" role="button" onclick="App.toggleEvening(${idx}, ${item.xp})" style="cursor:pointer;width:100%;box-sizing:border-box;">
             <div class="prayer-check" style="font-size:1.2rem;">${done?iqIcon('check'):iqIcon('moon')}</div>
             <div class="prayer-info">
                 <div style="font-family:'Amiri',serif;font-size:1.3rem;margin-bottom:2px;color:var(--accent);line-height:1.4;">${item.arabic}</div>
@@ -430,7 +430,7 @@
         const tapCount = (S.situationalXp && S.situationalXp[dayKey]) || 0;
         const maxed = tapCount >= 10;
         const isFav = favs.includes(_situationalView + '_' + idx);
-        h += `<div class="vol-card" role="button" tabindex="0" aria-label="Tap ${escapeHTML(item.english)}" style="position:relative;cursor:pointer;${maxed ? 'opacity:0.6;' : ''}" onclick="App.tapSituationalDhikr('${_situationalView}',${idx})">
+        h += `<div class="vol-card" role="button" tabindex="0" aria-label="Tap ${escapeHTML(item.english)}" style="position:relative;cursor:pointer;width:100%;box-sizing:border-box;${maxed ? 'opacity:0.6;' : ''}" onclick="App.tapSituationalDhikr('${_situationalView}',${idx})">
             <button type="button" class="sit-fav-btn" aria-label="${isFav ? 'Remove from favorites' : 'Add to favorites'}" title="${isFav ? 'Unpin dhikr' : 'Pin dhikr'}" style="position:absolute;top:8px;right:8px;background:none;border:none;cursor:pointer;padding:6px;font-size:1rem;line-height:1;color:${isFav ? 'var(--accent)' : 'var(--text3)'};" onclick="event.stopPropagation();App.toggleSitFav('${_situationalView}',${idx})">${isFav ? iqIcon('star') : iqIcon('bookmark')}</button>
             <div class="prayer-info">
               <div style="font-family:'Amiri',serif;font-size:1.3rem;margin-bottom:2px;color:var(--accent);line-height:1.4;">${item.arabic}</div>
@@ -629,7 +629,7 @@
       h += '<div class="section-title">' + iqIcon(cat.icon) + ' ' + cat.label + '</div>';
       h += '<div class="adhkar-list" style="display:flex;flex-direction:column;gap:12px;width:100%;align-items:stretch;">';
       cat.deeds.forEach(function(item) {
-        h += '<div class="vol-card" style="cursor:default;">';
+        h += '<div class="vol-card" style="cursor:default;width:100%;box-sizing:border-box;">';
         h += '<div class="prayer-info">';
         h += '<div class="prayer-name" style="font-size:1rem;font-weight:700;color:var(--accent-light);">' + item.name + '</div>';
         h += '<div style="font-size:0.85rem;color:var(--text2);margin-top:4px;line-height:1.5;">"' + item.virtue + '"</div>';
@@ -675,7 +675,7 @@
       h += '<div class="section-title">' + iqIcon(cat.icon) + ' ' + cat.label + '</div>';
       h += '<div class="adhkar-list" style="display:flex;flex-direction:column;gap:12px;width:100%;align-items:stretch;">';
       cat.prayers.forEach(function(item) {
-        h += '<div class="vol-card" style="cursor:default;">';
+        h += '<div class="vol-card" style="cursor:default;width:100%;box-sizing:border-box;">';
         h += '<div class="prayer-info">';
         h += '<div class="prayer-name" style="font-size:1rem;font-weight:700;color:var(--accent-light);">' + item.name + '</div>';
         h += '<div style="font-size:0.85rem;color:var(--text);margin-top:4px;line-height:1.5;">' + item.desc + '</div>';

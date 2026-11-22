@@ -3195,24 +3195,18 @@ html[data-theme="emara"] .global-search { background: var(--card-bg); }
   justify-items: stretch;
 }
 
-/* ── Content cards: centered ── */
-.content-card {
-  margin-left: auto;
-  margin-right: auto;
-}
-.prayer-card {
-  margin-left: auto;
-  margin-right: auto;
-}
-.deed-card {
-  margin-left: auto;
-  margin-right: auto;
-}
-.vol-card {
-  width: 100%;
-  box-sizing: border-box;
-  margin-left: 0;
-  margin-right: 0;
+/* ── Content & Action cards: full width unified sizing ── */
+.content-card,
+.prayer-card,
+.deed-card,
+.vol-card,
+.quest-row,
+.shop-card {
+  width: 100% !important;
+  box-sizing: border-box !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  align-self: stretch !important;
 }
 
 /* ── Hero strip: always centered ── */
@@ -4285,4 +4279,30 @@ body[data-active-tab]:not([data-active-tab="today"]) #seasonalBanner {
 .drill-back .drill-back-arrow {
   font-size: 1.1rem;
   line-height: 1;
+}
+
+/* ── Multi-Layer Page Sections Architecture ── */
+.page-sections-viewport {
+  width: 100%;
+  position: relative;
+}
+.page-section {
+  display: none;
+  width: 100%;
+}
+body[data-active-segment="ibadah"] #section-ibadah,
+body[data-active-segment="knowledge"] #section-knowledge,
+body[data-active-segment="names_main"] #section-names_main,
+body[data-active-segment="library"] #section-library,
+body[data-active-segment="profile_main"] #section-profile_main,
+.page-section.active {
+  display: block;
+  animation: pageSectionFade 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+body:not([data-active-segment]) #section-ibadah {
+  display: block;
+}
+@keyframes pageSectionFade {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
 }

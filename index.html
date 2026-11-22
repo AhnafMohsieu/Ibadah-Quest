@@ -195,9 +195,11 @@
     <div class="tier3-scroll" id="tier3Wrap" style="display:none;"><div class="tier3-tabs" id="tier3Tabs" role="tablist"></div></div>
   </div>
 
-  <!-- ═══════════════ ALL TAB PANELS ═══════════════ -->
-  <!-- IBADAH GROUP -->
-<div class="tab-panel active" role="tabpanel" id="panel-today">
+<!-- ═══════════════ MULTI-LAYER PAGE SECTIONS ═══════════════ -->
+  <div class="page-sections-viewport" id="pageSectionsViewport">
+    <!-- SECTION 1: DAILY / IBADAH -->
+    <section class="page-section active" id="section-ibadah" data-section="ibadah" role="region" aria-label="Daily Ibadah">
+      <div class="tab-panel active" role="tabpanel" id="panel-today">
 <div id="wellArea"></div>
 <div id="muhasabahEntry"></div>
 <div id="prayerArea"></div>
@@ -208,128 +210,128 @@
 <div id="deedArea"></div>
 <div id="lanternArea"></div>
 </div>
-  <div class="tab-panel" role="tabpanel" id="panel-timer">
+      <div class="tab-panel" role="tabpanel" id="panel-timer">
     <div class="section-title"> Next Prayer Countdown</div>
     <div id="timerArea" style="text-align:center;font-size:clamp(2rem,12vw,3rem);font-weight:bold;color:var(--accent);margin:30px 0;text-shadow:0 0 20px rgba(201,168,76,0.5);font-family:var(--font-heading);letter-spacing:2px;"></div>
     <div id="prayerNamesArea" style="text-align:center;color:var(--text2);font-size:1rem;letter-spacing:0.5px;"></div>
     <div class="section-title"> Prayer Times</div>
     <div id="prayerTimesArea"></div>
   </div>
-  <div class="tab-panel" role="tabpanel" id="panel-quests"><div id="questArea"></div></div>
-  <div class="tab-panel" role="tabpanel" id="panel-journeys"><div id="journeyArea"></div><div id="boatArea"></div></div>
-  <div class="tab-panel" role="tabpanel" id="panel-morning"><div id="morningArea"></div></div>
-  <div class="tab-panel" role="tabpanel" id="panel-evening"><div id="eveningArea"></div></div>
-  <div class="tab-panel" role="tabpanel" id="panel-dhikr"><div id="dhikrCounterArea"></div><div id="dhikrArea"></div></div>
-  <div class="tab-panel" role="tabpanel" id="panel-situational"><div id="situationalArea"></div></div>
-  <div class="tab-panel" role="tabpanel" id="panel-duas"><div id="duaArea"></div></div>
-  <div class="tab-panel" role="tabpanel" id="panel-quran"><div id="quranArea"></div></div>
-  <div class="tab-panel" role="tabpanel" id="panel-wudu"><div id="wuduArea"></div></div>
-  <div class="tab-panel" role="tabpanel" id="panel-jumuah"><div id="jumuahArea"></div></div>
-  <div class="tab-panel" role="tabpanel" id="panel-salah"><div id="salahArea"></div></div>
-  <div class="tab-panel" role="tabpanel" id="panel-tafsir"><div id="tafsirArea"></div></div>
-  <div class="tab-panel" role="tabpanel" id="panel-sunnahs"><div id="sunnahArea"></div></div>
-  <div class="tab-panel" role="tabpanel" id="panel-extradeeds"><div id="extraDeedsArea"></div></div>
-  <div class="tab-panel" role="tabpanel" id="panel-volprayers"><div id="volPrayersArea"></div></div>
-  <div class="tab-panel" role="tabpanel" id="panel-fasting"><div id="fastingArea"></div><div id="ramadanArea"></div><div id="laylatArea"></div></div>
-  <div class="tab-panel" role="tabpanel" id="panel-healthlog"><div id="healthlogArea"></div></div>
-  <div class="tab-panel" role="tabpanel" id="panel-finance"><div id="financeArea"></div></div>
-  <div class="tab-panel" role="tabpanel" id="panel-zakatcalc"><div id="zakatcalcArea"></div></div>
+      <div class="tab-panel" role="tabpanel" id="panel-quests"><div id="questArea"></div></div>
+      <div class="tab-panel" role="tabpanel" id="panel-journeys"><div id="journeyArea"></div><div id="boatArea"></div></div>
+      <div class="tab-panel" role="tabpanel" id="panel-morning"><div id="morningArea"></div></div>
+      <div class="tab-panel" role="tabpanel" id="panel-evening"><div id="eveningArea"></div></div>
+      <div class="tab-panel" role="tabpanel" id="panel-dhikr"><div id="dhikrCounterArea"></div><div id="dhikrArea"></div></div>
+      <div class="tab-panel" role="tabpanel" id="panel-situational"><div id="situationalArea"></div></div>
+      <div class="tab-panel" role="tabpanel" id="panel-duas"><div id="duaArea"></div></div>
+      <div class="tab-panel" role="tabpanel" id="panel-wudu"><div id="wuduArea"></div></div>
+      <div class="tab-panel" role="tabpanel" id="panel-jumuah"><div id="jumuahArea"></div></div>
+      <div class="tab-panel" role="tabpanel" id="panel-salah"><div id="salahArea"></div></div>
+      <div class="tab-panel" role="tabpanel" id="panel-extradeeds"><div id="extraDeedsArea"></div></div>
+      <div class="tab-panel" role="tabpanel" id="panel-volprayers"><div id="volPrayersArea"></div></div>
+      <div class="tab-panel" role="tabpanel" id="panel-fasting"><div id="fastingArea"></div><div id="ramadanArea"></div><div id="laylatArea"></div></div>
+      <div class="tab-panel" role="tabpanel" id="panel-healthlog"><div id="healthlogArea"></div></div>
+      <div class="tab-panel" role="tabpanel" id="panel-finance"><div id="financeArea"></div></div>
+      <div class="tab-panel" role="tabpanel" id="panel-zakatcalc"><div id="zakatcalcArea"></div></div>
+      <div class="tab-panel" role="tabpanel" id="panel-memorization"><div id="memorizationArea"></div></div>
+      <div class="tab-panel" role="tabpanel" id="panel-gratitude"><div id="gratitudeArea"></div></div>
+      <div class="tab-panel" role="tabpanel" id="panel-charity"><div id="charityArea"></div></div>
+      <div class="tab-panel" role="tabpanel" id="panel-growth"><div id="growthStatArea"></div><div id="growthCalArea"></div><div id="growthArea"></div><div id="armorArea"></div><div id="growthHeartArea"></div><div id="growthSettingsArea"></div></div>
+    </section>
 
-  <!-- ILM GROUP -->
-  <div class="tab-panel" role="tabpanel" id="panel-hadith"><div id="hadithArea"></div></div>
-  <div class="tab-panel" role="tabpanel" id="panel-aqeedah"><div id="aqeedahArea"></div></div>
-  <div class="tab-panel" role="tabpanel" id="panel-arabic"><div id="arabicArea"></div></div>
-  <div class="tab-panel" role="tabpanel" id="panel-fiqh"><div id="fiqhArea"></div></div>
-  <div class="tab-panel" role="tabpanel" id="panel-memorization"><div id="memorizationArea"></div></div>
+    <!-- SECTION 2: KNOWLEDGE / ILM -->
+    <section class="page-section" id="section-knowledge" data-section="knowledge" role="region" aria-label="Islamic Knowledge">
+      <div class="tab-panel" role="tabpanel" id="panel-quran"><div id="quranArea"></div></div>
+      <div class="tab-panel" role="tabpanel" id="panel-tafsir"><div id="tafsirArea"></div></div>
+      <div class="tab-panel" role="tabpanel" id="panel-sunnahs"><div id="sunnahArea"></div></div>
+      <div class="tab-panel" role="tabpanel" id="panel-hadith"><div id="hadithArea"></div></div>
+      <div class="tab-panel" role="tabpanel" id="panel-aqeedah"><div id="aqeedahArea"></div></div>
+      <div class="tab-panel" role="tabpanel" id="panel-fiqh"><div id="fiqhArea"></div></div>
+      <div class="tab-panel" role="tabpanel" id="panel-virtues"><div id="ikhlasArea"></div><div id="tawakkulArea"></div><div id="patienceArea"></div><div id="hopeArea"></div><div id="fearArea"></div><div id="loveofallahArea"></div><div id="contentmentArea"></div></div>
+      <div class="tab-panel" role="tabpanel" id="panel-vices-return"><div id="heartArea"></div><div id="sinsArea"></div><div id="repentanceArea"></div></div>
+      <div class="tab-panel" role="tabpanel" id="panel-character-path"><div id="mannersArea"></div><div id="zuhdArea"></div><div id="sufismArea"></div><div id="tazkiyahArea"></div><div id="inspireArea"></div><div id="reflectionArea"></div></div>
+      <div class="tab-panel" role="tabpanel" id="panel-family-life"><div id="familyArea"></div><div id="marriageArea"></div><div id="parentingArea"></div></div>
+      <div class="tab-panel" role="tabpanel" id="panel-community"><div id="neighborsArea"></div><div id="communityArea"></div><div id="brotherhoodArea"></div><div id="sisterhoodArea"></div><div id="ummahArea"></div><div id="antiracismArea"></div></div>
+      <div class="tab-panel" role="tabpanel" id="panel-service"><div id="orphans2Area"></div><div id="elderlyArea"></div><div id="disabledArea"></div><div id="povertyArea"></div><div id="volunteeringArea"></div><div id="dawahArea"></div></div>
+      <div class="tab-panel" role="tabpanel" id="panel-work-justice"><div id="workArea"></div><div id="punishmentsArea"></div></div>
+      <div class="tab-panel" role="tabpanel" id="panel-seerah"><div id="seerahArea"></div></div>
+      <div class="tab-panel" role="tabpanel" id="panel-stories"><div id="storiesArea"></div></div>
+      <div class="tab-panel" role="tabpanel" id="panel-civilisation"><div id="civilisationArea"></div></div>
+      <div class="tab-panel" role="tabpanel" id="panel-science"><div id="scienceArea"></div></div>
+      <div class="tab-panel" role="tabpanel" id="panel-battles"><div id="battlesArea"></div></div>
+      <div class="tab-panel" role="tabpanel" id="panel-akhirah"><div id="akhirahArea"></div></div>
+      <div class="tab-panel" role="tabpanel" id="panel-jannah"><div id="jannahArea"></div></div>
+      <div class="tab-panel" role="tabpanel" id="panel-jahannam"><div id="jahannamArea"></div></div>
+      <div class="tab-panel" role="tabpanel" id="panel-grave"><div id="graveArea"></div></div>
+      <div class="tab-panel" role="tabpanel" id="panel-signs"><div id="signsArea"></div></div>
+      <div class="tab-panel" role="tabpanel" id="panel-dreams"><div id="dreamsArea"></div></div>
+      <div class="tab-panel" role="tabpanel" id="panel-wellness"><div id="healthArea"></div><div id="tibbArea"></div><div id="mentalhealthArea"></div></div>
+      <div class="tab-panel" role="tabpanel" id="panel-earth-living"><div id="foodArea"></div><div id="environmentArea"></div><div id="greenArea"></div><div id="travelArea"></div></div>
+      <div class="tab-panel" role="tabpanel" id="panel-youth-tech"><div id="youthArea"></div><div id="techArea"></div><div id="technologyArea"></div><div id="socialmediaArea"></div><div id="educationArea"></div></div>
+      <div class="tab-panel" role="tabpanel" id="panel-ethics-finance"><div id="ethicsArea"></div><div id="bioethicsArea"></div><div id="modfinanceArea"></div><div id="politicsArea"></div></div>
+      <div class="tab-panel" role="tabpanel" id="panel-modernhist"><div id="modernhistArea"></div></div>
+      <div class="tab-panel" role="tabpanel" id="panel-ancientprophets"><div id="ancientprophetsArea"></div></div>
+      <div class="tab-panel" role="tabpanel" id="panel-worship-rulings"><div id="purificationArea"></div><div id="salahrulesArea"></div><div id="sawmrulesArea"></div><div id="hajjrulesArea"></div></div>
+      <div class="tab-panel" role="tabpanel" id="panel-wealth-oaths"><div id="zakatrulesArea"></div><div id="tradeArea"></div><div id="inheritanceArea"></div><div id="oathsArea"></div></div>
+    </section>
 
-  <!-- NAMES GROUP -->
-  <div class="tab-panel" role="tabpanel" id="panel-allah_names"><div id="namesArea"></div></div>
-  <div class="tab-panel" role="tabpanel" id="panel-scholars_names"><div id="scholarsArea"></div></div>
+    <!-- SECTION 3: SACRED NAMES & FIGURES -->
+    <section class="page-section" id="section-names_main" data-section="names_main" role="region" aria-label="Sacred Names & Figures">
+      <div class="tab-panel" role="tabpanel" id="panel-allah_names"><div id="namesArea"></div></div>
+      <div class="tab-panel" role="tabpanel" id="panel-scholars_names"><div id="scholarsArea"></div></div>
+      <div class="tab-panel" role="tabpanel" id="panel-sahaba"><div id="sahabaArea"></div></div>
+      <div class="tab-panel" role="tabpanel" id="panel-prophets"><div id="prophetsArea"></div></div>
+      <div class="tab-panel" role="tabpanel" id="panel-women"><div id="womenArea"></div></div>
+    </section>
 
-  <!-- QALB GROUP -->
-  <div class="tab-panel" role="tabpanel" id="panel-virtues"><div id="ikhlasArea"></div><div id="tawakkulArea"></div><div id="patienceArea"></div><div id="hopeArea"></div><div id="fearArea"></div><div id="loveofallahArea"></div><div id="contentmentArea"></div></div>
-  <div class="tab-panel" role="tabpanel" id="panel-vices-return"><div id="heartArea"></div><div id="sinsArea"></div><div id="repentanceArea"></div></div>
-  <div class="tab-panel" role="tabpanel" id="panel-character-path"><div id="mannersArea"></div><div id="zuhdArea"></div><div id="sufismArea"></div><div id="tazkiyahArea"></div><div id="inspireArea"></div><div id="reflectionArea"></div></div>
-  <div class="tab-panel" role="tabpanel" id="panel-gratitude"><div id="gratitudeArea"></div></div>
+    <!-- SECTION 4: ISLAMIC LIBRARY -->
+    <section class="page-section" id="section-library" data-section="library" role="region" aria-label="Islamic Library">
+      <div class="tab-panel" role="tabpanel" id="panel-arabic"><div id="arabicArea"></div></div>
+      <div class="tab-panel" role="tabpanel" id="panel-umayyads"><div id="umayyadsArea"></div></div>
+      <div class="tab-panel" role="tabpanel" id="panel-abbasids"><div id="abbasidsArea"></div></div>
+      <div class="tab-panel" role="tabpanel" id="panel-andalus"><div id="andalusArea"></div></div>
+      <div class="tab-panel" role="tabpanel" id="panel-ottomans"><div id="ottomansArea"></div></div>
+      <div class="tab-panel" role="tabpanel" id="panel-mamluks"><div id="mamluksArea"></div></div>
+      <div class="tab-panel" role="tabpanel" id="panel-seljuks"><div id="seljuksArea"></div></div>
+      <div class="tab-panel" role="tabpanel" id="panel-fatimids"><div id="fatimidsArea"></div></div>
+      <div class="tab-panel" role="tabpanel" id="panel-ayyubids"><div id="ayyubidsArea"></div></div>
+      <div class="tab-panel" role="tabpanel" id="panel-holy-cities"><div id="meccaArea"></div><div id="medinaArea"></div><div id="jerusalemArea"></div></div>
+      <div class="tab-panel" role="tabpanel" id="panel-capitals"><div id="damascusArea"></div><div id="baghdadArea"></div><div id="cairoArea"></div><div id="cordobaArea"></div><div id="istanbulArea"></div></div>
+      <div class="tab-panel" role="tabpanel" id="panel-east"><div id="bukharaArea"></div><div id="samarkandArea"></div></div>
+      <div class="tab-panel" role="tabpanel" id="panel-pattern"><div id="calligraphyArea"></div><div id="illuminationArea"></div></div>
+      <div class="tab-panel" role="tabpanel" id="panel-sacred-space"><div id="architectureArea"></div><div id="geometryArea"></div></div>
+      <div class="tab-panel" role="tabpanel" id="panel-living-crafts"><div id="textilesArea"></div><div id="ceramicsArea"></div><div id="woodworkArea"></div><div id="nasheedsArea"></div></div>
+      <div class="tab-panel" role="tabpanel" id="panel-word"><div id="literatureArea"></div></div>
+      <div class="tab-panel" role="tabpanel" id="panel-structure"><div id="arabicgrammarArea"></div><div id="morphologyArea"></div><div id="rhetoricArea"></div><div id="etymologyArea"></div></div>
+      <div class="tab-panel" role="tabpanel" id="panel-sound-script"><div id="pronunciationArea"></div><div id="scriptsArea"></div><div id="dialectsArea"></div></div>
+      <div class="tab-panel" role="tabpanel" id="panel-words-poetry"><div id="vocabArea"></div><div id="proverbsArea"></div><div id="poetryArea"></div><div id="poetryartArea"></div></div>
+      <div class="tab-panel" role="tabpanel" id="panel-being"><div id="ontologyArea"></div><div id="existenceArea"></div><div id="prophethoodArea"></div></div>
+      <div class="tab-panel" role="tabpanel" id="panel-knowing"><div id="epistemologyArea"></div><div id="logicArea"></div><div id="reasonArea"></div><div id="kalamArea"></div></div>
+      <div class="tab-panel" role="tabpanel" id="panel-will-evil"><div id="freewillArea"></div><div id="problemofevilArea"></div></div>
+    </section>
 
-  <!-- MU'AMALAT GROUP -->
-  <div class="tab-panel" role="tabpanel" id="panel-family-life"><div id="familyArea"></div><div id="marriageArea"></div><div id="parentingArea"></div></div>
-  <div class="tab-panel" role="tabpanel" id="panel-community"><div id="neighborsArea"></div><div id="communityArea"></div><div id="brotherhoodArea"></div><div id="sisterhoodArea"></div><div id="ummahArea"></div><div id="antiracismArea"></div></div>
-  <div class="tab-panel" role="tabpanel" id="panel-service"><div id="orphans2Area"></div><div id="elderlyArea"></div><div id="disabledArea"></div><div id="povertyArea"></div><div id="volunteeringArea"></div><div id="dawahArea"></div></div>
-  <div class="tab-panel" role="tabpanel" id="panel-work-justice"><div id="workArea"></div><div id="punishmentsArea"></div></div>
-  <div class="tab-panel" role="tabpanel" id="panel-charity"><div id="charityArea"></div></div>
-
-  <!-- TARIKH GROUP -->
-  <div class="tab-panel" role="tabpanel" id="panel-seerah"><div id="seerahArea"></div></div>
-  <div class="tab-panel" role="tabpanel" id="panel-sahaba"><div id="sahabaArea"></div></div>
-  <div class="tab-panel" role="tabpanel" id="panel-prophets"><div id="prophetsArea"></div></div>
-  <div class="tab-panel" role="tabpanel" id="panel-women"><div id="womenArea"></div></div>
-  <div class="tab-panel" role="tabpanel" id="panel-stories"><div id="storiesArea"></div></div>
-  <div class="tab-panel" role="tabpanel" id="panel-civilisation"><div id="civilisationArea"></div></div>
-  <div class="tab-panel" role="tabpanel" id="panel-science"><div id="scienceArea"></div></div>
-  <div class="tab-panel" role="tabpanel" id="panel-battles"><div id="battlesArea"></div></div>
-
-  <!-- AKHIRA GROUP -->
-  <div class="tab-panel" role="tabpanel" id="panel-akhirah"><div id="akhirahArea"></div></div>
-  <div class="tab-panel" role="tabpanel" id="panel-jannah"><div id="jannahArea"></div></div>
-  <div class="tab-panel" role="tabpanel" id="panel-jahannam"><div id="jahannamArea"></div></div>
-  <div class="tab-panel" role="tabpanel" id="panel-grave"><div id="graveArea"></div></div>
-  <div class="tab-panel" role="tabpanel" id="panel-signs"><div id="signsArea"></div></div>
-  <div class="tab-panel" role="tabpanel" id="panel-dreams"><div id="dreamsArea"></div></div>
-
-  <!-- PROFILE GROUP -->
-  <div class="tab-panel" role="tabpanel" id="panel-profile"><div id="profileArea"></div><div id="mosqueArea"></div><div id="keysArea"></div></div>
-  <div class="tab-panel" role="tabpanel" id="panel-goals"><div id="goalsArea"></div></div>
-  <div class="tab-panel" role="tabpanel" id="panel-trophies">
+    <!-- SECTION 5: PROFILE & ANALYTICS -->
+    <section class="page-section" id="section-profile_main" data-section="profile_main" role="region" aria-label="User Profile & Growth">
+      <div class="tab-panel" role="tabpanel" id="panel-profile"><div id="profileArea"></div><div id="mosqueArea"></div><div id="keysArea"></div></div>
+      <div class="tab-panel" role="tabpanel" id="panel-goals"><div id="goalsArea"></div></div>
+      <div class="tab-panel" role="tabpanel" id="panel-trophies">
     <div id="achievementShowcase"></div>
     <div id="achArea"></div>
   </div>
-  <div class="tab-panel" role="tabpanel" id="panel-progress">
+      <div class="tab-panel" role="tabpanel" id="panel-progress">
     <div id="statArea"></div>
     <div id="calArea"></div>
   </div>
-  <div class="tab-panel" role="tabpanel" id="panel-stats">
+      <div class="tab-panel" role="tabpanel" id="panel-stats">
     <div class="section-title"> Advanced Analytics</div>
     <div id="statsArea"></div>
   </div>
-  <div class="tab-panel" role="tabpanel" id="panel-rewards">
+      <div class="tab-panel" role="tabpanel" id="panel-rewards">
     <div class="shop-list" id="shopArea"></div>
   </div>
-
-  <!-- HAYAT GROUP -->
-  <div class="tab-panel" role="tabpanel" id="panel-wellness"><div id="healthArea"></div><div id="tibbArea"></div><div id="mentalhealthArea"></div></div>
-  <div class="tab-panel" role="tabpanel" id="panel-earth-living"><div id="foodArea"></div><div id="environmentArea"></div><div id="greenArea"></div><div id="travelArea"></div></div>
-  <div class="tab-panel" role="tabpanel" id="panel-youth-tech"><div id="youthArea"></div><div id="techArea"></div><div id="technologyArea"></div><div id="socialmediaArea"></div><div id="educationArea"></div></div>
-  <div class="tab-panel" role="tabpanel" id="panel-ethics-finance"><div id="ethicsArea"></div><div id="bioethicsArea"></div><div id="modfinanceArea"></div><div id="politicsArea"></div></div>
-
-  <!-- DYNAMIC PANELS (generated from TAB_GROUPS: history, fiqh, spirit, modern, geo, arts, scholars2, lang, society, philosophy) -->
-  <div class="tab-panel" role="tabpanel" id="panel-umayyads"><div id="umayyadsArea"></div></div>
-  <div class="tab-panel" role="tabpanel" id="panel-abbasids"><div id="abbasidsArea"></div></div>
-  <div class="tab-panel" role="tabpanel" id="panel-andalus"><div id="andalusArea"></div></div>
-  <div class="tab-panel" role="tabpanel" id="panel-ottomans"><div id="ottomansArea"></div></div>
-  <div class="tab-panel" role="tabpanel" id="panel-mamluks"><div id="mamluksArea"></div></div>
-  <div class="tab-panel" role="tabpanel" id="panel-seljuks"><div id="seljuksArea"></div></div>
-  <div class="tab-panel" role="tabpanel" id="panel-fatimids"><div id="fatimidsArea"></div></div>
-  <div class="tab-panel" role="tabpanel" id="panel-ayyubids"><div id="ayyubidsArea"></div></div>
-  <div class="tab-panel" role="tabpanel" id="panel-modernhist"><div id="modernhistArea"></div></div>
-  <div class="tab-panel" role="tabpanel" id="panel-ancientprophets"><div id="ancientprophetsArea"></div></div>
-  <div class="tab-panel" role="tabpanel" id="panel-worship-rulings"><div id="purificationArea"></div><div id="salahrulesArea"></div><div id="sawmrulesArea"></div><div id="hajjrulesArea"></div></div>
-  <div class="tab-panel" role="tabpanel" id="panel-wealth-oaths"><div id="zakatrulesArea"></div><div id="tradeArea"></div><div id="inheritanceArea"></div><div id="oathsArea"></div></div>
-  <div class="tab-panel" role="tabpanel" id="panel-holy-cities"><div id="meccaArea"></div><div id="medinaArea"></div><div id="jerusalemArea"></div></div>
-  <div class="tab-panel" role="tabpanel" id="panel-capitals"><div id="damascusArea"></div><div id="baghdadArea"></div><div id="cairoArea"></div><div id="cordobaArea"></div><div id="istanbulArea"></div></div>
-  <div class="tab-panel" role="tabpanel" id="panel-east"><div id="bukharaArea"></div><div id="samarkandArea"></div></div>
-  <div class="tab-panel" role="tabpanel" id="panel-pattern"><div id="calligraphyArea"></div><div id="illuminationArea"></div></div>
-  <div class="tab-panel" role="tabpanel" id="panel-sacred-space"><div id="architectureArea"></div><div id="geometryArea"></div></div>
-  <div class="tab-panel" role="tabpanel" id="panel-living-crafts"><div id="textilesArea"></div><div id="ceramicsArea"></div><div id="woodworkArea"></div><div id="nasheedsArea"></div></div>
-  <div class="tab-panel" role="tabpanel" id="panel-word"><div id="literatureArea"></div></div>
-  <div class="tab-panel" role="tabpanel" id="panel-structure"><div id="arabicgrammarArea"></div><div id="morphologyArea"></div><div id="rhetoricArea"></div><div id="etymologyArea"></div></div>
-  <div class="tab-panel" role="tabpanel" id="panel-sound-script"><div id="pronunciationArea"></div><div id="scriptsArea"></div><div id="dialectsArea"></div></div>
-  <div class="tab-panel" role="tabpanel" id="panel-words-poetry"><div id="vocabArea"></div><div id="proverbsArea"></div><div id="poetryArea"></div><div id="poetryartArea"></div></div>
-  <div class="tab-panel" role="tabpanel" id="panel-being"><div id="ontologyArea"></div><div id="existenceArea"></div><div id="prophethoodArea"></div></div>
-  <div class="tab-panel" role="tabpanel" id="panel-knowing"><div id="epistemologyArea"></div><div id="logicArea"></div><div id="reasonArea"></div><div id="kalamArea"></div></div>
-  <div class="tab-panel" role="tabpanel" id="panel-will-evil"><div id="freewillArea"></div><div id="problemofevilArea"></div></div>
-<div class="tab-panel" role="tabpanel" id="panel-growth"><div id="growthStatArea"></div><div id="growthCalArea"></div><div id="growthArea"></div><div id="armorArea"></div><div id="growthHeartArea"></div><div id="growthSettingsArea"></div></div>
-  </main>
+    </section>
+  </div>
+    </main>
 
   <div class="copyright-footer">Copyright &copy; 2026 Md. Mahin Ahmed. All rights reserved.</div>
 </div>
