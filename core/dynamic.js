@@ -853,11 +853,11 @@ h += '</div>';
     }
 
     let html = '<div class="quran-header"><h2>' + iqIcon('book-open') + ' The Noble Quran</h2><div class="quran-sub">114 Surahs - Tap a surah to read</div></div>';
-    html += '<div class="tab-bar-quran">';
+    html += '<div class="tab-bar-quran" style="display:flex;justify-content:center;gap:6px;margin:0 auto 10px;">';
     html += `<button class="${quranViewMode==='surah'?'active':''}" onclick="App.setQuranView('surah')">Surahs</button>`;
     html += `<button class="${quranViewMode==='juz'?'active':''}" onclick="App.setQuranView('juz')">Juz</button>`;
     html += '</div>';
-    html += '<input class="quran-search" placeholder="' + iqEmoji('search') + ' Search surah name..." oninput="App.quranSearchFilter(this.value)">';
+    html += '<div style="display:flex;justify-content:center;width:100%;"><input class="quran-search" style="text-align:center;max-width:540px;" placeholder="' + iqEmoji('search') + ' Search surah name..." oninput="App.quranSearchFilter(this.value)"></div>';
 
     if (quranViewMode === 'juz') {
       html += '<div class="juz-grid">';

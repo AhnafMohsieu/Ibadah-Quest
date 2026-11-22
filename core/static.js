@@ -341,7 +341,7 @@
     let completed = 0;
     for (let i=0; i<total; i++) { if (S.morningDone[dt][i]) completed++; }
 
-    let h = `<div class="section-title" style="display:flex;justify-content:space-between;align-items:center;">
+    let h = `<div class="section-title" style="display:flex;justify-content:center;align-items:center;gap:12px;">
       <span>${iqIcon('sunrise')} Morning Adhkar (After Fajr)</span>
       <span style="font-size:0.75rem;background:rgba(201,168,76,0.15);padding:3px 10px;border-radius:12px;color:var(--accent-light);font-weight:700;">${completed} / ${total}</span>
     </div><div class="adhkar-list" style="display:flex;flex-direction:column;gap:12px;width:100%;align-items:stretch;">`;
@@ -349,11 +349,11 @@
         const done = !!S.morningDone[dt][idx];
         h += `<div class="vol-card${done?' done':''}" tabindex="0" role="button" onclick="App.toggleMorning(${idx}, ${item.xp})" style="cursor:pointer;width:100%;box-sizing:border-box;">
             <div class="prayer-check" style="font-size:1.2rem;">${done?iqIcon('check'):iqIcon('sun')}</div>
-            <div class="prayer-info">
-                <div style="font-family:'Amiri',serif;font-size:1.3rem;margin-bottom:2px;color:var(--accent);line-height:1.4;">${item.arabic}</div>
-                ${item.roman ? `<div style="font-size:0.85rem;color:var(--text2);font-style:italic;margin-bottom:6px;opacity:0.9;">"${item.roman}"</div>` : ''}
-                <div class="prayer-name">${item.text}</div>
-                <div style="font-size:0.8rem;color:var(--text2);margin-top:4px;">${item.reward}</div>
+            <div class="prayer-info" style="text-align:center;">
+                <div style="font-family:'Amiri',serif;font-size:1.3rem;margin-bottom:2px;color:var(--accent);line-height:1.4;text-align:center;">${item.arabic}</div>
+                ${item.roman ? `<div style="font-size:0.85rem;color:var(--text2);font-style:italic;margin-bottom:6px;opacity:0.9;text-align:center;">"${item.roman}"</div>` : ''}
+                <div class="prayer-name" style="text-align:center;">${item.text}</div>
+                <div style="font-size:0.8rem;color:var(--text2);margin-top:4px;text-align:center;">${item.reward}</div>
             </div>
             <div class="prayer-xp">+${item.xp} XP</div>
         </div>`;
@@ -376,7 +376,7 @@
     let completed = 0;
     for (let i=0; i<total; i++) { if (S.eveningDone[dt][i]) completed++; }
     
-    let h = `<div class="section-title" style="display:flex;justify-content:space-between;align-items:center;">
+    let h = `<div class="section-title" style="display:flex;justify-content:center;align-items:center;gap:12px;">
       <span>${iqIcon('moon')} Evening Adhkar (After Asr)</span>
       <span style="font-size:0.75rem;background:rgba(201,168,76,0.15);padding:3px 10px;border-radius:12px;color:var(--accent-light);font-weight:700;">${completed} / ${total}</span>
     </div><div class="adhkar-list" style="display:flex;flex-direction:column;gap:12px;width:100%;align-items:stretch;">`;
@@ -384,11 +384,11 @@
         const done = !!S.eveningDone[dt][idx];
         h += `<div class="vol-card${done?' done':''}" tabindex="0" role="button" onclick="App.toggleEvening(${idx}, ${item.xp})" style="cursor:pointer;width:100%;box-sizing:border-box;">
             <div class="prayer-check" style="font-size:1.2rem;">${done?iqIcon('check'):iqIcon('moon')}</div>
-            <div class="prayer-info">
-                <div style="font-family:'Amiri',serif;font-size:1.3rem;margin-bottom:2px;color:var(--accent);line-height:1.4;">${item.arabic}</div>
-                ${item.roman ? `<div style="font-size:0.85rem;color:var(--text2);font-style:italic;margin-bottom:6px;opacity:0.9;">"${item.roman}"</div>` : ''}
-                <div class="prayer-name">${item.text}</div>
-                <div style="font-size:0.8rem;color:var(--text2);margin-top:4px;">${item.reward}</div>
+            <div class="prayer-info" style="text-align:center;">
+                <div style="font-family:'Amiri',serif;font-size:1.3rem;margin-bottom:2px;color:var(--accent);line-height:1.4;text-align:center;">${item.arabic}</div>
+                ${item.roman ? `<div style="font-size:0.85rem;color:var(--text2);font-style:italic;margin-bottom:6px;opacity:0.9;text-align:center;">"${item.roman}"</div>` : ''}
+                <div class="prayer-name" style="text-align:center;">${item.text}</div>
+                <div style="font-size:0.8rem;color:var(--text2);margin-top:4px;text-align:center;">${item.reward}</div>
             </div>
             <div class="prayer-xp">+${item.xp} XP</div>
         </div>`;
@@ -432,8 +432,8 @@
         const isFav = favs.includes(_situationalView + '_' + idx);
         h += `<div class="vol-card" role="button" tabindex="0" aria-label="Tap ${escapeHTML(item.english)}" style="position:relative;cursor:pointer;width:100%;box-sizing:border-box;${maxed ? 'opacity:0.6;' : ''}" onclick="App.tapSituationalDhikr('${_situationalView}',${idx})">
             <button type="button" class="sit-fav-btn" aria-label="${isFav ? 'Remove from favorites' : 'Add to favorites'}" title="${isFav ? 'Unpin dhikr' : 'Pin dhikr'}" style="position:absolute;top:8px;right:8px;background:none;border:none;cursor:pointer;padding:6px;font-size:1rem;line-height:1;color:${isFav ? 'var(--accent)' : 'var(--text3)'};" onclick="event.stopPropagation();App.toggleSitFav('${_situationalView}',${idx})">${isFav ? iqIcon('star') : iqIcon('bookmark')}</button>
-            <div class="prayer-info">
-              <div style="font-family:'Amiri',serif;font-size:1.3rem;margin-bottom:2px;color:var(--accent);line-height:1.4;">${item.arabic}</div>
+            <div class="prayer-info" style="text-align:center;">
+              <div style="font-family:'Amiri',serif;font-size:1.3rem;margin-bottom:2px;color:var(--accent);line-height:1.4;text-align:center;">${item.arabic}</div>
               ${item.roman ? '<div style="font-size:0.85rem;color:var(--text2);font-style:italic;margin-bottom:6px;opacity:0.9;">"' + escapeHTML(item.roman) + '"</div>' : ''}
               <div class="prayer-name">${escapeHTML(item.english)}</div>
               ${item.source ? '<div style="font-size:0.75rem;color:var(--text2);margin-top:4px;">' + iqIcon('book-open') + ' ' + escapeHTML(item.source) + '</div>' : ''}

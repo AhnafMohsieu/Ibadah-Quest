@@ -4119,10 +4119,19 @@ body[data-active-tab]:not([data-active-tab="today"]) #seasonalBanner {
   box-sizing: border-box;
 }
 
+.segment-page-header {
+  margin: 0 auto 12px;
+  text-align: center;
+}
 .segment-page-header .sph-content {
   display: flex;
   align-items: center;
+  justify-content: center;
+  text-align: center;
   gap: 14px;
+}
+.segment-page-header .sph-text {
+  text-align: center;
 }
 
 .segment-page-header .sph-icon {
@@ -4305,4 +4314,102 @@ body:not([data-active-segment]) #section-ibadah {
 @keyframes pageSectionFade {
   from { opacity: 0; transform: translateY(4px); }
   to { opacity: 1; transform: translateY(0); }
+}
+
+
+/* ── Universal Center Alignment System ── */
+.tab-content,
+.page-sections-viewport,
+.page-section,
+.tab-panel {
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.segment-page-header,
+.segment-page-header .sph-content,
+.segment-page-header .sph-text,
+.segment-page-header .sph-title,
+.segment-page-header .sph-desc {
+  text-align: center;
+  justify-content: center;
+}
+
+.section-title {
+  justify-content: center !important;
+  text-align: center !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+.section-title::before {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+.section-title::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+.ach-header .section-title::before,
+.ach-header .section-title::after {
+  display: none !important;
+}
+
+.prayer-info,
+.prayer-name,
+.prayer-time,
+.vol-card .prayer-info,
+.prayer-card .prayer-info,
+.deed-card .prayer-info,
+.quest-row .prayer-info,
+.shop-card .prayer-info,
+.content-card .prayer-info {
+  text-align: center !important;
+}
+
+.drill-back,
+.quran-back-btn {
+  margin-left: auto !important;
+  margin-right: auto !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.tab-bar-quran {
+  justify-content: center !important;
+  margin: 0 auto 10px !important;
+}
+
+.quran-search {
+  max-width: 560px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  text-align: center !important;
+  display: block !important;
+}
+
+.surah-card {
+  text-align: center !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.surah-card .surah-num {
+  margin: 0 auto !important;
+}
+
+.surah-meta {
+  text-align: center !important;
+}
+
+.quran-header {
+  text-align: center !important;
 }
