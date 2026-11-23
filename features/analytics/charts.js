@@ -60,10 +60,31 @@
     };
   }
 
+  function hasChartJS() {
+    return typeof Chart !== 'undefined';
+  }
+
+  function renderOfflineFallback(canvasId, title) {
+    const canvas = document.getElementById(canvasId);
+    if (!canvas || !canvas.getContext) return;
+    const ctx = canvas.getContext('2d');
+    const w = canvas.width || 300;
+    const h = canvas.height || 150;
+    ctx.clearRect(0, 0, w, h);
+    ctx.fillStyle = COLORS.text || '#6b7280';
+    ctx.font = '12px Sora, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText((title ? title + ' ' : '') + '(Offline mode - chart summary active)', w / 2, h / 2);
+  }
+
   function createLine(canvasId, labels, datasets, title) {
     destroy(canvasId);
     const ctx = document.getElementById(canvasId);
     if (!ctx) return;
+    if (!hasChartJS()) {
+      renderOfflineFallback(canvasId, title);
+      return null;
+    }
     instances[canvasId] = new Chart(ctx, {
       type: 'line',
       data: { labels, datasets: datasets.map(ds => ({ ...ds, borderWidth: 2, pointRadius: 2, tension: 0.3, fill: ds.fill !== false })) },
@@ -76,6 +97,10 @@
     destroy(canvasId);
     const ctx = document.getElementById(canvasId);
     if (!ctx) return;
+    if (!hasChartJS()) {
+      renderOfflineFallback(canvasId, title);
+      return null;
+    }
     instances[canvasId] = new Chart(ctx, {
       type: 'bar',
       data: { labels, datasets: [{ data, backgroundColor: color || COLORS.primary, borderRadius: 4 }] },
@@ -88,6 +113,10 @@
     destroy(canvasId);
     const ctx = document.getElementById(canvasId);
     if (!ctx) return;
+    if (!hasChartJS()) {
+      renderOfflineFallback(canvasId, title);
+      return null;
+    }
     const opts = baseOptions(title);
     const tmp = opts.scales.x;
     opts.scales.x = opts.scales.y;
@@ -104,6 +133,10 @@
     destroy(canvasId);
     const ctx = document.getElementById(canvasId);
     if (!ctx) return;
+    if (!hasChartJS()) {
+      renderOfflineFallback(canvasId, title);
+      return null;
+    }
     instances[canvasId] = new Chart(ctx, {
       type: 'doughnut',
       data: { labels, datasets: [{ data, backgroundColor: colors, borderWidth: 0 }] },

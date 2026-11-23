@@ -2,15 +2,18 @@
 // Main controller for spiritual growth features
 
 (function() {
-  const DEFAULT_VISIBLE = Object.keys(FEATURE_STAGES);
+  const stages = (typeof FEATURE_STAGES !== 'undefined' && FEATURE_STAGES) ? FEATURE_STAGES : {};
+  const DEFAULT_VISIBLE = Object.keys(stages);
   
   function getSettings() {
-    return S.growthSettings || { visible: [...DEFAULT_VISIBLE] };
+    return (window.S && window.S.growthSettings) || { visible: [...DEFAULT_VISIBLE] };
   }
   
   function saveSettings(settings) {
-    S.growthSettings = settings;
-    saveState();
+    if (window.S) {
+      window.S.growthSettings = settings;
+      if (typeof saveState === 'function') saveState();
+    }
   }
   
   function isVisible(featureName) {

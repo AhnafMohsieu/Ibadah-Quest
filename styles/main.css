@@ -3202,18 +3202,23 @@ html[data-theme="emara"] .global-search { background: var(--card-bg); }
   justify-items: stretch;
 }
 
-/* ── Content & Action cards: full width unified sizing ── */
+/* ── Content & Action cards: full width unified sizing & centered alignment ── */
 .content-card,
 .prayer-card,
 .deed-card,
 .vol-card,
 .quest-row,
-.shop-card {
-  width: 100% !important;
-  box-sizing: border-box !important;
-  margin-left: 0 !important;
-  margin-right: 0 !important;
-  align-self: stretch !important;
+.shop-card,
+.card-item,
+.journey-card,
+.ach-card,
+.insight-card {
+  width: 100%;
+  max-width: 720px;
+  box-sizing: border-box;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  align-self: center;
 }
 
 /* ── Hero strip: always centered ── */

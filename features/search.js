@@ -4,8 +4,9 @@
   }
 
   function fuzzyMatch(query, text) {
-    query = query.toLowerCase();
-    text = text.toLowerCase();
+    if (!query || text == null) return false;
+    query = String(query).toLowerCase();
+    text = String(text).toLowerCase();
     if (text.includes(query)) return true;
     let qi = 0;
     for (let ti = 0; ti < text.length && qi < query.length; ti++) {
@@ -136,6 +137,12 @@
     });
 
     input.addEventListener('focus', function() { updateClear(); if (this.value.length >= 2) showResults(this.value, box); });
+
+    document.addEventListener('click', function(e) {
+      if (!input.contains(e.target) && !box.contains(e.target)) {
+        box.classList.remove('show');
+      }
+    });
   }
 
   function setActive(items, idx) {
