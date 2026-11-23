@@ -7,7 +7,12 @@
   function init() {
     return new Promise(function(resolve, reject) {
       if (db) { resolve(db); return; }
-      var req = window.indexedDB.open(DB_NAME, DB_VERSION);
+      if (typeof window === 'undefined' || !window.indexedDB) {
+        reject(new Error('IndexedDB not supported'));
+        return;
+      }
+      try {
+        var req = window.indexedDB.open(DB_NAME, DB_VERSION);
       req.onupgradeneeded = function(e) {
         var database = e.target.result;
         if (!database.objectStoreNames.contains(STORE_NAME)) {
@@ -15,11 +20,15 @@
         }
       };
       req.onsuccess = function() { db = req.result; resolve(db); };
-      req.onerror = function(e) { reject(e.target.error); };
+      req.onerror = function(e) { reject(e && e.target ? e.target.error : e); };
+      } catch (err) {
+        reject(err);
+      }
     });
   }
 
   function getStore(mode) {
+    if (!db) throw new Error('IndexedDB not initialized or unavailable');
     var tx = db.transaction(STORE_NAME, mode);
     return tx.objectStore(STORE_NAME);
   }

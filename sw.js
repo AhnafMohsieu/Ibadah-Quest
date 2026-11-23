@@ -4,7 +4,7 @@
   // Bump MANIFEST_REV whenever precache-manifest.js (or any precached URL) changes:
   // any byte change to this file forces browsers to install the new worker.
   // (Replaces the old CACHE_NAME v51/v52 bump discipline.)
-  const MANIFEST_REV = 16;
+  const MANIFEST_REV = 17;
   const CDN_CACHE = 'iq-cdn-v1';
   importScripts('./core/precache-manifest.js');
   self.addEventListener('install', (event) => {

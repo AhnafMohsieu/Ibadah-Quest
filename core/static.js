@@ -333,7 +333,20 @@
     h += `<div class="content-card"><div class="content-english">Sadaqah Jariyah</div><div class="content-english" style="font-size:0.85rem;color:var(--text2);">Continuous charity. If you build a well, plant a tree, or write a useful book, you continue to receive reward even after death as long as people benefit from it. (Sahih Muslim)</div></div>`;
     document.getElementById('charityArea').innerHTML = h;
   }
-  function setCharityGoals() { const d=parseInt(document.getElementById('charityDaily').value); const m=parseInt(document.getElementById('charityMonthly').value); const g=parseInt(document.getElementById('charityGiven').value); if(!isNaN(d)) S.charity.daily=d; if(!isNaN(m)) S.charity.monthly=m; if(!isNaN(g)) S.charity.given+=g; saveState(); renderCharity(); }
+  function setCharityGoals() {
+    const dEl = document.getElementById('charityDaily');
+    const mEl = document.getElementById('charityMonthly');
+    const gEl = document.getElementById('charityGiven');
+    const d = dEl ? parseInt(dEl.value, 10) : NaN;
+    const m = mEl ? parseInt(mEl.value, 10) : NaN;
+    const g = gEl ? parseInt(gEl.value, 10) : NaN;
+    if (!isNaN(d) && d >= 0) S.charity.daily = d;
+    if (!isNaN(m) && m >= 0) S.charity.monthly = m;
+    if (!isNaN(g) && g > 0) S.charity.given = (S.charity.given || 0) + g;
+    if (gEl) gEl.value = '';
+    saveState();
+    renderCharity();
+  }
   function renderMemorization() {
     let h = '<div class="section-title">' + iqIcon('brain') + ' Memorization Tracker</div>';
     h += `<div class="stat-card" style="margin-bottom:16px;"><div class="stat-num">${S.memorized}</div><div>Surahs Memorized</div></div>`;
@@ -354,7 +367,7 @@
     </div><div class="adhkar-list" style="display:flex;flex-direction:column;gap:12px;width:100%;align-items:stretch;">`;
     MORNING_DHIKR.forEach((item, idx) => {
         const done = !!S.morningDone[dt][idx];
-        h += `<div class="vol-card${done?' done':''}" tabindex="0" role="button" onclick="App.toggleMorning(${idx}, ${item.xp})" style="cursor:pointer;width:100%;box-sizing:border-box;">
+        h += `<div class="vol-card${done?' done':''}" tabindex="0" role="button" aria-pressed="${done?'true':'false'}" aria-label="${escapeHTML(item.text)} (${item.xp} XP)" onclick="App.toggleMorning(${idx}, ${item.xp})" style="cursor:pointer;width:100%;box-sizing:border-box;">
             <div class="prayer-check" style="font-size:1.2rem;">${done?iqIcon('check'):iqIcon('sun')}</div>
             <div class="prayer-info" style="text-align:center;">
                 <div style="font-family:'Amiri',serif;font-size:1.3rem;margin-bottom:2px;color:var(--accent);line-height:1.4;text-align:center;">${item.arabic}</div>
@@ -389,7 +402,7 @@
     </div><div class="adhkar-list" style="display:flex;flex-direction:column;gap:12px;width:100%;align-items:stretch;">`;
     EVENING_DHIKR.forEach((item, idx) => {
         const done = !!S.eveningDone[dt][idx];
-        h += `<div class="vol-card${done?' done':''}" tabindex="0" role="button" onclick="App.toggleEvening(${idx}, ${item.xp})" style="cursor:pointer;width:100%;box-sizing:border-box;">
+        h += `<div class="vol-card${done?' done':''}" tabindex="0" role="button" aria-pressed="${done?'true':'false'}" aria-label="${escapeHTML(item.text)} (${item.xp} XP)" onclick="App.toggleEvening(${idx}, ${item.xp})" style="cursor:pointer;width:100%;box-sizing:border-box;">
             <div class="prayer-check" style="font-size:1.2rem;">${done?iqIcon('check'):iqIcon('moon')}</div>
             <div class="prayer-info" style="text-align:center;">
                 <div style="font-family:'Amiri',serif;font-size:1.3rem;margin-bottom:2px;color:var(--accent);line-height:1.4;text-align:center;">${item.arabic}</div>

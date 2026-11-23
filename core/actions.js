@@ -704,7 +704,7 @@ Object.keys(NEW_POOLS).forEach(k => {
     } catch(e) { console.error('Step 10c post-defer re-render hook failed:', e); }
     try {
       document.addEventListener('keydown', (e) => {
-        if ((e.key === 'Enter' || e.key === ' ') && e.target.matches('.card-item, .vol-card, .shop-card, .card-info-btn')) {
+        if ((e.key === 'Enter' || e.key === ' ') && (e.target.matches('.card-item, .vol-card, .shop-card, .card-info-btn') || e.target.matches('.ach-card, .quest-row, .deed-card, .theme-chip, [role="button"][tabindex="0"]'))) {
           e.preventDefault();
           e.target.click();
         }
