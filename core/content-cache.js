@@ -5,15 +5,21 @@
   var dbPromise = null;
 
   function open() {
+    if (typeof indexedDB === 'undefined') return Promise.reject(new Error('indexedDB not available'));
     if (dbPromise) return dbPromise;
     dbPromise = new Promise(function(resolve, reject) {
-      var req = indexedDB.open(DB_NAME, DB_VERSION);
-      req.onupgradeneeded = function(e) {
-        var database = e.target.result;
-        if (!database.objectStoreNames.contains(STORE_NAME)) database.createObjectStore(STORE_NAME);
-      };
-      req.onsuccess = function() { resolve(req.result); };
-      req.onerror = function() { dbPromise = null; reject(req.error); };
+      try {
+        var req = indexedDB.open(DB_NAME, DB_VERSION);
+        req.onupgradeneeded = function(e) {
+          var database = e.target.result;
+          if (!database.objectStoreNames.contains(STORE_NAME)) database.createObjectStore(STORE_NAME);
+        };
+        req.onsuccess = function() { resolve(req.result); };
+        req.onerror = function() { dbPromise = null; reject(req.error); };
+      } catch (err) {
+        dbPromise = null;
+        reject(err);
+      }
     });
     return dbPromise;
   }
