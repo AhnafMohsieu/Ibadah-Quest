@@ -39,9 +39,9 @@
     const sug = suggestionInfo
       ? `Perhaps next week, try dedicating a moment to ${iqIcon(suggestionInfo.icon)} ${suggestionInfo.label}.`
       : 'Your garden is thriving — keep nourishing it.';
-    return `<div class="muh-overlay" id="muhOverlay">
+    return `<div class="muh-overlay" id="muhOverlay" role="dialog" aria-modal="true" aria-labelledby="muhTitle">
       <div class="muh-card">
-        <div class="muh-title">${iqIcon('pencil')} Weekly Muhasabah · Friday Reflection</div>
+        <div class="muh-title" id="muhTitle">${iqIcon('pencil')} Weekly Muhasabah · Friday Reflection</div>
         <div class="muh-hero">${hero}</div>
         <div class="muh-list">
           <div class="muh-row"><span>${iqIcon('mosque')} Prayers logged</span><b>${metrics.prayers}</b></div>
@@ -68,6 +68,13 @@
         if (de) info = { icon: de.icon || de.id, label: de.name };
       }
       wrap.innerHTML = muhasabahHTML(metrics, info, S.cs || 0);
+      const closeOnEsc = function(e) {
+        if (e.key === 'Escape') {
+          document.removeEventListener('keydown', closeOnEsc);
+          App.dismissMuhasabah();
+        }
+      };
+      document.addEventListener('keydown', closeOnEsc);
     } catch (e) { console.warn('Open Muhasabah failed:', e.message); }
   }
   var _muhasabahTriggerEl = null;

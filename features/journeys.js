@@ -31,7 +31,7 @@
 
     return `
       <div class="journey-ring-container">
-        <svg width="120" height="120" viewBox="0 0 120 120">
+        <svg width="120" height="120" viewBox="0 0 120 120" role="img" aria-label="Progress: ${pct}%">
           <circle class="journey-ring-bg" cx="60" cy="60" r="${radius}"/>
           <circle class="journey-ring-progress" cx="60" cy="60" r="${radius}"
             stroke="${color}" stroke-dasharray="${circumference}" stroke-dashoffset="${offset}"/>

@@ -1,7 +1,9 @@
 (function() {
   function renderDailyProgressWidget() {
-    var t = today();
-    var log = S.log[t] || {};
+    var state = (typeof S !== 'undefined' && S) || (typeof window !== 'undefined' && window.S) || {};
+    var getToday = (typeof today === 'function') ? today : function() { return new Date().toISOString().slice(0, 10); };
+    var t = getToday();
+    var log = (state.log && state.log[t]) || {};
     var prayers = log.p || {};
     var prayedCount = 0;
     var totalPrayers = 5;
@@ -18,9 +20,9 @@
       prayers: prayerStatus,
       prayedCount: prayedCount,
       totalPrayers: totalPrayers,
-      xp: S.xp,
-      level: S.lv,
-      streak: S.cs
+      xp: state.xp,
+      level: state.lv,
+      streak: state.cs
     };
   }
 

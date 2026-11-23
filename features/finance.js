@@ -77,7 +77,21 @@
     ov.style.display = 'flex';
     ov.classList.add('show');
     ov.style.pointerEvents = 'auto';
-    setTimeout(() => { const inp = document.getElementById('customAmountInput'); if (inp) inp.focus(); }, 100);
+    setTimeout(() => {
+      const inp = document.getElementById('customAmountInput');
+      if (inp) {
+        inp.focus();
+        inp.addEventListener('keydown', function(e) {
+          if (e.key === 'Enter') {
+            e.preventDefault();
+            financeTracker.pickCustomAmount();
+          } else if (e.key === 'Escape') {
+            e.preventDefault();
+            financeTracker.cancelPick();
+          }
+        });
+      }
+    }, 100);
   }
 
   function hideAmountPicker() {

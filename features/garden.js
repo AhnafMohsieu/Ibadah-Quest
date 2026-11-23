@@ -67,13 +67,16 @@
       h += `<circle cx="60" cy="46" r="44" fill="var(--accent)" opacity="0.12"/>`;
       h += `<path d="M88 18 a9 9 0 1 0 2 11 a11 11 0 1 1 -2 -11 Z" fill="var(--accent)" opacity="0.9"/>`;
     }
-    return `<svg class="garden-svg" viewBox="0 0 120 132">${h}</svg>`;
+    return `<svg class="garden-svg" viewBox="0 0 120 132" role="img" aria-label="Spiritual Garden tree at stage ${stage} of 7">${h}</svg>`;
   }
   let lastTree = null;
   function renderGarden() {
     try {
       const el = document.getElementById('gardenArea');
-      if (!el || !SpiritualGrowth.isVisible('garden')) {
+      const isGardenVisible = (typeof SpiritualGrowth !== 'undefined' && typeof SpiritualGrowth.isVisible === 'function')
+        ? SpiritualGrowth.isVisible('garden')
+        : true;
+      if (!el || !isGardenVisible) {
         if (el) el.innerHTML = '';
         return;
       }

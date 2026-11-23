@@ -1,7 +1,9 @@
 (function() {
   function renderDhikrCounterWidget() {
-    var t = today();
-    var sessions = S.dhikrSessions || [];
+    var state = (typeof S !== 'undefined' && S) || (typeof window !== 'undefined' && window.S) || {};
+    var getToday = (typeof today === 'function') ? today : function() { return new Date().toISOString().slice(0, 10); };
+    var t = getToday();
+    var sessions = state.dhikrSessions || [];
     var lastSession = null;
     var todayTotal = 0;
 

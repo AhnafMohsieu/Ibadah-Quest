@@ -112,7 +112,10 @@
         <label for="goalDeadline">Deadline</label>
         <input type="date" id="goalDeadline" value="${today(new Date(Date.now()+30*86400000))}" />
       </div>
-      <button class="dr-close" onclick="addPersonalGoal(document.getElementById('goalType').value, parseInt(document.getElementById('goalTarget').value)||10, document.getElementById('goalDeadline').value);closeToastOverlay();">Add</button>
+      <div style="display:flex;gap:8px;margin-top:16px;">
+        <button class="dr-close" style="flex:1;" onclick="addPersonalGoal(document.getElementById('goalType').value, parseInt(document.getElementById('goalTarget').value)||10, document.getElementById('goalDeadline').value);closeToastOverlay();">Add</button>
+        <button class="onboarding-btn" style="flex:1;background:transparent;border:1px solid var(--border);color:var(--text2);" onclick="closeToastOverlay();">Cancel</button>
+      </div>
     </div>`;
     ov.style.display = 'flex';
     ov.classList.add('show');

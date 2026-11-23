@@ -54,7 +54,7 @@
         <div class="showcase-rarity" style="background:${color}">${a.tier}</div>
         <div class="showcase-name">${a.name}</div>
         <div class="showcase-desc">${a.desc}</div>
-        <button class="showcase-remove" onclick="unfeatureAchievement('${a.id}')">✕</button>
+        <button class="showcase-remove" onclick="unfeatureAchievement('${a.id}')" aria-label="Remove ${a.name} from showcase">✕</button>
       </div>`;
     });
     h += '</div>';
@@ -66,7 +66,7 @@
         const isFeatured = featured.some(f => f.id === a.id);
         h += `<div class="showcase-item ${isFeatured ? 'featured' : ''}" style="border-color:${color}">
           <span class="showcase-item-name">${a.name}</span>
-          ${!isFeatured ? `<button onclick="featureAchievement('${a.id}')">+</button>` : ''}
+          ${!isFeatured ? `<button onclick="featureAchievement('${a.id}')" aria-label="Feature ${a.name} in showcase">+</button>` : ''}
         </div>`;
       });
       h += '</div>';

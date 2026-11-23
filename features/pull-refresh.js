@@ -39,13 +39,13 @@
         indicator.style.opacity = '1';
         indicator.classList.add('refreshing');
         if (typeof refreshContent === 'function') {
-          refreshContent();
-          setTimeout(() => {
-            indicator.style.transform = 'translateY(-50px)';
-            indicator.style.opacity = '0';
-            indicator.classList.remove('refreshing');
-          }, 1000);
+          try { refreshContent(); } catch (e) { console.warn('refreshContent failed:', e); }
         }
+        setTimeout(() => {
+          indicator.style.transform = 'translateY(-50px)';
+          indicator.style.opacity = '0';
+          indicator.classList.remove('refreshing');
+        }, 1000);
       } else {
         indicator.style.transform = 'translateY(-50px)';
         indicator.style.opacity = '0';
