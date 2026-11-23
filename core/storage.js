@@ -133,15 +133,26 @@
     var sessions = window.S && window.S.dhikrSessions;
     if (!Array.isArray(sessions) || sessions.length < 100) return;
     var cutoff = Date.now() - 7 * 86400000;
-    var recent = sessions.filter(function(s) { return s.ts >= cutoff; });
-    var old = sessions.filter(function(s) { return s.ts < cutoff; });
+    var getTs = function(s) {
+      if (typeof s.ts === 'number') return s.ts;
+      if (typeof s.timestamp === 'number') return s.timestamp;
+      if (s.date) {
+        var parsed = new Date(s.date + 'T00:00:00').getTime();
+        if (!isNaN(parsed)) return parsed;
+      }
+      return 0;
+    };
+    var recent = sessions.filter(function(s) { return getTs(s) >= cutoff; });
+    var old = sessions.filter(function(s) { return getTs(s) < cutoff; });
     if (old.length === 0) return;
     var aggregates = {};
     for (var i = 0; i < old.length; i++) {
       var s = old[i];
-      var dateKey = new Date(s.ts).toISOString().slice(0, 10);
-      var key = dateKey + ':' + (s.type || 'unknown');
-      if (!aggregates[key]) aggregates[key] = { date: dateKey, type: s.type, count: 0 };
+      var ts = getTs(s);
+      var dateKey = s.date || (ts > 0 ? new Date(ts).toISOString().slice(0, 10) : 'archived');
+      var typeKey = s.type !== undefined ? s.type : (s.dhikrId !== undefined ? s.dhikrId : 'unknown');
+      var key = dateKey + ':' + typeKey;
+      if (!aggregates[key]) aggregates[key] = { date: dateKey, type: typeKey, dhikrId: typeKey, ts: ts, count: 0 };
       aggregates[key].count += (s.count || 1);
     }
     window.S.dhikrSessions = recent.concat(Object.values(aggregates));

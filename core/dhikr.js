@@ -44,7 +44,7 @@
       S.dhikrCounters[idx] = 0;
     }
     if (!S.dhikrSessions) S.dhikrSessions = [];
-    S.dhikrSessions.push({ date: today(), dhikrId: idx, count: cycleCount, timestamp: Date.now() });
+    S.dhikrSessions.push({ date: today(), dhikrId: idx, type: idx, count: cycleCount, timestamp: Date.now(), ts: Date.now() });
     if (!S.dhikrStats) S.dhikrStats = { total: {}, daily: {}, streak: 0, bestStreak: 0, lastSessionDate: null, badges: [], achievements: [] };
     S.dhikrStats.total[idx] = (S.dhikrStats.total[idx] || 0) + 1;
     const t = today();
