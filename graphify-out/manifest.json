@@ -156,9 +156,9 @@
     "semantic_hash": ""
   },
   "core/tabs.js": {
-    "mtime": 1795369573.1541998,
-    "seen": 1795369609.6614552,
-    "ast_hash": "8fb32ebf817512d194cfa0da8db67209",
+    "mtime": 1795403477.2621093,
+    "seen": 1795403649.569113,
+    "ast_hash": "a57f83f5da6b52edfb8b73a5668c393a",
     "semantic_hash": ""
   },
   "core/themes.js": {
@@ -2673,6 +2673,12 @@
     "mtime": 1795360281.5241764,
     "seen": 1795362392.6949205,
     "ast_hash": "2a32b547eed4e334a21b3ba975ec9f33",
+    "semantic_hash": ""
+  },
+  "tests/cross-tab-routing.test.js": {
+    "mtime": 1795403582.1937666,
+    "seen": 1795403649.5702093,
+    "ast_hash": "6570b412dbb392db3f49fc96e997ab7c",
     "semantic_hash": ""
   },
   ".opencode/package-lock.json": {

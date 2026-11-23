@@ -267,6 +267,26 @@
     return sections[sectionName] || null;
   }
 
+  function findCategoryForTab(tabId) {
+    if (typeof window === 'undefined' || !window.TAB_GROUPS) return null;
+    var cats = Object.keys(window.TAB_GROUPS);
+    for (var i = 0; i < cats.length; i++) {
+      var cat = cats[i];
+      var groups = window.TAB_GROUPS[cat];
+      if (!Array.isArray(groups)) continue;
+      for (var j = 0; j < groups.length; j++) {
+        var item = groups[j];
+        if (item.id === tabId) return cat;
+        if (Array.isArray(item.tabs)) {
+          for (var k = 0; k < item.tabs.length; k++) {
+            if (item.tabs[k].id === tabId) return cat;
+          }
+        }
+      }
+    }
+    return null;
+  }
+
   function activateTab(tabId, btn) {
     document.querySelectorAll('.t2-btn, .t3-btn').forEach(function(b) {
       if (b.getAttribute('data-tab') === tabId) {
@@ -285,6 +305,39 @@
     if (window.S) { window.S.lastSub = tabId; window.saveState(); }
     document.body.setAttribute('data-active-tab', tabId);
     var currentCat = (window.S && window.S.lastCat) || 'ibadah';
+    var ownerCat = findCategoryForTab(tabId);
+    if (ownerCat && ownerCat !== currentCat) {
+      currentCat = ownerCat;
+      if (window.S) { window.S.lastCat = currentCat; window.saveState(); }
+      document.querySelectorAll('.t1-btn, .bnav-btn').forEach(function(el) {
+        var isMatch = el.getAttribute('data-cat') === currentCat;
+        el.classList.toggle('active', isMatch);
+        el.setAttribute('aria-selected', isMatch ? 'true' : 'false');
+      });
+      var grp = window.TAB_GROUPS[currentCat] || [];
+      var t2 = document.getElementById('tier2Tabs');
+      var t3w = document.getElementById('tier3Wrap');
+      if (t2) {
+        var hasMulti = grp.length > 1 && Array.isArray(grp[0].tabs);
+        var isSingleWithTabs = grp.length === 1 && Array.isArray(grp[0].tabs);
+        if (hasMulti) {
+          t2.classList.remove('surah-grid');
+          t2.classList.add('cat-chips');
+          t2.innerHTML = grp.map(function(c, i) {
+            return '<button class="cat-chip ' + (i === 0 ? 'active' : '') + '" onclick="window.selectCategory(\'' + c.id + '\', this)" role="tab" aria-selected="' + (i === 0 ? 'true' : 'false') + '"><span>' + window.iqIcon(c.icon || c.id) + '</span> ' + t(c.label) + '</button>';
+          }).join('');
+          if (t3w) t3w.style.display = '';
+        } else {
+          t2.classList.remove('cat-chips');
+          t2.classList.remove('surah-grid');
+          var tList = isSingleWithTabs ? grp[0].tabs : grp;
+          t2.innerHTML = tList.map(function(p, i) {
+            return '<button data-tab="' + p.id + '" class="t2-btn ' + (i === 0 ? 'active' : '') + '" onclick="window.activateTab(\'' + p.id + '\', this)" role="tab" aria-selected="' + (i === 0 ? 'true' : 'false') + '"><span>' + window.iqIcon(p.icon || p.id) + '</span> ' + t(p.label) + '</button>';
+          }).join('');
+          if (t3w) t3w.style.display = 'none';
+        }
+      }
+    }
     var catGroups = window.TAB_GROUPS[currentCat] || [];
     var activeGrp = null;
     if (Array.isArray(catGroups)) {
