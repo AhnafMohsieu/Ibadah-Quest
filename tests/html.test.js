@@ -71,7 +71,7 @@ test('main.css uses modern iQ teal-mint tokens', () => {
 });
 
 test('index.html registers the service worker and update banner', () => {
-  assert.ok(html.includes("navigator.serviceWorker.register('sw.js?v=60')"));
+  assert.ok(html.includes("navigator.serviceWorker.register('sw.js?v=61')"));
   assert.ok(html.includes("'SKIP_WAITING'"));
   assert.ok(html.includes('swUpdateBanner'));
 });
@@ -94,7 +94,8 @@ test('hadith/dhikr audio modules wired with versions and load order', () => {
   assert.ok(html.includes('<script src="data/hadith-normalize.js?v=1"></script>'));
   assert.ok(html.includes('<script src="features/hadith-library.js?v=3" defer></script>'));
   assert.ok(html.includes('<script src="features/tafsir-library.js?v=3" defer></script>'));
-  assert.ok(html.includes('styles/main.css?v=47'));
+  assert.ok(html.includes('styles/main.css?v=48'));
+  assert.ok(html.includes('features/daily-content.js?v=2'));
   assert.ok(html.indexOf('core/content-cache.js') < html.indexOf('core/state.js'), 'cache module loads before state');
   assert.ok(html.indexOf('core/audio.js') < html.indexOf('core/static.js'), 'audio module loads before renderers');
   assert.ok(html.indexOf('features/tafsir-library.js') > html.indexOf('core/static.js'), 'deferred features load after renderers');
@@ -750,6 +751,12 @@ test('Option 3 shell & remodeled 2x2 Bento drawer tab section', () => {
   assert.ok(html.includes('features/masjid-checkins.js?v=1'), 'masjid-checkins script missing');
   assert.ok(html.includes('features/iq-shell.js?v=2'), 'iq-shell script v=2 missing');
   assert.ok(renderTabs.includes("menuBtn.style.display = 'inline-flex'"), 'top-left 3-dot menu button must stay visible on all views');
+  assert.ok(html.includes('<span class="iq-top-brand"><strong>IQ</strong></span>'), 'top-left brand must render uppercase IQ');
+  const heroIdx = html.indexOf('class="hero-strip"');
+  const carIdx = html.indexOf('id="dailyCarousel"');
+  const heroCloseIdx = html.indexOf('<!-- /hero-strip -->');
+  assert.ok(heroIdx > -1 && carIdx > heroIdx && carIdx < heroCloseIdx, 'dailyCarousel must live inside top hero-strip');
+  assert.ok(css.includes('.carousel-nav-btn'), 'hero carousel prev/next arrow styles missing');
   assert.ok(css.includes('.iq-curved-header'), 'curved header CSS missing');
   assert.ok(css.includes('.bnav-center-fab'), 'elevated center dock CSS missing');
   assert.ok(css.includes('.iq-sheet-overlay'), 'slide-over sheet overlay CSS missing');
