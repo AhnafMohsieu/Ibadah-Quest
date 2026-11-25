@@ -687,6 +687,7 @@ Object.keys(NEW_POOLS).forEach(k => {
         // rendered by init()'s renderAll() already; this eliminates the boot
         // double-render of the ~13 always-available panels.
         try { if (window.renderDeferred) window.renderDeferred(); } catch(e) { console.error('Post-defer re-render failed:', e); }
+        try { if (window.renderIqFeed) window.renderIqFeed(); } catch(e) {}
         try { if (window.renderDailyContent) window.renderDailyContent(); } catch(e) {}
         try { if (window.renderCombos) window.renderCombos(); } catch(e) {}
         try { if (window.renderAchievementShowcase) window.renderAchievementShowcase(); } catch(e) {}
@@ -756,6 +757,11 @@ Object.keys(NEW_POOLS).forEach(k => {
       extraDeedsBack: appAction('extraDeedsBack'),
       openVolPrayers: appAction('openVolPrayers'),
       volPrayersBack: appAction('volPrayersBack'),
+      openMasjidCheckins: appAction('openMasjidCheckins'),
+      openChallengeDetail: appAction('openChallengeDetail'),
+      openIqDrawer: appAction('openIqDrawer'),
+      openNotifDrawer: appAction('openNotifDrawer'),
+      closeActiveSheet: appAction('closeActiveSheet'),
       toggleAvatarPicker: function() {
         if (window.Auth && typeof window.Auth.show === 'function') {
           window.Auth.show('avatar');

@@ -55,24 +55,24 @@ test('Journeys tab is wired into the ibadah group', () => {
 
 test('index.html declares the PWA manifest and theme color', () => {
   assert.ok(html.includes('<link rel="manifest" href="manifest.json">'));
-  assert.ok(html.includes('<meta name="theme-color" content="#f8f9fa">'));
+  assert.ok(html.includes('<meta name="theme-color" content="#075e64">'));
 });
 
 test('index.html does NOT load Tailwind CDN', () => {
   assert.ok(!html.includes('tailwindcss'));
 });
 
-test('index.html theme-color uses light base', () => {
-  assert.ok(html.includes('content="#f8f9fa"'));
+test('index.html theme-color uses iQ teal header base', () => {
+  assert.ok(html.includes('content="#075e64"'));
 });
 
-test('main.css uses modern light tokens', () => {
+test('main.css uses modern iQ teal-mint tokens', () => {
   assert.ok(css.includes('--accent'));
-  assert.ok(css.includes('--bg: #f8f9fa'));
+  assert.ok(css.includes('--bg: #f2fbf8'));
 });
 
 test('index.html registers the service worker and update banner', () => {
-  assert.ok(html.includes("navigator.serviceWorker.register('sw.js?v=57')"));
+  assert.ok(html.includes("navigator.serviceWorker.register('sw.js?v=58')"));
   assert.ok(html.includes("'SKIP_WAITING'"));
   assert.ok(html.includes('swUpdateBanner'));
 });
@@ -95,7 +95,7 @@ test('hadith/dhikr audio modules wired with versions and load order', () => {
   assert.ok(html.includes('<script src="data/hadith-normalize.js?v=1"></script>'));
   assert.ok(html.includes('<script src="features/hadith-library.js?v=3" defer></script>'));
   assert.ok(html.includes('<script src="features/tafsir-library.js?v=3" defer></script>'));
-  assert.ok(html.includes('styles/main.css?v=44'));
+  assert.ok(html.includes('styles/main.css?v=45'));
   assert.ok(html.indexOf('core/content-cache.js') < html.indexOf('core/state.js'), 'cache module loads before state');
   assert.ok(html.indexOf('core/audio.js') < html.indexOf('core/static.js'), 'audio module loads before renderers');
   assert.ok(html.indexOf('features/tafsir-library.js') > html.indexOf('core/static.js'), 'deferred features load after renderers');
@@ -131,9 +131,9 @@ test('redesign keeps core markers and PWA meta intact', () => {
   assert.ok(tabs.includes("id: 'journeys'"));
 });
 
-test('modern light theme: uses the new bg and accent colors', () => {
-  assert.ok(css.includes('--bg: #f8f9fa'));
-  assert.ok(css.includes('--accent: #c9a84c'));
+test('modern light theme: uses the new iQ mint bg and teal accent colors', () => {
+  assert.ok(css.includes('--bg: #f2fbf8'));
+  assert.ok(css.includes('--accent: #0b8a82'));
   assert.ok(css.includes('backdrop-filter'));
 });
 
@@ -146,7 +146,7 @@ test('theme: light-family palette blocks exist in main.css', () => {
   for (const key of ['serene','royal','midnight','cream']) {
     assert.ok(css.includes(`html[data-theme="${key}"]`), `missing palette block for ${key}`);
   }
-  assert.ok(css.includes('--bg: #f8f9fa'));   // light (default) :root block present
+  assert.ok(css.includes('--bg: #f2fbf8'));   // light (default) :root block present
   assert.ok(!css.includes('html[data-theme="dark"]'), 'dark palette block must be removed');
   assert.ok(!css.includes('html[data-theme="night"]'), 'night palette block must be removed');
   assert.ok(!css.includes('html[data-theme="serene-dark"]'), 'serene-dark palette block must be removed');
@@ -156,7 +156,7 @@ test('theme: light-family palette blocks exist in main.css', () => {
 test('theme: index.html pre-paint script sets data-theme from localStorage', () => {
   assert.ok(html.includes("localStorage.getItem('iqTheme')"));
   assert.ok(html.includes("setAttribute('data-theme'"));
-  assert.ok(html.includes('styles/main.css?v=44'));
+  assert.ok(html.includes('styles/main.css?v=45'));
 });
 
 test('theme: picker references metadata and setTheme wiring', () => {
@@ -815,4 +815,21 @@ test('SP2: haptics helper + call sites', () => {
   assert.ok(renderStatic.includes('window.iqHaptic(10)'), 'static toggles must fire haptics');
   assert.ok(prayersSrc.includes('window.iqHaptic(10)'), 'prayer toggles must fire haptics');
   assert.ok(questsSrc.includes('window.iqHaptic(10)'), 'quest toggle must fire haptics');
+});
+
+test('Option 3 shell: iQ curved header, drawers, feed, slide-over sheets, and elevated center dock', () => {
+  assert.ok(html.includes('id="iqMenuBtn"'), 'hamburger drawer button missing');
+  assert.ok(html.includes('id="iqNotifBtn"'), 'notification bell button missing');
+  assert.ok(html.includes('id="iqHeroChallenge"'), 'floating hero challenge summary missing');
+  assert.ok(html.includes('id="iqFeedArea"'), 'daily challenges feed container missing');
+  assert.ok(html.includes('id="iqDrawer"'), 'slide-out navigation drawer missing');
+  assert.ok(html.includes('id="iqNotifDrawer"'), 'notifications drawer missing');
+  assert.ok(html.includes('id="iqChallengeSheet"'), 'challenge progress ring slide-over sheet missing');
+  assert.ok(html.includes('id="iqMasjidSheet"'), 'masjid check-ins slide-over sheet missing');
+  assert.ok(html.includes('id="bnavCenterFab"'), 'elevated center dock crescent button missing');
+  assert.ok(html.includes('features/masjid-checkins.js?v=1'), 'masjid-checkins script missing');
+  assert.ok(html.includes('features/iq-shell.js?v=1'), 'iq-shell script missing');
+  assert.ok(css.includes('.iq-curved-header'), 'curved header CSS missing');
+  assert.ok(css.includes('.bnav-center-fab'), 'elevated center dock CSS missing');
+  assert.ok(css.includes('.iq-sheet-overlay'), 'slide-over sheet overlay CSS missing');
 });

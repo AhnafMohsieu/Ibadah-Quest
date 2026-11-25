@@ -22,7 +22,7 @@ const expected = [
   'hadithBack','playQuranVerse','playSurah','stopSurah','setQuranReciter','playJuz','updateJuzButton',
   'calPrevMonth','calNextMonth','calGoToday','selectAvatar','selectTitle','selectFrame','setTheme',
   'toggleTheme','toggleNotifications','buy','tapDhikr','resetDhikr','nextDhikr','toggleDhikrHaptic','activateTab',
-  'switchCategory','toggleAvatarPicker'
+  'switchCategory','toggleAvatarPicker','openMasjidCheckins','openChallengeDetail','openIqDrawer','openNotifDrawer','closeActiveSheet'
 ];
 
 // Build a DOM stub

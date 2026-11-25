@@ -55,6 +55,13 @@
       var sphIcon = document.getElementById('sphIcon');
       var sphTitle = document.getElementById('sphTitle');
       var sphDesc = document.getElementById('sphDesc');
+      var backBtn = document.getElementById('iqHeaderBackBtn');
+      var menuBtn = document.getElementById('iqMenuBtn');
+      if (backBtn && menuBtn) {
+        var isHome = (catId === 'ibadah' && activeTab === 'today');
+        backBtn.style.display = isHome ? 'none' : 'inline-flex';
+        menuBtn.style.display = isHome ? 'inline-flex' : 'none';
+      }
       if (sph && sphIcon && sphTitle && sphDesc) {
         if (catId === 'ibadah' && activeTab === 'today') {
           sph.style.display = 'none';

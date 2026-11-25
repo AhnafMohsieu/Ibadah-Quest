@@ -18,9 +18,9 @@
     "semantic_hash": ""
   },
   "core/actions.js": {
-    "mtime": 1795403038.7838807,
-    "seen": 1795403272.0432017,
-    "ast_hash": "5a65dae88094563c096bbf22e45abf4e",
+    "mtime": 1795619558.9163175,
+    "seen": 1795620074.6486423,
+    "ast_hash": "bec9a4c00a331d1828b25e16cd1f25bb",
     "semantic_hash": ""
   },
   "core/audio.js": {
@@ -66,9 +66,9 @@
     "semantic_hash": ""
   },
   "core/dynamic.js": {
-    "mtime": 1795369509.8594115,
-    "seen": 1795369609.6613274,
-    "ast_hash": "a0b1d0407e2607d0973301e5f69c9c1c",
+    "mtime": 1795619665.040029,
+    "seen": 1795620074.6486783,
+    "ast_hash": "dc7ec5bfea25145abb0545421b296d3b",
     "semantic_hash": ""
   },
   "core/error-tap.js": {
@@ -96,9 +96,9 @@
     "semantic_hash": ""
   },
   "core/precache-manifest.js": {
-    "mtime": 1795402720.2107358,
-    "seen": 1795403272.0432844,
-    "ast_hash": "7dcf4cf1bb34fe86ecde1baac4576a46",
+    "mtime": 1795619668.389652,
+    "seen": 1795620074.6486988,
+    "ast_hash": "37dcfece7ac1f84b8bc8279ff535ca8e",
     "semantic_hash": ""
   },
   "core/quests.js": {
@@ -138,9 +138,9 @@
     "semantic_hash": ""
   },
   "core/state.js": {
-    "mtime": 1788909450.488681,
-    "seen": 1795355635.9460073,
-    "ast_hash": "3aa358abe67602c4a880e503573aa767",
+    "mtime": 1795619095.8486364,
+    "seen": 1795620074.6487272,
+    "ast_hash": "2d202c6f6d7521f38398ecd1141dc5da",
     "semantic_hash": ""
   },
   "core/static.js": {
@@ -156,9 +156,9 @@
     "semantic_hash": ""
   },
   "core/tabs.js": {
-    "mtime": 1795403477.2621093,
-    "seen": 1795403649.569113,
-    "ast_hash": "a57f83f5da6b52edfb8b73a5668c393a",
+    "mtime": 1795619533.7281218,
+    "seen": 1795620074.6487389,
+    "ast_hash": "8e3e843fa1c58f7b7bc9ed4863d2b15d",
     "semantic_hash": ""
   },
   "core/themes.js": {
@@ -210,9 +210,9 @@
     "semantic_hash": ""
   },
   "data/icons.js": {
-    "mtime": 1795360281.6104167,
-    "seen": 1795362392.6935995,
-    "ast_hash": "5f91933aaf66bc32f759a7b3a144913c",
+    "mtime": 1795619112.5722525,
+    "seen": 1795620074.6487753,
+    "ast_hash": "875cf917eaf0b86fb170ec2ebad3388a",
     "semantic_hash": ""
   },
   "data/journeys.js": {
@@ -630,9 +630,9 @@
     "semantic_hash": ""
   },
   "data/theme-meta.js": {
-    "mtime": 1787165769.7364478,
-    "seen": 1795355635.946405,
-    "ast_hash": "aa8ee3c006f4391bea403afbf4c19b51",
+    "mtime": 1795619109.884082,
+    "seen": 1795620074.649055,
+    "ast_hash": "fd386c812f877e637acf39db874f66a2",
     "semantic_hash": ""
   },
   "data/tips-details.js": {
@@ -936,9 +936,9 @@
     "semantic_hash": ""
   },
   "manifest.json": {
-    "mtime": 1795357817.5386994,
-    "seen": 1795360212.6856768,
-    "ast_hash": "e6a10a84bd3ec2e037135d6c1d993525",
+    "mtime": 1795619106.5166216,
+    "seen": 1795620074.649273,
+    "ast_hash": "9b05a70d674f1a2d3d1a3e523eb98464",
     "semantic_hash": ""
   },
   "opencode.json": {
@@ -978,9 +978,9 @@
     "semantic_hash": ""
   },
   "src/core/state.js": {
-    "mtime": 1788901549.520463,
-    "seen": 1795355635.9466808,
-    "ast_hash": "74df03e907e874f962c2c122001a9d1a",
+    "mtime": 1795619101.2653484,
+    "seen": 1795620074.6493003,
+    "ast_hash": "32d7519f1d7b08542eb18f2a8c6ecc09",
     "semantic_hash": ""
   },
   "src/core/storage.js": {
@@ -1062,9 +1062,9 @@
     "semantic_hash": ""
   },
   "sw.js": {
-    "mtime": 1795402720.2116783,
-    "seen": 1795403272.0442548,
-    "ast_hash": "17f214169f267306ce527ab2e02865cb",
+    "mtime": 1795619653.3375037,
+    "seen": 1795620074.6493554,
+    "ast_hash": "9b9c08f9badab25c1815beb85e5c5bcc",
     "semantic_hash": ""
   },
   "tests/achievement-showcase.test.js": {
@@ -1086,9 +1086,9 @@
     "semantic_hash": ""
   },
   "tests/app-registry.test.js": {
-    "mtime": 1789507093.601738,
-    "seen": 1795355635.946773,
-    "ast_hash": "d9a3006d9d5a905cdcc741e1babc2831",
+    "mtime": 1795619049.2599895,
+    "seen": 1795620074.6493716,
+    "ast_hash": "923e93b4fb95a08804886d5882f2c503",
     "semantic_hash": ""
   },
   "tests/audio.test.js": {
@@ -1242,9 +1242,9 @@
     "semantic_hash": ""
   },
   "tests/html.test.js": {
-    "mtime": 1795360281.6451273,
-    "seen": 1795362392.6941595,
-    "ast_hash": "aa383af55fea5f8917c12fd52b7a2c2d",
+    "mtime": 1795619030.4180448,
+    "seen": 1795620074.649482,
+    "ast_hash": "d75204bc40d2dd977d3f333ad3dc83b0",
     "semantic_hash": ""
   },
   "tests/i18n.test.js": {
@@ -1284,9 +1284,9 @@
     "semantic_hash": ""
   },
   "tests/manifest.test.js": {
-    "mtime": 1786390887.9898791,
-    "seen": 1795355635.9469297,
-    "ast_hash": "642da34a1713522f59b838cf07acfd1d",
+    "mtime": 1795619755.711457,
+    "seen": 1795620074.6495132,
+    "ast_hash": "6311c618765d7ea8a598ce386a220c6b",
     "semantic_hash": ""
   },
   "tests/milestones.test.js": {
@@ -1368,9 +1368,9 @@
     "semantic_hash": ""
   },
   "tests/schema-contract.test.js": {
-    "mtime": 1789506997.4456584,
-    "seen": 1795355635.9469924,
-    "ast_hash": "80d481adcfffe52df86901c744e75ef1",
+    "mtime": 1795618985.7148597,
+    "seen": 1795620074.6495752,
+    "ast_hash": "ea9febe7c63b3f5c9586208d949b0454",
     "semantic_hash": ""
   },
   "tests/search.test.js": {
@@ -1422,9 +1422,9 @@
     "semantic_hash": ""
   },
   "tests/sw-manifest.test.js": {
-    "mtime": 1792063028.4009423,
-    "seen": 1795355635.9470336,
-    "ast_hash": "95597657e3aef398a924d36c2529c812",
+    "mtime": 1795619033.781747,
+    "seen": 1795620074.6496105,
+    "ast_hash": "c50c6631795c779d20348db38c0d20fd",
     "semantic_hash": ""
   },
   "tests/sw.test.js": {
@@ -1896,9 +1896,9 @@
     "semantic_hash": ""
   },
   "index.html": {
-    "mtime": 1795367926.657097,
-    "seen": 1795368384.5469694,
-    "ast_hash": "77d84bce4d411e355f3c4d8992b99b7f",
+    "mtime": 1795619553.9354012,
+    "seen": 1795620074.649936,
+    "ast_hash": "c92299c5146ce95035536122a0605f3d",
     "semantic_hash": ""
   },
   "src/pages/ibadah/ibadah.html": {
@@ -2592,9 +2592,9 @@
     "semantic_hash": ""
   },
   "assets/icons/icon.svg": {
-    "mtime": 1795360281.594398,
-    "seen": 1795362392.694901,
-    "ast_hash": "30b7117306974997ccda0beddc0a537b",
+    "mtime": 1795619103.9758823,
+    "seen": 1795620074.6504216,
+    "ast_hash": "1f3ec3906497d98ce19a26b2f36b251b",
     "semantic_hash": ""
   },
   "features/auth.js": {
@@ -2679,6 +2679,60 @@
     "mtime": 1795403582.1937666,
     "seen": 1795403649.5702093,
     "ast_hash": "6570b412dbb392db3f49fc96e997ab7c",
+    "semantic_hash": ""
+  },
+  "404.html": {
+    "mtime": 1795450926.8395514,
+    "seen": 1795451099.159769,
+    "ast_hash": "a3f414b626a1f68d038bfa232183dd53",
+    "semantic_hash": ""
+  },
+  "privacy.html": {
+    "mtime": 1795450926.8887033,
+    "seen": 1795451099.160149,
+    "ast_hash": "d8316959ff23c0fbb3635ee3f8ee38f6",
+    "semantic_hash": ""
+  },
+  "robots.txt": {
+    "mtime": 1795450926.7791243,
+    "seen": 1795451099.1601553,
+    "ast_hash": "55d203557ad3b72780a4a99245667aee",
+    "semantic_hash": ""
+  },
+  "features/iq-shell.js": {
+    "mtime": 1795619529.2255344,
+    "seen": 1795620074.6491423,
+    "ast_hash": "cf88e96062f56baa997b7191e7d11896",
+    "semantic_hash": ""
+  },
+  "features/masjid-checkins.js": {
+    "mtime": 1795619416.0207217,
+    "seen": 1795620074.64915,
+    "ast_hash": "636b94bcbb87699a820a3046fb92e1f2",
+    "semantic_hash": ""
+  },
+  "tests/iq-shell.test.js": {
+    "mtime": 1795619003.3584225,
+    "seen": 1795620074.6494973,
+    "ast_hash": "475fd7b56c2504c252b302c9acb4343e",
+    "semantic_hash": ""
+  },
+  "tests/masjid-checkins.test.js": {
+    "mtime": 1795619000.1732662,
+    "seen": 1795620074.6495175,
+    "ast_hash": "fcef02d71e7cf54cf8ef5b4d47372e72",
+    "semantic_hash": ""
+  },
+  "docs/superpowers/plans/2026-11-25-iq-modern-restructure.md": {
+    "mtime": 1795618904.955422,
+    "seen": 1795620074.6498098,
+    "ast_hash": "c47816f878c499782ae20d3df7a55bb6",
+    "semantic_hash": ""
+  },
+  "docs/superpowers/specs/2026-11-25-iq-modern-restructure-design.md": {
+    "mtime": 1795618868.1138353,
+    "seen": 1795620074.6499279,
+    "ast_hash": "43fa0b3fa15f6a2f79bdfbeefa02148c",
     "semantic_hash": ""
   },
   ".opencode/package-lock.json": {

@@ -50,6 +50,7 @@ function resolveCurrentUser() {
       lastDailyRitual:null, lastDailySummary:null, lastWeeklySummary:null, lastWeeklyConsistency:null,
       healthXpClaimed:{}, ownedTitles:[], activeTitle:null, ownedFrames:[], activeFrame:null,
       lastAllPrayersSurprise:null, dhikrSettings:{haptic:true},
+      masjidCheckIns:[], dailyChallengeGoals:{dhikr:500,quranMinutes:20,prayers:5},
       schemaVersion:STATE_SCHEMA_VERSION, bookmarks:[]
     };
   }
@@ -119,6 +120,16 @@ function resolveCurrentUser() {
     if (p.lastActiveDate && typeof p.lastActiveDate === 'string') {
       if (!p.lad || p.lastActiveDate > p.lad) p.lad = p.lastActiveDate;
       delete p.lastActiveDate;
+    }
+    if (!Array.isArray(p.masjidCheckIns)) p.masjidCheckIns = [];
+    if (!p.dailyChallengeGoals || typeof p.dailyChallengeGoals !== 'object') {
+      p.dailyChallengeGoals = Object.assign({}, d.dailyChallengeGoals);
+    } else {
+      for (var gk of Object.keys(d.dailyChallengeGoals)) {
+        if (!(gk in p.dailyChallengeGoals) || typeof p.dailyChallengeGoals[gk] !== 'number') {
+          p.dailyChallengeGoals[gk] = d.dailyChallengeGoals[gk];
+        }
+      }
     }
     if (typeof p.log !== 'object' || typeof p.td !== 'object') return migrateState(p, sourceVersion);
     for (var dk in p.log) {

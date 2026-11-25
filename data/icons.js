@@ -190,7 +190,8 @@ const IQ_IDS = {
   'snowflake':'snow',
   /* Category-id safety nets (generic renderers fall back to the id as icon key) */
   'core':'home', 'worship':'mosque', 'tracking':'bar-chart-3',
-  'names':'sparkles'
+  'names':'sparkles',
+  'masjid':'mosque', 'compass':'target'
 };
 
 /* fallback KEY used when nothing matches */

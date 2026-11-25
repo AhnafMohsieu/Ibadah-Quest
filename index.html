@@ -4,27 +4,63 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://api.aladhan.com https://cdn.jsdelivr.net https://api.quran.com; media-src 'self' https://verses.quran.com; worker-src 'self'">
-  <title>Ibadah Quest</title>
+  <title>Ibadah Quest — Offline Islamic Worship, Prayer &amp; Dhikr Tracker</title>
+  <meta name="description" content="Ibadah Quest is an offline-first Islamic worship tracker PWA. Log your daily prayers, adhkar, Quran recitation, and spiritual habits with zero tracking and full privacy.">
+  <meta name="keywords" content="Ibadah Quest, Islamic tracker, prayer times, namaz log, dhikr counter, Quran tracker, spiritual habits, Islamic PWA">
+  <link rel="canonical" href="https://ahnafmohsieu.github.io/Ibadah-Quest/">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://ahnafmohsieu.github.io/Ibadah-Quest/">
+  <meta property="og:title" content="Ibadah Quest — Offline Islamic Worship &amp; Prayer Tracker">
+  <meta property="og:description" content="Track your five daily prayers, dhikr, Quran reading, voluntary acts, and build lasting spiritual habits offline.">
+  <meta property="og:image" content="https://ahnafmohsieu.github.io/Ibadah-Quest/docs/screenshots/desktop.png">
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:url" content="https://ahnafmohsieu.github.io/Ibadah-Quest/">
+  <meta name="twitter:title" content="Ibadah Quest — Offline Islamic Worship &amp; Prayer Tracker">
+  <meta name="twitter:description" content="Track your five daily prayers, dhikr, Quran reading, voluntary acts, and build lasting spiritual habits offline.">
+  <meta name="twitter:image" content="https://ahnafmohsieu.github.io/Ibadah-Quest/docs/screenshots/desktop.png">
+
+  <!-- Structured Data / JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Ibadah Quest",
+    "url": "https://ahnafmohsieu.github.io/Ibadah-Quest/",
+    "applicationCategory": "LifestyleApplication",
+    "operatingSystem": "All",
+    "browserRequirements": "Requires JavaScript. Requires HTML5.",
+    "description": "An offline-first Islamic worship tracker PWA for logging daily prayers, dhikr, Quran recitation, and spiritual milestones.",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    }
+  }
+  </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Noto+Naskh+Arabic:wght@400;500;600;700&family=Sora:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     /* Critical above-the-fold CSS */
-    :root{--bg:#f8f9fa;--bg-accent:#f1f3f5;--card-bg:#ffffff;--card-border:#e9ecef;--shadow-sm:0 1px 2px rgba(0,0,0,0.05);--shadow-md:0 2px 8px rgba(0,0,0,0.06);--text:#1a1a2e;--text2:#6b7280;--text3:#9ca3af;--accent:#c9a84c;--accent-light:#d4b96a;--accent-dark:#b8952f;--accent-bg:rgba(201,168,76,0.08);--accent-border:rgba(201,168,76,0.2);--green:#16a34a;--green-bg:rgba(22,163,74,0.08);--orange:#d97706;--red:#dc2626;--red-bg:rgba(220,38,38,0.08);--border:#e5e7eb;--border-light:#f3f4f6;--radius:12px;--radius-sm:8px;--radius-lg:16px;--font:'Sora',system-ui,-apple-system,'Segoe UI',sans-serif;--font-arabic:'Noto Naskh Arabic','Amiri',serif;--font-heading:'Sora',system-ui,sans-serif;--transition:150ms cubic-bezier(0.4,0,0.2,1);line-height:1.6}
+    :root{--bg:#f2fbf8;--bg-accent:#e4f5f0;--card-bg:#ffffff;--card-border:rgba(11,122,117,0.12);--shadow-sm:0 2px 8px rgba(7,67,75,0.05);--shadow-md:0 6px 20px rgba(7,67,75,0.08);--text:#0b2528;--text2:#4b6b6e;--text3:#7b9699;--accent:#0b8a82;--accent-light:#14b8a6;--accent-dark:#075e64;--accent-bg:rgba(11,138,130,0.10);--accent-border:rgba(11,138,130,0.22);--gold:#d4af37;--green:#16a34a;--green-bg:rgba(22,163,74,0.08);--orange:#d97706;--red:#dc2626;--red-bg:rgba(220,38,38,0.08);--border:rgba(11,122,117,0.14);--border-light:#e6f4f1;--radius:18px;--radius-sm:12px;--radius-lg:24px;--font:'Sora',system-ui,-apple-system,'Segoe UI',sans-serif;--font-arabic:'Noto Naskh Arabic','Amiri',serif;--font-heading:'Sora',system-ui,sans-serif;--transition:150ms cubic-bezier(0.4,0,0.2,1);line-height:1.6}
     *{margin:0;padding:0;box-sizing:border-box}
     html{overflow-x:clip}
     body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;-webkit-tap-highlight-color:transparent;line-height:1.6;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;opacity:1;transition:background 200ms ease,color 200ms ease}
     body.loading{opacity:0}
     .app{position:relative;z-index:1;max-width:min(62rem,100%);margin:0 auto;padding:0 16px 16px;overflow-x:clip}
-    .top-bar{position:sticky;top:0;z-index:100;display:flex;justify-content:space-between;align-items:center;padding:calc(10px + env(safe-area-inset-top, 0px)) 16px 10px;background:rgba(255,255,255,0.85);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--border);margin:0 -16px 12px}
-    .header{text-align:center;padding:24px 0 12px}
+    .top-bar{position:sticky;top:0;z-index:100;display:flex;justify-content:space-between;align-items:center;padding:calc(10px + env(safe-area-inset-top, 0px)) 16px 14px;background:linear-gradient(145deg,#07434b 0%,#0b7a75 60%,#14b8a6 100%);color:#fff;margin:0 -16px 14px;border-radius:0 0 26px 26px}
+    .header{text-align:center;padding:12px 0 8px}
     .header h1{font-family:var(--font-heading);font-size:clamp(1.4rem,4vw,2rem);font-weight:700;color:var(--text);letter-spacing:1px;margin:0}
-    .level-row{display:flex;align-items:center;justify-content:center;gap:16px;margin:12px auto 16px;flex-wrap:wrap;max-width:480px}
-    .streak-bar{background:var(--card-bg);border:1px solid var(--card-border);border-radius:var(--radius);padding:14px 20px;display:flex;align-items:center;gap:14px;margin-bottom:16px}
+    .level-row{display:flex;align-items:center;justify-content:center;gap:16px;margin:10px auto 12px;flex-wrap:wrap;max-width:480px}
+    .streak-bar{background:var(--card-bg);border:1px solid var(--card-border);border-radius:var(--radius);padding:14px 20px;display:flex;align-items:center;gap:14px;margin-bottom:14px}
     .tab-panel{display:none}
     .tab-panel.active{display:block}
   </style>
-  <link rel="preload" href="styles/main.css?v=44" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <link rel="preload" href="styles/main.css?v=45" as="style" onload="this.onload=null;this.rel='stylesheet'">
   <script>
     (function () {
       try { var t = localStorage.getItem('iqTheme'); if (t && t !== 'light') document.documentElement.setAttribute('data-theme', t); } catch (e) {}
@@ -67,13 +103,13 @@
       }, 1000);
     }, 8000);
   </script>
-  <script src="data/theme-meta.js?v=3"></script>
+  <script src="data/theme-meta.js?v=4"></script>
   <script src="core/error-tap.js?v=1"></script>
   <link rel="manifest" href="manifest.json">
   <link rel="icon" href="assets/icons/favicon.png" type="image/png">
   <link rel="icon" href="assets/icons/icon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="assets/icons/app-icon-192.png">
-  <meta name="theme-color" content="#f8f9fa">
+  <meta name="theme-color" content="#075e64">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -96,9 +132,21 @@
 
 <!-- INTRO OVERLAY -->
 <div id="introOverlay" class="intro-overlay">
-    
+    <svg class="iq-lattice-bg" viewBox="0 0 400 400" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <defs>
+        <pattern id="iqIntroStar" width="80" height="80" patternUnits="userSpaceOnUse">
+          <rect x="20" y="20" width="40" height="40" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+          <rect x="20" y="20" width="40" height="40" fill="none" stroke="rgba(212,175,55,0.08)" stroke-width="1" transform="rotate(45 40 40)"/>
+        </pattern>
+      </defs>
+      <rect width="100%" height="100%" fill="url(#iqIntroStar)"/>
+    </svg>
     <div class="intro-content">
       <div class="intro-glow" aria-hidden="true"></div>
+      <div class="intro-brand-mark" aria-hidden="true">
+        <span class="iq-wordmark"><strong>iQ</strong> IBADAH QUEST</span>
+        <span class="iq-brand-tag">Your Daily Spiritual Journey.</span>
+      </div>
             <div id="introBismillah" class="intro-bismillah">بِسْمِ ٱللَّهِ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ</div>
       <div id="introSub" class="intro-subtitle">In the Name of Allah,<br>The Most Merciful</div>
       <button id="introBtn" class="intro-btn" onclick="window.startJourney()" aria-label="Begin Your Quest">Begin Your Quest</button>
@@ -114,21 +162,26 @@
 <!-- Screen reader announcement region -->
 <div id="srAnnounce" class="sr-only" aria-live="polite" aria-atomic="true"></div>
 <div class="app">
-  <header class="top-bar" id="topBar">
+  <header class="top-bar iq-curved-header" id="topBar">
     <div class="geometric-bg" aria-hidden="true"></div>
     <div class="tb-left">
+      <button type="button" class="iq-icon-btn" id="iqMenuBtn" onclick="window.openIqDrawer && window.openIqDrawer()" aria-label="Open navigation drawer">&#9776;</button>
+      <button type="button" class="iq-icon-btn iq-back-btn" id="iqHeaderBackBtn" onclick="App.activateTab('today')" aria-label="Back to Today" style="display:none;">&lsaquo;</button>
+      <span class="iq-top-brand"><strong>iQ</strong></span>
       <span class="tb-level" id="tbLevel">Lv 1</span>
       <span class="tb-title" id="tbTitle">Muslim</span>
     </div>
 <div class="tb-right">
   <span class="tb-stat" id="tbXP">0 XP</span>
   <span class="tb-stat" id="tbStreak">0</span>
+  <button type="button" class="iq-icon-btn" id="iqNotifBtn" onclick="window.openNotifDrawer && window.openNotifDrawer()" aria-label="Open notifications">&#128276;</button>
     <button class="theme-btn" id="themeToggle" onclick="App.toggleTheme()" aria-label="Change color theme"><span class="theme-btn-icon" aria-hidden="true">🎨</span></button>
     </div>
   </header>
 
   <!-- ═══════════════ HERO HEADER ═══════════════ -->
   <div class="hero-strip">
+  <div id="iqHeroChallenge" class="iq-hero-challenge"></div>
   <div class="header">
     <div class="header-crescent" id="headerCrescent" aria-hidden="true"></div>
     <h1>Ibadah Quest</h1>
@@ -203,11 +256,15 @@
 <div id="wellArea"></div>
 <div id="muhasabahEntry"></div>
 <div id="prayerArea"></div>
+<div id="iqFeedArea" class="iq-feed-area"></div>
 <div id="gardenArea"></div>
-<div class="section-title"> Voluntary Prayers</div>
-<div id="volArea"></div>
-<div class="section-title"> Extra Good Deeds</div>
-<div id="deedArea"></div>
+<details id="iqAllActsDetails" class="iq-all-acts-details">
+  <summary>All Voluntary Prayers &amp; Extra Good Deeds</summary>
+  <div class="section-title"> Voluntary Prayers</div>
+  <div id="volArea"></div>
+  <div class="section-title"> Extra Good Deeds</div>
+  <div id="deedArea"></div>
+</details>
 <div id="lanternArea"></div>
 </div>
       <div class="tab-panel" role="tabpanel" id="panel-timer">
@@ -338,7 +395,7 @@
 
 <!-- Core Data Files (must load in dependency order) -->
 <script src="data/prayers.js?v=3"></script>
-<script src="data/icons.js?v=5"></script>
+<script src="data/icons.js?v=6"></script>
 <script>
   if (typeof iqIcon !== 'function') { function iqIcon(){return '';} function iqEmoji(){return '';} }
   document.querySelectorAll('.tier1-tabs .t1-btn').forEach(function (b) {
@@ -428,7 +485,7 @@
 <script src="core/content-cache.js?v=1"></script>
 <script src="core/audio.js?v=4"></script>
 <script src="core/recovery.js?v=1"></script>
-<script src="core/state.js?v=9"></script>
+<script src="core/state.js?v=10"></script>
 <script>
   window.storageReady = window.Storage && window.Storage.init
     ? window.Storage.init().catch(function(e) {
@@ -441,8 +498,8 @@
 <script src="core/calendar.js?v=1"></script>
 <script src="core/render-prayers.js?v=5"></script>
 <script src="core/static.js?v=9"></script>
-<script src="core/dynamic.js?v=13"></script>
-<script src="core/tabs.js?v=12"></script>
+<script src="core/dynamic.js?v=14"></script>
+<script src="core/tabs.js?v=13"></script>
 
 <!-- Chart.js CDN (lazy loaded) -->
 <script>
@@ -531,6 +588,8 @@
 
 <div id="onboardingOverlay" style="display:none"></div>
 <script src="features/onboarding.js" defer></script>
+<script src="features/masjid-checkins.js?v=1" defer></script>
+<script src="features/iq-shell.js?v=1" defer></script>
 
 <!-- Actions (core logic, navigation, init, window.App) -->
 <script src="features/auth.js?v=1"></script>
@@ -545,7 +604,7 @@
 <script src="core/content.js?v=1"></script>
 <script src="core/backup.js?v=1"></script>
 <script src="data/i18n.js?v=2"></script>
-<script src="core/actions.js?v=24"></script>
+<script src="core/actions.js?v=25"></script>
 
 <!-- PWA: Service Worker registration + update banner -->
 <script>
@@ -569,7 +628,7 @@
     });
   }
   window.addEventListener('load', function() {
-    navigator.serviceWorker.register('sw.js?v=57').then(function(reg) {
+    navigator.serviceWorker.register('sw.js?v=58').then(function(reg) {
       if (reg.waiting) { showUpdateBanner(reg); return; }
       reg.addEventListener('updatefound', function() {
         var sw = reg.installing;
@@ -585,13 +644,65 @@
 })();
 </script>
 
-<!-- Mobile bottom navigation -->
+<!-- Slide-out Drawers & Slide-over Detail Sheets (Option 3) -->
+<div id="iqDrawerBackdrop" class="iq-drawer-backdrop" onclick="window.closeActiveSheet && window.closeActiveSheet()"></div>
+
+<aside id="iqDrawer" class="iq-drawer" aria-hidden="true" aria-label="Navigation menu">
+  <div class="iq-drawer-head">
+    <div class="iq-drawer-brand"><strong>iQ</strong> <span>Ibadah Quest</span></div>
+    <button type="button" class="iq-icon-btn" onclick="window.closeIqDrawer && window.closeIqDrawer()" aria-label="Close menu">&times;</button>
+  </div>
+  <div class="iq-drawer-links">
+    <button type="button" class="iq-drawer-link" onclick="window.drawerNavigate && window.drawerNavigate('today')">Home Feed</button>
+    <button type="button" class="iq-drawer-link" onclick="window.drawerNavigate && window.drawerNavigate('challenge')">Daily Challenges &amp; Timer</button>
+    <button type="button" class="iq-drawer-link" onclick="window.drawerNavigate && window.drawerNavigate('masjid')">Masjid Check-ins Map</button>
+    <button type="button" class="iq-drawer-link" onclick="window.drawerNavigate && window.drawerNavigate('timer')">Prayer Times</button>
+    <button type="button" class="iq-drawer-link" onclick="window.drawerNavigate && window.drawerNavigate('quran')">Qur'an &amp; Audio</button>
+    <button type="button" class="iq-drawer-link" onclick="window.drawerNavigate && window.drawerNavigate('tafsir')">Tafsir Library</button>
+    <button type="button" class="iq-drawer-link" onclick="window.drawerNavigate && window.drawerNavigate('hadith')">Hadith Library</button>
+    <button type="button" class="iq-drawer-link" onclick="window.drawerNavigate && window.drawerNavigate('names')">99 Names &amp; Figures</button>
+    <button type="button" class="iq-drawer-link" onclick="window.drawerNavigate && window.drawerNavigate('finance')">Finance &amp; Zakat</button>
+    <button type="button" class="iq-drawer-link" onclick="window.drawerNavigate && window.drawerNavigate('profile')">Profile &amp; Settings</button>
+  </div>
+  <div class="iq-drawer-footer">
+    <button type="button" class="iq-pill-btn" onclick="App.toggleTheme()">Cycle Theme</button>
+    <a href="privacy.html" target="_blank" rel="noopener noreferrer">Privacy</a>
+  </div>
+</aside>
+
+<aside id="iqNotifDrawer" class="iq-drawer iq-drawer-right" aria-hidden="true" aria-label="Notifications">
+  <div class="iq-drawer-head">
+    <div class="iq-drawer-brand"><strong>Reminders</strong></div>
+    <button type="button" class="iq-icon-btn" onclick="window.closeNotifDrawer && window.closeNotifDrawer()" aria-label="Close notifications">&times;</button>
+  </div>
+  <div id="iqNotifBody" class="iq-notif-body"></div>
+</aside>
+
+<div id="iqChallengeSheet" class="iq-sheet-overlay" aria-hidden="true" role="dialog" aria-label="Daily challenges detail">
+  <div class="iq-sheet-header">
+    <button type="button" class="iq-icon-btn" onclick="window.closeChallengeDetail && window.closeChallengeDetail()" aria-label="Back">&lsaquo;</button>
+    <h2 class="iq-sheet-title">Daily challenges</h2>
+    <button type="button" class="iq-icon-btn" onclick="window.openNotifDrawer && window.openNotifDrawer()" aria-label="Notifications">&#128276;</button>
+  </div>
+  <div id="iqChallengeBody" class="iq-sheet-body"></div>
+</div>
+
+<div id="iqMasjidSheet" class="iq-sheet-overlay" aria-hidden="true" role="dialog" aria-label="Masjid check-ins">
+  <div class="iq-sheet-header">
+    <button type="button" class="iq-icon-btn" onclick="window.closeMasjidCheckins && window.closeMasjidCheckins()" aria-label="Back">&lsaquo;</button>
+    <h2 class="iq-sheet-title">masjid check-ins</h2>
+    <button type="button" class="iq-icon-btn" onclick="window.openNotifDrawer && window.openNotifDrawer()" aria-label="Notifications">&#128276;</button>
+  </div>
+  <div id="iqMasjidBody" class="iq-sheet-body"></div>
+</div>
+
+<!-- Mobile bottom navigation (5-slot floating dock with elevated center crescent button) -->
 <nav class="bnav" id="bnav" aria-label="Main navigation">
-  <button class="bnav-btn" data-cat="ibadah" onclick="App.switchCategory('ibadah', this)" role="tab" aria-selected="true"><span class="bnav-icon"></span><span class="bnav-label">Daily</span></button>
-  <button class="bnav-btn" data-cat="knowledge" onclick="App.switchCategory('knowledge', this)" role="tab" aria-selected="false"><span class="bnav-icon"></span><span class="bnav-label">Knowledge</span></button>
-  <button class="bnav-btn" data-cat="names_main" onclick="App.switchCategory('names_main', this)" role="tab" aria-selected="false"><span class="bnav-icon"></span><span class="bnav-label">Names</span></button>
-  <button class="bnav-btn" data-cat="library" onclick="App.switchCategory('library', this)" role="tab" aria-selected="false"><span class="bnav-icon"></span><span class="bnav-label">Library</span></button>
-  <button class="bnav-btn" data-cat="profile_main" onclick="App.switchCategory('profile_main', this)" role="tab" aria-selected="false"><span class="bnav-icon"></span><span class="bnav-label">Profile</span></button>
+  <button class="bnav-btn active" data-cat="ibadah" onclick="window.closeActiveSheet && window.closeActiveSheet();App.switchCategory('ibadah', this)" role="tab" aria-selected="true"><span class="bnav-icon"></span><span class="bnav-label">Home</span></button>
+  <button class="bnav-btn" data-cat="knowledge" onclick="window.closeActiveSheet && window.closeActiveSheet();App.switchCategory('knowledge', this)" role="tab" aria-selected="false"><span class="bnav-icon"></span><span class="bnav-label">Daily</span></button>
+  <button type="button" class="bnav-center-fab" id="bnavCenterFab" onclick="window.openChallengeDetail && window.openChallengeDetail('dhikr')" aria-label="Daily challenges quick view"><span class="bnav-center-icon">&#127769;</span></button>
+  <button class="bnav-btn" data-cat="library" onclick="window.closeActiveSheet && window.closeActiveSheet();App.switchCategory('library', this)" role="tab" aria-selected="false"><span class="bnav-icon"></span><span class="bnav-label">Library</span></button>
+  <button class="bnav-btn" data-cat="profile_main" onclick="window.closeActiveSheet && window.closeActiveSheet();App.switchCategory('profile_main', this)" role="tab" aria-selected="false"><span class="bnav-icon"></span><span class="bnav-label">Profile</span></button>
 </nav>
 
 <div id="fab" class="fab-container">

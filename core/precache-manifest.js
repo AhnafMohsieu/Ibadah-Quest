@@ -152,6 +152,10 @@ self.__PRECACHE = [
   "features/widgets/streak-calendar.js",
   "features/zakat-calc.js",
   "features/onboarding.js",
+  "features/masjid-checkins.js",
+  "features/iq-shell.js",
+  "404.html",
+  "privacy.html",
   "core/achievements.js",
   "data/i18n.js"
 ];

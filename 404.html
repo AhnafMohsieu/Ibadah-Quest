@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Page Not Found — Ibadah Quest</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Sora:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="icon" href="assets/icons/favicon.png" type="image/png">
+  <style>
+    :root {
+      --bg: #f8f9fa;
+      --card-bg: #ffffff;
+      --card-border: #e9ecef;
+      --text: #1a1a2e;
+      --text2: #6b7280;
+      --accent: #c9a84c;
+      --accent-dark: #b8952f;
+      --accent-bg: rgba(201,168,76,0.08);
+      --font: 'Sora', system-ui, -apple-system, sans-serif;
+      --font-arabic: 'Amiri', serif;
+    }
+    [data-theme="emara"] {
+      --bg: #0f1a15;
+      --card-bg: #16241e;
+      --card-border: #23382f;
+      --text: #f0fdf4;
+      --text2: #94a3b8;
+      --accent: #d4af37;
+      --accent-dark: #c5a028;
+      --accent-bg: rgba(212,175,55,0.12);
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      text-align: center;
+    }
+    .box {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 40px 28px;
+      max-width: 440px;
+      width: 100%;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+    }
+    .arabic {
+      font-family: var(--font-arabic);
+      font-size: 2.2rem;
+      color: var(--accent);
+      margin-bottom: 8px;
+      line-height: 1.4;
+    }
+    h1 {
+      font-size: 1.8rem;
+      margin-bottom: 8px;
+      font-weight: 700;
+    }
+    p {
+      color: var(--text2);
+      font-size: 0.95rem;
+      line-height: 1.6;
+      margin-bottom: 24px;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--accent);
+      color: #ffffff;
+      font-weight: 600;
+      font-size: 1rem;
+      padding: 12px 24px;
+      border-radius: 12px;
+      text-decoration: none;
+      transition: background 0.15s ease, transform 0.1s ease;
+    }
+    .btn:hover {
+      background: var(--accent-dark);
+      transform: translateY(-1px);
+    }
+    .btn:active {
+      transform: translateY(0);
+    }
+  </style>
+  <script>
+    try {
+      var t = localStorage.getItem('iqTheme');
+      if (t && t !== 'light') document.documentElement.setAttribute('data-theme', t);
+    } catch(e) {}
+  </script>
+</head>
+<body>
+  <div class="box">
+    <div class="arabic">إِنَّا لِلَّٰهِ وَإِنَّا إِلَيْهِ رَاجِعُونَ</div>
+    <h1>404 — Page Not Found</h1>
+    <p>The page or resource you are looking for does not exist or has been moved.</p>
+    <a href="https://ahnafmohsieu.github.io/Ibadah-Quest/" class="btn">Return to Ibadah Quest</a>
+  </div>
+</body>
+</html>

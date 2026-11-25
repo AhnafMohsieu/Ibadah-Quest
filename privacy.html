@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Privacy Policy — Ibadah Quest</title>
+  <meta name="description" content="Privacy Policy for Ibadah Quest. An offline-first, zero-telemetry Islamic worship tracker where all data stays on your device.">
+  <link rel="canonical" href="https://ahnafmohsieu.github.io/Ibadah-Quest/privacy.html">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="icon" href="assets/icons/favicon.png" type="image/png">
+  <style>
+    :root {
+      --bg: #f8f9fa;
+      --card-bg: #ffffff;
+      --card-border: #e9ecef;
+      --text: #1a1a2e;
+      --text2: #6b7280;
+      --accent: #c9a84c;
+      --accent-bg: rgba(201,168,76,0.08);
+      --font: 'Sora', system-ui, -apple-system, sans-serif;
+    }
+    [data-theme="emara"] {
+      --bg: #0f1a15;
+      --card-bg: #16241e;
+      --card-border: #23382f;
+      --text: #f0fdf4;
+      --text2: #94a3b8;
+      --accent: #d4af37;
+      --accent-bg: rgba(212,175,55,0.12);
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      padding: 32px 16px;
+    }
+    .container {
+      max-width: 720px;
+      margin: 0 auto;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 36px 28px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+    }
+    .back-link {
+      display: inline-block;
+      margin-bottom: 20px;
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+    h1 {
+      font-size: 1.8rem;
+      margin-bottom: 8px;
+      font-weight: 700;
+    }
+    .meta {
+      font-size: 0.85rem;
+      color: var(--text2);
+      margin-bottom: 24px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--card-border);
+    }
+    h2 {
+      font-size: 1.25rem;
+      margin: 24px 0 8px;
+      font-weight: 600;
+      color: var(--accent);
+    }
+    p {
+      margin-bottom: 14px;
+      color: var(--text);
+      font-size: 0.95rem;
+    }
+    ul {
+      margin: 0 0 16px 20px;
+      color: var(--text);
+      font-size: 0.95rem;
+    }
+    li {
+      margin-bottom: 6px;
+    }
+    .highlight-card {
+      background: var(--accent-bg);
+      border-left: 4px solid var(--accent);
+      padding: 14px 18px;
+      border-radius: 0 8px 8px 0;
+      margin: 20px 0;
+      font-size: 0.95rem;
+    }
+  </style>
+  <script>
+    try {
+      var t = localStorage.getItem('iqTheme');
+      if (t && t !== 'light') document.documentElement.setAttribute('data-theme', t);
+    } catch(e) {}
+  </script>
+</head>
+<body>
+  <div class="container">
+    <a href="https://ahnafmohsieu.github.io/Ibadah-Quest/" class="back-link">&larr; Back to Ibadah Quest</a>
+    <h1>Privacy Policy</h1>
+    <div class="meta">Last updated: November 23, 2026 · Effective immediately</div>
+
+    <div class="highlight-card">
+      <strong>Core Principle:</strong> Ibadah Quest is built as an <strong>offline-first, zero-telemetry</strong> application. Your worship records, personal notes, prayer history, and progress are stored entirely on your device and are never sent to our servers.
+    </div>
+
+    <h2>1. Data Storage & Ownership</h2>
+    <p>All data generated while using Ibadah Quest—including prayer completion logs, dhikr counts, Quran reading positions, personal goals, streaks, and achievements—is stored locally in your browser's <code>localStorage</code> and <code>IndexedDB</code>.</p>
+    <ul>
+      <li>You have 100% ownership over your data.</li>
+      <li>No account creation or personal identity information (e.g., email address, real name) is required.</li>
+      <li>Optional PIN authentication is hashed locally using client-side cryptographic functions (SHA-256).</li>
+    </ul>
+
+    <h2>2. Third-Party APIs & Network Requests</h2>
+    <p>Ibadah Quest functions offline without any internet connection. When online, network requests are strictly limited to fetching public liturgical and educational content:</p>
+    <ul>
+      <li><strong>Prayer Times:</strong> Fetched from the Aladhan API (<code>api.aladhan.com</code>) using your provided city/coordinates. No personal identifier is sent.</li>
+      <li><strong>Audio Verses:</strong> Audio Quran recitations stream directly from Quran.com CDN (<code>verses.quran.com</code>).</li>
+      <li><strong>Google Fonts:</strong> Static font files are loaded from Google Fonts CDN (<code>fonts.googleapis.com</code>, <code>fonts.gstatic.com</code>).</li>
+    </ul>
+
+    <h2>3. Zero Telemetry & Tracking</h2>
+    <p>We do not use tracking cookies, analytics SDKs (such as Google Analytics), or behavioral tracking scripts. The Content Security Policy (CSP) actively prevents connections to analytics or tracking services.</p>
+
+    <h2>4. Backup, Export & Data Deletion</h2>
+    <p>You can export your complete data as a JSON file at any time from the Profile tab. You also have full control to permanently erase all locally stored data using the "Reset All Data" option in the Profile settings.</p>
+
+    <h2>5. Contact & Questions</h2>
+    <p>If you have any questions or feedback regarding this Privacy Policy or the app, you can submit an issue on the project's public GitHub repository: <a href="https://github.com/AhnafMohsieu/Ibadah-Quest/issues" target="_blank" rel="noopener noreferrer" style="color:var(--accent);">Ibadah Quest GitHub Issues</a>.</p>
+  </div>
+</body>
+</html>

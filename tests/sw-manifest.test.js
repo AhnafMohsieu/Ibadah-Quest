@@ -14,7 +14,7 @@ test('precache manifest defines a non-empty __PRECACHE list', () => {
   vm.runInContext(code + '\nthis.__LIST__ = self.__PRECACHE;', sandbox, { filename: 'precache-manifest.js' });
   const list = sandbox.__LIST__;
   assert.ok(Array.isArray(list) && list.length > 0);
-  for (const must of ['index.html', 'core/offline.html', 'src/pages/today/today.html', 'src/pages/names/names.html']) {
+  for (const must of ['index.html', '404.html', 'privacy.html', 'features/iq-shell.js', 'features/masjid-checkins.js', 'core/offline.html', 'src/pages/today/today.html', 'src/pages/names/names.html']) {
     assert.ok(list.includes(must), 'manifest must precache ' + must);
   }
 });

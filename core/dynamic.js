@@ -245,7 +245,7 @@ function renderAll() {
     for (const panel of DEFERRED_PANELS) dirtyPanels.add(panel);
     return renderDynamic();
   }
-  function renderToday() { const s=(fn,n)=>{try{fn();}catch(e){console.warn('Today render '+n+' failed:',e.message);}}; s(renderBonus,'bonus'); s(renderPrayers,'prayers'); s(renderVol,'vol'); s(renderDeeds,'deeds'); }
+  function renderToday() { const s=(fn,n)=>{try{fn();}catch(e){console.warn('Today render '+n+' failed:',e.message);}}; s(renderBonus,'bonus'); s(renderPrayers,'prayers'); s(renderVol,'vol'); s(renderDeeds,'deeds'); s(function(){ if (typeof window.renderIqFeed === 'function') window.renderIqFeed(); },'iqFeed'); }
 
   function renderLv() {
     const cres = document.getElementById('headerCrescent');
@@ -518,6 +518,18 @@ h += '</div>';
     h += '<button class="shop-card" style="width:100%;justify-content:center;margin-bottom:10px;font-weight:700;font-size:1rem;color:var(--accent);letter-spacing:0.5px;" onclick="App.logout()">' + iqIcon('log-out') + ' Logout</button>';
     h += '</div>';
 
+    h += '<div style="margin-bottom:10px;font-weight:700;color:var(--accent-dark);">' + iqIcon('info') + ' About &amp; Support</div>';
+    h += '<div class="account-security-card" style="background:var(--card-bg);border:1px solid var(--border);border-radius:var(--radius);padding:14px;margin-bottom:14px;">';
+    h += '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">';
+    h += '<span style="font-size:var(--fs-sm);font-weight:600;color:var(--text);">Ibadah Quest</span>';
+    h += '<span style="font-size:var(--fs-xs);padding:3px 8px;border-radius:12px;background:var(--accent-bg);color:var(--accent-dark);font-weight:600;">v2.1 · Offline-First</span>';
+    h += '</div>';
+    h += '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px;">';
+    h += '<a href="privacy.html" target="_blank" rel="noopener noreferrer" class="shop-card" style="justify-content:center;padding:9px;border-radius:var(--radius-sm);font-weight:600;font-size:0.85rem;text-decoration:none;color:inherit;">' + iqIcon('shield') + ' Privacy Policy</a>';
+    h += '<a href="https://github.com/AhnafMohsieu/Ibadah-Quest/issues" target="_blank" rel="noopener noreferrer" class="shop-card" style="justify-content:center;padding:9px;border-radius:var(--radius-sm);font-weight:600;font-size:0.85rem;text-decoration:none;color:inherit;">' + iqIcon('message-circle') + ' Contact &amp; Feedback</a>';
+    h += '</div>';
+    h += '</div>';
+
     h += '<div class="danger-zone"><h3 style="color:var(--red)">' + iqIcon('alert-triangle') + ' Danger Zone</h3><p style="font-size:0.8rem;color:var(--text2);margin-bottom:10px;">Reset permanently deletes all your progress.</p><button class="danger-btn" onclick="App.resetAll()">' + iqIcon('trash') + ' Reset All Data</button></div>';
 
     document.getElementById('profileArea').innerHTML = h;
@@ -588,6 +600,9 @@ h += '</div>';
       try { cur = document.documentElement.getAttribute('data-theme') || 'light'; } catch (e) {}
       themeBtn.setAttribute('aria-label', 'Change color theme (current: ' + cur + ')');
       themeBtn.title = 'Theme: ' + cur + ' — tap to change';
+    }
+    if (typeof window.renderIqFeed === 'function') {
+      try { window.renderIqFeed(); } catch (e) {}
     }
   }
 

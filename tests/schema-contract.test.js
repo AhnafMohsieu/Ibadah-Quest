@@ -37,7 +37,9 @@ const EXPECTED = {
   ownedFrames: [],
   activeFrame: null,
   lastAllPrayersSurprise: null,
-  dhikrSettings: { haptic: true }
+  dhikrSettings: { haptic: true },
+  masjidCheckIns: [],
+  dailyChallengeGoals: { dhikr: 500, quranMinutes: 20, prayers: 5 }
 };
 
 test('freshState declares every formerly-ad-hoc field', () => {

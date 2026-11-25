@@ -16,9 +16,9 @@ test('manifest declares the app identity', () => {
   assert.strictEqual(manifest.scope, './');
 });
 
-test('manifest uses the light base theme colors', () => {
-  assert.strictEqual(manifest.theme_color, '#ddd3ea');
-  assert.strictEqual(manifest.background_color, '#ddd3ea');
+test('manifest uses the iQ teal-mint base theme colors', () => {
+  assert.strictEqual(manifest.theme_color, '#075e64');
+  assert.strictEqual(manifest.background_color, '#f2fbf8');
 });
 
 test('manifest declares a PWA icon', () => {
