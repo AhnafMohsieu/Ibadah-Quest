@@ -55,7 +55,7 @@ function createTabSandbox() {
         return dom.panels[id];
       },
       querySelector: (sel) => {
-        if (sel === '.t1-btn.active') return makeMockEl('button', null, dom.attributes['data-active-segment'] || 'ibadah');
+        if (sel === '.bnav-btn.active') return makeMockEl('button', null, dom.attributes['data-active-segment'] || 'ibadah');
         return makeMockEl('div');
       },
       querySelectorAll: (sel) => {

@@ -491,8 +491,7 @@ Object.keys(NEW_POOLS).forEach(k => {
   // Theme button is a native <button>: keyboard activation is built in.
 
   function _escAttr(s){ return String(s).replace(/\\/g,'\\\\').replace(/"/g,'\\"'); }
-  function _findT1ByCat(cat){ var esc=_escAttr(cat); try{return document.querySelector('.t1-btn[data-cat="' + esc + '"]');}catch(e){ var els=document.querySelectorAll('.t1-btn'); for(var i=0;i<els.length;i++) if(els[i].getAttribute('data-cat')===cat) return els[i]; return null; } }
-  function _findChipByCatId(catId){ var esc=_escAttr(catId); try{return document.querySelector('.cat-chip[onclick*="' + esc + '"]');}catch(e){ var els=document.querySelectorAll('.cat-chip'); for(var i=0;i<els.length;i++){ var oc=els[i].getAttribute('onclick')||''; if(oc.indexOf(catId)>-1) return els[i]; } return null; } }
+  function _findBnavByCat(cat){ var esc=_escAttr(cat); try{return document.querySelector('.bnav-btn[data-cat="' + esc + '"]');}catch(e){ var els=document.querySelectorAll('.bnav-btn'); for(var i=0;i<els.length;i++) if(els[i].getAttribute('data-cat')===cat) return els[i]; return null; } }
 
   function _parseHashAndNavigate() {
     const hash = location.hash;
@@ -501,20 +500,10 @@ Object.keys(NEW_POOLS).forEach(k => {
       if (parts.length === 2) {
         const cat = decodeURIComponent(parts[0] || '');
         const tab = decodeURIComponent(parts[1] || '');
-        const btn = _findT1ByCat(cat);
-        if (btn) {
+        if (window.TAB_GROUPS && window.TAB_GROUPS[cat]) {
           window._hashNavigating = true;
-          window.switchCategory(cat, btn);
-          const { catObj, tabBtn } = window._findTabBtn(cat, tab);
-          if (catObj) {
-            const chipBtn = _findChipByCatId(catObj.id);
-            if (chipBtn) window.selectCategory(catObj.id, chipBtn);
-          }
-          if (tabBtn) {
-            window.activateTab(tab, tabBtn);
-          } else {
-            window.activateTab(tab, null);
-          }
+          window.switchCategory(cat, _findBnavByCat(cat));
+          window.activateTab(tab, null);
           window._hashNavigating = false;
           return true;
         }
@@ -528,18 +517,8 @@ Object.keys(NEW_POOLS).forEach(k => {
     window.addEventListener('popstate', function(e) {
       if (e.state && e.state.cat && e.state.tab) {
         window._hashNavigating = true;
-        const btn = _findT1ByCat(e.state.cat);
-        if (btn) window.switchCategory(e.state.cat, btn);
-        const { catObj, tabBtn } = window._findTabBtn(e.state.cat, e.state.tab);
-        if (catObj) {
-          const chipBtn = _findChipByCatId(catObj.id);
-          if (chipBtn) window.selectCategory(catObj.id, chipBtn);
-        }
-        if (tabBtn) {
-          window.activateTab(e.state.tab, tabBtn);
-        } else {
-          window.activateTab(e.state.tab, null);
-        }
+        window.switchCategory(e.state.cat, _findBnavByCat(e.state.cat));
+        window.activateTab(e.state.tab, null);
         window._hashNavigating = false;
       }
     });
@@ -568,7 +547,7 @@ Object.keys(NEW_POOLS).forEach(k => {
   } else if (window.Auth && typeof window.Auth.isLocked === 'function' && window.Auth.isLocked()) {
     window.Auth.show('unlock');
   }
-  try { window.applyTheme(); } catch(e) { console.error('applyTheme in initApp failed:', e); }
+  try { if (document && document.documentElement) document.documentElement.removeAttribute('data-theme'); } catch(e) {}
 
     const t = today();
     if (S.lad !== t) {
@@ -624,21 +603,17 @@ Object.keys(NEW_POOLS).forEach(k => {
       if (!_parseHashAndNavigate()) {
         const savedCat = S ? S.lastCat : null;
         const savedSub = S ? S.lastSub : null;
-        let activeBtn = savedCat ? _findT1ByCat(savedCat) : null;
-        if (!activeBtn) activeBtn = document.querySelector('.t1-btn.active');
-        const activeCat = (activeBtn && typeof activeBtn.getAttribute === 'function') ? activeBtn.getAttribute('data-cat') : 'ibadah';
-        window.switchCategory(activeCat, activeBtn);
+        const activeCat = (savedCat && window.TAB_GROUPS && window.TAB_GROUPS[savedCat]) ? savedCat : 'ibadah';
+        window.switchCategory(activeCat, _findBnavByCat(activeCat));
         if (savedSub) {
-          var escSub = _escAttr(savedSub); var subBtn = null;
-          try { subBtn = document.querySelector('[data-tab="' + escSub + '"]'); } catch(e){ var els=document.querySelectorAll('[data-tab]'); for(var i=0;i<els.length;i++) if(els[i].getAttribute('data-tab')===savedSub){ subBtn=els[i]; break; } }
-          if (subBtn) subBtn.click();
+          window.activateTab(savedSub, null);
         }
       }
     } catch(e) { console.warn('Initial nav render failed:', e); }
   }
 
   function finishInit() {
-    try { window.applyTheme(); } catch(e) { console.error('Step 2 applyTheme failed:', e); }
+    try { if (document && document.documentElement) document.documentElement.removeAttribute('data-theme'); } catch(e) {}
     try { initApp(); } catch(e) { console.error('Step 3 initApp failed:', e); }
     try { if (window.initSearch) window.initSearch(); } catch(e) { console.error('Step 3b initSearch failed:', e); }
     try { if (window.initFAB) window.initFAB(); } catch(e) { console.error('Step 3c initFAB failed:', e); }
@@ -653,10 +628,8 @@ Object.keys(NEW_POOLS).forEach(k => {
         if (sr && !e.target.closest('.global-search-wrap')) sr.classList.remove('show');
       });
     } catch(e) { console.error('Step 6 clickOutside failed:', e); }
-    try { if (window.initTierTabKeyboardNav) window.initTierTabKeyboardNav(); } catch(e) { console.error('Step 7 tier tab keyboard nav failed:', e); }
-    try { if (window.initTier2TabKeyboardNav) window.initTier2TabKeyboardNav(); } catch(e) { console.error('Step 8 tier2 tab keyboard nav failed:', e); }
     try { if (window.initBnavKeyboardNav) window.initBnavKeyboardNav(); } catch(e) { console.error('Step 8c bnav keyboard nav failed:', e); }
-    try { if (window.populateTier1Icons) window.populateTier1Icons(); } catch(e) { console.error('Step 8b tier1 icons failed:', e); }
+    try { if (window.populateTier1Icons) window.populateTier1Icons(); } catch(e) { console.error('Step 8b bnav icons failed:', e); }
     try { initModalKeyboardHandlers(); } catch(e) { console.error('Step 9 modal keyboard handlers failed:', e); }
     try { _initHashRouting(); } catch(e) { console.error('Step 10b hash routing init failed:', e); }
     // Quota-failure banner: show on 'iq:quota', wire dismiss (re-arms the flag),
@@ -705,7 +678,7 @@ Object.keys(NEW_POOLS).forEach(k => {
     } catch(e) { console.error('Step 10c post-defer re-render hook failed:', e); }
     try {
       document.addEventListener('keydown', (e) => {
-        if ((e.key === 'Enter' || e.key === ' ') && (e.target.matches('.card-item, .vol-card, .shop-card, .card-info-btn') || e.target.matches('.ach-card, .quest-row, .deed-card, .theme-chip, [role="button"][tabindex="0"]'))) {
+        if ((e.key === 'Enter' || e.key === ' ') && (e.target.matches('.card-item, .vol-card, .shop-card, .card-info-btn') || e.target.matches('.ach-card, .quest-row, .deed-card, [role="button"][tabindex="0"]'))) {
           e.preventDefault();
           e.target.click();
         }
@@ -741,7 +714,6 @@ Object.keys(NEW_POOLS).forEach(k => {
       openHadithCollection: window.openHadithCollection, openHadithBook: window.openHadithBook, hadithBack: window.hadithBack,
       playQuranVerse: window.playQuranVerse, playSurah: window.playSurah, stopSurah: window.stopSurah, setQuranReciter: window.setQuranReciter, playJuz: window.playJuz, updateJuzButton: window.updateJuzButton,
       calPrevMonth: window.calPrevMonth, calNextMonth: window.calNextMonth, calGoToday: window.calGoToday, selectAvatar, selectTitle, selectFrame,
-      setTheme: window.setTheme, toggleTheme: window.toggleTheme,
       toggleNotifications: appAction('toggleNotifications'),
       switchCategory: appAction('switchCategory'),
       activateTab: appAction('activateTab'),

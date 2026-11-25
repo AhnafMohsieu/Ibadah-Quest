@@ -8,7 +8,7 @@ const root = path.join(__dirname, '..');
 const html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
 const i18n = fs.readFileSync(path.join(root, 'data', 'i18n.js'), 'utf8');
 const actions = fs.readFileSync(path.join(root, 'core', 'actions.js'), 'utf8');
-const tabs = fs.readFileSync(path.join(root, 'core', 'tabs.js'), 'utf8');
+const iqShell = fs.readFileSync(path.join(root, 'features', 'iq-shell.js'), 'utf8');
 
 // Stub a minimal global so the i18n module's top-level code runs under node.
 global.localStorage = {
@@ -46,16 +46,18 @@ test('i18n falls back to the source string for unknown keys', () => {
   I18N.lang = 'en';
 });
 
-test('tab/category labels pass through the translate helper in tabs.js', () => {
-  assert.ok(tabs.includes("${t(c.label)}"));
-  assert.ok(tabs.includes("${t(p.label)}"));
+test('tab/category labels pass through the translate helper in 3-dot drawer', () => {
+  assert.ok(iqShell.includes('tLabel(c.label)'), '3-dot drawer must translate category labels');
+  assert.ok(iqShell.includes('tLabel(grp.label)'), '3-dot drawer must translate group labels');
+  assert.ok(iqShell.includes('tLabel(tab.label)'), '3-dot drawer must translate sub-tab labels');
+  assert.ok(i18n.includes('.bnav-btn'), 'iqSetLang must update .bnav-btn labels');
+  assert.ok(i18n.includes('syncIqDrawer'), 'iqSetLang must sync 3-dot drawer labels');
 });
 
-test('t1 nav buttons carry data-i18n keys with .t1-label spans', () => {
+test('bnav buttons carry data-i18n keys with .bnav-label spans', () => {
   assert.ok(html.includes('data-i18n="Daily"'));
   assert.ok(html.includes('data-i18n="Knowledge"'));
-  assert.ok(html.includes('data-i18n="Names"'));
   assert.ok(html.includes('data-i18n="Library"'));
   assert.ok(html.includes('data-i18n="Profile"'));
-  assert.ok(html.includes('class="t1-label"'));
+  assert.ok(html.includes('class="bnav-label"'));
 });

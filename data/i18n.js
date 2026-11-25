@@ -255,15 +255,16 @@ function iqSetLang(lang) {
   if (!['en', 'ar', 'bn'].includes(lang)) lang = 'en';
   I18N.lang = lang;
   try { localStorage.setItem(LANG_KEY, lang); } catch (e) {}
-  document.querySelectorAll('.t1-btn').forEach((b) => {
-    const labelEl = b.querySelector('.t1-label');
+  document.querySelectorAll('.bnav-btn').forEach((b) => {
+    const labelEl = b.querySelector('.bnav-label');
     if (labelEl) labelEl.textContent = t(b.getAttribute('data-i18n') || '');
   });
-  const activeCat = (document.querySelector('.t1-btn.active') || {}).getAttribute?.('data-cat') || 'ibadah';
+  const activeBtn = document.querySelector('.bnav-btn.active');
+  const activeCat = (activeBtn && activeBtn.getAttribute('data-cat')) || (window.S && window.S.lastCat) || 'ibadah';
+  if (window.syncIqDrawer) window.syncIqDrawer();
   if (window.App && typeof window.App.switchCategory === 'function') {
-    window.App.switchCategory(activeCat, document.querySelector('.t1-btn.active'));
+    window.App.switchCategory(activeCat, activeBtn);
   }
-  if (window.App && typeof window.App.renderSubTabs === 'function') window.App.renderSubTabs();
   if (window.renderProfile) window.renderProfile();
 }
 

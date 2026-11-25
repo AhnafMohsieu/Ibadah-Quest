@@ -482,14 +482,6 @@ function renderAll() {
 
     h += '<div class="section-title">' + iqIcon('settings') + ' Settings</div>';
     h += '<div class="profile-settings">';
-    const curTheme = (typeof document !== 'undefined' && document.documentElement && document.documentElement.getAttribute && document.documentElement.getAttribute('data-theme')) || 'light';
-    const themeChips = (window.Themes || []).map(m => `
-      <button class="theme-chip${m.key === curTheme ? ' active' : ''}" data-key="${m.key}" role="switch" aria-checked="${m.key === curTheme}" onclick="App.setTheme('${m.key}')">
-        <span class="theme-swatch" style="background:linear-gradient(135deg,${m.swatch.bg},${m.swatch.accent});"></span>
-        <span class="name">${m.label}</span>
-      </button>`).join('');
-h += '<div style="margin-bottom:10px;font-weight:700;color:var(--accent-dark);">' + iqIcon('palette') + ' Theme</div>';
-h += '<div class="theme-picker">' + themeChips + '</div>';
 h += '<div style="margin-bottom:10px;font-weight:700;color:var(--accent-dark);">' + iqIcon('bell') + ' Notifications</div>';
 h += '<div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">';
 h += '<button class="shop-card" onclick="App.toggleNotifications()" style="padding:10px 14px;border-radius:var(--radius-sm);font-weight:700;">' + (S.notificationsEnabled ? iqIcon('bell-off') + ' Disable' : iqIcon('bell') + ' Enable') + '</button>';
@@ -594,13 +586,6 @@ h += '</div>';
     if (title) title.textContent = lvTitle(S.lv);
     if (xp) xp.innerHTML = iqIcon('zap') + ' ' + (S.xp||0).toLocaleString() + ' XP';
     if (streak) streak.innerHTML = iqIcon('flame') + ' ' + (S.cs||0);
-    const themeBtn = document.getElementById('themeToggle');
-    if (themeBtn) {
-      let cur = 'light';
-      try { cur = document.documentElement.getAttribute('data-theme') || 'light'; } catch (e) {}
-      themeBtn.setAttribute('aria-label', 'Change color theme (current: ' + cur + ')');
-      themeBtn.title = 'Theme: ' + cur + ' — tap to change';
-    }
     if (typeof window.renderIqFeed === 'function') {
       try { window.renderIqFeed(); } catch (e) {}
     }

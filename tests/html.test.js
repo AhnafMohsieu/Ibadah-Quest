@@ -19,8 +19,7 @@ const spiritual = fs.readFileSync(path.join(root, 'features', 'spiritual-growth'
 const spiritualGrowth = fs.readFileSync(path.join(root, 'features', 'spiritual-growth', 'index.js'), 'utf8');
 const actions = fs.readFileSync(path.join(root, 'core', 'actions.js'), 'utf8');
 const dhikr = fs.readFileSync(path.join(root, 'core', 'dhikr.js'), 'utf8');
-const themes = fs.readFileSync(path.join(root, 'core', 'themes.js'), 'utf8');
-const meta = fs.readFileSync(path.join(root, 'data', 'theme-meta.js'), 'utf8');
+const iqShell = fs.readFileSync(path.join(root, 'features', 'iq-shell.js'), 'utf8');
 
 test('index.html has the three feature containers', () => {
   assert.ok(html.includes('id="gardenArea"'));
@@ -72,7 +71,7 @@ test('main.css uses modern iQ teal-mint tokens', () => {
 });
 
 test('index.html registers the service worker and update banner', () => {
-  assert.ok(html.includes("navigator.serviceWorker.register('sw.js?v=58')"));
+  assert.ok(html.includes("navigator.serviceWorker.register('sw.js?v=59')"));
   assert.ok(html.includes("'SKIP_WAITING'"));
   assert.ok(html.includes('swUpdateBanner'));
 });
@@ -95,7 +94,7 @@ test('hadith/dhikr audio modules wired with versions and load order', () => {
   assert.ok(html.includes('<script src="data/hadith-normalize.js?v=1"></script>'));
   assert.ok(html.includes('<script src="features/hadith-library.js?v=3" defer></script>'));
   assert.ok(html.includes('<script src="features/tafsir-library.js?v=3" defer></script>'));
-  assert.ok(html.includes('styles/main.css?v=45'));
+  assert.ok(html.includes('styles/main.css?v=46'));
   assert.ok(html.indexOf('core/content-cache.js') < html.indexOf('core/state.js'), 'cache module loads before state');
   assert.ok(html.indexOf('core/audio.js') < html.indexOf('core/static.js'), 'audio module loads before renderers');
   assert.ok(html.indexOf('features/tafsir-library.js') > html.indexOf('core/static.js'), 'deferred features load after renderers');
@@ -110,7 +109,7 @@ test('modal queue advances via callback contract, not dom polling', () => {
 test('shell surfaces use clean borders and rounded corners', () => {
   assert.ok(css.includes('backdrop-filter'));
   assert.ok(css.includes('border-radius'));
-  assert.ok(css.includes('.t1-btn.active'));
+  assert.ok(css.includes('.bnav-btn.active'));
 });
 
 
@@ -131,46 +130,24 @@ test('redesign keeps core markers and PWA meta intact', () => {
   assert.ok(tabs.includes("id: 'journeys'"));
 });
 
-test('modern light theme: uses the new iQ mint bg and teal accent colors', () => {
+test('single signature light iQ palette: extra color themes and dark mode removed', () => {
   assert.ok(css.includes('--bg: #f2fbf8'));
   assert.ok(css.includes('--accent: #0b8a82'));
-  assert.ok(css.includes('backdrop-filter'));
-});
-
-test('modern light theme: old emerald/gold dark backgrounds are removed', () => {
   assert.ok(!css.includes('--bg: #0b1513'));
   assert.ok(!css.includes('--emerald: #10b981'));
-});
-
-test('theme: light-family palette blocks exist in main.css', () => {
-  for (const key of ['serene','royal','midnight','cream']) {
-    assert.ok(css.includes(`html[data-theme="${key}"]`), `missing palette block for ${key}`);
+  for (const key of ['serene','royal','midnight','cream','emara','dark','night','serene-dark','sand']) {
+    assert.ok(!css.includes(`html[data-theme="${key}"]`), `unexpected palette override block for ${key}`);
   }
-  assert.ok(css.includes('--bg: #f2fbf8'));   // light (default) :root block present
-  assert.ok(!css.includes('html[data-theme="dark"]'), 'dark palette block must be removed');
-  assert.ok(!css.includes('html[data-theme="night"]'), 'night palette block must be removed');
-  assert.ok(!css.includes('html[data-theme="serene-dark"]'), 'serene-dark palette block must be removed');
-  assert.ok(!css.includes('html[data-theme="sand"]'), 'sand palette block must be removed');
-});
-
-test('theme: index.html pre-paint script sets data-theme from localStorage', () => {
-  assert.ok(html.includes("localStorage.getItem('iqTheme')"));
-  assert.ok(html.includes("setAttribute('data-theme'"));
-  assert.ok(html.includes('styles/main.css?v=45'));
-});
-
-test('theme: picker references metadata and setTheme wiring', () => {
-  assert.ok(renderAll.includes('Theme'));
-  assert.ok(renderAll.includes('window.Themes'));
-  assert.ok(renderAll.includes('App.setTheme('));
-  assert.ok(renderAll.includes('theme-chip'));
-});
-
-test('theme: removed themes fall back to light via isValidTheme guard', () => {
-  assert.ok(themes.includes('function isValidTheme'), 'isValidTheme helper missing');
-  assert.ok(themes.includes('window.Themes || []'), 'isValidTheme must consult window.Themes');
-  assert.ok(themes.includes('const safe = isValidTheme(t) ? t : \'light\''), 'applyTheme must fall back to light');
-  assert.ok(themes.includes('isValidTheme(name) ? name : \'light\''), 'setTheme must fall back to light');
+  assert.ok(!css.includes('.theme-picker'), 'theme picker CSS must be removed');
+  assert.ok(!css.includes('.theme-chip'), 'theme chip CSS must be removed');
+  assert.ok(!html.includes("localStorage.getItem('iqTheme')"), 'pre-paint data-theme script must be removed');
+  assert.ok(!html.includes('data/theme-meta.js'), 'theme-meta script must be removed');
+  assert.ok(!html.includes('core/themes.js'), 'core/themes.js script must be removed');
+  assert.ok(!html.includes('id="themeToggle"'), 'topBar theme toggle button must be removed');
+  assert.ok(!renderAll.includes('window.Themes'), 'profile theme picker must be removed');
+  assert.ok(!renderAll.includes('App.setTheme('), 'profile setTheme wiring must be removed');
+  assert.ok(!fs.existsSync(path.join(root, 'core', 'themes.js')), 'core/themes.js must be deleted');
+  assert.ok(!fs.existsSync(path.join(root, 'data', 'theme-meta.js')), 'data/theme-meta.js must be deleted');
 });
 
 test('app shell has tab content container', () => {
@@ -356,50 +333,14 @@ test('hero renderers are real and wired into renderDynamic', () => {
   assert.ok(renderAll.includes("topbar: renderTopBar"), 'renderTopBar wired into PANEL_RENDERERS');
 });
 
-test('hero+topbar refresh on theme change and home tab', () => {
-  assert.ok(themes.includes('window.updateTopBar()'), 'setTheme must refresh the topbar');
-  assert.ok(themes.includes('window.renderTab(tab)'), 'setTheme must re-render the active panel');
+test('hero+topbar refresh on home tab', () => {
   const homeCall = actions.slice(actions.indexOf("name === 'home'"));
   assert.ok(homeCall.includes('window.renderTopBar();') || renderTabs.includes('window.renderTopBar();'), 'renderTab(home) calls renderTopBar');
 });
 
-test('theme: Emara jade-and-gold palette block exists', () => {
-  assert.ok(css.includes('html[data-theme="emara"]'), 'emara palette block missing');
-  assert.ok(css.includes('--bg: #0f1a15'), 'emara background is deep jade');
-  assert.ok(css.includes('--accent: #d4af37'), 'emara accent is gold');
-});
-
-test('theme: picker lists the Emara theme', () => {
-  assert.ok(meta.includes("key:'emara'"), 'theme-meta lists emara');
-  assert.ok(meta.includes("label:'Emara'"), 'theme-meta labels emara');
-  assert.ok(meta.includes("bg:'#0f1a15'"), 'emara swatch uses deep jade');
-});
-
-test('theme: theme toggle cycle drops dark and night', () => {
-  assert.ok(themes.includes("'midnight', 'cream', 'emara'") || themes.includes("'emara']"), 'toggleTheme cycle includes cream/emara');
-  assert.ok(!themes.includes("'dark'"), 'toggleTheme must not include dark');
-  assert.ok(!themes.includes("'night'"), 'toggleTheme must not include night');
-});
-
-test('theme: Cream warm-gold palette block exists', () => {
-  assert.ok(css.includes('html[data-theme="cream"]'), 'cream palette block missing');
-  assert.ok(css.includes('--bg: #faf8f3'), 'cream background is warm cream');
-  assert.ok(css.includes('--accent: #b8860b'), 'cream accent is gold');
-});
-
-test('theme: picker metadata excludes dark and night', () => {
-  assert.ok(meta.includes("key:'cream'"), 'theme-meta lists cream');
-  assert.ok(meta.includes("label:'Cream'"), 'theme-meta labels cream');
-  assert.ok(!meta.includes("key:'dark'"), 'theme-meta must not list dark');
-  assert.ok(!meta.includes("key:'night'"), 'theme-meta must not list night');
-});
-
-test('mobile media query provides responsive grid overrides', () => {
-  const mqIdx = css.indexOf('@media (max-width: 600px)');
-  assert.ok(mqIdx > -1, 'mobile media query must exist');
-  const mobileBlock = css.slice(mqIdx, mqIdx + 400);
-  assert.ok(mobileBlock.includes('tier2-tabs') || mobileBlock.includes('.tier2'),
-    'mobile tier2 grid overrides must exist');
+test('3-dot drawer removes multi-theme/dark-mode controls from drawer footer', () => {
+  assert.ok(!html.includes('Cycle Theme'), 'Cycle Theme button must be removed from 3-dot drawer');
+  assert.ok(!actions.includes('toggleTheme') && !actions.includes('setTheme'), 'theme switcher actions removed from App facade');
 });
 
 test('hero header styles exist with clean design tokens', () => {
@@ -419,12 +360,12 @@ test('hero is wrapped in compact hero-strip and keeps all ids', () => {
   assert.ok(css.includes('.hero-strip'), 'hero-strip styles missing');
 });
 
-test('bottom nav exists with five category buttons', () => {
+test('bottom nav dock exists with main category slots and centered challenge button', () => {
   assert.ok(html.includes('id="bnav"'), 'bottom nav missing');
-  const cats = ['ibadah','knowledge','names_main','library','profile_main'];
-  for (const c of cats) {
+  for (const c of ['ibadah','knowledge','library','profile_main']) {
     assert.ok(html.includes(`data-cat="${c}"`), `bottom nav missing ${c}`);
   }
+  assert.ok(html.includes('id="bnavCenterFab"'), 'center challenge button missing');
   assert.ok(html.includes('class="bnav-btn'), 'bnav-btn class missing');
   assert.ok(css.includes('.bnav'), 'bnav styles missing');
   assert.ok(css.includes('.bnav-btn'), 'bnav-btn styles missing');
@@ -453,30 +394,26 @@ test('focus-visible and reduced-motion polish present', () => {
   assert.ok(css.includes('#deedArea .deed-card'), 'desktop 2-col deed grid missing');
 });
 
-test('mobile tab strips use centered flex layout (tier1 5-across, tier2/tier3 flex-wrap)', () => {
+test('mobile drawer & MPA nav preserve responsive padding and grid structure', () => {
   const mqIdx = css.indexOf('@media (max-width: 600px)');
   assert.ok(mqIdx > -1, 'mobile media query must exist');
   const mobileBlock = css.slice(mqIdx, mqIdx + 600);
   assert.ok(mobileBlock.includes('gap:'), 'mobile gap must exist');
-  const tier23Sel = '.tier2-tabs, .tier2-tabs.cat-chips, .tier3-tabs';
-  const selIdx = css.indexOf(tier23Sel);
-  assert.ok(selIdx > -1, 'tier2/tier3 combined selector must exist');
   const ptGridIdx = css.indexOf('.prayer-times-grid');
   assert.ok(ptGridIdx > -1, '.prayer-times-grid must exist');
 });
 
-test('phone nav rows wrap with zero horizontal scroll', () => {
+test('phone layout prevents horizontal overflow and keeps 3-dot drawer clean', () => {
   const phoneBlock = css.slice(css.lastIndexOf('@media (max-width: 600px)'));
-  assert.ok(phoneBlock.includes('.tier1-tabs{flex-wrap:wrap'), 'tier1 must wrap on phones');
-  assert.ok(phoneBlock.includes('#tier2Tabs,#tier3Tabs{flex-wrap:wrap;overflow-x:visible'),
-    'tier2/tier3 must wrap instead of snap-scrolling on phones');
   assert.ok(phoneBlock.includes('overflow-x:clip'),
     'phone layout must clip horizontal overflow');
+  assert.ok(css.includes('.iq-drawer-catbar'), 'drawer category bar styles required');
+  assert.ok(css.includes('.iq-drawer-tabs'), 'drawer tab section styles required');
 });
 
 test('phone sweep: 44px touch floor and component target bumps', () => {
   const phoneBlock = css.slice(css.lastIndexOf('@media (max-width: 600px)'));
-  assert.ok(phoneBlock.includes('button:not(.carousel-dot):not(.t3-btn):not(.bnav-btn){min-height:44px;min-width:44px'),
+  assert.ok(phoneBlock.includes('button:not(.carousel-dot):not(.bnav-btn):not(.iq-quick-pill){min-height:44px;min-width:44px'),
     'global 44px interactive floor missing');
   assert.ok(phoneBlock.includes('.verify-btn{min-height:44px;padding:10px 16px}'),
     'verify buttons must reach 44px');
@@ -492,40 +429,25 @@ test('phone sweep: 44px touch floor and component target bumps', () => {
     'date inputs must be covered by the 16px rule');
 });
 
-test('phone sweep: calendar, theme picker, and finance labels stop overflowing', () => {
+test('phone sweep: calendar and finance labels stop overflowing', () => {
   const phoneBlock = css.slice(css.lastIndexOf('@media (max-width: 600px)'));
   assert.ok(phoneBlock.includes('.cal-grid{grid-template-columns:repeat(7,minmax(0,1fr))'),
     'calendar grid must squeeze to viewport');
   assert.ok(phoneBlock.includes('.cal-day{min-height:36px;font-size:0.72rem}'),
     'calendar day cells must fit');
-  assert.ok(phoneBlock.includes('.theme-picker{flex-wrap:wrap;overflow-x:visible}'),
-    'theme picker must wrap, not scroll');
   assert.ok(phoneBlock.includes('.finance-item-label{white-space:normal;overflow-wrap:break-word}'),
     'finance labels must wrap');
 });
 
-test('tier1 nav wraps at every viewport width (no breakpoint gap)', () => {
-  const t1Idx = css.indexOf('.tier1-tabs {');
-  assert.ok(t1Idx > -1, 'base tier1 rule missing');
-  assert.ok(t1Idx < css.indexOf('@media (max-width: 600px)'),
-    'tier1 wrap must live in base CSS, not only the phone query');
-  const t1Block = css.slice(t1Idx, t1Idx + 250);
-  assert.ok(t1Block.includes('flex-wrap:wrap') || t1Block.includes('flex-wrap: wrap'),
-    'base tier1 must wrap so 601-767px viewports never clip');
-  const btnIdx = css.indexOf('.t1-btn {');
-  assert.ok(btnIdx > -1, 'base t1-btn rule missing');
-  const btnBlock = css.slice(btnIdx, btnIdx + 700);
-  assert.ok(btnBlock.includes('min-width: 0') || btnBlock.includes('min-width:0'),
-    'base t1-btn must allow shrinking below content width');
-  assert.ok(!btnBlock.includes('white-space: nowrap') && !btnBlock.includes('white-space:nowrap'),
-    'base t1-btn must not force nowrap');
-});
-
-test('core and adhkar tier3 tabs render 2 by 2 on phones', () => {
-  assert.ok(renderTabs.includes('grid.dataset.cat'), 'tier3 grid must carry category id');
-  const phoneBlock = css.slice(css.lastIndexOf('@media (max-width: 600px)'));
-  assert.ok(phoneBlock.includes('#tier3Tabs[data-cat="core"]'), 'core tier3 must be pinned 2-col');
-  assert.ok(phoneBlock.includes('#tier3Tabs[data-cat="adhkar"]'), 'adhkar tier3 must be pinned 2-col');
+test('3-tier tab bars are removed from SPA canvas and remodeled into 3-dot drawer', () => {
+  assert.ok(!html.includes('tier-nav-container'), 'tier-nav-container must be removed from index.html');
+  assert.ok(!html.includes('tier1-tabs'), 'tier1-tabs must be removed from index.html');
+  assert.ok(!html.includes('id="tier2Tabs"'), 'tier2Tabs must be removed from index.html');
+  assert.ok(!html.includes('id="tier3Tabs"'), 'tier3Tabs must be removed from index.html');
+  assert.ok(!html.includes('features/nav-collapse.js'), 'nav-collapse script must be removed');
+  assert.ok(!fs.existsSync(path.join(root, 'features', 'nav-collapse.js')), 'features/nav-collapse.js must be deleted');
+  assert.ok(!css.includes('.tier-nav-container'), 'unused .tier-nav-container CSS must be removed');
+  assert.ok(!css.includes('.nav-compact'), 'unused .nav-compact CSS must be removed');
 });
 
 test('Mood feature is fully removed', () => {
@@ -577,12 +499,10 @@ test('healthlog tab is wired correctly (4 touchpoints)', () => {
   assert.ok(health.includes('window.renderHealthLog'), 'renderHealthLog must be exported');
 });
 
-test('small phones get compact stacked nav', () => {
+test('small phones get compact stacked bnav labels and hero polish', () => {
   const i = css.indexOf('@media (max-width: 360px)');
   assert.ok(i > -1, '360px block missing');
   const b = css.slice(i, i + 900);
-  assert.ok(b.includes('.tier1-tabs .t1-btn{flex-direction:column;gap:2px;padding:8px 4px;}'),
-    'tier1 must stack icon-above-label on small phones');
   assert.ok(b.includes('.bnav-label{font-size:var(--fs-2xs);}'),
     'bnav labels must shrink on small phones');
   assert.ok(b.includes('.streak-bar{padding:10px 12px;}'),
@@ -610,7 +530,7 @@ test('calm rendering: no fade replay, finite shimmers, no layout transitions', (
     'reduced-motion must kill shimmers');
   assert.ok(css.includes('transition: background 120ms ease, color 120ms ease;'),
     'body transition must be 120ms');
-  for (const sel of ['.t1-btn {', '.t2-btn {', '.cat-chip {', '.t3-btn {']) {
+  for (const sel of ['.t2-btn {', '.cat-chip {']) {
     const j = css.indexOf(sel);
     assert.ok(j > -1, sel + ' rule missing');
     const body = css.slice(j, j + 800);
@@ -637,12 +557,10 @@ test('coarse pointers force the mobile shell', () => {
   assert.ok(hideIdx > -1 && hideIdx < i, 'coarse block must come after the bnav hide rule');
   const b = css.slice(i, i + 1400);
   assert.ok(b.includes('nav.bnav{display:flex;}'), 'coarse must force bnav visible');
-  assert.ok(b.includes('.tier1-tabs{display:none;}'), 'coarse must hide tier1');
   assert.ok(b.includes('#dateLine{display:block;}'), 'coarse must show date line');
-  assert.ok(b.includes('#tier2Tabs{justify-content:center;}'), 'coarse must center orphan chips');
 });
 
-test('tier1 hides on mobile in favor of the date line', () => {
+test('date line refreshes on category switch', () => {
   assert.ok(html.includes('id="dateLine"'), 'dateLine div missing from index.html');
   assert.ok(renderTabs.includes('window.renderDateLine'), 'renderDateLine must be exported');
   assert.ok(renderTabs.includes('renderDateLine()'), 'switchCategory must refresh the date line');
@@ -663,11 +581,7 @@ test('intro dismissal persists synchronously with a mirror flag', () => {
     'wipe/import paths must clear the mirror flag');
 });
 
-test('nav tiers share one sizing language', () => {
-  assert.ok(css.includes('.t2-btn,.t3-btn{white-space:normal;}'),
-    'nav buttons must allow label wrapping');
-  assert.ok(css.includes('.tier3-tabs > :last-child:nth-child(4n+1){grid-column:1 / -1;}'),
-    'lone grid orphan must span full width');
+test('nav & FAB clearance keep MPA sizing language', () => {
   assert.ok(css.includes('bottom:calc(104px + env(safe-area-inset-bottom,0px))'),
     'FAB must clear the bottom nav');
 });
@@ -757,9 +671,7 @@ test('MPA track: all 5 pages reference module entries', () => {
   }
 });
 
-test('SP1: FAB gutters, equal prayer cards, info hit area, FAB a11y', () => {
-  const gutter = '#tier2Tabs,#tier3Tabs{flex-wrap:wrap;overflow-x:visible;padding-right:64px;}';
-  assert.strictEqual(css.split(gutter).length, 3, 'tier rows must reserve the FAB gutter in both phone blocks');
+test('SP1: equal prayer cards, info hit area, FAB a11y', () => {
   const calGutter = '.cal-header .cal-nav:last-child{padding-right:64px}';
   assert.strictEqual(css.split(calGutter).length, 3, 'calendar header must reserve the FAB gutter in both phone blocks');
   const thirds = '#prayerArea .card-grid > .card-item{flex:0 0 calc((100% - 16px)/3);}';
@@ -791,13 +703,11 @@ test('SP2: dormant features self-init and bind the real scroller', () => {
   assert.ok(pullSrc.includes('\n  init();'), 'pull-refresh must self-init at module load');
 });
 
-test('SP2: compact nav + swipe nav are wired', () => {
-  assert.ok(html.includes('features/nav-collapse.js?v=1'), 'nav-collapse must be script-tagged');
-  assert.ok(html.includes('features/swipe-nav.js?v=1'), 'swipe-nav must be script-tagged');
-  assert.ok(html.indexOf('features/nav-collapse.js') > html.indexOf('features/fab.js'), 'nav-collapse must load after fab.js');
-  assert.ok(css.includes('.tier-nav-container { position: sticky; top: var(--topbar-h); z-index: 90; }'), 'sticky nav rule required');
-  assert.ok(css.includes('.nav-compact #tier2Tabs'), 'compact chip-row rule required');
-  assert.ok(css.includes('(max-width: 767px), (pointer: coarse)'), 'compact nav must be media-guarded');
+test('SP2: swipe nav and lazy 3-dot drawer navigation are wired', () => {
+  assert.ok(html.includes('features/swipe-nav.js?v=2'), 'swipe-nav must be script-tagged');
+  assert.ok(iqShell.includes('_drawerDirty'), '3-dot drawer must memoize/lazy-render tab DOM');
+  assert.ok(iqShell.includes('renderIqDrawerTabs'), 'features/iq-shell.js must export renderIqDrawerTabs');
+  assert.ok(iqShell.includes('filterDrawerTabs'), 'features/iq-shell.js must export filterDrawerTabs');
 });
 
 test('SP2: scroll reset on category and group switches', () => {
@@ -817,18 +727,24 @@ test('SP2: haptics helper + call sites', () => {
   assert.ok(questsSrc.includes('window.iqHaptic(10)'), 'quest toggle must fire haptics');
 });
 
-test('Option 3 shell: iQ curved header, drawers, feed, slide-over sheets, and elevated center dock', () => {
-  assert.ok(html.includes('id="iqMenuBtn"'), 'hamburger drawer button missing');
+test('Option 3 shell & remodeled 2x2 Bento drawer tab section', () => {
+  assert.ok(html.includes('id="iqMenuBtn"'), 'top-left drawer launcher button missing');
+  assert.ok(html.includes('class="iq-bento-svg"'), 'top-left button must use crisp 2x2 Bento SVG icon');
+  assert.ok(html.includes('id="sphDrawerBtn"'), 'segment header browse pill missing');
   assert.ok(html.includes('id="iqNotifBtn"'), 'notification bell button missing');
   assert.ok(html.includes('id="iqHeroChallenge"'), 'floating hero challenge summary missing');
   assert.ok(html.includes('id="iqFeedArea"'), 'daily challenges feed container missing');
-  assert.ok(html.includes('id="iqDrawer"'), 'slide-out navigation drawer missing');
+  assert.ok(html.includes('id="iqDrawer"'), 'slide-out 3-dot drawer missing');
+  assert.ok(html.includes('id="iqDrawerSearch"'), '3-dot drawer filter input missing');
+  assert.ok(html.includes('id="iqDrawerCatBar"'), '3-dot drawer category tabs missing');
+  assert.ok(html.includes('id="iqDrawerTabs"'), '3-dot drawer tab groups container missing');
   assert.ok(html.includes('id="iqNotifDrawer"'), 'notifications drawer missing');
   assert.ok(html.includes('id="iqChallengeSheet"'), 'challenge progress ring slide-over sheet missing');
   assert.ok(html.includes('id="iqMasjidSheet"'), 'masjid check-ins slide-over sheet missing');
   assert.ok(html.includes('id="bnavCenterFab"'), 'elevated center dock crescent button missing');
   assert.ok(html.includes('features/masjid-checkins.js?v=1'), 'masjid-checkins script missing');
-  assert.ok(html.includes('features/iq-shell.js?v=1'), 'iq-shell script missing');
+  assert.ok(html.includes('features/iq-shell.js?v=2'), 'iq-shell script v=2 missing');
+  assert.ok(renderTabs.includes("menuBtn.style.display = 'inline-flex'"), 'top-left 3-dot menu button must stay visible on all views');
   assert.ok(css.includes('.iq-curved-header'), 'curved header CSS missing');
   assert.ok(css.includes('.bnav-center-fab'), 'elevated center dock CSS missing');
   assert.ok(css.includes('.iq-sheet-overlay'), 'slide-over sheet overlay CSS missing');

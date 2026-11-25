@@ -60,7 +60,7 @@
       if (backBtn && menuBtn) {
         var isHome = (catId === 'ibadah' && activeTab === 'today');
         backBtn.style.display = isHome ? 'none' : 'inline-flex';
-        menuBtn.style.display = isHome ? 'inline-flex' : 'none';
+        menuBtn.style.display = 'inline-flex';
       }
       if (sph && sphIcon && sphTitle && sphDesc) {
         if (catId === 'ibadah' && activeTab === 'today') {
@@ -104,19 +104,21 @@
   }
   window._updateSegmentHeader = _updateSegmentHeader;
 
+  function _firstTabForCategory(catId) {
+    var group = (typeof window !== 'undefined' && window.TAB_GROUPS && window.TAB_GROUPS[catId]) || [];
+    if (!group.length) return 'today';
+    if (Array.isArray(group[0].tabs) && group[0].tabs.length) return group[0].tabs[0].id;
+    return group[0].id || 'today';
+  }
+
   function switchCategory(catId, btn) {
     try { renderDateLine(); } catch (e) {}
-    _updateSegmentHeader(catId);
     document.querySelectorAll('.tab-panel').forEach(function(p) { p.classList.remove('active'); });
-    document.querySelectorAll('.t1-btn').forEach(function(el) {
-      el.classList.remove('active');
-      el.setAttribute('aria-selected', 'false');
-    });
     document.querySelectorAll('.bnav-btn').forEach(function(el) {
       el.classList.remove('active');
       el.setAttribute('aria-selected', 'false');
     });
-    if (btn) {
+    if (btn && btn.classList) {
       btn.classList.add('active');
       btn.setAttribute('aria-selected', 'true');
     }
@@ -125,148 +127,40 @@
       bnavMatch.classList.add('active');
       bnavMatch.setAttribute('aria-selected', 'true');
     }
-    var t1Match = (function(cid){ try { return document.querySelector('.t1-btn[data-cat="' + _escAttr(cid) + '"]'); } catch(e){ var els=document.querySelectorAll('.t1-btn'); for(var i=0;i<els.length;i++) if(els[i].getAttribute('data-cat')===cid) return els[i]; return null; } })(catId);
-    if (t1Match) {
-      t1Match.classList.add('active');
-      t1Match.setAttribute('aria-selected', 'true');
-    }
     if (window.S) { window.S.lastCat = catId; window.saveState(); }
     var group = window.TAB_GROUPS[catId] || [];
-    var container = document.getElementById('tier2Tabs');
-    var tier3Wrap = document.getElementById('tier3Wrap');
-    if (!container) return;
-
-    container.style.display = '';
-    container.classList.remove('surah-grid');
-
-    // Single-group categories (like names_main with 1 group) or flat categories (like profile_main):
-    // Flatten into clean, direct 1-level tabs to eliminate redundant chip levels!
     var hasMultipleGroups = group.length > 1 && Array.isArray(group[0].tabs);
-    var isSingleGroupWithTabs = group.length === 1 && Array.isArray(group[0].tabs);
-
-    if (hasMultipleGroups) {
-      _activeCategoryId = null;
-      container.classList.remove('surah-grid');
-      container.classList.add('cat-chips');
-      container.innerHTML = group.map(function(c, i) {
-        return `<button class="cat-chip ${i === 0 ? 'active' : ''}" onclick="window.selectCategory('${c.id}', this)" role="tab" aria-selected="${i === 0 ? 'true' : 'false'}"><span>${window.iqIcon(c.icon || c.id)}</span> ${t(c.label)}</button>`;
-      }).join('');
-      if (tier3Wrap) tier3Wrap.style.display = '';
-      var firstCat = group[0];
-      _activeCategoryId = firstCat.id;
-      _updateSegmentHeader(catId, firstCat.label);
-      renderCategoryTabs(firstCat);
-    } else {
-      container.classList.remove('cat-chips');
-      container.classList.remove('surah-grid');
-      var tabsList = isSingleGroupWithTabs ? group[0].tabs : group;
-      container.innerHTML = tabsList.map(function(p, i) {
-        return `<button data-tab="${p.id}" class="t2-btn ${i === 0 ? 'active' : ''}" onclick="window.activateTab('${p.id}', this)" role="tab" aria-selected="${i === 0 ? 'true' : 'false'}"><span>${window.iqIcon(p.icon || p.id)}</span> ${t(p.label)}</button>`;
-      }).join('');
-      if (tier3Wrap) tier3Wrap.style.display = 'none';
-      _updateSegmentHeader(catId, null);
-      if (tabsList.length > 0) activateTab(tabsList[0].id, container.firstElementChild);
-    }
+    _activeCategoryId = (hasMultipleGroups || (group.length === 1 && Array.isArray(group[0].tabs))) ? group[0].id : null;
+    var firstTab = _firstTabForCategory(catId);
+    activateTab(firstTab);
+    if (typeof window.syncIqDrawer === 'function') window.syncIqDrawer();
     var sc = document.querySelector('.app'); if (sc) sc.scrollTop = 0;
   }
 
-  function selectCategory(catId, btn) {
-    document.querySelectorAll('.cat-chip').forEach(function(el) {
-      el.classList.remove('active');
-      el.setAttribute('aria-selected', 'false');
-    });
-    document.querySelectorAll('#tier2Tabs .surah-card').forEach(function(el) {
-      el.classList.remove('active');
-    });
-    if (btn) {
-      btn.classList.add('active');
-      btn.setAttribute('aria-selected', 'true');
-    }
+  function selectCategory(catId) {
     _activeCategoryId = catId;
     var currentCat = (window.S && window.S.lastCat) || 'ibadah';
     var currentGroup = window.TAB_GROUPS[currentCat] || [];
     var cat = currentGroup.find(function(c) { return c.id === catId; });
-    if (cat) {
-      var tier3Wrap = document.getElementById('tier3Wrap');
-      if (tier3Wrap) tier3Wrap.style.display = '';
-      _updateSegmentHeader(currentCat, cat.label);
-      renderCategoryTabs(cat);
+    if (cat && Array.isArray(cat.tabs) && cat.tabs.length > 0) {
+      activateTab(cat.tabs[0].id);
+      _updateSegmentHeader(currentCat, cat.label, cat.tabs[0].id);
+    } else {
+      _updateSegmentHeader(currentCat, cat ? cat.label : null);
     }
+    if (typeof window.syncIqDrawer === 'function') window.syncIqDrawer();
     var sc = document.querySelector('.app'); if (sc) sc.scrollTop = 0;
   }
 
   function drillDown(tabId, btn) {
-    var grid = document.getElementById('tier3Tabs');
-    var wrap = document.getElementById('tier3Wrap');
-    if (!grid || !wrap) { activateTab(tabId, btn); return; }
-    wrap.style.display = 'none';
     activateTab(tabId, btn);
-    var panel = document.getElementById('panel-' + tabId);
-    if (panel) {
-      var existing = panel.querySelector('.drill-back');
-      if (!existing) {
-        var back = document.createElement('button');
-        back.className = 'drill-back';
-        back.innerHTML = '<span class="drill-back-arrow">←</span> Back to Topics';
-        back.onclick = function() { drillUp(); };
-        panel.insertBefore(back, panel.firstChild);
-      }
-    }
   }
 
   function drillUp() {
-    var wrap = document.getElementById('tier3Wrap');
     var currentCat = (window.S && window.S.lastCat) || 'ibadah';
-    document.querySelectorAll('.tab-panel').forEach(function(p) { p.classList.remove('active'); });
-    if (wrap) wrap.style.display = '';
-    var groups = window.TAB_GROUPS[currentCat] || [];
-    var cat = groups.find(function(c) { return c.id === _activeCategoryId; });
-    if (cat && cat.grid) renderCategoryTabs(cat);
-  }
-
-  function poolCount(tab) {
-    var count = 0;
-    if (tab.poolKeys) {
-      tab.poolKeys.forEach(function(k) {
-        var p = window[k] || (window.NEW_POOLS && NEW_POOLS[k]);
-        if (p && p.length) count += p.length;
-      });
-      return count;
+    if (typeof window.openIqDrawer === 'function') {
+      window.openIqDrawer(currentCat);
     }
-    var key = tab.poolKey || (tab.id.toUpperCase() + '_POOL');
-    var pool = window[key];
-    if (!pool && window.NEW_POOLS) pool = NEW_POOLS[tab.id];
-    if (pool && pool.length) count = pool.length;
-    return count;
-  }
-
-  function renderCategoryTabs(cat) {
-    var grid = document.getElementById('tier3Tabs');
-    if (!grid) return;
-    grid.dataset.cat = cat.id;
-    if (cat.grid) {
-      grid.classList.add('surah-grid');
-      grid.classList.remove('tier3-grid');
-      var catIcon = cat.icon || cat.id;
-      grid.innerHTML = cat.tabs.map(function(p, i) {
-        var icon = window.iqIcon(p.icon || p.id);
-        var desc = p.desc ? '<div style="font-size:0.72rem;color:var(--text2);margin-top:4px;line-height:1.4;">' + p.desc + '</div>' : '';
-        var count = poolCount(p);
-        var countHtml = count ? '<div style="font-size:0.68rem;color:var(--accent-light);margin-top:6px;font-weight:600;">' + count + ' entries</div>' : '';
-        return '<div class="surah-card" data-tab="' + p.id + '" onclick="window.drillDown(\'' + p.id + '\', this)">' +
-          '<div class="surah-num">' + icon + '</div>' +
-          '<div class="surah-name-en">' + t(p.label) + '</div>' +
-          desc +
-          countHtml +
-        '</div>';
-      }).join('');
-    } else {
-      grid.classList.remove('surah-grid');
-      grid.innerHTML = cat.tabs.map(function(p, i) {
-        return `<button data-tab="${p.id}" class="t2-btn ${i === 0 ? 'active' : ''}" onclick="window.activateTab('${p.id}', this)"><span>${window.iqIcon(p.icon || p.id)}</span> ${t(p.label)}</button>`;
-      }).join('');
-    }
-    if (cat.tabs.length > 0 && !cat.grid) activateTab(cat.tabs[0].id, grid.firstElementChild);
   }
 
   function getSectionPanels(sectionName) {
@@ -295,17 +189,12 @@
   }
 
   function activateTab(tabId, btn) {
-    document.querySelectorAll('.t2-btn, .t3-btn').forEach(function(b) {
-      if (b.getAttribute('data-tab') === tabId) {
-        b.classList.add('active');
-        b.setAttribute('aria-selected', 'true');
-      } else {
-        b.classList.remove('active');
-        b.setAttribute('aria-selected', 'false');
-      }
+    document.querySelectorAll('.iq-drawer-tab').forEach(function(b) {
+      var match = b.getAttribute('data-tab') === tabId;
+      b.classList.toggle('active', match);
+      b.setAttribute('aria-selected', match ? 'true' : 'false');
     });
-    document.querySelectorAll('.surah-card').forEach(function(b) { b.classList.remove('active'); });
-    if (btn) {
+    if (btn && btn.classList) {
       btn.classList.add('active');
       btn.setAttribute('aria-selected', 'true');
     }
@@ -316,50 +205,26 @@
     if (ownerCat && ownerCat !== currentCat) {
       currentCat = ownerCat;
       if (window.S) { window.S.lastCat = currentCat; window.saveState(); }
-      document.querySelectorAll('.t1-btn, .bnav-btn').forEach(function(el) {
-        var isMatch = el.getAttribute('data-cat') === currentCat;
-        el.classList.toggle('active', isMatch);
-        el.setAttribute('aria-selected', isMatch ? 'true' : 'false');
-      });
-      var grp = window.TAB_GROUPS[currentCat] || [];
-      var t2 = document.getElementById('tier2Tabs');
-      var t3w = document.getElementById('tier3Wrap');
-      if (t2) {
-        var hasMulti = grp.length > 1 && Array.isArray(grp[0].tabs);
-        var isSingleWithTabs = grp.length === 1 && Array.isArray(grp[0].tabs);
-        if (hasMulti) {
-          t2.classList.remove('surah-grid');
-          t2.classList.add('cat-chips');
-          t2.innerHTML = grp.map(function(c, i) {
-            return '<button class="cat-chip ' + (i === 0 ? 'active' : '') + '" onclick="window.selectCategory(\'' + c.id + '\', this)" role="tab" aria-selected="' + (i === 0 ? 'true' : 'false') + '"><span>' + window.iqIcon(c.icon || c.id) + '</span> ' + t(c.label) + '</button>';
-          }).join('');
-          if (t3w) t3w.style.display = '';
-        } else {
-          t2.classList.remove('cat-chips');
-          t2.classList.remove('surah-grid');
-          var tList = isSingleWithTabs ? grp[0].tabs : grp;
-          t2.innerHTML = tList.map(function(p, i) {
-            return '<button data-tab="' + p.id + '" class="t2-btn ' + (i === 0 ? 'active' : '') + '" onclick="window.activateTab(\'' + p.id + '\', this)" role="tab" aria-selected="' + (i === 0 ? 'true' : 'false') + '"><span>' + window.iqIcon(p.icon || p.id) + '</span> ' + t(p.label) + '</button>';
-          }).join('');
-          if (t3w) t3w.style.display = 'none';
-        }
-      }
     }
+    document.querySelectorAll('.bnav-btn').forEach(function(el) {
+      var isMatch = el.getAttribute('data-cat') === currentCat;
+      el.classList.toggle('active', isMatch);
+      el.setAttribute('aria-selected', isMatch ? 'true' : 'false');
+    });
     var catGroups = window.TAB_GROUPS[currentCat] || [];
     var activeGrp = null;
     if (Array.isArray(catGroups)) {
       for (var gi = 0; gi < catGroups.length; gi++) {
-        if (catGroups[gi].tabs && catGroups[gi].tabs.some(function(t) { return t.id === tabId; })) {
+        if (catGroups[gi].tabs && catGroups[gi].tabs.some(function(tb) { return tb.id === tabId; })) {
           activeGrp = catGroups[gi];
           break;
         }
       }
     }
     _updateSegmentHeader(currentCat, activeGrp ? activeGrp.label : null, tabId);
+    if (typeof window.syncIqDrawer === 'function') window.syncIqDrawer();
     if (!window._hashNavigating) {
-      var catEl = document.querySelector('.t1-btn.active');
-      var catId = (catEl && typeof catEl.getAttribute === "function") ? catEl.getAttribute("data-cat") : ((catEl && catEl["data-cat"]) || null);
-      if (catId) _pushTabState(catId, tabId);
+      if (currentCat) _pushTabState(currentCat, tabId);
     }
     var sectionName = null;
     var sections = (typeof window !== 'undefined' && window.PANEL_SECTIONS) || {};
@@ -489,70 +354,13 @@
     if (window.renderTopBar) window.renderTopBar();
   }
 
-  function initTierTabKeyboardNav() {
-    var tier1Tabs = document.querySelector('.tier1-tabs');
-    if (!tier1Tabs) return;
-    tier1Tabs.addEventListener('keydown', function(e) {
-      var tabs = Array.from(tier1Tabs.querySelectorAll('.t1-btn'));
-      var currentIndex = tabs.findIndex(function(t) { return t.classList.contains('active'); });
-      if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
-        e.preventDefault();
-        var nextIndex = (currentIndex + 1) % tabs.length;
-        tabs[nextIndex].focus();
-        tabs[nextIndex].click();
-      } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
-        e.preventDefault();
-        var prevIndex = (currentIndex - 1 + tabs.length) % tabs.length;
-        tabs[prevIndex].focus();
-        tabs[prevIndex].click();
-      } else if (e.key === 'Home') {
-        e.preventDefault();
-        tabs[0].focus();
-        tabs[0].click();
-      } else if (e.key === 'End') {
-        e.preventDefault();
-        tabs[tabs.length - 1].focus();
-        tabs[tabs.length - 1].click();
-      }
-    });
-  }
-
-  function initTier2TabKeyboardNav() {
-    var tier2Tabs = document.getElementById('tier2Tabs');
-    if (!tier2Tabs) return;
-    tier2Tabs.addEventListener('keydown', function(e) {
-      var tabs = Array.from(tier2Tabs.querySelectorAll('.t2-btn, .cat-chip'));
-      if (tabs.length === 0) return;
-      var currentIndex = tabs.findIndex(function(t) { return t.classList.contains('active'); });
-      if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
-        e.preventDefault();
-        var nextIndex = (currentIndex + 1) % tabs.length;
-        tabs[nextIndex].focus();
-        tabs[nextIndex].click();
-      } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
-        e.preventDefault();
-        var prevIndex = (currentIndex - 1 + tabs.length) % tabs.length;
-        tabs[prevIndex].focus();
-        tabs[prevIndex].click();
-      } else if (e.key === 'Home') {
-        e.preventDefault();
-        tabs[0].focus();
-        tabs[0].click();
-      } else if (e.key === 'End') {
-        e.preventDefault();
-        tabs[tabs.length - 1].focus();
-        tabs[tabs.length - 1].click();
-      }
-    });
-  }
-
   function initBnavKeyboardNav() {
     var bnav = document.getElementById('bnav');
     if (!bnav) return;
     bnav.addEventListener('keydown', function(e) {
       var tabs = Array.from(bnav.querySelectorAll('.bnav-btn'));
       if (tabs.length === 0) return;
-      var currentIndex = tabs.findIndex(function(t) { return t.classList.contains('active'); });
+      var currentIndex = tabs.findIndex(function(tb) { return tb.classList.contains('active'); });
       if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
         e.preventDefault();
         var nextIndex = (currentIndex + 1) % tabs.length;
@@ -576,15 +384,6 @@
   }
 
   function populateTier1Icons() {
-    var buttons = document.querySelectorAll('.t1-btn');
-    buttons.forEach(function(btn) {
-      var span = btn.querySelector('.iq-inline');
-      if (!span || span.childElementCount > 0) return;
-      var cat = btn.getAttribute('data-cat');
-      if (!cat) return;
-      var icon = window.iqIcon(cat);
-      if (icon) span.innerHTML = icon;
-    });
     document.querySelectorAll('.bnav-btn').forEach(function(btn) {
       var span = btn.querySelector('.bnav-icon');
       if (!span || span.childElementCount > 0) return;
@@ -599,15 +398,12 @@
   window._findTabBtn = _findTabBtn;
   window.switchCategory = switchCategory;
   window.selectCategory = selectCategory;
-  window.renderCategoryTabs = renderCategoryTabs;
   window.getSectionPanels = getSectionPanels;
   window.activateTab = activateTab;
   window.drillDown = drillDown;
   window.drillUp = drillUp;
   window.switchTab = switchTab;
   window.renderTab = renderTab;
-  window.initTierTabKeyboardNav = initTierTabKeyboardNav;
-  window.initTier2TabKeyboardNav = initTier2TabKeyboardNav;
   window.initBnavKeyboardNav = initBnavKeyboardNav;
   window.populateTier1Icons = populateTier1Icons;
 

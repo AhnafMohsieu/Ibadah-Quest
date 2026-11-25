@@ -167,27 +167,6 @@ function setupQuestEnv() {
   return sandbox;
 }
 
-function setupThemeEnv() {
-  const doc = createDocument();
-  const sandbox = loadSandbox(['core/themes.js'], {
-    window: { Themes: [{ key: 'light' }, { key: 'serene' }, { key: 'royal' }] },
-    S: { theme: 'light' },
-    localStorage: {
-      store: {},
-      getItem: function (k) { return this.store[k] || null; },
-      setItem: function (k, v) { this.store[k] = v; },
-      removeItem: function (k) { delete this.store[k]; }
-    },
-    saveState: stub(),
-    updateTopBar: stub(),
-    renderTab: stub(),
-    document: doc,
-    getComputedStyle: () => ({ getPropertyValue: () => '' })
-  });
-  sandbox._doc = doc;
-  return sandbox;
-}
-
 describe('Full prayer flow', () => {
   it('init -> pray Fajr -> check XP -> check level', () => {
     const s = setupPrayerEnv();
@@ -274,35 +253,5 @@ describe('Quest completion flow', () => {
 
     assert.equal(s.S.xp, 0, 'no duplicate XP');
     assert.equal(s.S.tq, 0, 'total quests unchanged');
-  });
-});
-
-describe('Theme switch flow', () => {
-  it('setTheme -> applyTheme -> data-theme attribute set', () => {
-    const s = setupThemeEnv();
-
-    s.setTheme('serene');
-
-    assert.equal(s.S.theme, 'serene', 'S.theme set to serene');
-    assert.equal(s._doc.documentElement.getAttribute('data-theme'), 'serene', 'data-theme attribute set');
-  });
-
-  it('applyTheme reads S.theme and applies it', () => {
-    const s = setupThemeEnv();
-    s.S.theme = 'royal';
-
-    s.applyTheme();
-
-    assert.equal(s._doc.documentElement.getAttribute('data-theme'), 'royal', 'applyTheme sets data-theme');
-  });
-
-  it('light theme removes data-theme attribute', () => {
-    const s = setupThemeEnv();
-    s.S.theme = 'light';
-    s._doc.documentElement.setAttribute('data-theme', 'serene');
-
-    s.applyTheme();
-
-    assert.equal(s._doc.documentElement.getAttribute('data-theme'), null, 'data-theme removed for light');
   });
 });

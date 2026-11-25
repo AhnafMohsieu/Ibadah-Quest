@@ -4,7 +4,7 @@
   var MIN_DX = 60;
   var EDGE = 28;
   var RATIO = 1.5;
-  var EXCLUDE = '#dailyCarousel, .tier-nav-container, .pull-refresh-indicator, input, textarea, select';
+  var EXCLUDE = '#dailyCarousel, .iq-drawer, .pull-refresh-indicator, input, textarea, select';
 
   // Pure gesture resolution: -1 = previous section, +1 = next, 0 = ignore.
   function _swipeDir(startX, dx, dy, viewportW) {
@@ -47,10 +47,6 @@
       if (!dir) return;
       var btns = document.querySelectorAll('.bnav-btn');
       var active = document.querySelector('.bnav-btn.active');
-      if (!btns.length || !active) {
-        btns = document.querySelectorAll('.t1-btn');
-        active = document.querySelector('.t1-btn.active');
-      }
       if (!btns.length || !active) return;
       var current = Array.prototype.indexOf.call(btns, active);
       var next = _swipeIndex(current, dir, btns.length);

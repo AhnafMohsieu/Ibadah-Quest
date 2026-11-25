@@ -4,6 +4,22 @@
   var _stopwatchTimer = null;
   var _stopwatchRunning = false;
   var _activeFocusId = 'dhikr';
+  var _drawerCat = null;
+  var _drawerQuery = '';
+  var _drawerDirty = true;
+  var _lastDrawerSig = '';
+
+  var DRAWER_CATS = [
+    { id: 'ibadah', label: 'Daily', icon: 'ibadah' },
+    { id: 'knowledge', label: 'Knowledge', icon: 'knowledge' },
+    { id: 'names_main', label: 'Names', icon: 'names_main' },
+    { id: 'library', label: 'Library', icon: 'library' },
+    { id: 'profile_main', label: 'Profile', icon: 'profile_main' }
+  ];
+
+  function tLabel(k) {
+    return (typeof window !== 'undefined' && typeof window.t === 'function') ? window.t(k) : k;
+  }
 
   function todayStr() {
     if (typeof today === 'function') return today();
@@ -331,8 +347,180 @@
     if (document.body) document.body.classList.remove('iq-sheet-open');
   }
 
-  function openIqDrawer() {
+  function drawerPoolCount(tab) {
+    try {
+      var count = 0;
+      if (tab.poolKeys) {
+        tab.poolKeys.forEach(function(k) {
+          var p = (typeof window !== 'undefined' && window[k]) || (typeof NEW_POOLS !== 'undefined' && NEW_POOLS[k]);
+          if (p && p.length) count += p.length;
+        });
+        return count;
+      }
+      var key = tab.poolKey || (tab.id ? tab.id.toUpperCase() + '_POOL' : '');
+      var pool = (key && typeof window !== 'undefined') ? window[key] : null;
+      if (!pool && typeof NEW_POOLS !== 'undefined') pool = NEW_POOLS[tab.id];
+      if (pool && pool.length) count = pool.length;
+      return count;
+    } catch (e) {
+      return 0;
+    }
+  }
+
+  function renderDrawerTabTile(tab, activeTab, badgeCatLabel) {
+    var isAct = tab.id === activeTab;
+    var count = drawerPoolCount(tab);
+    var subText = badgeCatLabel
+      ? badgeCatLabel + (count ? ' · ' + count + ' entries' : '')
+      : (tab.desc || (count ? count + ' entries' : ''));
+    return '<button type="button" data-tab="' + esc(tab.id) + '" class="iq-drawer-tab' + (isAct ? ' active' : '') + '" onclick="window.drawerNavigate && window.drawerNavigate(\'' + esc(tab.id) + '\')">' +
+      '<span class="iq-drawer-tab-icon">' + icon(tab.icon || tab.id) + '</span>' +
+      '<span class="iq-drawer-tab-meta">' +
+        '<span class="iq-drawer-tab-label">' + esc(tLabel(tab.label)) + '</span>' +
+        (subText ? '<span class="iq-drawer-tab-desc">' + esc(subText) + '</span>' : '') +
+      '</span>' +
+    '</button>';
+  }
+
+  function renderIqDrawerTabs(catOverride, queryOverride) {
+    if (typeof document === 'undefined') return;
+    var groupsRoot = (typeof TAB_GROUPS !== 'undefined' ? TAB_GROUPS : (typeof window !== 'undefined' ? window.TAB_GROUPS : null)) || {};
+    var catBar = document.getElementById('iqDrawerCatBar');
+    var tabsBox = document.getElementById('iqDrawerTabs');
+    var searchInp = document.getElementById('iqDrawerSearch');
+    var clearBtn = document.getElementById('iqDrawerSearchClear');
+    if (!catBar && !tabsBox) return;
+
+    var s = (typeof S !== 'undefined' && S) ? S : {};
+    var activeCat = catOverride || _drawerCat || s.lastCat || 'ibadah';
+    if (!groupsRoot[activeCat]) activeCat = 'ibadah';
+    _drawerCat = activeCat;
+    var activeTab = s.lastSub || 'today';
+    var qRaw = (queryOverride !== undefined) ? String(queryOverride == null ? '' : queryOverride) : _drawerQuery;
+    _drawerQuery = qRaw;
+    var q = qRaw.trim().toLowerCase();
+
+    if (searchInp && searchInp.value !== qRaw) searchInp.value = qRaw;
+    if (clearBtn) clearBtn.style.display = q ? 'inline-flex' : 'none';
+
+    var sig = activeCat + '|' + activeTab + '|' + q;
+    if (!_drawerDirty && sig === _lastDrawerSig) return;
+    _drawerDirty = false;
+    _lastDrawerSig = sig;
+
+    if (catBar) {
+      catBar.innerHTML = DRAWER_CATS.map(function(c) {
+        var grp = groupsRoot[c.id] || [];
+        var tabCount = 0;
+        for (var i = 0; i < grp.length; i++) {
+          tabCount += Array.isArray(grp[i].tabs) ? grp[i].tabs.length : 1;
+        }
+        var isActive = c.id === activeCat && !q;
+        return '<button type="button" class="iq-drawer-cat' + (isActive ? ' active' : '') + '" data-cat="' + esc(c.id) + '" role="tab" aria-selected="' + (isActive ? 'true' : 'false') + '" onclick="window.selectDrawerCategory && window.selectDrawerCategory(\'' + esc(c.id) + '\')">' +
+          '<span class="iq-drawer-cat-ico">' + icon(c.icon) + '</span>' +
+          '<span>' + esc(tLabel(c.label)) + '</span>' +
+          '<span class="iq-drawer-cat-num">' + tabCount + '</span>' +
+        '</button>';
+      }).join('');
+    }
+
+    if (!tabsBox) return;
+    if (q) {
+      var matches = [];
+      for (var ci = 0; ci < DRAWER_CATS.length; ci++) {
+        var catMeta = DRAWER_CATS[ci];
+        var catEntries = groupsRoot[catMeta.id] || [];
+        for (var gi = 0; gi < catEntries.length; gi++) {
+          var entry = catEntries[gi];
+          if (Array.isArray(entry.tabs)) {
+            for (var ti = 0; ti < entry.tabs.length; ti++) {
+              var tb = entry.tabs[ti];
+              var hay = (tLabel(tb.label) + ' ' + tb.id + ' ' + (tb.desc || '') + ' ' + tLabel(entry.label) + ' ' + tLabel(catMeta.label)).toLowerCase();
+              if (hay.indexOf(q) > -1) {
+                matches.push(renderDrawerTabTile(tb, activeTab, tLabel(catMeta.label) + ' › ' + tLabel(entry.label)));
+              }
+            }
+          } else {
+            var flatHay = (tLabel(entry.label) + ' ' + entry.id + ' ' + tLabel(catMeta.label)).toLowerCase();
+            if (flatHay.indexOf(q) > -1) {
+              matches.push(renderDrawerTabTile(entry, activeTab, tLabel(catMeta.label)));
+            }
+          }
+        }
+      }
+      tabsBox.innerHTML = matches.length
+        ? '<div class="iq-drawer-search-count">' + matches.length + ' match(es) for &ldquo;' + esc(qRaw.trim()) + '&rdquo;</div><div class="iq-drawer-grid">' + matches.join('') + '</div>'
+        : '<div class="iq-empty-card">No section matches &ldquo;' + esc(qRaw.trim()) + '&rdquo;. Try another keyword.</div>';
+      return;
+    }
+
+    var group = groupsRoot[activeCat] || [];
+    if (!group.length) {
+      tabsBox.innerHTML = '<div class="iq-empty-card">No sections configured.</div>';
+      return;
+    }
+
+    var isCategorized = Array.isArray(group[0].tabs);
+    if (!isCategorized) {
+      tabsBox.innerHTML = '<div class="iq-drawer-grid">' + group.map(function(tb) {
+        return renderDrawerTabTile(tb, activeTab, '');
+      }).join('') + '</div>';
+      return;
+    }
+
+    tabsBox.innerHTML = group.map(function(grp, idx) {
+      var containsActive = grp.tabs.some(function(tb) { return tb.id === activeTab; });
+      var openAttr = (containsActive || group.length <= 2 || idx === 0) ? ' open' : '';
+      return '<details class="iq-drawer-group"' + openAttr + '>' +
+        '<summary class="iq-drawer-group-head">' +
+          '<span class="iq-drawer-group-title">' + icon(grp.icon || grp.id) + ' ' + esc(tLabel(grp.label)) + '</span>' +
+          '<span class="iq-drawer-group-count">' + grp.tabs.length + '</span>' +
+        '</summary>' +
+        '<div class="iq-drawer-grid">' +
+          grp.tabs.map(function(tb) { return renderDrawerTabTile(tb, activeTab, ''); }).join('') +
+        '</div>' +
+      '</details>';
+    }).join('');
+  }
+
+  function markIqDrawerDirty() {
+    _drawerDirty = true;
+  }
+
+  function syncIqDrawer() {
+    _drawerDirty = true;
+    var s = (typeof S !== 'undefined' && S) ? S : {};
+    if (s.lastCat) _drawerCat = s.lastCat;
+    if (typeof document === 'undefined') return;
+    var d = document.getElementById('iqDrawer');
+    if (d && d.classList.contains('open')) {
+      renderIqDrawerTabs(_drawerCat, _drawerQuery);
+    }
+  }
+
+  function selectDrawerCategory(catId) {
+    _drawerCat = catId;
+    _drawerQuery = '';
+    _drawerDirty = true;
+    renderIqDrawerTabs(catId, '');
+    if (typeof document !== 'undefined') {
+      var tabsBox = document.getElementById('iqDrawerTabs');
+      if (tabsBox) tabsBox.scrollTop = 0;
+    }
+  }
+
+  function filterDrawerTabs(query) {
+    _drawerQuery = String(query == null ? '' : query);
+    _drawerDirty = true;
+    renderIqDrawerTabs(_drawerCat, _drawerQuery);
+  }
+
+  function openIqDrawer(focusCatId) {
     closeNotifDrawer();
+    if (focusCatId) _drawerCat = focusCatId;
+    else if (!_drawerCat && typeof S !== 'undefined' && S && S.lastCat) _drawerCat = S.lastCat;
+    _drawerDirty = true;
+    renderIqDrawerTabs(_drawerCat, _drawerQuery);
     if (typeof document === 'undefined') return;
     var d = document.getElementById('iqDrawer');
     var bd = document.getElementById('iqDrawerBackdrop');
@@ -410,12 +598,15 @@
 
   function drawerNavigate(target) {
     closeIqDrawer();
+    var groupsRoot = (typeof TAB_GROUPS !== 'undefined' ? TAB_GROUPS : (typeof window !== 'undefined' ? window.TAB_GROUPS : null)) || {};
     if (target === 'masjid' && typeof window.openMasjidCheckins === 'function') {
       window.openMasjidCheckins('map');
     } else if (target === 'challenge') {
       openChallengeDetail('dhikr');
     } else if (target === 'names' && typeof window.switchCategory === 'function') {
       window.switchCategory('names_main');
+    } else if (groupsRoot[target] && typeof window.switchCategory === 'function') {
+      window.switchCategory(target);
     } else if (typeof window.activateTab === 'function') {
       window.activateTab(target);
     }
@@ -440,6 +631,11 @@
   window.quickChallengeAction = quickChallengeAction;
   window.openIqDrawer = openIqDrawer;
   window.closeIqDrawer = closeIqDrawer;
+  window.renderIqDrawerTabs = renderIqDrawerTabs;
+  window.selectDrawerCategory = selectDrawerCategory;
+  window.filterDrawerTabs = filterDrawerTabs;
+  window.markIqDrawerDirty = markIqDrawerDirty;
+  window.syncIqDrawer = syncIqDrawer;
   window.openNotifDrawer = openNotifDrawer;
   window.closeNotifDrawer = closeNotifDrawer;
   window.renderNotifDrawerBody = renderNotifDrawerBody;

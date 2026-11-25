@@ -10,6 +10,7 @@ function makeEl() {
   return {
     innerHTML: '',
     textContent: '',
+    value: '',
     style: {},
     classList: {
       _set: new Set(),
@@ -31,6 +32,10 @@ function setupShell() {
     iqHeroChallenge: makeEl(),
     iqDrawer: makeEl(),
     iqDrawerBackdrop: makeEl(),
+    iqDrawerCatBar: makeEl(),
+    iqDrawerTabs: makeEl(),
+    iqDrawerSearch: makeEl(),
+    iqDrawerSearchClear: makeEl(),
     iqNotifDrawer: makeEl(),
     iqChallengeSheet: makeEl(),
     iqChallengeBody: makeEl(),
@@ -41,6 +46,8 @@ function setupShell() {
     xp: 250,
     lv: 2,
     cs: 3,
+    lastCat: 'ibadah',
+    lastSub: 'today',
     log: {
       '2026-11-25': {
         p: { fajr: true, dhuhr: true, asr: true },
@@ -59,9 +66,28 @@ function setupShell() {
     PRAYERS: [{ id: 'fajr' }, { id: 'dhuhr' }, { id: 'asr' }, { id: 'maghrib' }, { id: 'isha' }],
     VOLUNTARY: [{ id: 'tahajjud', name: 'Tahajjud' }, { id: 'duha', name: 'Duha' }],
     DEEDS: [{ id: 'smile', name: 'Smile' }, { id: 'charity_daily', name: 'Charity' }, { id: 'visit_sick', name: 'Visit' }],
+    TAB_GROUPS: {
+      ibadah: [
+        { id: 'tracking', label: 'Daily Tracking', tabs: [{ id: 'today', label: 'Today', icon: 'today' }, { id: 'dhikr', label: 'Dhikr', icon: 'dhikr' }] }
+      ],
+      knowledge: [
+        { id: 'quran_hadith', label: "Qur'an & Hadith", grid: true, tabs: [{ id: 'quran', label: "Qur'an", icon: 'quran', desc: 'Surah library' }, { id: 'hadith', label: 'Hadith', icon: 'hadith' }] }
+      ],
+      names_main: [
+        { id: 'names_grp', label: 'Names', tabs: [{ id: 'allah_names', label: '99 Names', icon: 'allah_names' }] }
+      ],
+      library: [
+        { id: 'history', label: 'History', tabs: [{ id: 'prophets', label: 'Prophets', icon: 'prophets' }] }
+      ],
+      profile_main: [
+        { id: 'profile_hub', label: 'Account', tabs: [{ id: 'profile', label: 'Profile', icon: 'profile' }] }
+      ]
+    },
     today: () => '2026-11-25',
     iqIcon: (k) => '[' + k + ']',
-    window: {},
+    window: {
+      escapeHTML: (v) => String(v == null ? '' : v).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]))
+    },
     document: {
       body,
       getElementById: (id) => els[id] || null,
@@ -105,4 +131,28 @@ test('openChallengeDetail renders circular progress ring sheet and closeActiveSh
   assert.ok(els.iqChallengeBody.innerHTML.includes('250'), 'detail sheet must show today dhikr progress');
   sb.window.closeActiveSheet();
   assert.strictEqual(els.iqChallengeSheet.classList.contains('open'), false);
+});
+
+test('3-dot drawer renders all 5 TAB_GROUPS categories lazily on open and switches category tabs', () => {
+  const { sb, els } = setupShell();
+  assert.strictEqual(els.iqDrawerCatBar.innerHTML, '', 'drawer tabs must not build DOM before drawer opens');
+  sb.window.openIqDrawer();
+  assert.ok(els.iqDrawerCatBar.innerHTML.includes('Daily'), 'drawer must list Daily category');
+  assert.ok(els.iqDrawerCatBar.innerHTML.includes('Knowledge'), 'drawer must list Knowledge category');
+  assert.ok(els.iqDrawerCatBar.innerHTML.includes('Names'), 'drawer must list Names category');
+  assert.ok(els.iqDrawerCatBar.innerHTML.includes('Library'), 'drawer must list Library category');
+  assert.ok(els.iqDrawerCatBar.innerHTML.includes('Profile'), 'drawer must list Profile category');
+  assert.ok(els.iqDrawerTabs.innerHTML.includes("data-tab=\"today\""), 'initial drawer view shows Daily subtabs');
+  sb.window.selectDrawerCategory('knowledge');
+  assert.ok(els.iqDrawerTabs.innerHTML.includes("data-tab=\"quran\""), 'switching category renders Knowledge subtabs');
+});
+
+test('3-dot drawer search filters across categories and escapes HTML safely', () => {
+  const { sb, els } = setupShell();
+  sb.window.openIqDrawer();
+  sb.window.filterDrawerTabs('quran');
+  assert.ok(els.iqDrawerTabs.innerHTML.includes("data-tab=\"quran\""), 'search must match quran tab');
+  assert.ok(!els.iqDrawerTabs.innerHTML.includes("data-tab=\"dhikr\""), 'search must exclude unmatched tabs');
+  sb.window.filterDrawerTabs('<img src=x onerror=alert(1)>');
+  assert.ok(!els.iqDrawerTabs.innerHTML.includes('<img'), 'malicious search input must be escaped via escapeHTML');
 });

@@ -20,8 +20,8 @@ const expected = [
   'recoverSalvage','recoverFresh','recoverImport','setQuranView',
   'quranSearchFilter','openQuranSurah','quranBack','openQuranJuz','openHadithCollection','openHadithBook',
   'hadithBack','playQuranVerse','playSurah','stopSurah','setQuranReciter','playJuz','updateJuzButton',
-  'calPrevMonth','calNextMonth','calGoToday','selectAvatar','selectTitle','selectFrame','setTheme',
-  'toggleTheme','toggleNotifications','buy','tapDhikr','resetDhikr','nextDhikr','toggleDhikrHaptic','activateTab',
+  'calPrevMonth','calNextMonth','calGoToday','selectAvatar','selectTitle','selectFrame',
+  'toggleNotifications','buy','tapDhikr','resetDhikr','nextDhikr','toggleDhikrHaptic','activateTab',
   'switchCategory','toggleAvatarPicker','openMasjidCheckins','openChallengeDetail','openIqDrawer','openNotifDrawer','closeActiveSheet'
 ];
 
@@ -67,11 +67,11 @@ const files = [
   'data/levels.js','data/prayers.js','data/quests.js','data/deeds.js','data/voluntary.js','data/morning-evening.js',
   'data/relatable-dhikr.js',
   'data/shop.js','data/journeys.js','data/achievements.js','data/tab-groups.js','data/icons.js',
-  'data/tips-details.js','data/hadith-collections.js','data/theme-meta.js','data/streak-msgs.js',
+  'data/tips-details.js','data/hadith-collections.js','data/streak-msgs.js',
   'data/pools/new-pools.js','data/pools/helpers.js',
   'core/state.js',
   'core/calendar.js','core/render-prayers.js','core/static.js','core/dynamic.js','core/tabs.js','core/render.js',
-  'core/themes.js','core/xp.js','core/prayers.js','core/quests.js','core/achievements.js','core/shop.js','core/dhikr.js','core/content.js',
+  'core/xp.js','core/prayers.js','core/quests.js','core/achievements.js','core/shop.js','core/dhikr.js','core/content.js',
   'core/actions.js'
 ];
 
