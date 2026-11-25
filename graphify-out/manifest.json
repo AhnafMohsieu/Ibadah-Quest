@@ -1044,9 +1044,9 @@
     "semantic_hash": ""
   },
   "sw.js": {
-    "mtime": 1795621064.4528348,
-    "seen": 1795621628.609591,
-    "ast_hash": "85b06f4205ce1d944032cd306a8c2fc8",
+    "mtime": 1795622619.8877122,
+    "seen": 1795622808.7158368,
+    "ast_hash": "88fc824e53c3ff5b84397c7f5e0b1436",
     "semantic_hash": ""
   },
   "tests/achievement-showcase.test.js": {
@@ -1224,9 +1224,9 @@
     "semantic_hash": ""
   },
   "tests/html.test.js": {
-    "mtime": 1795622148.2305274,
-    "seen": 1795622183.9730122,
-    "ast_hash": "785a7a47c71b1959dd71910143cf9563",
+    "mtime": 1795622625.4091735,
+    "seen": 1795622808.7159047,
+    "ast_hash": "fdaadb8b0f200d9706633f0647b535cc",
     "semantic_hash": ""
   },
   "tests/i18n.test.js": {
@@ -1872,9 +1872,9 @@
     "semantic_hash": ""
   },
   "index.html": {
-    "mtime": 1795622154.4299595,
-    "seen": 1795622183.9732094,
-    "ast_hash": "64aa22cff5ba25168e90f3df88266978",
+    "mtime": 1795622616.7093525,
+    "seen": 1795622808.716142,
+    "ast_hash": "fef65f8beeb456101ea4ff927fd79538",
     "semantic_hash": ""
   },
   "src/pages/ibadah/ibadah.html": {

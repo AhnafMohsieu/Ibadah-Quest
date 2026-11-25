@@ -51,7 +51,8 @@
     html{overflow-x:clip}
     body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;-webkit-tap-highlight-color:transparent;line-height:1.6;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;opacity:1;transition:background 200ms ease,color 200ms ease}
     body.loading{opacity:0}
-    .app{position:relative;z-index:1;max-width:min(62rem,100%);margin:0 auto;padding:0 16px 16px;overflow-x:clip}
+    .app{position:relative;z-index:1;width:100%;max-width:min(84rem,100%);margin:0 auto;padding:0 16px 16px;overflow-x:clip}
+    .tab-content{width:100%;align-self:stretch}
     .top-bar{position:sticky;top:0;z-index:100;display:flex;justify-content:space-between;align-items:center;padding:calc(10px + env(safe-area-inset-top, 0px)) 16px 14px;background:linear-gradient(145deg,#07434b 0%,#0b7a75 60%,#14b8a6 100%);color:#fff;margin:0 -16px 14px;border-radius:0 0 26px 26px}
     .header{text-align:center;padding:12px 0 8px}
     .header h1{font-family:var(--font-heading);font-size:clamp(1.4rem,4vw,2rem);font-weight:700;color:var(--text);letter-spacing:1px;margin:0}
@@ -60,7 +61,7 @@
     .tab-panel{display:none}
     .tab-panel.active{display:block}
   </style>
-  <link rel="preload" href="styles/main.css?v=46" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <link rel="preload" href="styles/main.css?v=47" as="style" onload="this.onload=null;this.rel='stylesheet'">
   <script>
     window.__iqBootT0 = Date.now();
     window.__iqReload = function() { location.reload(); };
@@ -605,7 +606,7 @@
     });
   }
   window.addEventListener('load', function() {
-    navigator.serviceWorker.register('sw.js?v=59').then(function(reg) {
+    navigator.serviceWorker.register('sw.js?v=60').then(function(reg) {
       if (reg.waiting) { showUpdateBanner(reg); return; }
       reg.addEventListener('updatefound', function() {
         var sw = reg.installing;

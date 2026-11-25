@@ -71,7 +71,7 @@ test('main.css uses modern iQ teal-mint tokens', () => {
 });
 
 test('index.html registers the service worker and update banner', () => {
-  assert.ok(html.includes("navigator.serviceWorker.register('sw.js?v=59')"));
+  assert.ok(html.includes("navigator.serviceWorker.register('sw.js?v=60')"));
   assert.ok(html.includes("'SKIP_WAITING'"));
   assert.ok(html.includes('swUpdateBanner'));
 });
@@ -94,7 +94,7 @@ test('hadith/dhikr audio modules wired with versions and load order', () => {
   assert.ok(html.includes('<script src="data/hadith-normalize.js?v=1"></script>'));
   assert.ok(html.includes('<script src="features/hadith-library.js?v=3" defer></script>'));
   assert.ok(html.includes('<script src="features/tafsir-library.js?v=3" defer></script>'));
-  assert.ok(html.includes('styles/main.css?v=46'));
+  assert.ok(html.includes('styles/main.css?v=47'));
   assert.ok(html.indexOf('core/content-cache.js') < html.indexOf('core/state.js'), 'cache module loads before state');
   assert.ok(html.indexOf('core/audio.js') < html.indexOf('core/static.js'), 'audio module loads before renderers');
   assert.ok(html.indexOf('features/tafsir-library.js') > html.indexOf('core/static.js'), 'deferred features load after renderers');
@@ -550,14 +550,19 @@ test('display type scales fluidly', () => {
     'timer countdown must be fluid');
 });
 
-test('coarse pointers force the mobile shell', () => {
-  const i = css.indexOf('@media (pointer:coarse)');
-  assert.ok(i > -1, 'coarse block missing');
-  const hideIdx = css.indexOf('@media (min-width: 768px)');
-  assert.ok(hideIdx > -1 && hideIdx < i, 'coarse block must come after the bnav hide rule');
-  const b = css.slice(i, i + 1400);
-  assert.ok(b.includes('nav.bnav{display:flex;}'), 'coarse must force bnav visible');
-  assert.ok(b.includes('#dateLine{display:block;}'), 'coarse must show date line');
+test('coarse pointers force mobile shell ONLY below tablet width', () => {
+  const i = css.indexOf('@media (pointer:coarse) and (max-width: 767px)');
+  assert.ok(i > -1, 'width-guarded coarse mobile block missing');
+  const b = css.slice(i, i + 900);
+  assert.ok(b.includes('nav.bnav{display:flex;}'), 'mobile coarse must show bnav');
+  assert.ok(b.includes('#dateLine{display:block;}'), 'mobile coarse must show date line');
+});
+
+test('tablet and laptop screens use full multi-column layout instead of mobile width', () => {
+  assert.ok(css.includes('width: 100%') && css.includes('align-self: stretch'), '.tab-content must stretch full container width');
+  assert.ok(css.includes('.iq-feed-list') && css.includes('repeat(2, minmax(0, 1fr))'), 'tablet+ must use multi-column feed grid');
+  assert.ok(css.includes('repeat(3, minmax(0, 1fr))'), 'desktop must use 3-column feed grid');
+  assert.ok(css.includes('repeat(5, minmax(0, 1fr))'), 'tablet+ must lay out 5 daily prayers across one row');
 });
 
 test('date line refreshes on category switch', () => {

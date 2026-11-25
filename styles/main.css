@@ -272,6 +272,8 @@ body.loading { opacity: 0; }
 /* ── Tab Content ── */
 .tab-content {
   flex: 1;
+  width: 100%;
+  align-self: stretch;
   padding: 0;
 }
 .tab-content.fading { opacity: 0; transform: translateY(4px); }
@@ -2689,15 +2691,17 @@ textarea:focus-visible {
   .fab-container { bottom:calc(104px + env(safe-area-inset-bottom,0px)); }
   #dateLine{display:block;}
 }
-/* ── Touch-first devices: mobile shell at any viewport ── */
-@media (pointer:coarse) {
+/* ── Touch-first mobile shell (strictly below tablet width) ── */
+@media (pointer:coarse) and (max-width: 767px) {
   nav.bnav{display:flex;}
   #prayerArea .card-grid{display:flex;flex-wrap:wrap;justify-content:center;}
   #prayerArea .card-grid > .card-item{flex:0 0 calc((100% - 16px)/3);}
-  button:not(.carousel-dot):not(.bnav-btn):not(.iq-quick-pill){min-height:44px;min-width:44px}
-  input[type="text"],input[type="number"],input[type="date"],input[type="search"],select,textarea,.profile-input,.amount-custom-input,.quran-search{font-size:16px;min-height:44px}
   #dateLine{display:block;}
   .cal-header .cal-nav:last-child{padding-right:64px}
+}
+@media (pointer:coarse) {
+  button:not(.carousel-dot):not(.bnav-btn):not(.iq-quick-pill){min-height:44px;min-width:44px}
+  input[type="text"],input[type="number"],input[type="date"],input[type="search"],select,textarea,.profile-input,.amount-custom-input,.quran-search{font-size:16px;min-height:44px}
 }
 @media (min-width: 768px) {
   nav.bnav { display: none !important; }
@@ -2965,14 +2969,17 @@ button,.t2-btn,.cat-chip{font-size:16px;}
   .card-grid { grid-template-columns: repeat(auto-fill, minmax(min(100%, 14rem), 1fr)); gap: 16px; }
   .insights-cards { grid-template-columns: repeat(4, 1fr); }
   .deed-card { flex: 1 1 calc(33.333% - 8px); }
-  .content-card,
+  .content-card {
+    max-width: 58rem;
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
   .prayer-card,
   .vol-card,
   .quest-row,
   .shop-card {
-    max-width: 720px;
-    margin-left: auto !important;
-    margin-right: auto !important;
+    max-width: none;
+    width: 100%;
   }
 }
 
@@ -3005,7 +3012,13 @@ button,.t2-btn,.cat-chip{font-size:16px;}
 }
 
 /* ── Content & Action cards: full width unified sizing & centered alignment ── */
-.content-card,
+.content-card {
+  width: 100%;
+  max-width: 58rem;
+  box-sizing: border-box;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
 .prayer-card,
 .deed-card,
 .vol-card,
@@ -3016,11 +3029,8 @@ button,.t2-btn,.cat-chip{font-size:16px;}
 .ach-card,
 .insight-card {
   width: 100%;
-  max-width: 720px;
+  max-width: none;
   box-sizing: border-box;
-  margin-left: auto !important;
-  margin-right: auto !important;
-  align-self: center;
 }
 
 /* ── Hero strip: always centered ── */
@@ -3246,7 +3256,7 @@ input[type="number"] {
    The bottom nav is position:fixed, so the shell scroller needs end padding or the
    last content hides behind it, and the FAB must float above the bar. Placed last
    to win the cascade over the desktop/landscape .fab-container offsets above. */
-@media (max-width: 767px) and (orientation: portrait), (pointer: coarse) and (orientation: portrait) {
+@media (max-width: 767px) and (orientation: portrait) {
   .app { padding-bottom: calc(84px + env(safe-area-inset-bottom, 0px)); }
   .fab-container { bottom: calc(104px + env(safe-area-inset-bottom, 0px)); }
 }
@@ -4091,9 +4101,9 @@ body:not([data-active-segment]) #section-ibadah {
 .page-sections-viewport,
 .page-section,
 .tab-panel {
+  width: 100%;
+  align-self: stretch;
   text-align: center;
-  margin-left: auto;
-  margin-right: auto;
 }
 
 .segment-page-header,
@@ -4231,8 +4241,8 @@ body:not([data-active-segment]) #section-ibadah {
   border-bottom: none;
   border-radius: 0 0 28px 28px;
   box-shadow: 0 8px 24px rgba(7, 67, 75, 0.16);
-  padding: calc(10px + env(safe-area-inset-top, 0px)) 16px 18px;
-  margin: 0 -16px 14px;
+  padding: calc(10px + env(safe-area-inset-top, 0px)) clamp(14px, 3vw, 32px) 18px;
+  margin: 0 calc(-1 * max(env(safe-area-inset-left, 0px), var(--fluid-pad))) 14px;
 }
 .iq-curved-header .tb-level,
 .iq-curved-header .tb-title,
@@ -4852,8 +4862,8 @@ body:not([data-active-tab="today"]) .hero-strip {
 .bnav-center-fab:hover { transform: translateY(-2px) scale(1.04); }
 .bnav-center-fab:active { transform: scale(0.95); }
 
-/* On phones/touch devices, center-docked crescent button replaces redundant corner FAB */
-@media (max-width: 767px), (pointer: coarse) {
+/* On phones (<768px), center-docked crescent button replaces redundant corner FAB */
+@media (max-width: 767px) {
   .fab-container { display: none; }
   .iq-mc-form-grid { grid-template-columns: 1fr; }
 }
@@ -5159,4 +5169,139 @@ body[data-active-tab="today"] .hero-strip .streak-bar {
   font-size: 0.74rem;
   color: var(--text2);
   font-weight: 600;
+}
+
+
+/* ══════════════════════════════════════════════════════════════
+   TABLET & LAPTOP/DESKTOP RESPONSIVE LAYOUT SYSTEM (>= 768px)
+   Ensures wide screens fill the canvas cleanly with multi-column
+   grids rather than a narrow centered phone strip.
+   ══════════════════════════════════════════════════════════════ */
+@media (min-width: 768px) {
+  body[data-active-tab="today"] .hero-strip .level-row,
+  body[data-active-tab="today"] .hero-strip .streak-bar {
+    display: flex;
+  }
+  #prayerArea .card-grid {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 12px;
+  }
+  #iqFeedArea .iq-feed-list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+  #morningArea,
+  #eveningArea,
+  #situationalArea,
+  #extraDeedsArea,
+  #volPrayersArea,
+  #questArea,
+  .adhkar-list,
+  .segment-page-header,
+  .iq-sheet-body {
+    max-width: 100%;
+    width: 100%;
+  }
+  .iq-drawer {
+    width: min(440px, 46vw);
+  }
+  .quran-search {
+    max-width: min(100%, 42rem) !important;
+  }
+  .global-search-wrap {
+    max-width: min(100%, 46rem);
+  }
+  .segment-page-header {
+    justify-content: space-between !important;
+    text-align: left !important;
+  }
+  .segment-page-header .sph-content {
+    width: auto !important;
+    flex: 1 1 auto;
+  }
+  .segment-page-header .sph-content,
+  .segment-page-header .sph-text,
+  .segment-page-header .sph-title,
+  .segment-page-header .sph-desc {
+    justify-content: flex-start !important;
+    text-align: left !important;
+  }
+}
+
+@media (min-width: 820px) {
+  .hero-strip {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1.18fr) minmax(0, 1fr);
+    gap: 10px 18px;
+    align-items: stretch;
+  }
+  .hero-strip .iq-hero-challenge {
+    grid-column: 1;
+    grid-row: 1 / span 2;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+  }
+  .hero-strip .iq-hero-ch-card {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .hero-strip .level-row {
+    grid-column: 2;
+    grid-row: 1;
+    margin: 0 !important;
+    max-width: none !important;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius);
+    padding: 12px 16px;
+    box-shadow: var(--shadow-sm);
+    align-self: stretch;
+  }
+  .hero-strip .xp-wrap {
+    max-width: none;
+  }
+  .hero-strip .streak-bar {
+    grid-column: 2;
+    grid-row: 2;
+    margin: 0 !important;
+  }
+  .hero-strip .global-search-wrap {
+    grid-column: 1 / -1;
+    grid-row: 3;
+    max-width: min(100%, 48rem);
+    margin: 2px auto 0 !important;
+  }
+}
+
+@media (min-width: 960px) {
+  .adhkar-list,
+  .shop-list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+    align-items: stretch;
+  }
+  .iq-sheet-body {
+    padding: 18px 28px 36px;
+  }
+  #iqChallengeBody .iq-feed-list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+}
+
+@media (min-width: 1100px) {
+  #iqFeedArea .iq-feed-list {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+  }
+  #prayerArea .card-grid {
+    gap: 14px;
+  }
 }

@@ -1,7 +1,7 @@
 # Graph Report - IQ  (2026-11-25)
 
 ## Corpus Check
-- 320 files · ~1,120,957 words
+- 320 files · ~1,121,074 words
 - Verdict: corpus is large enough that graph structure adds value.
 - Unclassified: 8 file(s) not represented in the graph (top: .jfif 4, (none) 2, .xml 1)
 
@@ -11,7 +11,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `f32f108a`
+- Built from commit: `6ed62fd0`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -305,16 +305,16 @@
 10. `switchCategory()` - 19 edges
 
 ## Surprising Connections (you probably didn't know these)
-- `Task 25: Add URL-based tab routing` --references--> `initApp()`  [INFERRED]
-  docs/superpowers/plans/2026-08-16-comprehensive-improvement-plan.md → core/actions.js
-- `Task 3: Declare `profile_main` in data instead of fabricating it at boot` --references--> `initApp()`  [INFERRED]
-  docs/superpowers/plans/2026-08-26-phase1-correctness-data-safety.md → core/actions.js
-- `Section 4: Recovery + verify + ship (approved)` --references--> `initApp()`  [INFERRED]
-  docs/superpowers/specs/2026-09-06-adaptive-shell-design.md → core/actions.js
 - `2. Navigation` --references--> `switchCategory()`  [INFERRED]
   docs/superpowers/specs/2026-08-17-modern-islamic-app-shell-redesign-design.md → core/tabs.js
 - `Contracts` --references--> `switchCategory()`  [INFERRED]
   docs/superpowers/specs/2026-09-04-mobile-first-app-shell-design.md → core/tabs.js
+- `2.4 Offline `Masjid Check-ins` Sheet (`#iqMasjidSheet` — `Screen 3`)` --references--> `grantDailyXp()`  [INFERRED]
+  docs/superpowers/specs/2026-11-25-iq-modern-restructure-design.md → core/xp.js
+- `Task 7: MPA parity (`src/pages/knowledge`, `src/pages/library`)` --references--> `renderCategoryNav()`  [INFERRED]
+  docs/superpowers/plans/2026-09-09-tab-consolidation.md → src/shell/tabs.js
+- `Fix 1: Bottom-nav icons` --references--> `populateTier1Icons()`  [INFERRED]
+  docs/superpowers/specs/2026-08-17-bugfix-phase1-icons-tabs-overflow-design.md → core/tabs.js
 
 ## Import Cycles
 - None detected.
@@ -1136,16 +1136,16 @@ Nodes (5): assert, fs, PAIRS, path, { test }
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `loadFile()` connect `ref_node_test` to `combined-render.test.js`, `daily-summary.test.js`, `date-keys.test.js`, `ref_fs`, `dhikr.test.js`, `ref_node_assert`, `shop.test.js`, `renderDynamic`, `schema-contract.test.js`, `loadLocalState`, `Ibadah Quest Comprehensive Improvement — Implementation Plan`, `journeys.test.js`, `masjid-checkins.test.js`, `ref_node_test`, `iq-shell.test.js`?**
-  _High betweenness centrality (0.230) - this node is a cross-community bridge._
+  _High betweenness centrality (0.244) - this node is a cross-community bridge._
 - **Are the 2 inferred relationships involving `poolRender()` (e.g. with `Findings (evidence from source)` and `Findings (evidence)`) actually correct?**
   _`poolRender()` has 2 INFERRED edges - model-reasoned connections that need verification._
 - **Should `ref_node_test` be split into smaller, more focused modules?**
   _Cohesion score 0.04918032786885246 - nodes in this community are weakly interconnected._
 - **Why does `Task 1: XP primitives in core/xp.js` connect `renderDynamic` to `Global Constraints`, `ref_node_test`, `checkLevelUp`?**
-  _High betweenness centrality (0.163) - this node is a cross-community bridge._
+  _High betweenness centrality (0.165) - this node is a cross-community bridge._
 - **Are the 4 inferred relationships involving `loadFile()` (e.g. with `Task 12: Create `tests/xp.test.js`` and `Task 9: `core/recovery.js` — junk-state detection, quarantine, salvage`) actually correct?**
   _`loadFile()` has 4 INFERRED edges - model-reasoned connections that need verification._
 - **Should `core/state.js` be split into smaller, more focused modules?**
   _Cohesion score 0.12 - nodes in this community are weakly interconnected._
 - **Why does `renderDynamic()` connect `renderDynamic` to `Task 2: Haptics — helper + core call sites`, `core/state.js`, `_playQueueItem`, `Changes by file`, `renderLv`, `Context`, `Global Constraints`, `Changes by File`, `Task 11: Split `render/render.js` into focused modules`, `Ibadah Quest — Comprehensive Improvement Plan`, `Global Constraints`?**
-  _High betweenness centrality (0.131) - this node is a cross-community bridge._
+  _High betweenness centrality (0.123) - this node is a cross-community bridge._
