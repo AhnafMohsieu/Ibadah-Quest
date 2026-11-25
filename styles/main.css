@@ -1859,7 +1859,7 @@ select.profile-input option { background: var(--card-bg); color: var(--text); }
 .intro-overlay.visible .intro-subtitle { animation: introFadeUp 0.8s ease-out 0.5s forwards; }
 .intro-overlay.visible .intro-btn { animation: introFadeUp 0.8s ease-out 0.8s forwards; }
 #introCanvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; }
-.intro-content { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; padding: calc(20px + env(safe-area-inset-top, 0px)) 24px 20px; max-width: 22rem; width: 100%; }
+.intro-content { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; text-align: center; padding: calc(20px + env(safe-area-inset-top, 0px)) 24px 20px; max-width: min(42rem, 94vw); width: 100%; }
 .intro-glow { display: none; }
 .intro-bismillah {
   font-family: var(--font-arabic);
@@ -4296,6 +4296,7 @@ body:not([data-active-segment]) #section-ibadah {
   display: flex;
   flex-direction: column;
   align-items: center;
+  text-align: center;
   gap: 6px;
   margin-bottom: 18px;
   position: relative;
@@ -4306,6 +4307,7 @@ body:not([data-active-segment]) #section-ibadah {
   font-size: clamp(1.35rem, 5vw, 1.85rem);
   font-weight: 800;
   letter-spacing: 1.5px;
+  text-align: center;
 }
 .iq-wordmark strong {
   color: #2dd4bf;
@@ -4316,6 +4318,7 @@ body:not([data-active-segment]) #section-ibadah {
   color: rgba(255,255,255,0.82);
   font-size: 0.85rem;
   letter-spacing: 0.5px;
+  text-align: center;
 }
 .intro-overlay .intro-subtitle {
   color: rgba(255,255,255,0.8);

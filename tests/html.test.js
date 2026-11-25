@@ -71,7 +71,7 @@ test('main.css uses modern iQ teal-mint tokens', () => {
 });
 
 test('index.html registers the service worker and update banner', () => {
-  assert.ok(html.includes("navigator.serviceWorker.register('sw.js?v=61')"));
+  assert.ok(html.includes("navigator.serviceWorker.register('sw.js?v=62')"));
   assert.ok(html.includes("'SKIP_WAITING'"));
   assert.ok(html.includes('swUpdateBanner'));
 });
@@ -94,7 +94,7 @@ test('hadith/dhikr audio modules wired with versions and load order', () => {
   assert.ok(html.includes('<script src="data/hadith-normalize.js?v=1"></script>'));
   assert.ok(html.includes('<script src="features/hadith-library.js?v=3" defer></script>'));
   assert.ok(html.includes('<script src="features/tafsir-library.js?v=3" defer></script>'));
-  assert.ok(html.includes('styles/main.css?v=48'));
+  assert.ok(html.includes('styles/main.css?v=49'));
   assert.ok(html.includes('features/daily-content.js?v=2'));
   assert.ok(html.indexOf('core/content-cache.js') < html.indexOf('core/state.js'), 'cache module loads before state');
   assert.ok(html.indexOf('core/audio.js') < html.indexOf('core/static.js'), 'audio module loads before renderers');
@@ -640,6 +640,11 @@ test('intro subtitle is centered like the bismillah', () => {
     'intro subtitle must be centered');
   assert.ok(html.includes('In the Name of Allah,<br>The Most Merciful'),
     'intro subtitle must break after Allah so THE MOST MERCIFUL sits on its own line');
+  const wmIdx = css.indexOf('.iq-wordmark {');
+  assert.ok(wmIdx > -1 && css.slice(wmIdx, wmIdx + 220).includes('text-align: center'),
+    'intro IQ wordmark must be center-aligned');
+  assert.ok(css.includes('max-width: min(42rem, 94vw)'),
+    'intro-content must use generous desktop width while scaling cleanly on phones');
 });
 
 test('prayer card icons sit in fixed boxes so rows align', () => {
