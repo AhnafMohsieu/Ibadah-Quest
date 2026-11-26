@@ -57,22 +57,24 @@
     }
     return streak;
   }
+  function _jt(s) { return (typeof window !== 'undefined' && typeof window.t === 'function') ? window.t(s) : s; }
+  function _jn(n) { return (typeof window !== 'undefined' && typeof window.iqFormatNum === 'function') ? window.iqFormatNum(n) : String(n); }
   function journeyCard(j, t) {
     const start = S.journeys ? S.journeys[j.id] : undefined;
     const head = `<div class="journey-head"><span class="journey-icon">${iqIcon(j.icon || j.key)}</span>
-      <div><div class="journey-name">${j.name}</div><div class="journey-desc">${j.desc}</div></div></div>`;
+      <div><div class="journey-name">${_jt(j.name)}</div><div class="journey-desc">${_jt(j.desc)}</div></div></div>`;
     if (!start) {
       return `<div class="journey-card">${head}
-        <button class="journey-start" onclick="App.joinJourney('${j.id}')">Begin ${j.target}-Day Journey</button></div>`;
+        <button type="button" class="iq-pill-btn journey-start" onclick="App.joinJourney('${j.id}')">${_jt('Begin')} ${_jn(j.target)}-${_jt('Day Journey')}</button></div>`;
     }
     const completed = journeyProgress(S.log, j, start, t);
     checkJourneyMilestone(j, completed);
     const done = completed >= j.target;
     const summary = done
-      ? 'Alhamdulillah, journey complete ' + iqIcon('sparkles')
-      : `Day ${completed} of ${j.target} — at your own pace, no rush.`;
+      ? _jt('Alhamdulillah, journey complete') + ' ' + iqIcon('sparkles')
+      : `${_jt('Day')} ${_jn(completed)} / ${_jn(j.target)} — ${_jt('at your own pace, no rush.')}`;
     const streak = calculateStreak(S.log, j, start);
-    const streakText = streak > 0 ? `<div class="journey-streak">${iqIcon('flame')} ${streak} day streak</div>` : '';
+    const streakText = streak > 0 ? `<div class="journey-streak">${iqIcon('flame')} ${_jn(streak)} ${_jt('day streak')}</div>` : '';
     return `<div class="journey-card">${head}
       <div class="journey-summary">${summary}</div>${streakText}${gridHTML(completed, j.target)}</div>`;
   }
@@ -132,23 +134,23 @@
     const analytics = getJourneyAnalytics();
     return `
       <div class="journey-dashboard">
-        <div class="section-title">${iqIcon('bar-chart-3')} Journey Statistics</div>
+        <div class="section-title">${iqIcon('bar-chart-3')} ${_jt('Journey Statistics')}</div>
         <div class="journey-stats-grid">
           <div class="journey-stat-item">
-            <div class="journey-stat-num">${analytics.totalCompleted}</div>
-            <div class="journey-stat-label">Completed</div>
+            <div class="journey-stat-num iq-tabular">${_jn(analytics.totalCompleted)}</div>
+            <div class="journey-stat-label">${_jt('Completed')}</div>
           </div>
           <div class="journey-stat-item">
-            <div class="journey-stat-num">${analytics.activeJourneys}</div>
-            <div class="journey-stat-label">Active</div>
+            <div class="journey-stat-num iq-tabular">${_jn(analytics.activeJourneys)}</div>
+            <div class="journey-stat-label">${_jt('Active')}</div>
           </div>
           <div class="journey-stat-item">
-            <div class="journey-stat-num">${analytics.bestStreak}</div>
-            <div class="journey-stat-label">Best Streak</div>
+            <div class="journey-stat-num iq-tabular">${_jn(analytics.bestStreak)}</div>
+            <div class="journey-stat-label">${_jt('Best Streak')}</div>
           </div>
           <div class="journey-stat-item">
-            <div class="journey-stat-num">${analytics.history.length}</div>
-            <div class="journey-stat-label">Total Attempts</div>
+            <div class="journey-stat-num iq-tabular">${_jn(analytics.history.length)}</div>
+            <div class="journey-stat-label">${_jt('Total Attempts')}</div>
           </div>
         </div>
       </div>
@@ -162,8 +164,8 @@
       const defs = getAvailableJourneys();
       el.innerHTML = renderJourneyDashboard() +
         renderJourneyInsights() +
-        `<div class="section-title">${iqIcon('sprout')} Habit Journeys</div>` +
-        '<div class="journey-intro">Choose a journey and go at your own pace. A missed day is not a reset — every day you return, your grid keeps growing.</div>' +
+        `<div class="section-title">${iqIcon('sprout')} ${_jt('Habit Journeys')}</div>` +
+        `<div class="journey-intro">${_jt('Choose a journey and go at your own pace. A missed day is not a reset — every day you return, your grid keeps growing.')}</div>` +
         defs.map(j => journeyCard(j, t)).join('');
     } catch (e) { console.warn('Render Journeys failed:', e.message); }
   }
@@ -193,9 +195,9 @@
         <div class="journey-insight-card">
           <div class="journey-insight-icon">${iqIcon(journey.icon || journey.key)}</div>
           <div class="journey-insight-info">
-            <div class="journey-insight-name">${journey.name}</div>
-            <div class="journey-insight-progress">${remaining > 0 ? `${remaining} days remaining` : 'Complete!'}</div>
-            <div class="journey-insight-pace">${pace}% daily pace</div>
+            <div class="journey-insight-name">${_jt(journey.name)}</div>
+            <div class="journey-insight-progress">${remaining > 0 ? `${_jn(remaining)} ${_jt('days remaining')}` : _jt('Complete!')}</div>
+            <div class="journey-insight-pace iq-tabular">${_jn(pace)}% ${_jt('daily pace')}</div>
           </div>
         </div>
       `;
@@ -205,7 +207,7 @@
     
     return `
       <div class="journey-insights">
-        <div class="section-title">${iqIcon('trending-up')} Active Journey Progress</div>
+        <div class="section-title">${iqIcon('trending-up')} ${_jt('Active Journey Progress')}</div>
         ${insights.join('')}
       </div>
     `;

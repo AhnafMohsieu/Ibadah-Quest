@@ -30,7 +30,7 @@ test('renderer: hadith UI wires library + audio', () => {
   assert.match(dyn, /HadithLibrary\.ensureBundledArabic\(/);
   assert.match(dyn, /AppAudio\.toggleTTS\(/);
   assert.match(dyn, /window\.hadithSpeak = hadithSpeak;/);
-  assert.match(dyn, /Online<\/span>/, 'remote cards carry an Online badge');
+  assert.match(dyn, /_tr\('Online',\s*'Online'\)\)\s*\+\s*'<\/span>|Online<\/span>/, 'remote cards carry an Online badge');
 });
 
 test('quran reader carries no tafsir UI (lives in interpretation browser)', () => {

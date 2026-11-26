@@ -71,7 +71,7 @@ test('main.css uses Noor & Rhythm AA teal-emerald tokens', () => {
 });
 
 test('index.html registers the service worker and update banner', () => {
-  assert.ok(html.includes("navigator.serviceWorker.register('sw.js?v=67')"));
+  assert.ok(html.includes("navigator.serviceWorker.register('sw.js?v=68')"));
   assert.ok(html.includes("'SKIP_WAITING'"));
   assert.ok(html.includes('swUpdateBanner'));
 });
@@ -94,8 +94,8 @@ test('hadith/dhikr audio, offline fonts, and adhan modules wired cleanly', () =>
   assert.ok(html.includes('<script src="data/hadith-normalize.js?v=1"></script>'));
   assert.ok(html.includes('<script src="features/hadith-library.js?v=3" defer></script>'));
   assert.ok(html.includes('<script src="features/tafsir-library.js?v=3" defer></script>'));
-  assert.ok(html.includes('styles/tokens.css?v=2'));
-  assert.ok(html.includes('styles/main.css?v=55'));
+  assert.ok(html.includes('styles/tokens.css?v=3'));
+  assert.ok(html.includes('styles/main.css?v=56'));
   assert.ok(html.includes('features/daily-content.js?v=4'));
   assert.ok(html.includes('features/notifications.js?v=3'));
   assert.ok(html.includes('assets/vendor/adhan.umd.min.js'));
@@ -143,7 +143,7 @@ test('Noor & Rhythm tokens support Light, Dark, and OLED Night themes cleanly', 
   assert.ok(tokensCss.includes('html[data-theme="dark"]'));
   assert.ok(tokensCss.includes('html[data-theme="night"]'));
   assert.ok(actions.includes('iqSetTheme'));
-  assert.ok(html.includes('styles/tokens.css?v=2'));
+  assert.ok(html.includes('styles/tokens.css?v=3'));
   assert.ok(!fs.existsSync(path.join(root, 'core', 'themes.js')), 'legacy core/themes.js remains deleted');
 });
 
@@ -248,9 +248,10 @@ test('99 Names name-card styles exist', () => {
 test('dhikr reset button renders icon without leaked concatenation text', () => {
   const fnIdx = renderAll.indexOf('function renderDhikrCounter');
   assert.ok(fnIdx > -1, 'renderDhikrCounter must exist');
-  const body = renderAll.slice(fnIdx, fnIdx + 2000);
-assert.ok(body.includes("App.resetDhikr()"), 'reset button must call resetDhikr');
-  assert.ok(body.includes('${iqIcon("refresh-cw")} Reset') || body.includes("${iqIcon('refresh-cw')} Reset"), 'reset icon must be interpolated via template literal');
+  const fnEnd = renderAll.indexOf('\n  function ', fnIdx + 20);
+  const body = renderAll.slice(fnIdx, fnEnd > -1 ? fnEnd : fnIdx + 3000);
+  assert.ok(body.includes("App.resetDhikr()"), 'reset button must call resetDhikr');
+  assert.ok(body.includes("${iqIcon('refresh-cw')}") && body.includes("_t('Reset')"), 'reset icon and localized label must interpolate cleanly');
   assert.ok(body.includes('refresh-cw'), 'refresh icon referenced');
 });
 
@@ -605,12 +606,12 @@ test('boot watchdog offers force-refresh when stuck', () => {
 test('guide detail rows share one card language', () => {
   function fnBody(src, name) { const i = src.indexOf('function ' + name); assert.ok(i > -1, name + ' must exist'); let j = src.indexOf('\n  function ', i + 10); if (j === -1) j = src.length; return src.slice(i, j); }
   const salah = fnBody(renderStatic, 'renderSalah');
-  assert.ok(salah.includes('<div class="content-card"><div style="display:flex;align-items:flex-start;gap:10px;">'), 'salah rows must use the shared numbered-row structure');
+  assert.ok(salah.includes('<div class="content-card"><div class="iq-card-row-head">'), 'salah rows must use the shared iq-card-row-head structure');
   assert.ok(!salah.includes('flex-direction:row;align-items:flex-start'), 'salah must not keep its bespoke row style');
   const ed = fnBody(renderStatic, 'renderExtraDeeds');
   const vp = fnBody(renderStatic, 'renderVolPrayers');
-  assert.ok(ed.includes('font-weight:700;color:var(--accent-light);'), 'extradeeds titles use shared gold');
-  assert.ok(vp.includes('font-weight:700;color:var(--accent-light);'), 'volprayers titles use shared gold');
+  assert.ok(ed.includes('<div class="iq-card-title">'), 'extradeeds titles use shared iq-card-title class');
+  assert.ok(vp.includes('<div class="iq-card-title">'), 'volprayers titles use shared iq-card-title class');
   assert.ok(!ed.includes('font-weight:700;color:var(--accent);'), 'no darker gold titles remain in extradeeds');
   assert.ok(!vp.includes('font-weight:700;color:var(--accent);'), 'no darker gold titles remain in volprayers');
 });
@@ -665,7 +666,7 @@ test('prayer last row centers under the grid', () => {
 });
 
 test('interpretation tab mounts the tafsir browser', () => {
-  assert.ok(html.includes('<script src="features/tafsir-browser.js?v=1" defer></script>'),
+  assert.ok(html.includes('<script src="features/tafsir-browser.js?v=2" defer></script>'),
     'browser script tag missing');
   const st = fs.readFileSync(path.join(root, 'core', 'state.js'), 'utf8');
   assert.ok(st.includes('tafsirLookup:{surah:1,ayah:1}'),
@@ -681,7 +682,7 @@ test('MPA track: all 5 pages reference module entries', () => {
 
 test('SP1: equal prayer cards, info hit area, FAB a11y', () => {
   const calGutter = '.cal-header .cal-nav:last-child{padding-right:64px}';
-  assert.strictEqual(css.split(calGutter).length, 3, 'calendar header must reserve the FAB gutter in both phone blocks');
+  assert.ok(!css.includes(calGutter), 'calendar header must stay symmetric without corner FAB gutter');
   const thirds = '#prayerArea .card-grid > .card-item{flex:0 0 calc((100% - 16px)/3);}';
   assert.strictEqual(css.split(thirds).length, 3, 'prayer cards must be equal thirds in both phone blocks');
   assert.ok(css.includes(".card-grid .card-item .card-info-btn::after { content:''; position:absolute; top:-17px; right:-3px; bottom:-3px; left:-17px; }"),
@@ -752,14 +753,14 @@ test('Option 3 shell & remodeled 2x2 Bento drawer tab section', () => {
   assert.ok(html.includes('id="iqMasjidSheet"'), 'masjid check-ins slide-over sheet missing');
   assert.ok(html.includes('id="bnavCenterFab"'), 'elevated center dock crescent button missing');
   assert.ok(html.includes('features/masjid-checkins.js?v=3'), 'masjid-checkins script v=3 missing');
-  assert.ok(html.includes('features/iq-shell.js?v=7'), 'iq-shell script v=7 missing');
+  assert.ok(html.includes('features/iq-shell.js?v=8'), 'iq-shell script v=8 missing');
   assert.ok(html.includes('core/prayers.js?v=6'), 'core/prayers.js script v=6 missing');
-  assert.ok(html.includes('core/render-prayers.js?v=8'), 'render-prayers.js script v=8 missing');
-  assert.ok(html.includes('core/static.js?v=11'), 'core/static.js script v=11 missing');
-  assert.ok(html.includes('core/dynamic.js?v=19'), 'dynamic.js script v=19 missing');
-  assert.ok(html.includes('core/tabs.js?v=17'), 'core/tabs.js script v=17 missing');
-  assert.ok(html.includes('features/daily-summary.js?v=3'), 'daily-summary script v=3 missing');
-  assert.ok(html.includes('core/actions.js?v=28'), 'core/actions.js script v=28 missing');
+  assert.ok(html.includes('core/render-prayers.js?v=9'), 'render-prayers.js script v=9 missing');
+  assert.ok(html.includes('core/static.js?v=12'), 'core/static.js script v=12 missing');
+  assert.ok(html.includes('core/dynamic.js?v=20'), 'dynamic.js script v=20 missing');
+  assert.ok(html.includes('core/tabs.js?v=18'), 'core/tabs.js script v=18 missing');
+  assert.ok(html.includes('features/daily-summary.js?v=4'), 'daily-summary script v=4 missing');
+  assert.ok(html.includes('core/actions.js?v=29'), 'core/actions.js script v=29 missing');
   assert.ok(renderPrayers.includes('computeNextPrayer'), 'render-prayers.js must expose computeNextPrayer');
   assert.ok(renderPrayers.includes('updatePrayerSettings'), 'render-prayers.js must expose updatePrayerSettings');
   assert.ok(renderPrayers.includes('togglePrayerPause'), 'render-prayers.js must expose togglePrayerPause');

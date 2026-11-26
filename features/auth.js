@@ -276,68 +276,82 @@
   }
 
   
+  function _at(s) {
+    return (typeof window !== 'undefined' && typeof window.t === 'function') ? window.t(s) : s;
+  }
+  function _an(v) {
+    return (typeof window !== 'undefined' && typeof window.iqFormatNum === 'function') ? window.iqFormatNum(v) : String(v);
+  }
+  function _eyeSvg(visible) {
+    if (visible) {
+      return '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/></svg>';
+    }
+    return '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>';
+  }
+
   function renderLoginGatewayView(container, user, cred, lockoutSec) {
-    const userLabel = user === 'default' ? 'Guest Profile' : user;
-    const userAvatar = (typeof S !== 'undefined' && S && S.avatar) ? S.avatar : '🌙';
+    const userLabel = user === 'default' ? _at('Guest Profile') : user;
+    const ico = (typeof window !== 'undefined' && typeof window.iqIcon === 'function') ? window.iqIcon : null;
+    const userAvatar = (typeof S !== 'undefined' && S && S.avatar) ? S.avatar : (ico ? ico('moon') : '');
     const userLv = (typeof S !== 'undefined' && S && S.lv) ? S.lv : 1;
     const hasPin = cred && cred.hasPin;
 
     let h = `
       <div class="auth-card" role="dialog" aria-modal="true" aria-labelledby="authLoginTitle">
         <div class="auth-header">
-          <div class="auth-bismillah">بِسْمِ ٱللَّهِ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ</div>
-          <div class="auth-icon-crescent" style="font-size:2.2rem;margin:4px auto 10px;display:flex;align-items:center;justify-content:center;width:64px;height:64px;border-radius:50%;background:var(--accent-bg);border:2px solid var(--accent);box-shadow:0 0 16px var(--accent-glow);">
+          <div class="auth-bismillah" dir="rtl">بِسْمِ ٱللَّهِ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ</div>
+          <div class="auth-icon-crescent" style="font-size:2.1rem;margin:4px auto 10px;display:flex;align-items:center;justify-content:center;width:64px;height:64px;border-radius:50%;background:var(--accent-bg);border:2px solid var(--accent);color:var(--accent-dark);">
             ${userAvatar}
           </div>
-          <h2 id="authLoginTitle" class="auth-title">${hasPin ? 'Sign In / Unlock' : 'Welcome to Ibadah Quest'}</h2>
-          <div class="auth-badge">${window.escapeHTML(userLabel)} · Level ${userLv} ${hasPin ? '· 🔒 Protected' : '· 👤 Active'}</div>
+          <h2 id="authLoginTitle" class="auth-title">${_at(hasPin ? 'Sign In / Unlock' : 'Welcome to Ibadah Quest')}</h2>
+          <div class="auth-badge iq-tabular">${window.escapeHTML(userLabel)} &middot; ${_at('Level')} ${_an(userLv)} &middot; ${hasPin ? ((ico ? ico('lock') + ' ' : '') + _at('Protected')) : ((ico ? ico('user') + ' ' : '') + _at('Active'))}</div>
         </div>
 
         ${hasPin ? `
           <div id="authLockoutNotice" class="auth-lockout" style="${lockoutSec > 0 ? 'display:block;' : 'display:none;'}">
-            ⚠️ Too many failed attempts. Locked for <span id="authCountdown">${lockoutSec}</span>s
+            ${_at('Too many failed attempts. Locked for')} <span id="authCountdown" class="iq-tabular">${_an(lockoutSec)}</span>s
           </div>
 
           <div class="auth-pin-wrap">
             <div class="auth-pin-display">
               <input type="password" id="authPinInput" class="auth-pin-input" maxlength="8" placeholder="••••" autocomplete="off" ${lockoutSec > 0 ? 'disabled' : ''} autofocus />
               <button type="button" class="auth-eye-btn" id="authToggleEye" aria-label="Toggle PIN visibility" onclick="window.Auth.togglePinVisibility()">
-                👁️
+                ${_eyeSvg(false)}
               </button>
             </div>
             <div id="authErrorMsg" class="auth-error-msg" style="display:none;"></div>
           </div>
 
           <div class="auth-keypad">
-            ${[1,2,3,4,5,6,7,8,9].map(n => `<button type="button" class="auth-key" onclick="window.Auth.keypadInput('${n}')">${n}</button>`).join('')}
+            ${[1,2,3,4,5,6,7,8,9].map(n => `<button type="button" class="auth-key iq-tabular" onclick="window.Auth.keypadInput('${n}')">${_an(n)}</button>`).join('')}
             <button type="button" class="auth-key auth-key-action" onclick="window.Auth.keypadClear()">C</button>
-            <button type="button" class="auth-key" onclick="window.Auth.keypadInput('0')">0</button>
-            <button type="button" class="auth-key auth-key-action" onclick="window.Auth.keypadBackspace()">⌫</button>
+            <button type="button" class="auth-key iq-tabular" onclick="window.Auth.keypadInput('0')">${_an(0)}</button>
+            <button type="button" class="auth-key auth-key-action" aria-label="Backspace" onclick="window.Auth.keypadBackspace()">&#9003;</button>
           </div>
 
           <div class="auth-actions">
             <button type="button" class="auth-btn auth-btn-primary" id="authUnlockBtn" onclick="window.Auth.submitUnlock('${window.escapeHTML(user)}')" ${lockoutSec > 0 ? 'disabled' : ''}>
-              Unlock &amp; Enter App
+              ${_at('Unlock & Enter App')}
             </button>
             <button type="button" class="auth-btn auth-btn-secondary" onclick="window.Auth.show('profiles')">
-              Switch Account
+              ${_at('Switch Account')}
             </button>
           </div>
         ` : `
           <p class="auth-sub" style="margin: 10px 0 16px; font-size: 0.95rem; line-height: 1.5; color: var(--text2);">
-            Sign in to track prayers, cultivate prophetic virtues, and ascend your spiritual quest.
+            ${_at('Sign in to track prayers, cultivate prophetic virtues, and ascend your spiritual quest.')}
           </p>
 
           <div class="auth-actions">
             <button type="button" class="auth-btn auth-btn-primary" onclick="window.Auth.enterApp('${window.escapeHTML(user)}')">
-              Enter Ibadah Quest ➔
+              ${_at('Enter Ibadah Quest')} <span class="iq-mirror-icon">&rarr;</span>
             </button>
             <button type="button" class="auth-btn auth-btn-secondary" onclick="window.Auth.show('profiles')">
-              Switch / Create Profile
+              ${_at('Switch / Create Profile')}
             </button>
           </div>
-          <div style="margin-top: 12px; font-size: 0.8rem; text-align: center; color: var(--text3);">
-            <a href="javascript:void(0)" onclick="window.Auth.show('security')" style="color:var(--accent);text-decoration:none;font-weight:600;">🔒 Set up PIN Security</a>
+          <div style="margin-top: 12px; font-size: 0.84rem; text-align: center;">
+            <button type="button" class="iq-text-btn" onclick="window.Auth.show('security')">${ico ? ico('lock') + ' ' : ''}${_at('Set up PIN Security')}</button>
           </div>
         `}
       </div>
@@ -363,46 +377,47 @@
   }
 
   function renderUnlockView(container, user, cred, lockoutSec) {
-    const userLabel = user === 'default' ? 'Guest Profile' : user;
-    const userAvatar = (typeof S !== 'undefined' && S && S.avatar) ? S.avatar : '🌙';
+    const userLabel = user === 'default' ? _at('Guest Profile') : user;
+    const ico = (typeof window !== 'undefined' && typeof window.iqIcon === 'function') ? window.iqIcon : null;
+    const userAvatar = (typeof S !== 'undefined' && S && S.avatar) ? S.avatar : (ico ? ico('moon') : '');
     const userLv = (typeof S !== 'undefined' && S && S.lv) ? S.lv : 1;
 
     let h = `
       <div class="auth-card" role="dialog" aria-modal="true" aria-labelledby="authTitle">
         <div class="auth-header">
-          <div class="auth-bismillah">بِسْمِ ٱللَّهِ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ</div>
-          <div class="auth-avatar-ring" style="font-size:2.2rem;margin:6px auto 10px;display:flex;align-items:center;justify-content:center;width:60px;height:60px;border-radius:50%;background:var(--accent-bg);border:2px solid var(--accent);box-shadow:0 0 16px var(--accent-glow);">${userAvatar}</div>
+          <div class="auth-bismillah" dir="rtl">بِسْمِ ٱللَّهِ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ</div>
+          <div class="auth-avatar-ring" style="font-size:2.1rem;margin:6px auto 10px;display:flex;align-items:center;justify-content:center;width:60px;height:60px;border-radius:50%;background:var(--accent-bg);border:2px solid var(--accent);color:var(--accent-dark);">${userAvatar}</div>
           <h2 id="authTitle" class="auth-title">${window.escapeHTML(userLabel)}</h2>
-          <div class="auth-badge">Level ${userLv} · 🔒 Protected</div>
+          <div class="auth-badge iq-tabular">${_at('Level')} ${_an(userLv)} &middot; ${ico ? ico('lock') + ' ' : ''}${_at('Protected')}</div>
         </div>
 
         <div id="authLockoutNotice" class="auth-lockout" style="${lockoutSec > 0 ? 'display:block;' : 'display:none;'}">
-          ⚠️ Too many failed attempts. Locked for <span id="authCountdown">${lockoutSec}</span>s
+          ${_at('Too many failed attempts. Locked for')} <span id="authCountdown" class="iq-tabular">${_an(lockoutSec)}</span>s
         </div>
 
         <div class="auth-pin-wrap">
           <div class="auth-pin-display">
             <input type="password" id="authPinInput" class="auth-pin-input" maxlength="8" placeholder="••••" autocomplete="off" ${lockoutSec > 0 ? 'disabled' : ''} autofocus />
             <button type="button" class="auth-eye-btn" id="authToggleEye" aria-label="Toggle PIN visibility" onclick="window.Auth.togglePinVisibility()">
-              👁️
+              ${_eyeSvg(false)}
             </button>
           </div>
           <div id="authErrorMsg" class="auth-error-msg" style="display:none;"></div>
         </div>
 
         <div class="auth-keypad">
-          ${[1,2,3,4,5,6,7,8,9].map(n => `<button type="button" class="auth-key" onclick="window.Auth.keypadInput('${n}')">${n}</button>`).join('')}
+          ${[1,2,3,4,5,6,7,8,9].map(n => `<button type="button" class="auth-key iq-tabular" onclick="window.Auth.keypadInput('${n}')">${_an(n)}</button>`).join('')}
           <button type="button" class="auth-key auth-key-action" onclick="window.Auth.keypadClear()">C</button>
-          <button type="button" class="auth-key" onclick="window.Auth.keypadInput('0')">0</button>
-          <button type="button" class="auth-key auth-key-action" onclick="window.Auth.keypadBackspace()">⌫</button>
+          <button type="button" class="auth-key iq-tabular" onclick="window.Auth.keypadInput('0')">${_an(0)}</button>
+          <button type="button" class="auth-key auth-key-action" aria-label="Backspace" onclick="window.Auth.keypadBackspace()">&#9003;</button>
         </div>
 
         <div class="auth-actions">
           <button type="button" class="auth-btn auth-btn-primary" id="authUnlockBtn" onclick="window.Auth.submitUnlock('${window.escapeHTML(user)}')" ${lockoutSec > 0 ? 'disabled' : ''}>
-            Unlock App
+            ${_at('Unlock App')}
           </button>
           <button type="button" class="auth-btn auth-btn-secondary" onclick="window.Auth.show('profiles')">
-            Switch Profile
+            ${_at('Switch Profile')}
           </button>
         </div>
       </div>
@@ -450,43 +465,44 @@
   function renderProfilesView(container) {
     const profiles = getProfiles();
     const activeUser = typeof currentUser !== 'undefined' ? currentUser : 'default';
+    const ico = (typeof window !== 'undefined' && typeof window.iqIcon === 'function') ? window.iqIcon : null;
 
     let h = `
       <div class="auth-card" role="dialog" aria-modal="true" aria-labelledby="profilesTitle">
         <div class="auth-header">
-          <div class="auth-icon-crescent" style="font-size:2rem;margin:0 auto 8px;display:flex;align-items:center;justify-content:center;width:52px;height:52px;border-radius:50%;background:var(--accent-bg);border:1px solid var(--accent-border);">🌙</div>
-          <h2 id="profilesTitle" class="auth-title">Profiles & Accounts</h2>
-          <p class="auth-sub">Select your account or create a new profile</p>
+          <div class="auth-icon-crescent" style="font-size:2rem;margin:0 auto 8px;display:flex;align-items:center;justify-content:center;width:52px;height:52px;border-radius:50%;background:var(--accent-bg);border:1px solid var(--accent-border);color:var(--accent-dark);">${ico ? ico('moon') : '🌙'}</div>
+          <h2 id="profilesTitle" class="auth-title">${_at('Profiles & Accounts')}</h2>
+          <p class="auth-sub">${_at('Select your account or create a new profile')}</p>
         </div>
 
         <div class="auth-profile-list">
           ${profiles.map(p => {
             const isAct = p === activeUser;
             const cred = getCredentials(p);
-            const label = p === 'default' ? 'Guest' : p;
+            const label = p === 'default' ? _at('Guest') : p;
             return `
-              <div class="auth-profile-item ${isAct ? 'active' : ''}" onclick="window.Auth.selectProfile('${window.escapeHTML(p)}')">
-                <div class="auth-profile-avatar">${p === 'default' ? '👤' : '✨'}</div>
+              <div class="auth-profile-item ${isAct ? 'active' : ''}" role="button" tabindex="0" onclick="window.Auth.selectProfile('${window.escapeHTML(p)}')">
+                <div class="auth-profile-avatar">${ico ? ico(p === 'default' ? 'user' : 'sparkles') : (p === 'default' ? '👤' : '✨')}</div>
                 <div class="auth-profile-details">
-                  <div class="auth-profile-name">${window.escapeHTML(label)} ${isAct ? '<span class="auth-cur-tag">(Current)</span>' : ''}</div>
-                  <div class="auth-profile-status">${cred.hasPin ? '🔒 PIN Protected' : '🔓 Unlocked'}</div>
+                  <div class="auth-profile-name">${window.escapeHTML(label)} ${isAct ? `<span class="auth-cur-tag">(${_at('Current')})</span>` : ''}</div>
+                  <div class="auth-profile-status">${cred.hasPin ? ((ico ? ico('lock') + ' ' : '') + _at('PIN Protected')) : ((ico ? ico('unlock') + ' ' : '') + _at('Unlocked'))}</div>
                 </div>
-                <button type="button" class="auth-profile-go" aria-label="Switch to ${window.escapeHTML(label)}">➔</button>
+                <button type="button" class="auth-profile-go" style="min-width:44px;min-height:44px;" aria-label="Switch to ${window.escapeHTML(label)}"><span class="iq-mirror-icon">&rarr;</span></button>
               </div>
             `;
           }).join('')}
         </div>
 
         <div class="auth-new-profile">
-          <label for="newProfileName" class="auth-label">Create New Profile</label>
+          <label for="newProfileName" class="auth-label">${_at('Create New Profile')}</label>
           <div class="auth-input-group">
-            <input type="text" id="newProfileName" class="auth-text-input" placeholder="Enter username..." maxlength="20" />
-            <button type="button" class="auth-btn auth-btn-primary" onclick="window.Auth.createNewProfile()">Create</button>
+            <input type="text" id="newProfileName" class="auth-text-input" placeholder="${_at('Enter username...')}" maxlength="20" />
+            <button type="button" class="auth-btn auth-btn-primary" onclick="window.Auth.createNewProfile()">${_at('Create')}</button>
           </div>
         </div>
 
         <div class="auth-actions" style="margin-top:16px;">
-          ${!isLocked(activeUser) ? `<button type="button" class="auth-btn auth-btn-secondary" onclick="window.Auth.close()">Back to App</button>` : ''}
+          ${!isLocked(activeUser) ? `<button type="button" class="auth-btn auth-btn-secondary" onclick="window.Auth.close()">${_at('Back to App')}</button>` : ''}
         </div>
       </div>
     `;
@@ -495,13 +511,14 @@
   }
 
   function renderSecurityView(container, user, cred) {
-    const userLabel = user === 'default' ? 'Guest' : user;
+    const userLabel = user === 'default' ? _at('Guest') : user;
+    const ico = (typeof window !== 'undefined' && typeof window.iqIcon === 'function') ? window.iqIcon : null;
     let h = `
       <div class="auth-card" role="dialog" aria-modal="true" aria-labelledby="secTitle">
         <div class="auth-header">
-          <div class="auth-icon-crescent">🛡️</div>
-          <h2 id="secTitle" class="auth-title">Security & PIN</h2>
-          <div class="auth-badge">${window.escapeHTML(userLabel)} · ${cred.hasPin ? '🔒 PIN Enabled' : '🔓 No PIN Set'}</div>
+          <div class="auth-icon-crescent" style="margin:0 auto 8px;display:flex;align-items:center;justify-content:center;width:52px;height:52px;border-radius:50%;background:var(--accent-bg);border:1px solid var(--accent-border);color:var(--accent-dark);">${ico ? ico('shield') : '🛡️'}</div>
+          <h2 id="secTitle" class="auth-title">${_at('Security & PIN')}</h2>
+          <div class="auth-badge">${window.escapeHTML(userLabel)} &middot; ${cred.hasPin ? _at('PIN Enabled') : _at('No PIN Set')}</div>
         </div>
 
         <div id="secErrorMsg" class="auth-error-msg" style="display:none;"></div>
@@ -510,32 +527,32 @@
         <form onsubmit="event.preventDefault(); window.Auth.submitSecurityForm('${window.escapeHTML(user)}');" class="auth-form">
           ${cred.hasPin ? `
             <div class="auth-field">
-              <label for="secCurrentPin" class="auth-label">Current PIN</label>
-              <input type="password" id="secCurrentPin" class="auth-text-input" maxlength="8" placeholder="Enter current PIN" required />
+              <label for="secCurrentPin" class="auth-label">${_at('Current PIN')}</label>
+              <input type="password" id="secCurrentPin" class="auth-text-input" maxlength="8" placeholder="${_at('Enter current PIN')}" required />
             </div>
           ` : ''}
 
           <div class="auth-field">
-            <label for="secNewPin" class="auth-label">${cred.hasPin ? 'New PIN (4-8 digits)' : 'Set PIN (4-8 digits)'}</label>
-            <input type="password" id="secNewPin" class="auth-text-input" maxlength="8" placeholder="4 to 8 digits" required />
+            <label for="secNewPin" class="auth-label">${_at(cred.hasPin ? 'New PIN (4-8 digits)' : 'Set PIN (4-8 digits)')}</label>
+            <input type="password" id="secNewPin" class="auth-text-input" maxlength="8" placeholder="${_at('4 to 8 digits')}" required />
           </div>
 
           <div class="auth-field">
-            <label for="secConfirmPin" class="auth-label">Confirm PIN</label>
-            <input type="password" id="secConfirmPin" class="auth-text-input" maxlength="8" placeholder="Re-enter PIN" required />
+            <label for="secConfirmPin" class="auth-label">${_at('Confirm PIN')}</label>
+            <input type="password" id="secConfirmPin" class="auth-text-input" maxlength="8" placeholder="${_at('Re-enter PIN')}" required />
           </div>
 
           <div class="auth-actions" style="margin-top:16px;">
             <button type="submit" class="auth-btn auth-btn-primary">
-              ${cred.hasPin ? 'Update PIN' : 'Enable PIN Protection'}
+              ${_at(cred.hasPin ? 'Update PIN' : 'Enable PIN Protection')}
             </button>
             ${cred.hasPin ? `
               <button type="button" class="auth-btn auth-btn-danger" onclick="window.Auth.promptRemovePin('${window.escapeHTML(user)}')">
-                Remove PIN
+                ${_at('Remove PIN')}
               </button>
             ` : ''}
             <button type="button" class="auth-btn auth-btn-secondary" onclick="window.Auth.close()">
-              Close
+              ${_at('Close')}
             </button>
           </div>
         </form>
@@ -636,10 +653,10 @@
       if (!inp) return;
       if (inp.type === 'password') {
         inp.type = 'text';
-        if (btn) btn.textContent = '🔒';
+        if (btn) btn.innerHTML = _eyeSvg(true);
       } else {
         inp.type = 'password';
-        if (btn) btn.textContent = '👁️';
+        if (btn) btn.innerHTML = _eyeSvg(false);
       }
     },
 

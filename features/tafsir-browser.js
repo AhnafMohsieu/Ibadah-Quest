@@ -37,30 +37,32 @@
     } catch (e) {}
     renderTafsirBrowser();
   }
+  function _tf(s) { return (typeof window !== 'undefined' && typeof window.t === 'function') ? window.t(s) : s; }
+  function _tn(v) { return (typeof window !== 'undefined' && typeof window.iqFormatNum === 'function') ? window.iqFormatNum(v) : String(v); }
   function loadBrowserResult() {
     var box = (typeof document !== 'undefined') ? document.getElementById('tafsirBrowserResult') : null;
     if (!box) return;
     if (typeof TafsirLibrary === 'undefined') {
-      box.innerHTML = '<div class="quran-loading">Tafsir library is still loading…</div>';
+      box.innerHTML = '<div class="quran-loading">' + _tf('Tafsir library is still loading…') + '</div>';
       return;
     }
     var cur = lookup();
     var ed = (typeof S !== 'undefined' && S && S.tafsirEdition) || 'ibnkathir';
-    box.innerHTML = '<div class="quran-loading">Loading tafsir…</div>';
+    box.innerHTML = '<div class="quran-loading">' + _tf('Loading tafsir…') + '</div>';
     TafsirLibrary.getTafsir(ed, cur.surah, cur.ayah).then(function(t) {
       var el = (typeof document !== 'undefined') ? document.getElementById('tafsirBrowserResult') : null;
       if (!el) return;
       var cur2 = lookup();
       if (cur2.surah !== cur.surah || cur2.ayah !== cur.ayah) return;
       var style = t.dir === 'rtl'
-        ? 'dir="rtl" style="font-family:\'Amiri\',serif;font-size:1.05rem;line-height:2;color:var(--text);"'
+        ? 'dir="rtl" style="font-family:var(--iq-font-ar);font-size:1.05rem;line-height:2;color:var(--text);"'
         : 'style="font-size:0.92rem;line-height:1.8;color:var(--text);"';
       el.innerHTML = '<div ' + style + '>' + TafsirLibrary.sanitizeRichText(t.text) + '</div>';
     }).catch(function() {
       var el = (typeof document !== 'undefined') ? document.getElementById('tafsirBrowserResult') : null;
       if (!el) return;
       var offline = (typeof navigator !== 'undefined' && navigator && navigator.onLine === false);
-      el.innerHTML = '<div class="quran-loading">' + (offline ? 'You are offline — tafsir needs connection once, then it is saved for offline use.' : 'Couldn&#39;t load tafsir — check connection.') + ' <button class="quran-retry-btn" onclick="window.retryBrowserTafsir()">Retry</button></div>';
+      el.innerHTML = '<div class="quran-loading">' + _tf(offline ? 'You are offline — tafsir needs connection once, then it is saved for offline use.' : "Couldn't load tafsir — check connection.") + ' <button type="button" class="quran-retry-btn" onclick="window.retryBrowserTafsir()">' + _tf('Retry') + '</button></div>';
     });
   }
   function retryBrowserTafsir() { loadBrowserResult(); }
@@ -68,7 +70,7 @@
     var host = (typeof document !== 'undefined') ? document.getElementById('tafsirBrowser') : null;
     if (!host) return;
     if (typeof QURAN_SURAHS === 'undefined' || typeof TafsirLibrary === 'undefined') {
-      host.innerHTML = '<div class="quran-loading">Tafsir library is still loading…</div>';
+      host.innerHTML = '<div class="quran-loading">' + _tf('Tafsir library is still loading…') + '</div>';
       return;
     }
     var cur = lookup();
@@ -76,15 +78,15 @@
     var opts = '';
     for (var i = 0; i < QURAN_SURAHS.length; i++) {
       var s = QURAN_SURAHS[i];
-      opts += '<option value="' + s.n + '"' + (s.n === cur.surah ? ' selected' : '') + '>' + s.n + '. ' + s.en + '</option>';
+      opts += '<option value="' + s.n + '"' + (s.n === cur.surah ? ' selected' : '') + '>' + _tn(s.n) + '. ' + s.en + '</option>';
     }
     var eds = '';
     TafsirLibrary.EDITIONS.forEach(function(e) {
-      eds += '<button class="' + (ed === e.id ? 'active' : '') + '" onclick="window.setBrowserEdition(\'' + e.id + '\')">' + e.name + '</button>';
+      eds += '<button type="button" class="' + (ed === e.id ? 'active' : '') + '" style="min-height:44px;" onclick="window.setBrowserEdition(\'' + e.id + '\')">' + e.name + '</button>';
     });
-    host.innerHTML = '<div class="tab-bar-quran" style="margin-bottom:10px;">'
-      + '<select id="tafsirSurah" aria-label="Surah" onchange="window.setBrowserSurah(this.value)">' + opts + '</select>'
-      + '<input id="tafsirAyah" type="number" min="1" max="' + ayahCount(cur.surah) + '" value="' + cur.ayah + '" aria-label="Ayah" onchange="window.setBrowserAyah(this.value)">'
+    host.innerHTML = '<div class="tab-bar-quran" style="margin-bottom:10px;align-items:center;">'
+      + '<select id="tafsirSurah" class="profile-input" style="width:auto;min-width:170px;min-height:44px;margin-bottom:0;" aria-label="Surah" onchange="window.setBrowserSurah(this.value)">' + opts + '</select>'
+      + '<input id="tafsirAyah" class="profile-input" style="width:84px;min-height:44px;margin-bottom:0;" type="number" min="1" max="' + ayahCount(cur.surah) + '" value="' + cur.ayah + '" aria-label="Ayah" onchange="window.setBrowserAyah(this.value)">'
       + eds + '</div><div id="tafsirBrowserResult"></div>';
     loadBrowserResult();
   }

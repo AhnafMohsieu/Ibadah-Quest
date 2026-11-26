@@ -41,10 +41,10 @@
     }
   }
   </script>
-  <link rel="stylesheet" href="styles/tokens.css?v=2">
+  <link rel="stylesheet" href="styles/tokens.css?v=3">
   <style>
     /* Critical above-the-fold CSS */
-    :root{--bg:#f2fbf8;--bg-accent:#e4f5f0;--card-bg:#ffffff;--card-border:rgba(11,122,117,0.12);--shadow-sm:0 2px 8px rgba(7,67,75,0.05);--shadow-md:0 6px 20px rgba(7,67,75,0.08);--text:#0b2528;--text2:#4b6b6e;--text3:#7b9699;--accent:#0b8a82;--accent-light:#14b8a6;--accent-dark:#075e64;--accent-bg:rgba(11,138,130,0.10);--accent-border:rgba(11,138,130,0.22);--gold:#d4af37;--green:#16a34a;--green-bg:rgba(22,163,74,0.08);--orange:#d97706;--red:#dc2626;--red-bg:rgba(220,38,38,0.08);--border:rgba(11,122,117,0.14);--border-light:#e6f4f1;--radius:18px;--radius-sm:12px;--radius-lg:24px;--font:'Sora',system-ui,-apple-system,'Segoe UI',sans-serif;--font-arabic:'Noto Naskh Arabic','Amiri',serif;--font-heading:'Sora',system-ui,sans-serif;--transition:150ms cubic-bezier(0.4,0,0.2,1);line-height:1.6}
+    :root{--bg:#f2fbf8;--bg-accent:#e5f3ee;--card-bg:#ffffff;--card-border:#c5dad2;--shadow-sm:0 2px 8px rgba(7,67,75,0.05);--shadow-md:0 6px 20px rgba(7,67,75,0.08);--text:#0d2421;--text2:#385752;--text3:#46635e;--accent:#07635d;--accent-light:#0a7a72;--accent-dark:#054944;--accent-bg:#e1f2ed;--accent-border:rgba(7,99,93,0.28);--gold:#8e6b1e;--green:#0a6a46;--green-bg:#e4f5ec;--orange:#8a4e04;--red:#b42318;--red-bg:#feeceb;--border:#c5dad2;--border-light:#e2eeea;--radius:16px;--radius-sm:10px;--radius-lg:18px;--font:'Hind Siliguri','Noto Sans Bengali',-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;--font-arabic:'Noto Sans Arabic','Amiri Quran',system-ui,serif;--font-heading:'Hind Siliguri',system-ui,sans-serif;--transition:180ms cubic-bezier(0.2,0.8,0.2,1);line-height:1.6}
     *{margin:0;padding:0;box-sizing:border-box}
     html{overflow-x:clip}
     body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;-webkit-tap-highlight-color:transparent;line-height:1.6;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;opacity:1;transition:background 200ms ease,color 200ms ease}
@@ -59,7 +59,7 @@
     .tab-panel{display:none}
     .tab-panel.active{display:block}
   </style>
-  <link rel="stylesheet" href="styles/main.css?v=55">
+  <link rel="stylesheet" href="styles/main.css?v=56">
   <script>
     window.__iqBootT0 = Date.now();
     window.__iqReload = function() { location.reload(); };
@@ -230,13 +230,13 @@
 
   <div id="segmentPageHeader" class="segment-page-header" style="display:none;">
     <div class="sph-content">
-      <span class="sph-icon" id="sphIcon" aria-hidden="true">📖</span>
+      <span class="sph-icon" id="sphIcon" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></span>
       <div class="sph-text">
         <h2 class="sph-title" id="sphTitle">Islamic Knowledge</h2>
         <p class="sph-desc" id="sphDesc">Qur'an, Hadith, Fiqh &amp; Prophetic Traditions</p>
       </div>
     </div>
-    <button type="button" id="sphDrawerBtn" class="sph-drawer-btn" onclick="window.openIqDrawer && window.openIqDrawer()" aria-label="Browse category sections"><svg class="iq-bento-svg" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/></svg> All Sections</button>
+    <button type="button" id="sphDrawerBtn" class="sph-drawer-btn" onclick="window.openIqDrawer && window.openIqDrawer()" aria-label="Browse category sections"><svg class="iq-bento-svg" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/></svg><span data-i18n-text="All Sections">All Sections</span></button>
   </div>
 
 <!-- ═══════════════ MULTI-LAYER PAGE SECTIONS ═══════════════ -->
@@ -259,10 +259,10 @@
 <div id="lanternArea"></div>
 </div>
       <div class="tab-panel" role="tabpanel" id="panel-timer">
-    <div class="section-title"> Next Prayer Countdown</div>
-    <div id="timerArea" style="text-align:center;font-size:clamp(2rem,12vw,3rem);font-weight:bold;color:var(--accent);margin:30px 0;text-shadow:0 0 20px rgba(201,168,76,0.5);font-family:var(--font-heading);letter-spacing:2px;"></div>
-    <div id="prayerNamesArea" style="text-align:center;color:var(--text2);font-size:1rem;letter-spacing:0.5px;"></div>
-    <div class="section-title"> Prayer Times</div>
+    <div class="section-title" data-i18n-text="Next Prayer">Next Prayer</div>
+    <div id="timerArea" class="iq-timer-display iq-tabular iq-no-mirror" style="font-size:clamp(2rem,12vw,3rem)"></div>
+    <div id="prayerNamesArea" class="iq-timer-sublabel"></div>
+    <div class="section-title" data-i18n-text="Prayer Times">Prayer Times</div>
     <div id="prayerTimesArea"></div>
   </div>
       <div class="tab-panel" role="tabpanel" id="panel-quests"><div id="questArea"></div></div>
@@ -371,7 +371,7 @@
     <div id="calArea"></div>
   </div>
       <div class="tab-panel" role="tabpanel" id="panel-stats">
-    <div class="section-title"> Advanced Analytics</div>
+    <div class="section-title" data-i18n-text="Analytics">Analytics</div>
     <div id="statsArea"></div>
   </div>
       <div class="tab-panel" role="tabpanel" id="panel-rewards">
@@ -486,10 +486,10 @@
 <script src="core/calendar.js?v=1"></script>
 <script src="assets/vendor/adhan.umd.min.js"></script>
 <script src="features/native-bridge.js?v=1" defer></script>
-<script src="core/render-prayers.js?v=8"></script>
-<script src="core/static.js?v=11"></script>
-<script src="core/dynamic.js?v=19"></script>
-<script src="core/tabs.js?v=17"></script>
+<script src="core/render-prayers.js?v=9"></script>
+<script src="core/static.js?v=12"></script>
+<script src="core/dynamic.js?v=20"></script>
+<script src="core/tabs.js?v=18"></script>
 
 <!-- Offline Analytics Dashboard (lazy loaded on first access) -->
 <script>
@@ -499,7 +499,7 @@
   window._loadAnalytics=function(){
     if(_analyticsLoaded)return Promise.resolve();
     _analyticsLoaded=true;
-    var scripts=['features/analytics/analytics.js','features/analytics/charts.js','features/analytics/dashboard.js','features/analytics/trend-charts.js','features/analytics/weekly-compare.js','features/analytics/smart-insights.js'];
+    var scripts=['features/analytics/analytics.js','features/analytics/charts.js?v=2','features/analytics/dashboard.js?v=2','features/analytics/trend-charts.js','features/analytics/weekly-compare.js?v=2','features/analytics/smart-insights.js'];
     var i=0;
     function next(){
       if(i>=scripts.length)return Promise.resolve();
@@ -518,14 +518,14 @@
 
 <!-- Spiritual Growth Features -->
 <script src="data/journeys.js?v=3"></script>
-<script src="features/garden.js?v=2" defer></script>
-<script src="features/muhasabah.js?v=5" defer></script>
-<script src="features/journeys.js?v=6" defer></script>
-<script src="features/health.js?v=7" defer></script>
-<script src="features/finance.js?v=7" defer></script>
-<script src="features/personal-goals.js?v=4" defer></script>
+<script src="features/garden.js?v=3" defer></script>
+<script src="features/muhasabah.js?v=6" defer></script>
+<script src="features/journeys.js?v=7" defer></script>
+<script src="features/health.js?v=8" defer></script>
+<script src="features/finance.js?v=8" defer></script>
+<script src="features/personal-goals.js?v=5" defer></script>
 <script src="features/spiritual-growth/data.js?v=2" defer></script>
-<script src="features/spiritual-growth/index.js?v=2" defer></script>
+<script src="features/spiritual-growth/index.js?v=3" defer></script>
 <script src="features/spiritual-growth/armor.js?v=1" defer></script>
 <script src="features/spiritual-growth/heart.js?v=2" defer></script>
 <script src="features/spiritual-growth/lantern.js?v=1" defer></script>
@@ -537,16 +537,16 @@
 <script src="features/search.js?v=5" defer></script>
 <script src="features/hadith-library.js?v=3" defer></script>
 <script src="features/tafsir-library.js?v=3" defer></script>
-<script src="features/tafsir-browser.js?v=1" defer></script>
+<script src="features/tafsir-browser.js?v=2" defer></script>
 <script src="features/fab.js?v=3" defer></script>
-<script src="features/streak-milestones.js?v=1" defer></script>
+<script src="features/streak-milestones.js?v=2" defer></script>
 <script src="features/pull-refresh.js?v=1" defer></script>
 <script src="features/swipe-nav.js?v=2" defer></script>
 <script src="features/surprise-rewards.js?v=1" defer></script>
-<script src="features/daily-summary.js?v=3" defer></script>
+<script src="features/daily-summary.js?v=4" defer></script>
 <script src="features/consistency-bonuses.js?v=1" defer></script>
 <script src="features/combo-streaks.js" defer></script>
-<script src="features/achievement-showcase.js" defer></script>
+<script src="features/achievement-showcase.js?v=2" defer></script>
 <script src="features/daily-content.js?v=4" defer></script>
 <script src="features/notifications.js?v=3" defer></script>
 
@@ -554,16 +554,16 @@
 <script src="features/widgets/daily-progress.js" defer></script>
 <script src="features/widgets/dhikr-counter.js" defer></script>
 <script src="features/widgets/streak-calendar.js" defer></script>
-<script src="features/zakat-calc.js" defer></script>
+<script src="features/zakat-calc.js?v=2" defer></script>
 
 <div id="onboardingOverlay" style="display:none"></div>
-<script src="features/onboarding.js" defer></script>
+<script src="features/onboarding.js?v=2" defer></script>
 <script src="features/masjid-checkins.js?v=3" defer></script>
-<script src="features/iq-shell.js?v=7"></script>
-<script src="features/gallery.js?v=1" defer></script>
+<script src="features/iq-shell.js?v=8"></script>
+<script src="features/gallery.js?v=2" defer></script>
 
 <!-- Actions (core logic, navigation, init, window.App) -->
-<script src="features/auth.js?v=1"></script>
+<script src="features/auth.js?v=2"></script>
 <script src="core/xp.js?v=4"></script>
 <script src="core/prayers.js?v=6"></script>
 <script src="core/quests.js?v=5"></script>
@@ -573,8 +573,8 @@
 <script src="core/dhikr.js?v=5"></script>
 <script src="core/content.js?v=1"></script>
 <script src="core/backup.js?v=1"></script>
-<script src="data/i18n.js?v=5"></script>
-<script src="core/actions.js?v=28"></script>
+<script src="data/i18n.js?v=6"></script>
+<script src="core/actions.js?v=29"></script>
 
 <!-- PWA: Service Worker registration + update banner -->
 <script>
@@ -598,7 +598,7 @@
     });
   }
   window.addEventListener('load', function() {
-    navigator.serviceWorker.register('sw.js?v=67').then(function(reg) {
+    navigator.serviceWorker.register('sw.js?v=68').then(function(reg) {
       if (reg.waiting) { showUpdateBanner(reg); return; }
       reg.addEventListener('updatefound', function() {
         var sw = reg.installing;
@@ -670,7 +670,7 @@
 <nav class="bnav" id="bnav" aria-label="Main navigation">
   <button class="bnav-btn active" data-cat="ibadah" data-i18n="Daily" onclick="window.closeActiveSheet && window.closeActiveSheet();App.switchCategory('ibadah', this)" role="tab" aria-selected="true"><span class="bnav-icon"></span><span class="bnav-label">Home</span></button>
   <button class="bnav-btn" data-cat="knowledge" data-i18n="Knowledge" onclick="window.closeActiveSheet && window.closeActiveSheet();App.switchCategory('knowledge', this)" role="tab" aria-selected="false"><span class="bnav-icon"></span><span class="bnav-label">Knowledge</span></button>
-  <button type="button" class="bnav-center-fab" id="bnavCenterFab" onclick="window.openChallengeDetail && window.openChallengeDetail('dhikr')" aria-label="Daily challenges quick view"><span class="bnav-center-icon">&#127769;</span></button>
+  <button type="button" class="bnav-center-fab" id="bnavCenterFab" onclick="window.openChallengeDetail && window.openChallengeDetail('dhikr')" aria-label="Daily challenges quick view"><span class="bnav-center-icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></span></button>
   <button class="bnav-btn" data-cat="library" data-i18n="Library" onclick="window.closeActiveSheet && window.closeActiveSheet();App.switchCategory('library', this)" role="tab" aria-selected="false"><span class="bnav-icon"></span><span class="bnav-label">Library</span></button>
   <button class="bnav-btn" data-cat="profile_main" data-i18n="Profile" onclick="window.closeActiveSheet && window.closeActiveSheet();App.switchCategory('profile_main', this)" role="tab" aria-selected="false"><span class="bnav-icon"></span><span class="bnav-label">Profile</span></button>
 </nav>

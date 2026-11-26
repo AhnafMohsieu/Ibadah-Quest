@@ -3,59 +3,90 @@
 
   let currentRange = 30;
 
-  const CAT_COLORS = ['#16a34a', '#22c55e', '#f59e0b', '#ef4444', '#3b82f6', '#8b5cf6', '#ec4899', '#06b6d4'];
+  function _dt(s) {
+    return (typeof window !== 'undefined' && typeof window.t === 'function') ? window.t(s) : s;
+  }
+  function _dn(v) {
+    return (typeof window !== 'undefined' && typeof window.iqFormatNum === 'function') ? window.iqFormatNum(v) : String(v);
+  }
+  function getCategoryPalette() {
+    if (typeof document === 'undefined' || typeof getComputedStyle !== 'function') {
+      return ['#07635d', '#15803d', '#8e6b1e', '#1d4ed8', '#0a7a72', '#b42318', '#0e7490', '#4f46e5'];
+    }
+    const cs = getComputedStyle(document.documentElement);
+    const read = (v, fb) => (cs.getPropertyValue(v).trim() || fb);
+    return [
+      read('--accent', '#07635d'),
+      read('--green', '#15803d'),
+      read('--gold', '#8e6b1e'),
+      read('--blue', '#1d4ed8'),
+      read('--accent-light', '#0a7a72'),
+      read('--orange', '#c2410c'),
+      read('--accent-dark', '#054642'),
+      read('--red', '#b42318')
+    ];
+  }
 
   function summaryCards() {
     const prayers = Analytics.getPrayerStats();
     const streak = Analytics.getStreakStats();
     const xp = Analytics.getXPStats();
+    const deedTotal = Object.values((typeof S !== 'undefined' && S && S.td) || {}).reduce((a, b) => a + b, 0);
+    const perfPct = prayers.possible ? Math.round((S.pd || 0) / (prayers.possible / 5) * 100) : 0;
+    const questSum = xp.questXP ? (xp.questXP.daily + xp.questXP.weekly + xp.questXP.monthly + xp.questXP.yearly) : 0;
     return `
       <div class="insights-cards">
         <div class="insight-card">
           <div class="insight-card-icon">${iqIcon('mosque')}</div>
-          <div class="insight-card-num">${prayers.total}</div>
-          <div class="insight-card-label">Total Prayers</div>
-          <div class="insight-card-sub">${prayers.rate}% completion</div>
+          <div class="insight-card-num iq-tabular">${_dn(prayers.total)}</div>
+          <div class="insight-card-label">${_dt('Total Prayers')}</div>
+          <div class="insight-card-sub iq-tabular">${_dn(prayers.rate)}% ${_dt('completion')}</div>
           <div class="insight-progress"><div class="insight-progress-bar" style="width:${prayers.rate}%"></div></div>
         </div>
         <div class="insight-card">
           <div class="insight-card-icon">${iqIcon('flame')}</div>
-          <div class="insight-card-num">${streak.current}</div>
-          <div class="insight-card-label">Current Streak</div>
-          <div class="insight-card-sub">Best: ${streak.best}</div>
+          <div class="insight-card-num iq-tabular">${_dn(streak.current)}</div>
+          <div class="insight-card-label">${_dt('Current Streak')}</div>
+          <div class="insight-card-sub iq-tabular">${_dt('Best')}: ${_dn(streak.best)}</div>
         </div>
         <div class="insight-card">
           <div class="insight-card-icon">${iqIcon('star')}</div>
-          <div class="insight-card-num">${S.pd || 0}</div>
-          <div class="insight-card-label">Perfect Days</div>
-          <div class="insight-card-sub">${prayers.possible ? Math.round((S.pd || 0) / (prayers.possible / 5) * 100) : 0}% rate</div>
+          <div class="insight-card-num iq-tabular">${_dn(S.pd || 0)}</div>
+          <div class="insight-card-label">${_dt('Perfect Days')}</div>
+          <div class="insight-card-sub iq-tabular">${_dn(perfPct)}% ${_dt('rate')}</div>
         </div>
         <div class="insight-card">
           <div class="insight-card-icon">${iqIcon('bar-chart-3')}</div>
-          <div class="insight-card-num">Lv ${xp.level}</div>
-          <div class="insight-card-label">${xp.title}</div>
-          <div class="insight-card-sub">${xp.progress}% to next</div>
+          <div class="insight-card-num iq-tabular"><bdi>${_dt('Lv')} ${_dn(xp.level)}</bdi></div>
+          <div class="insight-card-label">${_dt(xp.title)}</div>
+          <div class="insight-card-sub iq-tabular">${_dn(xp.progress)}% ${_dt('to next')}</div>
           <div class="insight-progress"><div class="insight-progress-bar" style="width:${xp.progress}%"></div></div>
         </div>
         <div class="insight-card">
           <div class="insight-card-icon">${iqIcon('target')}</div>
-          <div class="insight-card-num">${xp.questXP ? (xp.questXP.daily + xp.questXP.weekly + xp.questXP.monthly + xp.questXP.yearly) : 0} XP</div>
-          <div class="insight-card-label">Quest XP</div>
-          <div class="insight-card-sub">D:${xp.questXP?.daily||0} W:${xp.questXP?.weekly||0} M:${xp.questXP?.monthly||0} Y:${xp.questXP?.yearly||0}</div>
+          <div class="insight-card-num iq-tabular"><bdi dir="ltr">${_dn(questSum)} XP</bdi></div>
+          <div class="insight-card-label">${_dt('Quest XP')}</div>
+          <div class="insight-card-sub iq-tabular"><bdi dir="ltr">${_dn(xp.questXP?.daily||0)}/${_dn(xp.questXP?.weekly||0)}/${_dn(xp.questXP?.monthly||0)}</bdi></div>
+        </div>
+        <div class="insight-card">
+          <div class="insight-card-icon">${iqIcon('medal')}</div>
+          <div class="insight-card-num iq-tabular">${_dn(deedTotal)}</div>
+          <div class="insight-card-label">${_dt('Extra Deeds')}</div>
+          <div class="insight-card-sub">${_dt('Completed')}</div>
         </div>
       </div>`;
   }
 
   function dateFilter() {
-    const ranges = [{ v: 7, l: '7D' }, { v: 30, l: '30D' }, { v: 90, l: '90D' }, { v: 0, l: 'All' }];
+    const ranges = [{ v: 7, l: _dn(7) + _dt('D') }, { v: 30, l: _dn(30) + _dt('D') }, { v: 90, l: _dn(90) + _dt('D') }, { v: 0, l: _dt('All') }];
     return `<div class="insights-filter">
-      ${ranges.map(r => `<button class="filter-btn ${r.v === currentRange ? 'active' : ''}" onclick="Dashboard.setRange(${r.v})">${r.l}</button>`).join('')}
+      ${ranges.map(r => `<button type="button" class="filter-btn ${r.v === currentRange ? 'active' : ''}" onclick="Dashboard.setRange(${r.v})">${r.l}</button>`).join('')}
     </div>`;
   }
 
   function chartHTML(id, title, height, noData) {
     if (noData) {
-      return `<div class="insight-chart-wrap"><div style="height:${height || 200}px;display:flex;align-items:center;justify-content:center;color:var(--text2);font-size:0.85rem;">No data for this period</div></div>`;
+      return `<div class="insight-chart-wrap"><div style="height:${height || 200}px;display:flex;align-items:center;justify-content:center;color:var(--text2);font-size:0.85rem;">${_dt('No data for this period')}</div></div>`;
     }
     return `<div class="insight-chart-wrap"><canvas id="${id}" style="width:100%;height:${height || 200}px;"></canvas></div>`;
   }
@@ -83,7 +114,8 @@
     // 3. Deed Distribution Doughnut
     const deeds = Analytics.getDeedStats(currentRange);
     if (deeds.byCategory.length > 0 && document.getElementById('chart-deeds')) {
-      Charts.createDoughnut('chart-deeds', deeds.byCategory.map(c => c.category), deeds.byCategory.map(c => c.count), CAT_COLORS.slice(0, deeds.byCategory.length), 'Deed Distribution');
+      const pal = getCategoryPalette();
+      Charts.createDoughnut('chart-deeds', deeds.byCategory.map(c => c.category), deeds.byCategory.map(c => c.count), deeds.byCategory.map((_, i) => pal[i % pal.length]), 'Deed Distribution');
     }
 
     // 4. Streak Timeline
@@ -113,7 +145,7 @@
     if (!el) return;
 
     if (!S || !S.log || Object.keys(S.log).length === 0) {
-      el.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text2);">Start tracking to see insights</div>';
+      el.innerHTML = `<div style="text-align:center;padding:40px;color:var(--text2);">${_dt('Start tracking to see insights')}</div>`;
       return;
     }
 

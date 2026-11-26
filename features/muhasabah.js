@@ -39,18 +39,20 @@
     const sug = suggestionInfo
       ? `Perhaps next week, try dedicating a moment to ${iqIcon(suggestionInfo.icon)} ${suggestionInfo.label}.`
       : 'Your garden is thriving — keep nourishing it.';
+    const _mt = (s) => (typeof window !== 'undefined' && typeof window.t === 'function') ? window.t(s) : s;
+    const _mn = (v) => (typeof window !== 'undefined' && typeof window.iqFormatNum === 'function') ? window.iqFormatNum(v) : String(v);
     return `<div class="muh-overlay" id="muhOverlay" role="dialog" aria-modal="true" aria-labelledby="muhTitle">
       <div class="muh-card">
-        <div class="muh-title" id="muhTitle">${iqIcon('pencil')} Weekly Muhasabah · Friday Reflection</div>
+        <div class="muh-title" id="muhTitle">${iqIcon('pencil')} ${_mt('Weekly Muhasabah · Friday Reflection')}</div>
         <div class="muh-hero">${hero}</div>
         <div class="muh-list">
-          <div class="muh-row"><span>${iqIcon('mosque')} Prayers logged</span><b>${metrics.prayers}</b></div>
-          <div class="muh-row"><span>${iqIcon('calendar')} Days prayed</span><b>${metrics.daysPrayed}</b></div>
-          <div class="muh-row"><span>${iqIcon('flame')} Streak</span><b>${streak} days</b></div>
-          <div class="muh-row"><span>${iqIcon('star')} Extra deeds</span><b>${metrics.deeds}</b></div>
+          <div class="muh-row"><span>${iqIcon('mosque')} ${_mt('Prayers logged')}</span><b class="iq-tabular">${_mn(metrics.prayers)}</b></div>
+          <div class="muh-row"><span>${iqIcon('calendar')} ${_mt('Days prayed')}</span><b class="iq-tabular">${_mn(metrics.daysPrayed)}</b></div>
+          <div class="muh-row"><span>${iqIcon('flame')} ${_mt('Streak')}</span><b class="iq-tabular">${_mn(streak)} ${_mt('days')}</b></div>
+          <div class="muh-row"><span>${iqIcon('star')} ${_mt('Extra deeds')}</span><b class="iq-tabular">${_mn(metrics.deeds)}</b></div>
         </div>
         <div class="muh-suggestion">${sug}</div>
-        <button class="muh-dismiss" onclick="App.dismissMuhasabah()">JazakAllah khair ${iqIcon('hand-heart')}</button>
+        <button type="button" class="muh-dismiss" style="min-height:44px;" onclick="App.dismissMuhasabah()">${_mt('JazakAllah khair')} ${iqIcon('hand-heart')}</button>
       </div>
     </div>`;
   }
@@ -107,7 +109,8 @@
       const el = document.getElementById('muhasabahEntry');
       if (!el) return;
       const pending = isFri() && S.muhWeek !== ws();
-      el.innerHTML = `<button class="muh-entry${pending ? ' muh-pending' : ''}" onclick="App.openMuhasabah()">${iqIcon('pencil')} Weekly Reflection</button>`;
+      const _mt = (s) => (typeof window !== 'undefined' && typeof window.t === 'function') ? window.t(s) : s;
+      el.innerHTML = `<button type="button" class="muh-entry${pending ? ' muh-pending' : ''}" onclick="App.openMuhasabah()">${iqIcon('pencil')} ${_mt('Weekly Reflection')}</button>`;
     } catch (e) { console.warn('Render Muhasabah entry failed:', e.message); }
   }
   window.muhasabahMetrics = muhasabahMetrics;

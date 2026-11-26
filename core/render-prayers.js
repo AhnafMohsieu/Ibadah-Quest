@@ -487,7 +487,7 @@
     if (!el) return;
     const icons = { Fajr: iqIcon('sunrise'), Sunrise: iqIcon('sun'), Dhuhr: iqIcon('sun'), Asr: iqIcon('cloud-sun'), Maghrib: iqIcon('sunset'), Isha: iqIcon('moon') };
     const descs = {
-      Fajr: 'Dawn', Sunrise: 'Sunrise', Dhuhr: isFri() ? 'Jumu\'ah / Noon' : 'Noon', Asr: 'Afternoon', Maghrib: 'Sunset', Isha: 'Night'
+      Fajr: tr('Dawn'), Sunrise: tr('Sunrise'), Dhuhr: tr(isFri() ? 'Jumu\'ah / Noon' : 'Noon'), Asr: tr('Afternoon'), Maghrib: tr('Sunset'), Isha: tr('Night')
     };
     fetchPrayerTimes().then(times => {
       const settings = getPrayerSettings();
@@ -502,24 +502,24 @@
         `<option value="${m.id}"${m.id === settings.method ? ' selected' : ''}>${safePrayerText(m.name)}</option>`
       ).join('');
       const locateButton = typeof navigator !== 'undefined' && navigator.geolocation
-        ? '<button class="iq-pt-gps-btn" type="button" onclick="useCurrentPrayerLocation()">Use Device Location</button>'
+        ? `<button class="iq-pt-gps-btn" type="button" onclick="useCurrentPrayerLocation()">${safePrayerText(tr('Use Device Location'))}</button>`
         : '';
 
       const customAnglesHtml = settings.method === 0
-        ? `<div class="iq-pt-ctrl-group"><label class="iq-pt-label" for="iqFajrAngleInp">Fajr Angle (°)</label><input id="iqFajrAngleInp" type="number" step="0.5" min="10" max="24" class="iq-pt-select" value="${settings.fajrAngle}" onchange="window.updatePrayerSettings({fajrAngle:this.value})"></div>` +
-          `<div class="iq-pt-ctrl-group"><label class="iq-pt-label" for="iqIshaAngleInp">Isha Angle (°)</label><input id="iqIshaAngleInp" type="number" step="0.5" min="10" max="24" class="iq-pt-select" value="${settings.ishaAngle}" onchange="window.updatePrayerSettings({ishaAngle:this.value})"></div>`
+        ? `<div class="iq-pt-ctrl-group"><label class="iq-pt-label" for="iqFajrAngleInp">${safePrayerText(tr('Fajr Angle'))} (&deg;)</label><input id="iqFajrAngleInp" type="number" step="0.5" min="10" max="24" class="iq-pt-select" value="${settings.fajrAngle}" onchange="window.updatePrayerSettings({fajrAngle:this.value})"></div>` +
+          `<div class="iq-pt-ctrl-group"><label class="iq-pt-label" for="iqIshaAngleInp">${safePrayerText(tr('Isha Angle'))} (&deg;)</label><input id="iqIshaAngleInp" type="number" step="0.5" min="10" max="24" class="iq-pt-select" value="${settings.ishaAngle}" onchange="window.updatePrayerSettings({ishaAngle:this.value})"></div>`
         : '';
 
       const controlsHtml = `<div class="iq-pt-controls">` +
-        `<div class="iq-pt-ctrl-group"><label class="iq-pt-label" for="iqPrayerCitySelect">City</label><select id="iqPrayerCitySelect" class="iq-pt-select" onchange="window.applyPrayerCityPreset(this.value)">${customCityOpt}${cityOptions}</select></div>` +
-        `<div class="iq-pt-ctrl-group"><label class="iq-pt-label" for="iqPrayerMethodSelect">Method</label><select id="iqPrayerMethodSelect" class="iq-pt-select" onchange="window.applyPrayerMethod(this.value)">${methodOptions}</select></div>` +
+        `<div class="iq-pt-ctrl-group"><label class="iq-pt-label" for="iqPrayerCitySelect">${safePrayerText(tr('City'))}</label><select id="iqPrayerCitySelect" class="iq-pt-select" onchange="window.applyPrayerCityPreset(this.value)">${customCityOpt}${cityOptions}</select></div>` +
+        `<div class="iq-pt-ctrl-group"><label class="iq-pt-label" for="iqPrayerMethodSelect">${safePrayerText(tr('Method'))}</label><select id="iqPrayerMethodSelect" class="iq-pt-select" onchange="window.applyPrayerMethod(this.value)">${methodOptions}</select></div>` +
         customAnglesHtml +
-        `<div class="iq-pt-ctrl-group"><label class="iq-pt-label" for="iqAsrSelect">Asr Madhhab</label><select id="iqAsrSelect" class="iq-pt-select" onchange="window.updatePrayerSettings({asrSchool:this.value})"><option value="hanafi"${settings.asrSchool==='hanafi'?' selected':''}>Hanafi (2x shadow)</option><option value="shafi"${settings.asrSchool==='shafi'?' selected':''}>Standard (Shafi'i/Maliki/Hanbali)</option></select></div>` +
-        `<div class="iq-pt-ctrl-group"><label class="iq-pt-label" for="iqHighLatSelect">High Latitude Rule</label><select id="iqHighLatSelect" class="iq-pt-select" onchange="window.updatePrayerSettings({highLat:this.value})"><option value="middle"${settings.highLat==='middle'?' selected':''}>Middle of Night</option><option value="seventh"${settings.highLat==='seventh'?' selected':''}>Seventh of Night</option><option value="twilight"${settings.highLat==='twilight'?' selected':''}>Twilight Angle</option></select></div>` +
+        `<div class="iq-pt-ctrl-group"><label class="iq-pt-label" for="iqAsrSelect">${safePrayerText(tr('Asr Madhhab'))}</label><select id="iqAsrSelect" class="iq-pt-select" onchange="window.updatePrayerSettings({asrSchool:this.value})"><option value="hanafi"${settings.asrSchool==='hanafi'?' selected':''}>${safePrayerText(tr('Hanafi (2x shadow)'))}</option><option value="shafi"${settings.asrSchool==='shafi'?' selected':''}>${safePrayerText(tr("Standard (Shafi'i/Maliki/Hanbali)"))}</option></select></div>` +
+        `<div class="iq-pt-ctrl-group"><label class="iq-pt-label" for="iqHighLatSelect">${safePrayerText(tr('High Latitude Rule'))}</label><select id="iqHighLatSelect" class="iq-pt-select" onchange="window.updatePrayerSettings({highLat:this.value})"><option value="middle"${settings.highLat==='middle'?' selected':''}>${safePrayerText(tr('Middle of Night'))}</option><option value="seventh"${settings.highLat==='seventh'?' selected':''}>${safePrayerText(tr('Seventh of Night'))}</option><option value="twilight"${settings.highLat==='twilight'?' selected':''}>${safePrayerText(tr('Twilight Angle'))}</option></select></div>` +
         `${locateButton}</div>`;
 
       if (!times) {
-        el.innerHTML = controlsHtml + '<div style="text-align:center;color:var(--text2);padding:20px;">Unable to compute prayer times for this coordinate. Please select a city preset above.</div>';
+        el.innerHTML = controlsHtml + `<div style="text-align:center;color:var(--text2);padding:20px;">${safePrayerText(tr('Unable to compute prayer times for this coordinate. Please select a city preset above.'))}</div>`;
         return;
       }
       const nextInfo = computeNextPrayer(times);
@@ -534,25 +534,25 @@
         return `<div class="pt-card${isNext ? ' next-prayer' : ''}">
           <div class="pt-icon">${icons[name]}</div>
           <div class="pt-name">${safePrayerText(dispName)}</div>
-          <div class="pt-time iq-no-mirror">${safePrayerText(nfmt(formatTime12(t.h, t.m)))}</div>
-          ${jam ? `<div class="pt-sub">Jama'at: ${safePrayerText(nfmt(formatTime12(jam.h, jam.m)))}</div>` : `<div class="pt-sub">${descs[name]}</div>`}
-          <div style="display:flex;gap:6px;justify-content:center;align-items:center;margin-top:6px;">
-            <button type="button" class="iq-pill-btn" style="min-height:44px;min-width:44px;padding:6px 10px;" aria-label="Subtract 1 minute offset for ${name}" onclick="window.applyPrayerOffset('${name.toLowerCase()}',-1,false)">&minus;1m</button>
-            <span class="iq-tabular" style="font-size:0.75rem;color:var(--text2);">${offVal >= 0 ? '+' : ''}${nfmt(offVal)}m</span>
-            <button type="button" class="iq-pill-btn" style="min-height:44px;min-width:44px;padding:6px 10px;" aria-label="Add 1 minute offset for ${name}" onclick="window.applyPrayerOffset('${name.toLowerCase()}',1,false)">+1m</button>
+          <div class="pt-time"><bdi dir="ltr">${safePrayerText(nfmt(formatTime12(t.h, t.m)))}</bdi></div>
+          ${jam ? `<div class="pt-sub">${safePrayerText(tr("Jama'at"))}: <bdi dir="ltr">${safePrayerText(nfmt(formatTime12(jam.h, jam.m)))}</bdi></div>` : `<div class="pt-sub">${safePrayerText(descs[name])}</div>`}
+          <div style="display:flex;gap:4px;justify-content:center;align-items:center;margin-top:6px;">
+            <button type="button" class="iq-btn-secondary" style="min-height:44px;min-width:44px;padding:4px 8px;font-size:0.74rem;border-radius:10px;" aria-label="Subtract 1 minute offset for ${name}" onclick="window.applyPrayerOffset('${name.toLowerCase()}',-1,false)"><bdi dir="ltr">&minus;1m</bdi></button>
+            <span class="iq-tabular" style="font-size:0.75rem;color:var(--text2);min-width:34px;text-align:center;"><bdi dir="ltr">${offVal >= 0 ? '+' : ''}${nfmt(offVal)}m</bdi></span>
+            <button type="button" class="iq-btn-secondary" style="min-height:44px;min-width:44px;padding:4px 8px;font-size:0.74rem;border-radius:10px;" aria-label="Add 1 minute offset for ${name}" onclick="window.applyPrayerOffset('${name.toLowerCase()}',1,false)"><bdi dir="ltr">+1m</bdi></button>
           </div>
         </div>`;
       }).join('') + '</div>';
 
-      const qiblaHtml = `<div class="content-card" style="margin-top:16px;text-align:center;">
-        <div style="font-weight:700;color:var(--accent);margin-bottom:8px;">${iqIcon('compass')} ${safePrayerText(tr('Qibla Direction'))} &middot; ${safePrayerText(settings.label)}</div>
+      const qiblaHtml = `<div class="content-card" style="margin-top:16px;text-align:center;align-items:center;">
+        <div style="font-weight:700;color:var(--accent-dark);margin-bottom:8px;">${iqIcon('compass')} ${safePrayerText(tr('Qibla Direction'))} &middot; ${safePrayerText(settings.label)}</div>
         <div class="iq-no-mirror" style="position:relative;width:124px;height:124px;margin:8px auto;border-radius:50%;border:2px solid var(--accent);display:flex;align-items:center;justify-content:center;background:var(--surface-subtle);">
           <span style="position:absolute;top:4px;font-size:0.7rem;font-weight:700;color:var(--text2);">N</span>
           <div id="iqQiblaNeedle" style="width:4px;height:86px;background:linear-gradient(to bottom, var(--accent) 50%, var(--border) 50%);border-radius:4px;transform:rotate(${bearing.toFixed(1)}deg);transition:transform 0.25s ease;"></div>
         </div>
-        <div class="iq-tabular" style="font-weight:700;font-size:1rem;">${nfmt(bearing.toFixed(1))}&deg; ${cardinalDir(bearing)}</div>
-        <div id="iqQiblaSensorStatus" style="font-size:0.78rem;color:var(--text2);margin:6px 0;">Measured clockwise from True North (offline great-circle bearing).</div>
-        <button type="button" class="iq-pill-btn" onclick="window.toggleQiblaCompass()">Enable Live Compass</button>
+        <div class="iq-tabular" style="font-weight:700;font-size:1rem;"><bdi dir="ltr">${nfmt(bearing.toFixed(1))}&deg; ${safePrayerText(cardinalDir(bearing))}</bdi></div>
+        <div id="iqQiblaSensorStatus" style="font-size:0.78rem;color:var(--text2);margin:6px 0;text-align:center;">${safePrayerText(tr('Measured clockwise from True North (offline great-circle bearing).'))}</div>
+        <button type="button" class="iq-pill-btn" onclick="window.toggleQiblaCompass()">${safePrayerText(tr('Enable Live Compass'))}</button>
       </div>`;
 
       el.innerHTML = controlsHtml + gridHtml + qiblaHtml;
@@ -587,7 +587,7 @@
       const te = document.getElementById('timerArea');
       const pna = document.getElementById('prayerNamesArea');
       if (te) te.innerText = nfmt(info.countdownText);
-      if (pna) pna.innerText = `Until ${tr(info.name)} (${nfmt(info.timeLabel)})`;
+      if (pna) pna.innerHTML = `${safePrayerText(tr('Until'))} ${safePrayerText(tr(info.name))} (<bdi dir="ltr">${safePrayerText(nfmt(info.timeLabel))}</bdi>)`;
     }
     fetchPrayerTimes().then(times => {
       if (!times) return;

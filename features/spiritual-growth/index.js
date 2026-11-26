@@ -33,6 +33,9 @@
     renderGrowthSettings();
   }
   
+  function _sgT(s) { return (typeof window !== 'undefined' && typeof window.t === 'function') ? window.t(s) : s; }
+  function _sgN(v) { return (typeof window !== 'undefined' && typeof window.iqFormatNum === 'function') ? window.iqFormatNum(v) : String(v); }
+
   function renderGrowthSettings() {
     const el = document.getElementById('growthSettingsArea');
     if (!el) return;
@@ -40,23 +43,22 @@
     const settings = getSettings();
     const features = Object.keys(FEATURE_STAGES);
     
-    let h = '<div class="section-title">🌱 Spiritual Growth Features</div>';
+    let h = `<div class="section-title">${iqIcon('sprout')} ${_sgT('Spiritual Growth Features')}</div>`;
     h += '<div class="growth-settings">';
     
     features.forEach(f => {
       const visible = settings.visible.includes(f);
-      const stages = FEATURE_STAGES[f];
       const progress = SpiritualGrowth.getProgress(f);
       const icon = SpiritualGrowth.FEATURE_ICONS[f] || progress.icon;
-      const label = SpiritualGrowth.FEATURE_LABELS[f] || f;
+      const label = _sgT(SpiritualGrowth.FEATURE_LABELS[f] || f);
 
-      h += `<div class="growth-setting-item ${visible ? 'active' : ''}" onclick="SpiritualGrowth.toggle('${f}')">
+      h += `<div class="growth-setting-item ${visible ? 'active' : ''}" role="button" tabindex="0" aria-pressed="${visible}" onclick="SpiritualGrowth.toggle('${f}')">
         <div class="growth-setting-icon">${icon}</div>
         <div class="growth-setting-info">
           <div class="growth-setting-name">${label}</div>
-          <div class="growth-setting-stage">${progress.name} (${progress.stage}/${progress.totalStages})</div>
+          <div class="growth-setting-stage iq-tabular">${_sgT(progress.name)} (${_sgN(progress.stage)}/${_sgN(progress.totalStages)})</div>
         </div>
-        <div class="growth-setting-toggle">${visible ? '👁️' : '🙈'}</div>
+        <div class="growth-setting-toggle">${visible ? iqIcon('eye') || '✓' : iqIcon('eye-off') || '—'}</div>
       </div>`;
     });
     
@@ -66,7 +68,7 @@
   
   // Add to Profile tab
   if (TAB_GROUPS.profile_main) {
-    TAB_GROUPS.profile_main.push({ id: 'growth', icon: '🌱', label: 'Growth' });
+    TAB_GROUPS.profile_main.push({ id: 'growth', icon: 'sprout', label: 'Growth' });
   }
 
   function renderSpiritualGrowthTab() {
@@ -75,20 +77,20 @@
     const settings = getSettings();
     const features = Object.keys(FEATURE_STAGES);
 
-    let h = '<div class="section-title">Spiritual Growth</div>';
-    h += '<div class="growth-tab-intro">Each good deed grows your soul. Track your journey across the spiritual features below.</div>';
+    let h = `<div class="section-title">${iqIcon('sprout')} ${_sgT('Spiritual Growth')}</div>`;
+    h += `<div class="growth-tab-intro">${_sgT('Each good deed grows your soul. Track your journey across the spiritual features below.')}</div>`;
     h += '<div class="growth-tab-grid">';
 
     features.forEach(f => {
       const visible = settings.visible.includes(f);
       const progress = SpiritualGrowth.getProgress(f);
       const icon = SpiritualGrowth.FEATURE_ICONS[f] || '';
-      const label = SpiritualGrowth.FEATURE_LABELS[f] || f;
+      const label = _sgT(SpiritualGrowth.FEATURE_LABELS[f] || f);
       const stageEmoji = progress.icon || '';
       const pct = Math.round(progress.progress * 100);
       const progressText = progress.xpForNext
-        ? `${progress.xp.toLocaleString()} / ${progress.xpForNext.toLocaleString()} XP`
-        : 'Max — may Allah accept it.';
+        ? `${_sgN(progress.xp.toLocaleString())} / ${_sgN(progress.xpForNext.toLocaleString())} XP`
+        : _sgT('Max — may Allah accept it.');
 
       h += `<div class="growth-tab-card ${visible ? '' : 'disabled'}">
         <div class="growth-tab-card-head">
@@ -96,10 +98,10 @@
           <span class="growth-tab-label">${label}</span>
           <span class="growth-tab-stage-emoji">${stageEmoji}</span>
         </div>
-        <div class="growth-tab-stage">${progress.name} · Stage ${progress.stage}/${progress.totalStages}</div>
+        <div class="growth-tab-stage iq-tabular">${_sgT(progress.name)} · ${_sgT('Stage')} ${_sgN(progress.stage)}/${_sgN(progress.totalStages)}</div>
         <div class="growth-tab-bar"><div class="growth-tab-fill" style="width:${pct}%"></div></div>
-        <div class="growth-tab-xp">${progressText}</div>
-        <button class="growth-tab-toggle" onclick="SpiritualGrowth.toggle('${f}');renderSpiritualGrowthTab()">${visible ? 'Visible' : 'Hidden'}</button>
+        <div class="growth-tab-xp iq-tabular">${progressText}</div>
+        <button type="button" class="growth-tab-toggle" aria-pressed="${visible}" onclick="SpiritualGrowth.toggle('${f}');renderSpiritualGrowthTab()">${_sgT(visible ? 'Visible' : 'Hidden')}</button>
       </div>`;
     });
     h += '</div>';

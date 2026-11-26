@@ -72,34 +72,36 @@
       return '→';
     }
     
+    const _wt = (s) => (typeof window !== 'undefined' && typeof window.t === 'function') ? window.t(s) : s;
+    const _wn = (v) => (typeof window !== 'undefined' && typeof window.iqFormatNum === 'function') ? window.iqFormatNum(v) : String(v);
     container.innerHTML = `
-      <div class="section-title">${typeof iqIcon === 'function' ? iqIcon('bar-chart-3') : ''} Weekly Comparison</div>
+      <div class="section-title">${typeof iqIcon === 'function' ? iqIcon('bar-chart-3') : ''} ${_wt('Weekly Comparison')}</div>
       <div class="compare-grid">
         <div class="compare-card">
-          <div class="compare-label">XP Earned</div>
-          <div class="compare-value">${currentWeek.xp}</div>
+          <div class="compare-label">${_wt('XP Earned')}</div>
+          <div class="compare-value iq-tabular">${_wn(currentWeek.xp)}</div>
           <div class="compare-change ${getChangeClass(xpChange)}">
-            ${getChangeIcon(xpChange)} ${Math.abs(xpChange)}% vs last week
+            ${getChangeIcon(xpChange)} <span class="iq-tabular">${_wn(Math.abs(xpChange))}%</span> ${_wt('vs last week')}
           </div>
         </div>
         <div class="compare-card">
-          <div class="compare-label">Prayers Logged</div>
-          <div class="compare-value">${currentWeek.prayers}</div>
+          <div class="compare-label">${_wt('Prayers Logged')}</div>
+          <div class="compare-value iq-tabular">${_wn(currentWeek.prayers)}</div>
           <div class="compare-change ${getChangeClass(prayersChange)}">
-            ${getChangeIcon(prayersChange)} ${Math.abs(prayersChange)}% vs last week
+            ${getChangeIcon(prayersChange)} <span class="iq-tabular">${_wn(Math.abs(prayersChange))}%</span> ${_wt('vs last week')}
           </div>
         </div>
         <div class="compare-card">
-          <div class="compare-label">Quests Done</div>
-          <div class="compare-value">${currentWeek.quests}</div>
+          <div class="compare-label">${_wt('Quests Done')}</div>
+          <div class="compare-value iq-tabular">${_wn(currentWeek.quests)}</div>
           <div class="compare-change ${getChangeClass(questsChange)}">
-            ${getChangeIcon(questsChange)} ${Math.abs(questsChange)}% vs last week
+            ${getChangeIcon(questsChange)} <span class="iq-tabular">${_wn(Math.abs(questsChange))}%</span> ${_wt('vs last week')}
           </div>
         </div>
         <div class="compare-card">
-          <div class="compare-label">Period</div>
-          <div class="compare-value" style="font-size:1rem;">${currentWeek.weekStart.slice(5)} → ${currentWeek.weekEnd.slice(5)}</div>
-          <div class="compare-change">This week</div>
+          <div class="compare-label">${_wt('Period')}</div>
+          <div class="compare-value iq-tabular" style="font-size:0.96rem;"><bdi dir="ltr">${currentWeek.weekStart.slice(5)}</bdi> <span class="iq-mirror-icon">&rarr;</span> <bdi dir="ltr">${currentWeek.weekEnd.slice(5)}</bdi></div>
+          <div class="compare-change">${_wt('This week')}</div>
         </div>
       </div>
     `;

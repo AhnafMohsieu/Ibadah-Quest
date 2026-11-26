@@ -27,6 +27,10 @@
     } catch (e) { return {}; }
   }
 
+  function _zt(v) {
+    return (typeof window !== 'undefined' && typeof window.t === 'function') ? window.t(v) : v;
+  }
+
   function renderZakatCalc() {
     var el = document.getElementById('zakatcalcArea');
     if (!el) return;
@@ -39,24 +43,24 @@
       return '<option value="' + code + '"' + (code === curCode ? ' selected' : '') + '>' + _esc(CURRENCIES[code].label) + '</option>';
     }).join('');
 
-    el.innerHTML = '<div class="section-title">' + iqIcon('wallet') + ' Zakat Calculator</div>' +
-      '<div class="card-item" style="flex-direction:column;align-items:stretch;gap:12px;padding:16px;">' +
-        '<p style="color:var(--text2);font-size:0.85rem;margin:0;line-height:1.5;">Zakat is <strong>2.5%</strong> on net zakatable wealth held above the <em>nisab</em> threshold for one lunar year (Hawl). Choose your local currency and enter current local bullion prices from a trusted jeweler or central bank.</p>' +
-        '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">' +
-          '<label style="font-size:0.8rem;color:var(--text2);">Currency<select id="zkCurrency" class="profile-input" style="margin-top:4px;width:100%;" onchange="window.onZakatCurrencyChange(this.value)">' + curOpts + '</select></label>' +
-          '<label style="font-size:0.8rem;color:var(--text2);">Nisab Standard<select id="zkStandard" class="profile-input" style="margin-top:4px;width:100%;"><option value="silver"' + (standard === 'silver' ? ' selected' : '') + '>Silver (612.36g \u2014 Hanafi / Most Helpful to Poor)</option><option value="gold"' + (standard === 'gold' ? ' selected' : '') + '>Gold (87.48g \u2014 Majority Alternate)</option></select></label>' +
-          '<label style="font-size:0.8rem;color:var(--text2);">Gold Owned (grams)<input type="number" id="zkGold" class="profile-input" style="margin-top:4px;width:100%;" placeholder="0" min="0" step="any"></label>' +
-          '<label style="font-size:0.8rem;color:var(--text2);">Silver Owned (grams)<input type="number" id="zkSilver" class="profile-input" style="margin-top:4px;width:100%;" placeholder="0" min="0" step="any"></label>' +
-          '<label style="font-size:0.8rem;color:var(--text2);">Cash &amp; Savings (<span class="zk-cur-sym">' + _esc(curInfo.symbol) + '</span>)<input type="number" id="zkCash" class="profile-input" style="margin-top:4px;width:100%;" placeholder="0" min="0" step="any"></label>' +
-          '<label style="font-size:0.8rem;color:var(--text2);">Investments &amp; Shares (<span class="zk-cur-sym">' + _esc(curInfo.symbol) + '</span>)<input type="number" id="zkInvest" class="profile-input" style="margin-top:4px;width:100%;" placeholder="0" min="0" step="any"></label>' +
-          '<label style="font-size:0.8rem;color:var(--text2);">Business Inventory (<span class="zk-cur-sym">' + _esc(curInfo.symbol) + '</span>)<input type="number" id="zkBusiness" class="profile-input" style="margin-top:4px;width:100%;" placeholder="0" min="0" step="any"></label>' +
-          '<label style="font-size:0.8rem;color:var(--text2);">Receivables Owed to You (<span class="zk-cur-sym">' + _esc(curInfo.symbol) + '</span>)<input type="number" id="zkDebts" class="profile-input" style="margin-top:4px;width:100%;" placeholder="0" min="0" step="any"></label>' +
-          '<label style="font-size:0.8rem;color:var(--text2);">Short-Term Liabilities Due (<span class="zk-cur-sym">' + _esc(curInfo.symbol) + '</span>)<input type="number" id="zkLiabilities" class="profile-input" style="margin-top:4px;width:100%;" placeholder="0" min="0" step="any"></label>' +
-          '<label style="font-size:0.8rem;color:var(--text2);">Gold Price (<span class="zk-cur-sym">' + _esc(curInfo.symbol) + '</span>/g)<input type="number" id="zkGoldPrice" class="profile-input" style="margin-top:4px;width:100%;" min="0" step="any" value="' + _esc(curInfo.defaultGold) + '"></label>' +
-          '<label style="font-size:0.8rem;color:var(--text2);">Silver Price (<span class="zk-cur-sym">' + _esc(curInfo.symbol) + '</span>/g)<input type="number" id="zkSilverPrice" class="profile-input" style="margin-top:4px;width:100%;" min="0" step="any" value="' + _esc(curInfo.defaultSilver) + '"></label>' +
+    el.innerHTML = '<div class="section-title">' + iqIcon('wallet') + ' ' + _esc(_zt('Zakat Calculator')) + '</div>' +
+      '<div class="iq-setting-row" style="display:flex;flex-direction:column;align-items:stretch;gap:12px;padding:16px;text-align:start;">' +
+        '<p style="color:var(--text2);font-size:0.85rem;margin:0;line-height:1.5;">' + _esc(_zt('Zakat is 2.5% on net zakatable wealth held above the nisab threshold for one lunar year (Hawl). Choose your local currency and enter current local bullion prices from a trusted jeweler or central bank.')) + '</p>' +
+        '<div class="iq-zakat-grid">' +
+          '<label style="font-size:0.82rem;color:var(--text2);">' + _esc(_zt('Currency')) + '<select id="zkCurrency" class="profile-input" style="margin-top:4px;margin-bottom:0;width:100%;" onchange="window.onZakatCurrencyChange(this.value)">' + curOpts + '</select></label>' +
+          '<label style="font-size:0.82rem;color:var(--text2);">' + _esc(_zt('Nisab Standard')) + '<select id="zkStandard" class="profile-input" style="margin-top:4px;margin-bottom:0;width:100%;"><option value="silver"' + (standard === 'silver' ? ' selected' : '') + '>' + _esc(_zt('Silver (612.36g — Hanafi / Most Helpful to Poor)')) + '</option><option value="gold"' + (standard === 'gold' ? ' selected' : '') + '>' + _esc(_zt('Gold (87.48g — Majority Alternate)')) + '</option></select></label>' +
+          '<label style="font-size:0.82rem;color:var(--text2);">' + _esc(_zt('Gold Owned (grams)')) + '<input type="number" id="zkGold" class="profile-input" style="margin-top:4px;margin-bottom:0;width:100%;" placeholder="0" min="0" step="any"></label>' +
+          '<label style="font-size:0.82rem;color:var(--text2);">' + _esc(_zt('Silver Owned (grams)')) + '<input type="number" id="zkSilver" class="profile-input" style="margin-top:4px;margin-bottom:0;width:100%;" placeholder="0" min="0" step="any"></label>' +
+          '<label style="font-size:0.82rem;color:var(--text2);">' + _esc(_zt('Cash & Savings')) + ' (<span class="zk-cur-sym">' + _esc(curInfo.symbol) + '</span>)<input type="number" id="zkCash" class="profile-input" style="margin-top:4px;margin-bottom:0;width:100%;" placeholder="0" min="0" step="any"></label>' +
+          '<label style="font-size:0.82rem;color:var(--text2);">' + _esc(_zt('Investments & Shares')) + ' (<span class="zk-cur-sym">' + _esc(curInfo.symbol) + '</span>)<input type="number" id="zkInvest" class="profile-input" style="margin-top:4px;margin-bottom:0;width:100%;" placeholder="0" min="0" step="any"></label>' +
+          '<label style="font-size:0.82rem;color:var(--text2);">' + _esc(_zt('Business Inventory')) + ' (<span class="zk-cur-sym">' + _esc(curInfo.symbol) + '</span>)<input type="number" id="zkBusiness" class="profile-input" style="margin-top:4px;margin-bottom:0;width:100%;" placeholder="0" min="0" step="any"></label>' +
+          '<label style="font-size:0.82rem;color:var(--text2);">' + _esc(_zt('Receivables Owed to You')) + ' (<span class="zk-cur-sym">' + _esc(curInfo.symbol) + '</span>)<input type="number" id="zkDebts" class="profile-input" style="margin-top:4px;margin-bottom:0;width:100%;" placeholder="0" min="0" step="any"></label>' +
+          '<label style="font-size:0.82rem;color:var(--text2);">' + _esc(_zt('Short-Term Liabilities Due')) + ' (<span class="zk-cur-sym">' + _esc(curInfo.symbol) + '</span>)<input type="number" id="zkLiabilities" class="profile-input" style="margin-top:4px;margin-bottom:0;width:100%;" placeholder="0" min="0" step="any"></label>' +
+          '<label style="font-size:0.82rem;color:var(--text2);">' + _esc(_zt('Gold Price')) + ' (<span class="zk-cur-sym">' + _esc(curInfo.symbol) + '</span>/g)<input type="number" id="zkGoldPrice" class="profile-input" style="margin-top:4px;margin-bottom:0;width:100%;" min="0" step="any" value="' + _esc(curInfo.defaultGold) + '"></label>' +
+          '<label style="font-size:0.82rem;color:var(--text2);">' + _esc(_zt('Silver Price')) + ' (<span class="zk-cur-sym">' + _esc(curInfo.symbol) + '</span>/g)<input type="number" id="zkSilverPrice" class="profile-input" style="margin-top:4px;margin-bottom:0;width:100%;" min="0" step="any" value="' + _esc(curInfo.defaultSilver) + '"></label>' +
         '</div>' +
-        '<p style="font-size:0.75rem;color:var(--text3);margin:0;">Note: Pre-filled metal rates are editable estimates only; verify today\'s local gold/silver rate and consult a scholar for complex assets (retirement accounts, jewelry differing by madhab).</p>' +
-        '<button onclick="window.calcZakat()" class="onboarding-btn" style="width:100%;margin-top:4px;min-height:48px;">Calculate Zakat</button>' +
+        '<p style="font-size:0.78rem;color:var(--text2);margin:0;">' + _esc(_zt("Note: Pre-filled metal rates are editable estimates only; verify today's local gold/silver rate and consult a scholar for complex assets (retirement accounts, jewelry differing by madhab).")) + '</p>' +
+        '<button type="button" onclick="window.calcZakat()" class="iq-pill-btn" style="width:100%;margin-top:4px;min-height:48px;">' + _esc(_zt('Calculate Zakat')) + '</button>' +
         '<div id="zkResult" style="text-align:center;"></div>' +
       '</div>';
 
@@ -107,12 +111,12 @@
     if (!result) return;
     var sym = _esc(cur.symbol);
     result.innerHTML = '<div style="margin-top:12px;padding:14px;border-radius:var(--radius);background:var(--bg-accent);border:1px solid var(--border);">' +
-      '<div style="font-size:0.82rem;color:var(--text2);margin-bottom:4px;">Total Assets: ' + sym + _numFmt(totalAssets.toFixed(2)) + '</div>' +
-      '<div style="font-size:0.82rem;color:var(--text2);margin-bottom:4px;">Net Zakatable Wealth: ' + sym + _numFmt(netWealth.toFixed(2)) + '</div>' +
-      '<div style="font-size:0.82rem;color:var(--text2);margin-bottom:8px;">Active Nisab (' + (standard === 'gold' ? 'Gold 87.48g' : 'Silver 612.36g') + '): ' + sym + _numFmt(nisab.toFixed(2)) + '</div>' +
+      '<div style="font-size:0.82rem;color:var(--text2);margin-bottom:4px;">' + _esc(_zt('Total Assets')) + ': <bdi dir="ltr" class="iq-tabular">' + sym + _numFmt(totalAssets.toFixed(2)) + '</bdi></div>' +
+      '<div style="font-size:0.82rem;color:var(--text2);margin-bottom:4px;">' + _esc(_zt('Net Zakatable Wealth')) + ': <bdi dir="ltr" class="iq-tabular">' + sym + _numFmt(netWealth.toFixed(2)) + '</bdi></div>' +
+      '<div style="font-size:0.82rem;color:var(--text2);margin-bottom:8px;">' + _esc(_zt('Active Nisab')) + ' (' + _esc(_zt(standard === 'gold' ? 'Gold 87.48g' : 'Silver 612.36g')) + '): <bdi dir="ltr" class="iq-tabular">' + sym + _numFmt(nisab.toFixed(2)) + '</bdi></div>' +
       (zakatDue > 0
-        ? '<div style="font-size:1.2rem;font-weight:700;color:var(--accent);margin-top:6px;">Estimated Zakat (2.5%): ' + sym + _numFmt(zakatDue.toFixed(2)) + '</div>'
-        : '<div style="font-size:0.88rem;color:var(--text2);margin-top:6px;">Net wealth is below the selected nisab threshold — Zakat is not obligatory.</div>') +
+        ? '<div style="font-size:1.2rem;font-weight:700;color:var(--accent-dark);margin-top:6px;">' + _esc(_zt('Estimated Zakat (2.5%)')) + ': <bdi dir="ltr" class="iq-tabular">' + sym + _numFmt(zakatDue.toFixed(2)) + '</bdi></div>'
+        : '<div style="font-size:0.88rem;color:var(--text2);margin-top:6px;">' + _esc(_zt('Net wealth is below the selected nisab threshold — Zakat is not obligatory.')) + '</div>') +
       '</div>';
   }
 

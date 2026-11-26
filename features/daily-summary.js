@@ -40,16 +40,18 @@
 
     window._iqModalDone = typeof onDone === 'function' ? onDone : null;
 
-    const ov = openToastModal(`<div class="daily-summary">
-      <div class="ds-title">${iqIcon('calendar')} Daily Reflection</div>
+    const _dt = (s) => (typeof window !== 'undefined' && typeof window.t === 'function') ? window.t(s) : s;
+    const _dn = (v) => (typeof window !== 'undefined' && typeof window.iqFormatNum === 'function') ? window.iqFormatNum(v) : String(v);
+    const ov = openToastModal(`<div class="daily-summary" role="dialog" aria-modal="true">
+      <div class="ds-title">${iqIcon('calendar')} ${_dt('Daily Reflection')}</div>
       <div class="ds-grid">
-        <div class="ds-stat"><div class="ds-val iq-tabular">${prayers}/5</div><div class="ds-label">Prayers</div></div>
-        <div class="ds-stat"><div class="ds-val iq-tabular">${S.xp}</div><div class="ds-label">Total XP</div></div>
-        <div class="ds-stat"><div class="ds-val iq-tabular">${questsDone}/4</div><div class="ds-label">Quests</div></div>
-        <div class="ds-stat"><div class="ds-val iq-tabular">${streak}</div><div class="ds-label">Consistency</div></div>
+        <div class="ds-stat"><div class="ds-val iq-tabular">${_dn(prayers)}/${_dn(5)}</div><div class="ds-label">${_dt('Prayers')}</div></div>
+        <div class="ds-stat"><div class="ds-val iq-tabular">${_dn(S.xp)}</div><div class="ds-label">${_dt('Total XP')}</div></div>
+        <div class="ds-stat"><div class="ds-val iq-tabular">${_dn(questsDone)}/${_dn(4)}</div><div class="ds-label">${_dt('Quests')}</div></div>
+        <div class="ds-stat"><div class="ds-val iq-tabular">${_dn(streak)}</div><div class="ds-label">${_dt('Consistency')}</div></div>
       </div>
       <div class="ds-quote">"${quote}"</div>
-      <button class="ds-close" onclick="closeToastOverlay()">Alhamdulillah</button>
+      <button type="button" class="ds-close" style="min-height:44px;" onclick="closeToastOverlay()">${_dt('Alhamdulillah')}</button>
     </div>`);
     if (!ov) {
       window._iqModalDone = null;

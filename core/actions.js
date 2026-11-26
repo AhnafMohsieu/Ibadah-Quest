@@ -53,12 +53,13 @@
       return;
     }
     var esc = window.escapeHTML || function(s){ return String(s == null ? '' : s); };
+    var tFn = window.t || function(s){ return s; };
     openToastModal(
       '<div class="toast-box iq-modal-card" role="alertdialog" aria-modal="true" style="max-width:420px;width:92%;text-align:center;">' +
         (iconHtml ? '<div style="margin-bottom:8px;">' + iconHtml + '</div>' : '') +
         '<h3 style="margin-bottom:6px;">' + esc(title) + '</h3>' +
         '<p style="color:var(--text2);font-size:0.9rem;line-height:1.5;margin-bottom:14px;">' + esc(msg || '') + '</p>' +
-        '<button type="button" class="iq-pill-btn" onclick="window.closeToastOverlay && window.closeToastOverlay()">OK</button>' +
+        '<button type="button" class="iq-pill-btn" onclick="window.closeToastOverlay && window.closeToastOverlay()">' + esc(tFn('OK')) + '</button>' +
       '</div>'
     );
   }
@@ -72,14 +73,15 @@
       return;
     }
     var esc = window.escapeHTML || function(s){ return String(s == null ? '' : s); };
+    var tFn = window.t || function(s){ return s; };
     window._iqPendingConfirm = typeof onConfirm === 'function' ? onConfirm : null;
     openToastModal(
-      '<div class="toast-box iq-modal-card" role="alertdialog" aria-modal="true" style="max-width:420px;width:92%;text-align:left;">' +
+      '<div class="toast-box iq-modal-card" role="alertdialog" aria-modal="true" style="max-width:420px;width:92%;text-align:start;">' +
         '<h3 style="margin-bottom:6px;color:' + (isDanger ? 'var(--red)' : 'var(--text)') + ';">' + esc(title) + '</h3>' +
         '<p style="color:var(--text2);font-size:0.88rem;line-height:1.55;margin-bottom:16px;">' + esc(msg || '') + '</p>' +
         '<div style="display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap;">' +
-          '<button type="button" class="iq-btn-secondary" onclick="window._iqPendingConfirm=null;window.closeToastOverlay();">Cancel</button>' +
-          '<button type="button" class="' + (isDanger ? 'danger-btn' : 'iq-pill-btn') + '" style="margin:0;" onclick="var fn=window._iqPendingConfirm;window._iqPendingConfirm=null;window.closeToastOverlay();if(fn)fn();">' + esc(confirmLabel || 'Confirm') + '</button>' +
+          '<button type="button" class="iq-btn-secondary" onclick="window._iqPendingConfirm=null;window.closeToastOverlay();">' + esc(tFn('Cancel')) + '</button>' +
+          '<button type="button" class="' + (isDanger ? 'danger-btn' : 'iq-pill-btn') + '" style="margin:0;width:auto;" onclick="var fn=window._iqPendingConfirm;window._iqPendingConfirm=null;window.closeToastOverlay();if(fn)fn();">' + esc(confirmLabel || tFn('Confirm')) + '</button>' +
         '</div>' +
       '</div>'
     );
@@ -93,15 +95,16 @@
       return;
     }
     var esc = window.escapeHTML || function(s){ return String(s == null ? '' : s); };
+    var tFn = window.t || function(s){ return s; };
     window._iqPendingPrompt = typeof onSubmit === 'function' ? onSubmit : null;
     openToastModal(
-      '<div class="toast-box iq-modal-card" role="dialog" aria-modal="true" style="max-width:420px;width:92%;text-align:left;">' +
+      '<div class="toast-box iq-modal-card" role="dialog" aria-modal="true" style="max-width:420px;width:92%;text-align:start;">' +
         '<h3 style="margin-bottom:6px;">' + esc(title) + '</h3>' +
         '<p style="color:var(--text2);font-size:0.88rem;line-height:1.5;margin-bottom:10px;">' + esc(msg || '') + '</p>' +
         '<input type="text" id="iqPromptModalInput" class="profile-input" placeholder="' + esc(placeholder || '') + '" style="margin-bottom:14px;">' +
-        '<div style="display:flex;gap:10px;justify-content:flex-end;">' +
-          '<button type="button" class="iq-btn-secondary" onclick="window._iqPendingPrompt=null;window.closeToastOverlay();">Cancel</button>' +
-          '<button type="button" class="iq-pill-btn" onclick="var inp=document.getElementById(\'iqPromptModalInput\');var val=inp?inp.value:\'\';var fn=window._iqPendingPrompt;window._iqPendingPrompt=null;window.closeToastOverlay();if(fn)fn(val);">Confirm</button>' +
+        '<div style="display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap;">' +
+          '<button type="button" class="iq-btn-secondary" onclick="window._iqPendingPrompt=null;window.closeToastOverlay();">' + esc(tFn('Cancel')) + '</button>' +
+          '<button type="button" class="iq-pill-btn" onclick="var inp=document.getElementById(\'iqPromptModalInput\');var val=inp?inp.value:\'\';var fn=window._iqPendingPrompt;window._iqPendingPrompt=null;window.closeToastOverlay();if(fn)fn(val);">' + esc(tFn('Confirm')) + '</button>' +
         '</div>' +
       '</div>'
     );
@@ -110,13 +113,36 @@
   window.iqPromptDialog = iqPromptDialog;
 
   function toast(icon, msg, conf=false, ms=2600) {
+    const ov = document.getElementById('toastOverlay');
+    if (!ov) return;
+    const hasModal = !!(ov.classList && typeof ov.classList.contains === 'function' && ov.classList.contains('iq-modal-open') && ov.classList.contains('show'));
+    if (hasModal) {
+      playSound(conf ? 'chime' : 'pop');
+      return;
+    }
     window._modalTriggerEl = document.activeElement;
-    const ov=document.getElementById('toastOverlay'); ov.innerHTML=`<div class="toast-box"><span style="font-size:2.2rem">${icon}</span><h3>${msg}</h3></div>`;
-    ov.style.display='flex'; ov.classList.add('show'); playSound(conf ? 'chime' : 'pop');
-    ov.style.pointerEvents='auto';
+    if (ov.classList) {
+      ov.classList.remove('iq-modal-open');
+      ov.classList.add('iq-toast-passive');
+    }
+    ov.innerHTML=`<div class="toast-box" role="status" aria-live="polite"><span class="toast-ico" aria-hidden="true">${icon}</span><h3><bdi>${msg}</bdi></h3></div>`;
+    ov.style.display='flex'; if (ov.classList) ov.classList.add('show'); playSound(conf ? 'chime' : 'pop');
+    ov.style.pointerEvents='none';
     if(ov._t) clearTimeout(ov._t);
-    if(ms>0) ov._t=setTimeout(()=>{ ov.classList.remove('show'); setTimeout(()=>{ ov.style.display='none'; ov.innerHTML=''; },300); ov.style.pointerEvents='none'; },ms);
-    ov.onclick=()=>{ ov.classList.remove('show'); setTimeout(()=>{ ov.style.display='none'; ov.innerHTML=''; },300); ov.style.pointerEvents='none'; if(ov._t) clearTimeout(ov._t); };
+    const hidePassive = ()=>{
+      if (ov.classList && typeof ov.classList.contains === 'function' && ov.classList.contains('iq-modal-open')) return;
+      if (ov.classList) ov.classList.remove('show');
+      setTimeout(()=>{
+        const stillModal = !!(ov.classList && typeof ov.classList.contains === 'function' && ov.classList.contains('iq-modal-open'));
+        const isShown = !!(ov.classList && typeof ov.classList.contains === 'function' && ov.classList.contains('show'));
+        if (!stillModal && !isShown) {
+          ov.style.display='none'; ov.innerHTML='';
+          if (ov.classList) ov.classList.remove('iq-toast-passive');
+        }
+      }, 260);
+    };
+    if(ms>0) ov._t=setTimeout(hidePassive, ms);
+    ov.onclick=()=>{ if (ov.classList && typeof ov.classList.contains === 'function' && ov.classList.contains('iq-toast-passive')) hidePassive(); };
   }
   window.toast = toast;
 
@@ -644,21 +670,33 @@ Object.keys(NEW_POOLS).forEach(k => {
   function openToastModal(html, overlayId) {
     var ov = document.getElementById(overlayId || 'toastOverlay');
     if (!ov) return null;
+    if (ov._t) { clearTimeout(ov._t); ov._t = null; }
     window._modalTriggerEl = document.activeElement;
+    if (ov.classList) {
+      ov.classList.remove('iq-toast-passive');
+      ov.classList.add('iq-modal-open');
+    }
     ov.innerHTML = html;
     ov.style.display = 'flex';
-    ov.classList.add('show');
+    if (ov.classList) ov.classList.add('show');
     ov.style.pointerEvents = 'auto';
+    ov.onclick = null;
     return ov;
   }
   window.openToastModal = openToastModal;
   function closeToastOverlay() {
     var toastOverlay = document.getElementById('toastOverlay');
     if (!toastOverlay) return;
-    toastOverlay.classList.remove('show');
+    if (toastOverlay._t) { clearTimeout(toastOverlay._t); toastOverlay._t = null; }
+    if (toastOverlay.classList) {
+      toastOverlay.classList.remove('show');
+      toastOverlay.classList.remove('iq-modal-open');
+      toastOverlay.classList.remove('iq-toast-passive');
+    }
     toastOverlay.style.display = 'none';
     toastOverlay.innerHTML = '';
     toastOverlay.style.pointerEvents = 'none';
+    toastOverlay.onclick = null;
     if (window._modalTriggerEl && window._modalTriggerEl.focus) {
       window._modalTriggerEl.focus();
       window._modalTriggerEl = null;
@@ -796,6 +834,7 @@ Object.keys(NEW_POOLS).forEach(k => {
     if (S) { S.theme = valid; saveState(); }
     iqApplyTheme();
     if (typeof window.renderProfile === 'function') window.renderProfile();
+    if (typeof window.renderComponentGallery === 'function') window.renderComponentGallery();
   }
   function iqSetSeasonalAccent(on) {
     if (S) { S.seasonalAccent = !!on; saveState(); }
@@ -869,16 +908,17 @@ Object.keys(NEW_POOLS).forEach(k => {
   }
   function openContentErrorModal(refLabel) {
     var esc = window.escapeHTML || function(s){ return String(s == null ? '' : s); };
+    var tFn = window.t || function(s){ return s; };
     var ref = refLabel ? esc(refLabel) : '';
     openToastModal(
-      '<div class="toast-box iq-modal-card" role="dialog" aria-modal="true" style="max-width:440px;width:92%;text-align:left;">' +
-        '<h3 style="margin-bottom:6px;">Report Content Error</h3>' +
-        '<p style="color:var(--text2);font-size:0.84rem;line-height:1.5;margin-bottom:10px;">Help keep every Quran, Hadith, and Fiqh text accurate. Describe the reference and correction below (saved locally for offline review or exported in a bug report — never sent without your action).</p>' +
-        '<input type="text" id="iqErrRef" class="profile-input" placeholder="Screen / Verse / Hadith reference" value="' + ref + '" style="margin-bottom:8px;">' +
-        '<textarea id="iqErrDetail" class="profile-input" rows="3" placeholder="What seems inaccurate or misprinted?" style="margin-bottom:12px;"></textarea>' +
+      '<div class="toast-box iq-modal-card" role="dialog" aria-modal="true" style="max-width:440px;width:92%;text-align:start;">' +
+        '<h3 style="margin-bottom:6px;">' + esc(tFn('Report Content Error')) + '</h3>' +
+        '<p style="color:var(--text2);font-size:0.84rem;line-height:1.5;margin-bottom:10px;">' + esc(tFn('Help keep every Quran, Hadith, and Fiqh text accurate. Describe the reference and correction below (saved locally for offline review or exported in a bug report — never sent without your action).')) + '</p>' +
+        '<input type="text" id="iqErrRef" class="profile-input" placeholder="' + esc(tFn('Screen / Verse / Hadith reference')) + '" value="' + ref + '" style="margin-bottom:8px;">' +
+        '<textarea id="iqErrDetail" class="profile-input" rows="3" placeholder="' + esc(tFn('What seems inaccurate or misprinted?')) + '" style="margin-bottom:12px;"></textarea>' +
         '<div style="display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap;">' +
-          '<button type="button" class="iq-btn-secondary" onclick="window.closeToastOverlay();">Cancel</button>' +
-          '<button type="button" class="iq-pill-btn" onclick="window.App && window.App.submitContentErrorReport && window.App.submitContentErrorReport();">Save Note</button>' +
+          '<button type="button" class="iq-btn-secondary" onclick="window.closeToastOverlay();">' + esc(tFn('Cancel')) + '</button>' +
+          '<button type="button" class="iq-pill-btn" onclick="window.App && window.App.submitContentErrorReport && window.App.submitContentErrorReport();">' + esc(tFn('Save Note')) + '</button>' +
         '</div>' +
       '</div>'
     );
@@ -898,17 +938,19 @@ Object.keys(NEW_POOLS).forEach(k => {
     toast(iqIcon('check'), 'Error note saved locally. JazakAllahu khayran!', false, 2600);
   }
   function openChangelogModal() {
+    var esc = window.escapeHTML || function(s){ return String(s == null ? '' : s); };
+    var tFn = window.t || function(s){ return s; };
     openToastModal(
-      '<div class="toast-box iq-modal-card" role="dialog" aria-modal="true" style="max-width:460px;width:92%;text-align:left;max-height:80vh;overflow-y:auto;">' +
-        '<h3 style="margin-bottom:8px;">What&rsquo;s New in Ibadah Quest v2.2</h3>' +
-        '<ul style="padding-left:18px;font-size:0.86rem;line-height:1.65;color:var(--text2);margin-bottom:14px;">' +
+      '<div class="toast-box iq-modal-card" role="dialog" aria-modal="true" style="max-width:460px;width:92%;text-align:start;max-height:80vh;overflow-y:auto;">' +
+        '<h3 style="margin-bottom:8px;">' + esc(tFn("What's New in Ibadah Quest")) + '</h3>' +
+        '<ul style="padding-inline-start:18px;font-size:0.86rem;line-height:1.65;color:var(--text2);margin-bottom:14px;">' +
           '<li><strong>Noor &amp; Rhythm UI:</strong> Light, Dark, and OLED Night themes + seasonal accent overlay + WCAG 2.2 AA contrast.</li>' +
           '<li><strong>Offline Prayer &amp; Qibla Engine:</strong> Bundled astronomical calculations for global cities + Dhaka/IFB, Hanafi/Shafi Asr, High-Lat, ±1m offsets, and compass Qibla.</li>' +
           '<li><strong>Bangla, English &amp; Arabic:</strong> Full RTL support, bundled Bangla/Arabic fonts, digit style choice, and Bangla terminology toggle (Namaz/Salat).</li>' +
           '<li><strong>Quran &amp; Hifz Upgrade:</strong> Indo-Pak &amp; Uthmani scripts, complete Bangla Taisirul Quran + English Saheeh translations, Khatam planner, and Hifz Spaced Repetition.</li>' +
           '<li><strong>Ethical &amp; Forgiving Habits:</strong> Mid-day streak preservation, Grace cushion, zero-reason Rest Mode, and silence-first notifications with quiet hours.</li>' +
         '</ul>' +
-        '<button type="button" class="iq-pill-btn" onclick="window.closeToastOverlay();">Close</button>' +
+        '<button type="button" class="iq-pill-btn" onclick="window.closeToastOverlay();">' + esc(tFn('Close')) + '</button>' +
       '</div>'
     );
   }
@@ -1069,6 +1111,7 @@ Object.keys(NEW_POOLS).forEach(k => {
         }
       }
     };
+    window.iqSetTheme = iqSetTheme;
     window.closeToastOverlay = closeToastOverlay;
     console.log('Ibadah Quest initialized. window.App is set.');
   }

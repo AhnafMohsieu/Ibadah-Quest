@@ -1,13 +1,23 @@
 (function() {
+  const RARITY_STYLES = {
+    bronze: { border: '#a45b1d', bg: '#7c3e0d', fg: '#ffffff' },
+    silver: { border: '#6b7280', bg: '#4b5563', fg: '#ffffff' },
+    gold: { border: '#b47800', bg: '#8a5a00', fg: '#ffffff' },
+    platinum: { border: '#475569', bg: '#334155', fg: '#ffffff' },
+    diamond: { border: '#0369a1', bg: '#075985', fg: '#ffffff' },
+    legendary: { border: '#dc2626', bg: '#991b1b', fg: '#ffffff' },
+    mythic: { border: '#7e22ce', bg: '#6b21a8', fg: '#ffffff' },
+    jannah: { border: '#15803d', bg: '#166534', fg: '#ffffff' }
+  };
   const RARITY_COLORS = {
-    bronze: '#cd7f32',
-    silver: '#c0c0c0',
-    gold: '#ffd700',
-    platinum: '#e5e4e2',
-    diamond: '#b9f2ff',
-    legendary: '#ff6b6b',
-    mythic: '#9b59b6',
-    jannah: '#2ecc71'
+    bronze: '#a45b1d',
+    silver: '#6b7280',
+    gold: '#8a5a00',
+    platinum: '#334155',
+    diamond: '#075985',
+    legendary: '#991b1b',
+    mythic: '#6b21a8',
+    jannah: '#166534'
   };
 
   function getUnlockedAchievements() {
@@ -46,27 +56,28 @@
 
     const featured = getFeaturedAchievements();
     const unlocked = getUnlockedAchievements();
+    const _t = (s) => (typeof window !== 'undefined' && typeof window.t === 'function') ? window.t(s) : s;
 
     let h = '<div class="showcase-grid">';
     featured.forEach(a => {
-      const color = RARITY_COLORS[a.tier] || '#ccc';
-      h += `<div class="showcase-card" style="border-color:${color}">
-        <div class="showcase-rarity" style="background:${color}">${a.tier}</div>
+      const st = RARITY_STYLES[a.tier] || { border: 'var(--border)', bg: 'var(--accent)', fg: 'var(--accent-contrast, #ffffff)' };
+      h += `<div class="showcase-card" style="border-color:${st.border}">
+        <div class="showcase-rarity" style="background:${st.bg};color:${st.fg};font-weight:700;">${_t(a.tier)}</div>
         <div class="showcase-name">${a.name}</div>
         <div class="showcase-desc">${a.desc}</div>
-        <button class="showcase-remove" onclick="unfeatureAchievement('${a.id}')" aria-label="Remove ${a.name} from showcase">✕</button>
+        <button type="button" class="showcase-remove" style="min-width:44px;min-height:44px;" onclick="unfeatureAchievement('${a.id}')" aria-label="Remove ${a.name} from showcase">✕</button>
       </div>`;
     });
     h += '</div>';
 
     if (unlocked.length > 0) {
-      h += '<div class="showcase-unlocked"><h4>Unlocked Achievements</h4>';
+      h += `<div class="showcase-unlocked"><h4>${_t('Unlocked Achievements')}</h4>`;
       unlocked.forEach(a => {
-        const color = RARITY_COLORS[a.tier] || '#ccc';
+        const st = RARITY_STYLES[a.tier] || { border: 'var(--border)' };
         const isFeatured = featured.some(f => f.id === a.id);
-        h += `<div class="showcase-item ${isFeatured ? 'featured' : ''}" style="border-color:${color}">
+        h += `<div class="showcase-item ${isFeatured ? 'featured' : ''}" style="border-color:${st.border}">
           <span class="showcase-item-name">${a.name}</span>
-          ${!isFeatured ? `<button onclick="featureAchievement('${a.id}')" aria-label="Feature ${a.name} in showcase">+</button>` : ''}
+          ${!isFeatured ? `<button type="button" class="iq-btn-secondary" style="min-width:44px;min-height:44px;padding:4px 10px;" onclick="featureAchievement('${a.id}')" aria-label="Feature ${a.name} in showcase">+</button>` : ''}
         </div>`;
       });
       h += '</div>';

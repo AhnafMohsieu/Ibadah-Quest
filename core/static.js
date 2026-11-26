@@ -4,6 +4,15 @@
       return {'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',"'":'&#39;'}[ch];
     });
   }
+  function _t(str) {
+    return (typeof window !== 'undefined' && typeof window.t === 'function') ? window.t(str) : str;
+  }
+  function _n(val) {
+    return (typeof window !== 'undefined' && typeof window.iqFormatNum === 'function') ? window.iqFormatNum(val) : String(val);
+  }
+  function _numBadge(num) {
+    return `<span class="iq-num-pill iq-tabular">#${_n(num)}</span>`;
+  }
   // -------------------------------------------------------
   // STATIC CONTENT RENDERING
   // -------------------------------------------------------
@@ -50,23 +59,23 @@
       const o = pool[i % pool.length];
       if (!o) return '';
       
-      const numBadge = `<span style="display:inline-block; background:var(--accent-bg); color:var(--accent-light); border:1px solid var(--accent-border); border-radius:12px; padding:0 8px; font-size:0.75rem; margin-right:8px; font-weight:800; height:22px; line-height:20px; white-space:nowrap; font-family:var(--font);">#${mapIdx + 1}</span>`;
+      const numBadge = _numBadge(mapIdx + 1);
 
-      if (typeof o === 'string') return `<div class="content-card" onclick="if(typeof window.grantDailyXp==='function')window.grantDailyXp(2,'read|${areaId}|${i}')"><div style="display:flex;align-items:flex-start;gap:10px;"><div style="margin-top:2px;">${numBadge}</div><div class="content-english" style="flex:1;">${o}</div></div></div>`;
+      if (typeof o === 'string') return `<div class="content-card" onclick="if(typeof window.grantDailyXp==='function')window.grantDailyXp(2,'read|${areaId}|${i}')"><div class="iq-card-row-head"><div style="margin-top:2px;">${numBadge}</div><div class="content-english" style="flex:1;">${o}</div></div></div>`;
       
       let inner = '';
       if (o.arabic) inner += `<div class="content-arabic">${o.arabic}</div>`;
-      if (o.transliteration || o.roman) inner += `<div style="font-size:0.9rem;color:var(--text2);opacity:0.9;font-style:italic;margin-bottom:6px;text-align:right;">${o.transliteration || o.roman}</div>`;
+      if (o.transliteration || o.roman) inner += `<div class="iq-card-translit">${o.transliteration || o.roman}</div>`;
       inner += `<div class="content-english">${o.desc || o.text || o.english || ''}</div>`;
-      if (o.source) inner += `<div class="content-source">${iqIcon('book-open')} ${o.source}<a class="verify-btn" href="${getSourceLink(o.source)}" target="_blank" rel="noopener noreferrer" title="Verify this source">Verify</a></div>`;
+      if (o.source) inner += `<div class="content-source">${iqIcon('book-open')} ${o.source}<a class="verify-btn" href="${getSourceLink(o.source)}" target="_blank" rel="noopener noreferrer" title="Verify this source">${escapeHTML(_t('Verify'))}</a></div>`;
       
       let title_line = '';
       if (o.title) {
-        title_line = `<div style="font-weight:700;margin-bottom:6px;color:var(--accent-light);display:flex;align-items:flex-start;"><div style="margin-top:1px;">${numBadge}</div><span style="line-height:1.4;">${o.title}</span></div>`;
+        title_line = `<div class="iq-card-title" style="display:flex;align-items:flex-start;gap:8px;margin-bottom:6px;"><div style="margin-top:1px;">${numBadge}</div><span style="line-height:1.4;">${o.title}</span></div>`;
       } else if (o.name && o.arabic && !o.title) {
-        inner = `<div style="font-weight:700;font-size:1.1rem;color:var(--accent-light);display:flex;align-items:flex-start;margin-bottom:6px;"><div style="margin-top:3px;">${numBadge}</div><span style="line-height:1.3;">${o.name}</span></div><div class="content-arabic arabic-letter-glow">${o.arabic}</div><div class="content-english">${o.desc||''}</div>`;
+        inner = `<div class="iq-card-title" style="font-size:1.1rem;display:flex;align-items:flex-start;gap:8px;margin-bottom:6px;"><div style="margin-top:2px;">${numBadge}</div><span style="line-height:1.3;">${o.name}</span></div><div class="content-arabic arabic-letter-glow">${o.arabic}</div><div class="content-english">${o.desc||''}</div>`;
       } else {
-        return `<div class="content-card" style="flex-direction:row;align-items:flex-start;" onclick="if(typeof window.grantDailyXp==='function')window.grantDailyXp(2,'read|${areaId}|${i}')"><div style="margin-top:2px;">${numBadge}</div><div style="flex:1;">${inner}</div></div>`;
+        return `<div class="content-card" style="flex-direction:row;align-items:flex-start;" onclick="if(typeof window.grantDailyXp==='function')window.grantDailyXp(2,'read|${areaId}|${i}')"><div style="margin-top:2px;">${numBadge}</div><div style="flex:1;min-width:0;">${inner}</div></div>`;
       }
       
       return `<div class="content-card" onclick="if(typeof window.grantDailyXp==='function')window.grantDailyXp(2,'read|${areaId}|${i}')">${title_line}${inner}</div>`;
@@ -92,44 +101,43 @@
     if (!el || typeof SUNNAH_POOL === 'undefined' || !Array.isArray(SUNNAH_POOL)) return;
     const cats = [...new Set(SUNNAH_POOL.map(s => s.cat).filter(Boolean))];
     const cur = (S._sunnahCat || cats[0]);
-    let html = '<div class="section-title">' + iqIcon('sun') + ' Daily Sunnahs</div>';
+    let html = '<div class="section-title">' + iqIcon('sun') + ' ' + escapeHTML(_t('Daily Sunnahs')) + '</div>';
     html += '<div class="tier2-tabs cat-chips">';
     cats.forEach(function(c) {
       const active = c === cur ? ' active' : '';
-      html += '<button class="cat-chip' + active + '" onclick="S._sunnahCat=\'' + c + '\';renderSunnahs()">' + c + '</button>';
+      html += '<button type="button" class="cat-chip' + active + '" onclick="S._sunnahCat=\'' + c + '\';renderSunnahs()">' + escapeHTML(_t(c)) + '</button>';
     });
     html += '</div>';
     const filtered = cur === cats[0] ? SUNNAH_POOL : SUNNAH_POOL.filter(function(s) { return s.cat === cur; });
     html += filtered.map(function(o, i) {
-      const numBadge = '<span style="display:inline-block;background:var(--accent-bg);color:var(--accent-light);border:1px solid var(--accent-border);border-radius:12px;padding:0 8px;font-size:0.75rem;margin-right:8px;font-weight:800;height:22px;line-height:20px;white-space:nowrap;font-family:var(--font);">#' + (i + 1) + '</span>';
+      const numBadge = _numBadge(i + 1);
       let inner = '';
       if (o.arabic) inner += '<div class="content-arabic">' + o.arabic + '</div>';
-      if (o.roman) inner += '<div style="font-size:0.9rem;color:var(--text2);opacity:0.9;font-style:italic;margin-bottom:6px;text-align:right;">' + o.roman + '</div>';
+      if (o.roman) inner += '<div class="iq-card-translit">' + o.roman + '</div>';
       inner += '<div class="content-english">' + o.text + '</div>';
-      if (o.source) inner += '<div class="content-source">' + iqIcon('book-open') + ' ' + o.source + '<a class="verify-btn" href="' + getSourceLink(o.source) + '" target="_blank" rel="noopener noreferrer" title="Verify this source">Verify</a></div>';
-      return '<div class="content-card" onclick="if(typeof window.grantDailyXp===\'function\')window.grantDailyXp(2,\'read|sunnahArea|' + i + '\')"><div style="display:flex;align-items:flex-start;gap:10px;"><div style="margin-top:2px;">' + numBadge + '</div><div style="flex:1;">' + inner + '</div></div></div>';
+      if (o.source) inner += '<div class="content-source">' + iqIcon('book-open') + ' ' + o.source + '<a class="verify-btn" href="' + getSourceLink(o.source) + '" target="_blank" rel="noopener noreferrer" title="Verify this source">' + escapeHTML(_t('Verify')) + '</a></div>';
+      return '<div class="content-card" onclick="if(typeof window.grantDailyXp===\'function\')window.grantDailyXp(2,\'read|sunnahArea|' + i + '\')"><div class="iq-card-row-head"><div style="margin-top:2px;">' + numBadge + '</div><div style="flex:1;min-width:0;">' + inner + '</div></div></div>';
     }).join('');
     el.innerHTML = html;
   }
   function renderDhikr() {
     if (typeof window.renderDhikrCounter === 'function') window.renderDhikrCounter();
-    if (typeof DHIKR_POOL !== 'undefined') poolRender('dhikrArea', iqIcon('beads') + ' Dhikr Collection',DHIKR_POOL,'dhikrIdx');
+    if (typeof DHIKR_POOL !== 'undefined') poolRender('dhikrArea', iqIcon('beads') + ' ' + escapeHTML(_t('Dhikr Collection')),DHIKR_POOL,'dhikrIdx');
   }
   function renderStories() { if (typeof STORIES !== 'undefined') poolRender('storiesArea', iqIcon('book-open') + ' Inspiring Stories',STORIES,'storiesIdx',true); }
   function renderNames() {
     const el = document.getElementById('namesArea');
     if (!el || typeof NAMES === 'undefined' || !Array.isArray(NAMES)) return;
-    let html = `<div class="section-title">${iqIcon('mosque')} 99 Names of Allah</div>`;
+    let html = `<div class="section-title">${iqIcon('mosque')} ${escapeHTML(_t('99 Names of Allah'))}</div><div class="iq-names-grid">`;
     html += NAMES.map((o, i) => {
       if (!o) return '';
-      const numBadge = `<span style="display:inline-block; background:var(--accent-bg); color:var(--accent-light); border:1px solid var(--accent-border); border-radius:12px; padding:0 8px; font-size:0.75rem; margin-right:8px; font-weight:800; height:22px; line-height:20px; white-space:nowrap; font-family:var(--font);">#${i + 1}</span>`;
       return `<div class="content-card name-card">
-        <div style="align-self:flex-end; display:flex;">${numBadge}</div>
+        <div style="align-self:flex-end;display:flex;">${_numBadge(i + 1)}</div>
         <div class="content-arabic name-an">${o.arabic || ''}</div>
         <div class="name-roman">${o.name || o.roman || ''}</div>
         <div class="content-english" style="text-align:center;">${o.desc || ''}</div>
       </div>`;
-    }).join('');
+    }).join('') + '</div>';
     el.innerHTML = html;
   }
   function renderSins() { poolRender('sinsArea', iqIcon('alert-triangle') + ' Major Sins to Avoid',SINS_POOL,'sinsIdx'); }
@@ -148,17 +156,16 @@
   function renderProphets() {
     const el = document.getElementById('prophetsArea');
     if (!el) return;
-    let html = `<div class="section-title">${iqIcon('book-open')} Stories of the Prophets</div>`;
+    let html = `<div class="section-title">${iqIcon('book-open')} ${escapeHTML(_t('Stories of the Prophets'))}</div><div class="iq-names-grid">`;
     html += PROPHETS_POOL.map((o, i) => {
       if (!o) return '';
-      const numBadge = `<span style="display:inline-block; background:var(--accent-bg); color:var(--accent-light); border:1px solid var(--accent-border); border-radius:12px; padding:0 8px; font-size:0.75rem; margin-right:8px; font-weight:800; height:22px; line-height:20px; white-space:nowrap; font-family:var(--font);">#${i + 1}</span>`;
       return `<div class="content-card name-card">
-        <div style="align-self:flex-end; display:flex;">${numBadge}</div>
+        <div style="align-self:flex-end;display:flex;">${_numBadge(i + 1)}</div>
         <div class="content-arabic name-an">${o.arabic || ''}</div>
         <div class="name-roman">${o.name || ''}</div>
         <div class="content-english" style="text-align:center;">${o.desc || ''}</div>
       </div>`;
-    }).join('');
+    }).join('') + '</div>';
     el.innerHTML = html;
   }
   function renderWomen() { poolRender('womenArea', iqIcon('user') + ' Great Muslim Women',WOMEN_POOL,'womenIdx',true); }
@@ -178,17 +185,16 @@
     if (!el) return;
     const cats = [...new Set(FIQH_POOL.map(s => s.cat).filter(Boolean))];
     const cur = (S._fiqhCat || cats[0]);
-    let html = '<div class="section-title">' + iqIcon('book-open') + ' Islamic Jurisprudence (Fiqh)</div>';
+    let html = '<div class="section-title">' + iqIcon('book-open') + ' ' + escapeHTML(_t('Islamic Jurisprudence (Fiqh)')) + '</div>';
     html += '<div class="tier2-tabs cat-chips">';
     cats.forEach(function(c) {
       const active = c === cur ? ' active' : '';
-      html += '<button class="cat-chip' + active + '" onclick="S._fiqhCat=\'' + c + '\';renderFiqh()">' + c + '</button>';
+      html += '<button type="button" class="cat-chip' + active + '" onclick="S._fiqhCat=\'' + c + '\';renderFiqh()">' + escapeHTML(_t(c)) + '</button>';
     });
     html += '</div>';
     const filtered = FIQH_POOL.filter(function(s) { return s.cat === cur; });
     html += filtered.map(function(o, i) {
-      const numBadge = '<span style="display:inline-block;background:var(--accent-bg);color:var(--accent-light);border:1px solid var(--accent-border);border-radius:12px;padding:0 8px;font-size:0.75rem;margin-right:8px;font-weight:800;height:22px;line-height:20px;white-space:nowrap;font-family:var(--font);">#' + (i + 1) + '</span>';
-      return '<div class="content-card" onclick="if(typeof window.grantDailyXp===\'function\')window.grantDailyXp(2,\'read|fiqhArea|' + i + '\')"><div style="font-weight:700;margin-bottom:6px;color:var(--accent-light);display:flex;align-items:flex-start;"><div style="margin-top:1px;">' + numBadge + '</div><span style="line-height:1.4;">' + o.title + '</span></div><div class="content-english">' + o.desc + '</div></div>';
+      return '<div class="content-card" onclick="if(typeof window.grantDailyXp===\'function\')window.grantDailyXp(2,\'read|fiqhArea|' + i + '\')"><div class="iq-card-title" style="display:flex;align-items:flex-start;gap:8px;margin-bottom:6px;"><div style="margin-top:1px;">' + _numBadge(i + 1) + '</div><span style="line-height:1.4;">' + o.title + '</span></div><div class="content-english">' + o.desc + '</div></div>';
     }).join('');
     el.innerHTML = html;
   }
@@ -213,7 +219,7 @@
   function renderSalah() {
     const el = document.getElementById('salahArea');
     if (!el) return;
-    el.innerHTML = '<div class="section-title">' + iqIcon('kaaba') + ' Salah Guide</div>' + [
+    el.innerHTML = '<div class="section-title">' + iqIcon('kaaba') + ' ' + escapeHTML(_t('Salah Guide')) + '</div>' + [
       { name:'Wudu', desc:'Perform wudu perfectly before each prayer. Intention + 8 steps.' },
       { name:'Facing Qibla', desc:'Face the Kaaba in Makkah. Use a compass or app to find direction.' },
       { name:'Niyyah (Intention)', desc:'Make the intention in your heart for which prayer you are praying.' },
@@ -225,7 +231,7 @@
       { name:'Tashahud', desc:'Sit between rakats reciting At-Tahiyyatu lillahi... and send Salawat on the Prophet ﷺ.' },
       { name:'Tasleem', desc:'End prayer by turning head right then left saying As-Salamu Alaykum wa rahmatullah.' }
     ].map((s, i) => {
-      return `<div class="content-card"><div style="display:flex;align-items:flex-start;gap:10px;"><span style="display:inline-block;background:var(--accent-bg);color:var(--accent-light);border:1px solid var(--accent-border);border-radius:12px;padding:0 8px;font-size:0.75rem;font-weight:800;height:22px;line-height:20px;white-space:nowrap;font-family:var(--font);">#${i + 1}</span><div style="flex:1;"><div style="font-weight:700;color:var(--accent-light);margin-bottom:6px;">${s.name}</div><div class="content-english">${s.desc}</div></div></div></div>`;
+      return `<div class="content-card"><div class="iq-card-row-head">${_numBadge(i + 1)}<div style="flex:1;"><div class="iq-card-title">${s.name}</div><div class="content-english">${s.desc}</div></div></div></div>`;
     }).join('');
   }
 
@@ -237,19 +243,19 @@
     
     return `
       <div class="dhikr-analytics">
-        <div class="section-title">${iqIcon('bar-chart-3')} Dhikr Statistics</div>
+        <div class="section-title">${iqIcon('bar-chart-3')} ${escapeHTML(_t('Dhikr Statistics'))}</div>
         <div class="dhikr-stats-row">
           <div class="dhikr-stat-item">
-            <div class="dhikr-stat-num">${totalDhikr}</div>
-            <div class="dhikr-stat-label">Total Dhikr</div>
+            <div class="dhikr-stat-num iq-tabular">${_n(totalDhikr)}</div>
+            <div class="dhikr-stat-label">${escapeHTML(_t('Total Dhikr'))}</div>
           </div>
           <div class="dhikr-stat-item">
-            <div class="dhikr-stat-num">${todayCount}</div>
-            <div class="dhikr-stat-label">Today</div>
+            <div class="dhikr-stat-num iq-tabular">${_n(todayCount)}</div>
+            <div class="dhikr-stat-label">${escapeHTML(_t('Today'))}</div>
           </div>
           <div class="dhikr-stat-item">
-            <div class="dhikr-stat-num">${stats.streak}</div>
-            <div class="dhikr-stat-label">Streak</div>
+            <div class="dhikr-stat-num iq-tabular">${_n(stats.streak || 0)}</div>
+            <div class="dhikr-stat-label">${escapeHTML(_t('Streak'))}</div>
           </div>
         </div>
       </div>
@@ -258,14 +264,14 @@
 
   function _dhikrOrbHtml(cnt, d, pct) {
     const r = 58, c = 364.42, off = (c - (pct / 100) * c).toFixed(2);
-    return `<div class="iq-tasbeeh-wrap"><svg class="iq-tasbeeh-ring" viewBox="0 0 132 132" width="132" height="132" aria-hidden="true"><circle class="iq-tasbeeh-track" cx="66" cy="66" r="${r}"/><circle class="iq-tasbeeh-fill" cx="66" cy="66" r="${r}" style="stroke:${d.color};stroke-dasharray:${c};stroke-dashoffset:${off}"/></svg><button class="dhikr-tap-btn iq-tasbeeh-orb" onclick="this.classList.add('tap');setTimeout(()=>this.classList.remove('tap'),400);App.tapDhikr();" aria-label="Count dhikr +1"><span class="iq-orb-plus">+1</span><span class="iq-orb-pct iq-tabular">${pct}%</span></button></div>`;
+    return `<div class="iq-tasbeeh-wrap"><svg class="iq-tasbeeh-ring" viewBox="0 0 132 132" width="132" height="132" aria-hidden="true"><circle class="iq-tasbeeh-track" cx="66" cy="66" r="${r}"/><circle class="iq-tasbeeh-fill" cx="66" cy="66" r="${r}" style="stroke:${d.color};stroke-dasharray:${c};stroke-dashoffset:${off}"/></svg><button type="button" class="dhikr-tap-btn iq-tasbeeh-orb" onclick="this.classList.add('tap');setTimeout(()=>this.classList.remove('tap'),400);App.tapDhikr();" aria-label="Count dhikr +1"><span class="iq-orb-plus"><bdi dir="ltr">+${_n(1)}</bdi></span><span class="iq-orb-pct iq-tabular">${_n(pct)}%</span></button></div>`;
   }
 
   function renderDhikrCounter() {
     const el = document.getElementById('dhikrCounterArea');
     if (!el) return;
     if (!S.dhikrCounters) S.dhikrCounters = {};
-    const fmt = (n) => (typeof window.iqFormatNum === 'function') ? window.iqFormatNum(n) : String(n);
+    const fmt = _n;
     const current = S.dhikrCounters._active || 0;
     const pool = (typeof DHIKR_COUNTER_DATA !== 'undefined' && DHIKR_COUNTER_DATA) || (typeof window !== 'undefined' && window.DHIKR_COUNTER_DATA) || [];
     if (!pool.length) return;
@@ -275,19 +281,20 @@
     const dk = typeof today === 'function' ? today() : '';
     const dailyTapXp = (S.dhikrTapXpDay && S.dhikrTapXpDay.date === dk) ? (S.dhikrTapXpDay.xp || 0) : 0;
     const dailyCap = (typeof window.MAX_DAILY_TAP_XP === 'number') ? window.MAX_DAILY_TAP_XP : 100;
+    const nextArrow = '<svg class="iq-mirror-icon" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>';
     el.innerHTML = renderDhikrAnalytics() + `
       <div class="dhikr-counter-card">
-        <div style="font-size:0.75rem;color:var(--text2);margin-bottom:8px;">${fmt(current+1)} / ${fmt(pool.length)} &middot; Daily Tap XP: ${fmt(dailyTapXp)} / ${fmt(dailyCap)}</div>
+        <div class="iq-tabular" style="font-size:0.78rem;color:var(--text2);margin-bottom:8px;">${fmt(current+1)} / ${fmt(pool.length)} &middot; ${escapeHTML(_t('Daily Tap XP'))}: ${fmt(dailyTapXp)} / ${fmt(dailyCap)}</div>
         <div class="dhikr-counter-arabic" style="color:${d.color}">${d.arabic}</div>
-        <div style="font-style:italic;color:var(--text2);font-size:0.85rem;margin-bottom:4px;">${d.transliteration}</div>
-        <div style="font-size:0.8rem;color:var(--text2);margin-bottom:12px;">${d.english}</div>
+        <div style="font-style:italic;color:var(--text2);font-size:0.86rem;margin-bottom:4px;">${d.transliteration}</div>
+        <div style="font-size:0.84rem;color:var(--text2);margin-bottom:12px;">${d.english}</div>
         <div class="dhikr-counter-num iq-tabular" style="color:${d.color}">${fmt(cnt)}</div>
-        <div class="dhikr-counter-target iq-tabular">Target: ${fmt(d.target)} ${cnt >= d.target ? iqIcon('check') : ''}</div>
+        <div class="dhikr-counter-target iq-tabular">${escapeHTML(_t('Target'))}: ${fmt(d.target)} ${cnt >= d.target ? iqIcon('check') : ''}</div>
         ${_dhikrOrbHtml(cnt, d, pct)}
-        <div style="margin-top:12px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
-          <button class="dhikr-reset-btn" onclick="App.resetDhikr()">${iqIcon('refresh-cw')} Reset</button>
-          <button class="dhikr-reset-btn" onclick="App.nextDhikr()">Next ▶</button>
-          <button class="dhikr-reset-btn" onclick="App.toggleDhikrHaptic()" aria-pressed="${!!(S.dhikrSettings && S.dhikrSettings.haptic)}">${iqIcon('zap')} Vibration ${S.dhikrSettings && S.dhikrSettings.haptic ? 'On' : 'Off'}</button>
+        <div style="margin-top:14px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
+          <button type="button" class="iq-btn-secondary" onclick="App.resetDhikr()">${iqIcon('refresh-cw')} ${escapeHTML(_t('Reset'))}</button>
+          <button type="button" class="iq-btn-secondary" onclick="App.nextDhikr()">${escapeHTML(_t('Next'))} ${nextArrow}</button>
+          <button type="button" class="iq-btn-secondary" onclick="App.toggleDhikrHaptic()" aria-pressed="${!!(S.dhikrSettings && S.dhikrSettings.haptic)}">${iqIcon('zap')} ${escapeHTML(_t('Vibration'))} ${escapeHTML(_t(S.dhikrSettings && S.dhikrSettings.haptic ? 'On' : 'Off'))}</button>
         </div>
       </div>
     `;
@@ -299,44 +306,44 @@
     const pool = (typeof INSPIRATIONS_POOL !== 'undefined' && INSPIRATIONS_POOL) || (typeof window !== 'undefined' && window.INSPIRATIONS_POOL) || [];
     if (!pool.length) return;
     const idxs = S.inspireIdx && S.inspireIdx.length ? S.inspireIdx : [0,1,2,3,4];
-    el.innerHTML = '<div class="section-title">' + iqIcon('sparkles') + ' Inspirations</div>' + idxs.map(i => `<div class="content-card"><div class="content-english" style="font-size:1rem;line-height:1.8;">${pool[i%pool.length]}</div></div>`).join('');
+    el.innerHTML = '<div class="section-title">' + iqIcon('sparkles') + ' ' + escapeHTML(_t('Inspirations')) + '</div>' + idxs.map(i => `<div class="content-card"><div class="content-english" style="font-size:1rem;line-height:1.8;">${pool[i%pool.length]}</div></div>`).join('');
   }
   function renderSahaba() {
     const el = document.getElementById('sahabaArea');
     if (!el) return;
     const pool = (typeof SAHABA_POOL !== 'undefined' && SAHABA_POOL) || (typeof window !== 'undefined' && window.SAHABA_POOL) || [];
     if (!pool.length) return;
-    el.innerHTML = '<div class="section-title">' + iqIcon('users') + ' The Companions (Sahabah)</div>' + pool.map((s,i) => `<div class="content-card"><div style="display:flex;align-items:flex-start;gap:10px;"><span style="display:inline-block;background:var(--accent-bg);color:var(--accent-light);border:1px solid var(--accent-border);border-radius:12px;padding:0 8px;font-size:0.75rem;font-weight:800;height:22px;line-height:20px;white-space:nowrap;font-family:var(--font);">#${i+1}</span><div style="flex:1;"><div style="font-weight:700;color:var(--accent-light);margin-bottom:6px;">${s.title}</div><div class="content-english">${s.desc}</div></div></div></div>`).join('');
+    el.innerHTML = '<div class="section-title">' + iqIcon('users') + ' ' + escapeHTML(_t('The Companions (Sahabah)')) + '</div>' + pool.map((s,i) => `<div class="content-card"><div class="iq-card-row-head">${_numBadge(i+1)}<div style="flex:1;"><div class="iq-card-title">${s.title}</div><div class="content-english">${s.desc}</div></div></div></div>`).join('');
   }
   function renderGratitude() {
     const dt = today(), entries = S.gratitudeLog[dt] || [];
-    let h = '<div class="section-title">' + iqIcon('pencil') + ' Daily Gratitude Journal</div>';
-    h += `<div class="content-card"><div class="content-english">Today's entries (${entries.length}):</div></div>`;
-    entries.forEach((e,i) => h += `<div class="quest-row">${iqIcon('check')} ${i+1}. ${escapeHTML(e)}</div>`);
-    h += `<input class="profile-input" id="gratInput" placeholder="I am grateful for..."><button class="shop-card" onclick="App.addGratitude()" style="justify-content:center;width:100%;">${iqIcon('plus')} Add Entry</button>`;
+    let h = '<div class="section-title">' + iqIcon('pencil') + ' ' + escapeHTML(_t('Daily Gratitude Journal')) + '</div>';
+    h += `<div class="content-card"><div class="content-english">${escapeHTML(_t("Today's entries"))} (<span class="iq-tabular">${_n(entries.length)}</span>):</div></div>`;
+    entries.forEach((e,i) => h += `<div class="quest-row">${iqIcon('check')} <span class="iq-tabular">${_n(i+1)}.</span> ${escapeHTML(e)}</div>`);
+    h += `<label class="sr-only" for="gratInput">${escapeHTML(_t('I am grateful for...'))}</label><input class="profile-input" id="gratInput" placeholder="${escapeHTML(_t('I am grateful for...'))}"><button type="button" class="iq-pill-btn" onclick="App.addGratitude()" style="width:100%;">${iqIcon('plus')} ${escapeHTML(_t('Add Entry'))}</button>`;
     document.getElementById('gratitudeArea').innerHTML = h;
   }
   function addGratitude() { const inp=document.getElementById('gratInput'); if(!inp?.value.trim()) return; const dt=today(); if(!S.gratitudeLog[dt]) S.gratitudeLog[dt]=[]; S.gratitudeLog[dt].push(inp.value.trim()); inp.value=''; if (typeof window.grantCappedDailyXp === 'function') window.grantCappedDailyXp(3, 'gratitude', 3); saveState(); renderGratitude(); checkA(); }
   function renderFasting() {
     const dt = today(), fasted = !!S.fastingDays[dt];
-    let h = '<div class="section-title">' + iqIcon('calendar') + ' Fasting Tracker</div>';
-    h += `<label class="quest-row"><span style="flex:1">Fasted today?</span><input type="checkbox" class="quest-check" ${fasted?'checked':''} onchange="App.toggleFasting()"></label>`;
+    let h = '<div class="section-title">' + iqIcon('calendar') + ' ' + escapeHTML(_t('Fasting Tracker')) + '</div>';
+    h += `<label class="quest-row"><span style="flex:1">${escapeHTML(_t('Fasted today?'))}</span><input type="checkbox" class="quest-check" ${fasted?'checked':''} onchange="App.toggleFasting()"></label>`;
     const start=ms(), end=me(); let cnt=0;
     for (const dk in S.fastingDays) if (dk>=start && dk<=end && S.fastingDays[dk]) cnt++;
-    h += `<div class="content-card"><div class="content-english">${iqIcon('calendar')} ${cnt} fasting days this month</div><div class="content-english" style="font-size:0.85rem;color:var(--text2);">Monday & Thursday are most recommended (Sunnah)</div></div>`;
+    h += `<div class="content-card"><div class="content-english">${iqIcon('calendar')} <span class="iq-tabular">${_n(cnt)}</span> ${escapeHTML(_t('fasting days this month'))}</div><div class="content-english" style="font-size:0.85rem;color:var(--text2);">${escapeHTML(_t('Monday & Thursday are most recommended (Sunnah)'))}</div></div>`;
     document.getElementById('fastingArea').innerHTML = h;
   }
   function toggleFasting() { const dt=today(); S.fastingDays[dt]=!S.fastingDays[dt]; if(S.fastingDays[dt]) { S.td.fasting=(S.td.fasting||0)+1; applyXpDelta(50); window.playSound('pop'); if (typeof window.iqHaptic === 'function') window.iqHaptic(10); } else { S.td.fasting=Math.max(0,(S.td.fasting||0)-1); spendXp(50); } saveState(); renderFasting(); if (typeof window !== 'undefined' && window.renderLv) window.renderLv(); if (typeof window !== 'undefined' && window.renderTopBar) window.renderTopBar(); }
   function renderCharity() {
     const cm = S.charity; if (cm.monthStart !== ms()) { cm.monthStart=ms(); cm.given=0; }
-    let h = '<div class="section-title">' + iqIcon('wallet') + ' Charity Tracker</div>';
-    h += `<div class="content-card"><div class="content-english">Daily target: <strong style="color:var(--accent)">${cm.daily||'Not set'}</strong></div><input type="number" id="charityDaily" placeholder="Set daily target" class="profile-input"></div>`;
-    h += `<div class="content-card"><div class="content-english">Monthly target: <strong style="color:var(--accent)">${cm.monthly||'Not set'}</strong></div><input type="number" id="charityMonthly" placeholder="Set monthly target" class="profile-input"></div>`;
-    h += `<div class="content-card"><div class="content-english">Given this month: <strong style="color:var(--green)">${cm.given} / ${cm.monthly||'?'}</strong></div><input type="number" id="charityGiven" placeholder="Log amount given today" class="profile-input"></div>`;
-    h += `<button class="shop-card" onclick="App.setCharityGoals()" style="justify-content:center;width:100%;">${iqIcon('save')} Save & Log</button>`;
-    h += '<div class="section-title">' + iqIcon('book-open') + ' Charity Knowledge</div>';
-    h += `<div class="content-card"><div class="content-english">Waqf (Endowments)</div><div class="content-english" style="font-size:0.85rem;color:var(--text2);">The Islamic institution of Waqf allows individuals to dedicate land or assets permanently for public benefit. Awqaf historically funded hospitals, schools, and water fountains.</div></div>`;
-    h += `<div class="content-card"><div class="content-english">Sadaqah Jariyah</div><div class="content-english" style="font-size:0.85rem;color:var(--text2);">Continuous charity. If you build a well, plant a tree, or write a useful book, you continue to receive reward even after death as long as people benefit from it. (Sahih Muslim)</div></div>`;
+    let h = '<div class="section-title">' + iqIcon('wallet') + ' ' + escapeHTML(_t('Charity Tracker')) + '</div>';
+    h += `<div class="content-card"><label class="content-english" for="charityDaily">${escapeHTML(_t('Daily target'))}: <strong class="iq-tabular" style="color:var(--accent-dark)">${cm.daily ? _n(cm.daily) : escapeHTML(_t('Not set'))}</strong></label><input type="number" id="charityDaily" placeholder="${escapeHTML(_t('Set daily target'))}" class="profile-input" style="margin-bottom:0;"></div>`;
+    h += `<div class="content-card"><label class="content-english" for="charityMonthly">${escapeHTML(_t('Monthly target'))}: <strong class="iq-tabular" style="color:var(--accent-dark)">${cm.monthly ? _n(cm.monthly) : escapeHTML(_t('Not set'))}</strong></label><input type="number" id="charityMonthly" placeholder="${escapeHTML(_t('Set monthly target'))}" class="profile-input" style="margin-bottom:0;"></div>`;
+    h += `<div class="content-card"><label class="content-english" for="charityGiven">${escapeHTML(_t('Given this month'))}: <strong class="iq-tabular" style="color:var(--green)">${_n(cm.given)} / ${cm.monthly ? _n(cm.monthly) : '?'}</strong></label><input type="number" id="charityGiven" placeholder="${escapeHTML(_t('Log amount given today'))}" class="profile-input" style="margin-bottom:0;"></div>`;
+    h += `<button type="button" class="iq-pill-btn" onclick="App.setCharityGoals()" style="width:100%;margin-bottom:14px;">${iqIcon('save')} ${escapeHTML(_t('Save & Log'))}</button>`;
+    h += '<div class="section-title">' + iqIcon('book-open') + ' ' + escapeHTML(_t('Charity Knowledge')) + '</div>';
+    h += `<div class="content-card"><div class="iq-card-title">${escapeHTML(_t('Waqf (Endowments)'))}</div><div class="content-english" style="font-size:0.85rem;color:var(--text2);">The Islamic institution of Waqf allows individuals to dedicate land or assets permanently for public benefit. Awqaf historically funded hospitals, schools, and water fountains.</div></div>`;
+    h += `<div class="content-card"><div class="iq-card-title">${escapeHTML(_t('Sadaqah Jariyah'))}</div><div class="content-english" style="font-size:0.85rem;color:var(--text2);">Continuous charity. If you build a well, plant a tree, or write a useful book, you continue to receive reward even after death as long as people benefit from it. (Sahih Muslim)</div></div>`;
     document.getElementById('charityArea').innerHTML = h;
   }
   function setCharityGoals() {
@@ -361,7 +368,7 @@
     return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
   }
   function renderMemorization() {
-    const fmt = (n) => (typeof window.iqFormatNum === 'function') ? window.iqFormatNum(n) : String(n);
+    const fmt = _n;
     const dt = today();
     if (!S.hifzSrs || typeof S.hifzSrs !== 'object') S.hifzSrs = {};
     let dueCount = 0;
@@ -371,19 +378,19 @@
       if (isDue) dueCount++;
       return { name: s, idx: idx, rec: rec, isDue: isDue };
     });
-    let h = '<div class="section-title">' + iqIcon('brain') + ' Hifz &amp; Spaced Repetition</div>';
-    h += `<div class="stat-card" style="margin-bottom:14px;"><div class="stat-num">${fmt(S.memorized)}</div><div>Surahs Memorized &middot; <span class="iq-srs-badge">${fmt(dueCount)} Due Today</span></div></div>`;
-    h += `<div class="content-card"><div class="content-english" style="font-size:0.84rem;color:var(--text2);">Spaced repetition schedules reviews at gentle intervals (1, 3, 7, 14, 30 days) so memorized Surahs stay anchored in memory.</div></div>`;
-    h += `<input class="profile-input" id="memInput" placeholder="Surah name or Ayah range (e.g., Al-Mulk 1-10)"><button class="shop-card" onclick="App.addMemorization()" style="justify-content:center;width:100%;">${iqIcon('plus')} Add to Hifz Queue</button>`;
+    let h = '<div class="section-title">' + iqIcon('brain') + ' ' + escapeHTML(_t('Hifz & Spaced Repetition')) + '</div>';
+    h += `<div class="stat-card" style="margin-bottom:14px;"><div class="stat-num iq-tabular">${fmt(S.memorized)}</div><div>${escapeHTML(_t('Surahs Memorized'))} &middot; <span class="iq-srs-badge iq-tabular">${fmt(dueCount)} ${escapeHTML(_t('Due Today'))}</span></div></div>`;
+    h += `<div class="content-card"><div class="content-english" style="font-size:0.84rem;color:var(--text2);">${escapeHTML(_t('Spaced repetition schedules reviews at gentle intervals (1, 3, 7, 14, 30 days) so memorized Surahs stay anchored in memory.'))}</div></div>`;
+    h += `<label class="sr-only" for="memInput">${escapeHTML(_t('Surah name or Ayah range (e.g., Al-Mulk 1-10)'))}</label><input class="profile-input" id="memInput" placeholder="${escapeHTML(_t('Surah name or Ayah range (e.g., Al-Mulk 1-10)'))}"><button type="button" class="iq-pill-btn" onclick="App.addMemorization()" style="width:100%;margin-bottom:14px;">${iqIcon('plus')} ${escapeHTML(_t('Add to Hifz Queue'))}</button>`;
     if (rows.length) {
-      h += '<div class="section-title">' + iqIcon('clipboard') + ' Review Queue</div>';
+      h += '<div class="section-title">' + iqIcon('clipboard') + ' ' + escapeHTML(_t('Review Queue')) + '</div>';
       rows.forEach(item => {
         const ivl = HIFZ_INTERVALS[Math.min(HIFZ_INTERVALS.length - 1, item.rec.level || 0)];
         h += `<div class="quest-row" style="flex-wrap:wrap;gap:8px;justify-content:space-between;">
-          <div style="flex:1;min-width:160px;"><strong>${escapeHTML(item.name)}</strong><div style="font-size:0.75rem;color:var(--text2);">${item.isDue ? 'Due now for gentle review' : ('Next review: ' + escapeHTML(item.rec.nextDue) + ' (' + fmt(ivl) + 'd)')}</div></div>
-          <div style="display:flex;gap:6px;">
-            <button type="button" class="iq-pill-btn" style="padding:6px 12px;font-size:0.76rem;" onclick="App.markHifzReviewed(${item.idx}, false)">${iqIcon('check')} Reviewed</button>
-            <button type="button" class="iq-btn-secondary" style="padding:6px 10px;font-size:0.76rem;" onclick="App.markHifzReviewed(${item.idx}, true)">Reset (1d)</button>
+          <div style="flex:1;min-width:160px;"><strong>${escapeHTML(item.name)}</strong><div style="font-size:0.75rem;color:var(--text2);">${item.isDue ? escapeHTML(_t('Due now for gentle review')) : (escapeHTML(_t('Next review')) + ': <bdi dir="ltr">' + escapeHTML(item.rec.nextDue) + '</bdi> (<span class="iq-tabular">' + fmt(ivl) + 'd</span>)')}</div></div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;">
+            <button type="button" class="iq-pill-btn" style="padding:6px 12px;font-size:0.76rem;" onclick="App.markHifzReviewed(${item.idx}, false)">${iqIcon('check')} ${escapeHTML(_t('Reviewed'))}</button>
+            <button type="button" class="iq-btn-secondary" style="padding:6px 10px;font-size:0.76rem;" onclick="App.markHifzReviewed(${item.idx}, true)">${escapeHTML(_t('Reset'))} (<bdi dir="ltr">1d</bdi>)</button>
           </div>
         </div>`;
       });
@@ -428,21 +435,21 @@
     let completed = 0;
     for (let i=0; i<total; i++) { if (S.morningDone[dt][i]) completed++; }
 
-    let h = `<div class="section-title" style="display:flex;justify-content:center;align-items:center;gap:12px;">
-      <span>${iqIcon('sunrise')} Morning Adhkar (After Fajr)</span>
-      <span style="font-size:0.75rem;background:rgba(201,168,76,0.15);padding:3px 10px;border-radius:12px;color:var(--accent-light);font-weight:700;">${completed} / ${total}</span>
+    let h = `<div class="section-title" style="justify-content:space-between;gap:12px;">
+      <span>${iqIcon('sunrise')} ${escapeHTML(_t('Morning Adhkar (After Fajr)'))}</span>
+      <span class="iq-num-pill iq-tabular">${_n(completed)} / ${_n(total)}</span>
     </div><div class="adhkar-list" style="display:flex;flex-direction:column;gap:12px;width:100%;align-items:stretch;">`;
     MORNING_DHIKR.forEach((item, idx) => {
         const done = !!S.morningDone[dt][idx];
         h += `<div class="vol-card${done?' done':''}" tabindex="0" role="button" aria-pressed="${done?'true':'false'}" aria-label="${escapeHTML(item.text)} (${item.xp} XP)" onclick="App.toggleMorning(${idx}, ${item.xp})" style="cursor:pointer;width:100%;box-sizing:border-box;">
             <div class="prayer-check" style="font-size:1.2rem;">${done?iqIcon('check'):iqIcon('sun')}</div>
-            <div class="prayer-info" style="text-align:center;">
-                <div style="font-family:'Amiri',serif;font-size:1.3rem;margin-bottom:2px;color:var(--accent);line-height:1.4;text-align:center;">${item.arabic}</div>
-                ${item.roman ? `<div style="font-size:0.85rem;color:var(--text2);font-style:italic;margin-bottom:6px;opacity:0.9;text-align:center;">"${item.roman}"</div>` : ''}
-                <div class="prayer-name" style="text-align:center;">${item.text}</div>
-                <div style="font-size:0.8rem;color:var(--text2);margin-top:4px;text-align:center;">${item.reward}</div>
+            <div class="prayer-info">
+                <div class="content-arabic" style="font-size:1.3rem;margin-bottom:4px;color:var(--accent-dark);line-height:1.75;">${item.arabic}</div>
+                ${item.roman ? `<div class="iq-card-translit">"${escapeHTML(item.roman)}"</div>` : ''}
+                <div class="prayer-name">${escapeHTML(item.text)}</div>
+                <div style="font-size:0.8rem;color:var(--text2);margin-top:4px;">${escapeHTML(item.reward)}</div>
             </div>
-            <div class="prayer-xp">+${item.xp} XP</div>
+            <div class="prayer-xp iq-tabular">+${_n(item.xp)} XP</div>
         </div>`;
     });
     document.getElementById('morningArea').innerHTML = h + '</div>';
@@ -463,21 +470,21 @@
     let completed = 0;
     for (let i=0; i<total; i++) { if (S.eveningDone[dt][i]) completed++; }
     
-    let h = `<div class="section-title" style="display:flex;justify-content:center;align-items:center;gap:12px;">
-      <span>${iqIcon('moon')} Evening Adhkar (After Asr)</span>
-      <span style="font-size:0.75rem;background:rgba(201,168,76,0.15);padding:3px 10px;border-radius:12px;color:var(--accent-light);font-weight:700;">${completed} / ${total}</span>
+    let h = `<div class="section-title" style="justify-content:space-between;gap:12px;">
+      <span>${iqIcon('moon')} ${escapeHTML(_t('Evening Adhkar (After Asr)'))}</span>
+      <span class="iq-num-pill iq-tabular">${_n(completed)} / ${_n(total)}</span>
     </div><div class="adhkar-list" style="display:flex;flex-direction:column;gap:12px;width:100%;align-items:stretch;">`;
     EVENING_DHIKR.forEach((item, idx) => {
         const done = !!S.eveningDone[dt][idx];
         h += `<div class="vol-card${done?' done':''}" tabindex="0" role="button" aria-pressed="${done?'true':'false'}" aria-label="${escapeHTML(item.text)} (${item.xp} XP)" onclick="App.toggleEvening(${idx}, ${item.xp})" style="cursor:pointer;width:100%;box-sizing:border-box;">
             <div class="prayer-check" style="font-size:1.2rem;">${done?iqIcon('check'):iqIcon('moon')}</div>
-            <div class="prayer-info" style="text-align:center;">
-                <div style="font-family:'Amiri',serif;font-size:1.3rem;margin-bottom:2px;color:var(--accent);line-height:1.4;text-align:center;">${item.arabic}</div>
-                ${item.roman ? `<div style="font-size:0.85rem;color:var(--text2);font-style:italic;margin-bottom:6px;opacity:0.9;text-align:center;">"${item.roman}"</div>` : ''}
-                <div class="prayer-name" style="text-align:center;">${item.text}</div>
-                <div style="font-size:0.8rem;color:var(--text2);margin-top:4px;text-align:center;">${item.reward}</div>
+            <div class="prayer-info">
+                <div class="content-arabic" style="font-size:1.3rem;margin-bottom:4px;color:var(--accent-dark);line-height:1.75;">${item.arabic}</div>
+                ${item.roman ? `<div class="iq-card-translit">"${escapeHTML(item.roman)}"</div>` : ''}
+                <div class="prayer-name">${escapeHTML(item.text)}</div>
+                <div style="font-size:0.8rem;color:var(--text2);margin-top:4px;">${escapeHTML(item.reward)}</div>
             </div>
-            <div class="prayer-xp">+${item.xp} XP</div>
+            <div class="prayer-xp iq-tabular">+${_n(item.xp)} XP</div>
         </div>`;
     });
     document.getElementById('eveningArea').innerHTML = h + '</div>';
@@ -502,8 +509,8 @@
 
     if (_situationalView && SITUATIONAL_DHIKR[_situationalView]) {
       const cat = SITUATIONAL_DHIKR[_situationalView];
-      let h = `<button class="quran-back-btn" onclick="App.situationalBack()">${iqIcon('arrow-left')} Back to Categories</button>`;
-      h += `<div class="section-title">${iqIcon(cat.icon)} ${cat.label}</div>`;
+      let h = `<button type="button" class="quran-back-btn" onclick="App.situationalBack()"><span class="iq-mirror-icon">${iqIcon('arrow-left')}</span> ${escapeHTML(_t('Back to Categories'))}</button>`;
+      h += `<div class="section-title">${iqIcon(cat.icon)} ${escapeHTML(_t(cat.label))}</div>`;
       h += '<div class="adhkar-list" style="display:flex;flex-direction:column;gap:12px;width:100%;align-items:stretch;">';
       const favs = S.sitFavs || [];
       const sorted = cat.dhikr.map(function(item, idx) { return {item:item, idx:idx}; }).sort(function(a,b) {
@@ -517,15 +524,15 @@
         const tapCount = (S.situationalXp && S.situationalXp[dayKey]) || 0;
         const maxed = tapCount >= 10;
         const isFav = favs.includes(_situationalView + '_' + idx);
-        h += `<div class="vol-card" role="button" tabindex="0" aria-label="Tap ${escapeHTML(item.english)}" style="position:relative;cursor:pointer;width:100%;box-sizing:border-box;${maxed ? 'opacity:0.6;' : ''}" onclick="App.tapSituationalDhikr('${_situationalView}',${idx})">
-            <button type="button" class="sit-fav-btn" aria-label="${isFav ? 'Remove from favorites' : 'Add to favorites'}" title="${isFav ? 'Unpin dhikr' : 'Pin dhikr'}" style="position:absolute;top:8px;right:8px;background:none;border:none;cursor:pointer;padding:6px;font-size:1rem;line-height:1;color:${isFav ? 'var(--accent)' : 'var(--text3)'};" onclick="event.stopPropagation();App.toggleSitFav('${_situationalView}',${idx})">${isFav ? iqIcon('star') : iqIcon('bookmark')}</button>
-            <div class="prayer-info" style="text-align:center;">
-              <div style="font-family:'Amiri',serif;font-size:1.3rem;margin-bottom:2px;color:var(--accent);line-height:1.4;text-align:center;">${item.arabic}</div>
-              ${item.roman ? '<div style="font-size:0.85rem;color:var(--text2);font-style:italic;margin-bottom:6px;opacity:0.9;">"' + escapeHTML(item.roman) + '"</div>' : ''}
+        h += `<div class="vol-card" role="button" tabindex="0" aria-label="Tap ${escapeHTML(item.english)}" style="position:relative;cursor:pointer;width:100%;box-sizing:border-box;padding-inline-end:48px;${maxed ? 'opacity:0.65;' : ''}" onclick="App.tapSituationalDhikr('${_situationalView}',${idx})">
+            <button type="button" class="sit-fav-btn" aria-label="${isFav ? 'Remove from favorites' : 'Add to favorites'}" title="${isFav ? 'Unpin dhikr' : 'Pin dhikr'}" style="position:absolute;top:6px;inset-inline-end:6px;min-width:44px;min-height:44px;display:inline-flex;align-items:center;justify-content:center;background:none;border:none;cursor:pointer;padding:6px;font-size:1rem;line-height:1;color:${isFav ? 'var(--accent-dark)' : 'var(--text3)'};" onclick="event.stopPropagation();App.toggleSitFav('${_situationalView}',${idx})">${isFav ? iqIcon('star') : iqIcon('bookmark')}</button>
+            <div class="prayer-info">
+              <div class="content-arabic" style="font-size:1.3rem;margin-bottom:4px;color:var(--accent-dark);line-height:1.75;">${item.arabic}</div>
+              ${item.roman ? '<div class="iq-card-translit">"' + escapeHTML(item.roman) + '"</div>' : ''}
               <div class="prayer-name">${escapeHTML(item.english)}</div>
               ${item.source ? '<div style="font-size:0.75rem;color:var(--text2);margin-top:4px;">' + iqIcon('book-open') + ' ' + escapeHTML(item.source) + '</div>' : ''}
             </div>
-            <div class="prayer-xp">+5 XP<br><span style="font-size:0.65rem;opacity:0.8;">${tapCount}/10</span></div>
+            <div class="prayer-xp iq-tabular">+${_n(5)} XP<br><span style="font-size:0.65rem;opacity:0.85;">${_n(tapCount)}/${_n(10)}</span></div>
         </div>`;
       });
       h += '</div>';
@@ -534,8 +541,8 @@
     }
 
     const keys = Object.keys(SITUATIONAL_DHIKR);
-    let h = '<div class="section-title">' + iqIcon('heart') + ' Situational Dhikr</div>';
-    h += '<div style="color:var(--text2);font-size:0.82rem;margin-bottom:14px;line-height:1.5;">Dhikr organized by emotional and spiritual need. Tap a category to explore.</div>';
+    let h = '<div class="section-title">' + iqIcon('heart') + ' ' + escapeHTML(_t('Situational Dhikr')) + '</div>';
+    h += `<div style="color:var(--text2);font-size:0.84rem;margin-bottom:14px;line-height:1.5;">${escapeHTML(_t('Dhikr organized by emotional and spiritual need. Tap a category to explore.'))}</div>`;
     h += '<div class="situational-grid">';
     keys.forEach(function(key) {
       const cat = SITUATIONAL_DHIKR[key];
@@ -712,13 +719,13 @@
 
     if (_extraDeedsView && EXTRA_GOOD_DEEDS[_extraDeedsView]) {
       const cat = EXTRA_GOOD_DEEDS[_extraDeedsView];
-      let h = '<button class="quran-back-btn" onclick="App.extraDeedsBack()">' + iqIcon('arrow-left') + ' Back to Categories</button>';
-      h += '<div class="section-title">' + iqIcon(cat.icon) + ' ' + cat.label + '</div>';
+      let h = `<button type="button" class="quran-back-btn" onclick="App.extraDeedsBack()"><span class="iq-mirror-icon">${iqIcon('arrow-left')}</span> ${escapeHTML(_t('Back to Categories'))}</button>`;
+      h += '<div class="section-title">' + iqIcon(cat.icon) + ' ' + escapeHTML(_t(cat.label)) + '</div>';
       h += '<div class="adhkar-list" style="display:flex;flex-direction:column;gap:12px;width:100%;align-items:stretch;">';
       cat.deeds.forEach(function(item) {
         h += '<div class="vol-card" style="cursor:default;width:100%;box-sizing:border-box;">';
         h += '<div class="prayer-info">';
-        h += '<div class="prayer-name" style="font-size:1rem;font-weight:700;color:var(--accent-light);">' + item.name + '</div>';
+        h += '<div class="iq-card-title">' + item.name + '</div>';
         h += '<div style="font-size:0.85rem;color:var(--text2);margin-top:4px;line-height:1.5;">"' + item.virtue + '"</div>';
         if (item.source) h += '<div style="font-size:0.75rem;color:var(--text2);margin-top:4px;">' + iqIcon('book-open') + ' ' + item.source + '</div>';
         h += '</div>';
@@ -731,15 +738,15 @@
     }
 
     var keys = Object.keys(EXTRA_GOOD_DEEDS);
-    var h = '<div class="section-title">' + iqIcon('star') + ' Extra Good Deeds</div>';
-    h += '<div style="color:var(--text2);font-size:0.82rem;margin-bottom:14px;line-height:1.5;">Virtuous deeds organized by spiritual benefit. Tap a category to explore.</div>';
+    var h = '<div class="section-title">' + iqIcon('star') + ' ' + escapeHTML(_t('Extra Good Deeds')) + '</div>';
+    h += `<div style="color:var(--text2);font-size:0.84rem;margin-bottom:14px;line-height:1.5;">${escapeHTML(_t('Virtuous deeds organized by spiritual benefit. Tap a category to explore.'))}</div>`;
     h += '<div class="guide-grid">';
     keys.forEach(function(key) {
       var cat = EXTRA_GOOD_DEEDS[key];
       h += '<div class="guide-card" onclick="App.openExtraDeeds(\'' + key + '\')">';
       h += '<div class="guide-icon">' + iqIcon(cat.icon) + '</div>';
-      h += '<div class="guide-label">' + cat.label + '</div>';
-      h += '<div class="guide-count">' + cat.deeds.length + ' deeds</div>';
+      h += '<div class="guide-label">' + escapeHTML(_t(cat.label)) + '</div>';
+      h += '<div class="guide-count iq-tabular">' + _n(cat.deeds.length) + ' ' + escapeHTML(_t('deeds')) + '</div>';
       h += '</div>';
     });
     h += '</div>';
@@ -758,15 +765,15 @@
 
     if (_volPrayersView && VOL_PRAYERS[_volPrayersView]) {
       const cat = VOL_PRAYERS[_volPrayersView];
-      let h = '<button class="quran-back-btn" onclick="App.volPrayersBack()">' + iqIcon('arrow-left') + ' Back to Categories</button>';
-      h += '<div class="section-title">' + iqIcon(cat.icon) + ' ' + cat.label + '</div>';
+      let h = `<button type="button" class="quran-back-btn" onclick="App.volPrayersBack()"><span class="iq-mirror-icon">${iqIcon('arrow-left')}</span> ${escapeHTML(_t('Back to Categories'))}</button>`;
+      h += '<div class="section-title">' + iqIcon(cat.icon) + ' ' + escapeHTML(_t(cat.label)) + '</div>';
       h += '<div class="adhkar-list" style="display:flex;flex-direction:column;gap:12px;width:100%;align-items:stretch;">';
       cat.prayers.forEach(function(item) {
         h += '<div class="vol-card" style="cursor:default;width:100%;box-sizing:border-box;">';
         h += '<div class="prayer-info">';
-        h += '<div class="prayer-name" style="font-size:1rem;font-weight:700;color:var(--accent-light);">' + item.name + '</div>';
+        h += '<div class="iq-card-title">' + item.name + '</div>';
         h += '<div style="font-size:0.85rem;color:var(--text);margin-top:4px;line-height:1.5;">' + item.desc + '</div>';
-        h += '<div style="font-size:0.8rem;color:var(--accent-light);margin-top:4px;font-weight:600;">' + item.rakat + '</div>';
+        h += '<div style="font-size:0.8rem;color:var(--accent-dark);margin-top:4px;font-weight:600;">' + item.rakat + '</div>';
         if (item.source) h += '<div style="font-size:0.75rem;color:var(--text2);margin-top:4px;">' + iqIcon('book-open') + ' ' + item.source + '</div>';
         h += '</div>';
         h += '<div class="card-info-btn" role="button" tabindex="0" aria-label="Details: ' + item.name + '" onclick="event.stopPropagation();App.detail(\'' + item.id + '\')">' + iqIcon('info') + '</div>';
@@ -778,15 +785,15 @@
     }
 
     var keys = Object.keys(VOL_PRAYERS);
-    var h = '<div class="section-title">' + iqIcon('moon') + ' Volunteer Prayers</div>';
-    h += '<div style="color:var(--text2);font-size:0.82rem;margin-bottom:14px;line-height:1.5;">Sunnah and nafl prayers organized by type. Tap a category to explore.</div>';
+    var h = '<div class="section-title">' + iqIcon('moon') + ' ' + escapeHTML(_t('Volunteer Prayers')) + '</div>';
+    h += `<div style="color:var(--text2);font-size:0.84rem;margin-bottom:14px;line-height:1.5;">${escapeHTML(_t('Sunnah and nafl prayers organized by type. Tap a category to explore.'))}</div>`;
     h += '<div class="guide-grid">';
     keys.forEach(function(key) {
       var cat = VOL_PRAYERS[key];
       h += '<div class="guide-card" onclick="App.openVolPrayers(\'' + key + '\')">';
       h += '<div class="guide-icon">' + iqIcon(cat.icon) + '</div>';
-      h += '<div class="guide-label">' + cat.label + '</div>';
-      h += '<div class="guide-count">' + cat.prayers.length + ' prayers</div>';
+      h += '<div class="guide-label">' + escapeHTML(_t(cat.label)) + '</div>';
+      h += '<div class="guide-count iq-tabular">' + _n(cat.prayers.length) + ' ' + escapeHTML(_t('prayers')) + '</div>';
       h += '</div>';
     });
     h += '</div>';

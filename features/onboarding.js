@@ -50,7 +50,7 @@
       return {
         icon: 'globe',
         title: _tr('Choose Your Language'),
-        body: '<p style="margin-bottom:12px;">Switch anytime in Profile. No account required — your worship data stays private on this device.</p>' +
+        body: '<p style="margin-bottom:12px;">' + _esc(_tr('Switch anytime in Profile. No account required — your worship data stays private on this device.')) + '</p>' +
           '<div class="iq-onb-choice-grid">' +
             '<button type="button" class="iq-onb-choice' + (curLang === 'bn' ? ' active' : '') + '" onclick="window._onbPickLang(\'bn\')"><strong>\u09AC\u09BE\u0982\u09B2\u09BE</strong><small>Bangla \u00B7 \u09E6\u09E7\u09E8\u09E9</small></button>' +
             '<button type="button" class="iq-onb-choice' + (curLang === 'en' ? ' active' : '') + '" onclick="window._onbPickLang(\'en\')"><strong>English</strong><small>LTR \u00B7 0123</small></button>' +
@@ -63,11 +63,11 @@
       return {
         icon: 'compass',
         title: _tr('Welcome to Ibadah Quest'),
-        body: '<p style="margin-bottom:10px;">Where would you like to start? Everything stays gentle — never guilt-based.</p>' +
+        body: '<p style="margin-bottom:10px;">' + _esc(_tr('Where would you like to start? Everything stays gentle — never guilt-based.')) + '</p>' +
           '<div class="iq-onb-choice-grid">' +
-            '<button type="button" class="iq-onb-choice' + (lvl === 'beginner' ? ' active' : '') + '" onclick="window._onbSetLevel(\'beginner\')"><strong>Building Daily Rhythm</strong><small>Guided steps &amp; beginner-friendly reminders</small></button>' +
-            '<button type="button" class="iq-onb-choice' + (lvl === 'consistent' ? ' active' : '') + '" onclick="window._onbSetLevel(\'consistent\')"><strong>Deepening Consistency</strong><small>Prayer focus, Khatam plan &amp; Dhikr presets</small></button>' +
-            '<button type="button" class="iq-onb-choice' + (lvl === 'returning' ? ' active' : '') + '" onclick="window._onbSetLevel(\'returning\')"><strong>Fresh Start After a Break</strong><small>Calm restart with Rest / Grace protection</small></button>' +
+            '<button type="button" class="iq-onb-choice' + (lvl === 'beginner' ? ' active' : '') + '" onclick="window._onbSetLevel(\'beginner\')"><strong>' + _esc(_tr('Building Daily Rhythm')) + '</strong><small>' + _esc(_tr('Guided steps & beginner-friendly reminders')) + '</small></button>' +
+            '<button type="button" class="iq-onb-choice' + (lvl === 'consistent' ? ' active' : '') + '" onclick="window._onbSetLevel(\'consistent\')"><strong>' + _esc(_tr('Deepening Consistency')) + '</strong><small>' + _esc(_tr('Prayer focus, Khatam plan & Dhikr presets')) + '</small></button>' +
+            '<button type="button" class="iq-onb-choice' + (lvl === 'returning' ? ' active' : '') + '" onclick="window._onbSetLevel(\'returning\')"><strong>' + _esc(_tr('Fresh Start After a Break')) + '</strong><small>' + _esc(_tr('Calm restart with Rest / Grace protection')) + '</small></button>' +
           '</div>'
       };
     }
@@ -76,9 +76,9 @@
       return {
         icon: 'map-pin',
         title: _tr('Set Your Location & Prayer Method'),
-        body: '<p style="margin-bottom:10px;">Prayer times work <strong>100% offline</strong>. Choose a preset city or share approximate coordinates — never uploaded anywhere.</p>' +
+        body: '<p style="margin-bottom:10px;">' + _esc(_tr('Prayer times work 100% offline. Choose a preset city or share approximate coordinates — never uploaded anywhere.')) + '</p>' +
           '<div style="display:flex;flex-direction:column;gap:8px;text-align:start;margin-bottom:10px;">' +
-            '<label style="font-size:0.82rem;color:var(--text2);">City Preset' +
+            '<label style="font-size:0.82rem;color:var(--text2);">' + _esc(_tr('City Preset')) +
               '<select class="iq-pt-select" style="width:100%;margin-top:4px;" onchange="window.applyPrayerCityPreset && window.applyPrayerCityPreset(this.value)">' +
                 '<option value="0"' + (ps.label === 'Dhaka' ? ' selected' : '') + '>Dhaka (Islamic Foundation / Hanafi)</option>' +
                 '<option value="1"' + (ps.label === 'Chattogram' ? ' selected' : '') + '>Chattogram</option>' +
@@ -87,13 +87,13 @@
                 '<option value="8"' + (ps.label === 'New York' ? ' selected' : '') + '>New York (ISNA)</option>' +
               '</select>' +
             '</label>' +
-            '<label style="font-size:0.82rem;color:var(--text2);">Asr School' +
+            '<label style="font-size:0.82rem;color:var(--text2);">' + _esc(_tr('Asr School')) +
               '<select class="iq-pt-select" style="width:100%;margin-top:4px;" onchange="window.updatePrayerSettings && window.updatePrayerSettings({asrSchool:this.value})">' +
-                '<option value="hanafi"' + (ps.asrSchool === 'hanafi' ? ' selected' : '') + '>Hanafi (2x shadow)</option>' +
-                '<option value="shafi"' + (ps.asrSchool === 'shafi' ? ' selected' : '') + '>Standard (Shafi\'i / Maliki / Hanbali)</option>' +
+                '<option value="hanafi"' + (ps.asrSchool === 'hanafi' ? ' selected' : '') + '>' + _esc(_tr('Hanafi (2x shadow)')) + '</option>' +
+                '<option value="shafi"' + (ps.asrSchool === 'shafi' ? ' selected' : '') + '>' + _esc(_tr("Standard (Shafi'i / Maliki / Hanbali)")) + '</option>' +
               '</select>' +
             '</label>' +
-            '<button type="button" class="iq-pill-btn" onclick="window.useCurrentPrayerLocation && window.useCurrentPrayerLocation()">Use Approximate Location</button>' +
+            '<button type="button" class="iq-btn-secondary" style="width:100%;" onclick="window.useCurrentPrayerLocation && window.useCurrentPrayerLocation()">' + _esc(_tr('Use Approximate Location')) + '</button>' +
           '</div>'
       };
     }
@@ -102,19 +102,19 @@
       return {
         icon: 'bell',
         title: _tr('Gentle Reminders'),
-        body: '<p style="margin-bottom:12px;">Receive quiet alerts when prayer time enters, with quiet night hours built in and zero nagging messages.</p>' +
-          '<button type="button" class="iq-pill-btn" style="margin-bottom:8px;" onclick="window.App && window.App.toggleNotifications()">' + (S && S.notificationsEnabled ? 'Reminders Enabled \u2713' : 'Enable Prayer Reminders') + '</button>' +
-          '<div style="font-size:0.78rem;color:var(--text2);">You can adjust per-prayer alerts anytime in Profile.</div>'
+        body: '<p style="margin-bottom:12px;">' + _esc(_tr('Receive quiet alerts when prayer time enters, with quiet night hours built in and zero nagging messages.')) + '</p>' +
+          '<button type="button" class="iq-btn-secondary" style="width:100%;margin-bottom:8px;" onclick="window.App && window.App.toggleNotifications()">' + _esc(_tr(S && S.notificationsEnabled ? 'Reminders Enabled' : 'Enable Prayer Reminders')) + (S && S.notificationsEnabled ? ' \u2713' : '') + '</button>' +
+          '<div style="font-size:0.78rem;color:var(--text2);">' + _esc(_tr('You can adjust per-prayer alerts anytime in Profile.')) + '</div>'
       };
     }
 
     return {
       icon: 'sparkles',
       title: _tr('Your First Worship Moment'),
-      body: '<p style="margin-bottom:12px;">Begin right now in under 10 seconds — tap one small sincere step:</p>' +
+      body: '<p style="margin-bottom:12px;">' + _esc(_tr('Begin right now in under 10 seconds — tap one small sincere step:')) + '</p>' +
         '<div style="display:flex;flex-direction:column;gap:8px;">' +
-          '<button type="button" class="onboarding-btn" onclick="window._onbQuickFirst(\'dhikr\')">Tap 3x SubhanAllah &amp; Begin</button>' +
-          '<button type="button" class="iq-pill-btn" onclick="window._onbQuickFirst(\'prayer\')">Log Today\'s Fajr &amp; Begin</button>' +
+          '<button type="button" class="onboarding-btn" style="width:100%;" onclick="window._onbQuickFirst(\'dhikr\')">' + _esc(_tr('Tap 3x SubhanAllah & Begin')) + '</button>' +
+          '<button type="button" class="iq-btn-secondary" style="width:100%;" onclick="window._onbQuickFirst(\'prayer\')">' + _esc(_tr("Log Today's Fajr & Begin")) + '</button>' +
         '</div>'
     };
   }
@@ -132,16 +132,16 @@
     }
     ov.innerHTML = '<div class="onboarding-card" role="dialog" aria-modal="true" aria-label="Onboarding">' +
       '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">' +
-        (st > 0 ? '<button type="button" class="iq-text-btn" onclick="window.prevOnboardingStep()">&lsaquo; ' + _esc(_tr('Back')) + '</button>' : '<span></span>') +
-        '<button type="button" class="iq-text-btn" onclick="window.completeOnboarding()">' + _esc(_tr('Skip')) + '</button>' +
+        (st > 0 ? '<button type="button" class="iq-text-btn" style="min-height:44px;padding:6px 10px;" onclick="window.prevOnboardingStep()"><span class="iq-mirror-icon">&lsaquo;</span> ' + _esc(_tr('Back')) + '</button>' : '<span></span>') +
+        '<button type="button" class="iq-text-btn" style="min-height:44px;padding:6px 10px;" onclick="window.completeOnboarding()">' + _esc(_tr('Skip')) + '</button>' +
       '</div>' +
       '<div class="onboarding-icon">' + iqIcon(content.icon) + '</div>' +
       '<h2>' + _esc(content.title) + '</h2>' +
       '<div class="onboarding-body">' + content.body + '</div>' +
       '<div class="onboarding-progress">' + dots + '</div>' +
       (!isLast
-        ? '<button type="button" class="onboarding-btn" onclick="window.nextOnboardingStep()">' + _esc(_tr('Continue')) + '</button>'
-        : '<button type="button" class="iq-text-btn" style="margin-top:8px;" onclick="window.completeOnboarding()">' + _esc(_tr('Begin')) + ' &rsaquo;</button>') +
+        ? '<button type="button" class="onboarding-btn" style="width:100%;" onclick="window.nextOnboardingStep()">' + _esc(_tr('Continue')) + '</button>'
+        : '<button type="button" class="iq-btn-secondary" style="width:100%;margin-top:8px;" onclick="window.completeOnboarding()">' + _esc(_tr('Begin')) + ' <span class="iq-mirror-icon">&rsaquo;</span></button>') +
     '</div>';
     ov.style.display = 'flex';
   }
@@ -179,7 +179,7 @@
       S.onboarding.complete = true;
       if (typeof saveState === 'function') saveState();
     }
-    if (typeof toast === 'function') toast(iqIcon('sparkles'), 'Assalamu Alaikum! Welcome to Ibadah Quest.', false, 2400);
+    if (typeof toast === 'function') toast(iqIcon('sparkles'), _tr('Assalamu Alaikum! Welcome to Ibadah Quest.'), false, 2400);
     if (typeof document !== 'undefined') {
       const ov = document.getElementById('onboardingOverlay');
       if (ov) { ov.style.display = 'none'; ov.innerHTML = ''; }

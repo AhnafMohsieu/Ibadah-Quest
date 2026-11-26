@@ -68,13 +68,28 @@
     return { canvas, ctx, w, h };
   }
 
+  function _isRtl() {
+    return typeof document !== 'undefined' && document.documentElement && document.documentElement.dir === 'rtl';
+  }
+  function _ct(s) {
+    return (typeof window !== 'undefined' && typeof window.t === 'function') ? window.t(s) : s;
+  }
+  function _cn(v) {
+    return (typeof window !== 'undefined' && typeof window.iqFormatNum === 'function') ? window.iqFormatNum(v) : String(v);
+  }
+
   function drawTitle(ctx, title, w) {
     if (!title) return 10;
     ctx.fillStyle = COLORS.primary;
-    ctx.font = '600 13px "Hind Siliguri", system-ui, sans-serif';
-    ctx.textAlign = 'left';
+    ctx.font = '700 13px "Hind Siliguri", system-ui, sans-serif';
     ctx.textBaseline = 'top';
-    ctx.fillText(title, 12, 8, w - 24);
+    if (_isRtl()) {
+      ctx.textAlign = 'right';
+      ctx.fillText(_ct(title), w - 12, 8, w - 24);
+    } else {
+      ctx.textAlign = 'left';
+      ctx.fillText(_ct(title), 12, 8, w - 24);
+    }
     return 30;
   }
 
@@ -100,11 +115,11 @@
       ctx.lineTo(padL + pw, y);
       ctx.stroke();
       ctx.fillStyle = COLORS.text;
-      ctx.font = '10px system-ui, sans-serif';
+      ctx.font = '11px "Hind Siliguri", system-ui, sans-serif';
       ctx.textAlign = 'right';
       ctx.textBaseline = 'middle';
       const val = Math.round(maxV * (1 - i / 3));
-      ctx.fillText(String(val), padL - 6, y);
+      ctx.fillText(_cn(val), padL - 6, y);
     }
 
     (datasets || []).forEach((ds, di) => {
@@ -131,14 +146,14 @@
 
     if (labels && labels.length) {
       ctx.fillStyle = COLORS.text;
-      ctx.font = '10px system-ui, sans-serif';
+      ctx.font = '11px "Hind Siliguri", system-ui, sans-serif';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'top';
       const step = Math.max(1, Math.ceil(labels.length / 6));
       labels.forEach((lbl, idx) => {
         if (idx % step !== 0 && idx !== labels.length - 1) return;
         const x = labels.length === 1 ? padL + pw / 2 : padL + (idx / (labels.length - 1)) * pw;
-        ctx.fillText(String(lbl), x, top + ph + 6);
+        ctx.fillText(_cn(String(lbl)), x, top + ph + 6);
       });
     }
 
@@ -175,10 +190,10 @@
       ctx.fillRect(x, y, barW, Math.max(2, bh));
       if (labels && labels[i]) {
         ctx.fillStyle = COLORS.text;
-        ctx.font = '10px system-ui, sans-serif';
+        ctx.font = '11px "Hind Siliguri", system-ui, sans-serif';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'top';
-        ctx.fillText(String(labels[i]).slice(0, 6), x + barW / 2, top + ph + 6);
+        ctx.fillText(_cn(String(labels[i])).slice(0, 8), x + barW / 2, top + ph + 6);
       }
     });
 
@@ -191,8 +206,9 @@
     const env = setupCanvas(canvasId);
     if (!env) return null;
     const { ctx, w, h } = env;
+    const rtl = _isRtl();
     const top = drawTitle(ctx, title, w);
-    const padL = 78, padR = 24, padB = 10;
+    const padL = rtl ? 20 : 88, padR = rtl ? 94 : 24, padB = 10;
     const pw = Math.max(40, w - padL - padR);
     const ph = Math.max(40, h - top - padB);
     const vals = (data || []).map(v => Number(v) || 0);
@@ -202,15 +218,23 @@
     const barH = Math.max(6, Math.min(18, rowH * 0.58));
 
     vals.forEach((v, i) => {
-      const bw = (v / maxV) * pw;
+      const bw = Math.max(2, (v / maxV) * pw);
       const y = top + i * rowH + (rowH - barH) / 2;
+      const lbl = _ct(String((labels && labels[i]) || '')).slice(0, 14);
       ctx.fillStyle = COLORS.text;
-      ctx.font = '11px system-ui, sans-serif';
-      ctx.textAlign = 'right';
+      ctx.font = '11px "Hind Siliguri", system-ui, sans-serif';
       ctx.textBaseline = 'middle';
-      ctx.fillText(String((labels && labels[i]) || '').slice(0, 12), padL - 8, y + barH / 2);
-      ctx.fillStyle = color || COLORS.primary;
-      ctx.fillRect(padL, y, Math.max(2, bw), barH);
+      if (rtl) {
+        ctx.textAlign = 'right';
+        ctx.fillText(lbl, w - 8, y + barH / 2, padR - 14);
+        ctx.fillStyle = color || COLORS.primary;
+        ctx.fillRect(w - padR - bw, y, bw, barH);
+      } else {
+        ctx.textAlign = 'right';
+        ctx.fillText(lbl, padL - 8, y + barH / 2, padL - 12);
+        ctx.fillStyle = color || COLORS.primary;
+        ctx.fillRect(padL, y, bw, barH);
+      }
     });
 
     instances[canvasId] = { type: 'hbar', labels, data };
@@ -222,12 +246,13 @@
     const env = setupCanvas(canvasId);
     if (!env) return null;
     const { ctx, w, h } = env;
+    const rtl = _isRtl();
     const top = drawTitle(ctx, title, w);
     const vals = (data || []).map(v => Math.max(0, Number(v) || 0));
     const sum = vals.reduce((a, b) => a + b, 0) || 1;
-    const cx = Math.min(w * 0.34, 90);
+    const cx = rtl ? (w - Math.min(w * 0.34, 90)) : Math.min(w * 0.34, 90);
     const cy = top + (h - top) / 2;
-    const r = Math.max(24, Math.min(cx - 12, (h - top) * 0.38));
+    const r = Math.max(24, Math.min(Math.min(cx, w - cx) - 12, (h - top) * 0.38));
 
     let angle = -Math.PI / 2;
     const pal = colors && colors.length ? colors : [COLORS.primary, COLORS.light, COLORS.secondary, COLORS.grid];
@@ -241,16 +266,26 @@
       angle += slice;
     });
 
-    const legX = cx + r + 16;
-    ctx.font = '11px system-ui, sans-serif';
-    ctx.textAlign = 'left';
+    ctx.font = '11px "Hind Siliguri", system-ui, sans-serif';
     ctx.textBaseline = 'middle';
     (labels || []).slice(0, 5).forEach((lbl, idx) => {
       const y = top + 16 + idx * 20;
-      ctx.fillStyle = pal[idx % pal.length];
-      ctx.fillRect(legX, y - 5, 10, 10);
-      ctx.fillStyle = COLORS.text;
-      ctx.fillText(String(lbl) + ' (' + (vals[idx] || 0) + ')', legX + 16, y, w - legX - 20);
+      const legText = _ct(String(lbl)) + ' (' + _cn(vals[idx] || 0) + ')';
+      if (rtl) {
+        const boxX = cx - r - 24;
+        ctx.fillStyle = pal[idx % pal.length];
+        ctx.fillRect(boxX, y - 5, 10, 10);
+        ctx.fillStyle = COLORS.text;
+        ctx.textAlign = 'right';
+        ctx.fillText(legText, boxX - 6, y, Math.max(40, boxX - 18));
+      } else {
+        const legX = cx + r + 16;
+        ctx.fillStyle = pal[idx % pal.length];
+        ctx.fillRect(legX, y - 5, 10, 10);
+        ctx.fillStyle = COLORS.text;
+        ctx.textAlign = 'left';
+        ctx.fillText(legText, legX + 16, y, Math.max(40, w - legX - 20));
+      }
     });
 
     instances[canvasId] = { type: 'doughnut', labels, data };
@@ -327,17 +362,21 @@
     };
 
     ctx.fillStyle = COLORS.text;
-    ctx.font = '10px sans-serif';
-    ctx.textAlign = 'right';
+    ctx.font = '11px "Hind Siliguri", system-ui, sans-serif';
+    ctx.textAlign = _isRtl() ? 'left' : 'right';
     ctx.textBaseline = 'middle';
+    const dayOffsetX = _isRtl() ? (totalWidth - labelWidth + 6) : (labelWidth - 6);
+    const cellOffsetX = _isRtl() ? 16 : labelWidth;
     [1, 3, 5].forEach(i => {
-      ctx.fillText(['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'][i], labelWidth - 6, topPadding + i * (cellSize + cellGap) + cellSize / 2);
+      const dayLbl = _ct(['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'][i]);
+      ctx.fillText(dayLbl, dayOffsetX, topPadding + i * (cellSize + cellGap) + cellSize / 2);
     });
 
     weeks.forEach((week, wi) => {
+      const colIdx = _isRtl() ? (weeks.length - 1 - wi) : wi;
       week.forEach((day, di) => {
         if (!day) return;
-        const x = labelWidth + wi * (cellSize + cellGap);
+        const x = cellOffsetX + colIdx * (cellSize + cellGap);
         const y = topPadding + di * (cellSize + cellGap);
         ctx.fillStyle = getColor(day.value);
         ctx.beginPath();
@@ -348,21 +387,22 @@
       });
     });
 
-    canvas.title = title || '';
+    canvas.title = _ct(title || '');
     canvas.onmousemove = (e) => {
       const rect = canvas.getBoundingClientRect();
       const mx = e.clientX - rect.left;
       const my = e.clientY - rect.top;
       let found = null;
       weeks.forEach((week, wi) => {
+        const colIdx = _isRtl() ? (weeks.length - 1 - wi) : wi;
         week.forEach((day, di) => {
           if (!day || !day.date) return;
-          const x = labelWidth + wi * (cellSize + cellGap);
+          const x = cellOffsetX + colIdx * (cellSize + cellGap);
           const y = topPadding + di * (cellSize + cellGap);
           if (mx >= x && mx <= x + cellSize && my >= y && my <= y + cellSize) found = day;
         });
       });
-      canvas.title = found && found.date ? `${found.date}: ${found.value} prayers` : '';
+      canvas.title = found && found.date ? `${found.date}: ${_cn(found.value)} ${_ct('prayers')}` : '';
     };
 
     instances[canvasId] = { weeks };

@@ -308,8 +308,8 @@
           id: 'dhikr',
           tone: 'teal',
           icon: 'beads',
-          title: 'Dhikr Counter',
-          sub: summary.dhikrToday + ' of ' + summary.dhikrGoal + ' daily tasbih',
+          title: tLabel('Dhikr Counter'),
+          sub: fmtNum(summary.dhikrToday) + ' / ' + fmtNum(summary.dhikrGoal) + ' ' + tLabel('today'),
           pct: summary.dhikrPct,
           onclick: "window.openChallengeDetail('dhikr')"
         },
@@ -317,8 +317,8 @@
           id: 'quran',
           tone: 'gold',
           icon: 'book-open',
-          title: 'Quran Reading Goal',
-          sub: summary.quranToday + ' / ' + summary.quranGoal + ' min read today',
+          title: tLabel('Quran Reading Goal'),
+          sub: fmtNum(summary.quranToday) + ' / ' + fmtNum(summary.quranGoal) + ' ' + tLabel('min read today'),
           pct: summary.quranPct,
           onclick: "App.activateTab('quran')"
         },
@@ -326,8 +326,8 @@
           id: 'masjid',
           tone: 'mint',
           icon: 'mosque',
-          title: 'Masjid Check-ins',
-          sub: summary.masjidToday > 0 ? (summary.masjidToday + ' visit(s) today · ' + summary.masjidTotal + ' total') : (summary.masjidTotal + ' total masjid visit(s)'),
+          title: tLabel('Masjid Check-ins'),
+          sub: summary.masjidToday > 0 ? (fmtNum(summary.masjidToday) + ' ' + tLabel('today') + ' · ' + fmtNum(summary.masjidTotal) + ' ' + tLabel('total')) : (fmtNum(summary.masjidTotal) + ' ' + tLabel('total masjid visits')),
           pct: null,
           onclick: "window.openMasjidCheckins('map')"
         },
@@ -335,8 +335,8 @@
           id: 'quests',
           tone: 'cyan',
           icon: 'scroll',
-          title: 'Daily Quests',
-          sub: summary.questsDone + ' / ' + summary.questsTotal + ' quests complete',
+          title: tLabel('Daily Quests'),
+          sub: fmtNum(summary.questsDone) + ' / ' + fmtNum(summary.questsTotal) + ' ' + tLabel('completed'),
           pct: summary.questsPct,
           onclick: "App.activateTab('quests')"
         },
@@ -344,8 +344,8 @@
           id: 'vol',
           tone: 'teal',
           icon: 'moon',
-          title: 'Voluntary Prayers',
-          sub: summary.volDone + ' / ' + summary.volTotal + ' logged today',
+          title: tLabel('Voluntary Prayers'),
+          sub: fmtNum(summary.volDone) + ' / ' + fmtNum(summary.volTotal) + ' ' + tLabel('today'),
           pct: null,
           onclick: "window.openChallengeDetail('vol')"
         },
@@ -353,8 +353,8 @@
           id: 'deeds',
           tone: 'gold',
           icon: 'sparkles',
-          title: 'Extra Good Deeds',
-          sub: summary.deedsDone + ' / ' + summary.deedsTotal + ' completed today',
+          title: tLabel('Extra Good Deeds'),
+          sub: fmtNum(summary.deedsDone) + ' / ' + fmtNum(summary.deedsTotal) + ' ' + tLabel('completed'),
           pct: null,
           onclick: "window.openChallengeDetail('deeds')"
         }
@@ -362,14 +362,14 @@
 
       feedEl.innerHTML =
         '<div class="iq-feed-head">' +
-          '<span>Daily challenges</span>' +
-          '<button type="button" class="iq-text-btn" onclick="window.openChallengeDetail(\'dhikr\')">Show All</button>' +
+          '<span>' + esc(tLabel('Daily challenges')) + '</span>' +
+          '<button type="button" class="iq-text-btn" onclick="window.openChallengeDetail(\'dhikr\')">' + esc(tLabel('Show All')) + '</button>' +
         '</div>' +
         '<div class="iq-feed-list">' +
         cards.map(function(c) {
           var right = c.pct !== null
-            ? '<div class="iq-ch-progress-col"><div class="iq-mini-bar"><span style="width:' + c.pct + '%"></span></div><span class="iq-pct-label">' + c.pct + '%</span></div>'
-            : '<span class="iq-chevron">&rsaquo;</span>';
+            ? '<div class="iq-ch-progress-col"><div class="iq-mini-bar"><span style="width:' + c.pct + '%"></span></div><span class="iq-pct-label iq-tabular">' + fmtNum(c.pct) + '%</span></div>'
+            : '<span class="iq-chevron iq-mirror-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>';
           return '<div class="iq-challenge-card" role="button" tabindex="0" onclick="' + c.onclick + '">' +
             '<div class="iq-ch-icon ' + c.tone + '">' + icon(c.icon) + '</div>' +
             '<div class="iq-ch-body">' +
@@ -425,6 +425,10 @@
       closeChallengeDetail();
       window.activateTab('quests');
       return;
+    } else if (type === 'charity' && typeof window.activateTab === 'function') {
+      closeChallengeDetail();
+      window.activateTab('charity');
+      return;
     } else if (type === 'masjid' && typeof window.openMasjidCheckins === 'function') {
       window.openMasjidCheckins('map');
       return;
@@ -454,16 +458,16 @@
       ? PRAYERS
       : [{ id: 'fajr', name: 'Fajr' }, { id: 'dhuhr', name: 'Dhuhr' }, { id: 'asr', name: 'Asr' }, { id: 'maghrib', name: 'Maghrib' }, { id: 'isha', name: 'Isha' }];
 
-    var focusTitle = 'Daily Concentric Telemetry';
-    if (focusId === 'prayers') focusTitle = 'Prayers: ' + summary.prayersDone + '/' + summary.prayersTotal;
-    else if (focusId === 'vol') focusTitle = 'Voluntary: ' + summary.volDone + ' logged';
-    else if (focusId === 'deeds') focusTitle = 'Deeds: ' + summary.deedsDone + ' completed';
-    else focusTitle = 'Dhikr: ' + summary.dhikrToday + '/' + summary.dhikrGoal;
+    var focusTitle = tLabel('Daily Concentric Telemetry');
+    if (focusId === 'prayers') focusTitle = tLabel('Prayers') + ': ' + fmtNum(summary.prayersDone) + '/' + fmtNum(summary.prayersTotal);
+    else if (focusId === 'vol') focusTitle = tLabel('Voluntary') + ': ' + fmtNum(summary.volDone) + ' ' + tLabel('logged');
+    else if (focusId === 'deeds') focusTitle = tLabel('Deeds') + ': ' + fmtNum(summary.deedsDone) + ' ' + tLabel('completed');
+    else focusTitle = tLabel('Dhikr') + ': ' + fmtNum(summary.dhikrToday) + '/' + fmtNum(summary.dhikrGoal);
 
     var timerBannerHtml = nextP
       ? '<div class="iq-notif-card" style="display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px;">' +
-          '<div><div class="iq-ch-title">Next Prayer: ' + esc(nextP.name) + '</div><div class="iq-ch-sub iq-tabular">' + esc(nextP.timeLabel) + ' &middot; ' + esc(nextP.shortRemaining) + '</div></div>' +
-          '<button type="button" class="iq-pill-btn" onclick="window.quickChallengeAction(\'timer\')">Times</button>' +
+          '<div><div class="iq-ch-title">' + esc(tLabel('Next Prayer:')) + ' ' + esc(tLabel(nextP.name)) + '</div><div class="iq-ch-sub iq-tabular"><bdi dir="ltr">' + esc(nextP.timeLabel) + '</bdi> &middot; ' + esc(nextP.shortRemaining) + '</div></div>' +
+          '<button type="button" class="iq-pill-btn" onclick="window.quickChallengeAction(\'timer\')">' + esc(tLabel('Times')) + '</button>' +
         '</div>'
       : '';
 
@@ -474,27 +478,29 @@
         var done = !!raw;
         var isQada = raw === 'qada';
         return '<button type="button" class="iq-sheet-prayer-btn' + (done ? ' done' : '') + (isQada ? ' qada' : '') + '" onclick="window.quickToggleSheetPrayer(\'' + esc(pr.id) + '\')">' +
-          (done ? (isQada ? '&#8634; ' : '&#10003; ') : '') + esc(nm) +
+          (done ? (isQada ? '&#8634; ' : '&#10003; ') : '') + esc(tLabel(nm)) +
         '</button>';
       }).join('') +
       '</div>';
 
     var rows = [
-      { title: 'Dhikr Tap (+1)', sub: summary.dhikrToday + ' / ' + summary.dhikrGoal + ' completed', btn: 'Progress', act: 'dhikr1', icon: 'beads' },
-      { title: 'Tasbih Cycle (+33)', sub: 'Complete a full 33-count dhikr set', btn: 'Start', act: 'dhikr33', icon: 'sparkles' },
-      { title: 'Quran Session (+5m)', sub: summary.quranToday + ' / ' + summary.quranGoal + ' min logged today', btn: '+5m Read', act: 'quran5', icon: 'book-open' },
-      { title: 'Quran Reader', sub: 'Read by Surah or Juz with audio', btn: 'Open', act: 'quran', icon: 'book-open' },
-      { title: 'Masjid Check-ins', sub: summary.masjidTotal + ' visit(s) logged', btn: 'Map', act: 'masjid', icon: 'mosque' },
-      { title: 'Voluntary & Deeds', sub: (summary.volDone + summary.deedsDone) + ' completed today', btn: 'Show All', act: 'vol', icon: 'heart' }
+      { title: tLabel('Dhikr Tap') + ' (+1)', sub: fmtNum(summary.dhikrToday) + ' / ' + fmtNum(summary.dhikrGoal) + ' ' + tLabel('completed'), btn: tLabel('Progress'), act: 'dhikr1', icon: 'beads' },
+      { title: tLabel('Tasbih Cycle') + ' (+33)', sub: tLabel('Complete a full 33-count dhikr set'), btn: tLabel('Start'), act: 'dhikr33', icon: 'sparkles' },
+      { title: tLabel('Quran Session') + ' (+5m)', sub: fmtNum(summary.quranToday) + ' / ' + fmtNum(summary.quranGoal) + ' ' + tLabel('min logged today'), btn: '+5m ' + tLabel('Read'), act: 'quran5', icon: 'book-open' },
+      { title: tLabel('Quran Reader'), sub: tLabel('Read by Surah or Juz with audio'), btn: tLabel('Open'), act: 'quran', icon: 'book-open' },
+      { title: tLabel('Daily Quests'), sub: fmtNum(summary.questsDone) + ' / ' + fmtNum(summary.questsTotal) + ' ' + tLabel('completed'), btn: tLabel('Open'), act: 'quests', icon: 'scroll' },
+      { title: tLabel('Sadaqah & Charity'), sub: tLabel('Log a charity or sadaqah act'), btn: tLabel('Log'), act: 'charity', icon: 'heart' },
+      { title: tLabel('Masjid Check-ins'), sub: fmtNum(summary.masjidTotal) + ' ' + tLabel('visits logged'), btn: tLabel('Map'), act: 'masjid', icon: 'mosque' },
+      { title: tLabel('Voluntary & Deeds'), sub: fmtNum(summary.volDone + summary.deedsDone) + ' ' + tLabel('completed today'), btn: tLabel('Show All'), act: 'vol', icon: 'sun' }
     ];
 
     var goalsEditorHtml = '<div class="iq-goal-editor">' +
-      '<div class="iq-ch-title">Daily Goal Targets</div>' +
+      '<div class="iq-ch-title">' + esc(tLabel('Daily Goal Targets')) + '</div>' +
       '<div class="iq-goal-editor-grid">' +
-        '<div class="iq-goal-field"><label for="iqGoalDhikrInput">Daily Dhikr Target</label><input id="iqGoalDhikrInput" type="number" min="33" max="5000" value="' + esc(summary.dhikrGoal) + '"></div>' +
-        '<div class="iq-goal-field"><label for="iqGoalQuranInput">Daily Quran (min)</label><input id="iqGoalQuranInput" type="number" min="5" max="180" value="' + esc(summary.quranGoal) + '"></div>' +
+        '<div class="iq-goal-field"><label for="iqGoalDhikrInput">' + esc(tLabel('Daily Dhikr Target')) + '</label><input id="iqGoalDhikrInput" type="number" min="33" max="5000" value="' + esc(summary.dhikrGoal) + '"></div>' +
+        '<div class="iq-goal-field"><label for="iqGoalQuranInput">' + esc(tLabel('Daily Quran (min)')) + '</label><input id="iqGoalQuranInput" type="number" min="5" max="180" value="' + esc(summary.quranGoal) + '"></div>' +
       '</div>' +
-      '<button type="button" class="iq-gold-btn" onclick="window.saveGoalTargetsForm()">Save Daily Targets</button>' +
+      '<button type="button" class="iq-gold-btn" onclick="window.saveGoalTargetsForm()">' + esc(tLabel('Save Daily Targets')) + '</button>' +
     '</div>';
 
     bodyEl.innerHTML =
@@ -504,17 +510,17 @@
           renderFocusRingSvg(summary, 108) +
           '<div class="iq-ring-legend">' +
             '<span class="iq-ch-sub" style="font-weight:700;color:var(--text);">' + esc(focusTitle) + '</span>' +
-            '<span class="iq-ch-sub iq-tabular">Prayers ' + summary.prayersPct + '% &middot; Dhikr ' + summary.dhikrPct + '% &middot; Quran ' + summary.quranPct + '%</span>' +
+            '<span class="iq-ch-sub iq-tabular">' + esc(tLabel('Prayers')) + ' ' + fmtNum(summary.prayersPct) + '% &middot; ' + esc(tLabel('Dhikr')) + ' ' + fmtNum(summary.dhikrPct) + '% &middot; ' + esc(tLabel('Quran')) + ' ' + fmtNum(summary.quranPct) + '%</span>' +
           '</div>' +
         '</div>' +
         '<div class="iq-timer-box">' +
-          '<div class="iq-timer-val" id="iqChallengeStopwatch">' + formatStopwatch(_stopwatchSec) + '</div>' +
-          '<div class="iq-timer-sub">Focus Session</div>' +
-          '<button type="button" id="iqStopwatchBtn" class="iq-pill-btn" onclick="window.toggleChallengeStopwatch()">' + (_stopwatchRunning ? 'Pause' : 'Start') + '</button>' +
+          '<div class="iq-timer-val iq-tabular" id="iqChallengeStopwatch"><bdi dir="ltr">' + formatStopwatch(_stopwatchSec) + '</bdi></div>' +
+          '<div class="iq-timer-sub">' + esc(tLabel('Focus Session')) + '</div>' +
+          '<button type="button" id="iqStopwatchBtn" class="iq-pill-btn" onclick="window.toggleChallengeStopwatch()">' + esc(tLabel(_stopwatchRunning ? 'Pause' : 'Start')) + '</button>' +
         '</div>' +
       '</div>' +
       prayerRowHtml +
-      '<div class="iq-feed-head"><span>Daily challenges</span><span>' + summary.overallPct + '% overall</span></div>' +
+      '<div class="iq-feed-head"><span>' + esc(tLabel('Daily challenges')) + '</span><span class="iq-tabular">' + fmtNum(summary.overallPct) + '% ' + esc(tLabel('overall')) + '</span></div>' +
       '<div class="iq-feed-list">' +
       rows.map(function(r) {
         return '<div class="iq-challenge-card">' +
@@ -824,18 +830,18 @@
     var enabled = !!s.notificationsEnabled;
     el.innerHTML =
       '<div class="iq-notif-card">' +
-        '<div class="iq-ch-title">Daily Bonus XP</div>' +
-        '<div class="iq-ch-sub">' + (bonusClaimed ? 'Already claimed today — Alhamdulillah!' : 'Your daily streak bonus is ready to claim.') + '</div>' +
-        (!bonusClaimed ? '<button type="button" class="iq-pill-btn" style="margin-top:8px;" onclick="App.claimBonus();window.renderNotifDrawerBody();">Claim Bonus</button>' : '') +
+        '<div class="iq-ch-title">' + esc(tLabel('Daily Bonus XP')) + '</div>' +
+        '<div class="iq-ch-sub">' + esc(tLabel(bonusClaimed ? 'Already claimed today — Alhamdulillah!' : 'Your daily streak bonus is ready to claim.')) + '</div>' +
+        (!bonusClaimed ? '<button type="button" class="iq-pill-btn" style="margin-top:8px;" onclick="App.claimBonus();window.renderNotifDrawerBody();">' + esc(tLabel('Claim Bonus')) + '</button>' : '') +
       '</div>' +
       '<div class="iq-notif-card">' +
-        '<div class="iq-ch-title">Daily Worship Status</div>' +
-        '<div class="iq-ch-sub">Prayers: ' + summary.prayersDone + '/' + summary.prayersTotal + ' · Dhikr: ' + summary.dhikrToday + '/' + summary.dhikrGoal + '</div>' +
+        '<div class="iq-ch-title">' + esc(tLabel('Daily Worship Status')) + '</div>' +
+        '<div class="iq-ch-sub iq-tabular">' + esc(tLabel('Prayers')) + ': ' + fmtNum(summary.prayersDone) + '/' + fmtNum(summary.prayersTotal) + ' &middot; ' + esc(tLabel('Dhikr')) + ': ' + fmtNum(summary.dhikrToday) + '/' + fmtNum(summary.dhikrGoal) + '</div>' +
       '</div>' +
       '<div class="iq-notif-card">' +
-        '<div class="iq-ch-title">Browser Reminders</div>' +
-        '<div class="iq-ch-sub">' + (enabled ? 'Prayer & streak reminders active.' : 'Enable push reminders for prayer streaks.') + '</div>' +
-        '<button type="button" class="iq-pill-btn" style="margin-top:8px;" onclick="App.toggleNotifications();setTimeout(window.renderNotifDrawerBody,200);">' + (enabled ? 'Disable' : 'Enable') + '</button>' +
+        '<div class="iq-ch-title">' + esc(tLabel('Browser Reminders')) + '</div>' +
+        '<div class="iq-ch-sub">' + esc(tLabel(enabled ? 'Prayer & streak reminders active.' : 'Enable push reminders for prayer streaks.')) + '</div>' +
+        '<button type="button" class="iq-pill-btn" style="margin-top:8px;" onclick="App.toggleNotifications();setTimeout(window.renderNotifDrawerBody,200);">' + esc(tLabel(enabled ? 'Disable' : 'Enable')) + '</button>' +
       '</div>';
   }
 

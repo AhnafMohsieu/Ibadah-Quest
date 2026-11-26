@@ -80,23 +80,25 @@
         if (el) el.innerHTML = '';
         return;
       }
+      const _gt = (s) => (typeof window !== 'undefined' && typeof window.t === 'function') ? window.t(s) : s;
+      const _gn = (v) => (typeof window !== 'undefined' && typeof window.iqFormatNum === 'function') ? window.iqFormatNum(v) : String(v);
       const streak = Math.max(S.cs || 0, S.bs || 0);
       const g = gardenStage(S.xp || 0, streak);
       const flowers = g.stage >= 6 ? flowerCount(streak) : 0;
       const scale = (1 + 0.12 * g.xpPct).toFixed(3);
       const pctFill = Math.round(g.xpPct * 100);
       const progress = g.xpForNext
-        ? `${S.xp}/${g.xpForNext} XP`
-        : 'Max stage reached — keep nourishing it.';
+        ? `${_gn(S.xp)} / ${_gn(g.xpForNext)} XP`
+        : _gt('Max stage reached — keep nourishing it.');
       const key = g.stage + ':' + flowers;
       if (lastTree !== key) {
         el.innerHTML = `<div class="garden-card">
           <div class="garden-tree" style="transform:scale(${scale})">${treeSVG(g.stage, flowers)}</div>
           <div class="garden-info">
-            <div class="garden-stage-name">${iqIcon(g.icon || g.name)} ${g.name} <span class="garden-stage-num">Stage ${g.stage}/7</span></div>
-            <div class="garden-progress">${progress}</div>
+            <div class="garden-stage-name">${iqIcon(g.icon || g.name)} ${_gt(g.name)} <span class="garden-stage-num iq-tabular">${_gt('Stage')} ${_gn(g.stage)}/${_gn(7)}</span></div>
+            <div class="garden-progress iq-tabular">${progress}</div>
             <div class="garden-progress-bar"><div class="garden-progress-fill" style="width:${pctFill}%"></div></div>
-            <div class="garden-caption">${caption()}</div>
+            <div class="garden-caption">${_gt(caption())}</div>
           </div>
         </div>`;
         lastTree = key;
@@ -107,7 +109,7 @@
       el.querySelector('.garden-progress').textContent = progress;
       const fill = el.querySelector('.garden-progress-fill');
       if (fill) fill.style.width = pctFill + '%';
-      el.querySelector('.garden-caption').textContent = caption();
+      el.querySelector('.garden-caption').textContent = _gt(caption());
     } catch (e) { console.warn('Render Garden failed:', e.message); }
   }
   window.gardenStage = gardenStage;

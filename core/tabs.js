@@ -71,31 +71,33 @@
           sph.style.display = 'none';
         } else {
           sph.style.display = 'flex';
+          var tFn = typeof window.t === 'function' ? window.t : function(s){ return s; };
+          var subLabelTx = subGroupLabel ? tFn(subGroupLabel) : '';
           var headerMap = {
             ibadah: {
               icon: window.iqIcon('sun') || '🌅',
-              title: subGroupLabel ? ('Daily › ' + subGroupLabel) : 'Daily Ibadah & Adhkar',
-              desc: 'Habit tracking, morning & evening remembrance, and prophetic devotions'
+              title: subLabelTx ? (tFn('Daily') + ' › ' + subLabelTx) : tFn('Daily Ibadah & Adhkar'),
+              desc: tFn('Habit tracking, morning & evening remembrance, and prophetic devotions')
             },
             knowledge: {
               icon: window.iqIcon('book-open') || '📖',
-              title: subGroupLabel ? ('Knowledge › ' + subGroupLabel) : 'Islamic Knowledge',
-              desc: "Qur'an, Hadith, Fiqh rulings, character & prophetic wisdom"
+              title: subLabelTx ? (tFn('Knowledge') + ' › ' + subLabelTx) : tFn('Islamic Knowledge'),
+              desc: tFn("Qur'an, Hadith, Fiqh rulings, character & prophetic wisdom")
             },
             names_main: {
               icon: window.iqIcon('star') || '🌟',
-              title: '99 Names & Blessed Figures',
-              desc: 'Asma-ul-Husna, Prophets, Sahabah, and righteous classical scholars'
+              title: tFn('99 Names & Blessed Figures'),
+              desc: tFn('Asma-ul-Husna, Prophets, Sahabah, and righteous classical scholars')
             },
             library: {
               icon: window.iqIcon('landmark') || '📚',
-              title: subGroupLabel ? ('Library › ' + subGroupLabel) : 'Islamic Library',
-              desc: 'Dynasties, sacred cities, Islamic architecture, arts & Arabic language'
+              title: subLabelTx ? (tFn('Library') + ' › ' + subLabelTx) : tFn('Islamic Library'),
+              desc: tFn('Dynasties, sacred cities, Islamic architecture, arts & Arabic language')
             },
             profile_main: {
               icon: window.iqIcon('user') || '👤',
-              title: 'Account & Progress',
-              desc: 'Spiritual streaks, achievements, trophies & personal progress'
+              title: tFn('Account & Progress'),
+              desc: tFn('Spiritual streaks, achievements, trophies & personal progress')
             }
           };
           var cfg = headerMap[catId] || headerMap.ibadah;

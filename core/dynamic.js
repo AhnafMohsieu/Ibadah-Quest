@@ -47,6 +47,21 @@
   // DYNAMIC CONTENT RENDERING
   // -------------------------------------------------------
   const safe = (fn, name) => { try { fn(); } catch(e) { console.warn('Static ' + name + ' failed:', e.message); } };
+  function _escD(s) {
+    return (typeof window !== 'undefined' && typeof window.escapeHTML === 'function')
+      ? window.escapeHTML(s)
+      : String(s == null ? '' : s);
+  }
+  function _fmtN(v) {
+    return (typeof window.iqFormatNum === 'function') ? window.iqFormatNum(v) : String(v == null ? '' : v);
+  }
+  function _tr(k, fallback) {
+    if (typeof window.t === 'function') {
+      const out = window.t(k);
+      if (out && out !== k) return out;
+    }
+    return fallback || k;
+  }
 
   // Static renderers grouped by tab ID
   // Only the active tab's renderer fires on boot; _lazyRender in activateTab handles the rest.
@@ -292,7 +307,7 @@ function renderAll() {
   }
   function renderBonus() {
     const el = document.getElementById('bonusArea');
-    if (el) el.innerHTML = S.lbd === today() ? '' : '<div class="daily-bonus" onclick="App.claimBonus()">' + window.escapeHTML(_tr('Tap to claim your Daily Bonus!', 'Tap to claim your Daily Bonus!')) + '</div>';
+    if (el) el.innerHTML = S.lbd === today() ? '' : '<div class="daily-bonus" onclick="App.claimBonus()">' + _escD(_tr('Tap to claim your Daily Bonus!', 'Tap to claim your Daily Bonus!')) + '</div>';
   }
 
   // ── Quests ──
@@ -306,7 +321,7 @@ function renderAll() {
       const completed = quests.filter(q => q.done).length;
       const openAttr = isOpen ? ' open' : '';
       
-      let html = `<details class="cat-details"${openAttr}><summary><div style="display:flex;justify-content:space-between;align-items:center;flex:1;"><span>${title}</span><span style="font-size:0.75rem;background:rgba(201,168,76,0.15);padding:3px 10px;border-radius:12px;color:var(--accent-light);font-weight:700;">${completed} / ${total}</span></div></summary><div style="padding:0 12px 12px;display:flex;flex-direction:column;gap:8px;margin-top:8px;">`;
+      let html = `<details class="cat-details"${openAttr}><summary><div style="display:flex;justify-content:space-between;align-items:center;flex:1;"><span>${title}</span><span class="iq-num-pill iq-tabular">${_fmtN(completed)} / ${_fmtN(total)}</span></div></summary><div style="padding:0 12px 12px;display:flex;flex-direction:column;gap:8px;margin-top:8px;">`;
       html += quests.map(q => {
         const d = q.done;
         let icon = iqIcon('target');
@@ -322,19 +337,19 @@ function renderAll() {
         
         return `<div class="vol-card${d?' done':''}" tabindex="0" role="button" onclick="App.toggleQuest('${q.id}','${type}',${q.xp})" style="cursor:pointer;width:100%;box-sizing:border-box;">
           <div class="prayer-check">${d?iqIcon('check'):icon}</div>
-          <div class="prayer-info"><div class="prayer-name">${q.d}</div></div>
-          <div class="prayer-xp">+${q.xp} XP</div>
+          <div class="prayer-info"><div class="prayer-name">${_escD(_tr(q.d, q.d))}</div></div>
+          <div class="prayer-xp iq-tabular">+${_fmtN(q.xp)} XP</div>
         </div>`;
       }).join('');
       return html + '</div></details>';
     };
 
-    let h = renderQuestGroup(iqIcon('clipboard') + ' Daily Quests', S.dq, 'daily', openStates[0]);
-    h += renderQuestGroup(iqIcon('calendar') + ' Weekly Quests', S.wq, 'weekly', openStates[1]);
-    h += renderQuestGroup(iqIcon('calendar-days') + ' Monthly Quests', S.mq, 'monthly', openStates[2]);
-    h += renderQuestGroup(iqIcon('calendar-check') + ' Yearly Quests', S.yq, 'yearly', openStates[3]);
-    h += renderQuestGroup(iqIcon('star') + ' Lifetime Quests', S.lq, 'lifetime', openStates[4]);
-    h += `<div style="text-align:center;margin-top:20px;color:var(--text2);">Total quests completed: <strong style="color:var(--accent)">${S.tq||0}</strong></div>`;
+    let h = renderQuestGroup(iqIcon('clipboard') + ' ' + _escD(_tr('Daily Quests', 'Daily Quests')), S.dq, 'daily', openStates[0]);
+    h += renderQuestGroup(iqIcon('calendar') + ' ' + _escD(_tr('Weekly Quests', 'Weekly Quests')), S.wq, 'weekly', openStates[1]);
+    h += renderQuestGroup(iqIcon('calendar-days') + ' ' + _escD(_tr('Monthly Quests', 'Monthly Quests')), S.mq, 'monthly', openStates[2]);
+    h += renderQuestGroup(iqIcon('calendar-check') + ' ' + _escD(_tr('Yearly Quests', 'Yearly Quests')), S.yq, 'yearly', openStates[3]);
+    h += renderQuestGroup(iqIcon('star') + ' ' + _escD(_tr('Lifetime Quests', 'Lifetime Quests')), S.lq, 'lifetime', openStates[4]);
+    h += `<div style="text-align:center;margin-top:20px;color:var(--text2);">${_escD(_tr('Total quests completed', 'Total quests completed'))}: <strong class="iq-tabular" style="color:var(--accent-dark)">${_fmtN(S.tq||0)}</strong></div>`;
     
     if(questArea) questArea.innerHTML = h;
   }
@@ -347,9 +362,9 @@ function renderAll() {
   const unlockedAchs = ACHS.filter(a => !!S.ua[a.id]);
 
   let h = '<div class="ach-header">';
-  h += `<div class="section-title">${iqIcon('trophy')} Trophy Cabinet</div>`;
+  h += `<div class="section-title">${iqIcon('trophy')} ${_escD(_tr('Trophy Cabinet', 'Trophy Cabinet'))}</div>`;
   h += `<div class="ach-progress"><span class="ach-progress-bar" style="width:${pct}%"></span></div>`;
-  h += `<div class="ach-progress-text">${cnt} / ${total} Unlocked</div>`;
+  h += `<div class="ach-progress-text iq-tabular">${_fmtN(cnt)} / ${_fmtN(total)} ${_escD(_tr('Unlocked', 'Unlocked'))}</div>`;
   h += '</div>';
 
   h += '<div class="ach-grid">';
@@ -367,7 +382,7 @@ function renderAll() {
   h += '</div>';
 
   if (cnt === 0) {
-    h += '<div class="ach-empty">No trophies yet. Start completing deeds to earn your first!</div>';
+    h += `<div class="ach-empty">${_escD(_tr('No trophies yet. Start completing deeds to earn your first!', 'No trophies yet. Start completing deeds to earn your first!'))}</div>`;
   }
 
   var aEl = document.getElementById('achArea');
@@ -384,18 +399,20 @@ function renderAll() {
     const vM = (calM == null ? now.getMonth() : calM);
     const dim = new Date(vY, vM + 1, 0).getDate();
     const fd = new Date(vY, vM, 1).getDay();
-    const gMonthName = new Date(vY, vM, 1).toLocaleString('en', { month: 'long' });
+    const loc = (typeof I18N !== 'undefined' && I18N.lang) ? I18N.lang : 'en';
+    const gMonthName = new Date(vY, vM, 1).toLocaleString(loc, { month: 'long' });
     const isCurrentMonth = calY === now.getFullYear() && calM === now.getMonth();
 
     let cal = '<div class="cal-header">';
-    cal += '<div class="cal-nav"><button onclick="App.calPrevMonth()">◀</button></div>';
+    cal += '<div class="cal-nav"><button type="button" aria-label="Previous month" onclick="App.calPrevMonth()"><span class="iq-mirror-icon">◀</span></button></div>';
     cal += '<div class="cal-header-info">';
-    cal += `<h3>${gMonthName} ${vY}</h3>`;
+    cal += `<h3>${gMonthName} ${_fmtN(vY)}</h3>`;
     const hMonth = (typeof window.HIJRI_MONTHS_AR !== 'undefined' && window.HIJRI_MONTHS_AR[window.calViewHijriM - 1]) || '';
-    cal += `<div class="cal-hijri-title">${hMonth} ${window.calViewHijriY || ''} AH</div>`;
+    cal += `<div class="cal-hijri-title">${hMonth} ${_fmtN(window.calViewHijriY || '')} ${_escD(_tr('AH', 'AH'))}</div>`;
     cal += '</div>';
-    cal += '<div class="cal-nav"><button onclick="App.calNextMonth()">▶</button>';
-    if (!isCurrentMonth) cal += ' <button class="cal-today-btn" onclick="App.calGoToday()">Today</button>';
+    cal += '<div class="cal-nav">';
+    if (!isCurrentMonth) cal += '<button type="button" class="cal-today-btn" onclick="App.calGoToday()">' + _escD(_tr('Today', 'Today')) + '</button> ';
+    cal += '<button type="button" aria-label="Next month" onclick="App.calNextMonth()"><span class="iq-mirror-icon">▶</span></button>';
     cal += '</div></div>';
 
     cal += '<div class="cal-grid">';
@@ -403,7 +420,7 @@ function renderAll() {
       const wEn = (typeof window.WEEKDAYS_EN !== 'undefined' && window.WEEKDAYS_EN[i]) || ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][i];
       const wAr = (typeof window.WEEKDAYS_AR !== 'undefined' && window.WEEKDAYS_AR[i]) || '';
       const wRom = (typeof window.WEEKDAYS_ROM !== 'undefined' && window.WEEKDAYS_ROM[i]) || '';
-      cal += `<div class="cal-weekday">${wEn}<br><span class="cal-weekday ar">${wAr}</span><br><span class="cal-weekday rom">${wRom}</span></div>`;
+      cal += `<div class="cal-weekday">${_escD(_tr(wEn, wEn))}<br><span class="cal-weekday ar">${wAr}</span><br><span class="cal-weekday rom">${wRom}</span></div>`;
     }
 
     for (let i = 0; i < fd; i++) cal += '<div class="cal-day empty"></div>';
@@ -412,21 +429,21 @@ function renderAll() {
       const dk = today(new Date(window.calViewYear, window.calViewMonth, d));
       const log = S.log[dk];
       const cnt = log ? Object.values(log.p || {}).filter(v => v).length : 0;
-      let cls = cnt >= 5 ? 'good' : (cnt > 0 ? 'ok' : (dk < tk ? 'bad' : ''));
+      let cls = cnt >= 5 ? 'good' : (cnt > 0 ? 'ok' : (dk < tk && log ? 'bad' : ''));
       if (dk === tk) cls += ' now';
 
       const h = (typeof gregorianToHijri === "function") ? gregorianToHijri(window.calViewYear, window.calViewMonth + 1, d) : ((typeof window !== "undefined" && typeof window.gregorianToHijri === "function") ? window.gregorianToHijri(window.calViewYear, window.calViewMonth + 1, d) : { day: d, month: 1, year: 1448 });
       const hDay = (h && h.day) || d;
 
-      cal += `<div class="cal-day ${cls}"><span class="g-date">${d}</span><span class="h-date">${hDay}</span></div>`;
+      cal += `<div class="cal-day ${cls}"><span class="g-date iq-tabular">${_fmtN(d)}</span><span class="h-date iq-tabular">${_fmtN(hDay)}</span></div>`;
     }
     cal += '</div>';
 
     cal += '<div class="cal-legend">';
-    cal += '<div class="cal-legend-item"><div class="cal-legend-dot" style="background:rgba(22,163,74,0.5);"></div>5 prayers</div>';
-    cal += '<div class="cal-legend-item"><div class="cal-legend-dot" style="background:rgba(245,158,11,0.5);"></div>Some prayers</div>';
-    cal += '<div class="cal-legend-item"><div class="cal-legend-dot" style="background:rgba(239,68,68,0.5);"></div>Missed</div>';
-    cal += '<div class="cal-legend-item"><div class="cal-legend-dot" style="background:var(--accent-bg);"></div>Today</div>';
+    cal += `<div class="cal-legend-item"><div class="cal-legend-dot" style="background:var(--green);"></div>${_escD(_tr('5 prayers', '5 prayers'))}</div>`;
+    cal += `<div class="cal-legend-item"><div class="cal-legend-dot" style="background:var(--orange);"></div>${_escD(_tr('Some prayers', 'Some prayers'))}</div>`;
+    cal += `<div class="cal-legend-item"><div class="cal-legend-dot" style="background:var(--red);"></div>${_escD(_tr('Missed', 'Missed'))}</div>`;
+    cal += `<div class="cal-legend-item"><div class="cal-legend-dot" style="background:var(--accent);"></div>${_escD(_tr('Today', 'Today'))}</div>`;
     cal += '</div>';
 
     document.getElementById('calArea').innerHTML = cal;
@@ -435,22 +452,22 @@ function renderAll() {
 
   // ── Shop ──
   function renderShop() {
-    let h = '<div class="section-title">' + iqIcon('gift') + ' Rewards Shop</div>';
+    let h = '<div class="section-title">' + iqIcon('gift') + ' ' + _escD(_tr('Rewards Shop', 'Rewards Shop')) + '</div>';
 
-    h += `<div class="reward-xp-banner">${iqIcon('star')} <strong>${S.xp}</strong> XP Available</div>`;
+    h += `<div class="reward-xp-banner">${iqIcon('star')} <strong class="iq-tabular">${_fmtN(S.xp)}</strong> ${_escD(_tr('XP Available', 'XP Available'))}</div>`;
 
     h += '<div class="reward-grid">';
     h += SHOP.map(r => {
       const owned = !!S.ur[r.id];
       const canAfford = S.xp >= r.cost;
       const cls = owned ? 'owned' : (canAfford ? '' : 'disabled');
-      return `<div class="reward-card ${cls}" onclick="${owned ? '' : 'App.buy(\'' + r.id + '\')'}">
+      return `<div class="reward-card ${cls}" role="button" tabindex="${owned ? '-1' : '0'}" onclick="${owned ? '' : 'App.buy(\'' + r.id + '\')'}">
         <span class="reward-icon">${iqIcon(r.icon || r.id || r.name)}</span>
         <div class="reward-info">
-          <div class="reward-name">${r.name}</div>
-          <div class="reward-desc">${r.desc || ''}</div>
+          <div class="reward-name">${_escD(r.name)}</div>
+          <div class="reward-desc">${_escD(r.desc || '')}</div>
         </div>
-        <div class="reward-badge">${owned ? iqIcon('check') + ' Owned' : iqIcon('star') + ' ' + r.cost + ' XP'}</div>
+        <div class="reward-badge iq-tabular">${owned ? iqIcon('check') + ' ' + _escD(_tr('Owned', 'Owned')) : iqIcon('star') + ' ' + _fmtN(r.cost) + ' XP'}</div>
       </div>`;
     }).join('');
     h += '</div>';
@@ -467,22 +484,12 @@ function renderAll() {
     };
     return frames[frameId] || '';
   }
-  function _fmtN(v) {
-    return (typeof window.iqFormatNum === 'function') ? window.iqFormatNum(v) : String(v == null ? '' : v);
-  }
-  function _tr(k, fallback) {
-    if (typeof window.t === 'function') {
-      const out = window.t(k);
-      if (out && out !== k) return out;
-    }
-    return fallback || k;
-  }
 
   function renderProfile() {
     const achCnt = Object.keys(S.ua || {}).length;
-    const avatar = window.escapeHTML(S.avatar || '');
+    const avatar = _escD(S.avatar || '');
     const joinDate = S.joinDate ? new Date(S.joinDate).toLocaleDateString('en', { month: 'long', year: 'numeric' }) : null;
-    const esc = window.escapeHTML || ((s) => String(s == null ? '' : s));
+    const esc = _escD;
     const curLang = (S && S.lang) || 'en';
     const curTheme = (S && S.theme) || 'light';
     const curNum = (S && S.numerals) || 'auto';
@@ -494,90 +501,91 @@ function renderAll() {
     let h = '<div class="section-title">' + esc(_tr('Profile', 'Profile')) + '</div>';
 
     h += `<div class="profile-identity">
-      <div class="profile-avatar-wrap" onclick="App.toggleAvatarPicker()">
-        <span class="profile-avatar" style="${S.activeFrame ? getFrameStyle(S.activeFrame) : ''}">${avatar}</span>
+      <div class="profile-avatar-wrap" role="button" tabindex="0" aria-label="${esc(_tr('Change avatar', 'Change avatar'))}" onclick="App.toggleAvatarPicker()">
+        <span class="profile-avatar" style="${S.activeFrame ? getFrameStyle(S.activeFrame) : ''}">${avatar || iqIcon('user')}</span>
       </div>
       <div class="profile-info">
-        <h2 class="profile-name">${esc(currentUser === 'default' ? 'Guest' : currentUser)}</h2>
-        <div class="profile-level">Level ${_fmtN(S.lv)} &middot; ${esc(lvTitle(S.lv))}</div>
+        <h2 class="profile-name">${esc(currentUser === 'default' ? _tr('Guest', 'Guest') : currentUser)}</h2>
+        <div class="profile-level iq-tabular">${esc(_tr('Level', 'Level'))} ${_fmtN(S.lv)} &middot; ${esc(_tr(lvTitle(S.lv), lvTitle(S.lv)))}</div>
         ${S.activeTitle ? (() => { const t = (typeof SHOP !== 'undefined' ? SHOP : []).find(x => x.id === S.activeTitle); return t ? `<div class="profile-title" style="color:var(--accent-dark);font-weight:600;margin-top:2px;">${esc(t.name.replace('Title: ',''))}</div>` : ''; })() : ''}
-        ${joinDate ? `<div class="profile-join">Member since ${esc(joinDate)}</div>` : ''}
+        ${joinDate ? `<div class="profile-join">${esc(_tr('Member since', 'Member since'))} ${esc(joinDate)}</div>` : ''}
       </div>
     </div>`;
 
     h += '<div class="profile-stats">';
-    h += `<div class="stat-card"><div class="stat-num">${_fmtN(S.xp)}</div><div class="stat-label">${esc(_tr('Total XP', 'Total XP'))}</div></div>`;
-    h += `<div class="stat-card"><div class="stat-num">${_fmtN(S.tp)}</div><div class="stat-label">${esc(_tr('Prayers', 'Prayers'))}</div></div>`;
-    h += `<div class="stat-card"><div class="stat-num">${_fmtN(S.cs)}</div><div class="stat-label">${esc(_tr('Streak', 'Streak'))}</div></div>`;
-    h += `<div class="stat-card"><div class="stat-icon">${iqIcon('trophy')}</div><div class="stat-num">${_fmtN(achCnt)}</div><div class="stat-label">${esc(_tr('Achievements', 'Achievements'))}</div></div>`;
+    h += `<div class="stat-card"><div class="stat-num iq-tabular">${_fmtN(S.xp)}</div><div class="stat-label">${esc(_tr('Total XP', 'Total XP'))}</div></div>`;
+    h += `<div class="stat-card"><div class="stat-num iq-tabular">${_fmtN(S.tp)}</div><div class="stat-label">${esc(_tr('Prayers', 'Prayers'))}</div></div>`;
+    h += `<div class="stat-card"><div class="stat-num iq-tabular">${_fmtN(S.cs)}</div><div class="stat-label">${esc(_tr('Streak', 'Streak'))}</div></div>`;
+    h += `<div class="stat-card"><div class="stat-icon">${iqIcon('trophy')}</div><div class="stat-num iq-tabular">${_fmtN(achCnt)}</div><div class="stat-label">${esc(_tr('Achievements', 'Achievements'))}</div></div>`;
     h += '</div>';
 
-    h += '<div class="profile-section"><h3>Achievement Showcase</h3><div id="achievementShowcase"></div></div>';
+    h += `<div class="profile-section"><h3>${esc(_tr('Achievement Showcase', 'Achievement Showcase'))}</h3><div id="achievementShowcase"></div></div>`;
 
-    h += '<div class="section-title">' + iqIcon('settings') + ' Settings &amp; Preferences</div>';
+    h += `<div class="section-title">${iqIcon('settings')} ${esc(_tr('Settings & Preferences', 'Settings & Preferences'))}</div>`;
     h += '<div class="profile-settings">';
 
     // 1. Language, Glossary & Numerals
     h += '<div class="iq-setting-row">';
-    h += '<div class="iq-setting-label"><span>' + iqIcon('globe') + ' Language &amp; Script</span></div>';
+    h += `<div class="iq-setting-label"><span>${iqIcon('globe')} ${esc(_tr('Language & Script', 'Language & Script'))}</span></div>`;
     h += '<div class="iq-seg-group" role="group" aria-label="Language">';
     h += `<button type="button" class="iq-seg-btn${curLang === 'en' ? ' active' : ''}" onclick="App.iqSetLanguage && App.iqSetLanguage('en')">English</button>`;
     h += `<button type="button" class="iq-seg-btn${curLang === 'bn' ? ' active' : ''}" onclick="App.iqSetLanguage && App.iqSetLanguage('bn')">বাংলা (Bangla)</button>`;
     h += `<button type="button" class="iq-seg-btn${curLang === 'ar' ? ' active' : ''}" onclick="App.iqSetLanguage && App.iqSetLanguage('ar')">العربية (Arabic)</button>`;
     h += '</div>';
-    h += '<div class="iq-setting-label" style="margin-top:12px;"><span>Bangla Glossary Terms</span></div>';
+    h += `<div class="iq-setting-label" style="margin-top:12px;"><span>${esc(_tr('Bangla Glossary Terms', 'Bangla Glossary Terms'))}</span></div>`;
     h += '<div class="iq-seg-group" role="group" aria-label="Bangla glossary preference">';
     h += `<button type="button" class="iq-seg-btn${curBnTerm === 'namaz' ? ' active' : ''}" onclick="App.iqSetBnTermMode && App.iqSetBnTermMode('namaz')">নামাজ &middot; রোজা (Familiar)</button>`;
     h += `<button type="button" class="iq-seg-btn${curBnTerm === 'salat' ? ' active' : ''}" onclick="App.iqSetBnTermMode && App.iqSetBnTermMode('salat')">সালাত &middot; সিয়াম (Classical)</button>`;
     h += '</div>';
-    h += '<div class="iq-setting-label" style="margin-top:12px;"><span>Numeral Digits</span></div>';
+    h += `<div class="iq-setting-label" style="margin-top:12px;"><span>${esc(_tr('Numeral Digits', 'Numeral Digits'))}</span></div>`;
     h += '<div class="iq-seg-group" role="group" aria-label="Digit numerals">';
-    [['auto','Auto'],['western','0–9'],['bangla','০–৯'],['arabic','٠–٩']].forEach(([m, lbl]) => {
-      h += `<button type="button" class="iq-seg-btn${curNum === m ? ' active' : ''}" onclick="App.iqSetNumerals && App.iqSetNumerals('${m}')">${lbl}</button>`;
+    [['auto', _tr('Auto', 'Auto')], ['western', '0–9'], ['bangla', '০–৯'], ['arabic', '٠–٩']].forEach(([m, lbl]) => {
+      h += `<button type="button" class="iq-seg-btn${curNum === m ? ' active' : ''}" onclick="App.iqSetNumerals && App.iqSetNumerals('${m}')">${esc(lbl)}</button>`;
     });
     h += '</div></div>';
 
     // 2. Theme, Seasonal Accent, Typography Scale & Calm Audio
     h += '<div class="iq-setting-row">';
-    h += '<div class="iq-setting-label"><span>' + iqIcon('moon') + ' Theme &amp; Appearance</span></div>';
+    h += `<div class="iq-setting-label"><span>${iqIcon('moon')} ${esc(_tr('Theme & Appearance', 'Theme & Appearance'))}</span></div>`;
     h += '<div class="iq-seg-group" role="group" aria-label="Theme mode">';
-    [['light','Light'],['dark','Dark'],['night','OLED Night'],['system','System']].forEach(([m, lbl]) => {
-      h += `<button type="button" class="iq-seg-btn${curTheme === m ? ' active' : ''}" onclick="App.iqSetTheme && App.iqSetTheme('${m}')">${lbl}</button>`;
+    [['light', _tr('Light', 'Light')], ['dark', _tr('Dark', 'Dark')], ['night', _tr('OLED Night', 'OLED Night')], ['system', _tr('System', 'System')]].forEach(([m, lbl]) => {
+      h += `<button type="button" class="iq-seg-btn${curTheme === m ? ' active' : ''}" onclick="App.iqSetTheme && App.iqSetTheme('${m}')">${esc(lbl)}</button>`;
     });
     h += '</div>';
     h += '<div style="display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:12px;flex-wrap:wrap;">';
-    h += '<span style="font-size:0.84rem;font-weight:600;color:var(--text);">Seasonal Gold Accent Overlay</span>';
-    h += `<button type="button" class="iq-btn-secondary" onclick="App.iqSetSeasonalAccent && App.iqSetSeasonalAccent(${!S.seasonalAccent})">${S.seasonalAccent ? 'On' : 'Off'}</button>`;
+    h += `<span style="font-size:0.84rem;font-weight:600;color:var(--text);">${esc(_tr('Seasonal Gold Accent Overlay', 'Seasonal Gold Accent Overlay'))}</span>`;
+    h += `<button type="button" class="iq-btn-secondary" onclick="App.iqSetSeasonalAccent && App.iqSetSeasonalAccent(${!S.seasonalAccent})">${esc(_tr(S.seasonalAccent ? 'On' : 'Off', S.seasonalAccent ? 'On' : 'Off'))}</button>`;
     h += '</div>';
-    h += '<div class="iq-setting-label" style="margin-top:12px;"><span>Script &amp; UI Text Scale</span><span>' + Math.round(curScale * 100) + '%</span></div>';
+    h += `<div class="iq-setting-label" style="margin-top:12px;"><span>${esc(_tr('Script & UI Text Scale', 'Script & UI Text Scale'))}</span><span class="iq-tabular">${_fmtN(Math.round(curScale * 100))}%</span></div>`;
     h += '<div class="iq-seg-group" role="group" aria-label="Text scale">';
     [0.9, 1, 1.15, 1.3].forEach((sc) => {
-      h += `<button type="button" class="iq-seg-btn${Math.abs(curScale - sc) < 0.04 ? ' active' : ''}" onclick="App.iqSetScriptScale && App.iqSetScriptScale(${sc})">${Math.round(sc * 100)}%</button>`;
+      h += `<button type="button" class="iq-seg-btn${Math.abs(curScale - sc) < 0.04 ? ' active' : ''}" onclick="App.iqSetScriptScale && App.iqSetScriptScale(${sc})">${_fmtN(Math.round(sc * 100))}%</button>`;
     });
     h += '</div>';
     h += '<div style="display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:12px;flex-wrap:wrap;">';
-    h += '<span style="font-size:0.84rem;font-weight:600;color:var(--text);">UI Sound Chimes (Calm default: Off)</span>';
-    h += `<button type="button" class="iq-btn-secondary" onclick="App.iqSetSoundEnabled && App.iqSetSoundEnabled(${!S.soundEnabled})">${S.soundEnabled ? 'Sound On' : 'Muted'}</button>`;
+    h += `<span style="font-size:0.84rem;font-weight:600;color:var(--text);">${esc(_tr('UI Sound Chimes (Calm default: Off)', 'UI Sound Chimes (Calm default: Off)'))}</span>`;
+    h += `<button type="button" class="iq-btn-secondary" onclick="App.iqSetSoundEnabled && App.iqSetSoundEnabled(${!S.soundEnabled})">${esc(_tr(S.soundEnabled ? 'Sound On' : 'Muted', S.soundEnabled ? 'Sound On' : 'Muted'))}</button>`;
     h += '</div>';
-    h += '<div class="iq-setting-label" style="margin-top:12px;"><span>Hijri Crescent Sighting Adjustment</span></div>';
+    h += `<div class="iq-setting-label" style="margin-top:12px;"><span>${esc(_tr('Hijri Crescent Sighting Adjustment', 'Hijri Crescent Sighting Adjustment'))}</span></div>`;
     h += '<div class="iq-seg-group" role="group" aria-label="Hijri offset">';
     [-2, -1, 0, 1, 2].forEach((off) => {
-      h += `<button type="button" class="iq-seg-btn${curHijriOff === off ? ' active' : ''}" onclick="App.iqSetHijriOffset && App.iqSetHijriOffset(${off})">${off > 0 ? '+' + off : String(off)}d</button>`;
+      h += `<button type="button" class="iq-seg-btn${curHijriOff === off ? ' active' : ''}" onclick="App.iqSetHijriOffset && App.iqSetHijriOffset(${off})"><bdi dir="ltr">${off > 0 ? '+' + off : String(off)}d</bdi></button>`;
     });
     h += '</div></div>';
 
     // 3. Notifications & Quiet Hours
     h += '<div class="iq-setting-row">';
-    h += '<div class="iq-setting-label"><span>' + iqIcon('bell') + ' Prayer Reminders &amp; Quiet Hours</span></div>';
-    h += '<div class="iq-setting-sub">Calm, opt-in browser &amp; native local reminders. Respects Quiet Hours (' + esc(notifPrefs.quietStart || '22:30') + '–' + esc(notifPrefs.quietEnd || '04:30') + ').</div>';
+    h += `<div class="iq-setting-label"><span>${iqIcon('bell')} ${esc(_tr('Prayer Reminders & Quiet Hours', 'Prayer Reminders & Quiet Hours'))}</span></div>`;
+    h += `<div class="iq-setting-sub">${esc(_tr('Calm, opt-in browser & native local reminders. Respects Quiet Hours', 'Calm, opt-in browser & native local reminders. Respects Quiet Hours'))} (<bdi dir="ltr">${esc(notifPrefs.quietStart || '22:30')}–${esc(notifPrefs.quietEnd || '04:30')}</bdi>).</div>`;
     h += '<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:10px;">';
-    h += '<button type="button" class="shop-card" onclick="App.toggleNotifications()" style="padding:10px 14px;border-radius:var(--radius-sm);font-weight:700;">' + (S.notificationsEnabled ? iqIcon('bell-off') + ' Disable Reminders' : iqIcon('bell') + ' Enable Reminders') + '</button>';
-    h += '<button type="button" class="iq-btn-secondary" onclick="App.testNotification && App.testNotification()">Send Test Notification</button>';
+    h += '<button type="button" class="iq-btn-secondary" onclick="App.toggleNotifications()">' + (S.notificationsEnabled ? iqIcon('bell-off') + ' ' + esc(_tr('Disable Reminders', 'Disable Reminders')) : iqIcon('bell') + ' ' + esc(_tr('Enable Reminders', 'Enable Reminders'))) + '</button>';
+    h += '<button type="button" class="iq-btn-secondary" onclick="App.testNotification && App.testNotification()">' + esc(_tr('Send Test Notification', 'Send Test Notification')) + '</button>';
     h += '</div>';
     h += '<div class="iq-seg-group" role="group" aria-label="Prayer notification toggles">';
     ['fajr','dhuhr','asr','maghrib','isha'].forEach((pid) => {
       const enabled = !(notifPrefs.prayers && notifPrefs.prayers[pid] === false);
-      h += `<button type="button" class="iq-seg-btn${enabled ? ' active' : ''}" onclick="App.updateNotifSetting && App.updateNotifSetting('${pid}', ${!enabled})">${pid.charAt(0).toUpperCase() + pid.slice(1)} ${enabled ? '✓' : 'Off'}</button>`;
+      const pName = pid.charAt(0).toUpperCase() + pid.slice(1);
+      h += `<button type="button" class="iq-seg-btn${enabled ? ' active' : ''}" onclick="App.updateNotifSetting && App.updateNotifSetting('${pid}', ${!enabled})">${esc(_tr(pName, pName))} ${enabled ? '✓' : esc(_tr('Off', 'Off'))}</button>`;
     });
     h += '</div></div>';
 
@@ -590,45 +598,45 @@ function renderAll() {
     })();
 
     h += '<div class="iq-privacy-card">';
-    h += '<div style="font-weight:700;color:var(--text);margin-bottom:4px;">' + iqIcon('shield') + ' Privacy Dashboard</div>';
-    h += '<p style="margin-bottom:10px;">Your worship logs, Rest Mode days (no reason recorded), journals, and streaks never leave this device. Zero analytics SDKs, zero ad trackers. Network requests occur only when you tap Online Hadith collections, streaming Audio, or Quran CDN updates.</p>';
+    h += `<div style="font-weight:700;color:var(--text);margin-bottom:4px;">${iqIcon('shield')} ${esc(_tr('Privacy Dashboard', 'Privacy Dashboard'))}</div>`;
+    h += `<p style="margin-bottom:10px;">${esc(_tr('Your worship logs, Rest Mode days (no reason recorded), journals, and streaks never leave this device. Zero analytics SDKs, zero ad trackers. Network requests occur only when you tap Online Hadith collections, streaming Audio, or Quran CDN updates.', 'Your worship logs, Rest Mode days (no reason recorded), journals, and streaks never leave this device. Zero analytics SDKs, zero ad trackers. Network requests occur only when you tap Online Hadith collections, streaming Audio, or Quran CDN updates.'))}</p>`;
     h += '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(135px,1fr));gap:8px;">';
-    h += '<button type="button" class="shop-card" onclick="App.exportData()" style="justify-content:center;padding:9px;border-radius:var(--radius-sm);font-weight:600;font-size:0.84rem;">' + iqIcon('download') + ' Export JSON</button>';
-    h += '<button type="button" class="shop-card" onclick="App.exportCSVData && App.exportCSVData()" style="justify-content:center;padding:9px;border-radius:var(--radius-sm);font-weight:600;font-size:0.84rem;">' + iqIcon('download') + ' Export CSV</button>';
-    h += '<button type="button" class="shop-card" onclick="App.importData()" style="justify-content:center;padding:9px;border-radius:var(--radius-sm);font-weight:600;font-size:0.84rem;">' + iqIcon('upload') + ' Restore JSON</button>';
+    h += '<button type="button" class="iq-btn-secondary" style="border-radius:var(--radius-sm);" onclick="App.exportData()">' + iqIcon('download') + ' ' + esc(_tr('Export JSON', 'Export JSON')) + '</button>';
+    h += '<button type="button" class="iq-btn-secondary" style="border-radius:var(--radius-sm);" onclick="App.exportCSVData && App.exportCSVData()">' + iqIcon('download') + ' ' + esc(_tr('Export CSV', 'Export CSV')) + '</button>';
+    h += '<button type="button" class="iq-btn-secondary" style="border-radius:var(--radius-sm);" onclick="App.importData()">' + iqIcon('upload') + ' ' + esc(_tr('Restore JSON', 'Restore JSON')) + '</button>';
     h += '</div></div>';
 
     // 5. Account & Security
     h += '<div class="iq-setting-row">';
-    h += '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">';
-    h += '<span style="font-weight:700;color:var(--text);">' + iqIcon('shield') + ' Profile: ' + esc(currentUser === 'default' ? 'Guest' : currentUser) + '</span>';
-    h += '<span style="font-size:var(--fs-xs);padding:3px 8px;border-radius:12px;background:' + (isPinProtected ? 'var(--green-bg);color:var(--green);font-weight:700;' : 'var(--accent-bg);color:var(--accent-dark);font-weight:600;') + '">' + (isPinProtected ? 'PIN Protected' : 'Open Local Profile') + '</span>';
+    h += '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;gap:8px;flex-wrap:wrap;">';
+    h += `<span style="font-weight:700;color:var(--text);">${iqIcon('shield')} ${esc(_tr('Profile', 'Profile'))}: ${esc(currentUser === 'default' ? _tr('Guest', 'Guest') : currentUser)}</span>`;
+    h += '<span style="font-size:var(--fs-xs);padding:3px 10px;border-radius:12px;background:' + (isPinProtected ? 'var(--green-bg);color:var(--green);font-weight:700;' : 'var(--accent-bg);color:var(--accent-dark);font-weight:600;') + '">' + esc(_tr(isPinProtected ? 'PIN Protected' : 'Open Local Profile', isPinProtected ? 'PIN Protected' : 'Open Local Profile')) + '</span>';
     h += '</div>';
     h += '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px;">';
-    h += '<button type="button" class="shop-card" onclick="App.openProfilePicker()" style="justify-content:center;padding:9px;border-radius:var(--radius-sm);font-weight:600;font-size:0.85rem;">' + iqIcon('users') + ' Switch Profile</button>';
-    h += '<button type="button" class="shop-card" onclick="App.openSecuritySettings()" style="justify-content:center;padding:9px;border-radius:var(--radius-sm);font-weight:600;font-size:0.85rem;">' + iqIcon('shield') + (isPinProtected ? ' Change PIN' : ' Set PIN') + '</button>';
+    h += '<button type="button" class="iq-btn-secondary" style="border-radius:var(--radius-sm);" onclick="App.openProfilePicker()">' + iqIcon('users') + ' ' + esc(_tr('Switch Profile', 'Switch Profile')) + '</button>';
+    h += '<button type="button" class="iq-btn-secondary" style="border-radius:var(--radius-sm);" onclick="App.openSecuritySettings()">' + iqIcon('shield') + ' ' + esc(_tr(isPinProtected ? 'Change PIN' : 'Set PIN', isPinProtected ? 'Change PIN' : 'Set PIN')) + '</button>';
     if (isPinProtected) {
-      h += '<button type="button" class="shop-card" onclick="App.lockApp()" style="justify-content:center;padding:9px;border-radius:var(--radius-sm);font-weight:600;font-size:0.85rem;">' + iqIcon('lock') + ' Lock Now</button>';
+      h += '<button type="button" class="iq-btn-secondary" style="border-radius:var(--radius-sm);" onclick="App.lockApp()">' + iqIcon('lock') + ' ' + esc(_tr('Lock Now', 'Lock Now')) + '</button>';
     }
     h += '</div></div>';
-    h += '<button type="button" class="shop-card" style="width:100%;justify-content:center;margin-bottom:12px;font-weight:700;font-size:0.95rem;color:var(--accent-dark);" onclick="App.logout()">' + iqIcon('log-out') + ' Switch / Lock Session</button>';
+    h += '<button type="button" class="iq-btn-secondary" style="width:100%;margin-bottom:12px;color:var(--accent-dark);" onclick="App.logout()">' + iqIcon('log-out') + ' ' + esc(_tr('Switch / Lock Session', 'Switch / Lock Session')) + '</button>';
     h += '</div>';
 
     // 6. Design Gallery, Attributions & Support
     h += '<div class="iq-attribution-card">';
     h += '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;flex-wrap:wrap;gap:6px;">';
-    h += '<span style="font-weight:700;color:var(--text);">' + iqIcon('info') + ' Sources, Design System &amp; Support</span>';
-    h += '<span style="font-size:0.74rem;padding:3px 8px;border-radius:12px;background:var(--accent-bg);color:var(--accent-dark);font-weight:700;">v2.2 · Noor &amp; Rhythm</span>';
+    h += `<span style="font-weight:700;color:var(--text);">${iqIcon('info')} ${esc(_tr('Sources, Design System & Support', 'Sources, Design System & Support'))}</span>`;
+    h += '<span class="iq-num-pill">v2.2 · Noor &amp; Rhythm</span>';
     h += '</div>';
-    h += '<p style="font-size:0.8rem;margin-bottom:10px;">Quran Uthmani (Tanzil/KFGQPC), Indo-Pak &amp; Bangla <em>Taisirul Quran</em> (Quran.com API), English <em>Saheeh International</em>, Prayer math (<code>adhan</code> MIT), UI fonts (SIL OFL 1.1). <em>Scholarly accuracy review recommended prior to store binary submission.</em></p>';
+    h += '<p style="font-size:0.8rem;margin-bottom:10px;">Quran Uthmani (Tanzil/KFGQPC), Indo-Pak &amp; Bangla <em>Taisirul Quran</em> (Quran.com API), English <em>Saheeh International</em>, Prayer math (<code dir="ltr">adhan</code> MIT), UI fonts (SIL OFL 1.1). <em>Scholarly accuracy review recommended prior to store binary submission.</em></p>';
     h += '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(135px,1fr));gap:8px;margin-bottom:10px;">';
-    h += '<button type="button" class="shop-card" onclick="App.openGallery && App.openGallery()" style="justify-content:center;padding:9px;border-radius:var(--radius-sm);font-weight:600;font-size:0.84rem;">' + iqIcon('sparkles') + ' Component Gallery</button>';
-    h += '<button type="button" class="shop-card" onclick="App.openContentErrorModal && App.openContentErrorModal(\'General\')" style="justify-content:center;padding:9px;border-radius:var(--radius-sm);font-weight:600;font-size:0.84rem;">' + iqIcon('alert-triangle') + ' Report Content Error</button>';
-    h += '<button type="button" class="shop-card" onclick="App.openChangelogModal && App.openChangelogModal()" style="justify-content:center;padding:9px;border-radius:var(--radius-sm);font-weight:600;font-size:0.84rem;">' + iqIcon('book-open') + ' What&rsquo;s New</button>';
-    h += '<a href="privacy.html" target="_blank" rel="noopener noreferrer" class="shop-card" style="justify-content:center;padding:9px;border-radius:var(--radius-sm);font-weight:600;font-size:0.84rem;text-decoration:none;color:inherit;">' + iqIcon('shield') + ' Privacy Policy</a>';
+    h += '<button type="button" class="iq-btn-secondary" style="border-radius:var(--radius-sm);" onclick="App.openGallery && App.openGallery()">' + iqIcon('sparkles') + ' ' + esc(_tr('Component Gallery', 'Component Gallery')) + '</button>';
+    h += '<button type="button" class="iq-btn-secondary" style="border-radius:var(--radius-sm);" onclick="App.openContentErrorModal && App.openContentErrorModal(\'General\')">' + iqIcon('alert-triangle') + ' ' + esc(_tr('Report Content Error', 'Report Content Error')) + '</button>';
+    h += '<button type="button" class="iq-btn-secondary" style="border-radius:var(--radius-sm);" onclick="App.openChangelogModal && App.openChangelogModal()">' + iqIcon('book-open') + ' ' + esc(_tr("What's New", "What's New")) + '</button>';
+    h += '<a href="privacy.html" target="_blank" rel="noopener noreferrer" class="iq-btn-secondary" style="border-radius:var(--radius-sm);text-decoration:none;">' + iqIcon('shield') + ' ' + esc(_tr('Privacy Policy', 'Privacy Policy')) + '</a>';
     h += '</div></div>';
 
-    h += '<div class="danger-zone"><h3 style="color:var(--red)">' + iqIcon('alert-triangle') + ' Danger Zone</h3><p style="font-size:0.8rem;color:var(--text2);margin-bottom:10px;">Reset clears this profile; Delete All wipes every local key and offline database on this device.</p><div style="display:flex;gap:8px;flex-wrap:wrap;"><button type="button" class="danger-btn" onclick="App.resetAll()">' + iqIcon('trash') + ' Reset Profile</button><button type="button" class="danger-btn" onclick="App.deleteAllUserData && App.deleteAllUserData()">' + iqIcon('trash') + ' Delete All Data</button></div></div>';
+    h += `<div class="danger-zone"><h3 style="color:var(--red)">${iqIcon('alert-triangle')} ${esc(_tr('Danger Zone', 'Danger Zone'))}</h3><p style="font-size:0.8rem;color:var(--text2);margin-bottom:10px;">${esc(_tr('Reset clears this profile; Delete All wipes every local key and offline database on this device.', 'Reset clears this profile; Delete All wipes every local key and offline database on this device.'))}</p><div style="display:flex;gap:8px;flex-wrap:wrap;"><button type="button" class="danger-btn" style="flex:1 1 160px;" onclick="App.resetAll()">${iqIcon('trash')} ${esc(_tr('Reset Profile', 'Reset Profile'))}</button><button type="button" class="danger-btn" style="flex:1 1 160px;" onclick="App.deleteAllUserData && App.deleteAllUserData()">${iqIcon('trash')} ${esc(_tr('Delete All Data', 'Delete All Data'))}</button></div></div>`;
 
     document.getElementById('profileArea').innerHTML = h;
   }
@@ -1008,18 +1016,18 @@ function renderAll() {
     var perDay = Math.ceil((604 - pages) / Math.max(1, days));
     var pct = Math.round((pages / 604) * 100);
     return '<div class="iq-khatam-bar-wrap">' +
-      '<div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:6px;">' +
-        '<strong style="font-size:0.86rem;color:var(--text);">Khatam Planner &middot; ' + _fmtN(pages) + ' / ' + _fmtN(604) + ' pages (' + _fmtN(pct) + '%)</strong>' +
-        '<span style="font-size:0.76rem;color:var(--text2);">~' + _fmtN(perDay) + ' pg/day (' + _fmtN(days) + 'd goal)</span>' +
+      '<div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:8px;">' +
+        '<strong style="font-size:0.88rem;color:var(--text);">' + window.escapeHTML(_tr('Khatam Planner', 'Khatam Planner')) + ' &middot; <span class="iq-tabular">' + _fmtN(pages) + ' / ' + _fmtN(604) + '</span> ' + window.escapeHTML(_tr('pages', 'pages')) + ' (<span class="iq-tabular">' + _fmtN(pct) + '%</span>)</strong>' +
+        '<span class="iq-tabular" style="font-size:0.78rem;color:var(--text2);">~' + _fmtN(perDay) + ' ' + window.escapeHTML(_tr('pg/day', 'pg/day')) + ' (' + _fmtN(days) + window.escapeHTML(_tr('d', 'd')) + ')</span>' +
       '</div>' +
-      '<div class="iq-dual-bar" style="margin-bottom:8px;"><div class="iq-dual-teal" style="width:' + pct + '%"></div></div>' +
-      '<div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;justify-content:space-between;">' +
-        '<div style="display:flex;gap:6px;">' +
-          '<button type="button" class="iq-btn-secondary" style="padding:4px 10px;min-height:36px;font-size:0.76rem;" onclick="App.iqLogKhatamPages && App.iqLogKhatamPages(1)">+1 Page</button>' +
-          '<button type="button" class="iq-btn-secondary" style="padding:4px 10px;min-height:36px;font-size:0.76rem;" onclick="App.iqLogKhatamPages && App.iqLogKhatamPages(5)">+5 Pages</button>' +
+      '<div class="iq-dual-bar" style="margin-bottom:10px;"><div class="iq-dual-teal" style="width:' + pct + '%"></div></div>' +
+      '<div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;justify-content:space-between;">' +
+        '<div style="display:flex;gap:8px;flex-wrap:wrap;">' +
+          '<button type="button" class="iq-btn-secondary" style="padding:8px 14px;min-height:44px;min-width:44px;font-size:0.8rem;" onclick="App.iqLogKhatamPages && App.iqLogKhatamPages(1)"><bdi dir="ltr">+1</bdi> ' + window.escapeHTML(_tr('Page', 'Page')) + '</button>' +
+          '<button type="button" class="iq-btn-secondary" style="padding:8px 14px;min-height:44px;min-width:44px;font-size:0.8rem;" onclick="App.iqLogKhatamPages && App.iqLogKhatamPages(5)"><bdi dir="ltr">+5</bdi> ' + window.escapeHTML(_tr('Pages', 'Pages')) + '</button>' +
         '</div>' +
-        '<select aria-label="Khatam target days" class="iq-pt-select" style="width:auto;min-height:36px;padding:4px 8px;font-size:0.76rem;" onchange="App.iqSetKhatamGoal && App.iqSetKhatamGoal(this.value)">' +
-          [15, 30, 60, 90].map(function(d){ return '<option value="' + d + '"' + (days === d ? ' selected' : '') + '>' + d + ' days</option>'; }).join('') +
+        '<select aria-label="Khatam target days" class="iq-pt-select" style="width:auto;min-height:44px;padding:6px 12px;font-size:0.8rem;" onchange="App.iqSetKhatamGoal && App.iqSetKhatamGoal(this.value)">' +
+          [15, 30, 60, 90].map(function(d){ return '<option value="' + d + '"' + (days === d ? ' selected' : '') + '>' + _fmtN(d) + ' ' + window.escapeHTML(_tr('days', 'days')) + '</option>'; }).join('') +
         '</select>' +
       '</div>' +
     '</div>';
@@ -1030,21 +1038,21 @@ function renderAll() {
     var qScript = (S && S.quranScript) || 'uthmani';
     var qTr = (S && S.quranTranslation) || 'en';
     return '<div class="iq-quran-toolbar" role="toolbar" aria-label="Quran reading appearance">' +
-      '<div class="iq-quran-tool-group">' +
+      '<div class="iq-quran-tool-group" aria-label="' + window.escapeHTML(_tr('Text scale', 'Text scale')) + '">' +
         '<button type="button" class="iq-quran-tool-btn" onclick="App.adjustQuranFont(-0.1)" aria-label="Decrease Arabic font size">A&minus;</button>' +
         '<span class="iq-quran-scale-label iq-tabular">' + _fmtN(pct) + '%</span>' +
         '<button type="button" class="iq-quran-tool-btn" onclick="App.adjustQuranFont(0.1)" aria-label="Increase Arabic font size">A+</button>' +
       '</div>' +
-      '<div class="iq-quran-tint-group">' +
-        '<button type="button" class="iq-quran-tint-btn' + (prefs.tint === 'light' ? ' active' : '') + '" data-tint="light" aria-pressed="' + (prefs.tint === 'light') + '" onclick="App.setQuranTint(\'light\')">Light</button>' +
-        '<button type="button" class="iq-quran-tint-btn' + (prefs.tint === 'sepia' ? ' active' : '') + '" data-tint="sepia" aria-pressed="' + (prefs.tint === 'sepia') + '" onclick="App.setQuranTint(\'sepia\')">Sepia</button>' +
-        '<button type="button" class="iq-quran-tint-btn' + (prefs.tint === 'night' ? ' active' : '') + '" data-tint="night" aria-pressed="' + (prefs.tint === 'night') + '" onclick="App.setQuranTint(\'night\')">Night</button>' +
+      '<div class="iq-quran-tint-group" role="group" aria-label="' + window.escapeHTML(_tr('Reading theme', 'Reading theme')) + '">' +
+        '<button type="button" class="iq-quran-tint-btn' + (prefs.tint === 'light' ? ' active' : '') + '" data-tint="light" aria-pressed="' + (prefs.tint === 'light') + '" onclick="App.setQuranTint(\'light\')">' + window.escapeHTML(_tr('Light', 'Light')) + '</button>' +
+        '<button type="button" class="iq-quran-tint-btn' + (prefs.tint === 'sepia' ? ' active' : '') + '" data-tint="sepia" aria-pressed="' + (prefs.tint === 'sepia') + '" onclick="App.setQuranTint(\'sepia\')">' + window.escapeHTML(_tr('Sepia', 'Sepia')) + '</button>' +
+        '<button type="button" class="iq-quran-tint-btn' + (prefs.tint === 'night' ? ' active' : '') + '" data-tint="night" aria-pressed="' + (prefs.tint === 'night') + '" onclick="App.setQuranTint(\'night\')">' + window.escapeHTML(_tr('Night', 'Night')) + '</button>' +
       '</div>' +
-      '<div class="iq-quran-tint-group">' +
-        '<button type="button" class="iq-quran-tint-btn' + (qScript === 'uthmani' ? ' active' : '') + '" onclick="App.iqSetQuranScript && App.iqSetQuranScript(\'uthmani\')">Uthmani</button>' +
-        '<button type="button" class="iq-quran-tint-btn' + (qScript === 'indopak' ? ' active' : '') + '" onclick="App.iqSetQuranScript && App.iqSetQuranScript(\'indopak\')">Indo-Pak</button>' +
+      '<div class="iq-quran-tint-group" role="group" aria-label="' + window.escapeHTML(_tr('Script', 'Script')) + '">' +
+        '<button type="button" class="iq-quran-tint-btn' + (qScript === 'uthmani' ? ' active' : '') + '" onclick="App.iqSetQuranScript && App.iqSetQuranScript(\'uthmani\')">' + window.escapeHTML(_tr('Uthmani', 'Uthmani')) + '</button>' +
+        '<button type="button" class="iq-quran-tint-btn' + (qScript === 'indopak' ? ' active' : '') + '" onclick="App.iqSetQuranScript && App.iqSetQuranScript(\'indopak\')">' + window.escapeHTML(_tr('Indo-Pak', 'Indo-Pak')) + '</button>' +
       '</div>' +
-      '<div class="iq-quran-tint-group">' +
+      '<div class="iq-quran-tint-group" role="group" aria-label="' + window.escapeHTML(_tr('Translation', 'Translation')) + '">' +
         '<button type="button" class="iq-quran-tint-btn' + (qTr === 'en' ? ' active' : '') + '" onclick="App.iqSetQuranTranslation && App.iqSetQuranTranslation(\'en\')">EN</button>' +
         '<button type="button" class="iq-quran-tint-btn' + (qTr === 'bn' ? ' active' : '') + '" onclick="App.iqSetQuranTranslation && App.iqSetQuranTranslation(\'bn\')">বাংলা</button>' +
         '<button type="button" class="iq-quran-tint-btn' + (qTr === 'both' ? ' active' : '') + '" onclick="App.iqSetQuranTranslation && App.iqSetQuranTranslation(\'both\')">EN+বাংলা</button>' +
@@ -1067,28 +1075,28 @@ function renderAll() {
       return;
     }
 
-    let html = '<div class="quran-header"><h2>' + iqIcon('book-open') + ' The Noble Quran</h2><div class="quran-sub">114 Surahs &middot; Tap a surah to enter reading sanctuary</div></div>';
+    let html = '<div class="quran-header"><h2>' + iqIcon('book-open') + ' ' + window.escapeHTML(_tr('The Noble Quran', 'The Noble Quran')) + '</h2><div class="quran-sub">' + _fmtN(114) + ' ' + window.escapeHTML(_tr('Surahs', 'Surahs')) + ' &middot; ' + window.escapeHTML(_tr('Tap a surah to enter reading sanctuary', 'Tap a surah to enter reading sanctuary')) + '</div></div>';
     if (prefs.lastSurah) {
       const lastS = QURAN_SURAHS.find(x => x.n === prefs.lastSurah);
       if (lastS) {
         html += `<div class="iq-quran-continue-card" role="button" tabindex="0" onclick="App.openQuranSurah(${lastS.n})">
-          <div><div class="iq-qc-eyebrow">Continue Reading</div><div class="iq-qc-title">${lastS.n}. ${lastS.en} &middot; <span class="iq-qc-ar">${lastS.ar}</span></div><div class="iq-qc-meta">${lastS.ay} verses &middot; ${lastS.type}</div></div>
-          <span class="iq-pill-btn">Resume &rsaquo;</span>
+          <div><div class="iq-qc-eyebrow">${window.escapeHTML(_tr('Continue Reading', 'Continue Reading'))}</div><div class="iq-qc-title"><span class="iq-tabular">${_fmtN(lastS.n)}</span>. ${lastS.en} &middot; <span class="iq-qc-ar">${lastS.ar}</span></div><div class="iq-qc-meta iq-tabular">${_fmtN(lastS.ay)} ${window.escapeHTML(_tr('verses', 'verses'))} &middot; ${window.escapeHTML(_tr(lastS.type, lastS.type))}</div></div>
+          <span class="iq-pill-btn">${window.escapeHTML(_tr('Resume', 'Resume'))} <span class="iq-mirror-icon">&rsaquo;</span></span>
         </div>`;
       }
     }
     html += _renderKhatamCard();
     html += _renderQuranSanctuaryBar(prefs);
     html += '<div class="tab-bar-quran" style="display:flex;justify-content:center;gap:6px;margin:0 auto 10px;">';
-    html += `<button class="${quranViewMode==='surah'?'active':''}" onclick="App.setQuranView('surah')">Surahs</button>`;
-    html += `<button class="${quranViewMode==='juz'?'active':''}" onclick="App.setQuranView('juz')">Juz</button>`;
+    html += `<button type="button" class="${quranViewMode==='surah'?'active':''}" onclick="App.setQuranView('surah')">${window.escapeHTML(_tr('Surahs', 'Surahs'))}</button>`;
+    html += `<button type="button" class="${quranViewMode==='juz'?'active':''}" onclick="App.setQuranView('juz')">${window.escapeHTML(_tr('Juz', 'Juz'))}</button>`;
     html += '</div>';
-    html += '<div style="display:flex;justify-content:center;width:100%;"><input class="quran-search" style="text-align:center;max-width:540px;" placeholder="' + iqEmoji('search') + ' Search surah name..." oninput="App.quranSearchFilter(this.value)"></div>';
+    html += '<div style="display:flex;justify-content:center;width:100%;margin-bottom:10px;"><input class="quran-search" style="max-width:560px;" placeholder="' + window.escapeHTML(_tr('Search surah name...', 'Search surah name...')) + '" oninput="App.quranSearchFilter(this.value)"></div>';
 
     if (quranViewMode === 'juz') {
       html += '<div class="juz-grid">';
       QURAN_JUZ.forEach(j => {
-        html += `<div class="juz-card" onclick="App.openQuranJuz(${j.n})"><div style="font-weight:700;color:var(--accent-light);">Juz ${j.n}</div><div style="font-size:0.7rem;color:var(--text2);margin-top:3px;">${j.name}</div></div>`;
+        html += `<div class="juz-card" onclick="App.openQuranJuz(${j.n})"><div style="font-weight:700;color:var(--accent-dark);">${window.escapeHTML(_tr('Juz', 'Juz'))} ${_fmtN(j.n)}</div><div style="font-size:0.72rem;color:var(--text2);margin-top:3px;">${j.name}</div></div>`;
       });
       html += '</div>';
     } else {
@@ -1096,10 +1104,10 @@ function renderAll() {
       html += '<div class="surah-grid">';
       filtered.forEach(s => {
         html += `<div class="surah-card" onclick="App.openQuranSurah(${s.n})">
-          <div class="surah-num">#${s.n}</div>
+          <div class="surah-num iq-tabular">#${_fmtN(s.n)}</div>
           <div class="surah-name-ar">${s.ar}</div>
           <div class="surah-name-en">${s.en}</div>
-          <div class="surah-meta">${s.ay} verses · ${s.type}</div>
+          <div class="surah-meta iq-tabular">${_fmtN(s.ay)} ${window.escapeHTML(_tr('verses', 'verses'))} &middot; ${window.escapeHTML(_tr(s.type, s.type))}</div>
         </div>`;
       });
       html += '</div>';
@@ -1113,7 +1121,7 @@ function renderAll() {
     const needIndo = (S && S.quranScript === 'indopak' && typeof window.QURAN_INDOPAK_POOL === 'undefined');
     const needBn = (S && (S.quranTranslation === 'bn' || S.quranTranslation === 'both') && typeof window.QURAN_BN_POOL === 'undefined');
     if (typeof QURAN_POOL === 'undefined' || needIndo || needBn) {
-      el.innerHTML = '<div class="quran-loading">Loading Quran script &amp; translation…</div>';
+      el.innerHTML = '<div class="quran-loading">' + window.escapeHTML(_tr('Loading Quran script & translation…', 'Loading Quran script & translation…')) + '</div>';
       const jobs = [window.App.ensureQuranLoaded()];
       if (needIndo && window.App.ensureQuranIndoPakLoaded) jobs.push(window.App.ensureQuranIndoPakLoaded());
       if (needBn && window.App.ensureQuranBanglaLoaded) jobs.push(window.App.ensureQuranBanglaLoaded());
@@ -1127,10 +1135,10 @@ function renderAll() {
     const qScript = (S && S.quranScript) || 'uthmani';
     const qTr = (S && S.quranTranslation) || 'en';
     const isOffline = (typeof navigator !== 'undefined' && navigator.onLine === false);
-    let html = '<button class="quran-back-btn" onclick="App.quranBack()">◀ Back to Surahs</button>';
-    html += `<div class="quran-header"><h2>${s.ar}</h2><div style="font-family:var(--iq-font-quran);font-size:1.3rem;color:var(--accent-dark);margin:4px 0;">${s.en}</div><div class="quran-sub">${_fmtN(s.ay)} verses &middot; ${s.type}</div></div>`;
+    let html = '<button type="button" class="quran-back-btn" onclick="App.quranBack()"><span class="iq-mirror-icon">◀</span> ' + window.escapeHTML(_tr('Back to Surahs', 'Back to Surahs')) + '</button>';
+    html += `<div class="quran-header"><h2>${s.ar}</h2><div style="font-family:var(--iq-font-quran);font-size:1.3rem;color:var(--accent-dark);margin:4px 0;">${s.en}</div><div class="quran-sub iq-tabular">${_fmtN(s.ay)} ${window.escapeHTML(_tr('verses', 'verses'))} &middot; ${window.escapeHTML(_tr(s.type, s.type))}</div></div>`;
     html += _renderQuranSanctuaryBar(prefs);
-    html += `<div style="display:flex;justify-content:center;align-items:center;gap:8px;flex-wrap:wrap;margin:8px 0 12px;"><button id="surahPlayBtn" class="surah-play-btn" onclick="App.playSurah(${surahNum})">▶ Play Surah</button><button type="button" class="surah-log-btn" onclick="window.logQuranMinutes && window.logQuranMinutes(5)">+5m Read</button></div>`;
+    html += `<div style="display:flex;justify-content:center;align-items:center;gap:8px;flex-wrap:wrap;margin:8px 0 12px;"><button type="button" id="surahPlayBtn" class="surah-play-btn" style="min-height:44px;" onclick="App.playSurah(${surahNum})">&#9654; ${window.escapeHTML(_tr('Play Surah', 'Play Surah'))}</button><button type="button" class="surah-log-btn" style="min-height:44px;" onclick="window.logQuranMinutes && window.logQuranMinutes(5)"><bdi dir="ltr">+5m</bdi> ${window.escapeHTML(_tr('Read', 'Read'))}</button></div>`;
     if (isOffline) html += '<div class="iq-setting-sub" style="text-align:center;">Offline mode: complete Arabic &amp; translation text available offline; audio recitation requires internet connection.</div>';
     const verses = QURAN_POOL.filter(v => {
       if (!v.source) return false;
@@ -1187,11 +1195,11 @@ function renderAll() {
     const lastLocal = endG - globalAyahOf(endS.n, 1) + 1;
     const verseCount = endG - startG + 1;
 
-    let html = '<button class="quran-back-btn" onclick="App.quranBack()">◀ Back to Juzes</button>';
-    html += `<div class="quran-header"><h2>Juz ${juzNum} · ${j ? j.name : ''}</h2><div style="font-family:'Amiri',serif;font-size:1.2rem;color:var(--accent);margin:4px 0;">${startS.en} → ${endS.en}</div><div class="quran-sub">${startS.n}:${firstLocal} · ${endS.n}:${lastLocal} · ${verseCount} verses</div></div>`;
+    let html = '<button type="button" class="quran-back-btn" onclick="App.quranBack()"><span class="iq-mirror-icon">◀</span> ' + window.escapeHTML(_tr('Back to Juzes', 'Back to Juzes')) + '</button>';
+    html += `<div class="quran-header"><h2>${window.escapeHTML(_tr('Juz', 'Juz'))} ${_fmtN(juzNum)} &middot; ${j ? j.name : ''}</h2><div style="font-family:var(--iq-font-quran);font-size:1.2rem;color:var(--accent-dark);margin:4px 0;">${startS.en} <span class="iq-mirror-icon">&rarr;</span> ${endS.en}</div><div class="quran-sub iq-tabular"><bdi dir="ltr">${_fmtN(startS.n)}:${_fmtN(firstLocal)}</bdi> &middot; <bdi dir="ltr">${_fmtN(endS.n)}:${_fmtN(lastLocal)}</bdi> &middot; ${_fmtN(verseCount)} ${window.escapeHTML(_tr('verses', 'verses'))}</div></div>`;
     html += _renderQuranSanctuaryBar(prefs);
-    html += `<div style="display:flex;justify-content:center;align-items:center;gap:8px;flex-wrap:wrap;margin:8px 0 12px;"><button id="juzPlayBtn" class="surah-play-btn" onclick="App.playJuz(${juzNum})">▶ Play Juz</button><button type="button" class="surah-log-btn" onclick="window.logQuranMinutes && window.logQuranMinutes(5)">+5m Read</button></div>`;
-    if (startS.n !== 1) { html += `<div style="text-align:center;font-size:calc(1.6rem * var(--iq-quran-scale, 1));color:var(--accent);font-family:'Amiri',serif;margin:16px 0;">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ</div>`; }
+    html += `<div style="display:flex;justify-content:center;align-items:center;gap:8px;flex-wrap:wrap;margin:8px 0 12px;"><button type="button" id="juzPlayBtn" class="surah-play-btn" style="min-height:44px;" onclick="App.playJuz(${juzNum})">&#9654; ${window.escapeHTML(_tr('Play Juz', 'Play Juz'))}</button><button type="button" class="surah-log-btn" style="min-height:44px;" onclick="window.logQuranMinutes && window.logQuranMinutes(5)"><bdi dir="ltr">+5m</bdi> ${window.escapeHTML(_tr('Read', 'Read'))}</button></div>`;
+    if (startS.n !== 1) { html += `<div style="text-align:center;font-size:calc(1.6rem * var(--iq-quran-scale, 1));color:var(--accent-dark);font-family:var(--iq-font-quran);margin:16px 0;" dir="rtl">بِسْمِ ٱللَّهِ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ</div>`; }
 
 
     const verses = [];
@@ -1342,17 +1350,17 @@ function renderAll() {
       const col = data.find(c => c.id === hadithView.collectionId);
       const book = col && col.books.find(b => b.id === hadithView.bookId);
       if (!col || !book) { hadithView = { level: 'collections', collectionId: null, bookId: null }; renderHadith(); return; }
-      let html = `<button class="quran-back-btn" onclick="App.hadithBack()">◀ Back to ${col.name}</button>`;
-      html += `<div class="quran-header"><h2>${iqIcon(col.icon || colIconFor(col.id))} ${book.name}</h2><div class="quran-sub">${book.hadiths.length} hadiths</div></div>`;
+      let html = `<button type="button" class="quran-back-btn" onclick="App.hadithBack()"><span class="iq-mirror-icon">◀</span> ${window.escapeHTML(_tr('Back to', 'Back to'))} ${window.escapeHTML(col.name)}</button>`;
+      html += `<div class="quran-header"><h2>${iqIcon(col.icon || colIconFor(col.id))} ${window.escapeHTML(book.name)}</h2><div class="quran-sub iq-tabular">${_fmtN(book.hadiths.length)} ${window.escapeHTML(_tr('hadiths', 'hadiths'))}</div></div>`;
       const escH = window.escapeHTML || ((v) => String(v == null ? '' : v));
       book.hadiths.forEach(h => {
         const hasA = !!h.a;
-        html += `<div class="verse-card" style="position:relative;">
-          <div class="verse-num">${_fmtN(h.n)}</div>
+        html += `<div class="verse-card" style="position:relative;padding-inline-end:52px;">
+          <div class="verse-num iq-tabular">${_fmtN(h.n)}</div>
           ${hasA ? `<div dir="rtl" style="font-family:var(--iq-font-ar);font-size:1.25rem;line-height:1.9;color:var(--accent-dark);margin-bottom:10px;">${escH(h.a)}</div>` : ''}
           <div class="verse-english">${escH(h.t)}</div>
-          <div class="content-source">${iqIcon('book-open')} ${escH(col.name)} ${escH(h.b)}:${escH(h.h)} <a class="verify-btn" href="https://sunnah.com/${escH(col.id)}/${escH(h.b)}#${escH(h.n)}" target="_blank" rel="noopener noreferrer" title="Verify on sunnah.com">Verify</a> <button type="button" class="iq-text-btn" style="padding:2px 6px;min-height:32px;font-size:0.74rem;" onclick="App.openContentErrorModal && App.openContentErrorModal('${escH(col.name)} ${escH(h.b)}:${escH(h.h)}')">Report</button></div>
-          <button type="button" class="sit-fav-btn" aria-label="Listen" title="Listen (Arabic)" style="position:absolute;top:8px;right:8px;background:none;border:none;cursor:pointer;padding:6px;font-size:1rem;line-height:1;color:var(--accent-dark);" onclick="event.stopPropagation();hadithSpeak('${escH(col.id)}',${Number(h.b)},${Number(h.h)})">${iqIcon('music')}</button>
+          <div class="content-source">${iqIcon('book-open')} ${escH(col.name)} <bdi dir="ltr">${escH(h.b)}:${escH(h.h)}</bdi> <a class="verify-btn" href="https://sunnah.com/${escH(col.id)}/${escH(h.b)}#${escH(h.n)}" target="_blank" rel="noopener noreferrer" title="Verify on sunnah.com">${escH(_tr('Verify', 'Verify'))}</a> <button type="button" class="iq-text-btn" style="padding:4px 8px;min-height:36px;font-size:0.74rem;" onclick="App.openContentErrorModal && App.openContentErrorModal('${escH(col.name)} ${escH(h.b)}:${escH(h.h)}')">${escH(_tr('Report', 'Report'))}</button></div>
+          <button type="button" class="sit-fav-btn" aria-label="Listen" title="Listen (Arabic)" style="position:absolute;top:6px;inset-inline-end:6px;min-width:44px;min-height:44px;display:inline-flex;align-items:center;justify-content:center;background:none;border:none;cursor:pointer;padding:6px;font-size:1rem;line-height:1;color:var(--accent-dark);" onclick="event.stopPropagation();hadithSpeak('${escH(col.id)}',${Number(h.b)},${Number(h.h)})">${iqIcon('music')}</button>
         </div>`;
       });
       el.innerHTML = html;
@@ -1362,14 +1370,14 @@ function renderAll() {
     if (hadithView.level === 'books') {
       const col = data.find(c => c.id === hadithView.collectionId);
       if (!col) { hadithView = { level: 'collections', collectionId: null, bookId: null }; renderHadith(); return; }
-      let html = `<button class="quran-back-btn" onclick="App.hadithBack()">◀ Back to Collections</button>`;
-      html += `<div class="quran-header"><h2>${iqIcon(col.icon || colIconFor(col.id))} ${col.name}</h2><div class="quran-sub">${col.books.length} books · ${col.books.reduce((s, b) => s + b.hadiths.length, 0)} hadiths</div></div>`;
+      let html = `<button type="button" class="quran-back-btn" onclick="App.hadithBack()"><span class="iq-mirror-icon">◀</span> ${window.escapeHTML(_tr('Back to Collections', 'Back to Collections'))}</button>`;
+      html += `<div class="quran-header"><h2>${iqIcon(col.icon || colIconFor(col.id))} ${window.escapeHTML(col.name)}</h2><div class="quran-sub iq-tabular">${_fmtN(col.books.length)} ${window.escapeHTML(_tr('books', 'books'))} &middot; ${_fmtN(col.books.reduce((s, b) => s + b.hadiths.length, 0))} ${window.escapeHTML(_tr('hadiths', 'hadiths'))}</div></div>`;
       html += '<div class="surah-grid">';
       col.books.forEach(book => {
         html += `<div class="surah-card" onclick="App.openHadithBook('${col.id}',${book.id})">
-          <div class="surah-num">${iqIcon('book-open')} ${book.id}</div>
-          <div class="surah-name-en">${book.name}</div>
-          <div class="surah-meta">${book.hadiths.length} hadiths</div>
+          <div class="surah-num iq-tabular">${iqIcon('book-open')} ${_fmtN(book.id)}</div>
+          <div class="surah-name-en">${window.escapeHTML(book.name)}</div>
+          <div class="surah-meta iq-tabular">${_fmtN(book.hadiths.length)} ${window.escapeHTML(_tr('hadiths', 'hadiths'))}</div>
         </div>`;
       });
       html += '</div>';
@@ -1377,7 +1385,7 @@ function renderAll() {
       return;
     }
 
-    let html = '<div class="quran-header"><h2>' + iqIcon('book') + ' The Hadith Collections</h2><div class="quran-sub">Authentic narrations of the Prophet Muhammad ﷺ</div></div>';
+    let html = '<div class="quran-header"><h2>' + iqIcon('book') + ' ' + window.escapeHTML(_tr('The Hadith Collections', 'The Hadith Collections')) + '</h2><div class="quran-sub">' + window.escapeHTML(_tr('Authentic narrations of the Prophet Muhammad ﷺ', 'Authentic narrations of the Prophet Muhammad ﷺ')) + '</div></div>';
     html += '<div class="surah-grid">';
     _allCollections().forEach(c => {
       const total = (c.books || []).reduce((s, b) => s + b.hadiths.length, 0);
@@ -1385,12 +1393,14 @@ function renderAll() {
       /* Bundled cols (bukhari/muslim/nawawi) resolve via icon aliases; remote/pending
          ids don't resolve in data/icons.js, so fall back to colIconFor for those. */
       const iconHtml = (c.remote || c.remotePending) ? iqIcon(colIconFor(c.id)) : iqIcon(c.icon || c.id);
-      const badge = pending ? '<span style="float:right;font-size:0.62rem;background:rgba(201,168,76,0.18);color:var(--accent-light);padding:2px 8px;border-radius:10px;">Online</span>' : '';
+      const badge = pending ? '<span class="iq-num-pill">' + window.escapeHTML(_tr('Online', 'Online')) + '</span>' : '';
       html += `<div class="surah-card" onclick="App.openHadithCollection('${c.id}')">
-        <div class="surah-num">${iconHtml}${badge}</div>
-        <div class="surah-name-en">${c.name}</div>
-        <div class="surah-meta">${pending ? 'Tap to download' : (c.books.length + ' books · ' + total + ' hadiths')}</div>
-        <div style="font-size:0.72rem;color:var(--text2);margin-top:4px;line-height:1.4;">${c.desc}</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;width:100%;">
+          <div class="surah-num">${iconHtml}</div>${badge}
+        </div>
+        <div class="surah-name-en">${window.escapeHTML(c.name)}</div>
+        <div class="surah-meta iq-tabular">${pending ? window.escapeHTML(_tr('Tap to download', 'Tap to download')) : (_fmtN(c.books.length) + ' ' + window.escapeHTML(_tr('books', 'books')) + ' · ' + _fmtN(total) + ' ' + window.escapeHTML(_tr('hadiths', 'hadiths')))}</div>
+        <div style="font-size:0.74rem;color:var(--text2);margin-top:4px;line-height:1.45;">${window.escapeHTML(c.desc)}</div>
       </div>`;
     });
     html += '</div>';

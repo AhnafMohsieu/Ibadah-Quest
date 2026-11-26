@@ -95,19 +95,21 @@
     if (!el) return;
     const h = getTodayHealth();
     const score = getHealthScore();
+    const _t = (s) => (typeof window !== 'undefined' && typeof window.t === 'function') ? window.t(s) : s;
+    const _n = (v) => (typeof window !== 'undefined' && typeof window.iqFormatNum === 'function') ? window.iqFormatNum(v) : String(v);
 
-    let html = `<div class="section-title">${iqIcon('heart')} Health & Wellness</div>`;
+    let html = `<div class="section-title">${iqIcon('heart')} ${safeText(_t('Health & Wellness'))}</div>`;
 
     // Health Score
     html += `<div class="health-score-card">
-      <div class="health-score-num">${score}</div>
-      <div class="health-score-label">Health Score</div>
+      <div class="health-score-num iq-tabular">${_n(score)}</div>
+      <div class="health-score-label">${safeText(_t('Health Score'))}</div>
       <div class="health-score-bar"><div class="health-score-fill" style="width:${score}%"></div></div>
     </div>`;
 
     // Water Tracker
     html += `<div class="health-card">
-      <div class="health-card-header">${iqIcon('droplets')} Water (${h.water}/${WATER_TARGET} glasses)</div>
+      <div class="health-card-header">${iqIcon('droplets')} ${safeText(_t('Water'))} (<span class="iq-tabular">${_n(h.water)}/${_n(WATER_TARGET)}</span> ${safeText(_t('glasses'))})</div>
       <div class="water-grid">
         ${Array.from({length: WATER_TARGET}, (_, i) =>
           `<button type="button" class="water-glass ${i < h.water ? 'filled' : ''}" aria-label="Log ${i + 1} glasses of water" aria-pressed="${i < h.water}" onclick="App.logWater(${i + 1})">${iqIcon('droplets')}</button>`
@@ -117,35 +119,35 @@
 
     // Sleep Tracker
     html += `<div class="health-card">
-      <div class="health-card-header">${iqIcon('cloud-sun')} Sleep (${h.sleep}h)</div>
-      <label class="sr-only" for="sleepInput">Hours slept</label>
-      <input type="number" class="profile-input" id="sleepInput" placeholder="Hours slept" min="0" max="12" step="0.5" value="${h.sleep}">
-      <button class="shop-card" onclick="App.logSleep(document.getElementById('sleepInput').value)" style="justify-content:center;width:100%;">Log Sleep</button>
+      <div class="health-card-header">${iqIcon('cloud-sun')} ${safeText(_t('Sleep'))} (<span class="iq-tabular">${_n(h.sleep)}h</span>)</div>
+      <label class="sr-only" for="sleepInput">${safeText(_t('Hours slept'))}</label>
+      <input type="number" class="profile-input" id="sleepInput" placeholder="${safeText(_t('Hours slept'))}" min="0" max="12" step="0.5" value="${h.sleep}">
+      <button type="button" class="iq-pill-btn" onclick="App.logSleep(document.getElementById('sleepInput').value)" style="width:100%;">${safeText(_t('Log Sleep'))}</button>
     </div>`;
 
     // Exercise Tracker
     html += `<div class="health-card">
-      <div class="health-card-header">${iqIcon('target')} Exercise</div>
-      <label class="sr-only" for="exerciseType">Exercise type</label>
+      <div class="health-card-header">${iqIcon('target')} ${safeText(_t('Exercise'))}</div>
+      <label class="sr-only" for="exerciseType">${safeText(_t('Exercise type'))}</label>
       <select class="profile-input" id="exerciseType">
-        ${EXERCISE_TYPES.map(e => `<option value="${e.id}">${iqIcon(e.icon)} ${e.label}</option>`).join('')}
+        ${EXERCISE_TYPES.map(e => `<option value="${e.id}">${safeText(_t(e.label))}</option>`).join('')}
       </select>
-      <label class="sr-only" for="exerciseDuration">Exercise duration in minutes</label>
-      <input type="number" class="profile-input" id="exerciseDuration" placeholder="Duration (minutes)" min="1">
-      <button class="shop-card" onclick="App.logExercise(document.getElementById('exerciseType').value, document.getElementById('exerciseDuration').value)" style="justify-content:center;width:100%;">Log Exercise</button>
+      <label class="sr-only" for="exerciseDuration">${safeText(_t('Duration (minutes)'))}</label>
+      <input type="number" class="profile-input" id="exerciseDuration" placeholder="${safeText(_t('Duration (minutes)'))}" min="1">
+      <button type="button" class="iq-pill-btn" onclick="App.logExercise(document.getElementById('exerciseType').value, document.getElementById('exerciseDuration').value)" style="width:100%;">${safeText(_t('Log Exercise'))}</button>
       ${h.exercise.length > 0 ? `<div class="exercise-log">${h.exercise.map(e => {
         const type = EXERCISE_TYPES.find(t => t.id === e.type);
-        return `<div class="exercise-item">${iqIcon(type?.icon || 'target')} ${safeText(type?.label || e.type)} - ${e.duration}min</div>`;
+        return `<div class="exercise-item">${iqIcon(type?.icon || 'target')} ${safeText(_t(type?.label || e.type))} - <span class="iq-tabular">${_n(e.duration)}${safeText(_t('min'))}</span></div>`;
       }).join('')}</div>` : ''}
     </div>`;
 
     // Meals Tracker
     html += `<div class="health-card">
-      <div class="health-card-header">${iqIcon('utensils')} Meals</div>
+      <div class="health-card-header">${iqIcon('utensils')} ${safeText(_t('Meals'))}</div>
       <div class="meal-grid">
-        <button type="button" class="meal-item ${h.meals.breakfast ? 'eaten' : ''}" aria-pressed="${!!h.meals.breakfast}" onclick="App.toggleMeal('breakfast')">${iqIcon('sunrise')} Breakfast</button>
-        <button type="button" class="meal-item ${h.meals.lunch ? 'eaten' : ''}" aria-pressed="${!!h.meals.lunch}" onclick="App.toggleMeal('lunch')">${iqIcon('sun')} Lunch</button>
-        <button type="button" class="meal-item ${h.meals.dinner ? 'eaten' : ''}" aria-pressed="${!!h.meals.dinner}" onclick="App.toggleMeal('dinner')">${iqIcon('sunset')} Dinner</button>
+        <button type="button" class="meal-item ${h.meals.breakfast ? 'eaten' : ''}" aria-pressed="${!!h.meals.breakfast}" onclick="App.toggleMeal('breakfast')">${iqIcon('sunrise')} ${safeText(_t('Breakfast'))}</button>
+        <button type="button" class="meal-item ${h.meals.lunch ? 'eaten' : ''}" aria-pressed="${!!h.meals.lunch}" onclick="App.toggleMeal('lunch')">${iqIcon('sun')} ${safeText(_t('Lunch'))}</button>
+        <button type="button" class="meal-item ${h.meals.dinner ? 'eaten' : ''}" aria-pressed="${!!h.meals.dinner}" onclick="App.toggleMeal('dinner')">${iqIcon('sunset')} ${safeText(_t('Dinner'))}</button>
       </div>
     </div>`;
 
