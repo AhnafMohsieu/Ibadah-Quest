@@ -1,12 +1,14 @@
-﻿const QURAN_POOL = [
-  { arabic:"﻿بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ", roman:"Bismillaahir Rahmaanir Raheem", english:"In the name of Allah, the Entirely Merciful, the Especially Merciful.", source:"Al-Faatiha 1:1" },
+/* Arabic script & Saheeh International English translation (matched against api.alquran.cloud en.sahih). Verify commercial redistribution terms prior to store submission. */
+const QURAN_EN_META = { translator: "Saheeh International", source: "Bundled corpus (verified against api.alquran.cloud en.sahih)" };
+const QURAN_POOL = [
+  { arabic:"بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ", roman:"Bismillaahir Rahmaanir Raheem", english:"In the name of Allah, the Entirely Merciful, the Especially Merciful.", source:"Al-Faatiha 1:1" },
   { arabic:"الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ", roman:"Alhamdu lillaahi Rabbil \'aalameen", english:"[All] praise is [due] to Allah, Lord of the worlds -", source:"Al-Faatiha 1:2" },
   { arabic:"الرَّحْمَٰنِ الرَّحِيمِ", roman:"Ar-Rahmaanir-Raheem", english:"The Entirely Merciful, the Especially Merciful,", source:"Al-Faatiha 1:3" },
   { arabic:"مَالِكِ يَوْمِ الدِّينِ", roman:"Maaliki Yawmid-Deen", english:"Sovereign of the Day of Recompense.", source:"Al-Faatiha 1:4" },
   { arabic:"إِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ", roman:"Iyyaaka na\'budu wa lyyaaka nasta\'een", english:"It is You we worship and You we ask for help.", source:"Al-Faatiha 1:5" },
   { arabic:"اهْدِنَا الصِّرَاطَ الْمُسْتَقِيمَ", roman:"Ihdinas-Siraatal-Mustaqeem", english:"Guide us to the straight path -", source:"Al-Faatiha 1:6" },
   { arabic:"صِرَاطَ الَّذِينَ أَنْعَمْتَ عَلَيْهِمْ غَيْرِ الْمَغْضُوبِ عَلَيْهِمْ وَلَا الضَّالِّينَ", roman:"Siraatal-lazeena an\'amta \'alaihim ghayril-maghdoobi \'alaihim wa lad-daaalleen", english:"The path of those upon whom You have bestowed favor, not of those who have evoked [Your] anger or of those who are astray.", source:"Al-Faatiha 1:7" },
-  { arabic:"بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ الم", roman:"Alif-Laaam-Meeem", english:"Alif, Lam, Meem.", source:"Al-Baqara 2:1" },
+  { arabic:"الم", roman:"Alif-Laaam-Meeem", english:"Alif, Lam, Meem.", source:"Al-Baqara 2:1" },
   { arabic:"ذَٰلِكَ الْكِتَابُ لَا رَيْبَ ۛ فِيهِ ۛ هُدًى لِلْمُتَّقِينَ", roman:"Zaalikal Kitaabu laa raiba feeh; udal lilmuttaqeen", english:"This is the Book about which there is no doubt, a guidance for those conscious of Allah -", source:"Al-Baqara 2:2" },
   { arabic:"الَّذِينَ يُؤْمِنُونَ بِالْغَيْبِ وَيُقِيمُونَ الصَّلَاةَ وَمِمَّا رَزَقْنَاهُمْ يُنْفِقُونَ", roman:"Allazeena yu\'minoona bilghaibi wa yuqeemoonas salaata wa mimmaa razaqnaahum yunfiqoon", english:"Who believe in the unseen, establish prayer, and spend out of what We have provided for them,", source:"Al-Baqara 2:3" },
   { arabic:"وَالَّذِينَ يُؤْمِنُونَ بِمَا أُنْزِلَ إِلَيْكَ وَمَا أُنْزِلَ مِنْ قَبْلِكَ وَبِالْآخِرَةِ هُمْ يُوقِنُونَ", roman:"Wallazeena yu\'minoona bimaa unzila ilaika wa maaa unzila min qablika wa bil Aakhirati hum yooqinoon", english:"And who believe in what has been revealed to you, [O Muhammad], and what was revealed before you, and of the Hereafter they are certain [in faith].", source:"Al-Baqara 2:4" },

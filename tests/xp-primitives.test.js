@@ -86,7 +86,7 @@ test('applyXpDelta fires the level-up toast by default; skipLevelToast suppresse
   const def = capture(mk({ S: { xp: 350, lv: 2 } }));
   const rDef = def.window.applyXpDelta(150); // crosses quadratic threshold -> lv 3
   assert.strictEqual(rDef.leveledUp, true, 'default call must still report leveledUp');
-  assert.ok(written.some(h => h.includes('LEVEL UP')), 'default call must run the real checkLevelUp toast path');
+  assert.ok(written.some(h => h.includes('Milestone Reached') || h.includes('levelup-box')), 'default call must run the real checkLevelUp toast path');
 
   written.length = 0;
   const skip = capture(mk({ S: { xp: 350, lv: 2 } }));

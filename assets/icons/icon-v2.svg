@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Ibadah Quest Geometric Mihrab and Crescent Mark">
+  <defs>
+    <linearGradient id="iqBgV2" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#054944"/>
+      <stop offset="55%" stop-color="#07635D"/>
+      <stop offset="100%" stop-color="#0A7A72"/>
+    </linearGradient>
+    <linearGradient id="iqGoldV2" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#F2D78A"/>
+      <stop offset="100%" stop-color="#C99B3B"/>
+    </linearGradient>
+  </defs>
+  <rect x="24" y="24" width="464" height="464" rx="112" fill="url(#iqBgV2)"/>
+  <!-- Subtle Mihrab Arch -->
+  <path d="M128 408V232c0-78 62-128 128-156 66 28 128 78 128 156v176" fill="none" stroke="rgba(255,255,255,0.28)" stroke-width="14" stroke-linecap="round"/>
+  <!-- Quiet Horizon Bar -->
+  <path d="M148 408h216" stroke="url(#iqGoldV2)" stroke-width="14" stroke-linecap="round"/>
+  <!-- Centered Crescent -->
+  <path d="M274 166a78 78 0 1 0 74 104 62 62 0 1 1-74-104z" fill="#FFFFFF"/>
+  <!-- 8-point Geometric Star Accent -->
+  <g transform="translate(302 204)" fill="url(#iqGoldV2)">
+    <rect x="-14" y="-14" width="28" height="28" rx="3"/>
+    <rect x="-14" y="-14" width="28" height="28" rx="3" transform="rotate(45)"/>
+  </g>
+</svg>

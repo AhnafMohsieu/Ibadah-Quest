@@ -54,24 +54,24 @@ test('Journeys tab is wired into the ibadah group', () => {
 
 test('index.html declares the PWA manifest and theme color', () => {
   assert.ok(html.includes('<link rel="manifest" href="manifest.json">'));
-  assert.ok(html.includes('<meta name="theme-color" content="#075e64">'));
+  assert.ok(html.includes('<meta name="theme-color" content="#054944">'));
 });
 
 test('index.html does NOT load Tailwind CDN', () => {
   assert.ok(!html.includes('tailwindcss'));
 });
 
-test('index.html theme-color uses iQ teal header base', () => {
-  assert.ok(html.includes('content="#075e64"'));
+test('index.html theme-color uses iQ AA emerald-teal header base', () => {
+  assert.ok(html.includes('content="#054944"'));
 });
 
-test('main.css uses modern iQ teal-mint tokens', () => {
-  assert.ok(css.includes('--accent'));
+test('main.css uses Noor & Rhythm AA teal-emerald tokens', () => {
+  assert.ok(css.includes('--accent: #07635d'));
   assert.ok(css.includes('--bg: #f2fbf8'));
 });
 
 test('index.html registers the service worker and update banner', () => {
-  assert.ok(html.includes("navigator.serviceWorker.register('sw.js?v=65')"));
+  assert.ok(html.includes("navigator.serviceWorker.register('sw.js?v=66')"));
   assert.ok(html.includes("'SKIP_WAITING'"));
   assert.ok(html.includes('swUpdateBanner'));
 });
@@ -88,14 +88,19 @@ test('index.html CSP permits the app\'s remote fetch and media hosts', () => {
     'media-src must allow verses.quran.com audio');
 });
 
-test('hadith/dhikr audio modules wired with versions and load order', () => {
+test('hadith/dhikr audio, offline fonts, and adhan modules wired cleanly', () => {
   assert.ok(html.includes('<script src="core/content-cache.js?v=1"></script>'));
   assert.ok(html.includes('<script src="core/audio.js?v=4"></script>'));
   assert.ok(html.includes('<script src="data/hadith-normalize.js?v=1"></script>'));
   assert.ok(html.includes('<script src="features/hadith-library.js?v=3" defer></script>'));
   assert.ok(html.includes('<script src="features/tafsir-library.js?v=3" defer></script>'));
-  assert.ok(html.includes('styles/main.css?v=53'));
-  assert.ok(html.includes('features/daily-content.js?v=2'));
+  assert.ok(html.includes('styles/tokens.css?v=1'));
+  assert.ok(html.includes('styles/main.css?v=54'));
+  assert.ok(html.includes('features/daily-content.js?v=3'));
+  assert.ok(html.includes('features/notifications.js?v=3'));
+  assert.ok(html.includes('assets/vendor/adhan.umd.min.js'));
+  assert.ok(!html.includes('fonts.googleapis.com'), 'Google Fonts CDN removed for offline privacy');
+  assert.ok(!html.includes('cdn.jsdelivr.net/npm/chart.js'), 'Chart.js CDN removed in favor of offline Canvas charts');
   assert.ok(html.indexOf('core/content-cache.js') < html.indexOf('core/state.js'), 'cache module loads before state');
   assert.ok(html.indexOf('core/audio.js') < html.indexOf('core/static.js'), 'audio module loads before renderers');
   assert.ok(html.indexOf('features/tafsir-library.js') > html.indexOf('core/static.js'), 'deferred features load after renderers');
@@ -131,24 +136,15 @@ test('redesign keeps core markers and PWA meta intact', () => {
   assert.ok(tabs.includes("id: 'journeys'"));
 });
 
-test('single signature light iQ palette: extra color themes and dark mode removed', () => {
+test('Noor & Rhythm tokens support Light, Dark, and OLED Night themes cleanly', () => {
+  const tokensCss = fs.readFileSync(path.join(root, 'styles', 'tokens.css'), 'utf8');
   assert.ok(css.includes('--bg: #f2fbf8'));
-  assert.ok(css.includes('--accent: #0b8a82'));
-  assert.ok(!css.includes('--bg: #0b1513'));
-  assert.ok(!css.includes('--emerald: #10b981'));
-  for (const key of ['serene','royal','midnight','cream','emara','dark','night','serene-dark','sand']) {
-    assert.ok(!css.includes(`html[data-theme="${key}"]`), `unexpected palette override block for ${key}`);
-  }
-  assert.ok(!css.includes('.theme-picker'), 'theme picker CSS must be removed');
-  assert.ok(!css.includes('.theme-chip'), 'theme chip CSS must be removed');
-  assert.ok(!html.includes("localStorage.getItem('iqTheme')"), 'pre-paint data-theme script must be removed');
-  assert.ok(!html.includes('data/theme-meta.js'), 'theme-meta script must be removed');
-  assert.ok(!html.includes('core/themes.js'), 'core/themes.js script must be removed');
-  assert.ok(!html.includes('id="themeToggle"'), 'topBar theme toggle button must be removed');
-  assert.ok(!renderAll.includes('window.Themes'), 'profile theme picker must be removed');
-  assert.ok(!renderAll.includes('App.setTheme('), 'profile setTheme wiring must be removed');
-  assert.ok(!fs.existsSync(path.join(root, 'core', 'themes.js')), 'core/themes.js must be deleted');
-  assert.ok(!fs.existsSync(path.join(root, 'data', 'theme-meta.js')), 'data/theme-meta.js must be deleted');
+  assert.ok(css.includes('--accent: #07635d'));
+  assert.ok(tokensCss.includes('html[data-theme="dark"]'));
+  assert.ok(tokensCss.includes('html[data-theme="night"]'));
+  assert.ok(actions.includes('iqSetTheme'));
+  assert.ok(html.includes('styles/tokens.css?v=1'));
+  assert.ok(!fs.existsSync(path.join(root, 'core', 'themes.js')), 'legacy core/themes.js remains deleted');
 });
 
 test('app shell has tab content container', () => {
@@ -261,7 +257,7 @@ assert.ok(body.includes("App.resetDhikr()"), 'reset button must call resetDhikr'
 test('dhikr tap grants per-tap XP, completion bonus, and auto-resets counter', () => {
   const fnIdx = dhikr.indexOf('function tapDhikr');
   assert.ok(fnIdx > -1, 'tapDhikr must exist in core/dhikr.js');
-  const body = dhikr.slice(fnIdx, fnIdx + 1600);
+  const body = dhikr.slice(fnIdx, fnIdx + 2400);
   assert.ok(body.includes('let gain = 1'), 'per-tap dhikr XP +1 missing');
   assert.ok(body.includes('gain += 20'), 'dhikr completion bonus +20 missing');
   assert.ok(body.includes('S.dhikrCounters[idx] = 0'), 'counter must auto-reset on completion');
@@ -696,8 +692,9 @@ test('SP1: equal prayer cards, info hit area, FAB a11y', () => {
 });
 
 test('SP1: info buttons are labelled and keyboard-operable', () => {
-  const labelled = (renderPrayers + renderStatic).split('role="button" tabindex="0" aria-label="Details: ').length;
-  assert.strictEqual(labelled, 6, 'all five info-button templates must be labelled');
+  const labelledMatches = (renderPrayers + renderStatic).match(/aria-label="Details: /g) || [];
+  assert.strictEqual(labelledMatches.length, 5, 'all five info-button templates must be labelled');
+  assert.ok(renderPrayers.includes('<button type="button" class="card-info-btn"'), 'prayer info button uses semantic <button>');
   assert.ok(actions.includes("'.card-item, .vol-card, .shop-card, .card-info-btn'"),
     'keydown handler must cover info buttons');
 });
@@ -754,14 +751,14 @@ test('Option 3 shell & remodeled 2x2 Bento drawer tab section', () => {
   assert.ok(html.includes('id="iqMasjidSheet"'), 'masjid check-ins slide-over sheet missing');
   assert.ok(html.includes('id="bnavCenterFab"'), 'elevated center dock crescent button missing');
   assert.ok(html.includes('features/masjid-checkins.js?v=3'), 'masjid-checkins script v=3 missing');
-  assert.ok(html.includes('features/iq-shell.js?v=5'), 'iq-shell script v=5 missing');
-  assert.ok(html.includes('core/prayers.js?v=5'), 'core/prayers.js script v=5 missing');
-  assert.ok(html.includes('core/render-prayers.js?v=7'), 'render-prayers.js script v=7 missing');
-  assert.ok(html.includes('core/static.js?v=10'), 'core/static.js script v=10 missing');
-  assert.ok(html.includes('core/dynamic.js?v=17'), 'dynamic.js script v=17 missing');
-  assert.ok(html.includes('core/tabs.js?v=15'), 'core/tabs.js script v=15 missing');
-  assert.ok(html.includes('features/daily-summary.js?v=2'), 'daily-summary script v=2 missing');
-  assert.ok(html.includes('core/actions.js?v=27'), 'core/actions.js script v=27 missing');
+  assert.ok(html.includes('features/iq-shell.js?v=6'), 'iq-shell script v=6 missing');
+  assert.ok(html.includes('core/prayers.js?v=6'), 'core/prayers.js script v=6 missing');
+  assert.ok(html.includes('core/render-prayers.js?v=8'), 'render-prayers.js script v=8 missing');
+  assert.ok(html.includes('core/static.js?v=11'), 'core/static.js script v=11 missing');
+  assert.ok(html.includes('core/dynamic.js?v=18'), 'dynamic.js script v=18 missing');
+  assert.ok(html.includes('core/tabs.js?v=16'), 'core/tabs.js script v=16 missing');
+  assert.ok(html.includes('features/daily-summary.js?v=3'), 'daily-summary script v=3 missing');
+  assert.ok(html.includes('core/actions.js?v=28'), 'core/actions.js script v=28 missing');
   assert.ok(renderPrayers.includes('computeNextPrayer'), 'render-prayers.js must expose computeNextPrayer');
   assert.ok(renderPrayers.includes('updatePrayerSettings'), 'render-prayers.js must expose updatePrayerSettings');
   assert.ok(renderPrayers.includes('togglePrayerPause'), 'render-prayers.js must expose togglePrayerPause');

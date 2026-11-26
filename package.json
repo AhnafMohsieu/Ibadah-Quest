@@ -1,0 +1,16 @@
+{
+  "name": "ibadah-quest",
+  "version": "2.2.0",
+  "description": "Offline-first Islamic worship tracker PWA & mobile app (Bangla, English, Arabic)",
+  "private": true,
+  "scripts": {
+    "test": "node --test",
+    "check-syntax": "node scripts/check-syntax.js",
+    "build:spa-check": "node scripts/check-syntax.js && node --test"
+  },
+  "keywords": ["islamic", "pwa", "prayer-times", "quran", "dhikr", "offline-first", "capacitor"],
+  "license": "SEE LICENSE",
+  "dependencies": {
+    "adhan": "^4.4.6"
+  }
+}

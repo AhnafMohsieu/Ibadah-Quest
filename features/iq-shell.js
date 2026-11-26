@@ -20,6 +20,9 @@
   function tLabel(k) {
     return (typeof window !== 'undefined' && typeof window.t === 'function') ? window.t(k) : k;
   }
+  function fmtNum(v) {
+    return (typeof window !== 'undefined' && typeof window.iqFormatNum === 'function') ? window.iqFormatNum(v) : String(v);
+  }
 
   function todayStr() {
     if (typeof today === 'function') return today();
@@ -253,8 +256,8 @@
     var heroEl = document.getElementById('iqHeroChallenge');
     if (heroEl) {
       var focusMetaRight = nextP
-        ? ('Next: ' + esc(nextP.name) + ' &middot; ' + esc(nextP.shortRemaining))
-        : ('Overall ' + summary.overallPct + '% today');
+        ? (esc(tLabel('Next:')) + ' ' + esc(tLabel(nextP.name)) + ' &middot; ' + esc(nextP.shortRemaining))
+        : ('Overall ' + fmtNum(summary.overallPct) + '% today');
       var rhythmHtml = '<div class="iq-rhythm-strip" aria-label="7-day prayer consistency">' +
         rhythm.map(function(day) {
           var cls = 'iq-rhythm-day' + (day.complete ? ' complete' : (day.partial ? ' partial' : '')) + (day.isToday ? ' today' : '');
@@ -264,18 +267,20 @@
           '</div>';
         }).join('') +
       '</div>';
+      var focusLbl = tLabel("Today's Focus");
+      var detailsLbl = tLabel('Details');
       heroEl.innerHTML =
         '<div class="iq-hero-ch-top">' +
-          '<span class="iq-hero-ch-title">' + esc(greet) + ' &middot; Today\'s Focus</span>' +
-          '<button type="button" class="iq-hero-ch-link" onclick="window.openChallengeDetail(\'dhikr\')">Details &rsaquo;</button>' +
+          '<span class="iq-hero-ch-title">' + esc(tLabel(greet)) + ' &middot; ' + focusLbl + '</span>' +
+          '<button type="button" class="iq-hero-ch-link" onclick="window.openChallengeDetail(\'dhikr\')">' + esc(detailsLbl) + ' &rsaquo;</button>' +
         '</div>' +
         '<div class="iq-hero-ch-card iq-hero-upgraded" role="button" tabindex="0" onclick="window.openChallengeDetail(\'dhikr\')">' +
           '<div class="iq-hero-ring-grid">' +
             renderConcentricRingsSvg(summary, 94) +
             '<div class="iq-hero-pillars">' +
-              '<div class="iq-pillar-row"><span class="iq-pillar-dot" style="background:#14b8a6"></span><span>Prayers</span><strong class="iq-tabular">' + summary.prayersDone + '/' + summary.prayersTotal + '</strong></div>' +
-              '<div class="iq-pillar-row"><span class="iq-pillar-dot" style="background:#38bdf8"></span><span>Dhikr</span><strong class="iq-tabular">' + summary.dhikrToday + '/' + summary.dhikrGoal + '</strong></div>' +
-              '<div class="iq-pillar-row"><span class="iq-pillar-dot" style="background:#eab308"></span><span>Quran</span><strong class="iq-tabular">' + summary.quranToday + '/' + summary.quranGoal + 'm</strong></div>' +
+              '<div class="iq-pillar-row"><span class="iq-pillar-dot" style="background:#0a7a72"></span><span>' + esc(tLabel('Prayers')) + '</span><strong class="iq-tabular">' + fmtNum(summary.prayersDone) + '/' + fmtNum(summary.prayersTotal) + '</strong></div>' +
+              '<div class="iq-pillar-row"><span class="iq-pillar-dot" style="background:#0284c7"></span><span>' + esc(tLabel('Dhikr')) + '</span><strong class="iq-tabular">' + fmtNum(summary.dhikrToday) + '/' + fmtNum(summary.dhikrGoal) + '</strong></div>' +
+              '<div class="iq-pillar-row"><span class="iq-pillar-dot" style="background:#8e6b1e"></span><span>' + esc(tLabel('Quran')) + '</span><strong class="iq-tabular">' + fmtNum(summary.quranToday) + '/' + fmtNum(summary.quranGoal) + 'm</strong></div>' +
               '<div class="iq-hero-ch-meta"><span>' + focusMetaRight + '</span></div>' +
             '</div>' +
           '</div>' +

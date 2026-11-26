@@ -6,7 +6,7 @@
     quests: ['panel-quests'],
     stats: ['panel-stats'],
     growth: ['panel-progress','panel-growth'],
-    profile: ['panel-profile','panel-trophies','panel-rewards','panel-goals','panel-allah_names','panel-prophets','panel-scholars_names','panel-sahaba','panel-women'],
+    profile: ['panel-profile','panel-gallery','panel-trophies','panel-rewards','panel-goals','panel-allah_names','panel-prophets','panel-scholars_names','panel-sahaba','panel-women'],
     knowledge_quran: ['panel-quran','panel-hadith','panel-tafsir','panel-seerah'],
     knowledge_fiqh: ['panel-fiqh','panel-worship-rulings','panel-wealth-oaths'],
     knowledge_creed: ['panel-aqeedah'],

@@ -14,7 +14,24 @@
     });
     return _loadingScripts[srcUrl];
   }
-  function ensureQuranLoaded() { return loadScript('data/pools/quran-verses.js').then(() => { if (window.invalidateSearchIndex) window.invalidateSearchIndex(); }); }
+  function ensureQuranLoaded() {
+    var reqs = [loadScript('data/pools/quran-verses.js')];
+    try {
+      if (typeof S !== 'undefined' && S) {
+        if (S.quranScript === 'indopak') reqs.push(loadScript('data/pools/quran-indopak.js'));
+        if (S.quranTranslation === 'bn' || S.quranTranslation === 'both' || S.lang === 'bn') {
+          reqs.push(loadScript('data/pools/quran-bn.js'));
+        }
+      }
+    } catch (e) {}
+    return Promise.all(reqs).then(() => { if (window.invalidateSearchIndex) window.invalidateSearchIndex(); });
+  }
+  function ensureQuranBanglaLoaded() {
+    return loadScript('data/pools/quran-bn.js');
+  }
+  function ensureQuranIndoPakLoaded() {
+    return loadScript('data/pools/quran-indopak.js');
+  }
   function ensureHadithLoaded() {
     return Promise.all([
       loadScript('data/pools/hadiths.js'),
@@ -61,6 +78,8 @@
   }
 
   window.ensureQuranLoaded = ensureQuranLoaded;
+  window.ensureQuranBanglaLoaded = ensureQuranBanglaLoaded;
+  window.ensureQuranIndoPakLoaded = ensureQuranIndoPakLoaded;
   window.ensureHadithLoaded = ensureHadithLoaded;
   window.refreshContent = refreshContent;
   window.manualRefreshContent = manualRefreshContent;

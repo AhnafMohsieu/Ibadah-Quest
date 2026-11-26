@@ -34,7 +34,7 @@ test('i18n translates known chrome strings across all three languages', () => {
   I18N.lang = 'en';
   assert.strictEqual(t('Prayer Times'), 'Prayer Times');
   I18N.lang = 'ar';
-  assert.strictEqual(t('Prayer Times'), 'Awqat al-Salah');
+  assert.strictEqual(t('Prayer Times'), 'أوقات الصلاة');
   I18N.lang = 'bn';
   assert.strictEqual(t('Prayer Times'), 'নামাজের সময়');
   I18N.lang = 'en';

@@ -16,16 +16,14 @@ test('manifest declares the app identity', () => {
   assert.strictEqual(manifest.scope, './');
 });
 
-test('manifest uses the iQ teal-mint base theme colors', () => {
-  assert.strictEqual(manifest.theme_color, '#075e64');
+test('manifest uses the iQ AA emerald-teal base theme colors', () => {
+  assert.strictEqual(manifest.theme_color, '#054944');
   assert.strictEqual(manifest.background_color, '#f2fbf8');
 });
 
-test('manifest declares a PWA icon', () => {
+test('manifest declares refreshed v2 PWA icon alongside maskable fallback', () => {
   assert.ok(Array.isArray(manifest.icons));
-  assert.strictEqual(manifest.icons.length, 1);
-  assert.strictEqual(manifest.icons[0].src, 'assets/icons/icon.svg');
-  assert.strictEqual(manifest.icons[0].type, 'image/svg+xml');
-  assert.strictEqual(manifest.icons[0].sizes, 'any');
-  assert.strictEqual(manifest.icons[0].purpose, 'maskable');
+  assert.ok(manifest.icons.length >= 2);
+  assert.ok(manifest.icons.some(i => i.src === 'assets/icons/icon-v2.svg' && i.type === 'image/svg+xml'));
+  assert.ok(manifest.icons.some(i => i.src === 'assets/icons/icon.svg' && i.purpose === 'maskable'));
 });

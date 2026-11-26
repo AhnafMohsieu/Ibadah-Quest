@@ -599,11 +599,9 @@
     close: closeAuthOverlay,
 
     checkStartupAuth: function() {
-      let authed = false;
-      try { authed = sessionStorage.getItem('iq_session_authenticated') === '1'; } catch(e) {}
       const activeUser = typeof currentUser !== 'undefined' ? currentUser : 'default';
-      if (!authed || isLocked(activeUser)) {
-        showAuthOverlay(isLocked(activeUser) ? 'unlock' : 'login');
+      if (isLocked(activeUser)) {
+        showAuthOverlay('unlock');
         return false;
       }
       return true;
@@ -627,6 +625,9 @@
         window.toast('✨', 'Welcome to Ibadah Quest!');
       }
       if (typeof window.renderAll === 'function') window.renderAll();
+      if (typeof window.isOnboardingComplete === 'function' && !window.isOnboardingComplete()) {
+        setTimeout(function() { if (typeof window.startOnboarding === 'function') window.startOnboarding(); }, 350);
+      }
     },
 
     togglePinVisibility: function() {
@@ -712,13 +713,18 @@
       const inp = document.getElementById('newProfileName');
       if (!inp) return;
       const name = inp.value.trim().replace(/[^a-zA-Z0-9_\-\s]/g, '');
+      const warn = function(m) {
+        if (typeof window.iqAlertDialog === 'function') window.iqAlertDialog('Profile Name', m);
+        else if (typeof window.toast === 'function') window.toast('!', m, false, 2400);
+        else if (typeof alert === 'function') alert(m);
+      };
       if (!name) {
-        alert('Please enter a valid profile name.');
+        warn('Please enter a valid profile name.');
         return;
       }
       const profiles = getProfiles();
       if (profiles.includes(name)) {
-        alert('Profile already exists.');
+        warn('Profile already exists.');
         return;
       }
       profiles.push(name);
@@ -769,15 +775,22 @@
     },
 
     promptRemovePin: function(user) {
-      const pin = prompt('Enter current PIN to confirm removal:');
-      if (!pin) return;
-      const res = removePin(user, pin);
-      if (res.success) {
-        alert('PIN protection removed.');
-        closeAuthOverlay();
-        if (typeof window.renderProfile === 'function') window.renderProfile();
-      } else {
-        alert(res.error || 'Incorrect PIN.');
+      const finish = function(pin) {
+        if (!pin) return;
+        const res = removePin(user, pin);
+        if (res.success) {
+          closeAuthOverlay();
+          if (typeof window.renderProfile === 'function') window.renderProfile();
+          if (typeof window.toast === 'function') window.toast('🔓', 'PIN protection removed.', false, 2200);
+        } else {
+          if (typeof window.iqAlertDialog === 'function') window.iqAlertDialog('PIN Removal', res.error || 'Incorrect PIN.');
+          else if (typeof alert === 'function') alert(res.error || 'Incorrect PIN.');
+        }
+      };
+      if (typeof window.iqPromptDialog === 'function') {
+        window.iqPromptDialog('Remove PIN', 'Enter current PIN to confirm removal:', 'Current PIN', finish);
+      } else if (typeof prompt === 'function') {
+        finish(prompt('Enter current PIN to confirm removal:'));
       }
     },
 

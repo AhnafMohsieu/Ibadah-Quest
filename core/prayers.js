@@ -1,4 +1,8 @@
 (function() {
+  function _countPrayers(logEntry) {
+    return Object.values((logEntry && logEntry.p) || {}).filter(function(v) { return !!v; }).length;
+  }
+
   function _setPrayerState(id, targetMode) {
     const pr = PRAYERS.find(x => x.id === id);
     if (!pr) return;
@@ -26,20 +30,77 @@
     recalc(); checkQ(); checkA(); saveAndRenderDirty();
     if (typeof checkCombo === 'function') {
       const prayedFajr = !!l.p.fajr;
-      const prayedAll = Object.values(l.p || {}).filter(v => v).length >= 5;
+      const prayedAll = _countPrayers(l) >= 5;
       if (prayedFajr) checkCombo('fajr', true);
       if (prayedAll) checkCombo('adhkar', true);
       if (typeof window.renderCombos === 'function') window.renderCombos();
     }
     if (typeof window.autoTrackJourneyProgress === 'function') window.autoTrackJourneyProgress();
   }
+
   function toggleP(id) { _setPrayerState(id, true); }
   function togglePrayerQada(id) { _setPrayerState(id, 'qada'); }
-  function toggleV(id) { const vp=VOLUNTARY.find(x=>x.id===id); if(!vp) return; const l=tlog(); if(!l.v) l.v={}; const w=!!l.v[id]; l.v[id]=!w; let xp=vp.xp; if(S.ab&&S.ab.exp>=today()) xp*=2; if(!w){ S.vc[id]=(S.vc[id]||0)+1; applyXpDelta(xp); playSound('pop'); if (typeof window.iqHaptic === 'function') window.iqHaptic(10); } else { S.vc[id]=Math.max(0,(S.vc[id]||0)-1); spendXp(xp); } checkQ(); checkA(); saveAndRenderDirty(); }
-  function toggleD(id) { const de=DEEDS.find(x=>x.id===id); if(!de) return; const l=tlog(); const w=!!l.d[id]; l.d[id]=!w; let xp=de.xp; if(S.ab&&S.ab.exp>=today()) xp*=2; if(!w){ S.td[id]=(S.td[id]||0)+1; applyXpDelta(xp); playSound('pop'); if (typeof window.iqHaptic === 'function') window.iqHaptic(10); } else { S.td[id]=Math.max(0,(S.td[id]||0)-1); spendXp(xp); } recalc(); checkQ(); checkA(); saveAndRenderDirty(); if (typeof window.autoTrackJourneyProgress === 'function') window.autoTrackJourneyProgress(); }
+
+  function toggleV(id) {
+    const vp = VOLUNTARY.find(x => x.id === id);
+    if (!vp) return;
+    const l = tlog();
+    if (!l.v) l.v = {};
+    const w = !!l.v[id];
+    l.v[id] = !w;
+    let xp = vp.xp;
+    if (S.ab && S.ab.exp >= today()) xp *= 2;
+    if (!w) {
+      S.vc[id] = (S.vc[id] || 0) + 1;
+      applyXpDelta(xp);
+      playSound('pop');
+      if (typeof window.iqHaptic === 'function') window.iqHaptic(10);
+    } else {
+      S.vc[id] = Math.max(0, (S.vc[id] || 0) - 1);
+      spendXp(xp);
+    }
+    checkQ(); checkA(); saveAndRenderDirty();
+  }
+
+  function toggleD(id) {
+    const de = DEEDS.find(x => x.id === id);
+    if (!de) return;
+    const l = tlog();
+    const w = !!l.d[id];
+    l.d[id] = !w;
+    let xp = de.xp;
+    if (S.ab && S.ab.exp >= today()) xp *= 2;
+    if (!w) {
+      S.td[id] = (S.td[id] || 0) + 1;
+      applyXpDelta(xp);
+      playSound('pop');
+      if (typeof window.iqHaptic === 'function') window.iqHaptic(10);
+    } else {
+      S.td[id] = Math.max(0, (S.td[id] || 0) - 1);
+      spendXp(xp);
+    }
+    recalc(); checkQ(); checkA(); saveAndRenderDirty();
+    if (typeof window.autoTrackJourneyProgress === 'function') window.autoTrackJourneyProgress();
+  }
+
+  function _countConsecutiveEndingOn(startDateObj) {
+    let s = 0;
+    const ck = new Date(startDateObj.getTime());
+    for (let guard = 0; guard < 400; guard++) {
+      const dk = today(ck);
+      if (S.log[dk] && _countPrayers(S.log[dk]) >= 5) {
+        s++;
+        ck.setDate(ck.getDate() - 1);
+      } else {
+        break;
+      }
+    }
+    return s;
+  }
+
   function recalc() {
     const prevCs = Number(S.cs) || 0;
-    const all = Object.keys(S.log).filter(d => Object.values((S.log[d] && S.log[d].p) || {}).filter(v => v).length >= 5).sort();
+    const all = Object.keys(S.log).filter(d => _countPrayers(S.log[d]) >= 5).sort();
     let best = 0, run = 0, prev = null;
     for (const d of all) {
       if (prev) {
@@ -55,28 +116,29 @@
       prev = d;
     }
     S.bs = Math.max(Number(S.bs) || 0, best);
-    const tc = Object.values(tlog().p || {}).filter(v => v).length >= 5;
+
+    const todayPrayers = _countPrayers(tlog());
+    const tc = todayPrayers >= 5;
     const isPaused = !!(typeof S === 'object' && S && S.prayerSettings && S.prayerSettings.paused);
+
     if (tc) {
-      let s = 1, ck = new Date();
-      while (true) {
-        ck.setDate(ck.getDate() - 1);
-        const dk = today(ck);
-        if (S.log[dk] && Object.values(S.log[dk].p || {}).filter(v => v).length >= 5) s++;
-        else break;
-      }
-      S.cs = isPaused ? Math.max(prevCs, s) : s;
+      const fullStreak = _countConsecutiveEndingOn(new Date());
+      S.cs = isPaused ? Math.max(prevCs, fullStreak) : fullStreak;
       if (typeof checkSurpriseReward === 'function') checkSurpriseReward('allPrayers');
     } else if (isPaused) {
       S.cs = prevCs;
     } else {
-      const yd = today(new Date(Date.now() - 86400000));
-      S.cs = (S.log[yd] && Object.values(S.log[yd].p || {}).filter(v => v).length >= 5) ? 1 : 0;
+      // Preserve unbroken streak through yesterday while today's prayers are still in progress
+      const yd = new Date(Date.now() - 86400000);
+      const yRun = _countConsecutiveEndingOn(yd);
+      S.cs = yRun;
     }
+
     S.pd = (S.pdArchived || 0) + all.length;
     if (S.cs > S.bs) S.bs = S.cs;
     if (window.checkMilestones) checkMilestones();
   }
+
   window.toggleP = toggleP;
   window.togglePrayerQada = togglePrayerQada;
   window.toggleV = toggleV;

@@ -1,5 +1,12 @@
-// core/xp.js — XP granting, level-up detection, sound effects
+// core/xp.js — XP granting, level-up detection, calm celebrations, opt-in sound & light haptics
 (function() {
+  function isReducedMotion() {
+    try {
+      return typeof window !== 'undefined' && typeof window.matchMedia === 'function' &&
+        window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    } catch (e) { return false; }
+  }
+
   function checkLevelUp(oldLv) {
     if (S.lv > oldLv) {
       const t = lvTitle(S.lv);
@@ -63,35 +70,35 @@
   }
 
   function levelUpToast(lv, title) {
+    if (typeof document === 'undefined') return;
     window._modalTriggerEl = document.activeElement;
     const ov = document.getElementById('toastOverlay');
-    ov.innerHTML = `<div class="levelup-box"><div class="levelup-glow"></div><div class="levelup-icon">${iqIcon('zap')}</div><div class="levelup-label">LEVEL UP</div><div class="levelup-num">${lv}</div><div class="levelup-title">${title}</div></div>`;
+    if (!ov) return;
+    var tr = typeof window.t === 'function' ? window.t : function(k) { return k; };
+    var nfmt = typeof window.iqFormatNum === 'function' ? window.iqFormatNum : function(v) { return String(v); };
+    var safeTitle = typeof window.escapeHTML === 'function' ? window.escapeHTML(title) : String(title || '');
+    ov.innerHTML = `<div class="levelup-box" role="status" aria-live="polite">` +
+      `<div class="levelup-icon">${iqIcon('sparkles')}</div>` +
+      `<div class="levelup-label">${tr('Milestone Reached')}</div>` +
+      `<div class="levelup-num iq-tabular">${nfmt(lv)}</div>` +
+      `<div class="levelup-title">${safeTitle}</div>` +
+      `<div style="font-size:0.82rem;color:var(--text2);margin-top:6px;">${tr('Alhamdulillah — steady consistency')}</div>` +
+    `</div>`;
     ov.style.display = 'flex';
     ov.classList.add('show');
     ov.style.pointerEvents = 'auto';
     playSound('chime');
     iqHaptic([30, 50, 30]);
-    for (let i = 0; i < 50; i++) {
-      const el = document.createElement('span');
-      el.className = 'confetti';
-      el.setAttribute('aria-hidden', 'true');
-      el.textContent = [iqEmoji('star'), iqEmoji('sparkles'), iqEmoji('moon'), iqEmoji('sparkles'), iqEmoji('star'), iqEmoji('crescent')][i % 6];
-      el.style.left = Math.random() * 100 + '%';
-      el.style.top = '-20px';
-      el.style.setProperty('--fall-dur', (2 + Math.random() * 4) + 's');
-      el.style.setProperty('--rot', (Math.random() * 720 - 360) + 'deg');
-      document.body.appendChild(el);
-      setTimeout(() => el.remove(), 4000);
-    }
     if (ov._t) clearTimeout(ov._t);
+    var delay = isReducedMotion() ? 2200 : 3200;
     ov._t = setTimeout(() => {
       ov.classList.remove('show');
-      setTimeout(() => { ov.style.display = 'none'; ov.innerHTML = ''; }, 400);
+      setTimeout(() => { ov.style.display = 'none'; ov.innerHTML = ''; }, 240);
       ov.style.pointerEvents = 'none';
-    }, 4000);
+    }, delay);
     ov.onclick = () => {
       ov.classList.remove('show');
-      setTimeout(() => { ov.style.display = 'none'; ov.innerHTML = ''; }, 400);
+      setTimeout(() => { ov.style.display = 'none'; ov.innerHTML = ''; }, 240);
       ov.style.pointerEvents = 'none';
       if (ov._t) clearTimeout(ov._t);
     };
@@ -100,6 +107,8 @@
   let _audioCtx = null;
   function playSound(type) {
     try {
+      // Default to silence; non-instrumental chimes play ONLY when user opts in via S.soundEnabled
+      if (typeof S === 'undefined' || !S || !S.soundEnabled) return;
       const AC = window.AudioContext || window.webkitAudioContext;
       if (!AC) return;
       if (!_audioCtx) _audioCtx = new AC();
@@ -110,20 +119,20 @@
       gain.connect(ctx.destination);
       if (type === 'pop') {
         osc.type = 'sine';
-        osc.frequency.setValueAtTime(880, ctx.currentTime);
-        osc.frequency.exponentialRampToValueAtTime(110, ctx.currentTime + 0.1);
-        gain.gain.setValueAtTime(0.5, ctx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.1);
+        osc.frequency.setValueAtTime(660, ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(330, ctx.currentTime + 0.08);
+        gain.gain.setValueAtTime(0.12, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.005, ctx.currentTime + 0.08);
         osc.start(ctx.currentTime);
-        osc.stop(ctx.currentTime + 0.1);
+        osc.stop(ctx.currentTime + 0.08);
       } else if (type === 'chime') {
-        osc.type = 'triangle';
+        osc.type = 'sine';
         osc.frequency.setValueAtTime(523.25, ctx.currentTime);
-        osc.frequency.exponentialRampToValueAtTime(1046.50, ctx.currentTime + 0.3);
-        gain.gain.setValueAtTime(0.3, ctx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.8);
+        osc.frequency.exponentialRampToValueAtTime(783.99, ctx.currentTime + 0.25);
+        gain.gain.setValueAtTime(0.14, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.005, ctx.currentTime + 0.45);
         osc.start(ctx.currentTime);
-        osc.stop(ctx.currentTime + 0.8);
+        osc.stop(ctx.currentTime + 0.45);
       }
     } catch (e) {}
   }
@@ -131,7 +140,6 @@
   window.applyXpDelta = applyXpDelta;
   window.spendXp = spendXp;
   window.saveAndRenderDirty = saveAndRenderDirty;
-
   window.grantDailyXp = grantDailyXp;
   window.grantCappedDailyXp = grantCappedDailyXp;
   window.checkLevelUp = checkLevelUp;

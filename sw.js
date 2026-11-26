@@ -4,7 +4,7 @@
   // Bump MANIFEST_REV whenever precache-manifest.js (or any precached URL) changes:
   // any byte change to this file forces browsers to install the new worker.
   // (Replaces the old CACHE_NAME v51/v52 bump discipline.)
-  const MANIFEST_REV = 26;
+  const MANIFEST_REV = 28;
   const CDN_CACHE = 'iq-cdn-v1';
   importScripts('./core/precache-manifest.js');
   self.addEventListener('install', (event) => {
@@ -49,7 +49,7 @@
     event.waitUntil((async () => {
       const keys = await caches.keys();
       // Keep CDN_CACHE persistent across activations: deleting it on every
-      // activate forces re-download of CDN assets (Chart.js) and breaks
+      // activate forces re-download of external CDN assets and breaks
       // offline. Only old versioned core caches are purged.
       await Promise.all(keys
         .filter((k) => isCoreCache(k) && k !== CACHE_NAME)

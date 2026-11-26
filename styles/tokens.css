@@ -1,0 +1,247 @@
+/* styles/tokens.css — Single source of truth for Ibadah Quest ("Noor & Rhythm")
+ * Color roles satisfy WCAG 2.2 AA (>=4.5:1 normal text, >=3:1 large text & UI borders)
+ * across Light, Dark, and OLED Night themes, plus optional seasonal accent overlays.
+ */
+
+@font-face {
+  font-family: 'Amiri Quran';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('../assets/fonts/amiri-quran-arabic.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Noto Sans Arabic';
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url('../assets/fonts/noto-sans-arabic-var.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Hind Siliguri';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('../assets/fonts/hind-siliguri-400-bn.woff2') format('woff2');
+  unicode-range: U+0951-0952, U+0964-0965, U+0980-09FE, U+1CD0, U+1CD2, U+1CD5-1CD6, U+1CD8, U+1CE1, U+1CEA, U+1CED, U+1CF2, U+1CF5-1CF7, U+200C-200D, U+20B9, U+25CC, U+A8F1;
+}
+@font-face {
+  font-family: 'Hind Siliguri';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('../assets/fonts/hind-siliguri-600-bn.woff2') format('woff2');
+  unicode-range: U+0951-0952, U+0964-0965, U+0980-09FE, U+1CD0, U+1CD2, U+1CD5-1CD6, U+1CD8, U+1CE1, U+1CEA, U+1CED, U+1CF2, U+1CF5-1CF7, U+200C-200D, U+20B9, U+25CC, U+A8F1;
+}
+@font-face {
+  font-family: 'Hind Siliguri';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('../assets/fonts/hind-siliguri-700-bn.woff2') format('woff2');
+  unicode-range: U+0951-0952, U+0964-0965, U+0980-09FE, U+1CD0, U+1CD2, U+1CD5-1CD6, U+1CD8, U+1CE1, U+1CEA, U+1CED, U+1CF2, U+1CF5-1CF7, U+200C-200D, U+20B9, U+25CC, U+A8F1;
+}
+@font-face {
+  font-family: 'Hind Siliguri';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('../assets/fonts/hind-siliguri-400-lat.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+FEFF;
+}
+@font-face {
+  font-family: 'Hind Siliguri';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('../assets/fonts/hind-siliguri-600-lat.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+FEFF;
+}
+@font-face {
+  font-family: 'Hind Siliguri';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('../assets/fonts/hind-siliguri-700-lat.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+FEFF;
+}
+
+:root {
+  color-scheme: light;
+  --iq-font-ui: 'Hind Siliguri', 'Noto Sans Bengali', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  --iq-font-bn: 'Hind Siliguri', 'Noto Sans Bengali', system-ui, sans-serif;
+  --iq-font-ar: 'Noto Sans Arabic', system-ui, sans-serif;
+  --iq-font-quran: 'Amiri Quran', 'Noto Naskh Arabic', serif;
+
+  /* Light — Warm Alabaster & Deep Coastal Emerald (#07635D on #FFFFFF = 7.02:1 AA/AAA) */
+  --bg: #f2fbf8;
+  --bg-subtle: #e6f2ed;
+  --card: #ffffff;
+  --card-bg: #ffffff;
+  --surface: #ffffff;
+  --surface-subtle: #ebf3ee;
+  --card-border: #c5dad2;
+  --border: #c5dad2;
+  --bg-accent: #e5f3ee;
+
+  --accent: #07635d;
+  --accent-dark: #054944;
+  --accent-light: #0a7a72;
+  --accent-contrast: #ffffff;
+  --accent-bg: #e1f2ed;
+  --accent-soft: #e1f2ed;
+
+  --gold: #8e6b1e;
+  --gold-dark: #6f5212;
+  --gold-light: #9e7720;
+  --gold-bg: #fbf6e8;
+
+  --text: #0d2421;
+  --text2: #385752;
+  --text3: #46635e;
+
+  --green: #0a6a46;
+  --green-bg: #e4f5ec;
+  --warn: #8a4e04;
+  --warn-bg: #fef3e1;
+  --red: #b42318;
+  --red-bg: #feeceb;
+
+  --nav-bg: rgba(255, 255, 255, 0.94);
+  --shadow: 0 2px 10px rgba(7, 74, 70, 0.06);
+  --shadow-lg: 0 10px 28px rgba(7, 74, 70, 0.12);
+
+  --radius: 16px;
+  --radius-sm: 10px;
+  --radius-pill: 999px;
+  --transition: 180ms cubic-bezier(0.2, 0.8, 0.2, 1);
+
+  --iq-script-scale: 1;
+  --iq-quran-size: 1.75rem;
+}
+
+/* Dark Theme — Slate Pine (WCAG 2.2 AA verified >=4.5:1) */
+html[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #0e1715;
+  --bg-subtle: #14221f;
+  --card: #162421;
+  --card-bg: #162421;
+  --surface: #162421;
+  --surface-subtle: #1c2e2a;
+  --card-border: #2c433e;
+  --border: #2c433e;
+  --bg-accent: #18302b;
+
+  --accent: #38b5a8;
+  --accent-dark: #5cd0c3;
+  --accent-light: #7de0d5;
+  --accent-contrast: #041d1a;
+  --accent-bg: #17342f;
+  --accent-soft: #17342f;
+
+  --gold: #d7b562;
+  --gold-dark: #e6cb82;
+  --gold-light: #edd699;
+  --gold-bg: #262113;
+
+  --text: #eaf3ef;
+  --text2: #b2ccc4;
+  --text3: #9cb8b0;
+
+  --green: #4dd49d;
+  --green-bg: #123326;
+  --warn: #f5b759;
+  --warn-bg: #2e220d;
+  --red: #f87171;
+  --red-bg: #331515;
+
+  --nav-bg: rgba(18, 30, 27, 0.94);
+  --shadow: 0 2px 12px rgba(0, 0, 0, 0.35);
+  --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.5);
+}
+
+/* OLED Night Theme — Low-Glare Obsidian for Fajr & Tahajjud */
+html[data-theme="night"] {
+  color-scheme: dark;
+  --bg: #030605;
+  --bg-subtle: #09100e;
+  --card: #0b1311;
+  --card-bg: #0b1311;
+  --surface: #0b1311;
+  --surface-subtle: #111d1a;
+  --card-border: #223530;
+  --border: #223530;
+  --bg-accent: #0f211d;
+
+  --accent: #4ec7b9;
+  --accent-dark: #6ad8cb;
+  --accent-light: #89e5da;
+  --accent-contrast: #021412;
+  --accent-bg: #0d2420;
+  --accent-soft: #0d2420;
+
+  --gold: #dcb966;
+  --gold-dark: #ecd08b;
+  --gold-light: #f3dc9f;
+  --gold-bg: #1a160a;
+
+  --text: #dce8e3;
+  --text2: #a8c2ba;
+  --text3: #94afa7;
+
+  --green: #57dba5;
+  --green-bg: #0c261c;
+  --warn: #f2b860;
+  --warn-bg: #221807;
+  --red: #f87171;
+  --red-bg: #270e0e;
+
+  --nav-bg: rgba(8, 13, 12, 0.96);
+  --shadow: none;
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.7);
+}
+
+/* Seasonal Accent Overlay (Ramadan / Dhul Hijjah) */
+html[data-season-accent="true"] {
+  --card-border: #b8933a;
+}
+html[data-theme="dark"][data-season-accent="true"],
+html[data-theme="night"][data-season-accent="true"] {
+  --card-border: #8d6e28;
+}
+
+/* Per-script metrics & accessibility rules */
+:lang(bn), .iq-script-bn {
+  font-family: var(--iq-font-bn);
+  line-height: 1.62;
+  letter-spacing: 0 !important;
+}
+:lang(ar), .iq-script-ar {
+  font-family: var(--iq-font-ar);
+  line-height: 1.65;
+  letter-spacing: 0 !important;
+  font-size: calc(1em * 1.06 * var(--iq-script-scale, 1));
+}
+:lang(bn) body, body[data-lang="bn"] {
+  line-height: 1.6;
+  letter-spacing: 0 !important;
+}
+.verse-arabic, .quran-arabic, [data-script="quran"] {
+  font-family: var(--iq-font-quran) !important;
+  line-height: 2.05 !important;
+  letter-spacing: 0 !important;
+  direction: rtl;
+  unicode-bidi: isolate;
+}
+.iq-no-mirror {
+  direction: ltr !important;
+}
+[dir="rtl"] .iq-mirror-icon {
+  transform: scaleX(-1);
+}
+[dir="rtl"] .iq-pill-eta,
+[dir="rtl"] .iq-ch-sub,
+[dir="rtl"] .iq-ch-title {
+  text-align: start;
+}

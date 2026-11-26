@@ -44,14 +44,16 @@ Track your five daily prayers, dhikr, Quran reading, voluntary acts, and more. E
 
 | Layer | Technology |
 |-------|-----------|
-| UI | Vanilla JavaScript + Tailwind CSS (CDN) |
-| Charts | Chart.js + Canvas API |
-| Storage | localStorage (schema-versioned with auto-migration) |
-| PWA | Service Worker + Web App Manifest |
-| Fonts | Sora, Noto Naskh Arabic, Amiri |
-| Testing | Node.js built-in test runner (468 tests) |
+| UI | Vanilla JavaScript + Noor & Rhythm Design Tokens (`styles/tokens.css`, `styles/main.css`) |
+| Prayer Math | Offline `adhan@4.4.6` (MIT) + Qibla bearing |
+| Charts | Dependency-free Canvas 2D API |
+| Storage | IndexedDB + `localStorage` (schema-versioned v2 with auto-migration) |
+| PWA | Service Worker (`sw.js`, `MANIFEST_REV`) + Web App Manifest + Capacitor scaffold |
+| Fonts | Bundled `Amiri Quran`, `Noto Sans Arabic`, `Hind Siliguri` (SIL OFL v1.1) |
+| Languages | English (`en`), Bangla (`bn`), Arabic (`ar` + full RTL) |
+| Testing | Node.js built-in test runner (`node --test`, 602 tests) |
 
-No build step. No bundler. No framework dependencies.
+No framework dependencies required for runtime execution (`package.json` tracks offline `adhan` & test checks).
 
 ## Getting Started
 
@@ -110,7 +112,7 @@ Ibadah Quest/
 ├── data/                   # Static data (prayers, achievements, panel sections)
 ├── styles/                 # CSS (main.css)
 ├── assets/icons/           # App icons (SVG)
-└── tests/                  # 57 test files, 468 tests
+└── tests/                  # Unit, contract, prayer, RTL/numerals & ethics test suites (602 tests)
 ```
 
 ## Architecture

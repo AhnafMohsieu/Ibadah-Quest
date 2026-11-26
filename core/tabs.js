@@ -34,16 +34,20 @@
   function renderDateLine() {
     var el = document.getElementById('dateLine');
     if (!el) return;
+    var fmtNum = function(n) { return (typeof window !== 'undefined' && typeof window.iqFormatNum === 'function') ? window.iqFormatNum(n) : String(n); };
     var d = new Date();
-    var g = d.getDate() + ' ' + ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][d.getMonth()] + ' ' + d.getFullYear();
+    var gMonth = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][d.getMonth()];
+    var g = fmtNum(d.getDate()) + ' ' + gMonth + ' ' + fmtNum(d.getFullYear());
     var h = '';
     try {
-      if (window.gregorianToHijri && window.HIJRI_MONTHS) {
-        var hd = window.gregorianToHijri(d.getFullYear(), d.getMonth() + 1, d.getDate());
-        if (hd) h = hd.day + ' ' + window.HIJRI_MONTHS[hd.month - 1] + ' ' + hd.year;
+      var hd = window.getAdjustedHijri ? window.getAdjustedHijri(d) : (window.gregorianToHijri ? window.gregorianToHijri(d.getFullYear(), d.getMonth() + 1, d.getDate()) : null);
+      if (hd && window.formatHijriLabel) {
+        h = window.formatHijriLabel(hd);
+      } else if (hd && window.HIJRI_MONTHS) {
+        h = fmtNum(hd.day) + ' ' + window.HIJRI_MONTHS[(hd.month - 1) % 12] + ' ' + fmtNum(hd.year);
       }
     } catch (e) {}
-    el.textContent = h ? (g + ' · ' + h) : g;
+    el.textContent = (h && h.trim()) ? (g + ' · ' + h) : g;
   }
   window.renderDateLine = renderDateLine;
     function _updateSegmentHeader(catId, subGroupLabel, tabId) {
@@ -165,6 +169,7 @@
   }
 
   function findCategoryForTab(tabId) {
+    if (tabId === 'gallery') return 'profile_main';
     if (typeof window === 'undefined' || !window.TAB_GROUPS) return null;
     var cats = Object.keys(window.TAB_GROUPS);
     for (var i = 0; i < cats.length; i++) {
@@ -233,7 +238,7 @@
     if (panel) panel.classList.add('active');
     var _lazyRender = {
       today:'renderToday', quests:'renderQ', journeys:'renderJourneys',
-      profile:'renderProfile', trophies:'renderAch', progress:'renderProg',
+      profile:'renderProfile', trophies:'renderAch', progress:'renderProg', gallery:'renderComponentGallery',
       rewards:'renderShop', duas:'renderDuas', growth:'renderSpiritualGrowthTab',
       quran:'renderQuran', hadith:'renderHadith', sunnahs:'renderSunnahs', dhikr:'renderDhikr',
       stories:'renderStories', inspirations:'renderInspirations', gratitude:'renderGratitude',

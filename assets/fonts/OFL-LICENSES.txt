@@ -1,0 +1,18 @@
+Bundled Fonts License Summary (All SIL Open Font License v1.1)
+
+1. Amiri Quran (amiri-quran-arabic.woff2)
+   - Designer: Khaled Hosny (Alif Type / Amiri Project)
+   - License: SIL Open Font License (OFL) v1.1
+   - Source: Google Fonts / github.com/aliftype/amiri
+
+2. Hind Siliguri (hind-siliguri-*-bn.woff2, hind-siliguri-*-lat.woff2)
+   - Designer: Jyotish Sonowal, Indian Type Foundry (ITF)
+   - License: SIL Open Font License (OFL) v1.1
+   - Source: Google Fonts / github.com/itfoundry/hind-siliguri
+
+3. Noto Sans Arabic (noto-sans-arabic-var.woff2)
+   - Designer: Google Noto Fonts Project
+   - License: SIL Open Font License (OFL) v1.1
+   - Source: Google Fonts / github.com/notofonts/arabic
+
+All subsetted WOFF2 files in assets/fonts/ are unmodified font software subsets bundled under SIL OFL v1.1 for offline rendering.
