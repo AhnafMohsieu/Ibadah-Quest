@@ -194,17 +194,17 @@
     const textDirAttr = hasLatin ? ' dir="ltr" style="unicode-bidi:isolate;"' : '';
     el.innerHTML = `<div class="carousel-card">
       <div class="carousel-top-row">
-        <div class="carousel-header">${icon} <span>${_esc(item.badge)}</span></div>
+        <div class="carousel-header">${icon}<span>${_esc(item.badge)}</span></div>
         <div class="carousel-nav-controls">
-          <button type="button" class="carousel-nav-btn iq-mirror-icon" onclick="window._carouselPrev()" aria-label="Previous highlight">&lsaquo;</button>
-          <button type="button" class="carousel-nav-btn iq-mirror-icon" onclick="window._carouselNext()" aria-label="Next highlight">&rsaquo;</button>
+          <div class="carousel-dots">${dotsHtml}</div>
+          <button type="button" class="carousel-nav-btn iq-mirror-icon" onclick="window._carouselPrev()" aria-label="Previous highlight"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg></button>
+          <button type="button" class="carousel-nav-btn iq-mirror-icon" onclick="window._carouselNext()" aria-label="Next highlight"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg></button>
         </div>
       </div>
       <div class="carousel-main-row">
         <div class="carousel-text"${textDirAttr}>${_esc(item.text)}</div>
-        <button type="button" class="carousel-cta" onclick="${_esc(item.ctaAction)}">${_esc(item.ctaLabel)} &rsaquo;</button>
+        <button type="button" class="carousel-cta" onclick="${_esc(item.ctaAction)}"><span>${_esc(item.ctaLabel)}</span><svg class="iq-mirror-icon" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg></button>
       </div>
-      <div class="carousel-dots">${dotsHtml}</div>
     </div>`;
   }
 

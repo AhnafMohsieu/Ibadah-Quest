@@ -41,7 +41,7 @@
     }
   }
   </script>
-  <link rel="stylesheet" href="styles/tokens.css?v=1">
+  <link rel="stylesheet" href="styles/tokens.css?v=2">
   <style>
     /* Critical above-the-fold CSS */
     :root{--bg:#f2fbf8;--bg-accent:#e4f5f0;--card-bg:#ffffff;--card-border:rgba(11,122,117,0.12);--shadow-sm:0 2px 8px rgba(7,67,75,0.05);--shadow-md:0 6px 20px rgba(7,67,75,0.08);--text:#0b2528;--text2:#4b6b6e;--text3:#7b9699;--accent:#0b8a82;--accent-light:#14b8a6;--accent-dark:#075e64;--accent-bg:rgba(11,138,130,0.10);--accent-border:rgba(11,138,130,0.22);--gold:#d4af37;--green:#16a34a;--green-bg:rgba(22,163,74,0.08);--orange:#d97706;--red:#dc2626;--red-bg:rgba(220,38,38,0.08);--border:rgba(11,122,117,0.14);--border-light:#e6f4f1;--radius:18px;--radius-sm:12px;--radius-lg:24px;--font:'Sora',system-ui,-apple-system,'Segoe UI',sans-serif;--font-arabic:'Noto Naskh Arabic','Amiri',serif;--font-heading:'Sora',system-ui,sans-serif;--transition:150ms cubic-bezier(0.4,0,0.2,1);line-height:1.6}
@@ -51,15 +51,15 @@
     body.loading{opacity:0}
     .app{position:relative;z-index:1;width:100%;max-width:min(84rem,100%);margin:0 auto;padding:0 16px 16px;overflow-x:clip}
     .tab-content{width:100%;align-self:stretch}
-    .top-bar{position:sticky;top:0;z-index:100;display:flex;justify-content:space-between;align-items:center;padding:calc(10px + env(safe-area-inset-top, 0px)) 16px 14px;background:linear-gradient(145deg,#07434b 0%,#0b7a75 60%,#14b8a6 100%);color:#fff;margin:0 -16px 14px;border-radius:0 0 26px 26px}
+    .top-bar{position:sticky;top:0;z-index:100;display:flex;justify-content:space-between;align-items:center;padding:calc(10px + env(safe-area-inset-top, 0px)) 16px 12px;background:linear-gradient(145deg,#054944 0%,#07635d 58%,#0a7a72 100%);color:#fff;margin:0 -16px 14px;border-radius:0 0 22px 22px}
     .header{text-align:center;padding:12px 0 8px}
     .header h1{font-family:var(--font-heading);font-size:clamp(1.4rem,4vw,2rem);font-weight:700;color:var(--text);letter-spacing:1px;margin:0}
-    .level-row{display:flex;align-items:center;justify-content:center;gap:16px;margin:10px auto 12px;flex-wrap:wrap;max-width:480px}
-    .streak-bar{background:var(--card-bg);border:1px solid var(--card-border);border-radius:var(--radius);padding:14px 20px;display:flex;align-items:center;gap:14px;margin-bottom:14px}
+    .level-row{display:flex;flex-direction:column;justify-content:center;gap:8px;margin:10px auto 12px;max-width:480px}
+    .streak-bar{background:var(--card-bg);border:1px solid var(--border);border-radius:var(--radius);padding:12px 16px;display:flex;align-items:center;gap:12px;margin-bottom:14px}
     .tab-panel{display:none}
     .tab-panel.active{display:block}
   </style>
-  <link rel="stylesheet" href="styles/main.css?v=54">
+  <link rel="stylesheet" href="styles/main.css?v=55">
   <script>
     window.__iqBootT0 = Date.now();
     window.__iqReload = function() { location.reload(); };
@@ -158,24 +158,24 @@
   <header class="top-bar iq-curved-header" id="topBar">
     <div class="geometric-bg" aria-hidden="true"></div>
     <div class="tb-left">
-      <button type="button" class="iq-icon-btn" id="iqMenuBtn" onclick="window.openIqDrawer && window.openIqDrawer()" aria-label="Open all sections menu" title="All sections &amp; topics"><svg class="iq-bento-svg" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/></svg></button>
-      <button type="button" class="iq-icon-btn iq-back-btn" id="iqHeaderBackBtn" onclick="App.activateTab('today')" aria-label="Back to Today" style="display:none;">&lsaquo;</button>
+      <button type="button" class="iq-icon-btn iq-menu-trigger" id="iqMenuBtn" onclick="window.openIqDrawer && window.openIqDrawer()" aria-label="Open all sections menu" title="All sections &amp; topics"><svg class="iq-bento-svg" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/></svg><span class="iq-menu-btn-label" id="iqMenuBtnLabel" data-i18n-text="All Sections">All Sections</span></button>
+      <button type="button" class="iq-icon-btn iq-back-btn" id="iqHeaderBackBtn" onclick="App.activateTab('today')" aria-label="Back to Today" style="display:none;"><svg class="iq-mirror-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg></button>
       <span class="iq-top-brand"><strong>IQ</strong></span>
-      <span class="tb-level" id="tbLevel">Lv 1</span>
-      <span class="tb-title" id="tbTitle">Muslim</span>
+      <span class="tb-divider" aria-hidden="true"></span>
+      <span class="tb-user-meta">
+        <span class="tb-level iq-tabular" id="tbLevel">Lv 1</span>
+        <span class="tb-sep" aria-hidden="true">&middot;</span>
+        <span class="tb-title" id="tbTitle">New Seeker</span>
+      </span>
     </div>
-    <nav id="topCatNav" class="iq-top-catnav" role="tablist" aria-label="Main categories">
-      <button type="button" class="iq-top-cat-btn active" data-cat="ibadah" onclick="window.closeActiveSheet && window.closeActiveSheet();App.switchCategory('ibadah', this)" role="tab" aria-selected="true">Home</button>
-      <button type="button" class="iq-top-cat-btn" data-cat="knowledge" onclick="window.closeActiveSheet && window.closeActiveSheet();App.switchCategory('knowledge', this)" role="tab" aria-selected="false">Knowledge</button>
-      <button type="button" class="iq-top-cat-btn" data-cat="names_main" onclick="window.closeActiveSheet && window.closeActiveSheet();App.switchCategory('names_main', this)" role="tab" aria-selected="false">Names</button>
-      <button type="button" class="iq-top-cat-btn" data-cat="library" onclick="window.closeActiveSheet && window.closeActiveSheet();App.switchCategory('library', this)" role="tab" aria-selected="false">Library</button>
-      <button type="button" class="iq-top-cat-btn" data-cat="profile_main" onclick="window.closeActiveSheet && window.closeActiveSheet();App.switchCategory('profile_main', this)" role="tab" aria-selected="false">Profile</button>
-    </nav>
-<div class="tb-right">
-  <span class="tb-stat" id="tbXP">0 XP</span>
-  <span class="tb-stat" id="tbStreak">0</span>
-  <button type="button" class="iq-icon-btn" id="iqNotifBtn" onclick="window.openNotifDrawer && window.openNotifDrawer()" aria-label="Open notifications">&#128276;</button>
-</div>
+    <div class="tb-right">
+      <div class="tb-stats-cluster">
+        <span class="tb-stat" id="tbXP" title="Total XP">0 XP</span>
+        <span class="tb-stat-sep" aria-hidden="true"></span>
+        <span class="tb-stat" id="tbStreak" title="Consistency streak">0</span>
+      </div>
+      <button type="button" class="iq-icon-btn" id="iqNotifBtn" onclick="window.openNotifDrawer && window.openNotifDrawer()" aria-label="Open notifications"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></button>
+    </div>
   </header>
 
   <!-- ═══════════════ HERO HEADER ═══════════════ -->
@@ -189,20 +189,24 @@
   </div>
 
   <div class="level-row">
-    <div class="level-badge">
-      <span class="lv-num" id="lvNum" aria-live="polite">1</span>
-      <span class="lv-title" id="lvTitle">Seeker</span>
+    <div class="xp-head">
+      <div class="level-badge">
+        <span class="lv-prefix" id="lvPrefix" data-i18n-text="Level">Level</span>
+        <span class="lv-num iq-tabular" id="lvNum" aria-live="polite">1</span>
+        <span class="lv-sep" aria-hidden="true">&middot;</span>
+        <span class="lv-title" id="lvTitle">New Seeker</span>
+      </div>
+      <div class="xp-label iq-tabular" id="xpLabel" aria-live="polite">0 / 100 XP</div>
     </div>
     <div class="xp-wrap" id="xpWrap">
       <div class="xp-outer"><div class="xp-inner" id="xpBar" style="width:0%"></div></div>
-      <div class="xp-label" id="xpLabel" aria-live="polite">0 / 100 XP</div>
     </div>
   </div>
 
   <div class="streak-bar">
-    <span class="streak-fire" id="streakFire"></span>
+    <span class="streak-fire" id="streakFire" aria-hidden="true"></span>
     <div class="streak-info"><h3 id="strDays" aria-live="polite">0 Day Streak</h3><p id="strMsg">Start your journey!</p></div>
-    <div class="streak-best"><div class="best-num" id="bestStr">0</div><div class="best-label">BEST</div></div>
+    <div class="streak-best"><div class="best-num iq-tabular" id="bestStr">0</div><div class="best-label" data-i18n-text="Best">Best</div></div>
   </div>
 
   <div id="dateLine" class="date-line" aria-live="off"></div>
@@ -484,8 +488,8 @@
 <script src="features/native-bridge.js?v=1" defer></script>
 <script src="core/render-prayers.js?v=8"></script>
 <script src="core/static.js?v=11"></script>
-<script src="core/dynamic.js?v=18"></script>
-<script src="core/tabs.js?v=16"></script>
+<script src="core/dynamic.js?v=19"></script>
+<script src="core/tabs.js?v=17"></script>
 
 <!-- Offline Analytics Dashboard (lazy loaded on first access) -->
 <script>
@@ -543,7 +547,7 @@
 <script src="features/consistency-bonuses.js?v=1" defer></script>
 <script src="features/combo-streaks.js" defer></script>
 <script src="features/achievement-showcase.js" defer></script>
-<script src="features/daily-content.js?v=3" defer></script>
+<script src="features/daily-content.js?v=4" defer></script>
 <script src="features/notifications.js?v=3" defer></script>
 
 <script src="features/seasonal-events.js" defer></script>
@@ -555,7 +559,7 @@
 <div id="onboardingOverlay" style="display:none"></div>
 <script src="features/onboarding.js" defer></script>
 <script src="features/masjid-checkins.js?v=3" defer></script>
-<script src="features/iq-shell.js?v=6"></script>
+<script src="features/iq-shell.js?v=7"></script>
 <script src="features/gallery.js?v=1" defer></script>
 
 <!-- Actions (core logic, navigation, init, window.App) -->
@@ -569,7 +573,7 @@
 <script src="core/dhikr.js?v=5"></script>
 <script src="core/content.js?v=1"></script>
 <script src="core/backup.js?v=1"></script>
-<script src="data/i18n.js?v=4"></script>
+<script src="data/i18n.js?v=5"></script>
 <script src="core/actions.js?v=28"></script>
 
 <!-- PWA: Service Worker registration + update banner -->
@@ -594,7 +598,7 @@
     });
   }
   window.addEventListener('load', function() {
-    navigator.serviceWorker.register('sw.js?v=66').then(function(reg) {
+    navigator.serviceWorker.register('sw.js?v=67').then(function(reg) {
       if (reg.waiting) { showUpdateBanner(reg); return; }
       reg.addEventListener('updatefound', function() {
         var sw = reg.installing;

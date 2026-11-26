@@ -82,6 +82,7 @@
   --surface-subtle: #ebf3ee;
   --card-border: #c5dad2;
   --border: #c5dad2;
+  --border-light: #e2eeea;
   --bg-accent: #e5f3ee;
 
   --accent: #07635d;
@@ -131,6 +132,7 @@ html[data-theme="dark"] {
   --surface-subtle: #1c2e2a;
   --card-border: #2c433e;
   --border: #2c433e;
+  --border-light: #213530;
   --bg-accent: #18302b;
 
   --accent: #38b5a8;
@@ -172,6 +174,7 @@ html[data-theme="night"] {
   --surface-subtle: #111d1a;
   --card-border: #223530;
   --border: #223530;
+  --border-light: #182622;
   --bg-accent: #0f211d;
 
   --accent: #4ec7b9;

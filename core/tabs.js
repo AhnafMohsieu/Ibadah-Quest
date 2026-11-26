@@ -116,7 +116,7 @@
   }
 
   function _syncNavButtons(catId, clickedBtn, selector) {
-    document.querySelectorAll(selector || '.bnav-btn, .iq-top-cat-btn').forEach(function(el) {
+    document.querySelectorAll(selector || '.bnav-btn').forEach(function(el) {
       var isMatch = el.getAttribute('data-cat') === catId || (!!clickedBtn && el === clickedBtn);
       el.classList.toggle('active', isMatch);
       el.setAttribute('aria-selected', isMatch ? 'true' : 'false');
@@ -126,7 +126,7 @@
   function switchCategory(catId, btn) {
     try { renderDateLine(); } catch (e) {}
     document.querySelectorAll('.tab-panel').forEach(function(p) { p.classList.remove('active'); });
-    _syncNavButtons(catId, btn, '.bnav-btn, .iq-top-cat-btn');
+    _syncNavButtons(catId, btn, '.bnav-btn');
     if (window.S) { window.S.lastCat = catId; window.saveState(); }
     var group = window.TAB_GROUPS[catId] || [];
     var hasMultipleGroups = group.length > 1 && Array.isArray(group[0].tabs);
@@ -194,6 +194,8 @@
       var match = b.getAttribute('data-tab') === tabId;
       b.classList.toggle('active', match);
       b.setAttribute('aria-selected', match ? 'true' : 'false');
+      if (match) b.setAttribute('aria-current', 'page');
+      else b.removeAttribute('aria-current');
     });
     if (btn && btn.classList) {
       btn.classList.add('active');

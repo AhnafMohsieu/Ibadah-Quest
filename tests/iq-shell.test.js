@@ -143,6 +143,9 @@ test('3-dot drawer renders all 5 TAB_GROUPS categories lazily on open and switch
   assert.ok(els.iqDrawerCatBar.innerHTML.includes('Library'), 'drawer must list Library category');
   assert.ok(els.iqDrawerCatBar.innerHTML.includes('Profile'), 'drawer must list Profile category');
   assert.ok(els.iqDrawerTabs.innerHTML.includes("data-tab=\"today\""), 'initial drawer view shows Daily subtabs');
+  assert.ok(els.iqDrawerTabs.innerHTML.includes('iq-drawer-group-chevron'), 'category groups include expand/collapse chevron');
+  assert.ok(els.iqDrawerTabs.innerHTML.includes('aria-expanded="true"') && els.iqDrawerTabs.innerHTML.includes('aria-controls='), 'category headings expose aria-expanded and aria-controls');
+  assert.ok(els.iqDrawerTabs.innerHTML.includes('aria-current="page"'), 'active drawer tab sets aria-current="page"');
   sb.window.selectDrawerCategory('knowledge');
   assert.ok(els.iqDrawerTabs.innerHTML.includes("data-tab=\"quran\""), 'switching category renders Knowledge subtabs');
 });
@@ -248,6 +251,6 @@ test('Phase B: concentric 3-ring SVG, time greeting, and 7-day consistency rhyth
   assert.ok(greet.includes('Morning'), 'morning greeting matches hour');
 
   sb.window.renderIqFeed();
-  assert.ok(els.iqHeroChallenge.innerHTML.includes('iq-concentric-rings'), 'hero displays concentric 3-ring gauge');
+  assert.ok(els.iqHeroChallenge.innerHTML.includes('iq-focus-ring'), 'hero displays refined single focus ring');
   assert.ok(els.iqHeroChallenge.innerHTML.includes('iq-rhythm-strip'), 'hero displays 7-day rhythm strip');
 });

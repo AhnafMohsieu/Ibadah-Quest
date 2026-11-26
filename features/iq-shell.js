@@ -226,23 +226,22 @@
     return out;
   }
 
-  function renderConcentricRingsSvg(summary, sizePx) {
+  function renderFocusRingSvg(summary, sizePx) {
     var s = summary || computeDailyChallenges();
-    var size = sizePx || 96;
-    var rings = [
-      { r: 44, pct: s.prayersPct || 0, cls: 'iq-ring-p', stroke: '#14b8a6' },
-      { r: 33, pct: s.dhikrPct || 0, cls: 'iq-ring-d', stroke: '#38bdf8' },
-      { r: 22, pct: s.quranPct || 0, cls: 'iq-ring-q', stroke: '#eab308' }
-    ];
-    var tracks = rings.map(function(rg) {
-      var c = 2 * Math.PI * rg.r;
-      var off = c - (Math.min(100, Math.max(0, rg.pct)) / 100) * c;
-      return '<circle class="iq-cr-track" cx="55" cy="55" r="' + rg.r + '"/>' +
-        '<circle class="iq-cr-fill ' + rg.cls + '" cx="55" cy="55" r="' + rg.r + '" stroke="' + rg.stroke + '" stroke-dasharray="' + c.toFixed(2) + '" stroke-dashoffset="' + off.toFixed(2) + '"/>';
-    }).join('');
-    return '<div class="iq-concentric-rings" style="width:' + size + 'px;height:' + size + 'px">' +
-      '<svg viewBox="0 0 110 110" width="' + size + '" height="' + size + '" aria-hidden="true">' + tracks + '</svg>' +
-      '<span class="iq-cr-center iq-tabular">' + (s.overallPct || 0) + '%</span>' +
+    var size = sizePx || 88;
+    var pct = Math.min(100, Math.max(0, Number(s.overallPct) || 0));
+    var r = 41;
+    var c = 2 * Math.PI * r;
+    var off = c - (pct / 100) * c;
+    return '<div class="iq-focus-ring" style="width:' + size + 'px;height:' + size + 'px">' +
+      '<svg viewBox="0 0 100 100" width="' + size + '" height="' + size + '" aria-hidden="true">' +
+        '<circle class="iq-fr-track" cx="50" cy="50" r="' + r + '"/>' +
+        '<circle class="iq-fr-fill" cx="50" cy="50" r="' + r + '" stroke-dasharray="' + c.toFixed(2) + '" stroke-dashoffset="' + off.toFixed(2) + '"/>' +
+      '</svg>' +
+      '<div class="iq-fr-center">' +
+        '<span class="iq-fr-pct iq-tabular">' + fmtNum(pct) + '%</span>' +
+        '<span class="iq-fr-lbl">' + esc(tLabel('today')) + '</span>' +
+      '</div>' +
     '</div>';
   }
 
@@ -255,36 +254,50 @@
 
     var heroEl = document.getElementById('iqHeroChallenge');
     if (heroEl) {
-      var focusMetaRight = nextP
-        ? (esc(tLabel('Next:')) + ' ' + esc(tLabel(nextP.name)) + ' &middot; ' + esc(nextP.shortRemaining))
-        : ('Overall ' + fmtNum(summary.overallPct) + '% today');
+      var nextPrayerHtml = nextP
+        ? '<div class="iq-hero-next-bar">' +
+            '<span class="iq-hero-next-lbl">' +
+              '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>' +
+              '<span>' + esc(tLabel('Next Prayer:')) + ' <strong>' + esc(tLabel(nextP.name)) + '</strong></span>' +
+            '</span>' +
+            '<span class="iq-hero-next-eta iq-tabular">' + esc(nextP.shortRemaining) + '</span>' +
+          '</div>'
+        : '<div class="iq-hero-next-bar">' +
+            '<span class="iq-hero-next-lbl">' + esc(tLabel('Overall')) + '</span>' +
+            '<span class="iq-hero-next-eta iq-tabular">' + fmtNum(summary.overallPct) + '% ' + esc(tLabel('today')) + '</span>' +
+          '</div>';
+      var checkSvg = '<svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>';
       var rhythmHtml = '<div class="iq-rhythm-strip" aria-label="7-day prayer consistency">' +
         rhythm.map(function(day) {
           var cls = 'iq-rhythm-day' + (day.complete ? ' complete' : (day.partial ? ' partial' : '')) + (day.isToday ? ' today' : '');
-          return '<div class="' + cls + '" title="' + esc(day.dk) + ': ' + day.count + '/5 prayers">' +
-            '<span class="iq-rhythm-dot"></span>' +
+          var marker = day.complete ? checkSvg : (day.partial ? '<span class="iq-rhythm-count iq-tabular">' + fmtNum(day.count) + '</span>' : '');
+          return '<div class="' + cls + '" title="' + esc(day.dk) + ': ' + day.count + '/5 prayers" aria-label="' + esc(day.dk) + ': ' + day.count + ' of 5 prayers">' +
+            '<span class="iq-rhythm-dot" aria-hidden="true">' + marker + '</span>' +
             '<span class="iq-rhythm-lbl">' + esc(day.label) + '</span>' +
           '</div>';
         }).join('') +
       '</div>';
       var focusLbl = tLabel("Today's Focus");
+      var safeFocusLbl = String(focusLbl).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
       var detailsLbl = tLabel('Details');
       heroEl.innerHTML =
-        '<div class="iq-hero-ch-top">' +
-          '<span class="iq-hero-ch-title">' + esc(tLabel(greet)) + ' &middot; ' + focusLbl + '</span>' +
-          '<button type="button" class="iq-hero-ch-link" onclick="window.openChallengeDetail(\'dhikr\')">' + esc(detailsLbl) + ' &rsaquo;</button>' +
-        '</div>' +
-        '<div class="iq-hero-ch-card iq-hero-upgraded" role="button" tabindex="0" onclick="window.openChallengeDetail(\'dhikr\')">' +
-          '<div class="iq-hero-ring-grid">' +
-            renderConcentricRingsSvg(summary, 94) +
-            '<div class="iq-hero-pillars">' +
-              '<div class="iq-pillar-row"><span class="iq-pillar-dot" style="background:#0a7a72"></span><span>' + esc(tLabel('Prayers')) + '</span><strong class="iq-tabular">' + fmtNum(summary.prayersDone) + '/' + fmtNum(summary.prayersTotal) + '</strong></div>' +
-              '<div class="iq-pillar-row"><span class="iq-pillar-dot" style="background:#0284c7"></span><span>' + esc(tLabel('Dhikr')) + '</span><strong class="iq-tabular">' + fmtNum(summary.dhikrToday) + '/' + fmtNum(summary.dhikrGoal) + '</strong></div>' +
-              '<div class="iq-pillar-row"><span class="iq-pillar-dot" style="background:#8e6b1e"></span><span>' + esc(tLabel('Quran')) + '</span><strong class="iq-tabular">' + fmtNum(summary.quranToday) + '/' + fmtNum(summary.quranGoal) + 'm</strong></div>' +
-              '<div class="iq-hero-ch-meta"><span>' + focusMetaRight + '</span></div>' +
-            '</div>' +
+        '<div class="iq-hero-ch-card iq-hero-upgraded">' +
+          '<div class="iq-hero-ch-top">' +
+            '<span class="iq-hero-ch-title">' + esc(tLabel(greet)) + ' &middot; ' + safeFocusLbl + '</span>' +
+            '<button type="button" class="iq-hero-ch-link" onclick="window.openChallengeDetail(\'dhikr\')"><span>' + esc(detailsLbl) + '</span><svg class="iq-mirror-icon" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg></button>' +
           '</div>' +
-          rhythmHtml +
+          '<div class="iq-hero-focus-body" role="button" tabindex="0" onclick="window.openChallengeDetail(\'dhikr\')" aria-label="' + esc(focusLbl) + ' ' + esc(detailsLbl) + '">' +
+            '<div class="iq-hero-ring-grid">' +
+              renderFocusRingSvg(summary, 86) +
+              '<div class="iq-hero-pillars">' +
+                '<div class="iq-pillar-row"><span class="iq-pillar-dot prayers"></span><span class="iq-pillar-lbl">' + esc(tLabel('Prayers')) + '</span><strong class="iq-tabular">' + fmtNum(summary.prayersDone) + '/' + fmtNum(summary.prayersTotal) + '</strong></div>' +
+                '<div class="iq-pillar-row"><span class="iq-pillar-dot dhikr"></span><span class="iq-pillar-lbl">' + esc(tLabel('Dhikr')) + '</span><strong class="iq-tabular">' + fmtNum(summary.dhikrToday) + '/' + fmtNum(summary.dhikrGoal) + '</strong></div>' +
+                '<div class="iq-pillar-row"><span class="iq-pillar-dot quran"></span><span class="iq-pillar-lbl">' + esc(tLabel('Quran')) + '</span><strong class="iq-tabular">' + fmtNum(summary.quranToday) + '/' + fmtNum(summary.quranGoal) + 'm</strong></div>' +
+              '</div>' +
+            '</div>' +
+            nextPrayerHtml +
+            rhythmHtml +
+          '</div>' +
         '</div>';
     }
 
@@ -488,7 +501,7 @@
       timerBannerHtml +
       '<div class="iq-ring-hero-card">' +
         '<div class="iq-ring-wrap">' +
-          renderConcentricRingsSvg(summary, 110) +
+          renderFocusRingSvg(summary, 108) +
           '<div class="iq-ring-legend">' +
             '<span class="iq-ch-sub" style="font-weight:700;color:var(--text);">' + esc(focusTitle) + '</span>' +
             '<span class="iq-ch-sub iq-tabular">Prayers ' + summary.prayersPct + '% &middot; Dhikr ' + summary.dhikrPct + '% &middot; Quran ' + summary.quranPct + '%</span>' +
@@ -606,15 +619,29 @@
     var isAct = tab.id === activeTab;
     var count = drawerPoolCount(tab);
     var subText = badgeCatLabel
-      ? badgeCatLabel + (count ? ' · ' + count + ' entries' : '')
-      : (tab.desc || (count ? count + ' entries' : ''));
-    return '<button type="button" data-tab="' + esc(tab.id) + '" class="iq-drawer-tab' + (isAct ? ' active' : '') + '" onclick="window.drawerNavigate && window.drawerNavigate(\'' + esc(tab.id) + '\')">' +
-      '<span class="iq-drawer-tab-icon">' + icon(tab.icon || tab.id) + '</span>' +
+      ? badgeCatLabel + (count ? ' · ' + fmtNum(count) + ' entries' : '')
+      : (tab.desc || (count ? fmtNum(count) + ' entries' : ''));
+    return '<button type="button" data-tab="' + esc(tab.id) + '" class="iq-drawer-tab' + (isAct ? ' active' : '') + '"' + (isAct ? ' aria-current="page"' : '') + ' onclick="window.drawerNavigate && window.drawerNavigate(\'' + esc(tab.id) + '\')">' +
+      '<span class="iq-drawer-tab-icon" aria-hidden="true">' + icon(tab.icon || tab.id) + '</span>' +
       '<span class="iq-drawer-tab-meta">' +
         '<span class="iq-drawer-tab-label">' + esc(tLabel(tab.label)) + '</span>' +
         (subText ? '<span class="iq-drawer-tab-desc">' + esc(subText) + '</span>' : '') +
       '</span>' +
+      '<span class="iq-drawer-tab-arrow iq-mirror-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>' +
     '</button>';
+  }
+
+  function _bindDrawerAccordionToggle(tabsBox) {
+    if (!tabsBox || tabsBox._iqToggleBound || typeof tabsBox.addEventListener !== 'function') return;
+    tabsBox._iqToggleBound = true;
+    tabsBox.addEventListener('toggle', function(ev) {
+      var det = ev && ev.target;
+      if (!det || !det.classList || !det.classList.contains('iq-drawer-group')) return;
+      var sum = det.querySelector && det.querySelector('.iq-drawer-group-head');
+      if (sum && typeof sum.setAttribute === 'function') {
+        sum.setAttribute('aria-expanded', det.open ? 'true' : 'false');
+      }
+    }, true);
   }
 
   function renderIqDrawerTabs(catOverride, queryOverride) {
@@ -703,15 +730,20 @@
       return;
     }
 
+    _bindDrawerAccordionToggle(tabsBox);
     tabsBox.innerHTML = group.map(function(grp, idx) {
       var containsActive = grp.tabs.some(function(tb) { return tb.id === activeTab; });
-      var openAttr = (containsActive || group.length <= 2 || idx === 0) ? ' open' : '';
+      var isOpen = (containsActive || group.length <= 2 || idx === 0);
+      var openAttr = isOpen ? ' open' : '';
+      var panelId = 'iqDrawerGrp_' + esc(activeCat) + '_' + esc(grp.id || idx);
       return '<details class="iq-drawer-group"' + openAttr + '>' +
-        '<summary class="iq-drawer-group-head">' +
-          '<span class="iq-drawer-group-title">' + icon(grp.icon || grp.id) + ' ' + esc(tLabel(grp.label)) + '</span>' +
-          '<span class="iq-drawer-group-count">' + grp.tabs.length + '</span>' +
+        '<summary class="iq-drawer-group-head" aria-expanded="' + (isOpen ? 'true' : 'false') + '" aria-controls="' + panelId + '">' +
+          '<span class="iq-drawer-group-ico" aria-hidden="true">' + icon(grp.icon || grp.id) + '</span>' +
+          '<span class="iq-drawer-group-title">' + esc(tLabel(grp.label)) + '</span>' +
+          '<span class="iq-drawer-group-count iq-tabular">' + fmtNum(grp.tabs.length) + '</span>' +
+          '<span class="iq-drawer-group-chevron" aria-hidden="true"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>' +
         '</summary>' +
-        '<div class="iq-drawer-grid">' +
+        '<div id="' + panelId + '" class="iq-drawer-grid">' +
           grp.tabs.map(function(tb) { return renderDrawerTabTile(tb, activeTab, ''); }).join('') +
         '</div>' +
       '</details>';
@@ -886,7 +918,8 @@
 
   window.getTimeGreeting = getTimeGreeting;
   window.computeWeeklyRhythm = computeWeeklyRhythm;
-  window.renderConcentricRingsSvg = renderConcentricRingsSvg;
+  window.renderFocusRingSvg = renderFocusRingSvg;
+  window.renderConcentricRingsSvg = renderFocusRingSvg;
   window.computeDailyChallenges = computeDailyChallenges;
   window.logQuranMinutes = logQuranMinutes;
   window.updateDailyChallengeGoals = updateDailyChallengeGoals;

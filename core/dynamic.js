@@ -258,25 +258,37 @@ function renderAll() {
     const title = document.getElementById('lvTitle');
     const bar = document.getElementById('xpBar');
     const label = document.getElementById('xpLabel');
+    const prefix = document.getElementById('lvPrefix');
     if (!lv || !title || !bar || !label) return;
     const xp = S.xp || 0;
     const cur = xpFor(S.lv), nxt = xpFor(S.lv + 1);
     const prog = xp - cur, need = (nxt - cur) || 1;
-    lv.textContent = S.lv;
-    title.textContent = lvTitle(S.lv);
+    if (prefix) prefix.textContent = _tr('Level', 'Level');
+    lv.textContent = _fmtN(S.lv);
+    title.textContent = _tr(lvTitle(S.lv), lvTitle(S.lv));
     bar.style.width = Math.min(100, (prog / need) * 100) + '%';
-    label.textContent = prog + ' / ' + need + ' XP';
+    label.textContent = _fmtN(prog) + ' / ' + _fmtN(need) + ' XP';
   }
   function renderStr() {
     const fire = document.getElementById('streakFire');
-    if (fire) fire.innerHTML = iqIcon('flame');
+    if (fire) {
+      fire.innerHTML = '<svg class="iq-streak-svg" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2c.7 3.2 3.8 5.2 4.8 8.3a5.5 5.5 0 1 1-9.6 0C8.2 7.2 11.3 5.2 12 2Z"/><path d="M12 18a2.5 2.5 0 0 0 2.4-2.6c0-1.4-1.2-2.5-2.4-3.6-1.2 1.1-2.4 2.2-2.4 3.6A2.5 2.5 0 0 0 12 18Z"/></svg>';
+    }
     const days = document.getElementById('strDays');
     const best = document.getElementById('bestStr');
     const msg = document.getElementById('strMsg');
     if (!days || !best || !msg) return;
-    days.textContent = (S.cs || 0) + ' Day Streak';
-    best.textContent = S.bs || 0;
-    msg.textContent = (STREAK_MSGS.find(x => (S.cs || 0) >= x.m) || { t: 'Legendary!' }).t;
+    const curStreak = S.cs || 0;
+    const barEl = days.closest ? days.closest('.streak-bar') : null;
+    if (barEl && barEl.classList) barEl.classList.toggle('is-zero', curStreak === 0);
+    days.textContent = _fmtN(curStreak) + ' ' + _tr('Day Streak', 'Day Streak');
+    best.textContent = _fmtN(S.bs || 0);
+    if (typeof document !== 'undefined' && typeof document.querySelector === 'function') {
+      const bestLbl = document.querySelector('.streak-best .best-label');
+      if (bestLbl) bestLbl.textContent = _tr('Best', 'Best');
+    }
+    const rawMsg = (STREAK_MSGS.find(x => curStreak >= x.m) || { t: 'Legendary!' }).t;
+    msg.textContent = _tr(rawMsg, rawMsg);
   }
   function renderBonus() {
     const el = document.getElementById('bonusArea');
@@ -676,10 +688,16 @@ function renderAll() {
     const title = document.getElementById('tbTitle');
     const xp = document.getElementById('tbXP');
     const streak = document.getElementById('tbStreak');
-    if (lv) lv.textContent = `Lv ${_fmtN(S.lv)}`;
-    if (title) title.textContent = lvTitle(S.lv);
-    if (xp) xp.innerHTML = iqIcon('zap') + ' ' + _fmtN(S.xp || 0) + ' XP';
-    if (streak) streak.innerHTML = iqIcon('flame') + ' ' + _fmtN(S.cs || 0);
+    const menuLbl = document.getElementById('iqMenuBtnLabel');
+    if (menuLbl) menuLbl.textContent = _tr('All Sections', 'All Sections');
+    if (lv) lv.textContent = `${_tr('Lv', 'Lv')} ${_fmtN(S.lv)}`;
+    if (title) title.textContent = _tr(lvTitle(S.lv), lvTitle(S.lv));
+    if (xp) {
+      xp.innerHTML = '<svg class="tb-stat-svg" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg><bdi dir="ltr">' + _fmtN(S.xp || 0) + ' XP</bdi>';
+    }
+    if (streak) {
+      streak.innerHTML = '<svg class="tb-stat-svg" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2c.7 3.2 3.8 5.2 4.8 8.3a5.5 5.5 0 1 1-9.6 0C8.2 7.2 11.3 5.2 12 2Z"/></svg><span>' + _fmtN(S.cs || 0) + '</span>';
+    }
     if (typeof window.renderIqFeed === 'function') {
       try { window.renderIqFeed(); } catch (e) {}
     }

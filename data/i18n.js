@@ -41,6 +41,21 @@
   var DICT = {
     // Primary 5 destinations & core sections
     'Daily': { ar: 'اليومية', bn: 'দৈনিক' },
+    'All Sections': { ar: 'كل الأقسام', bn: 'সকল বিভাগ' },
+    'Level': { ar: 'المستوى', bn: 'স্তর' },
+    'Lv': { ar: 'م', bn: 'স্তর' },
+    'Best': { ar: 'الأفضل', bn: 'সেরা' },
+    'Day Streak': { ar: 'أيام متتالية', bn: 'দিনের ধারাবাহিকতা' },
+    'Start your journey!': { ar: 'ابدأ رحلتك المباركة', bn: 'আপনার যাত্রা শুরু করুন!' },
+    'Overall': { ar: 'الإجمالي', bn: 'মোট' },
+    'today': { ar: 'اليوم', bn: 'আজ' },
+    'Next Prayer:': { ar: 'الصلاة القادمة:', bn: 'পরবর্তী নামাজ:' },
+    'New Seeker': { ar: 'طالب جديد', bn: 'নতুন অন্বেষী' },
+    'Core': { ar: 'الأساسيات', bn: 'মূল বিভাগ' },
+    'Adhkar': { ar: 'الأذكار', bn: 'যিকির ও দোয়া' },
+    'Guide': { ar: 'الدليل', bn: 'নির্দেশিকা' },
+    'Self-Tracking': { ar: 'المتابعة الذاتية', bn: 'আত্ম-অনুসরণ' },
+    'Faith & Life': { ar: 'الإيمان والحياة', bn: 'ঈমান ও জীবন' },
     'Today': { ar: 'اليوم', bn: 'আজ' },
     'Quests': { ar: 'المهام', bn: 'কুয়েস্ট' },
     'Quran': { ar: 'القرآن الكريم', bn: 'কুরআন' },
@@ -320,6 +335,9 @@
     if (typeof window !== 'undefined') {
       if (window.syncIqDrawer) window.syncIqDrawer();
       if (window.renderDateLine) window.renderDateLine();
+      if (window.renderTopBar) window.renderTopBar();
+      if (window.renderLv) window.renderLv();
+      if (window.renderStr) window.renderStr();
       if (window.renderIqFeed) window.renderIqFeed();
       if (window.renderPrayers) window.renderPrayers();
       if (window.renderPrayerTimes) window.renderPrayerTimes();

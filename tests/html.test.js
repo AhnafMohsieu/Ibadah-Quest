@@ -71,7 +71,7 @@ test('main.css uses Noor & Rhythm AA teal-emerald tokens', () => {
 });
 
 test('index.html registers the service worker and update banner', () => {
-  assert.ok(html.includes("navigator.serviceWorker.register('sw.js?v=66')"));
+  assert.ok(html.includes("navigator.serviceWorker.register('sw.js?v=67')"));
   assert.ok(html.includes("'SKIP_WAITING'"));
   assert.ok(html.includes('swUpdateBanner'));
 });
@@ -94,9 +94,9 @@ test('hadith/dhikr audio, offline fonts, and adhan modules wired cleanly', () =>
   assert.ok(html.includes('<script src="data/hadith-normalize.js?v=1"></script>'));
   assert.ok(html.includes('<script src="features/hadith-library.js?v=3" defer></script>'));
   assert.ok(html.includes('<script src="features/tafsir-library.js?v=3" defer></script>'));
-  assert.ok(html.includes('styles/tokens.css?v=1'));
-  assert.ok(html.includes('styles/main.css?v=54'));
-  assert.ok(html.includes('features/daily-content.js?v=3'));
+  assert.ok(html.includes('styles/tokens.css?v=2'));
+  assert.ok(html.includes('styles/main.css?v=55'));
+  assert.ok(html.includes('features/daily-content.js?v=4'));
   assert.ok(html.includes('features/notifications.js?v=3'));
   assert.ok(html.includes('assets/vendor/adhan.umd.min.js'));
   assert.ok(!html.includes('fonts.googleapis.com'), 'Google Fonts CDN removed for offline privacy');
@@ -143,7 +143,7 @@ test('Noor & Rhythm tokens support Light, Dark, and OLED Night themes cleanly', 
   assert.ok(tokensCss.includes('html[data-theme="dark"]'));
   assert.ok(tokensCss.includes('html[data-theme="night"]'));
   assert.ok(actions.includes('iqSetTheme'));
-  assert.ok(html.includes('styles/tokens.css?v=1'));
+  assert.ok(html.includes('styles/tokens.css?v=2'));
   assert.ok(!fs.existsSync(path.join(root, 'core', 'themes.js')), 'legacy core/themes.js remains deleted');
 });
 
@@ -752,12 +752,12 @@ test('Option 3 shell & remodeled 2x2 Bento drawer tab section', () => {
   assert.ok(html.includes('id="iqMasjidSheet"'), 'masjid check-ins slide-over sheet missing');
   assert.ok(html.includes('id="bnavCenterFab"'), 'elevated center dock crescent button missing');
   assert.ok(html.includes('features/masjid-checkins.js?v=3'), 'masjid-checkins script v=3 missing');
-  assert.ok(html.includes('features/iq-shell.js?v=6'), 'iq-shell script v=6 missing');
+  assert.ok(html.includes('features/iq-shell.js?v=7'), 'iq-shell script v=7 missing');
   assert.ok(html.includes('core/prayers.js?v=6'), 'core/prayers.js script v=6 missing');
   assert.ok(html.includes('core/render-prayers.js?v=8'), 'render-prayers.js script v=8 missing');
   assert.ok(html.includes('core/static.js?v=11'), 'core/static.js script v=11 missing');
-  assert.ok(html.includes('core/dynamic.js?v=18'), 'dynamic.js script v=18 missing');
-  assert.ok(html.includes('core/tabs.js?v=16'), 'core/tabs.js script v=16 missing');
+  assert.ok(html.includes('core/dynamic.js?v=19'), 'dynamic.js script v=19 missing');
+  assert.ok(html.includes('core/tabs.js?v=17'), 'core/tabs.js script v=17 missing');
   assert.ok(html.includes('features/daily-summary.js?v=3'), 'daily-summary script v=3 missing');
   assert.ok(html.includes('core/actions.js?v=28'), 'core/actions.js script v=28 missing');
   assert.ok(renderPrayers.includes('computeNextPrayer'), 'render-prayers.js must expose computeNextPrayer');
@@ -775,14 +775,16 @@ test('Option 3 shell & remodeled 2x2 Bento drawer tab section', () => {
   const heroCloseIdx = html.indexOf('<!-- /hero-strip -->');
   assert.ok(heroIdx > -1 && carIdx > heroIdx && carIdx < heroCloseIdx, 'dailyCarousel must live inside top hero-strip');
   assert.ok(dateIdx > heroIdx && dateIdx < heroCloseIdx, 'dateLine must live cleanly inside hero-strip');
-  assert.ok(html.includes('id="topCatNav"'), 'topBar category pill nav missing for desktop/tablet');
-  assert.ok(renderTabs.includes('.iq-top-cat-btn'), 'core/tabs.js must sync topCatNav buttons');
+  assert.ok(!html.includes('id="topCatNav"'), 'desktop topBar center tabs removed in favor of All Sections');
+  assert.ok(html.includes('id="iqMenuBtnLabel"'), 'desktop All Sections trigger label present');
+  assert.ok(renderTabs.includes("'.bnav-btn'"), 'core/tabs.js must sync bottom nav buttons');
   assert.ok(html.includes('<h2 class="iq-sheet-title">Masjid Check-ins</h2>'), 'masjid sheet title must use Title Case');
   for (const ov of ['id="iqDrawer"', 'id="iqNotifDrawer"', 'id="iqChallengeSheet"', 'id="iqMasjidSheet"']) {
     const start = html.indexOf(ov);
     assert.ok(start > -1 && html.slice(start, start + 180).includes('inert'), ov + ' must carry initial inert attribute');
   }
-  assert.ok(css.includes('.iq-top-catnav'), 'topCatNav CSS missing');
+  assert.ok(!css.includes('.iq-top-catnav'), 'removed topCatNav CSS must stay deleted');
+  assert.ok(css.includes('.iq-drawer-group-chevron'), 'category group chevron CSS missing');
   assert.ok(css.includes('.iq-mc-workspace'), 'masjid side-by-side workspace CSS missing');
   assert.ok(css.includes('.carousel-nav-btn'), 'hero carousel prev/next arrow styles missing');
   assert.ok(css.includes('.iq-curved-header'), 'curved header CSS missing');
