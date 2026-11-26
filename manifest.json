@@ -1,15 +1,21 @@
 {
   "name": "Ibadah Quest",
   "short_name": "IbadahQuest",
-  "description": "Prayer · Deeds · Knowledge · Growth — an offline-first habit tracker for daily worship.",
+  "description": "Prayer \u00b7 Deeds \u00b7 Knowledge \u00b7 Growth \u2014 an offline-first habit tracker for daily worship.",
   "lang": "en",
   "start_url": "./",
   "scope": "./",
   "id": "./",
   "display": "standalone",
   "background_color": "#f2fbf8",
-  "theme_color": "#075e64",
+  "theme_color": "#054944",
   "icons": [
+    {
+      "src": "assets/icons/icon-v2.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
     {
       "src": "assets/icons/icon.svg",
       "sizes": "any",
@@ -22,7 +28,7 @@
       "name": "Daily Progress",
       "description": "Track your daily prayer completion, XP, and streak.",
       "tag": "daily-progress",
-      "ms_ac_template": "widgets/daily-progress.json",
+      "ms_ac_template": "features/widgets/daily-progress.json",
       "data": "/",
       "screenshots": [],
       "icons": [
@@ -42,7 +48,7 @@
       "name": "Dhikr Counter",
       "description": "View your dhikr session counts for today.",
       "tag": "dhikr-counter",
-      "ms_ac_template": "widgets/dhikr-counter.json",
+      "ms_ac_template": "features/widgets/dhikr-counter.json",
       "data": "/",
       "screenshots": [],
       "icons": [
@@ -62,7 +68,7 @@
       "name": "Streak Calendar",
       "description": "See your monthly prayer streak calendar.",
       "tag": "streak-calendar",
-      "ms_ac_template": "widgets/streak-calendar.json",
+      "ms_ac_template": "features/widgets/streak-calendar.json",
       "data": "/",
       "screenshots": [],
       "icons": [

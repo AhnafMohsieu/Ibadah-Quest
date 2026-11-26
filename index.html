@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://api.aladhan.com https://cdn.jsdelivr.net https://api.quran.com; media-src 'self' https://verses.quran.com; worker-src 'self'">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:; connect-src 'self' https://api.aladhan.com https://cdn.jsdelivr.net https://api.quran.com; media-src 'self' https://verses.quran.com; worker-src 'self'">
   <title>Ibadah Quest — Offline Islamic Worship, Prayer &amp; Dhikr Tracker</title>
   <meta name="description" content="Ibadah Quest is an offline-first Islamic worship tracker PWA. Log your daily prayers, adhkar, Quran recitation, and spiritual habits with zero tracking and full privacy.">
   <meta name="keywords" content="Ibadah Quest, Islamic tracker, prayer times, namaz log, dhikr counter, Quran tracker, spiritual habits, Islamic PWA">
@@ -41,9 +41,7 @@
     }
   }
   </script>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Noto+Naskh+Arabic:wght@400;500;600;700&family=Sora:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles/tokens.css?v=1">
   <style>
     /* Critical above-the-fold CSS */
     :root{--bg:#f2fbf8;--bg-accent:#e4f5f0;--card-bg:#ffffff;--card-border:rgba(11,122,117,0.12);--shadow-sm:0 2px 8px rgba(7,67,75,0.05);--shadow-md:0 6px 20px rgba(7,67,75,0.08);--text:#0b2528;--text2:#4b6b6e;--text3:#7b9699;--accent:#0b8a82;--accent-light:#14b8a6;--accent-dark:#075e64;--accent-bg:rgba(11,138,130,0.10);--accent-border:rgba(11,138,130,0.22);--gold:#d4af37;--green:#16a34a;--green-bg:rgba(22,163,74,0.08);--orange:#d97706;--red:#dc2626;--red-bg:rgba(220,38,38,0.08);--border:rgba(11,122,117,0.14);--border-light:#e6f4f1;--radius:18px;--radius-sm:12px;--radius-lg:24px;--font:'Sora',system-ui,-apple-system,'Segoe UI',sans-serif;--font-arabic:'Noto Naskh Arabic','Amiri',serif;--font-heading:'Sora',system-ui,sans-serif;--transition:150ms cubic-bezier(0.4,0,0.2,1);line-height:1.6}
@@ -61,7 +59,7 @@
     .tab-panel{display:none}
     .tab-panel.active{display:block}
   </style>
-  <link rel="preload" href="styles/main.css?v=53" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <link rel="stylesheet" href="styles/main.css?v=54">
   <script>
     window.__iqBootT0 = Date.now();
     window.__iqReload = function() { location.reload(); };
@@ -102,9 +100,9 @@
   <script src="core/error-tap.js?v=1"></script>
   <link rel="manifest" href="manifest.json">
   <link rel="icon" href="assets/icons/favicon.png" type="image/png">
-  <link rel="icon" href="assets/icons/icon.svg" type="image/svg+xml">
+  <link rel="icon" href="assets/icons/icon-v2.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="assets/icons/app-icon-192.png">
-  <meta name="theme-color" content="#075e64">
+  <meta name="theme-color" content="#054944">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -242,10 +240,10 @@
     <!-- SECTION 1: DAILY / IBADAH -->
     <section class="page-section active" id="section-ibadah" data-section="ibadah" role="region" aria-label="Daily Ibadah">
       <div class="tab-panel active" role="tabpanel" id="panel-today">
-<div id="wellArea"></div>
-<div id="muhasabahEntry"></div>
 <div id="prayerArea"></div>
+<div id="wellArea"></div>
 <div id="iqFeedArea" class="iq-feed-area"></div>
+<div id="muhasabahEntry"></div>
 <div id="gardenArea"></div>
 <details id="iqAllActsDetails" class="iq-all-acts-details">
   <summary>All Voluntary Prayers &amp; Extra Good Deeds</summary>
@@ -375,6 +373,7 @@
       <div class="tab-panel" role="tabpanel" id="panel-rewards">
     <div class="shop-list" id="shopArea"></div>
   </div>
+      <div class="tab-panel" role="tabpanel" id="panel-gallery"><div id="galleryArea"></div></div>
     </section>
   </div>
     </main>
@@ -481,51 +480,34 @@
 
 <!-- Render engine (split modules) -->
 <script src="core/calendar.js?v=1"></script>
-<script src="core/render-prayers.js?v=7"></script>
-<script src="core/static.js?v=10"></script>
-<script src="core/dynamic.js?v=17"></script>
-<script src="core/tabs.js?v=15"></script>
+<script src="assets/vendor/adhan.umd.min.js"></script>
+<script src="features/native-bridge.js?v=1" defer></script>
+<script src="core/render-prayers.js?v=8"></script>
+<script src="core/static.js?v=11"></script>
+<script src="core/dynamic.js?v=18"></script>
+<script src="core/tabs.js?v=16"></script>
 
-<!-- Chart.js CDN (lazy loaded) -->
-<script>
-(function(){
-  var _chartLoaded=false;
-  window._loadChart=function(){
-    if(_chartLoaded)return Promise.resolve();
-    _chartLoaded=true;
-    return new Promise(function(resolve,reject){
-      var s=document.createElement('script');
-      s.src='https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js';
-      s.onload=resolve;
-      s.onerror=function(){_chartLoaded=false;reject(new Error('Chart.js failed to load'));};
-      document.head.appendChild(s);
-    });
-  };
-})();
-</script>
-
-<!-- Analytics Dashboard (lazy loaded on first access) -->
+<!-- Offline Analytics Dashboard (lazy loaded on first access) -->
 <script>
 (function(){
   var _analyticsLoaded=false;
+  window._loadChart=function(){ return Promise.resolve(); };
   window._loadAnalytics=function(){
     if(_analyticsLoaded)return Promise.resolve();
     _analyticsLoaded=true;
-    return window._loadChart().then(function(){
-      var scripts=['features/analytics/analytics.js','features/analytics/charts.js','features/analytics/dashboard.js','features/analytics/trend-charts.js','features/analytics/weekly-compare.js','features/analytics/smart-insights.js'];
-      var i=0;
-      function next(){
-        if(i>=scripts.length)return Promise.resolve();
-        return new Promise(function(resolve,reject){
-          var s=document.createElement('script');
-          s.src=scripts[i++];
-          s.onload=resolve;
-          s.onerror=function(){_analyticsLoaded=false;reject(new Error('Failed to load '+s.src));};
-          document.head.appendChild(s);
-        }).then(next);
-      }
-      return next();
-    }).catch(function(err){_analyticsLoaded=false;throw err;});
+    var scripts=['features/analytics/analytics.js','features/analytics/charts.js','features/analytics/dashboard.js','features/analytics/trend-charts.js','features/analytics/weekly-compare.js','features/analytics/smart-insights.js'];
+    var i=0;
+    function next(){
+      if(i>=scripts.length)return Promise.resolve();
+      return new Promise(function(resolve,reject){
+        var s=document.createElement('script');
+        s.src=scripts[i++];
+        s.onload=resolve;
+        s.onerror=function(){_analyticsLoaded=false;reject(new Error('Failed to load '+s.src));};
+        document.head.appendChild(s);
+      }).then(next);
+    }
+    return next().catch(function(err){_analyticsLoaded=false;throw err;});
   };
 })();
 </script>
@@ -557,12 +539,12 @@
 <script src="features/pull-refresh.js?v=1" defer></script>
 <script src="features/swipe-nav.js?v=2" defer></script>
 <script src="features/surprise-rewards.js?v=1" defer></script>
-<script src="features/daily-summary.js?v=2" defer></script>
+<script src="features/daily-summary.js?v=3" defer></script>
 <script src="features/consistency-bonuses.js?v=1" defer></script>
 <script src="features/combo-streaks.js" defer></script>
 <script src="features/achievement-showcase.js" defer></script>
-<script src="features/daily-content.js?v=2" defer></script>
-<script src="features/notifications.js?v=2" defer></script>
+<script src="features/daily-content.js?v=3" defer></script>
+<script src="features/notifications.js?v=3" defer></script>
 
 <script src="features/seasonal-events.js" defer></script>
 <script src="features/widgets/daily-progress.js" defer></script>
@@ -573,21 +555,22 @@
 <div id="onboardingOverlay" style="display:none"></div>
 <script src="features/onboarding.js" defer></script>
 <script src="features/masjid-checkins.js?v=3" defer></script>
-<script src="features/iq-shell.js?v=5" defer></script>
+<script src="features/iq-shell.js?v=6"></script>
+<script src="features/gallery.js?v=1" defer></script>
 
 <!-- Actions (core logic, navigation, init, window.App) -->
 <script src="features/auth.js?v=1"></script>
-<script src="core/xp.js?v=3"></script>
-<script src="core/prayers.js?v=5"></script>
+<script src="core/xp.js?v=4"></script>
+<script src="core/prayers.js?v=6"></script>
 <script src="core/quests.js?v=5"></script>
 <script src="core/achievements.js?v=1"></script>
 <script src="core/random.js?v=1"></script>
 <script src="core/shop.js?v=2"></script>
-<script src="core/dhikr.js?v=4"></script>
+<script src="core/dhikr.js?v=5"></script>
 <script src="core/content.js?v=1"></script>
 <script src="core/backup.js?v=1"></script>
-<script src="data/i18n.js?v=3"></script>
-<script src="core/actions.js?v=27"></script>
+<script src="data/i18n.js?v=4"></script>
+<script src="core/actions.js?v=28"></script>
 
 <!-- PWA: Service Worker registration + update banner -->
 <script>
@@ -611,7 +594,7 @@
     });
   }
   window.addEventListener('load', function() {
-    navigator.serviceWorker.register('sw.js?v=65').then(function(reg) {
+    navigator.serviceWorker.register('sw.js?v=66').then(function(reg) {
       if (reg.waiting) { showUpdateBanner(reg); return; }
       reg.addEventListener('updatefound', function() {
         var sw = reg.installing;

@@ -15,3 +15,4 @@ const SHOP = [
   { id:'r23', name:'Kind Neighbor Frame',          cost:6500 },
   { id:'r25', name:'Seeker of Mercy Crest',        cost:8500 }
 ];
+if (typeof window !== 'undefined') window.SHOP = SHOP;

@@ -148,6 +148,10 @@
     'Details': { ar: 'التفاصيل', bn: 'বিস্তারিত' },
     'Daily Reminder': { ar: 'تذكرة اليوم', bn: 'আজকের স্মরণ' },
     'Daily challenges': { ar: 'عبادات اليوم', bn: 'আজকের আমল' },
+    'Dhikr': { ar: 'الذكر', bn: 'যিকর' },
+    'Next:': { ar: 'التالية:', bn: 'পরবর্তী:' },
+    'Tap to claim your Daily Bonus!': { ar: 'اضغط لاستلام مكافأة اليوم', bn: 'আজকের দৈনিক বোনাস নিতে ট্যাপ করুন!' },
+    'Search anything...': { ar: 'ابحث في كل شيء...', bn: 'যেকোনো বিষয় খুঁজুন...' },
     'Show All': { ar: 'عرض الكل', bn: 'সব দেখুন' },
     'Start': { ar: 'ابدأ', bn: 'শুরু করুন' },
     'Pause': { ar: 'إيقاف مؤقت', bn: 'বিরতি' },
@@ -217,9 +221,10 @@
     },
     t: function(str) {
       if (!str) return str;
+      var termMode = (typeof S !== 'undefined' && S && S.bnTermMode) || this.bnTermMode;
       if (this.lang === 'bn') {
-        if (this.bnTermMode === 'salat' && GLOSSARY_SALAT[str]) return GLOSSARY_SALAT[str];
-        if (this.bnTermMode === 'namaz' && GLOSSARY_NAMAZ[str]) return GLOSSARY_NAMAZ[str];
+        if (termMode === 'salat' && GLOSSARY_SALAT[str]) return GLOSSARY_SALAT[str];
+        if (termMode === 'namaz' && GLOSSARY_NAMAZ[str]) return GLOSSARY_NAMAZ[str];
       }
       var entry = this.dict[str];
       if (!entry || !entry[this.lang]) return str;
@@ -233,6 +238,10 @@
     try {
       document.documentElement.lang = lang;
       document.documentElement.dir = rtl ? 'rtl' : 'ltr';
+      if (typeof document.documentElement.setAttribute === 'function') {
+        document.documentElement.setAttribute('lang', lang);
+        document.documentElement.setAttribute('dir', rtl ? 'rtl' : 'ltr');
+      }
       if (document.body) {
         document.body.setAttribute('data-lang', lang);
         document.body.setAttribute('dir', rtl ? 'rtl' : 'ltr');
@@ -302,6 +311,10 @@
     document.querySelectorAll('[data-i18n-text]').forEach(function(el) {
       el.textContent = t(el.getAttribute('data-i18n-text') || '');
     });
+    document.querySelectorAll('.global-search').forEach(function(inp) {
+      inp.setAttribute('placeholder', t('Search anything...'));
+      inp.setAttribute('aria-label', t('Search anything...'));
+    });
     var activeBtn = document.querySelector('.bnav-btn.active');
     var activeCat = (activeBtn && activeBtn.getAttribute('data-cat')) || (typeof S !== 'undefined' && S && S.lastCat) || 'ibadah';
     if (typeof window !== 'undefined') {
@@ -336,10 +349,18 @@
     iqSetLang(I18N.lang);
   }
 
+  function iqSyncLangDir() {
+    var l = (typeof S !== 'undefined' && S && S.lang) ? S.lang : I18N.lang;
+    if (['en', 'ar', 'bn'].indexOf(l) !== -1) I18N.lang = l;
+    applyDomLanguage(I18N.lang);
+  }
+
   I18N.load();
 
   window.t = t;
   window.iqSetLang = iqSetLang;
+  window.setLanguage = iqSetLang;
+  window.iqSyncLangDir = iqSyncLangDir;
   window.iqSetNumerals = iqSetNumerals;
   window.iqSetBnTermMode = iqSetBnTermMode;
   window.iqFormatNum = iqFormatNum;

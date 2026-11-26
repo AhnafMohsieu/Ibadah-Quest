@@ -265,20 +265,24 @@
     const el = document.getElementById('dhikrCounterArea');
     if (!el) return;
     if (!S.dhikrCounters) S.dhikrCounters = {};
+    const fmt = (n) => (typeof window.iqFormatNum === 'function') ? window.iqFormatNum(n) : String(n);
     const current = S.dhikrCounters._active || 0;
     const pool = (typeof DHIKR_COUNTER_DATA !== 'undefined' && DHIKR_COUNTER_DATA) || (typeof window !== 'undefined' && window.DHIKR_COUNTER_DATA) || [];
     if (!pool.length) return;
     const d = pool[current % pool.length];
     const cnt = S.dhikrCounters[current] || 0;
     const pct = Math.min(100, Math.round((cnt / d.target) * 100));
+    const dk = typeof today === 'function' ? today() : '';
+    const dailyTapXp = (S.dhikrTapXpDay && S.dhikrTapXpDay.date === dk) ? (S.dhikrTapXpDay.xp || 0) : 0;
+    const dailyCap = (typeof window.MAX_DAILY_TAP_XP === 'number') ? window.MAX_DAILY_TAP_XP : 100;
     el.innerHTML = renderDhikrAnalytics() + `
       <div class="dhikr-counter-card">
-        <div style="font-size:0.75rem;color:var(--text2);margin-bottom:8px;">${current+1} / ${pool.length}</div>
+        <div style="font-size:0.75rem;color:var(--text2);margin-bottom:8px;">${fmt(current+1)} / ${fmt(pool.length)} &middot; Daily Tap XP: ${fmt(dailyTapXp)} / ${fmt(dailyCap)}</div>
         <div class="dhikr-counter-arabic" style="color:${d.color}">${d.arabic}</div>
         <div style="font-style:italic;color:var(--text2);font-size:0.85rem;margin-bottom:4px;">${d.transliteration}</div>
         <div style="font-size:0.8rem;color:var(--text2);margin-bottom:12px;">${d.english}</div>
-        <div class="dhikr-counter-num iq-tabular" style="color:${d.color}">${cnt}</div>
-        <div class="dhikr-counter-target iq-tabular">Target: ${d.target} ${cnt >= d.target ? iqIcon('check') : ''}</div>
+        <div class="dhikr-counter-num iq-tabular" style="color:${d.color}">${fmt(cnt)}</div>
+        <div class="dhikr-counter-target iq-tabular">Target: ${fmt(d.target)} ${cnt >= d.target ? iqIcon('check') : ''}</div>
         ${_dhikrOrbHtml(cnt, d, pct)}
         <div style="margin-top:12px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
           <button class="dhikr-reset-btn" onclick="App.resetDhikr()">${iqIcon('refresh-cw')} Reset</button>
@@ -349,14 +353,75 @@
     saveState();
     renderCharity();
   }
-  function renderMemorization() {
-    let h = '<div class="section-title">' + iqIcon('brain') + ' Memorization Tracker</div>';
-    h += `<div class="stat-card" style="margin-bottom:16px;"><div class="stat-num">${S.memorized}</div><div>Surahs Memorized</div></div>`;
-    h += `<input class="profile-input" id="memInput" placeholder="Surah name (e.g., Al-Fatiha)"><button class="shop-card" onclick="App.addMemorization()" style="justify-content:center;width:100%;">${iqIcon('plus')} Add Surah</button>`;
-    if (S.memorizationList.length) { h += '<div class="section-title">' + iqIcon('clipboard') + ' Memorized List</div>'; S.memorizationList.forEach(s => h += `<div class="quest-row">${iqIcon('check')} ${escapeHTML(s)}</div>`); }
-    document.getElementById('memorizationArea').innerHTML = h;
+  const HIFZ_INTERVALS = [1, 3, 7, 14, 30];
+  function _addDaysIso(baseStr, days) {
+    const p = String(baseStr).split('-');
+    const d = p.length === 3 ? new Date(Number(p[0]), Number(p[1]) - 1, Number(p[2]), 12) : new Date();
+    d.setDate(d.getDate() + days);
+    return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
   }
-  function addMemorization() { const inp=document.getElementById('memInput'); if(!inp?.value.trim()) return; S.memorizationList.push(inp.value.trim()); S.memorized++; inp.value=''; if (typeof window.grantCappedDailyXp === 'function') window.grantCappedDailyXp(3, 'memorization', 5); saveState(); renderMemorization(); checkA(); }
+  function renderMemorization() {
+    const fmt = (n) => (typeof window.iqFormatNum === 'function') ? window.iqFormatNum(n) : String(n);
+    const dt = today();
+    if (!S.hifzSrs || typeof S.hifzSrs !== 'object') S.hifzSrs = {};
+    let dueCount = 0;
+    const rows = (S.memorizationList || []).map((s, idx) => {
+      const rec = S.hifzSrs[s] || { level: 0, nextDue: dt, lastReviewed: '' };
+      const isDue = !rec.nextDue || rec.nextDue <= dt;
+      if (isDue) dueCount++;
+      return { name: s, idx: idx, rec: rec, isDue: isDue };
+    });
+    let h = '<div class="section-title">' + iqIcon('brain') + ' Hifz &amp; Spaced Repetition</div>';
+    h += `<div class="stat-card" style="margin-bottom:14px;"><div class="stat-num">${fmt(S.memorized)}</div><div>Surahs Memorized &middot; <span class="iq-srs-badge">${fmt(dueCount)} Due Today</span></div></div>`;
+    h += `<div class="content-card"><div class="content-english" style="font-size:0.84rem;color:var(--text2);">Spaced repetition schedules reviews at gentle intervals (1, 3, 7, 14, 30 days) so memorized Surahs stay anchored in memory.</div></div>`;
+    h += `<input class="profile-input" id="memInput" placeholder="Surah name or Ayah range (e.g., Al-Mulk 1-10)"><button class="shop-card" onclick="App.addMemorization()" style="justify-content:center;width:100%;">${iqIcon('plus')} Add to Hifz Queue</button>`;
+    if (rows.length) {
+      h += '<div class="section-title">' + iqIcon('clipboard') + ' Review Queue</div>';
+      rows.forEach(item => {
+        const ivl = HIFZ_INTERVALS[Math.min(HIFZ_INTERVALS.length - 1, item.rec.level || 0)];
+        h += `<div class="quest-row" style="flex-wrap:wrap;gap:8px;justify-content:space-between;">
+          <div style="flex:1;min-width:160px;"><strong>${escapeHTML(item.name)}</strong><div style="font-size:0.75rem;color:var(--text2);">${item.isDue ? 'Due now for gentle review' : ('Next review: ' + escapeHTML(item.rec.nextDue) + ' (' + fmt(ivl) + 'd)')}</div></div>
+          <div style="display:flex;gap:6px;">
+            <button type="button" class="iq-pill-btn" style="padding:6px 12px;font-size:0.76rem;" onclick="App.markHifzReviewed(${item.idx}, false)">${iqIcon('check')} Reviewed</button>
+            <button type="button" class="iq-btn-secondary" style="padding:6px 10px;font-size:0.76rem;" onclick="App.markHifzReviewed(${item.idx}, true)">Reset (1d)</button>
+          </div>
+        </div>`;
+      });
+    }
+    const area = document.getElementById('memorizationArea');
+    if (area) area.innerHTML = h;
+  }
+  function addMemorization() {
+    const inp = document.getElementById('memInput');
+    if (!inp?.value.trim()) return;
+    const label = inp.value.trim();
+    if (!Array.isArray(S.memorizationList)) S.memorizationList = [];
+    if (!S.hifzSrs) S.hifzSrs = {};
+    if (!S.memorizationList.includes(label)) {
+      S.memorizationList.push(label);
+      S.memorized = (S.memorized || 0) + 1;
+      S.hifzSrs[label] = { level: 0, nextDue: today(), lastReviewed: '' };
+    }
+    inp.value = '';
+    if (typeof window.grantCappedDailyXp === 'function') window.grantCappedDailyXp(3, 'memorization', 5);
+    saveState();
+    renderMemorization();
+    checkA();
+  }
+  function markHifzReviewed(idx, reset) {
+    if (!Array.isArray(S.memorizationList) || idx < 0 || idx >= S.memorizationList.length) return;
+    if (!S.hifzSrs) S.hifzSrs = {};
+    const name = S.memorizationList[idx];
+    const dt = today();
+    const cur = S.hifzSrs[name] || { level: 0, nextDue: dt, lastReviewed: '' };
+    const nextLevel = reset ? 0 : Math.min(HIFZ_INTERVALS.length - 1, (cur.level || 0) + 1);
+    const days = HIFZ_INTERVALS[nextLevel];
+    S.hifzSrs[name] = { level: nextLevel, nextDue: _addDaysIso(dt, days), lastReviewed: dt };
+    if (!reset && typeof window.grantCappedDailyXp === 'function') window.grantCappedDailyXp(2, 'hifz_review', 10);
+    saveState();
+    renderMemorization();
+  }
+  window.markHifzReviewed = markHifzReviewed;
   function renderMorning() {
     const dt = today(); if (!S.morningDone[dt]) S.morningDone[dt] = {};
     const total = MORNING_DHIKR.length;

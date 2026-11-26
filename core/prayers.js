@@ -86,23 +86,11 @@
   function _countConsecutiveEndingOn(startDateObj) {
     let s = 0;
     const ck = new Date(startDateObj.getTime());
-    let graceUsed = false;
     for (let guard = 0; guard < 400; guard++) {
       const dk = today(ck);
       if (S.log[dk] && _countPrayers(S.log[dk]) >= 5) {
         s++;
         ck.setDate(ck.getDate() - 1);
-      } else if (!graceUsed && guard > 0) {
-        // Forgiving design: up to 1 missed day does not erase an ongoing multi-day consistency run
-        const prev = new Date(ck.getTime());
-        prev.setDate(prev.getDate() - 1);
-        const pdk = today(prev);
-        if (S.log[pdk] && _countPrayers(S.log[pdk]) >= 5) {
-          graceUsed = true;
-          ck.setDate(ck.getDate() - 1);
-          continue;
-        }
-        break;
       } else {
         break;
       }

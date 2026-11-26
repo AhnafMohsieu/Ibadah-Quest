@@ -59,6 +59,8 @@
 
   function formatHijriLabel(hd) {
     if (!hd) return '';
+    if (hd instanceof Date) hd = getAdjustedHijri(hd);
+    if (!hd || typeof hd.month !== 'number') return '';
     var lang = (typeof I18N !== 'undefined' && I18N.lang) || 'en';
     var months = lang === 'ar' ? HIJRI_MONTHS_AR : (lang === 'bn' ? HIJRI_MONTHS_BN : HIJRI_MONTHS);
     var mName = months[(hd.month - 1) % 12] || '';

@@ -1,11 +1,119 @@
 ﻿(function() {
   // ═══════════════════════════════════════════════════════
+  function _isRealBrowser() {
+    return typeof navigator !== 'undefined' && /Mozilla|Chrome|Safari|WebKit/i.test(navigator.userAgent || '');
+  }
+
+  function iqResolveTheme(mode) {
+    var m = mode || (typeof S !== 'undefined' && S && S.theme) || 'light';
+    if (m === 'system') {
+      try {
+        if (typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+          return 'dark';
+        }
+      } catch (e) {}
+      return 'light';
+    }
+    if (m === 'dark' || m === 'night') return m;
+    return 'light';
+  }
+
+  function iqApplyTheme() {
+    if (typeof document === 'undefined' || !document.documentElement) return;
+    var pref = (typeof S !== 'undefined' && S && S.theme) ? S.theme : 'light';
+    var resolved = iqResolveTheme(pref);
+    if (resolved === 'light') document.documentElement.removeAttribute('data-theme');
+    else document.documentElement.setAttribute('data-theme', resolved);
+    var seasonOn = !!(typeof S !== 'undefined' && S && S.seasonalAccent);
+    document.documentElement.setAttribute('data-season-accent', seasonOn ? 'true' : 'false');
+    var scale = (typeof S !== 'undefined' && S && typeof S.scriptScale === 'number') ? S.scriptScale : 1;
+    try { document.documentElement.style.setProperty('--iq-script-scale', String(scale)); } catch (e) {}
+    var metaTheme = document.querySelector && document.querySelector('meta[name="theme-color"]');
+    if (metaTheme && typeof metaTheme.setAttribute === 'function') {
+      metaTheme.setAttribute('content', resolved === 'night' ? '#030605' : (resolved === 'dark' ? '#0e1715' : '#054944'));
+    }
+    try { localStorage.setItem('iqTheme', pref); } catch (e) {}
+  }
+  window.iqApplyTheme = iqApplyTheme;
+
+  try {
+    if (typeof window !== 'undefined' && window.matchMedia) {
+      var _mqDark = window.matchMedia('(prefers-color-scheme: dark)');
+      if (_mqDark && typeof _mqDark.addEventListener === 'function') {
+        _mqDark.addEventListener('change', function() {
+          if (typeof S !== 'undefined' && S && S.theme === 'system') iqApplyTheme();
+        });
+      }
+    }
+  } catch (e) {}
+
+  function iqAlertDialog(title, msg, iconHtml) {
+    if (!_isRealBrowser() || typeof alert === 'function' && !document.getElementById('toastOverlay')) {
+      if (typeof alert === 'function') alert(String(title || '') + (msg ? '\n' + msg : ''));
+      return;
+    }
+    var esc = window.escapeHTML || function(s){ return String(s == null ? '' : s); };
+    openToastModal(
+      '<div class="toast-box iq-modal-card" role="alertdialog" aria-modal="true" style="max-width:420px;width:92%;text-align:center;">' +
+        (iconHtml ? '<div style="margin-bottom:8px;">' + iconHtml + '</div>' : '') +
+        '<h3 style="margin-bottom:6px;">' + esc(title) + '</h3>' +
+        '<p style="color:var(--text2);font-size:0.9rem;line-height:1.5;margin-bottom:14px;">' + esc(msg || '') + '</p>' +
+        '<button type="button" class="iq-pill-btn" onclick="window.closeToastOverlay && window.closeToastOverlay()">OK</button>' +
+      '</div>'
+    );
+  }
+  window.iqAlertDialog = iqAlertDialog;
+
+  function iqConfirmDialog(title, msg, confirmLabel, onConfirm, isDanger) {
+    if (!_isRealBrowser() || !document.getElementById('toastOverlay')) {
+      if (typeof confirm === 'function' && confirm(msg || title)) {
+        if (typeof onConfirm === 'function') onConfirm();
+      }
+      return;
+    }
+    var esc = window.escapeHTML || function(s){ return String(s == null ? '' : s); };
+    window._iqPendingConfirm = typeof onConfirm === 'function' ? onConfirm : null;
+    openToastModal(
+      '<div class="toast-box iq-modal-card" role="alertdialog" aria-modal="true" style="max-width:420px;width:92%;text-align:left;">' +
+        '<h3 style="margin-bottom:6px;color:' + (isDanger ? 'var(--red)' : 'var(--text)') + ';">' + esc(title) + '</h3>' +
+        '<p style="color:var(--text2);font-size:0.88rem;line-height:1.55;margin-bottom:16px;">' + esc(msg || '') + '</p>' +
+        '<div style="display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap;">' +
+          '<button type="button" class="iq-btn-secondary" onclick="window._iqPendingConfirm=null;window.closeToastOverlay();">Cancel</button>' +
+          '<button type="button" class="' + (isDanger ? 'danger-btn' : 'iq-pill-btn') + '" style="margin:0;" onclick="var fn=window._iqPendingConfirm;window._iqPendingConfirm=null;window.closeToastOverlay();if(fn)fn();">' + esc(confirmLabel || 'Confirm') + '</button>' +
+        '</div>' +
+      '</div>'
+    );
+  }
+  window.iqConfirmDialog = iqConfirmDialog;
+
+  function iqPromptDialog(title, msg, placeholder, onSubmit) {
+    if (!_isRealBrowser() || !document.getElementById('toastOverlay')) {
+      var ans = typeof prompt === 'function' ? prompt(msg || title) : null;
+      if (typeof onSubmit === 'function') onSubmit(ans);
+      return;
+    }
+    var esc = window.escapeHTML || function(s){ return String(s == null ? '' : s); };
+    window._iqPendingPrompt = typeof onSubmit === 'function' ? onSubmit : null;
+    openToastModal(
+      '<div class="toast-box iq-modal-card" role="dialog" aria-modal="true" style="max-width:420px;width:92%;text-align:left;">' +
+        '<h3 style="margin-bottom:6px;">' + esc(title) + '</h3>' +
+        '<p style="color:var(--text2);font-size:0.88rem;line-height:1.5;margin-bottom:10px;">' + esc(msg || '') + '</p>' +
+        '<input type="text" id="iqPromptModalInput" class="profile-input" placeholder="' + esc(placeholder || '') + '" style="margin-bottom:14px;">' +
+        '<div style="display:flex;gap:10px;justify-content:flex-end;">' +
+          '<button type="button" class="iq-btn-secondary" onclick="window._iqPendingPrompt=null;window.closeToastOverlay();">Cancel</button>' +
+          '<button type="button" class="iq-pill-btn" onclick="var inp=document.getElementById(\'iqPromptModalInput\');var val=inp?inp.value:\'\';var fn=window._iqPendingPrompt;window._iqPendingPrompt=null;window.closeToastOverlay();if(fn)fn(val);">Confirm</button>' +
+        '</div>' +
+      '</div>'
+    );
+    setTimeout(function() { var inp = document.getElementById('iqPromptModalInput'); if (inp && inp.focus) inp.focus(); }, 60);
+  }
+  window.iqPromptDialog = iqPromptDialog;
+
   function toast(icon, msg, conf=false, ms=2600) {
     window._modalTriggerEl = document.activeElement;
-    const ov=document.getElementById('toastOverlay'); ov.innerHTML=`<div class="toast-box"><span style="font-size:2.5rem">${icon}</span><h3>${msg}</h3></div>`;
+    const ov=document.getElementById('toastOverlay'); ov.innerHTML=`<div class="toast-box"><span style="font-size:2.2rem">${icon}</span><h3>${msg}</h3></div>`;
     ov.style.display='flex'; ov.classList.add('show'); playSound(conf ? 'chime' : 'pop');
     ov.style.pointerEvents='auto';
-    if(conf) for(let i=0;i<30;i++){ const el=document.createElement('span'); el.className='confetti'; el.setAttribute('aria-hidden','true'); el.textContent=[iqEmoji('sparkles'),iqEmoji('star'),iqEmoji('sparkles'),iqEmoji('zap')][i%4]; el.style.left=Math.random()*100+'%'; el.style.top='-20px'; el.style.setProperty('--fall-dur',(2+Math.random()*3)+'s'); el.style.setProperty('--rot',(Math.random()*720-360)+'deg'); document.body.appendChild(el); setTimeout(()=>el.remove(),3000); }
     if(ov._t) clearTimeout(ov._t);
     if(ms>0) ov._t=setTimeout(()=>{ ov.classList.remove('show'); setTimeout(()=>{ ov.style.display='none'; ov.innerHTML=''; },300); ov.style.pointerEvents='none'; },ms);
     ov.onclick=()=>{ ov.classList.remove('show'); setTimeout(()=>{ ov.style.display='none'; ov.innerHTML=''; },300); ov.style.pointerEvents='none'; if(ov._t) clearTimeout(ov._t); };
@@ -31,8 +139,7 @@
       initApp();
     }
   }
-  function resetAll() {
-    if (!confirm(iqEmoji('alert-triangle') + ' Reset all data? This cannot be undone.')) return;
+  function _performResetAll() {
     const keys = [];
     for (let i = 0; i < localStorage.length; i++) {
       const k = localStorage.key(i);
@@ -45,7 +152,71 @@
     }
     S = freshState();
     saveState();
+    iqApplyTheme();
     renderAll();
+  }
+  function resetAll(force) {
+    if (force === true) { _performResetAll(); return; }
+    if (!_isRealBrowser() && typeof confirm === 'function') {
+      if (!confirm(iqEmoji('alert-triangle') + ' Reset all data? This cannot be undone.')) return;
+      _performResetAll();
+      return;
+    }
+    iqConfirmDialog('Reset All Progress?', 'This permanently deletes your logs, streaks, XP, and settings on this device.', 'Reset All', _performResetAll, true);
+  }
+  function deleteAllUserData() {
+    iqConfirmDialog(
+      'Delete All On-Device Data?',
+      'Removes all Ibadah Quest profiles, localStorage keys, and IndexedDB storage on this device. This cannot be undone.',
+      'Delete Everything',
+      function() {
+        var keys = [];
+        for (var i = 0; i < localStorage.length; i++) {
+          var k = localStorage.key(i);
+          if (k && (k.indexOf('iq') === 0)) keys.push(k);
+        }
+        keys.forEach(function(k) { try { localStorage.removeItem(k); } catch (e) {} });
+        if (window.Storage && window.Storage.destroy) {
+          try { window.Storage.destroy(currentUser).catch(function(){}); } catch (e) {}
+        }
+        S = freshState();
+        S.introSeen = true;
+        saveState();
+        iqApplyTheme();
+        renderAll();
+        toast(iqIcon('check'), 'All personal worship data cleared from device', false, 2600);
+      },
+      true
+    );
+  }
+  function exportCSVData() {
+    var rows = [['date', 'prayers_done', 'prayers_qada', 'dhikr_count', 'fasted']];
+    var log = (S && S.log) ? S.log : {};
+    Object.keys(log).sort().forEach(function(dt) {
+      var day = log[dt] || {};
+      var p = day.p || {};
+      var done = 0, qada = 0;
+      Object.keys(p).forEach(function(k) {
+        if (p[k] === 'qada') qada++;
+        else if (p[k]) done++;
+      });
+      var dSum = 0;
+      var dMap = day.d || {};
+      Object.keys(dMap).forEach(function(k) { dSum += Number(dMap[k] || 0); });
+      var fasted = (S && S.fastingDays && S.fastingDays[dt]) ? '1' : '0';
+      rows.push([dt, done, qada, dSum, fasted]);
+    });
+    var csv = rows.map(function(r) { return r.join(','); }).join('\n');
+    if (typeof Blob === 'function' && typeof URL !== 'undefined' && typeof URL.createObjectURL === 'function') {
+      var blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement('a');
+      a.href = url; a.download = 'ibadah-quest-log-' + today() + '.csv';
+      document.body.appendChild(a); a.click(); a.remove();
+      URL.revokeObjectURL(url);
+      toast(iqIcon('download'), 'CSV activity log exported', false, 2000);
+    }
+    return csv;
   }
   function _downloadBackup(data) {
     const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
@@ -266,13 +437,20 @@
     importData();
   }
   function recoverFresh() {
-    var proceed = function() {
-      var token = prompt('Type RESET to erase corrupted data and start fresh:');
+    var applyResetToken = function(token) {
       if (!window.Recovery.freshStartAllowed(token)) { toast(iqIcon('info'), 'Confirmation did not match. Nothing was erased.'); return; }
       S = window.freshState();
       saveState();
+      iqApplyTheme();
       toast(iqIcon('sprout'), 'Fresh start ready.');
       continueBootAfterRecovery();
+    };
+    var proceed = function() {
+      if (!_isRealBrowser() && typeof prompt === 'function') {
+        applyResetToken(prompt('Type RESET to erase corrupted data and start fresh:'));
+        return;
+      }
+      iqPromptDialog('Start Fresh', 'Type RESET to erase corrupted data and start fresh:', 'RESET', applyResetToken);
     };
     // A typed wipe must never destroy the only healthy copy of user data.
     if (window.Storage && window.Storage.load) {
@@ -547,7 +725,8 @@ Object.keys(NEW_POOLS).forEach(k => {
   } else if (window.Auth && typeof window.Auth.isLocked === 'function' && window.Auth.isLocked()) {
     window.Auth.show('unlock');
   }
-  try { if (document && document.documentElement) document.documentElement.removeAttribute('data-theme'); } catch(e) {}
+  iqApplyTheme();
+  try { if (typeof window.iqSyncLangDir === 'function') window.iqSyncLangDir(); } catch(e) {}
 
     const t = today();
     if (S.lad !== t) {
@@ -612,8 +791,135 @@ Object.keys(NEW_POOLS).forEach(k => {
     } catch(e) { console.warn('Initial nav render failed:', e); }
   }
 
+  function iqSetTheme(theme) {
+    var valid = ['light', 'dark', 'night', 'system'].includes(theme) ? theme : 'light';
+    if (S) { S.theme = valid; saveState(); }
+    iqApplyTheme();
+    if (typeof window.renderProfile === 'function') window.renderProfile();
+  }
+  function iqSetSeasonalAccent(on) {
+    if (S) { S.seasonalAccent = !!on; saveState(); }
+    iqApplyTheme();
+    if (typeof window.renderProfile === 'function') window.renderProfile();
+  }
+  function iqSetScriptScale(scale) {
+    var n = Math.max(0.9, Math.min(1.4, parseFloat(scale) || 1));
+    if (S) { S.scriptScale = Math.round(n * 100) / 100; saveState(); }
+    iqApplyTheme();
+    if (typeof window.renderProfile === 'function') window.renderProfile();
+  }
+  function iqSetSoundEnabled(on) {
+    if (S) { S.soundEnabled = !!on; saveState(); }
+    if (typeof window.renderProfile === 'function') window.renderProfile();
+  }
+  function iqSetNumerals(mode) {
+    var valid = ['auto', 'western', 'bangla', 'arabic'].includes(mode) ? mode : 'auto';
+    if (S) { S.numerals = valid; saveState(); }
+    if (window.I18N) window.I18N.numerals = valid;
+    try { localStorage.setItem('iq_numerals', valid); } catch (e) {}
+    if (typeof window.renderAll === 'function') window.renderAll();
+  }
+  function iqSetBnTermMode(mode) {
+    var valid = mode === 'salat' ? 'salat' : 'namaz';
+    if (S) { S.bnTermMode = valid; saveState(); }
+    if (window.I18N) window.I18N.bnTermMode = valid;
+    try { localStorage.setItem('iq_bn_term_mode', valid); } catch (e) {}
+    if (typeof window.renderAll === 'function') window.renderAll();
+  }
+  function iqSetHijriOffset(val) {
+    var n = Math.max(-2, Math.min(2, parseInt(val, 10) || 0));
+    if (S) { S.hijriOffset = n; saveState(); }
+    if (typeof window.renderDateLine === 'function') window.renderDateLine();
+    if (typeof window.renderAll === 'function') window.renderAll();
+  }
+  function iqSetLanguage(lang) {
+    if (typeof window.iqSetLang === 'function') window.iqSetLang(lang);
+    else if (typeof window.setLanguage === 'function') window.setLanguage(lang);
+    else if (S) { S.lang = lang; saveState(); }
+    iqApplyTheme();
+    if (typeof window.renderAll === 'function') window.renderAll();
+  }
+  function iqSetQuranScript(script) {
+    if (S) { S.quranScript = script === 'indopak' ? 'indopak' : 'uthmani'; saveState(); }
+    if (typeof window.renderQuran === 'function') window.renderQuran();
+  }
+  function iqSetQuranTranslation(tr) {
+    if (S) { S.quranTranslation = ['en', 'bn', 'both'].includes(tr) ? tr : 'en'; saveState(); }
+    if (typeof window.renderQuran === 'function') window.renderQuran();
+  }
+  function iqSetKhatamGoal(days) {
+    var d = Math.max(7, Math.min(365, parseInt(days, 10) || 30));
+    if (S) {
+      if (!S.khatamGoal) S.khatamGoal = { targetDays: d, pagesRead: 0, startDate: today() };
+      else S.khatamGoal.targetDays = d;
+      saveState();
+    }
+    if (typeof window.renderQuran === 'function') window.renderQuran();
+  }
+  function iqLogKhatamPages(pages) {
+    var p = Math.max(1, parseInt(pages, 10) || 1);
+    if (S) {
+      if (!S.khatamGoal) S.khatamGoal = { targetDays: 30, pagesRead: 0, startDate: today() };
+      S.khatamGoal.pagesRead = Math.min(604, (S.khatamGoal.pagesRead || 0) + p);
+      saveState();
+    }
+    if (typeof window.grantCappedDailyXp === 'function') window.grantCappedDailyXp(p * 3, 'quran_pages', 15);
+    if (typeof window.renderQuran === 'function') window.renderQuran();
+    toast(iqIcon('book-open'), '+' + p + ' Quran page(s) logged', false, 1800);
+  }
+  function openContentErrorModal(refLabel) {
+    var esc = window.escapeHTML || function(s){ return String(s == null ? '' : s); };
+    var ref = refLabel ? esc(refLabel) : '';
+    openToastModal(
+      '<div class="toast-box iq-modal-card" role="dialog" aria-modal="true" style="max-width:440px;width:92%;text-align:left;">' +
+        '<h3 style="margin-bottom:6px;">Report Content Error</h3>' +
+        '<p style="color:var(--text2);font-size:0.84rem;line-height:1.5;margin-bottom:10px;">Help keep every Quran, Hadith, and Fiqh text accurate. Describe the reference and correction below (saved locally for offline review or exported in a bug report — never sent without your action).</p>' +
+        '<input type="text" id="iqErrRef" class="profile-input" placeholder="Screen / Verse / Hadith reference" value="' + ref + '" style="margin-bottom:8px;">' +
+        '<textarea id="iqErrDetail" class="profile-input" rows="3" placeholder="What seems inaccurate or misprinted?" style="margin-bottom:12px;"></textarea>' +
+        '<div style="display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap;">' +
+          '<button type="button" class="iq-btn-secondary" onclick="window.closeToastOverlay();">Cancel</button>' +
+          '<button type="button" class="iq-pill-btn" onclick="window.App && window.App.submitContentErrorReport && window.App.submitContentErrorReport();">Save Note</button>' +
+        '</div>' +
+      '</div>'
+    );
+  }
+  function submitContentErrorReport() {
+    var refEl = document.getElementById('iqErrRef');
+    var detEl = document.getElementById('iqErrDetail');
+    var ref = refEl ? refEl.value.trim() : '';
+    var detail = detEl ? detEl.value.trim() : '';
+    if (!detail) { toast(iqIcon('info'), 'Please enter a short description.', false, 2000); return; }
+    try {
+      var list = JSON.parse(localStorage.getItem('iq_content_error_reports') || '[]');
+      list.push({ at: new Date().toISOString(), ref: ref, detail: detail });
+      localStorage.setItem('iq_content_error_reports', JSON.stringify(list.slice(-50)));
+    } catch (e) {}
+    closeToastOverlay();
+    toast(iqIcon('check'), 'Error note saved locally. JazakAllahu khayran!', false, 2600);
+  }
+  function openChangelogModal() {
+    openToastModal(
+      '<div class="toast-box iq-modal-card" role="dialog" aria-modal="true" style="max-width:460px;width:92%;text-align:left;max-height:80vh;overflow-y:auto;">' +
+        '<h3 style="margin-bottom:8px;">What&rsquo;s New in Ibadah Quest v2.2</h3>' +
+        '<ul style="padding-left:18px;font-size:0.86rem;line-height:1.65;color:var(--text2);margin-bottom:14px;">' +
+          '<li><strong>Noor &amp; Rhythm UI:</strong> Light, Dark, and OLED Night themes + seasonal accent overlay + WCAG 2.2 AA contrast.</li>' +
+          '<li><strong>Offline Prayer &amp; Qibla Engine:</strong> Bundled astronomical calculations for global cities + Dhaka/IFB, Hanafi/Shafi Asr, High-Lat, ±1m offsets, and compass Qibla.</li>' +
+          '<li><strong>Bangla, English &amp; Arabic:</strong> Full RTL support, bundled Bangla/Arabic fonts, digit style choice, and Bangla terminology toggle (Namaz/Salat).</li>' +
+          '<li><strong>Quran &amp; Hifz Upgrade:</strong> Indo-Pak &amp; Uthmani scripts, complete Bangla Taisirul Quran + English Saheeh translations, Khatam planner, and Hifz Spaced Repetition.</li>' +
+          '<li><strong>Ethical &amp; Forgiving Habits:</strong> Mid-day streak preservation, Grace cushion, zero-reason Rest Mode, and silence-first notifications with quiet hours.</li>' +
+        '</ul>' +
+        '<button type="button" class="iq-pill-btn" onclick="window.closeToastOverlay();">Close</button>' +
+      '</div>'
+    );
+  }
+  function openGallery() {
+    if (typeof window.switchCategory === 'function') window.switchCategory('profile_main', null);
+    if (typeof window.activateTab === 'function') window.activateTab('gallery', null);
+    if (typeof window.renderComponentGallery === 'function') window.renderComponentGallery();
+  }
+
   function finishInit() {
-    try { if (document && document.documentElement) document.documentElement.removeAttribute('data-theme'); } catch(e) {}
+    iqApplyTheme();
     try { initApp(); } catch(e) { console.error('Step 3 initApp failed:', e); }
     try { if (window.initSearch) window.initSearch(); } catch(e) { console.error('Step 3b initSearch failed:', e); }
     try { if (window.initFAB) window.initFAB(); } catch(e) { console.error('Step 3c initFAB failed:', e); }
@@ -702,8 +1008,14 @@ Object.keys(NEW_POOLS).forEach(k => {
       logSleep: appAction('logSleep'),
       logExercise: appAction('logExercise'),
       toggleMeal: appAction('toggleMeal'),
-      addMemorization: window.addMemorization, toggleMorning: window.toggleMorning, toggleEvening: window.toggleEvening,
-      setTafsirEdition: appAction('setTafsirEdition'), switchUser, logout, resetAll, exportData, importData, toggleBookmark, isBookmarked, toggleVolCat: appAction('toggleVolCat'), toggleDeedCat: appAction('toggleDeedCat'),
+      addMemorization: window.addMemorization, markHifzReviewed: window.markHifzReviewed, toggleMorning: window.toggleMorning, toggleEvening: window.toggleEvening,
+      ensureQuranBanglaLoaded: window.ensureQuranBanglaLoaded, ensureQuranIndoPakLoaded: window.ensureQuranIndoPakLoaded,
+      setTafsirEdition: appAction('setTafsirEdition'), switchUser, logout, resetAll, exportData, exportCSVData, importData, deleteAllUserData, toggleBookmark, isBookmarked, toggleVolCat: appAction('toggleVolCat'), toggleDeedCat: appAction('toggleDeedCat'),
+      iqSetTheme, iqSetSeasonalAccent, iqSetScriptScale, iqSetSoundEnabled, iqSetNumerals, iqSetBnTermMode, iqSetHijriOffset, iqSetLanguage,
+      iqSetQuranScript, iqSetQuranTranslation, iqSetKhatamGoal, iqLogKhatamPages,
+      openContentErrorModal, submitContentErrorReport, openChangelogModal, openGallery,
+      testNotification: appAction('sendTestNotification'),
+      updateNotifSetting: appAction('updateNotificationSettings'),
       openMuhasabah: appAction('openMuhasabah'),
       dismissMuhasabah: appAction('dismissMuhasabah'),
       joinJourney: appAction('joinJourney'),
@@ -795,7 +1107,7 @@ Object.keys(NEW_POOLS).forEach(k => {
     try { saveState(); } catch (e) {}
     var overlay = document.getElementById('introOverlay');
     if (overlay) {
-      overlay.style.transition = 'opacity 0.8s ease-in-out';
+      overlay.style.transition = 'opacity 0.4s ease-out';
       overlay.style.opacity = '0';
       setTimeout(function(){
         overlay.classList.remove('visible');
@@ -803,9 +1115,9 @@ Object.keys(NEW_POOLS).forEach(k => {
         overlay.style.transition = '';
         S.introSeen = true; saveState();
         if (typeof window.isOnboardingComplete === 'function' && !window.isOnboardingComplete()) {
-          setTimeout(function() { window.startOnboarding(); }, 400);
+          setTimeout(function() { if (typeof window.startOnboarding === 'function') window.startOnboarding(); }, 80);
         }
-      }, 800);
+      }, 420);
     }
   }
   window.startJourney = startJourney;

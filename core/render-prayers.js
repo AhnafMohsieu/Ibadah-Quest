@@ -72,17 +72,25 @@
   }
 
   function computeOfflinePrayerTimes(settings, dateObj) {
-    var adhan = (typeof window !== 'undefined' && window.adhan) || (typeof global !== 'undefined' && global.adhan) || null;
-    if (!adhan || !adhan.Coordinates || !adhan.PrayerTimes) return null;
+    if (settings instanceof Date) {
+      var tmpDate = settings;
+      settings = dateObj;
+      dateObj = tmpDate;
+    }
+    var adhanLib = (typeof adhan !== 'undefined' && adhan && adhan.Coordinates) ? adhan : ((typeof window !== 'undefined' && window.adhan) || (typeof globalThis !== 'undefined' && globalThis.adhan) || (typeof global !== 'undefined' && global.adhan) || null);
+    if (!adhanLib || !adhanLib.Coordinates || !adhanLib.PrayerTimes) return null;
     try {
       var st = settings || getPrayerSettings();
       var dt = dateObj || new Date();
-      var coords = new adhan.Coordinates(st.lat, st.lng);
-      var params = _resolveAdhanMethod(adhan, st.method);
-      params.madhab = st.asrSchool === 'shafi' ? adhan.Madhab.Shafi : adhan.Madhab.Hanafi;
-      if (st.highLat === 'seventh') params.highLatitudeRule = adhan.HighLatitudeRule.SeventhOfTheNight;
-      else if (st.highLat === 'twilight') params.highLatitudeRule = adhan.HighLatitudeRule.TwilightAngle;
-      else params.highLatitudeRule = adhan.HighLatitudeRule.MiddleOfTheNight;
+      var coords = new adhanLib.Coordinates(st.lat, st.lng);
+      var params = _resolveAdhanMethod(adhanLib, st.method);
+      params.madhab = st.asrSchool === 'shafi' ? adhanLib.Madhab.Shafi : adhanLib.Madhab.Hanafi;
+      if (st.highLat === 'seventh') params.highLatitudeRule = adhanLib.HighLatitudeRule.SeventhOfTheNight;
+      else if (st.highLat === 'twilight') params.highLatitudeRule = adhanLib.HighLatitudeRule.TwilightAngle;
+      else params.highLatitudeRule = adhanLib.HighLatitudeRule.MiddleOfTheNight;
+      if (adhanLib.PolarCircleResolution && Math.abs(st.lat) > 48) {
+        params.polarCircleResolution = adhanLib.PolarCircleResolution.AqrabYaum;
+      }
 
       var off = st.offsets || {};
       params.adjustments = {
@@ -94,9 +102,26 @@
         isha: off.isha || 0
       };
 
-      var pt = new adhan.PrayerTimes(coords, dt, params);
+      var presetMatch = st.tz ? null : (typeof PRAYER_CITY_PRESETS !== 'undefined' ? PRAYER_CITY_PRESETS.find(function(c) {
+        return (st.label && c.label === st.label) || (Math.abs(c.lat - st.lat) < 0.05 && Math.abs(c.lng - st.lng) < 0.05);
+      }) : null);
+      var targetTz = st.tz || (presetMatch && presetMatch.tz) || null;
+      var tzFmt = null;
+      if (targetTz && typeof Intl !== 'undefined' && typeof Intl.DateTimeFormat === 'function') {
+        try {
+          tzFmt = new Intl.DateTimeFormat('en-GB', { timeZone: targetTz, hour: '2-digit', minute: '2-digit', hourCycle: 'h23' });
+        } catch (e) { tzFmt = null; }
+      }
+
+      var pt = new adhanLib.PrayerTimes(coords, dt, params);
       function toSlot(d) {
         if (!d || isNaN(d.getTime())) return null;
+        if (tzFmt) {
+          try {
+            var parts = tzFmt.format(d).split(':');
+            if (parts.length === 2) return { h: parseInt(parts[0], 10) % 24, m: parseInt(parts[1], 10) };
+          } catch (e) {}
+        }
         return { h: d.getHours(), m: d.getMinutes() };
       }
       var res = {
@@ -127,9 +152,9 @@
     var st = getPrayerSettings();
     var la = Number.isFinite(lat) ? lat : st.lat;
     var ln = Number.isFinite(lng) ? lng : st.lng;
-    var adhan = (typeof window !== 'undefined' && window.adhan) || (typeof global !== 'undefined' && global.adhan) || null;
-    if (adhan && typeof adhan.Qibla === 'function' && adhan.Coordinates) {
-      return adhan.Qibla(new adhan.Coordinates(la, ln));
+    var adhanLib = (typeof adhan !== 'undefined' && adhan && adhan.Coordinates) ? adhan : ((typeof window !== 'undefined' && window.adhan) || (typeof globalThis !== 'undefined' && globalThis.adhan) || (typeof global !== 'undefined' && global.adhan) || null);
+    if (adhanLib && typeof adhanLib.Qibla === 'function' && adhanLib.Coordinates) {
+      return adhanLib.Qibla(new adhanLib.Coordinates(la, ln));
     }
     // Great-circle fallback to Kaaba (21.4225, 39.8262)
     var phiK = 21.4225 * Math.PI / 180;
@@ -213,18 +238,18 @@
   }
 
   const PRAYER_CITY_PRESETS = [
-    { label: 'Dhaka', lat: 23.8103, lng: 90.4125, method: 1, asrSchool: 'hanafi' },
-    { label: 'Chattogram', lat: 22.3569, lng: 91.7832, method: 1, asrSchool: 'hanafi' },
-    { label: 'Sylhet', lat: 24.8949, lng: 91.8687, method: 1, asrSchool: 'hanafi' },
-    { label: 'Makkah', lat: 21.4225, lng: 39.8262, method: 4, asrSchool: 'shafi' },
-    { label: 'Madinah', lat: 24.4672, lng: 39.6111, method: 4, asrSchool: 'shafi' },
-    { label: 'Istanbul', lat: 41.0082, lng: 28.9784, method: 13, asrSchool: 'hanafi' },
-    { label: 'Cairo', lat: 30.0444, lng: 31.2357, method: 5, asrSchool: 'shafi' },
-    { label: 'London', lat: 51.5072, lng: -0.1276, method: 15, asrSchool: 'shafi' },
-    { label: 'New York', lat: 40.7128, lng: -74.0060, method: 2, asrSchool: 'shafi' },
-    { label: 'Toronto', lat: 43.6532, lng: -79.3832, method: 2, asrSchool: 'shafi' },
-    { label: 'Kuala Lumpur', lat: 3.1390, lng: 101.6869, method: 11, asrSchool: 'shafi' },
-    { label: 'Tromso', lat: 69.6492, lng: 18.9553, method: 3, asrSchool: 'shafi', highLat: 'seventh' }
+    { label: 'Dhaka', lat: 23.8103, lng: 90.4125, method: 1, asrSchool: 'hanafi', tz: 'Asia/Dhaka' },
+    { label: 'Chattogram', lat: 22.3569, lng: 91.7832, method: 1, asrSchool: 'hanafi', tz: 'Asia/Dhaka' },
+    { label: 'Sylhet', lat: 24.8949, lng: 91.8687, method: 1, asrSchool: 'hanafi', tz: 'Asia/Dhaka' },
+    { label: 'Makkah', lat: 21.4225, lng: 39.8262, method: 4, asrSchool: 'shafi', tz: 'Asia/Riyadh' },
+    { label: 'Madinah', lat: 24.4672, lng: 39.6111, method: 4, asrSchool: 'shafi', tz: 'Asia/Riyadh' },
+    { label: 'Istanbul', lat: 41.0082, lng: 28.9784, method: 13, asrSchool: 'hanafi', tz: 'Europe/Istanbul' },
+    { label: 'Cairo', lat: 30.0444, lng: 31.2357, method: 5, asrSchool: 'shafi', tz: 'Africa/Cairo' },
+    { label: 'London', lat: 51.5072, lng: -0.1276, method: 15, asrSchool: 'shafi', tz: 'Europe/London' },
+    { label: 'New York', lat: 40.7128, lng: -74.0060, method: 2, asrSchool: 'shafi', tz: 'America/New_York' },
+    { label: 'Toronto', lat: 43.6532, lng: -79.3832, method: 2, asrSchool: 'shafi', tz: 'America/Toronto' },
+    { label: 'Kuala Lumpur', lat: 3.1390, lng: 101.6869, method: 11, asrSchool: 'shafi', tz: 'Asia/Kuala_Lumpur' },
+    { label: 'Tromso', lat: 69.6492, lng: 18.9553, method: 3, asrSchool: 'shafi', highLat: 'seventh', tz: 'Europe/Oslo' }
   ];
 
   const PRAYER_METHODS = [
