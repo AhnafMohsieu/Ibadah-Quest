@@ -1,17 +1,17 @@
-# Graph Report - IQ  (2026-11-25)
+# Graph Report - IQ  (2026-11-26)
 
 ## Corpus Check
-- 321 files · ~1,121,741 words
+- 327 files · ~1,130,753 words
 - Verdict: corpus is large enough that graph structure adds value.
-- Unclassified: 8 file(s) not represented in the graph (top: .jfif 4, (none) 2, .xml 1)
+- Unclassified: 4 file(s) not represented in the graph (top: (none) 2, .xml 1, .css 1)
 
 ## Summary
-- 2673 nodes · 4108 edges · 282 communities (194 shown, 88 thin omitted)
-- Extraction: 83% EXTRACTED · 17% INFERRED · 0% AMBIGUOUS · INFERRED: 705 edges (avg confidence: 0.93)
+- 2742 nodes · 4302 edges · 292 communities (204 shown, 88 thin omitted)
+- Extraction: 82% EXTRACTED · 18% INFERRED · 0% AMBIGUOUS · INFERRED: 759 edges (avg confidence: 0.93)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `82081b8d`
+- Built from commit: `2121c32e`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -23,29 +23,29 @@
 - globals
 - glm-5.3
 - today/entry.js
-- helpers.test.js
+- Global Constraints
 - Features
 - poolRender
 - core/tabs.js
 - Changes by file
-- showRecoveryModal
+- Context
 - `core/actions.js` → 8 new files + gutted actions.js
 - renderDynamic
-- Design
+- Global Constraints
 - iq-shell.js
 - renderLv
 - auth.js
 - html.test.js
 - seasonal-events.js
 - Ibadah Quest Comprehensive Improvement — Implementation Plan
-- App Improvement Program — Design Spec
+- index.js
 - charts.js
-- Task 11: Split `render/render.js` into focused modules
+- render-prayers.js
 - App Improvement Program — Design Spec
 - Ibadah Quest — Comprehensive Improvement Plan
 - steps
 - onboarding.test.js
-- actions.js
+- exportData
 - Hadith Library Expansion + Hadith & Dhikr Audio — Design
 - renderTafsir
 - features/journeys.js
@@ -71,7 +71,7 @@
 - names/entry.js
 - dhikr-xp.test.js
 - Changes by File
-- finishInit
+- actions.js
 - core/check-syntax.js
 - Global Constraints
 - Tab Consolidation Design (Approach A: merge + cluster)
@@ -87,18 +87,18 @@
 - prayers.test.js
 - File Structure
 - core/storage.js
-- File Structure
+- Task 11: Split `render/render.js` into focused modules
 - Global Constraints
 - Architecture
 - analytics.js
 - tafsir-browser.js
-- ref_path
+- Ibadah Quest
 - profile/entry.js
 - calendar.test.js
 - schema-contract.test.js
 - renderSituationalDhikr
 - Global Constraints
-- Context
+- Self-Review
 - health-xp.test.js
 - Global Constraints
 - Components
@@ -106,15 +106,15 @@
 - 2026-09-05 Fluid Sizing + Calm Rendering Design
 - True MPA + ES Modules + Light Build — Design Spec
 - features/health.js
-- ref_node_test
+- ref_node_assert
 - src/core/error-tap.js
 - actions-boot-fallback.test.js
 - ref_fs
 - i18n.test.js
 - icons.test.js
 - storage.test.js
-- Task 2: Haptics — helper + core call sites
-- Global Constraints
+- Task 4: Create `core/prayers.js` — Prayer/deed toggling and streak recalculation
+- loadLocalState
 - core/recovery.js
 - data/quests.js
 - renderQuran
@@ -131,34 +131,35 @@
 - auth.test.js
 - src/core/backup.js
 - shell/tabs.js
-- Ibadah Quest
+- calendar.js
 - core-esm.test.js
-- loadLocalState
-- ref_node_assert
+- renderGarden
+- journeys.test.js
 - sandbox
 - Restore Classic Hero Header
 - seasonal.test.js
 - populateTier1Icons
 - core/backup.js
-- Ibadah Quest — Option 3 Modern Restructure Design Spec
-- surprise.test.js
 - Global Constraints
+- helpers.test.js
 - Global Constraints
+- achievement-showcase.test.js
 - File Structure
 - File Structure
 - File Structure
-- _playQueueItem
-- daily-summary.test.js
+- dynamic.js
+- ref_node_test
 - ref_node_path
-- Multi-Tafsir Selector + Qudsi Collection + Exact-Portion Dhikr Audio — Design
+- _renderQuranSanctuaryBar
 - milestones.test.js
-- 2. Option 3 Screen Architecture & Navigation
+- getYesterdayKey
 - smart-insights.test.js
 - core/error-tap.js
-- renderEarthliving
-- Approach
+- renderPunishments
+- showRecoveryModal
 - pools/helpers.js
-- search.test.js
+- Ibadah Quest — Option 3 Modern Restructure Design Spec
+- initApp
 - File Structure
 - File Structure
 - dashboard.js
@@ -166,14 +167,16 @@
 - personal-goals.js
 - Superpower
 - sw.test.js
-- Global Constraints
+- _playQueueItem
 - garden.test.js
 - masjid-checkins.test.js
 - combo-streaks.test.js
-- hadith-library.js
-- iq-shell.test.js
+- switchCategory
+- populateFABIcons
+- search.test.js
 - AGENTS.md — Ibadah Quest
-- getYesterdayKey
+- renderLaylat
+- renderMosque
 - 3. Design (exact changes)
 - achievement-showcase.js
 - renderWeeklyCompare
@@ -186,8 +189,9 @@
 - dhikr.test.js
 - escapeHTML
 - pools/finance.js
-- renderHadith
-- renderCharacterpath
+- renderRamadan
+- Global Constraints
+- renderHeartRefinement
 - 2026-09-06 Adaptive Shell + Intro + Nav Unity Design
 - combo-streaks.js
 - data.js
@@ -195,18 +199,19 @@
 - dhikr-counter.json
 - streak-calendar.json
 - Ponytail
+- Global Constraints
 - pools/dhikr.js
 - pools/health.js
 - trend-charts.js
 - armor.js
 - Caveman
-- renderPunishments
+- Global Constraints
 - goals.test.js
 - manifest.test.js
 - morning-evening.js
 - quran-meta.js
 - tips-details.js
-- Phase 3 — Performance & PWA Quality: Implementation Plan
+- sw.js
 - iq-qa.md
 - data/achievements.js
 - deeds.js
@@ -276,13 +281,18 @@
 - voluntary.js
 - package.json
 - content.js
+- Phase 2: Code Health & Architecture — Design Spec
 - consistency.test.js
 - tafsir-browser.test.js
 - tafsir-library.test.js
 - hadith-library.test.js
 - mpa-complete.test.js
 - no-globals.test.js
+- iq-shell.test.js
 - Design
+- renderQuranJuz
+- 2. Option 3 Screen Architecture & Navigation
+- Global Constraints
 
 ## God Nodes (most connected - your core abstractions)
 1. `poolRender()` - 52 edges
@@ -293,41 +303,41 @@
 6. `renderPoolMember()` - 25 edges
 7. `renderDynamic()` - 24 edges
 8. `initApp()` - 22 edges
-9. `Context` - 20 edges
-10. `switchCategory()` - 19 edges
+9. `switchCategory()` - 21 edges
+10. `Context` - 20 edges
 
 ## Surprising Connections (you probably didn't know these)
-- `2. Navigation` --references--> `switchCategory()`  [INFERRED]
-  docs/superpowers/specs/2026-08-17-modern-islamic-app-shell-redesign-design.md → core/tabs.js
-- `Contracts` --references--> `switchCategory()`  [INFERRED]
-  docs/superpowers/specs/2026-09-04-mobile-first-app-shell-design.md → core/tabs.js
-- `2.4 Offline `Masjid Check-ins` Sheet (`#iqMasjidSheet` — `Screen 3`)` --references--> `grantDailyXp()`  [INFERRED]
-  docs/superpowers/specs/2026-11-25-iq-modern-restructure-design.md → core/xp.js
-- `Task 7: MPA parity (`src/pages/knowledge`, `src/pages/library`)` --references--> `renderCategoryNav()`  [INFERRED]
-  docs/superpowers/plans/2026-09-09-tab-consolidation.md → src/shell/tabs.js
-- `Fix 1: Bottom-nav icons` --references--> `populateTier1Icons()`  [INFERRED]
-  docs/superpowers/specs/2026-08-17-bugfix-phase1-icons-tabs-overflow-design.md → core/tabs.js
+- `Task 25: Add URL-based tab routing` --references--> `initApp()`  [INFERRED]
+  docs/superpowers/plans/2026-08-16-comprehensive-improvement-plan.md → core/actions.js
+- `Task 3: Declare `profile_main` in data instead of fabricating it at boot` --references--> `initApp()`  [INFERRED]
+  docs/superpowers/plans/2026-08-26-phase1-correctness-data-safety.md → core/actions.js
+- `Section 4: Recovery + verify + ship (approved)` --references--> `initApp()`  [INFERRED]
+  docs/superpowers/specs/2026-09-06-adaptive-shell-design.md → core/actions.js
+- `Task 1: Remove Mood feature entirely` --references--> `renderDynamic()`  [INFERRED]
+  docs/superpowers/plans/2026-08-17-remove-mood-grid-tabs.md → core/dynamic.js
+- `5. render/render.js` --references--> `renderDynamic()`  [INFERRED]
+  docs/superpowers/specs/2026-08-10-spiritual-growth-icons-alignment-design.md → core/dynamic.js
 
 ## Import Cycles
 - None detected.
 
-## Communities (282 total, 88 thin omitted)
+## Communities (292 total, 88 thin omitted)
 
 ### Community 0 - "audio.js"
-Cohesion: 0.19
-Nodes (24): _applyOpts(), _fireChange(), isBusy(), isSpeaking(), pickArabicVoice(), playRecording(), playSequence(), playTTS() (+16 more)
+Cohesion: 0.05
+Nodes (55): _applyOpts(), currentId(), _fireChange(), isBusy(), isSpeaking(), pickArabicVoice(), playRecording(), playSequence() (+47 more)
 
 ### Community 1 - "ref_node_test"
-Cohesion: 0.05
-Nodes (45): assert, path, setup(), { test }, assert, loadBackup(), path, { test } (+37 more)
+Cohesion: 0.04
+Nodes (52): assert, path, setup(), { test }, assert, loadBackup(), path, { test } (+44 more)
 
 ### Community 2 - "core/state.js"
-Cohesion: 0.15
-Nodes (13): renderQ(), getTodayKey(), lvFrom(), me(), ms(), tlog(), today(), we() (+5 more)
+Cohesion: 0.13
+Nodes (17): renderQ(), compactLogs(), getTodayKey(), isFri(), lvFrom(), me(), ms(), saveState() (+9 more)
 
 ### Community 3 - "static.js"
-Cohesion: 0.08
-Nodes (38): extraDeedsBack(), getSourceLink(), openExtraDeeds(), openVolPrayers(), renderBeing(), renderCapitals(), renderCharity(), renderDawah() (+30 more)
+Cohesion: 0.07
+Nodes (43): _dhikrOrbHtml(), extraDeedsBack(), getSourceLink(), openExtraDeeds(), openVolPrayers(), renderBeing(), renderCapitals(), renderCharacterpath() (+35 more)
 
 ### Community 4 - "globals"
 Cohesion: 0.04
@@ -341,9 +351,9 @@ Nodes (46): command, enabled, type, models, name, npm, options, FIRECRAWL_API_KE
 Cohesion: 0.08
 Nodes (32): destroy(), idb(), init(), load(), save(), lsNow(), pruneQuarantines(), quarantine() (+24 more)
 
-### Community 7 - "helpers.test.js"
-Cohesion: 0.25
-Nodes (6): assert, fs, path, sandbox, { test }, vm
+### Community 7 - "Global Constraints"
+Cohesion: 0.29
+Nodes (7): initBnavKeyboardNav(), Global Constraints, Self-Review, Task 1: Fix t1-btn mobile width bug, Task 3: Mobile bottom nav with synced active state, Task 4: Keyboard nav for bottom nav + visual polish, Task 5: Final verification pass
 
 ### Community 8 - "Features"
 Cohesion: 0.05
@@ -351,35 +361,35 @@ Nodes (36): Achievement Showcase, Achievement System, Analytics Dashboard, Combo
 
 ### Community 9 - "poolRender"
 Cohesion: 0.07
-Nodes (33): poolRender(), renderAkhirah(), renderAqeedah(), renderArabic(), renderBattles(), renderCivilisation(), renderCommunity(), renderDhikr() (+25 more)
+Nodes (37): poolRender(), renderAkhirah(), renderAqeedah(), renderArabic(), renderBattles(), renderCivilisation(), renderCommunity(), renderDhikr() (+29 more)
 
 ### Community 10 - "core/tabs.js"
-Cohesion: 0.18
-Nodes (18): activateTab(), drillDown(), _escAttr(), _findByTabId(), findCategoryForTab(), _findTabBtn(), _firstTabForCategory(), initBnavKeyboardNav() (+10 more)
+Cohesion: 0.24
+Nodes (11): activateTab(), drillDown(), _escAttr(), _findByTabId(), findCategoryForTab(), _findTabBtn(), _firstTabForCategory(), _pushTabState() (+3 more)
 
 ### Community 11 - "Changes by file"
-Cohesion: 0.14
-Nodes (16): renderTab(), switchTab(), updateTopBar(), Task 2: Collapse the top-bar writers into one, Task 3: Create `core/themes.js` — Theme management, 1. core/actions.js, 2. index.html, 3. styles/main.css (+8 more)
+Cohesion: 0.20
+Nodes (9): 2. index.html, 3. styles/main.css, 5. data/theme-meta.js, Changes by file, Decisions, Hero Restore + Theme Deepening + Top-Bar Fix, Layout, Out of scope (+1 more)
 
-### Community 12 - "showRecoveryModal"
+### Community 12 - "Context"
 Cohesion: 0.33
-Nodes (10): applySalvage(), continueBootAfterRecovery(), _hide(), init(), initAsync(), recoverFresh(), recoverImport(), recoverSalvage() (+2 more)
+Nodes (8): Task 9: Nur Lantern SVG scene (7 stages), Context, boatSVG(), caption(), renderBoat(), caption(), lanternSVG(), renderLantern()
 
 ### Community 13 - "`core/actions.js` → 8 new files + gutted actions.js"
-Cohesion: 0.18
-Nodes (20): addCustomDhikr(), checkDhikrBadges(), nextDhikr(), removeCustomDhikr(), resetDhikr(), tapDhikr(), toggleDhikrFavorite(), toggleDhikrHaptic() (+12 more)
+Cohesion: 0.16
+Nodes (21): checkA(), addCustomDhikr(), checkDhikrBadges(), nextDhikr(), removeCustomDhikr(), resetDhikr(), tapDhikr(), toggleDhikrFavorite() (+13 more)
 
 ### Community 14 - "renderDynamic"
-Cohesion: 0.14
-Nodes (22): clearDirty(), markDirty(), refreshLucideIcons(), renderAll(), renderDeferred(), renderDynamic(), renderStatic(), Task 1: XP primitives in core/xp.js (+14 more)
+Cohesion: 0.15
+Nodes (21): clearDirty(), markDirty(), refreshLucideIcons(), renderAll(), renderDeferred(), renderDynamic(), renderStatic(), getSectionPanels() (+13 more)
 
-### Community 15 - "Design"
-Cohesion: 0.29
-Nodes (6): Constraints, Goal, Not In Scope (deferred), Phase 2: Code Health & Architecture — Design Spec, Problem (verified against current code 2026-08-26), Risks
+### Community 15 - "Global Constraints"
+Cohesion: 0.22
+Nodes (9): Global Constraints, Task 11: Journey Boat SVG scene (7 stages), Task 15: Alignment pass for spiritual + growth cards and full-panel audit, Task 16: Full suite regression + final check, Task 1: Populate FEATURE_ICONS and add heart to FEATURE_STAGES, Task 3: Create the vm test loader helper, Task 4: Restore Spiritual Armor with 7-stage SVG scene, Task 5: Restore Heart Refinement with 7-stage SVG scene (+1 more)
 
 ### Community 16 - "iq-shell.js"
-Cohesion: 0.09
-Nodes (47): Global Constraints, Ibadah Quest Option 3 Modern Restructure Implementation Plan, Task 1: Pins & Failing Tests First (TDD RED), Task 2: State Schema & Migration Parity, Task 3: Brand Icon, Manifest, Theme Metadata & Dark-Teal Intro, Task 4: Masjid Check-ins & Option 3 Shell Feature Modules + Core Wiring, Task 5: `styles/main.css` Visual Overhaul & Mobile Screen Ratio Responsiveness, Task 6: Cache Versioning, Precache Sync & Full Test Verification (+39 more)
+Cohesion: 0.06
+Nodes (74): Global Constraints, Ibadah Quest Option 3 Modern Restructure Implementation Plan, Task 1: Pins & Failing Tests First (TDD RED), Task 2: State Schema & Migration Parity, Task 3: Brand Icon, Manifest, Theme Metadata & Dark-Teal Intro, Task 4: Masjid Check-ins & Option 3 Shell Feature Modules + Core Wiring, Task 5: `styles/main.css` Visual Overhaul & Mobile Screen Ratio Responsiveness, Task 6: Cache Versioning, Precache Sync & Full Test Verification (+66 more)
 
 ### Community 17 - "renderLv"
 Cohesion: 0.19
@@ -394,32 +404,32 @@ Cohesion: 0.09
 Nodes (19): actions, assert, css, dhikr, fs, html, iqShell, path (+11 more)
 
 ### Community 20 - "seasonal-events.js"
-Cohesion: 0.17
-Nodes (19): calGoToday(), calNextMonth(), calPrevMonth(), getDaysInHijriMonth(), getHijriMonthDays(), gregorianToHijri(), initCalView(), isHijriLeapYear() (+11 more)
+Cohesion: 0.32
+Nodes (11): Task 8: Auto-activate seasonal events by Hijri date, activateSeason(), deactivateSeason(), getSeasonalMultiplier(), isHajjSeason(), isRamadan(), renderSeasonalBanner(), seasonalActive() (+3 more)
 
 ### Community 21 - "Ibadah Quest Comprehensive Improvement — Implementation Plan"
 Cohesion: 0.10
 Nodes (20): Execution Order, Global Constraints, Ibadah Quest Comprehensive Improvement — Implementation Plan, Phase 2: Test Coverage, Phase 3: Accessibility, Phase 4: Performance, Phase 5: Navigation / URL Routing, Task 12: Create `tests/xp.test.js` (+12 more)
 
-### Community 22 - "App Improvement Program — Design Spec"
-Cohesion: 0.17
-Nodes (11): compactLogs(), saveState(), App Improvement Program — Design Spec, Goal, Guiding Doctrine (all phases), Not In Scope, Phase 2 — Code Health & Architecture (roadmap), Phase 3 — Performance & PWA Quality (roadmap) (+3 more)
+### Community 22 - "index.js"
+Cohesion: 0.44
+Nodes (8): Task 2: Fix icon rendering + mojibake in spiritual-growth/index.js, 2. features/spiritual-growth/index.js, getSettings(), isVisible(), renderGrowthSettings(), renderSpiritualGrowthTab(), saveSettings(), toggleFeature()
 
 ### Community 23 - "charts.js"
 Cohesion: 0.21
 Nodes (22): accent(), baseOptions(), bg(), createBar(), createDoughnut(), createHeatmap(), createHorizontalBar(), createLine() (+14 more)
 
-### Community 24 - "Task 11: Split `render/render.js` into focused modules"
-Cohesion: 0.21
-Nodes (19): hijriToGregorian(), renderBonus(), renderToday(), fetchPrayerTimes(), fetchPrayerTimesInternal(), getPrayerSettings(), getPrayerTimesFromCache(), parsePrayerTime() (+11 more)
+### Community 24 - "render-prayers.js"
+Cohesion: 0.16
+Nodes (27): applyPrayerCityPreset(), applyPrayerMethod(), computeNextPrayer(), fetchPrayerTimes(), fetchPrayerTimesInternal(), formatTime12(), getPrayerSettings(), getPrayerTimesFromCache() (+19 more)
 
 ### Community 25 - "App Improvement Program — Design Spec"
-Cohesion: 0.22
-Nodes (9): I18N, iqSetLang(), t(), 1a. Bug fixes, 1b. Data-safety core, 1c. Explicitly deferred from Phase 1, 1d. Success criteria, Phase 1 — Correctness & Data Safety (implementable now) (+1 more)
+Cohesion: 0.12
+Nodes (17): I18N, iqSetLang(), t(), 1a. Bug fixes, 1b. Data-safety core, 1c. Explicitly deferred from Phase 1, 1d. Success criteria, App Improvement Program — Design Spec (+9 more)
 
 ### Community 26 - "Ibadah Quest — Comprehensive Improvement Plan"
-Cohesion: 0.12
-Nodes (15): Changes, Constraints, Execution Order, Fallback, Goal, Goal, Goal, Ibadah Quest — Comprehensive Improvement Plan (+7 more)
+Cohesion: 0.11
+Nodes (18): Approach, Changes, Constraints, Execution Order, Fallback, Goal, Goal, Goal (+10 more)
 
 ### Community 27 - "steps"
 Cohesion: 0.11
@@ -429,13 +439,13 @@ Nodes (18): concurrency, cancel-in-progress, group, jobs, test, name, on, pull_r
 Cohesion: 0.25
 Nodes (7): assert, fakeDoc(), fs, loadSandbox(), path, { test }, vm
 
-### Community 29 - "actions.js"
-Cohesion: 0.23
-Nodes (19): claimBonus(), _collectExportExtras(), _completeImport(), _downloadBackup(), _escAttr(), exportData(), exportDataLS(), _finalizeExport() (+11 more)
+### Community 29 - "exportData"
+Cohesion: 0.36
+Nodes (11): _collectExportExtras(), _completeImport(), _downloadBackup(), exportData(), exportDataLS(), _finalizeExport(), importData(), importDataLS() (+3 more)
 
 ### Community 30 - "Hadith Library Expansion + Hadith & Dhikr Audio — Design"
-Cohesion: 0.18
-Nodes (10): normalizeRemoteEdition(), stripTags(), Background, Data Sources (verified working 2026-08-24), Dhikr audio — hisnmuslim.com, Goal, Hadith JSON — fawazahmed0/hadith-api via jsDelivr, Hadith Library Expansion + Hadith & Dhikr Audio — Design (+2 more)
+Cohesion: 0.12
+Nodes (16): normalizeRemoteEdition(), stripTags(), Architecture, Background, Data Sources (verified working 2026-08-24), Dhikr audio — hisnmuslim.com, Error handling, Goal (+8 more)
 
 ### Community 31 - "renderTafsir"
 Cohesion: 0.13
@@ -446,20 +456,20 @@ Cohesion: 0.24
 Nodes (15): autoTrackJourneyProgress(), calculateStreak(), checkJourneyMilestone(), checkTierUnlocking(), getAvailableJourneys(), getJourneyAnalytics(), gridHTML(), joinJourney() (+7 more)
 
 ### Community 33 - "Global Constraints"
-Cohesion: 0.13
-Nodes (13): setupOfflineDetection(), Global Constraints, Phase 1: Correctness & Data Safety — Implementation Plan, Self-Review Notes (completed during authoring), Task 11: Quota-failure surfacing banner, Task 13: Cache bumps, full verification, final commit sweep, Task 1: Correct the spec's false "dead tab persistence" bug + pin behavior with a regression test, Task 3: Declare `profile_main` in data instead of fabricating it at boot (+5 more)
+Cohesion: 0.17
+Nodes (10): setupOfflineDetection(), Global Constraints, Phase 1: Correctness & Data Safety — Implementation Plan, Self-Review Notes (completed during authoring), Task 11: Quota-failure surfacing banner, Task 13: Cache bumps, full verification, final commit sweep, Task 1: Correct the spec's false "dead tab persistence" bug + pin behavior with a regression test, Task 3: Declare `profile_main` in data instead of fabricating it at boot (+2 more)
 
 ### Community 34 - "iqIcon"
-Cohesion: 0.19
-Nodes (15): fastRng(), IQ_AUTO, IQ_CODES, IQ_EMOJI, IQ_IDS, _iqAutoResolve(), iqEmoji(), _iqFile() (+7 more)
+Cohesion: 0.15
+Nodes (18): buy(), fastRng(), IQ_AUTO, IQ_CODES, IQ_EMOJI, IQ_IDS, _iqAutoResolve(), iqEmoji() (+10 more)
 
 ### Community 35 - "integration.test.js"
 Cohesion: 0.21
 Nodes (12): assert, dateAgo(), { describe, it }, fs, loadSandbox(), path, setupPrayerEnv(), tlog() (+4 more)
 
 ### Community 36 - "App Sweep Fixes — CSP, Tab Drill/Back, MPA Script Paths"
-Cohesion: 0.12
-Nodes (18): drillUp(), Task 2 — F2: `core/tabs.js` drill/back + class normalization + cache bump, 1. Problem (verified against current code + live browser), 2. Goal & success criteria, 3. Design (exact changes), 4. Constraints, 5. Risks, 6. Manual QA owed after merge (+10 more)
+Cohesion: 0.13
+Nodes (14): 1. Problem (verified against current code + live browser), 2. Goal & success criteria, 3. Design (exact changes), 4. Constraints, 5. Risks, 6. Manual QA owed after merge, 7. Addendum — F4: mobile bottom nav never visible (user-reported during verification), App Sweep Fixes — CSP, Tab Drill/Back, MPA Script Paths (+6 more)
 
 ### Community 37 - "Mobile Comfort Polish (SP1) — FAB clearance, equal prayer cards, nav chrome, info-button hit area"
 Cohesion: 0.13
@@ -506,8 +516,8 @@ Cohesion: 0.15
 Nodes (12): 1. Prayer Times cards → true squares, 2. Daily sub-tabs row (tier2) → square cards, 3. Tier3 tabs + cat-chips → same square-card family, 4. Desktop unchanged, Cache-busting, Design, Design: Square Prayer Cards + Square Daily Sub-Tabs (Mobile Tab Cards), Goal (+4 more)
 
 ### Community 48 - "Feel & Feedback (SP2) — Design"
-Cohesion: 0.14
-Nodes (13): 1. Why — findings from code (evidence), 2. Scope, 3. Decisions, 4.1 FAB + pull-refresh resurrection (`features/fab.js`, `features/pull-refresh.js`), 4.2 Sticky compact nav (`features/nav-collapse.js` (new), `styles/main.css`, `index.html`), 4.3 Scroll reset on switch (`core/tabs.js`), 4.5 Swipe between sections (`features/swipe-nav.js` (new)), 4.6 Press & motion polish (`styles/main.css`) (+5 more)
+Cohesion: 0.15
+Nodes (12): 1. Why — findings from code (evidence), 2. Scope, 4.1 FAB + pull-refresh resurrection (`features/fab.js`, `features/pull-refresh.js`), 4.2 Sticky compact nav (`features/nav-collapse.js` (new), `styles/main.css`, `index.html`), 4.5 Swipe between sections (`features/swipe-nav.js` (new)), 4.6 Press & motion polish (`styles/main.css`), 4. Per-item design, 5. Testing strategy (+4 more)
 
 ### Community 49 - "manifest.json"
 Cohesion: 0.15
@@ -530,12 +540,12 @@ Cohesion: 0.15
 Nodes (10): assert, badgeSrc, DHIKR_COUNTER_DATA, dhikrSrc, fs, path, sandbox, tapSrc (+2 more)
 
 ### Community 54 - "Changes by File"
-Cohesion: 0.18
-Nodes (10): 1. features/spiritual-growth/data.js, 4. index.html, 5. render/render.js, 7. styles/main.css — alignment pass, Changes by File, Decisions, Layout / Component Model, Out of Scope (unchanged, noted) (+2 more)
+Cohesion: 0.17
+Nodes (11): 1. features/spiritual-growth/data.js, 3. Sealed SVG scenes (7 existing + 2 restored), 4. index.html, 5. render/render.js, 7. styles/main.css — alignment pass, Changes by File, Decisions, Layout / Component Model (+3 more)
 
-### Community 55 - "finishInit"
-Cohesion: 0.30
-Nodes (11): finishInit(), initApp(), runNextModal(), logout(), resetAll(), selectAvatar(), selectFrame(), selectTitle() (+3 more)
+### Community 55 - "actions.js"
+Cohesion: 0.23
+Nodes (16): claimBonus(), finishInit(), init(), _initHashRouting(), initModalKeyboardHandlers(), isBookmarked(), logout(), resetAll() (+8 more)
 
 ### Community 56 - "core/check-syntax.js"
 Cohesion: 0.20
@@ -546,8 +556,8 @@ Cohesion: 0.18
 Nodes (11): renderIkhlas(), Global Constraints, Tab Consolidation Implementation Plan, Task 1: Knowledge IA in `data/tab-groups.js`, Task 2: Library IA + `names_main` in `data/tab-groups.js`, Task 3: Panels in `index.html` + `data/panel-sections.js`, Task 4: `_lazyRender` in `render/tabs.js` + combined renderers, Task 5: Retired-id sweep (panels, maps, tests, i18n) (+3 more)
 
 ### Community 58 - "Tab Consolidation Design (Approach A: merge + cluster)"
-Cohesion: 0.18
-Nodes (10): renderNames(), renderPatience(), renderTawakkul(), renderVirtues(), 1. Problem, 2. Decisions (owner-confirmed), 3. Knowledge IA: 80 -> 34, 4. Library IA: 49 -> 21, plus Names (5) (+2 more)
+Cohesion: 0.17
+Nodes (11): renderNames(), renderPatience(), renderTawakkul(), renderVirtues(), 1. Problem, 2. Decisions (owner-confirmed), 3. Knowledge IA: 80 -> 34, 4. Library IA: 49 -> 21, plus Names (5) (+3 more)
 
 ### Community 59 - "cross-tab-routing.test.js"
 Cohesion: 0.20
@@ -558,8 +568,8 @@ Cohesion: 0.18
 Nodes (9): File Structure, Global Constraints, MPA Modular Migration Implementation Plan, Task 1: Build skeleton + gates (proves MPA shape, old app untouched), Task 2: Core ESM — state + xp + storage (single truth, no globals), Task 3: Today page — first real page (proves the pattern), Task 4: Ibadah + Knowledge pages (lazy heavy pools — the perf win), Task 6: Coexistence + docs (RESCOPED by human decision 2026-09-07 — no cutover) (+1 more)
 
 ### Community 61 - "notifications.js"
-Cohesion: 0.31
-Nodes (8): quranSearchFilter(), Task 2: Leak Fixes + Debounce, askNotificationPermission(), enableNotifications(), notifyOnce(), scheduleNotifications(), sendNotification(), toggleNotifications()
+Cohesion: 0.36
+Nodes (7): Task 2: Leak Fixes + Debounce, askNotificationPermission(), enableNotifications(), notifyOnce(), scheduleNotifications(), sendNotification(), toggleNotifications()
 
 ### Community 62 - "Design: Bug-Fix Phase 1 — Icons, Tab Wrap, Overflow"
 Cohesion: 0.17
@@ -578,8 +588,8 @@ Cohesion: 0.17
 Nodes (11): §4 Leak Fixes + Debounce, 4a. Prayer-timer interval cleanup, 4b. Quran search debounce, Deferred, Goal, Guiding Constraints, Phase 3 — Performance & PWA Quality: Design Spec, Problem (+3 more)
 
 ### Community 66 - "ref_node_fs"
-Cohesion: 0.17
-Nodes (9): assert, fs, path, src, test, assert, fs, path (+1 more)
+Cohesion: 0.29
+Nodes (5): assert, fs, path, src, test
 
 ### Community 67 - "app-registry.test.js"
 Cohesion: 0.17
@@ -591,19 +601,19 @@ Nodes (10): assert, dateAgo(), fs, loadSandbox(), path, setup(), tlog(), { test 
 
 ### Community 69 - "File Structure"
 Cohesion: 0.20
-Nodes (10): startJourney(), renderDateLine(), Adaptive Shell + Intro + Nav Unity Implementation Plan, File Structure, Global Constraints, Task 1: Adaptive shell + date line (CSS + HTML + JS + test), Task 2: Intro hardening + mobile polish (JS + CSS + test), Task 3: Nav unity + even grids + FAB clearance (CSS + test) (+2 more)
+Nodes (10): startJourney(), Adaptive Shell + Intro + Nav Unity Implementation Plan, File Structure, Global Constraints, Task 1: Adaptive shell + date line (CSS + HTML + JS + test), Task 2: Intro hardening + mobile polish (JS + CSS + test), Task 3: Nav unity + even grids + FAB clearance (CSS + test), Task 4: Boot watchdog (HTML inline + test) (+2 more)
 
 ### Community 70 - "core/storage.js"
 Cohesion: 0.29
 Nodes (7): destroy(), getRaw(), getStore(), load(), migrate(), save(), saveRaw()
 
-### Community 71 - "File Structure"
-Cohesion: 0.12
-Nodes (18): currentId(), setOnChange(), File Structure, Global Constraints, Multi-Tafsir + Qudsi + Dhikr Play/Stop Implementation Plan, Self-Review, Task 1: Qudsi collection, Task 4: `features/tafsir-library.js` (+10 more)
+### Community 71 - "Task 11: Split `render/render.js` into focused modules"
+Cohesion: 0.24
+Nodes (13): hijriToGregorian(), renderBonus(), renderToday(), renderDeeds(), renderVol(), renderTab(), switchTab(), updateTopBar() (+5 more)
 
 ### Community 72 - "Global Constraints"
-Cohesion: 0.22
-Nodes (9): Global Constraints, Task 10: Final gate + report, Task 1: Pins first — tests must go RED, Task 4: Scroll reset on category and group switches, Task 5: Sticky compact nav, Task 6: Swipe between the 5 sections, Task 7: Press & motion polish, Task 8: Cache discipline — version bumps + service worker (+1 more)
+Cohesion: 0.18
+Nodes (10): Feel & Feedback (SP2) Implementation Plan, Global Constraints, Progress (updated live), Task 10: Final gate + report, Task 1: Pins first — tests must go RED, Task 5: Sticky compact nav, Task 6: Swipe between the 5 sections, Task 7: Press & motion polish (+2 more)
 
 ### Community 73 - "Architecture"
 Cohesion: 0.18
@@ -617,9 +627,9 @@ Nodes (8): getDateRange(), getDeedStats(), getHeatmapData(), getLogDates(), getP
 Cohesion: 0.42
 Nodes (10): ayahCount(), loadBrowserResult(), lookup(), renderTafsirBrowser(), retryBrowserTafsir(), saveLookup(), setBrowserAyah(), setBrowserEdition() (+2 more)
 
-### Community 76 - "ref_path"
-Cohesion: 0.11
-Nodes (13): assert, log, path, { test }, assert, fs, loadSections(), path (+5 more)
+### Community 76 - "Ibadah Quest"
+Cohesion: 0.14
+Nodes (13): Adding a Feature, Agent skills (`.opencode/skills/`), Data Structure, Development, Features, Getting Started, Ibadah Quest, License (+5 more)
 
 ### Community 77 - "profile/entry.js"
 Cohesion: 0.22
@@ -638,12 +648,12 @@ Cohesion: 0.20
 Nodes (9): openSituational(), renderSituationalDhikr(), situationalBack(), Categories (10), Data Structure, Files, Overview, Situational Dhikr Subtab (+1 more)
 
 ### Community 81 - "Global Constraints"
-Cohesion: 0.12
-Nodes (15): buy(), Task 7: Create `core/shop.js` — Shop purchase logic, Global Constraints, Phase 2: Code Health & Architecture Implementation Plan, Self-Review, Task 10: escapeHTML consolidation, Task 11: Test-gap closures, Task 12: Cache bumps + final sweep (+7 more)
+Cohesion: 0.15
+Nodes (12): Global Constraints, Phase 2: Code Health & Architecture Implementation Plan, Self-Review, Task 10: escapeHTML consolidation, Task 11: Test-gap closures, Task 12: Cache bumps + final sweep, Task 3: Migrate dhikr XP flows, Task 4: Migrate remaining raw sites + repo-wide sweep (+4 more)
 
-### Community 82 - "Context"
-Cohesion: 0.05
-Nodes (55): Global Constraints, Self-Review, Spiritual Growth Visuals, Icon Fixes & Alignment — Implementation Plan, Task 10: Mosque Builder SVG scene (7 stages), Task 11: Journey Boat SVG scene (7 stages), Task 12: Paradise Keys SVG scene (7 stages), Task 13: Ramadan Tracker SVG scene (7 stages), Task 14: Laylat al-Qadr SVG scene (7 stages) (+47 more)
+### Community 82 - "Self-Review"
+Cohesion: 0.33
+Nodes (7): Self-Review, Spiritual Growth Visuals, Icon Fixes & Alignment — Implementation Plan, Task 12: Paradise Keys SVG scene (7 stages), caption(), drawKey(), keysSVG(), renderKeys()
 
 ### Community 83 - "health-xp.test.js"
 Cohesion: 0.20
@@ -673,9 +683,9 @@ Nodes (9): 1. Problem, 2. Decision, 3. Architecture — 5 pages, 4. Module bound
 Cohesion: 0.58
 Nodes (9): getHealthScore(), getTodayHealth(), grantMilestoneXp(), logExercise(), logSleep(), logWater(), renderHealthLog(), safeText() (+1 more)
 
-### Community 90 - "ref_node_test"
-Cohesion: 0.12
-Nodes (13): assert, fs, PAIRS, path, { test }, assert, { loadFile }, path (+5 more)
+### Community 90 - "ref_node_assert"
+Cohesion: 0.08
+Nodes (18): assert, fs, PAIRS, path, { test }, assert, fs, path (+10 more)
 
 ### Community 91 - "src/core/error-tap.js"
 Cohesion: 0.42
@@ -687,7 +697,7 @@ Nodes (8): assert, files, fs, makeEl(), makeSandbox(), path, { test }, vm
 
 ### Community 93 - "ref_fs"
 Cohesion: 0.05
-Nodes (36): assert, fs, path, { test }, vm, assert, fs, path (+28 more)
+Nodes (32): assert, fs, path, { test }, vm, assert, path, { test } (+24 more)
 
 ### Community 94 - "i18n.test.js"
 Cohesion: 0.20
@@ -701,13 +711,13 @@ Nodes (9): assert, fs, iconsPath, iconsSrc, path, rootAssets, sandbox, { test } 
 Cohesion: 0.20
 Nodes (5): assert, fs, path, { test }, vm
 
-### Community 97 - "Task 2: Haptics — helper + core call sites"
-Cohesion: 0.27
-Nodes (10): checkA(), recalc(), toggleD(), toggleP(), toggleV(), isFri(), renderFasting(), toggleFasting() (+2 more)
+### Community 97 - "Task 4: Create `core/prayers.js` — Prayer/deed toggling and streak recalculation"
+Cohesion: 0.33
+Nodes (11): recalc(), _setPrayerState(), toggleD(), toggleP(), togglePrayerQada(), toggleV(), renderFasting(), toggleFasting() (+3 more)
 
-### Community 98 - "Global Constraints"
-Cohesion: 0.22
-Nodes (8): Global Constraints, Hero Restore + Theme Deepening + Top-Bar Fix Implementation Plan, Task 1: Fix the orphan renderTip throw in renderTab, Task 3: Restore the hero + level-row + streak-bar markup, Task 6: Deepen the five light theme backgrounds + base :root, Task 7: Add the Emara (Jade & Gold) theme, Task 8: Add hero CSS (moon float, xp wave, streak bar, dark/emara overrides), Task 9: Final verification pass
+### Community 98 - "loadLocalState"
+Cohesion: 0.29
+Nodes (10): flagCorrupt(), freshState(), loadLocalState(), loadState(), loadStateAsync(), migrateState(), normalizeState(), parseMaybeJunk() (+2 more)
 
 ### Community 99 - "core/recovery.js"
 Cohesion: 0.28
@@ -718,8 +728,8 @@ Cohesion: 0.22
 Nodes (6): DQUESTS, LQUESTS, MQUESTS, SEASONAL_DQUESTS, WQUESTS, YQUESTS
 
 ### Community 101 - "renderQuran"
-Cohesion: 0.39
-Nodes (9): openQuranJuz(), openQuranSurah(), quranBack(), renderQuran(), renderQuranSurah(), setQuranView(), setTafsirEdition(), Task 5: State field + Quran reader integration (+1 more)
+Cohesion: 0.23
+Nodes (17): adjustQuranFont(), _applyQuranSanctuaryHost(), _getQuranPrefs(), openQuranJuz(), openQuranSurah(), quranBack(), quranSearchFilter(), renderQuran() (+9 more)
 
 ### Community 102 - "Execution Notes"
 Cohesion: 0.22
@@ -758,8 +768,8 @@ Cohesion: 0.39
 Nodes (7): escapeSearchText(), fuzzyMatch(), init(), saveRecent(), searchAll(), setActive(), showResults()
 
 ### Community 111 - "Ibadah Quest Development Conventions"
-Cohesion: 0.17
-Nodes (11): getSectionPanels(), Task 7: Wire all 9 renderers into renderDynamic, _lazyRender, and renderTab, Task 4: Single source of truth for panel sections (`data/panel-sections.js`), 2. Adding a new tab — all 4 touchpoints required, 3. State schema rules, 4. Cache versioning discipline, 5. Overlays and modals, 6. XSS escaping (+3 more)
+Cohesion: 0.22
+Nodes (8): 1. Script load order matters, 3. State schema rules, 4. Cache versioning discipline, 5. Overlays and modals, 6. XSS escaping, 7. Testing, 8. Windows environment, Ibadah Quest Development Conventions
 
 ### Community 112 - "auth.test.js"
 Cohesion: 0.22
@@ -773,21 +783,21 @@ Nodes (5): Backup, buildExport(), checksum(), stableStringify(), validateBackup(
 Cohesion: 0.42
 Nodes (8): esc(), isCategorized(), _loaded, _loadScript(), renderCategoryNav(), activateTab(), renderTier3(), renderFlatTabs()
 
-### Community 115 - "Ibadah Quest"
-Cohesion: 0.14
-Nodes (13): Adding a Feature, Agent skills (`.opencode/skills/`), Data Structure, Development, Features, Getting Started, Ibadah Quest, License (+5 more)
+### Community 115 - "calendar.js"
+Cohesion: 0.39
+Nodes (8): calGoToday(), calNextMonth(), calPrevMonth(), getDaysInHijriMonth(), getHijriMonthDays(), gregorianToHijri(), initCalView(), isHijriLeapYear()
 
 ### Community 116 - "core-esm.test.js"
 Cohesion: 0.18
 Nodes (7): assert, { test }, assert, fs, path, { test }, vm
 
-### Community 117 - "loadLocalState"
-Cohesion: 0.29
-Nodes (10): flagCorrupt(), freshState(), loadLocalState(), loadState(), loadStateAsync(), migrateState(), normalizeState(), parseMaybeJunk() (+2 more)
+### Community 117 - "renderGarden"
+Cohesion: 0.48
+Nodes (6): Task 8: Garden tree SVG scene (7 stages), caption(), flowerCount(), gardenStage(), renderGarden(), treeSVG()
 
-### Community 118 - "ref_node_assert"
-Cohesion: 0.11
-Nodes (14): assert, fajrJourney, fs, istighfarJourney, journeySandbox, log, path, { test } (+6 more)
+### Community 118 - "journeys.test.js"
+Cohesion: 0.22
+Nodes (8): assert, fajrJourney, fs, istighfarJourney, journeySandbox, log, path, { test }
 
 ### Community 120 - "Restore Classic Hero Header"
 Cohesion: 0.29
@@ -798,28 +808,28 @@ Cohesion: 0.22
 Nodes (5): assert, fs, path, { test }, vm
 
 ### Community 122 - "populateTier1Icons"
-Cohesion: 0.15
-Nodes (17): populateTier1Icons(), Bug-Fix Phase 1 Implementation Plan, Global Constraints, Self-Review, Task 1: Fill bottom-nav icons via populateTier1Icons, Task 2: Populate FAB action icons, Task 3: Wrap tab strips into rows on mobile (no horizontal scroll), Task 4: Verify overflow eliminated and icons present (verification-only) (+9 more)
+Cohesion: 0.22
+Nodes (9): populateTier1Icons(), Bug-Fix Phase 1 Implementation Plan, Global Constraints, Self-Review, Task 1: Fill bottom-nav icons via populateTier1Icons, Task 3: Wrap tab strips into rows on mobile (no horizontal scroll), Task 4: Verify overflow eliminated and icons present (verification-only), Task 2: Fix bnav icon fill timing (populateTier1Icons runs before #bnav exists) (+1 more)
 
 ### Community 123 - "core/backup.js"
 Cohesion: 0.39
 Nodes (4): buildExport(), checksum(), stableStringify(), validateBackup()
 
-### Community 124 - "Ibadah Quest — Option 3 Modern Restructure Design Spec"
-Cohesion: 0.20
-Nodes (9): 1.1 Color Tokens (`styles/main.css`, `data/theme-meta.js`), 1.2 Brand Icon & Lattice Watermarks (`assets/icons/icon.svg`, `manifest.json`, `index.html`), 1. Visual Brand & Design System, 3.1 State Fields (`core/state.js` & `src/core/state.js`), 3.2 Security & Escaping, 3.3 Cache Versioning & MPA Parity, 3. Data Schema, Security & PWA Cache Discipline, 4. Testing Strategy (+1 more)
+### Community 124 - "Global Constraints"
+Cohesion: 0.22
+Nodes (8): Global Constraints, Hero Restore + Theme Deepening + Top-Bar Fix Implementation Plan, Task 1: Fix the orphan renderTip throw in renderTab, Task 3: Restore the hero + level-row + streak-bar markup, Task 6: Deepen the five light theme backgrounds + base :root, Task 7: Add the Emara (Jade & Gold) theme, Task 8: Add hero CSS (moon float, xp wave, streak bar, dark/emara overrides), Task 9: Final verification pass
 
-### Community 125 - "surprise.test.js"
-Cohesion: 0.29
-Nodes (5): assert, fs, path, { test }, vm
+### Community 125 - "helpers.test.js"
+Cohesion: 0.25
+Nodes (6): assert, fs, path, sandbox, { test }, vm
 
 ### Community 126 - "Global Constraints"
-Cohesion: 0.13
-Nodes (9): Global Constraints, Remove Mood Feature + Even-Grid Tab Layout Implementation Plan, Self-Review, Task 1: Remove Mood feature entirely, Task 3: Rewrite the mobile tab-strip test for the grid layout, Task 4: Restyle tab strips as even grids (mobile), Task 5: Verify removal + grid end-to-end (verification-only), Task 6: Cache-bust the changed assets for field users (+1 more)
-
-### Community 127 - "Global Constraints"
 Cohesion: 0.25
-Nodes (7): Global Constraints, Self-Review, Square Prayer Cards + Square Tab Cards Implementation Plan, Task 1: Square the Prayer Times cards (auto-fit grid + aspect-ratio), Task 2: Square mobile tab cards (tier2, tier3, cat-chips) via auto-fit, Task 3: Verify layout end-to-end in headless Chrome, Task 4: Cache-bust the CSS version query
+Nodes (7): Global Constraints, Remove Mood Feature + Even-Grid Tab Layout Implementation Plan, Self-Review, Task 1: Remove Mood feature entirely, Task 3: Rewrite the mobile tab-strip test for the grid layout, Task 4: Restyle tab strips as even grids (mobile), Task 5: Verify removal + grid end-to-end (verification-only)
+
+### Community 127 - "achievement-showcase.test.js"
+Cohesion: 0.29
+Nodes (5): assert, fs, path, { test }, vm
 
 ### Community 128 - "File Structure"
 Cohesion: 0.25
@@ -833,29 +843,29 @@ Nodes (7): File Structure, Fluid Sizing + Calm Rendering Implementation Plan, Gl
 Cohesion: 0.25
 Nodes (7): File Structure, Global Constraints, Mobile-Friendly Sweep Implementation Plan, Task 1: Touch-target floor + component bumps (CSS), Task 2: Overflow fixes — calendar, theme picker, finance labels (CSS), Task 3: 154-tab audit re-verification (Playwright), Task 4: Cache bumps, full suite, commit, push
 
-### Community 131 - "_playQueueItem"
-Cohesion: 0.18
-Nodes (19): findSurahByAyah(), getFrameStyle(), getQuranAudioUrl(), globalAyahOf(), juzBegin(), juzEnd(), playJuz(), _playQueueItem() (+11 more)
+### Community 131 - "dynamic.js"
+Cohesion: 0.16
+Nodes (14): _allCollections(), colIconFor(), _findHadith(), getFrameStyle(), hadithBack(), hadithSpeak(), openHadithBook(), openHadithCollection() (+6 more)
 
-### Community 132 - "daily-summary.test.js"
-Cohesion: 0.25
-Nodes (5): assert, fs, path, { test }, vm
+### Community 132 - "ref_node_test"
+Cohesion: 0.07
+Nodes (20): assert, path, setupCarousel(), { test }, assert, fs, path, { test } (+12 more)
 
 ### Community 133 - "ref_node_path"
 Cohesion: 0.20
 Nodes (6): assert, fs, path, src, test, __dirname
 
-### Community 134 - "Multi-Tafsir Selector + Qudsi Collection + Exact-Portion Dhikr Audio — Design"
-Cohesion: 0.22
-Nodes (8): colIconFor(), Error handling, Goal, Item A — Qudsi collection, Item C — Exact-portion dhikr audio, Multi-Tafsir Selector + Qudsi Collection + Exact-Portion Dhikr Audio — Design, Verified data sources (2026-08-25), Wiring & cache discipline
+### Community 134 - "_renderQuranSanctuaryBar"
+Cohesion: 0.18
+Nodes (9): _renderQuranSanctuaryBar(), Global Constraints, Phase B: Market-Grade UI Upgrade Implementation Plan, 1.1 Concentric 3-Ring Bento Hero & 7-Day Consistency Rhythm (`features/iq-shell.js`, `styles/main.css`), 1.2 Pillars-Grade Prayer Cards (`core/prayers.js`, `core/render-prayers.js`, `core/actions.js`, `styles/main.css`), 1.3 Tarteel Sanctuary Quran Reader & Tactile Tasbeeh Orb (`core/dynamic.js`, `core/static.js`, `styles/main.css`), 1.4 Custom Geometric Empty States & Unified MPA Shell (`features/masjid-checkins.js`, `src/shell/layout.js`, `src/render/prayers.js`), 1. Visual Architecture & Signature Components (+1 more)
 
 ### Community 135 - "milestones.test.js"
 Cohesion: 0.29
 Nodes (7): assert, createSandbox(), fs, loadSandbox(), path, { test }, vm
 
-### Community 136 - "2. Option 3 Screen Architecture & Navigation"
+### Community 136 - "getYesterdayKey"
 Cohesion: 0.33
-Nodes (6): 2.2 Clean Vertical `Daily challenges` Feed (`#panel-today`), 2.3 Slide-Over Progress Ring & Timer Detail Sheet (`#iqChallengeSheet` — `Screen 2`), 2.4 Offline `Masjid Check-ins` Sheet (`#iqMasjidSheet` — `Screen 3`), 2.5 Floating 5-Slot Bottom Dock + Elevated Center Crescent FAB (`#bnav`), 2.6 Dark-Teal Onboarding & Auth Overlays (`Screen 4`), 2. Option 3 Screen Architecture & Navigation
+Nodes (6): getWeekAgoKey(), getYesterdayKey(), yesterdayKey(), Task 9: Date-key consolidation + UTC bug fix, 6. Date keys (bug fix included), Architecture
 
 ### Community 137 - "smart-insights.test.js"
 Cohesion: 0.32
@@ -865,21 +875,25 @@ Nodes (7): assert, { loadFile }, loadSmartInsights(), makeState(), path, { test 
 Cohesion: 0.62
 Nodes (6): install(), messageOf(), onGlobalError(), onUnhandledRejection(), record(), showToastOnce()
 
-### Community 139 - "renderEarthliving"
-Cohesion: 0.50
-Nodes (4): renderEarthliving(), renderEnvironment(), renderFood(), renderTravel()
-
-### Community 140 - "Approach"
+### Community 139 - "renderPunishments"
 Cohesion: 0.67
-Nodes (3): Approach, Goal, Phase 2: Test Coverage
+Nodes (3): renderPunishments(), renderWork(), renderWorkjustice()
+
+### Community 140 - "showRecoveryModal"
+Cohesion: 0.33
+Nodes (10): applySalvage(), continueBootAfterRecovery(), _hide(), initAsync(), openToastModal(), recoverFresh(), recoverImport(), recoverSalvage() (+2 more)
 
 ### Community 141 - "pools/helpers.js"
 Cohesion: 0.29
 Nodes (4): _buildFullIndex(), _poolTabMap, SEARCH_INDEX, _searchActions
 
-### Community 143 - "search.test.js"
-Cohesion: 0.22
-Nodes (6): assert, fs, path, sandbox, { test }, vm
+### Community 142 - "Ibadah Quest — Option 3 Modern Restructure Design Spec"
+Cohesion: 0.20
+Nodes (9): 1.1 Color Tokens (`styles/main.css`, `data/theme-meta.js`), 1.2 Brand Icon & Lattice Watermarks (`assets/icons/icon.svg`, `manifest.json`, `index.html`), 1. Visual Brand & Design System, 3.1 State Fields (`core/state.js` & `src/core/state.js`), 3.2 Security & Escaping, 3.3 Cache Versioning & MPA Parity, 3. Data Schema, Security & PWA Cache Discipline, 4. Testing Strategy (+1 more)
+
+### Community 143 - "initApp"
+Cohesion: 0.28
+Nodes (8): _escAttr(), _findBnavByCat(), initApp(), runNextModal(), _parseHashAndNavigate(), Task 7: Consolidate `lad` vs `lastActiveDate` without killing comeback bonuses, checkConsistency(), checkWeeklyConsistency()
 
 ### Community 144 - "File Structure"
 Cohesion: 0.29
@@ -909,9 +923,9 @@ Nodes (6): Executing plans, Hard rules in this repo (from AGENTS.md, do not viol
 Cohesion: 0.22
 Nodes (7): assert, fs, { helpers, listeners }, path, src, { test }, vm
 
-### Community 151 - "Global Constraints"
-Cohesion: 0.25
-Nodes (7): Global Constraints, Task 1: Create `core/storage.js` with IndexedDB init and basic CRUD, Task 2: Wire `state/state.js` to use Storage, Task 3: Update export/import to use Storage, Task 4: Clean up localStorage duplication, Task 5: Add cache-busting and version safety, Task 6: Verify end-to-end
+### Community 151 - "_playQueueItem"
+Cohesion: 0.44
+Nodes (9): getQuranAudioUrl(), _playQueueItem(), playQuranVerse(), playSurah(), _scrollToVerse(), stopSurah(), updateAudioButtons(), updateJuzButton() (+1 more)
 
 ### Community 152 - "garden.test.js"
 Cohesion: 0.22
@@ -925,21 +939,29 @@ Nodes (7): assert, fs, makeEl(), path, ROOT, setupMasjid(), { test }
 Cohesion: 0.25
 Nodes (5): assert, fs, path, { test }, vm
 
-### Community 156 - "hadith-library.js"
-Cohesion: 0.48
-Nodes (5): Task 4: `features/hadith-library.js` — fetch/join/cache glue, ensureBundledArabic(), ensureHadithCollection(), fetchJSON(), preloadRemoteCollections()
+### Community 155 - "switchCategory"
+Cohesion: 0.42
+Nodes (9): drillUp(), selectCategory(), switchCategory(), Task 2 — F2: `core/tabs.js` drill/back + class normalization + cache bump, Task 4: Scroll reset on category and group switches, F2 — `core/tabs.js`, F2 — tabs.js drill/back bugs (verified via browser DOM reads on the running app), 3. Decisions (+1 more)
 
-### Community 157 - "iq-shell.test.js"
+### Community 156 - "populateFABIcons"
 Cohesion: 0.33
-Nodes (6): assert, makeEl(), path, ROOT, setupShell(), { test }
+Nodes (8): Task 2: Populate FAB action icons, Task 4: Behavior + a11y markup, Task 3: Resurrection — FAB + pull-refresh self-init on the real scroller, F1 — Right gutter for tier nav rows + FAB a11y, close(), init(), populateFABIcons(), toggle()
+
+### Community 157 - "search.test.js"
+Cohesion: 0.22
+Nodes (6): assert, fs, path, sandbox, { test }, vm
 
 ### Community 158 - "AGENTS.md — Ibadah Quest"
 Cohesion: 0.33
 Nodes (5): AGENTS.md — Ibadah Quest, Before you finish any task, Critical contracts — legacy SPA (still binding for legacy files), Environment, Rules
 
-### Community 160 - "getYesterdayKey"
-Cohesion: 0.33
-Nodes (6): getWeekAgoKey(), getYesterdayKey(), yesterdayKey(), Task 9: Date-key consolidation + UTC bug fix, 6. Date keys (bug fix included), Architecture
+### Community 159 - "renderLaylat"
+Cohesion: 0.47
+Nodes (4): Task 14: Laylat al-Qadr SVG scene (7 stages), caption(), laylatSVG(), renderLaylat()
+
+### Community 160 - "renderMosque"
+Cohesion: 0.60
+Nodes (4): Task 10: Mosque Builder SVG scene (7 stages), caption(), mosqueSVG(), renderMosque()
 
 ### Community 161 - "3. Design (exact changes)"
 Cohesion: 0.33
@@ -974,8 +996,8 @@ Cohesion: 0.25
 Nodes (6): ARA, assert, ENG, fs, path, test
 
 ### Community 169 - "Self-review notes (per writing-plans skill)"
-Cohesion: 0.31
-Nodes (7): Feel & Feedback (SP2) Implementation Plan, Progress (updated live), Self-review notes (per writing-plans skill), 5. Testing strategy, init(), _swipeDir(), _swipeIndex()
+Cohesion: 0.70
+Nodes (4): Self-review notes (per writing-plans skill), init(), _swipeDir(), _swipeIndex()
 
 ### Community 170 - "dhikr.test.js"
 Cohesion: 0.29
@@ -989,17 +1011,21 @@ Nodes (10): addGratitude(), addMemorization(), escapeHTML(), renderEvening(), re
 Cohesion: 0.40
 Nodes (4): EXPENSE_CATEGORIES, FINANCE_POOL, FINANCE_PROMPTS, INCOME_SOURCES
 
-### Community 174 - "renderHadith"
-Cohesion: 0.14
-Nodes (17): _allCollections(), _findHadith(), hadithBack(), hadithSpeak(), openHadithBook(), openHadithCollection(), renderHadith(), Global Constraints (+9 more)
+### Community 173 - "renderRamadan"
+Cohesion: 0.60
+Nodes (4): Task 13: Ramadan Tracker SVG scene (7 stages), caption(), ramadanSVG(), renderRamadan()
 
-### Community 175 - "renderCharacterpath"
-Cohesion: 0.50
-Nodes (4): renderCharacterpath(), renderInspirations(), renderManners(), renderZuhd()
+### Community 174 - "Global Constraints"
+Cohesion: 0.25
+Nodes (7): Global Constraints, Self-Review, Square Prayer Cards + Square Tab Cards Implementation Plan, Task 1: Square the Prayer Times cards (auto-fit grid + aspect-ratio), Task 2: Square mobile tab cards (tier2, tier3, cat-chips) via auto-fit, Task 3: Verify layout end-to-end in headless Chrome, Task 4: Cache-bust the CSS version query
+
+### Community 175 - "renderHeartRefinement"
+Cohesion: 0.60
+Nodes (4): Task 2: Fix duplicate `heartArea` DOM id + add unique-id structural test, caption(), heartSVG(), renderHeartRefinement()
 
 ### Community 176 - "2026-09-06 Adaptive Shell + Intro + Nav Unity Design"
-Cohesion: 0.20
-Nodes (9): 2026-09-06 Adaptive Shell + Intro + Nav Unity Design, Design, Evidence, Goal, Non-goals, Section 1: Adaptive shell + date line (approved), Section 2: Intro hardening + polish (approved), Section 3: Nav unity + grids + FAB (approved) (+1 more)
+Cohesion: 0.22
+Nodes (8): 2026-09-06 Adaptive Shell + Intro + Nav Unity Design, Design, Evidence, Goal, Non-goals, Section 1: Adaptive shell + date line (approved), Section 3: Nav unity + grids + FAB (approved), Section 4: Recovery + verify + ship (approved)
 
 ### Community 177 - "combo-streaks.js"
 Cohesion: 0.70
@@ -1025,6 +1051,10 @@ Nodes (4): body, $schema, type, version
 Cohesion: 0.40
 Nodes (4): Ponytail, Voice, What Ponytail values, Working loop
 
+### Community 183 - "Global Constraints"
+Cohesion: 0.25
+Nodes (7): Global Constraints, Task 1: Create `core/storage.js` with IndexedDB init and basic CRUD, Task 2: Wire `state/state.js` to use Storage, Task 3: Update export/import to use Storage, Task 4: Clean up localStorage duplication, Task 5: Add cache-busting and version safety, Task 6: Verify end-to-end
+
 ### Community 185 - "pools/dhikr.js"
 Cohesion: 0.50
 Nodes (3): DHIKR_BADGES, DHIKR_COUNTER_DATA, DHIKR_POOL
@@ -1045,9 +1075,9 @@ Nodes (3): armorSVG(), caption(), renderArmor()
 Cohesion: 0.50
 Nodes (3): Caveman, Example, Rules
 
-### Community 190 - "renderPunishments"
-Cohesion: 0.67
-Nodes (3): renderPunishments(), renderWork(), renderWorkjustice()
+### Community 190 - "Global Constraints"
+Cohesion: 0.25
+Nodes (7): Global Constraints, Phase 3 — Performance & PWA Quality: Implementation Plan, Success Criteria, Task 1: Storage Diet — compactStorage, Task 3: Lazy Panel Rendering, Task 4: Service Worker Hardening, Task 5: Cache Bumps + Sweep
 
 ### Community 191 - "goals.test.js"
 Cohesion: 0.29
@@ -1060,6 +1090,10 @@ Nodes (6): assert, fs, manifest, path, ROOT, { test }
 ### Community 278 - "content.js"
 Cohesion: 0.43
 Nodes (7): ensureHadithLoaded(), ensureQuranLoaded(), _getNewPools(), loadScript(), manualRefreshContent(), refreshContent(), Task 1: Extract NEW_POOLS data to `data/pools/new-pools.js`
+
+### Community 280 - "Phase 2: Code Health & Architecture — Design Spec"
+Cohesion: 0.29
+Nodes (6): Constraints, Goal, Not In Scope (deferred), Phase 2: Code Health & Architecture — Design Spec, Problem (verified against current code 2026-08-26), Risks
 
 ### Community 281 - "consistency.test.js"
 Cohesion: 0.29
@@ -1085,9 +1119,25 @@ Nodes (4): assert, fs, path, { test }
 Cohesion: 0.33
 Nodes (5): assert, fs, path, { test }, walk()
 
+### Community 287 - "iq-shell.test.js"
+Cohesion: 0.33
+Nodes (6): assert, makeEl(), path, ROOT, setupShell(), { test }
+
 ### Community 288 - "Design"
-Cohesion: 0.12
-Nodes (14): closeToastOverlay(), appAction(), initModalKeyboardHandlers(), trapFocus(), Task 18: Add keyboard navigation to cards and FAB, 2. Fail-loud facade (core/actions.js), 3. Shared modal opener (core/actions.js), 4. Modal queue without polling (core/actions.js) (+6 more)
+Cohesion: 0.18
+Nodes (10): closeToastOverlay(), appAction(), 2. Fail-loud facade (core/actions.js), 3. Shared modal opener (core/actions.js), 4. Modal queue without polling (core/actions.js), 5. Weighted roll (new core/random.js), 7. escapeHTML consolidation, 8. Test-gap closures (+2 more)
+
+### Community 289 - "renderQuranJuz"
+Cohesion: 0.47
+Nodes (6): findSurahByAyah(), globalAyahOf(), juzBegin(), juzEnd(), playJuz(), renderQuranJuz()
+
+### Community 290 - "2. Option 3 Screen Architecture & Navigation"
+Cohesion: 0.33
+Nodes (6): 2.2 Clean Vertical `Daily challenges` Feed (`#panel-today`), 2.3 Slide-Over Progress Ring & Timer Detail Sheet (`#iqChallengeSheet` — `Screen 2`), 2.4 Offline `Masjid Check-ins` Sheet (`#iqMasjidSheet` — `Screen 3`), 2.5 Floating 5-Slot Bottom Dock + Elevated Center Crescent FAB (`#bnav`), 2.6 Dark-Teal Onboarding & Auth Overlays (`Screen 4`), 2. Option 3 Screen Architecture & Navigation
+
+### Community 291 - "Global Constraints"
+Cohesion: 0.40
+Nodes (4): Global Constraints, Sub-project 1: Dashboard Hierarchy, Desktop/Tablet Navigation & Sheet Polish Implementation Plan, Task 1: Empty-Profile Daily Summary Boot Restraint (`features/daily-summary.js`), Task 3: Top-Bar Desktop Category Navigation, `#dateLine` Anchoring, Tablet Hero Grid & CSS Polish (`index.html`, `core/tabs.js`, `styles/main.css`, `sw.js`, `tests/html.test.js`)
 
 ## Knowledge Gaps
 - **88 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
@@ -1095,17 +1145,17 @@ Nodes (14): closeToastOverlay(), appAction(), initModalKeyboardHandlers(), trapF
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `loadFile()` connect `ref_node_test` to `daily-summary.test.js`, `date-keys.test.js`, `dhikr.test.js`, `ref_path`, `shop.test.js`, `renderDynamic`, `schema-contract.test.js`, `ref_fs`, `loadLocalState`, `Ibadah Quest Comprehensive Improvement — Implementation Plan`, `ref_node_assert`, `masjid-checkins.test.js`, `ref_node_test`, `iq-shell.test.js`?**
-  _High betweenness centrality (0.211) - this node is a cross-community bridge._
+- **Why does `loadFile()` connect `ref_node_test` to `loadLocalState`, `ref_node_test`, `date-keys.test.js`, `dhikr.test.js`, `shop.test.js`, `renderDynamic`, `schema-contract.test.js`, `Ibadah Quest Comprehensive Improvement — Implementation Plan`, `journeys.test.js`, `masjid-checkins.test.js`, `ref_node_assert`, `iq-shell.test.js`?**
+  _High betweenness centrality (0.215) - this node is a cross-community bridge._
 - **Are the 2 inferred relationships involving `poolRender()` (e.g. with `Findings (evidence from source)` and `Findings (evidence)`) actually correct?**
   _`poolRender()` has 2 INFERRED edges - model-reasoned connections that need verification._
-- **Should `ref_node_test` be split into smaller, more focused modules?**
-  _Cohesion score 0.046171829339567504 - nodes in this community are weakly interconnected._
+- **Should `audio.js` be split into smaller, more focused modules?**
+  _Cohesion score 0.05427547363031234 - nodes in this community are weakly interconnected._
 - **Why does `Task 1: XP primitives in core/xp.js` connect `renderDynamic` to `Global Constraints`, `ref_node_test`, `checkLevelUp`?**
-  _High betweenness centrality (0.142) - this node is a cross-community bridge._
+  _High betweenness centrality (0.164) - this node is a cross-community bridge._
 - **Are the 4 inferred relationships involving `loadFile()` (e.g. with `Task 12: Create `tests/xp.test.js`` and `Task 9: `core/recovery.js` — junk-state detection, quarantine, salvage`) actually correct?**
   _`loadFile()` has 4 INFERRED edges - model-reasoned connections that need verification._
-- **Should `static.js` be split into smaller, more focused modules?**
-  _Cohesion score 0.07928118393234672 - nodes in this community are weakly interconnected._
-- **Why does `renderDynamic()` connect `renderDynamic` to `Task 2: Haptics — helper + core call sites`, `core/state.js`, `_playQueueItem`, `Approach`, `Ibadah Quest Development Conventions`, `renderLv`, `Context`, `Changes by File`, `Task 11: Split `render/render.js` into focused modules`, `Global Constraints`?**
-  _High betweenness centrality (0.093) - this node is a cross-community bridge._
+- **Should `ref_node_test` be split into smaller, more focused modules?**
+  _Cohesion score 0.043064182194616975 - nodes in this community are weakly interconnected._
+- **Why does `renderDynamic()` connect `renderDynamic` to `Task 4: Create `core/prayers.js` — Prayer/deed toggling and streak recalculation`, `core/state.js`, `dynamic.js`, `Task 11: Split `render/render.js` into focused modules`, `Context`, `renderLv`, `Changes by File`, `Ibadah Quest — Comprehensive Improvement Plan`, `Global Constraints`?**
+  _High betweenness centrality (0.130) - this node is a cross-community bridge._

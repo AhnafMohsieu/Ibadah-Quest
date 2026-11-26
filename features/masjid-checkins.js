@@ -170,7 +170,15 @@
 
   function renderMasjidList(list) {
     if (!list.length) {
-      return '<div class="iq-empty-card">No masjid check-ins logged yet. Log your first congregational visit above!</div>';
+      return '<div class="iq-empty-card iq-empty-illustrated">' +
+        '<svg class="iq-empty-svg" viewBox="0 0 80 64" width="68" height="54" fill="none" aria-hidden="true">' +
+          '<path d="M16 54V30c0-11 12-18 24-24 12 6 24 13 24 24v24" stroke="var(--accent)" stroke-width="2" stroke-linecap="round"/>' +
+          '<path d="M28 54V38a12 12 0 0 1 24 0v16" fill="var(--accent-bg)" stroke="var(--accent)" stroke-width="1.8"/>' +
+          '<path d="M40 2v4M37 14a4 4 0 0 0 6 0" stroke="var(--gold)" stroke-width="2" stroke-linecap="round"/>' +
+          '<line x1="10" y1="54" x2="70" y2="54" stroke="var(--accent-border)" stroke-width="2" stroke-linecap="round"/>' +
+        '</svg>' +
+        '<div><strong>No masjid visits logged yet</strong><span>Tap a region pin above or record your next congregational prayer.</span></div>' +
+      '</div>';
     }
     return '<div class="iq-mc-list">' + list.slice(0, 30).map(function(item) {
       var prayerLabel = String(item.prayer || 'prayer').toUpperCase();
@@ -221,7 +229,11 @@
       ? renderMasjidCalendar(list)
       : (_activeSubTab === 'history' ? '' : renderWorldMapSvg(stats));
 
-    bodyEl.innerHTML = tabsHtml + viewHtml + formHtml + '<div class="iq-section-label">masjid check-ins</div>' + renderMasjidList(list);
+    var topSection = viewHtml
+      ? '<div class="iq-mc-workspace">' + viewHtml + formHtml + '</div>'
+      : formHtml;
+
+    bodyEl.innerHTML = tabsHtml + topSection + '<div class="iq-section-label">Check-in History</div>' + renderMasjidList(list);
   }
 
   function selectMasjidRegion(regionId) {
@@ -230,28 +242,48 @@
   }
 
   function openMasjidCheckins(subTab) {
-    if (typeof window !== 'undefined' && typeof window.closeActiveSheet === 'function') {
-      window.closeActiveSheet();
+    var a11y = typeof window !== 'undefined' ? window.iqOverlayA11y : null;
+    if (a11y && a11y.captureTrigger) a11y.captureTrigger();
+    if (a11y && a11y.setTransitioning) a11y.setTransitioning(true);
+    try {
+      if (typeof window !== 'undefined' && typeof window.closeActiveSheet === 'function') {
+        window.closeActiveSheet();
+      }
+    } finally {
+      if (a11y && a11y.setTransitioning) a11y.setTransitioning(false);
     }
     _activeSubTab = subTab || 'map';
     renderMasjidSheet(_activeSubTab);
     if (typeof document === 'undefined') return;
     var sheet = document.getElementById('iqMasjidSheet');
     if (sheet) {
-      sheet.classList.add('open');
-      sheet.setAttribute('aria-hidden', 'false');
+      if (a11y && a11y.setOverlayState) {
+        a11y.setOverlayState(sheet, true);
+      } else {
+        sheet.classList.add('open');
+        sheet.setAttribute('aria-hidden', 'false');
+        sheet.inert = false;
+      }
+      if (a11y && a11y.focusInside) a11y.focusInside(sheet);
     }
     if (document.body) document.body.classList.add('iq-sheet-open');
   }
 
   function closeMasjidCheckins() {
     if (typeof document === 'undefined') return;
+    var a11y = typeof window !== 'undefined' ? window.iqOverlayA11y : null;
     var sheet = document.getElementById('iqMasjidSheet');
     if (sheet) {
-      sheet.classList.remove('open');
-      sheet.setAttribute('aria-hidden', 'true');
+      if (a11y && a11y.setOverlayState) {
+        a11y.setOverlayState(sheet, false);
+      } else {
+        sheet.classList.remove('open');
+        sheet.setAttribute('aria-hidden', 'true');
+        sheet.inert = true;
+      }
     }
     if (document.body) document.body.classList.remove('iq-sheet-open');
+    if (a11y && a11y.restoreTrigger) a11y.restoreTrigger();
   }
 
   window.MAP_REGIONS = MAP_REGIONS;

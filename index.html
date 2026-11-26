@@ -61,7 +61,7 @@
     .tab-panel{display:none}
     .tab-panel.active{display:block}
   </style>
-  <link rel="preload" href="styles/main.css?v=49" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <link rel="preload" href="styles/main.css?v=53" as="style" onload="this.onload=null;this.rel='stylesheet'">
   <script>
     window.__iqBootT0 = Date.now();
     window.__iqReload = function() { location.reload(); };
@@ -166,6 +166,13 @@
       <span class="tb-level" id="tbLevel">Lv 1</span>
       <span class="tb-title" id="tbTitle">Muslim</span>
     </div>
+    <nav id="topCatNav" class="iq-top-catnav" role="tablist" aria-label="Main categories">
+      <button type="button" class="iq-top-cat-btn active" data-cat="ibadah" onclick="window.closeActiveSheet && window.closeActiveSheet();App.switchCategory('ibadah', this)" role="tab" aria-selected="true">Home</button>
+      <button type="button" class="iq-top-cat-btn" data-cat="knowledge" onclick="window.closeActiveSheet && window.closeActiveSheet();App.switchCategory('knowledge', this)" role="tab" aria-selected="false">Knowledge</button>
+      <button type="button" class="iq-top-cat-btn" data-cat="names_main" onclick="window.closeActiveSheet && window.closeActiveSheet();App.switchCategory('names_main', this)" role="tab" aria-selected="false">Names</button>
+      <button type="button" class="iq-top-cat-btn" data-cat="library" onclick="window.closeActiveSheet && window.closeActiveSheet();App.switchCategory('library', this)" role="tab" aria-selected="false">Library</button>
+      <button type="button" class="iq-top-cat-btn" data-cat="profile_main" onclick="window.closeActiveSheet && window.closeActiveSheet();App.switchCategory('profile_main', this)" role="tab" aria-selected="false">Profile</button>
+    </nav>
 <div class="tb-right">
   <span class="tb-stat" id="tbXP">0 XP</span>
   <span class="tb-stat" id="tbStreak">0</span>
@@ -200,6 +207,7 @@
     <div class="streak-best"><div class="best-num" id="bestStr">0</div><div class="best-label">BEST</div></div>
   </div>
 
+  <div id="dateLine" class="date-line" aria-live="off"></div>
   <div class="global-search-wrap">
     <span class="global-search-icon" aria-hidden="true">&#128269;</span>
     <input class="global-search" placeholder="Search anything..." autocomplete="off" aria-label="Search anything">
@@ -218,8 +226,6 @@
   <div id="bonusArea"></div>
   <div id="comboDisplay"></div>
 
-  
-  <div id="dateLine" class="date-line" aria-live="off"></div>
   <div id="segmentPageHeader" class="segment-page-header" style="display:none;">
     <div class="sph-content">
       <span class="sph-icon" id="sphIcon" aria-hidden="true">📖</span>
@@ -475,10 +481,10 @@
 
 <!-- Render engine (split modules) -->
 <script src="core/calendar.js?v=1"></script>
-<script src="core/render-prayers.js?v=5"></script>
-<script src="core/static.js?v=9"></script>
-<script src="core/dynamic.js?v=15"></script>
-<script src="core/tabs.js?v=14"></script>
+<script src="core/render-prayers.js?v=7"></script>
+<script src="core/static.js?v=10"></script>
+<script src="core/dynamic.js?v=17"></script>
+<script src="core/tabs.js?v=15"></script>
 
 <!-- Chart.js CDN (lazy loaded) -->
 <script>
@@ -551,7 +557,7 @@
 <script src="features/pull-refresh.js?v=1" defer></script>
 <script src="features/swipe-nav.js?v=2" defer></script>
 <script src="features/surprise-rewards.js?v=1" defer></script>
-<script src="features/daily-summary.js?v=1" defer></script>
+<script src="features/daily-summary.js?v=2" defer></script>
 <script src="features/consistency-bonuses.js?v=1" defer></script>
 <script src="features/combo-streaks.js" defer></script>
 <script src="features/achievement-showcase.js" defer></script>
@@ -566,13 +572,13 @@
 
 <div id="onboardingOverlay" style="display:none"></div>
 <script src="features/onboarding.js" defer></script>
-<script src="features/masjid-checkins.js?v=1" defer></script>
-<script src="features/iq-shell.js?v=2" defer></script>
+<script src="features/masjid-checkins.js?v=3" defer></script>
+<script src="features/iq-shell.js?v=5" defer></script>
 
 <!-- Actions (core logic, navigation, init, window.App) -->
 <script src="features/auth.js?v=1"></script>
 <script src="core/xp.js?v=3"></script>
-<script src="core/prayers.js?v=4"></script>
+<script src="core/prayers.js?v=5"></script>
 <script src="core/quests.js?v=5"></script>
 <script src="core/achievements.js?v=1"></script>
 <script src="core/random.js?v=1"></script>
@@ -581,7 +587,7 @@
 <script src="core/content.js?v=1"></script>
 <script src="core/backup.js?v=1"></script>
 <script src="data/i18n.js?v=3"></script>
-<script src="core/actions.js?v=26"></script>
+<script src="core/actions.js?v=27"></script>
 
 <!-- PWA: Service Worker registration + update banner -->
 <script>
@@ -605,7 +611,7 @@
     });
   }
   window.addEventListener('load', function() {
-    navigator.serviceWorker.register('sw.js?v=62').then(function(reg) {
+    navigator.serviceWorker.register('sw.js?v=65').then(function(reg) {
       if (reg.waiting) { showUpdateBanner(reg); return; }
       reg.addEventListener('updatefound', function() {
         var sw = reg.installing;
@@ -624,7 +630,7 @@
 <!-- Slide-out Drawers & Slide-over Detail Sheets (Option 3) -->
 <div id="iqDrawerBackdrop" class="iq-drawer-backdrop" onclick="window.closeActiveSheet && window.closeActiveSheet()"></div>
 
-<aside id="iqDrawer" class="iq-drawer" aria-hidden="true" aria-label="All sections and topics">
+<aside id="iqDrawer" class="iq-drawer" aria-hidden="true" inert aria-label="All sections and topics">
   <div class="iq-drawer-head">
     <div class="iq-drawer-brand"><strong>IQ</strong> <span>All Sections</span></div>
     <button type="button" class="iq-icon-btn" onclick="window.closeIqDrawer && window.closeIqDrawer()" aria-label="Close menu">&times;</button>
@@ -647,7 +653,7 @@
   </div>
 </aside>
 
-<aside id="iqNotifDrawer" class="iq-drawer iq-drawer-right" aria-hidden="true" aria-label="Notifications">
+<aside id="iqNotifDrawer" class="iq-drawer iq-drawer-right" aria-hidden="true" inert aria-label="Notifications">
   <div class="iq-drawer-head">
     <div class="iq-drawer-brand"><strong>Reminders</strong></div>
     <button type="button" class="iq-icon-btn" onclick="window.closeNotifDrawer && window.closeNotifDrawer()" aria-label="Close notifications">&times;</button>
@@ -655,7 +661,7 @@
   <div id="iqNotifBody" class="iq-notif-body"></div>
 </aside>
 
-<div id="iqChallengeSheet" class="iq-sheet-overlay" aria-hidden="true" role="dialog" aria-label="Daily challenges detail">
+<div id="iqChallengeSheet" class="iq-sheet-overlay" aria-hidden="true" inert role="dialog" aria-label="Daily challenges detail">
   <div class="iq-sheet-header">
     <button type="button" class="iq-icon-btn" onclick="window.closeChallengeDetail && window.closeChallengeDetail()" aria-label="Back">&lsaquo;</button>
     <h2 class="iq-sheet-title">Daily challenges</h2>
@@ -664,10 +670,10 @@
   <div id="iqChallengeBody" class="iq-sheet-body"></div>
 </div>
 
-<div id="iqMasjidSheet" class="iq-sheet-overlay" aria-hidden="true" role="dialog" aria-label="Masjid check-ins">
+<div id="iqMasjidSheet" class="iq-sheet-overlay" aria-hidden="true" inert role="dialog" aria-label="Masjid Check-ins">
   <div class="iq-sheet-header">
     <button type="button" class="iq-icon-btn" onclick="window.closeMasjidCheckins && window.closeMasjidCheckins()" aria-label="Back">&lsaquo;</button>
-    <h2 class="iq-sheet-title">masjid check-ins</h2>
+    <h2 class="iq-sheet-title">Masjid Check-ins</h2>
     <button type="button" class="iq-icon-btn" onclick="window.openNotifDrawer && window.openNotifDrawer()" aria-label="Notifications">&#128276;</button>
   </div>
   <div id="iqMasjidBody" class="iq-sheet-body"></div>

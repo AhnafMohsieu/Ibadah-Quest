@@ -3,15 +3,53 @@
   // PRAYER RENDERING & PRAYER TIMES
   // -------------------------------------------------------
 
+  function _renderNextPrayerPillHtml(cachedTimes) {
+    const settings = getPrayerSettings();
+    const nextInfo = cachedTimes ? computeNextPrayer(cachedTimes) : null;
+    const pill = nextInfo
+      ? `<button type="button" id="iqNextPrayerPill" class="iq-next-prayer-pill" onclick="App.activateTab('timer')">Next: <strong>${safePrayerText(nextInfo.name)}</strong> &middot; ${safePrayerText(nextInfo.timeLabel)} <span class="iq-pill-eta">${safePrayerText(nextInfo.shortRemaining)}</span></button>`
+      : `<button type="button" id="iqNextPrayerPill" class="iq-next-prayer-pill" onclick="App.activateTab('timer')">Prayer Times &middot; ${safePrayerText(settings.label)} &rsaquo;</button>`;
+    const pauseBtn = `<button type="button" class="iq-pause-btn${settings.paused ? ' active' : ''}" onclick="App.togglePrayerPause()" aria-pressed="${!!settings.paused}" title="Protect streak during excused days">${settings.paused ? 'Streak Paused' : 'Grace Mode'}</button>`;
+    return `<div class="iq-prayer-header-actions">${pill}${pauseBtn}</div>`;
+  }
+
   function renderPrayers() {
+    if (typeof document === 'undefined') return;
+    const area = document.getElementById('prayerArea');
+    if (!area) return;
     const l = tlog(), f = isFri();
+    const cached = getPrayerTimesFromCache();
+    const nextInfo = cached ? computeNextPrayer(cached) : null;
     const cards = PRAYERS.map(p => {
-      const d = !!l.p[p.id]; let nm=p.name, xp=p.xp;
-      if (f && p.id==='dhuhr') { nm=p.fri.name; xp=p.fri.xp; }
+      const raw = l.p && l.p[p.id];
+      const d = !!raw;
+      const isQada = raw === 'qada';
+      let nm = p.name, xp = p.xp;
+      if (f && p.id === 'dhuhr') { nm = p.fri.name; xp = p.fri.xp; }
       if (S.ab && S.ab.exp >= today()) xp *= 2;
-      return `<div class="card-item${d?' done':''}" tabindex="0" role="button" onclick="App.toggleP('${p.id}')"><div class="card-icon">${iqIcon(p.id)}</div><div class="card-name">${nm}</div><div class="card-sub">${p.time}</div><div class="card-xp">+${xp} XP</div>${d?'<div class="card-check">'+iqIcon('check')+'</div>':''}<div class="card-info-btn" role="button" tabindex="0" aria-label="Details: ${nm}" onclick="event.stopPropagation();App.detail('${p.id}')">ℹ</div></div>`;
+      const capKey = p.id.charAt(0).toUpperCase() + p.id.slice(1);
+      const cachedSlot = cached && cached[capKey];
+      const liveTime = (cachedSlot && typeof cachedSlot.h === 'number') ? formatTime12(cachedSlot.h, cachedSlot.m) : p.time;
+      const isNext = !!(nextInfo && !nextInfo.isTomorrow && nextInfo.name.toLowerCase() === p.id && !d);
+      const cls = `card-item${d ? ' done' : ''}${isQada ? ' qada' : ''}${isNext ? ' iq-next-prayer-card' : ''}`;
+      return `<div class="${cls}" tabindex="0" role="button" onclick="App.toggleP('${p.id}')">` +
+        (isNext ? '<span class="iq-next-badge">UP NEXT</span>' : '') +
+        `<div class="card-icon">${iqIcon(p.id)}</div>` +
+        `<div class="card-name">${nm}</div>` +
+        `<div class="card-sub iq-tabular">${safePrayerText(liveTime)}</div>` +
+        `<div class="card-xp">+${xp} XP</div>` +
+        (d ? `<div class="card-check" title="${isQada ? 'Made up (Qada)' : 'Completed'}">${isQada ? 'Q' : iqIcon('check')}</div>` : '') +
+        `<div class="card-qada-btn${isQada ? ' active' : ''}" role="button" tabindex="0" aria-label="Mark ${nm} made up (Qada)" title="Toggle Qada (made up)" onclick="event.stopPropagation();App.togglePrayerQada('${p.id}')">${isQada ? 'Qada' : 'Q'}</div>` +
+        `<div class="card-info-btn" role="button" tabindex="0" aria-label="Details: ${nm}" onclick="event.stopPropagation();App.detail('${p.id}')">ℹ</div>` +
+      `</div>`;
     }).join('');
-    document.getElementById('prayerArea').innerHTML = '<div class="section-title">Daily Prayers</div><div class="card-grid">' + cards + '</div>';
+    area.innerHTML = `<div class="prayer-header-row"><div class="section-title" style="margin:0;">Daily Prayers</div>${_renderNextPrayerPillHtml(cached)}</div><div class="card-grid">${cards}</div>`;
+    if (!cached) {
+      fetchPrayerTimes().then(times => {
+        if (!times) return;
+        if (getPrayerTimesFromCache()) renderPrayers();
+      }).catch(() => {});
+    }
   }
 
   function renderVol() {
@@ -122,7 +160,8 @@
       lat: Number.isFinite(lat) && lat >= -90 && lat <= 90 ? lat : DEFAULT_PRAYER_SETTINGS.lat,
       lng: Number.isFinite(lng) && lng >= -180 && lng <= 180 ? lng : DEFAULT_PRAYER_SETTINGS.lng,
       label: typeof saved.label === 'string' && saved.label.trim() ? saved.label.trim() : DEFAULT_PRAYER_SETTINGS.label,
-      method: Number.isFinite(method) && method > 0 ? method : DEFAULT_PRAYER_SETTINGS.method
+      method: Number.isFinite(method) && method > 0 ? method : DEFAULT_PRAYER_SETTINGS.method,
+      paused: !!saved.paused
     };
   }
 
@@ -193,7 +232,122 @@
     return null;
   }
 
+  const PRAYER_CITY_PRESETS = [
+    { label: 'Dhaka', lat: 23.8103, lng: 90.4125, method: 1 },
+    { label: 'Makkah', lat: 21.4225, lng: 39.8262, method: 4 },
+    { label: 'Madinah', lat: 24.4672, lng: 39.6111, method: 4 },
+    { label: 'Istanbul', lat: 41.0082, lng: 28.9784, method: 13 },
+    { label: 'Cairo', lat: 30.0444, lng: 31.2357, method: 5 },
+    { label: 'London', lat: 51.5072, lng: -0.1276, method: 2 },
+    { label: 'New York', lat: 40.7128, lng: -74.0060, method: 2 },
+    { label: 'Toronto', lat: 43.6532, lng: -79.3832, method: 2 },
+    { label: 'Kuala Lumpur', lat: 3.1390, lng: 101.6869, method: 3 }
+  ];
+
+  const PRAYER_METHODS = [
+    { id: 1, name: 'Karachi / Dhaka (Univ. Islamic Sciences)' },
+    { id: 2, name: 'ISNA (North America)' },
+    { id: 3, name: 'Muslim World League (MWL)' },
+    { id: 4, name: 'Umm Al-Qura (Makkah)' },
+    { id: 5, name: 'Egyptian General Authority' },
+    { id: 13, name: 'Diyanet (Turkey)' }
+  ];
+
+  function formatTime12(h, m) {
+    const ampm = h >= 12 ? 'PM' : 'AM';
+    const h12 = h === 0 ? 12 : (h > 12 ? h - 12 : h);
+    return `${h12}:${String(m).padStart(2, '0')} ${ampm}`;
+  }
+
+  function computeNextPrayer(times, nowDate) {
+    if (!times || typeof times !== 'object') return null;
+    const now = (nowDate && typeof nowDate.getHours === 'function') ? nowDate : new Date();
+    const nowMin = now.getHours() * 60 + now.getMinutes();
+    const prayers = ['Fajr', 'Dhuhr', 'Asr', 'Maghrib', 'Isha']
+      .map(n => (times[n] && typeof times[n].h === 'number') ? { name: n, h: times[n].h, m: times[n].m } : null)
+      .filter(Boolean);
+    if (!prayers.length) return null;
+
+    let next = null;
+    let isTomorrow = false;
+    for (const p of prayers) {
+      if ((p.h * 60 + p.m) > nowMin) { next = p; break; }
+    }
+    const targetDate = new Date(now.getTime());
+    if (!next) {
+      next = prayers[0];
+      isTomorrow = true;
+      targetDate.setDate(targetDate.getDate() + 1);
+    }
+    targetDate.setHours(next.h, next.m, 0, 0);
+    const diffMs = Math.max(0, targetDate.getTime() - now.getTime());
+    const totalSec = Math.floor(diffMs / 1000);
+    const hhNum = Math.floor(totalSec / 3600);
+    const mmNum = Math.floor((totalSec % 3600) / 60);
+    const ssNum = totalSec % 60;
+    const countdownText = `${String(hhNum).padStart(2, '0')}:${String(mmNum).padStart(2, '0')}:${String(ssNum).padStart(2, '0')}`;
+    const shortRemaining = hhNum > 0 ? `in ${hhNum}h ${mmNum}m` : `in ${mmNum}m`;
+    return {
+      name: next.name,
+      h: next.h,
+      m: next.m,
+      timeLabel: formatTime12(next.h, next.m),
+      isTomorrow,
+      diffMs,
+      countdownText,
+      shortRemaining
+    };
+  }
+
+  function updatePrayerSettings(opts) {
+    const prev = getPrayerSettings();
+    const input = (opts && typeof opts === 'object') ? opts : {};
+    const lat = Number(input.lat);
+    const lng = Number(input.lng);
+    const method = Number(input.method);
+    const labelStr = typeof input.label === 'string' && input.label.trim() ? input.label.trim().slice(0, 60) : prev.label;
+    const next = {
+      lat: Number.isFinite(lat) && lat >= -90 && lat <= 90 ? lat : prev.lat,
+      lng: Number.isFinite(lng) && lng >= -180 && lng <= 180 ? lng : prev.lng,
+      label: labelStr,
+      method: Number.isFinite(method) && method > 0 ? Math.round(method) : prev.method,
+      paused: typeof input.paused === 'boolean' ? input.paused : !!prev.paused
+    };
+    if (typeof S === 'object' && S) S.prayerSettings = next;
+    if (typeof saveState === 'function') saveState();
+    if (typeof renderPrayerTimes === 'function') renderPrayerTimes();
+    if (typeof renderTimer === 'function') renderTimer();
+    if (typeof renderPrayers === 'function') renderPrayers();
+    if (typeof window !== 'undefined' && typeof window.renderIqFeed === 'function') window.renderIqFeed();
+    return next;
+  }
+
+  function togglePrayerPause() {
+    const cur = getPrayerSettings();
+    const next = updatePrayerSettings({ paused: !cur.paused });
+    if (typeof toast === 'function') {
+      toast(iqIcon(next.paused ? 'moon' : 'check'), next.paused ? 'Grace Mode active — prayer streak protected.' : 'Grace Mode off — daily prayer streak active.');
+    }
+    return next.paused;
+  }
+
+  function applyPrayerCityPreset(idxStr) {
+    const idx = parseInt(idxStr, 10);
+    const city = PRAYER_CITY_PRESETS[idx];
+    if (!city) return;
+    updatePrayerSettings({ lat: city.lat, lng: city.lng, label: city.label, method: city.method });
+    if (typeof toast === 'function') toast(iqIcon('map-pin'), `Prayer city updated: ${city.label}`);
+  }
+
+  function applyPrayerMethod(methodStr) {
+    const m = parseInt(methodStr, 10);
+    if (!Number.isFinite(m) || m <= 0) return;
+    updatePrayerSettings({ method: m });
+    if (typeof toast === 'function') toast(iqIcon('clock'), 'Calculation method updated.');
+  }
+
   function renderPrayerTimes() {
+    if (typeof document === 'undefined') return;
     const el = document.getElementById('prayerTimesArea');
     if (!el) return;
     const icons = { Fajr: iqIcon('sunrise'), Sunrise: iqIcon('sun'), Dhuhr: iqIcon('sun'), Asr: iqIcon('cloud-sun'), Maghrib: iqIcon('sunset'), Isha: iqIcon('moon') };
@@ -206,32 +360,38 @@
       Isha: 'Night'
     };
     fetchPrayerTimes().then(times => {
+      const settings = getPrayerSettings();
+      const cityOptions = PRAYER_CITY_PRESETS.map((c, i) => {
+        const sel = c.label.toLowerCase() === settings.label.toLowerCase() ? ' selected' : '';
+        return `<option value="${i}"${sel}>${safePrayerText(c.label)}</option>`;
+      }).join('');
+      const hasPreset = PRAYER_CITY_PRESETS.some(c => c.label.toLowerCase() === settings.label.toLowerCase());
+      const customCityOpt = !hasPreset ? `<option value="" selected>${safePrayerText(settings.label)}</option>` : '';
+      const methodOptions = PRAYER_METHODS.map(m =>
+        `<option value="${m.id}"${m.id === settings.method ? ' selected' : ''}>${safePrayerText(m.name)}</option>`
+      ).join('');
+      const locateButton = typeof navigator !== 'undefined' && navigator.geolocation
+        ? '<button class="iq-pt-gps-btn" type="button" onclick="useCurrentPrayerLocation()">Use GPS</button>'
+        : '';
+      const controlsHtml = `<div class="iq-pt-controls">` +
+        `<div class="iq-pt-ctrl-group"><label class="iq-pt-label" for="iqPrayerCitySelect">City</label><select id="iqPrayerCitySelect" class="iq-pt-select" onchange="window.applyPrayerCityPreset(this.value)">${customCityOpt}${cityOptions}</select></div>` +
+        `<div class="iq-pt-ctrl-group"><label class="iq-pt-label" for="iqPrayerMethodSelect">Method</label><select id="iqPrayerMethodSelect" class="iq-pt-select" onchange="window.applyPrayerMethod(this.value)">${methodOptions}</select></div>` +
+        `${locateButton}</div>`;
+
       if (!times) {
-        el.innerHTML = '<div style="text-align:center;color:var(--text2);padding:20px;">Unable to load prayer times. Please check your connection.</div>';
+        el.innerHTML = controlsHtml + '<div style="text-align:center;color:var(--text2);padding:20px;">Unable to load prayer times. Please check your connection.</div>';
         return;
       }
-      const now = new Date();
-      const nowMin = now.getHours() * 60 + now.getMinutes();
-      const prayerNames = ['Fajr','Sunrise','Dhuhr','Asr','Maghrib','Isha'];
-      let nextPrayer = null;
-      for (const name of ['Fajr','Dhuhr','Asr','Maghrib','Isha']) {
-        const t = times[name];
-        if (t && (t.h * 60 + t.m) > nowMin) { nextPrayer = name; break; }
-      }
-      const settings = getPrayerSettings();
-      const locateButton = typeof navigator !== 'undefined' && navigator.geolocation
-        ? '<button class="shop-card" type="button" onclick="useCurrentPrayerLocation()" style="padding:7px 10px;font-size:0.75rem;">Use my location</button>'
-        : '';
-      el.innerHTML = `<div style="display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px;color:var(--text2);font-size:0.8rem;"><span>Location: ${safePrayerText(settings.label)}</span>${locateButton}</div><div class="prayer-times-grid">` + prayerNames.map(name => {
+      const nextInfo = computeNextPrayer(times);
+      const nextPrayer = nextInfo && !nextInfo.isTomorrow ? nextInfo.name : null;
+      el.innerHTML = controlsHtml + '<div class="prayer-times-grid">' + ['Fajr','Sunrise','Dhuhr','Asr','Maghrib','Isha'].map(name => {
         const t = times[name];
         if (!t) return '';
-        const ampm = t.h >= 12 ? 'PM' : 'AM';
-        const h12 = t.h === 0 ? 12 : (t.h > 12 ? t.h - 12 : t.h);
         const isNext = name === nextPrayer;
         return `<div class="pt-card${isNext ? ' next-prayer' : ''}">
           <div class="pt-icon">${icons[name]}</div>
           <div class="pt-name">${name}</div>
-          <div class="pt-time">${h12}:${String(t.m).padStart(2,'0')} ${ampm}</div>
+          <div class="pt-time">${formatTime12(t.h, t.m)}</div>
           <div class="pt-sub">${descs[name]}</div>
         </div>`;
       }).join('') + '</div>';
@@ -245,15 +405,12 @@
     }
     navigator.geolocation.getCurrentPosition(function(position) {
       const coords = position.coords;
-      S.prayerSettings = {
+      updatePrayerSettings({
         lat: coords.latitude,
         lng: coords.longitude,
         label: 'Current location',
         method: getPrayerSettings().method
-      };
-      saveState();
-      renderPrayerTimes();
-      renderTimer();
+      });
       if (typeof toast === 'function') toast(iqIcon('map-pin'), 'Prayer times updated for your location.');
     }, function() {
       if (typeof toast === 'function') toast(iqIcon('map-pin-off'), 'Unable to access your location.');
@@ -261,29 +418,15 @@
   }
 
   function renderTimer() {
+    if (typeof document === 'undefined') return;
     if (window.timerInt) clearInterval(window.timerInt);
     function tick(times) {
-      const now = new Date();
-      const nowMin = now.getHours() * 60 + now.getMinutes();
-      const prayers = ['Fajr','Dhuhr','Asr','Maghrib','Isha'].map(n => ({ n, ...times[n] })).filter(p => p.h != null);
-      if (!prayers.length) return;
-      let next = null;
-      for (const p of prayers) {
-        const pMin = p.h * 60 + p.m;
-        if (pMin > nowMin) { next = p; break; }
-      }
-      let d = new Date();
-      if (!next) { next = prayers[0]; d.setDate(d.getDate() + 1); }
-      d.setHours(next.h, next.m, 0, 0);
-      const diff = d - now;
-      if (diff < 0) return;
-      const hh = String(Math.floor(diff / (1000*60*60))).padStart(2,'0');
-      const mm = String(Math.floor((diff / (1000*60)) % 60)).padStart(2,'0');
-      const ss = String(Math.floor((diff / 1000) % 60)).padStart(2,'0');
+      const info = computeNextPrayer(times);
+      if (!info) return;
       const te = document.getElementById('timerArea');
       const pna = document.getElementById('prayerNamesArea');
-      if (te) te.innerText = `${hh}:${mm}:${ss}`;
-      if (pna) pna.innerText = `Until ${next.n}`;
+      if (te) te.innerText = info.countdownText;
+      if (pna) pna.innerText = `Until ${info.name} (${info.timeLabel})`;
     }
     fetchPrayerTimes().then(times => {
       if (!times) return;
@@ -296,6 +439,13 @@
   window.renderVol = renderVol;
   window.renderDeeds = renderDeeds;
   window.fetchPrayerTimes = fetchPrayerTimes;
+  window.getPrayerTimesFromCache = getPrayerTimesFromCache;
+  window.getPrayerSettings = getPrayerSettings;
+  window.computeNextPrayer = computeNextPrayer;
+  window.updatePrayerSettings = updatePrayerSettings;
+  window.togglePrayerPause = togglePrayerPause;
+  window.applyPrayerCityPreset = applyPrayerCityPreset;
+  window.applyPrayerMethod = applyPrayerMethod;
   window.renderPrayerTimes = renderPrayerTimes;
   window.renderTimer = renderTimer;
   window.stopPrayerTimer = function() {

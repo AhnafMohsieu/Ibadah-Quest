@@ -45,3 +45,13 @@ test('getTodayKey uses local date, not UTC', async () => {
   assert.equal(getTodayKey(d), expected);
   assert.match(getTodayKey(), /^\d{4}-\d{2}-\d{2}$/);
 });
+
+test('MPA shell carries IQ brand badge and Teal design system alignment', async () => {
+  const { renderShell } = await import('../src/shell/layout.js');
+  const { renderToday } = await import('../src/render/prayers.js');
+  const { freshState } = await import('../src/core/state.js');
+  const shell = renderShell('today');
+  assert.ok(shell.includes('<strong>IQ</strong>'), 'MPA header carries crisp IQ brand badge');
+  const html = renderToday(freshState('2026-11-26'), '2026-11-26');
+  assert.ok(html.includes('mpa-prayer-btn'), 'MPA today renders styled prayer buttons');
+});

@@ -685,67 +685,6 @@ main#page {
 
 /* ── Prayer Times Grid ── */
 .prayer-times-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-bottom: 8px; }
-
-/* ── Category Cards (Voluntary Prayers / Extra Good Deeds) ── */
-.cat-cards { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-bottom: 12px; }
-.cat-card {
-  flex: 1 1 0;
-  min-width: 100px;
-  background: var(--card-bg);
-  border: 1px solid var(--card-border);
-  border-radius: var(--radius);
-  padding: 12px 8px;
-  text-align: center;
-  cursor: pointer;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-  position: relative;
-  transition: all var(--transition);
-  min-height: 44px;
-}
-.cat-card:hover { border-color: var(--text3); }
-.cat-card.expanded { border-color: var(--accent-border); background: var(--accent-bg); }
-.cat-card .cat-card-icon { font-size: 1.5rem; line-height: 1; }
-.cat-card .cat-card-name { font-weight: 600; font-size: var(--fs-sm); color: var(--text); }
-.cat-card .cat-card-count {
-  display: inline-block;
-  padding: 3px 10px;
-  border-radius: 12px;
-  background: var(--accent-bg);
-  color: var(--accent-dark);
-  font-size: 0.7rem;
-  font-weight: 700;
-}
-.cat-card .cat-card-chevron {
-  position: absolute;
-  bottom: 6px;
-  right: 6px;
-  width: 0;
-  height: 0;
-  border-left: 4px solid transparent;
-  border-right: 4px solid transparent;
-  border-top: 5px solid var(--text3);
-  opacity: 0.4;
-  transition: all var(--transition);
-}
-.cat-card.expanded .cat-card-chevron { transform: rotate(180deg); opacity: 0.6; border-top-color: var(--accent-dark); }
-.cat-card .cat-card-info {
-  position: absolute;
-  bottom: 6px;
-  left: 6px;
-  font-size: 0.65rem;
-  cursor: pointer;
-  opacity: 0.35;
-  transition: opacity var(--transition);
-  min-width: 24px;
-  min-height: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.cat-card .cat-card-info:hover { opacity: 1; }
 .prayer-times-grid .pt-card {
   flex: 1 1 0;
   min-width: 100px;
@@ -1123,41 +1062,10 @@ select.profile-input option { background: var(--card-bg); color: var(--text); }
 .profile-avatar-wrap { cursor: pointer; transition: transform var(--transition); position: relative; }
 .profile-avatar-wrap:hover { transform: scale(1.05); }
 .profile-avatar { font-size: 3rem; display: block; }
-.profile-avatar-edit {
-  position: absolute;
-  bottom: -2px;
-  right: -2px;
-  font-size: 0.82rem;
-  background: var(--card-bg);
-  border-radius: 50%;
-  padding: 2px 4px;
-  border: 1px solid var(--border);
-}
 .profile-info { flex: 1; }
 .profile-name { margin: 0 0 3px; color: var(--text); font-size: var(--fs-lg); font-weight: 700; }
 .profile-level { font-size: var(--fs-sm); color: var(--text2); margin-bottom: 2px; }
 .profile-join { font-size: var(--fs-xs); color: var(--text3); }
-
-/* Avatar Picker */
-.avatar-picker {
-  margin-bottom: 14px;
-  padding: 10px;
-  background: var(--card-bg);
-  border: 1px solid var(--card-border);
-  border-radius: var(--radius);
-}
-.avatar-grid { display: grid; grid-template-columns: repeat(8, 1fr); gap: 4px; }
-.avatar-option {
-  font-size: 1.3rem;
-  text-align: center;
-  padding: 6px;
-  cursor: pointer;
-  border-radius: 6px;
-  border: 2px solid transparent;
-  transition: all var(--transition);
-}
-.avatar-option:hover { background: var(--accent-bg); border-color: var(--accent-border); }
-.avatar-option.selected { border-color: var(--accent); background: var(--accent-bg); }
 
 /* Profile Stats Row */
 .profile-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 14px; }
@@ -1714,25 +1622,6 @@ select.profile-input option { background: var(--card-bg); color: var(--text); }
 .surah-num { font-size: 0.65rem; color: var(--accent-dark); background: var(--accent-bg); border-radius: 6px; padding: 2px 6px; font-weight: 700; width: fit-content; }
 .surah-name-en { font-size: var(--fs-base); font-weight: 700; color: var(--text); }
 .surah-name-ar { font-family: var(--font-arabic); font-size: 1.15rem; color: var(--text); direction: rtl; text-align: right; }
-
-.drill-back {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  background: var(--card-bg);
-  border: 1px solid var(--card-border);
-  border-radius: var(--radius);
-  padding: 8px 16px;
-  font-size: var(--fs-sm);
-  color: var(--accent);
-  font-weight: 600;
-  cursor: pointer;
-  margin-bottom: 12px;
-  width: fit-content;
-  transition: background var(--transition), border-color var(--transition);
-}
-.drill-back:hover { background: var(--accent-bg); border-color: var(--accent); }
-.drill-back:active { transform: scale(0.97); }
 .surah-meta { font-size: var(--fs-2xs); color: var(--text2); }
 .quran-back-btn {
   background: var(--accent-bg);
@@ -1858,7 +1747,6 @@ select.profile-input option { background: var(--card-bg); color: var(--text); }
 .intro-overlay.visible .intro-bismillah { animation: introFadeUp 1.2s ease-out forwards; }
 .intro-overlay.visible .intro-subtitle { animation: introFadeUp 0.8s ease-out 0.5s forwards; }
 .intro-overlay.visible .intro-btn { animation: introFadeUp 0.8s ease-out 0.8s forwards; }
-#introCanvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; }
 .intro-content { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; text-align: center; padding: calc(20px + env(safe-area-inset-top, 0px)) 24px 20px; max-width: min(42rem, 94vw); width: 100%; }
 .intro-glow { display: none; }
 .intro-bismillah {
@@ -1925,18 +1813,6 @@ select.profile-input option { background: var(--card-bg); color: var(--text); }
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* ── Magical Trail ── */
-.magical-trail {
-  position: fixed;
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 9998;
-  opacity: 0.8;
-  transition: transform 0.4s ease-out, opacity 0.4s ease-out;
-}
-
 /* ── Analytics Dashboard ── */
 .insights-dashboard { padding: 8px 0; }
 .insights-cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-bottom: 12px; }
@@ -1984,9 +1860,6 @@ select.profile-input option { background: var(--card-bg); color: var(--text); }
 }
 .chart-half canvas { width: 100%; height: 220px; }
 @media (max-width: 600px) { .chart-row { grid-template-columns: 1fr; } .insights-cards { grid-template-columns: repeat(2, 1fr); } }
-
-/* ── Fireflies ── */
-.firefly { display: none; }
 
 /* ── Spiritual Garden ── */
 .garden-card {
@@ -3318,7 +3191,7 @@ input[type="number"] {
 .t2-btn, .cat-chip, .bnav-btn, .iq-drawer-tab, .iq-drawer-cat,
 .surah-card, .card-item, .deed-card, .vol-card,
 .filter-btn, .quest-check, .cal-day,
-.goal-btn, .drill-back, .ds-close, .add-goal-btn, .dhikr-tap-btn, .fab-action {
+.goal-btn, .ds-close, .add-goal-btn, .dhikr-tap-btn, .fab-action {
   transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease, transform 0.1s ease;
 }
 
@@ -4591,7 +4464,9 @@ body:not([data-active-tab="today"]) .hero-strip {
   background: var(--card-bg);
   z-index: 960;
   transform: translateX(-105%);
-  transition: transform 0.24s cubic-bezier(0.22, 1, 0.36, 1);
+  visibility: hidden;
+  pointer-events: none;
+  transition: transform 0.24s cubic-bezier(0.22, 1, 0.36, 1), visibility 0s linear 0.24s;
   display: flex;
   flex-direction: column;
   box-shadow: var(--shadow-lg);
@@ -4602,7 +4477,12 @@ body:not([data-active-tab="today"]) .hero-strip {
   right: 0;
   transform: translateX(105%);
 }
-.iq-drawer.open { transform: translateX(0); }
+.iq-drawer.open {
+  transform: translateX(0);
+  visibility: visible;
+  pointer-events: auto;
+  transition: transform 0.24s cubic-bezier(0.22, 1, 0.36, 1), visibility 0s linear 0s;
+}
 .iq-drawer-head {
   flex-shrink: 0;
   background: var(--header-grad, linear-gradient(145deg, #07434b 0%, #0b7a75 100%));
@@ -4613,26 +4493,6 @@ body:not([data-active-tab="today"]) .hero-strip {
   justify-content: space-between;
 }
 .iq-drawer-brand strong { color: #5eead4; margin-right: 4px; }
-.iq-drawer-links {
-  flex: 1;
-  overflow-y: auto;
-  padding: 12px;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-.iq-drawer-link {
-  text-align: left;
-  background: var(--bg);
-  border: 1px solid var(--card-border);
-  border-radius: 12px;
-  padding: 11px 14px;
-  color: var(--text);
-  font-weight: 600;
-  font-size: 0.9rem;
-  cursor: pointer;
-}
-.iq-drawer-link:hover { border-color: var(--accent); background: var(--accent-bg); }
 .iq-drawer-footer {
   padding: 12px 16px calc(12px + env(safe-area-inset-bottom, 0px));
   border-top: 1px solid var(--border);
@@ -4664,12 +4524,15 @@ body:not([data-active-tab="today"]) .hero-strip {
   display: flex;
   flex-direction: column;
   transform: translateY(102%);
-  transition: transform 0.26s cubic-bezier(0.22, 1, 0.36, 1);
+  visibility: hidden;
+  transition: transform 0.26s cubic-bezier(0.22, 1, 0.36, 1), visibility 0s linear 0.26s;
   pointer-events: none;
 }
 .iq-sheet-overlay.open {
   transform: translateY(0);
+  visibility: visible;
   pointer-events: auto;
+  transition: transform 0.26s cubic-bezier(0.22, 1, 0.36, 1), visibility 0s linear 0s;
 }
 .iq-sheet-header {
   background: var(--header-grad, linear-gradient(145deg, #07434b 0%, #0b7a75 58%, #14b8a6 100%));
@@ -4878,7 +4741,6 @@ body:not([data-active-tab="today"]) .hero-strip {
   font-size: 0.92rem;
   color: var(--text);
   margin: 6px 2px 10px;
-  text-transform: lowercase;
 }
 .iq-ch-pill {
   font-size: 0.72rem;
@@ -5262,65 +5124,52 @@ body[data-active-tab="today"] .hero-strip .streak-bar {
 }
 
 
+.iq-top-catnav {
+  display: none;
+  align-items: center;
+  gap: 6px;
+}
+.iq-top-cat-btn {
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  background: rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.92);
+  border-radius: 999px;
+  padding: 6px 13px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background var(--transition), color var(--transition), transform var(--transition);
+}
+.iq-top-cat-btn:hover {
+  background: rgba(255, 255, 255, 0.22);
+  color: #ffffff;
+}
+.iq-top-cat-btn.active {
+  background: #ffffff;
+  color: var(--teal-deep, #07434b);
+  border-color: #ffffff;
+  box-shadow: 0 2px 8px rgba(7, 67, 75, 0.18);
+}
+
 /* ══════════════════════════════════════════════════════════════
    TABLET & LAPTOP/DESKTOP RESPONSIVE LAYOUT SYSTEM (>= 768px)
    Ensures wide screens fill the canvas cleanly with multi-column
    grids rather than a narrow centered phone strip.
    ══════════════════════════════════════════════════════════════ */
 @media (min-width: 768px) {
+  .fab-container {
+    display: none;
+  }
+  .iq-top-catnav {
+    display: flex;
+    justify-content: center;
+    flex-wrap: nowrap;
+  }
   body[data-active-tab="today"] .hero-strip .level-row,
   body[data-active-tab="today"] .hero-strip .streak-bar {
     display: flex;
   }
-  #prayerArea .card-grid {
-    display: grid;
-    grid-template-columns: repeat(5, minmax(0, 1fr));
-    gap: 12px;
-  }
-  #iqFeedArea .iq-feed-list {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 12px;
-  }
-  #morningArea,
-  #eveningArea,
-  #situationalArea,
-  #extraDeedsArea,
-  #volPrayersArea,
-  #questArea,
-  .adhkar-list,
-  .segment-page-header,
-  .iq-sheet-body {
-    max-width: 100%;
-    width: 100%;
-  }
-  .iq-drawer {
-    width: min(440px, 46vw);
-  }
-  .quran-search {
-    max-width: min(100%, 42rem) !important;
-  }
-  .global-search-wrap {
-    max-width: min(100%, 46rem);
-  }
-  .segment-page-header {
-    justify-content: space-between !important;
-    text-align: left !important;
-  }
-  .segment-page-header .sph-content {
-    width: auto !important;
-    flex: 1 1 auto;
-  }
-  .segment-page-header .sph-content,
-  .segment-page-header .sph-text,
-  .segment-page-header .sph-title,
-  .segment-page-header .sph-desc {
-    justify-content: flex-start !important;
-    text-align: left !important;
-  }
-}
-
-@media (min-width: 820px) {
   .hero-strip {
     display: grid !important;
     grid-template-columns: minmax(0, 1.18fr) minmax(0, 1fr);
@@ -5371,6 +5220,82 @@ body[data-active-tab="today"] .hero-strip .streak-bar {
     max-width: min(100%, 48rem);
     margin: 2px auto 0 !important;
   }
+  #prayerArea .card-grid {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 12px;
+  }
+  #iqFeedArea .iq-feed-list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+  #morningArea,
+  #eveningArea,
+  #situationalArea,
+  #extraDeedsArea,
+  #volPrayersArea,
+  #questArea,
+  .adhkar-list,
+  .segment-page-header,
+  .iq-sheet-body {
+    max-width: 100%;
+    width: 100%;
+  }
+  .iq-drawer {
+    width: min(440px, 46vw);
+  }
+  .quran-search {
+    max-width: min(100%, 42rem) !important;
+  }
+  .global-search-wrap {
+    max-width: min(100%, 46rem);
+  }
+  .segment-page-header {
+    justify-content: space-between !important;
+    text-align: left !important;
+  }
+  .segment-page-header .sph-content {
+    width: auto !important;
+    flex: 1 1 auto;
+  }
+  .segment-page-header .sph-content,
+  .segment-page-header .sph-text,
+  .segment-page-header .sph-title,
+  .segment-page-header .sph-desc {
+    justify-content: flex-start !important;
+    text-align: left !important;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 979px) {
+  .iq-curved-header .tb-title {
+    display: none;
+  }
+  .iq-top-cat-btn {
+    padding: 5px 10px;
+    font-size: 0.76rem;
+  }
+}
+
+@media (min-width: 900px) {
+  #iqMasjidSheet .iq-sheet-body {
+    max-width: 68rem;
+  }
+  .iq-mc-workspace {
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(300px, 0.85fr);
+    gap: 16px;
+    align-items: start;
+  }
+  .iq-mc-workspace .iq-masjid-map-card,
+  .iq-mc-workspace .iq-mc-cal-card,
+  .iq-mc-workspace .iq-mc-form-card {
+    margin-bottom: 14px;
+  }
+  .iq-masjid-map-svg {
+    max-height: 290px;
+  }
 }
 
 @media (min-width: 960px) {
@@ -5399,4 +5324,612 @@ body[data-active-tab="today"] .hero-strip .streak-bar {
   #prayerArea .card-grid {
     gap: 14px;
   }
+}
+
+/* ── Sub-project 2: Worship Quick Actions, Next-Prayer Controls & Goal Customization ── */
+.prayer-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+.iq-next-prayer-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid var(--accent-border);
+  background: var(--card-bg);
+  color: var(--accent-dark);
+  border-radius: 999px;
+  padding: 5px 12px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  transition: border-color var(--transition), background var(--transition);
+}
+.iq-next-prayer-pill:hover {
+  border-color: var(--accent);
+  background: var(--accent-bg);
+}
+.iq-pill-eta {
+  color: var(--accent);
+  font-weight: 700;
+}
+.iq-pt-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 10px;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 16px;
+  padding: 12px 14px;
+  margin-bottom: 14px;
+  box-shadow: var(--shadow-sm);
+}
+.iq-pt-ctrl-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1 1 170px;
+}
+.iq-pt-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--text2);
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+.iq-pt-select {
+  width: 100%;
+  padding: 8px 10px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 0.84rem;
+}
+.iq-pt-gps-btn,
+.surah-log-btn {
+  border: 1px solid var(--accent-border);
+  background: var(--accent-bg);
+  color: var(--accent-dark);
+  border-radius: 999px;
+  padding: 8px 14px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background var(--transition), color var(--transition);
+}
+.iq-pt-gps-btn:hover,
+.surah-log-btn:hover {
+  background: var(--accent);
+  color: #ffffff;
+}
+.iq-sheet-prayer-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 10px 0 14px;
+}
+.iq-sheet-prayer-btn {
+  flex: 1 1 82px;
+  border: 1px solid var(--card-border);
+  background: var(--card-bg);
+  color: var(--text);
+  border-radius: 12px;
+  padding: 8px 10px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  box-shadow: var(--shadow-sm);
+  transition: border-color var(--transition), background var(--transition);
+}
+.iq-sheet-prayer-btn.done {
+  background: var(--accent-bg);
+  border-color: var(--accent);
+  color: var(--accent-dark);
+}
+.iq-goal-editor {
+  margin-top: 14px;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 16px;
+  padding: 14px;
+  box-shadow: var(--shadow-sm);
+}
+.iq-goal-editor-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 10px;
+  margin: 10px 0 12px;
+}
+.iq-goal-field label {
+  display: block;
+  font-size: 0.74rem;
+  font-weight: 700;
+  color: var(--text2);
+  margin-bottom: 4px;
+}
+.iq-goal-field input {
+  width: 100%;
+  padding: 8px 10px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 0.88rem;
+}
+
+/* ── Phase B: Market-Researched Senior UI Upgrade ── */
+.iq-tabular,
+.tb-stat,
+.card-xp,
+.card-sub,
+.stat-num,
+.best-num,
+#timerDisplay,
+#iqChallengeStopwatch,
+.dhikr-counter-num {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Compact secondary utility bars */
+.daily-bonus {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 999px;
+  font-size: 0.82rem;
+  margin-bottom: 12px;
+}
+#bonusArea {
+  display: flex;
+  justify-content: center;
+}
+.muh-entry {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: auto;
+  min-width: min(100%, 260px);
+  padding: 8px 16px;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  margin: 0 auto 12px;
+}
+
+/* Concentric 3-Ring SVG Gauge + 7-Day Rhythm Strip */
+.iq-hero-ring-grid {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.iq-concentric-rings {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.iq-concentric-rings svg {
+  transform: rotate(-90deg);
+}
+.iq-cr-track {
+  fill: none;
+  stroke: var(--border-light);
+  stroke-width: 7;
+}
+.iq-cr-fill {
+  fill: none;
+  stroke-width: 7;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.iq-cr-center {
+  position: absolute;
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: var(--text);
+}
+.iq-hero-pillars {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.iq-pillar-row {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 0.8rem;
+  color: var(--text2);
+}
+.iq-pillar-row strong {
+  margin-left: auto;
+  color: var(--text);
+  font-weight: 700;
+}
+.iq-pillar-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.iq-hero-upgraded .iq-hero-ch-meta {
+  margin-top: 2px;
+  font-size: 0.74rem;
+}
+.iq-rhythm-strip {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 6px;
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border-light);
+}
+.iq-rhythm-day {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+}
+.iq-rhythm-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--border);
+  border: 1px solid transparent;
+  transition: transform var(--transition), background var(--transition);
+}
+.iq-rhythm-day.partial .iq-rhythm-dot {
+  background: rgba(20, 184, 166, 0.38);
+  border-color: var(--accent);
+}
+.iq-rhythm-day.complete .iq-rhythm-dot {
+  background: var(--accent);
+  box-shadow: 0 0 0 2px var(--accent-bg);
+}
+.iq-rhythm-day.today .iq-rhythm-dot {
+  border-color: var(--accent-dark);
+  transform: scale(1.15);
+}
+.iq-rhythm-lbl {
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: var(--text3);
+}
+.iq-rhythm-day.today .iq-rhythm-lbl {
+  color: var(--accent-dark);
+}
+.iq-ring-legend {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 2px;
+  margin-top: 6px;
+}
+
+/* Prayers: Next-Prayer Highlight, Qada Badge, Grace Mode Pause */
+.iq-prayer-header-actions {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.iq-pause-btn {
+  border: 1px solid var(--border);
+  background: var(--bg-accent);
+  color: var(--text2);
+  border-radius: 999px;
+  padding: 5px 11px;
+  font-size: 0.74rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: border-color var(--transition), background var(--transition), color var(--transition);
+}
+.iq-pause-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent-dark);
+}
+.iq-pause-btn.active {
+  background: rgba(217, 119, 6, 0.14);
+  border-color: rgba(217, 119, 6, 0.45);
+  color: #b45309;
+}
+.card-grid .card-item.iq-next-prayer-card {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px var(--accent-bg), var(--shadow-md);
+}
+#prayerArea .card-grid > .card-item {
+  padding-top: 24px;
+  padding-bottom: 30px;
+}
+.iq-next-badge {
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  font-size: 0.56rem;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  padding: 2px 6px;
+  border-radius: 999px;
+  background: var(--accent);
+  color: #ffffff;
+}
+.card-grid .card-item.done.qada {
+  background: rgba(217, 119, 6, 0.08);
+  border-color: rgba(217, 119, 6, 0.38);
+}
+.card-grid .card-item.done.qada .card-check {
+  background: var(--orange);
+}
+.card-grid .card-item .card-qada-btn {
+  position: absolute;
+  bottom: 4px;
+  left: 4px;
+  font-size: 0.62rem;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg-accent);
+  color: var(--text2);
+  cursor: pointer;
+  opacity: 0.72;
+  transition: opacity var(--transition), background var(--transition), color var(--transition);
+}
+.card-grid .card-item .card-qada-btn:hover,
+.card-grid .card-item .card-qada-btn.active {
+  opacity: 1;
+  background: rgba(217, 119, 6, 0.16);
+  border-color: rgba(217, 119, 6, 0.45);
+  color: #b45309;
+}
+.iq-sheet-prayer-btn.qada {
+  background: rgba(217, 119, 6, 0.12);
+  border-color: rgba(217, 119, 6, 0.45);
+  color: #b45309;
+}
+
+/* Quran Sanctuary Toolbar, Continue Reading & Scoped Tints */
+.iq-quran-continue-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  max-width: 560px;
+  margin: 0 auto 12px;
+  padding: 14px 16px;
+  border-radius: 18px;
+  background: linear-gradient(135deg, rgba(11, 138, 130, 0.10), rgba(20, 184, 166, 0.05));
+  border: 1px solid var(--accent-border);
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+}
+.iq-qc-eyebrow {
+  font-size: 0.68rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--accent);
+}
+.iq-qc-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text);
+}
+.iq-qc-ar {
+  font-family: var(--font-arabic);
+  color: var(--accent-dark);
+}
+.iq-qc-meta {
+  font-size: 0.74rem;
+  color: var(--text2);
+}
+.iq-quran-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 0 auto 12px;
+}
+.iq-quran-tool-group,
+.iq-quran-tint-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 999px;
+  padding: 4px 6px;
+  box-shadow: var(--shadow-sm);
+}
+.iq-quran-tool-btn,
+.iq-quran-tint-btn {
+  border: none;
+  background: transparent;
+  color: var(--text2);
+  font-family: var(--font);
+  font-size: 0.76rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background var(--transition), color var(--transition);
+}
+.iq-quran-tool-btn:hover,
+.iq-quran-tint-btn.active {
+  background: var(--accent);
+  color: #ffffff;
+}
+.iq-quran-scale-label {
+  font-size: 0.74rem;
+  font-weight: 700;
+  color: var(--text);
+  min-width: 38px;
+  text-align: center;
+}
+#quranArea .verse-arabic {
+  font-size: calc(1.35rem * var(--iq-quran-scale, 1));
+  line-height: 2.05;
+}
+#quranArea[data-quran-tint="sepia"] .verse-card {
+  background: #fbf5e6;
+  border-color: #e4d5b7;
+  color: #3e2e1e;
+}
+#quranArea[data-quran-tint="sepia"] .verse-arabic {
+  color: #2f2012;
+}
+#quranArea[data-quran-tint="sepia"] .verse-english {
+  color: #5b4834;
+}
+#quranArea[data-quran-tint="night"] .verse-card {
+  background: #0d262b;
+  border-color: #16444b;
+  color: #e2f5f2;
+}
+#quranArea[data-quran-tint="night"] .verse-arabic {
+  color: #ffffff;
+}
+#quranArea[data-quran-tint="night"] .verse-english {
+  color: #a9d6d0;
+}
+
+/* Tactile Tasbeeh Orb Ring */
+.iq-tasbeeh-wrap {
+  position: relative;
+  width: 132px;
+  height: 132px;
+  margin: 10px auto 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.iq-tasbeeh-ring {
+  position: absolute;
+  inset: 0;
+  transform: rotate(-90deg);
+  pointer-events: none;
+}
+.iq-tasbeeh-track {
+  fill: none;
+  stroke: var(--border-light);
+  stroke-width: 8;
+}
+.iq-tasbeeh-fill {
+  fill: none;
+  stroke-width: 8;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 0.25s ease;
+}
+.iq-tasbeeh-orb {
+  width: 92px;
+  height: 92px;
+  flex-direction: column;
+  gap: 2px;
+  box-shadow: var(--shadow-md);
+}
+.iq-orb-plus {
+  font-size: 1.45rem;
+  font-weight: 800;
+  line-height: 1;
+}
+.iq-orb-pct {
+  font-size: 0.7rem;
+  font-weight: 700;
+  opacity: 0.85;
+}
+
+/* Illustrated Empty States */
+.iq-empty-illustrated {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 10px;
+  padding: 24px 16px;
+}
+.iq-empty-illustrated strong,
+.iq-empty-illustrated span {
+  display: block;
+}
+.iq-empty-illustrated strong {
+  margin-bottom: 4px;
+  color: var(--text);
+}
+.iq-empty-svg {
+  display: block;
+}
+
+/* MPA Header Brand & Prayer Controls */
+.mpa-brand {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: var(--font-heading);
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text);
+}
+.mpa-brand strong {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #0b7a75, #14b8a6);
+  color: #ffffff;
+  font-size: 0.82rem;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+}
+.mpa-prayer-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 10px 0;
+}
+.mpa-prayer-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-radius: 14px;
+  border: 1px solid var(--card-border);
+  background: var(--card-bg);
+  color: var(--text);
+  font-family: var(--font);
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  transition: border-color var(--transition), background var(--transition), transform var(--transition);
+}
+.mpa-prayer-btn:hover {
+  border-color: var(--accent);
+}
+.mpa-prayer-btn.done {
+  background: var(--green-bg);
+  border-color: var(--green-border, rgba(22, 163, 74, 0.35));
+  color: var(--text);
 }

@@ -843,9 +843,73 @@ h += '</div>';
     });
   }
 
+  var QURAN_PREFS_KEY = 'iq_quran_prefs';
+  function _getQuranPrefs() {
+    var def = { lastSurah: null, fontScale: 1, tint: 'light' };
+    try {
+      var raw = typeof localStorage !== 'undefined' ? localStorage.getItem(QURAN_PREFS_KEY) : null;
+      if (!raw) return def;
+      var parsed = JSON.parse(raw);
+      if (!parsed || typeof parsed !== 'object') return def;
+      var scale = Number(parsed.fontScale);
+      var tint = parsed.tint === 'sepia' || parsed.tint === 'night' ? parsed.tint : 'light';
+      var lastSurah = Number.isInteger(parsed.lastSurah) && parsed.lastSurah >= 1 && parsed.lastSurah <= 114 ? parsed.lastSurah : null;
+      return {
+        lastSurah: lastSurah,
+        fontScale: Number.isFinite(scale) ? Math.min(1.5, Math.max(0.85, scale)) : 1,
+        tint: tint
+      };
+    } catch (e) {
+      return def;
+    }
+  }
+  function _saveQuranPrefs(patch) {
+    var next = Object.assign(_getQuranPrefs(), patch || {});
+    try {
+      if (typeof localStorage !== 'undefined') localStorage.setItem(QURAN_PREFS_KEY, JSON.stringify(next));
+    } catch (e) {}
+    return next;
+  }
+  function adjustQuranFont(delta) {
+    var cur = _getQuranPrefs();
+    var step = Number(delta) || 0;
+    var nextScale = Math.min(1.5, Math.max(0.85, Number((cur.fontScale + step).toFixed(2))));
+    _saveQuranPrefs({ fontScale: nextScale });
+    renderQuran();
+  }
+  function setQuranTint(tint) {
+    var valid = tint === 'sepia' || tint === 'night' ? tint : 'light';
+    _saveQuranPrefs({ tint: valid });
+    renderQuran();
+  }
+  function _applyQuranSanctuaryHost(el, prefs) {
+    if (!el) return;
+    if (el.dataset) el.dataset.quranTint = prefs.tint;
+    if (el.style && typeof el.style.setProperty === 'function') {
+      el.style.setProperty('--iq-quran-scale', String(prefs.fontScale));
+    }
+  }
+  function _renderQuranSanctuaryBar(prefs) {
+    var pct = Math.round((prefs.fontScale || 1) * 100);
+    return '<div class="iq-quran-toolbar" role="toolbar" aria-label="Quran reading appearance">' +
+      '<div class="iq-quran-tool-group">' +
+        '<button type="button" class="iq-quran-tool-btn" onclick="App.adjustQuranFont(-0.1)" aria-label="Decrease Arabic font size">A&minus;</button>' +
+        '<span class="iq-quran-scale-label iq-tabular">' + pct + '%</span>' +
+        '<button type="button" class="iq-quran-tool-btn" onclick="App.adjustQuranFont(0.1)" aria-label="Increase Arabic font size">A+</button>' +
+      '</div>' +
+      '<div class="iq-quran-tint-group">' +
+        '<button type="button" class="iq-quran-tint-btn' + (prefs.tint === 'light' ? ' active' : '') + '" data-tint="light" aria-pressed="' + (prefs.tint === 'light') + '" onclick="App.setQuranTint(\'light\')">Light</button>' +
+        '<button type="button" class="iq-quran-tint-btn' + (prefs.tint === 'sepia' ? ' active' : '') + '" data-tint="sepia" aria-pressed="' + (prefs.tint === 'sepia') + '" onclick="App.setQuranTint(\'sepia\')">Sepia</button>' +
+        '<button type="button" class="iq-quran-tint-btn' + (prefs.tint === 'night' ? ' active' : '') + '" data-tint="night" aria-pressed="' + (prefs.tint === 'night') + '" onclick="App.setQuranTint(\'night\')">Night</button>' +
+      '</div>' +
+    '</div>';
+  }
+
   function renderQuran() {
     const el = document.getElementById('quranArea');
     if (!el || typeof QURAN_SURAHS === 'undefined') return;
+    const prefs = _getQuranPrefs();
+    _applyQuranSanctuaryHost(el, prefs);
 
     if (quranCurrentSurah !== null) {
       renderQuranSurah(el, quranCurrentSurah);
@@ -856,7 +920,17 @@ h += '</div>';
       return;
     }
 
-    let html = '<div class="quran-header"><h2>' + iqIcon('book-open') + ' The Noble Quran</h2><div class="quran-sub">114 Surahs - Tap a surah to read</div></div>';
+    let html = '<div class="quran-header"><h2>' + iqIcon('book-open') + ' The Noble Quran</h2><div class="quran-sub">114 Surahs &middot; Tap a surah to enter reading sanctuary</div></div>';
+    if (prefs.lastSurah) {
+      const lastS = QURAN_SURAHS.find(x => x.n === prefs.lastSurah);
+      if (lastS) {
+        html += `<div class="iq-quran-continue-card" role="button" tabindex="0" onclick="App.openQuranSurah(${lastS.n})">
+          <div><div class="iq-qc-eyebrow">Continue Reading</div><div class="iq-qc-title">${lastS.n}. ${lastS.en} &middot; <span class="iq-qc-ar">${lastS.ar}</span></div><div class="iq-qc-meta">${lastS.ay} verses &middot; ${lastS.type}</div></div>
+          <span class="iq-pill-btn">Resume &rsaquo;</span>
+        </div>`;
+      }
+    }
+    html += _renderQuranSanctuaryBar(prefs);
     html += '<div class="tab-bar-quran" style="display:flex;justify-content:center;gap:6px;margin:0 auto 10px;">';
     html += `<button class="${quranViewMode==='surah'?'active':''}" onclick="App.setQuranView('surah')">Surahs</button>`;
     html += `<button class="${quranViewMode==='juz'?'active':''}" onclick="App.setQuranView('juz')">Juz</button>`;
@@ -886,6 +960,8 @@ h += '</div>';
   }
 
   function renderQuranSurah(el, surahNum) {
+    const prefs = _getQuranPrefs();
+    _applyQuranSanctuaryHost(el, prefs);
     if (typeof QURAN_POOL === 'undefined') {
       el.innerHTML = '<div class="quran-loading">Loading verses…</div>';
       window.App.ensureQuranLoaded()
@@ -897,14 +973,15 @@ h += '</div>';
     if (!s) { quranCurrentSurah = null; renderQuran(); return; }
     let html = '<button class="quran-back-btn" onclick="App.quranBack()">◀ Back to Surahs</button>';
     html += `<div class="quran-header"><h2>${s.ar}</h2><div style="font-family:'Amiri',serif;font-size:1.3rem;color:var(--accent);margin:4px 0;">${s.en}</div><div class="quran-sub">${s.ay} verses · ${s.type}</div></div>`;
-    html += `<div style="text-align:center;margin:8px 0 12px;"><button id="surahPlayBtn" class="surah-play-btn" onclick="App.playSurah(${surahNum})">▶ Play Surah</button></div>`;
+    html += _renderQuranSanctuaryBar(prefs);
+    html += `<div style="display:flex;justify-content:center;align-items:center;gap:8px;flex-wrap:wrap;margin:8px 0 12px;"><button id="surahPlayBtn" class="surah-play-btn" onclick="App.playSurah(${surahNum})">▶ Play Surah</button><button type="button" class="surah-log-btn" onclick="window.logQuranMinutes && window.logQuranMinutes(5)">+5m Read</button></div>`;
     const verses = QURAN_POOL.filter(v => {
       if (!v.source) return false;
       const m = v.source.match(/(\d+):(\d+)/);
       return m && parseInt(m[1]) === surahNum;
     });
     if (surahNum !== 1) {
-      html += `<div style="text-align:center;font-size:1.6rem;color:var(--accent);font-family:'Amiri',serif;margin:16px 0;">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ</div>`;
+      html += `<div style="text-align:center;font-size:calc(1.6rem * var(--iq-quran-scale, 1));color:var(--accent);font-family:'Amiri',serif;margin:16px 0;">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ</div>`;
     }
     if (verses.length === 0) {
       html += `<div class="quran-loading">No local verses available for this surah. ${s.ay} verses total.</div>`;
@@ -912,7 +989,7 @@ h += '</div>';
       verses.forEach(v => {
         const m = v.source.match(/(\d+):(\d+)/);
         const vNum = m ? m[2] : '';
-        html += `<div class="verse-card">
+        html += `<div class="verse-card quran-sanctuary-card">
           <div class="verse-num">${vNum}</div>
           <div class="verse-arabic">${v.arabic}</div>
           ${v.roman ? `<div style="font-size:0.85rem;color:var(--text2);font-style:italic;margin:6px 0;line-height:1.5;">${v.roman}</div>` : ''}
@@ -925,6 +1002,8 @@ h += '</div>';
   }
 
   function renderQuranJuz(el, juzNum) {
+    const prefs = _getQuranPrefs();
+    _applyQuranSanctuaryHost(el, prefs);
     if (typeof QURAN_POOL === 'undefined') {
       el.innerHTML = '<div class="quran-loading">Loading verses…</div>';
       window.App.ensureQuranLoaded()
@@ -943,8 +1022,9 @@ h += '</div>';
 
     let html = '<button class="quran-back-btn" onclick="App.quranBack()">◀ Back to Juzes</button>';
     html += `<div class="quran-header"><h2>Juz ${juzNum} · ${j ? j.name : ''}</h2><div style="font-family:'Amiri',serif;font-size:1.2rem;color:var(--accent);margin:4px 0;">${startS.en} → ${endS.en}</div><div class="quran-sub">${startS.n}:${firstLocal} · ${endS.n}:${lastLocal} · ${verseCount} verses</div></div>`;
-    html += `<div style="text-align:center;margin:8px 0 12px;"><button id="juzPlayBtn" class="surah-play-btn" onclick="App.playJuz(${juzNum})">▶ Play Juz</button></div>`;
-    if (startS.n !== 1) { html += `<div style="text-align:center;font-size:1.6rem;color:var(--accent);font-family:'Amiri',serif;margin:16px 0;">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ</div>`; }
+    html += _renderQuranSanctuaryBar(prefs);
+    html += `<div style="display:flex;justify-content:center;align-items:center;gap:8px;flex-wrap:wrap;margin:8px 0 12px;"><button id="juzPlayBtn" class="surah-play-btn" onclick="App.playJuz(${juzNum})">▶ Play Juz</button><button type="button" class="surah-log-btn" onclick="window.logQuranMinutes && window.logQuranMinutes(5)">+5m Read</button></div>`;
+    if (startS.n !== 1) { html += `<div style="text-align:center;font-size:calc(1.6rem * var(--iq-quran-scale, 1));color:var(--accent);font-family:'Amiri',serif;margin:16px 0;">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ</div>`; }
 
 
     const verses = [];
@@ -962,7 +1042,7 @@ h += '</div>';
       html += `<div class="quran-loading">No local verses available for Juz ${juzNum}.</div>`;
     } else {
       verses.forEach(({ v, surah, ayah }) => {
-        html += `<div class="verse-card">
+        html += `<div class="verse-card quran-sanctuary-card">
           <div class="verse-num">${surah}:${ayah}</div>
           <div class="verse-arabic">${v.arabic}</div>
           ${v.roman ? `<div style="font-size:0.85rem;color:var(--text2);font-style:italic;margin:6px 0;line-height:1.5;">${v.roman}</div>` : ''}
@@ -989,7 +1069,12 @@ h += '</div>';
     clearTimeout(_quranSearchDebounce);
     _quranSearchDebounce = setTimeout(function() { renderQuran(); }, 200);
   }
-  function openQuranSurah(num) { quranCurrentSurah = num; quranCurrentJuz = null; renderQuran(); }
+  function openQuranSurah(num) {
+    quranCurrentSurah = num;
+    quranCurrentJuz = null;
+    if (Number.isInteger(num) && num >= 1 && num <= 114) _saveQuranPrefs({ lastSurah: num });
+    renderQuran();
+  }
   function quranBack() { quranCurrentSurah = null; quranCurrentJuz = null; renderQuran(); }
   function openQuranJuz(juzNum) {
     quranCurrentJuz = juzNum;
@@ -1226,6 +1311,8 @@ h += '</div>';
   window.openQuranSurah = openQuranSurah;
   window.quranBack = quranBack;
   window.openQuranJuz = openQuranJuz;
+  window.adjustQuranFont = adjustQuranFont;
+  window.setQuranTint = setQuranTint;
   window.setTafsirEdition = setTafsirEdition;
   window.openHadithCollection = openHadithCollection;
   window.openHadithBook = openHadithBook;

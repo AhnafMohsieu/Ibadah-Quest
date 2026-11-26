@@ -114,3 +114,17 @@ test('computeMasjidStats aggregates total visits, unique mosques, and region cou
   assert.strictEqual(stats.byRegion.europe, 2);
   assert.strictEqual(stats.byRegion.south_asia, 1);
 });
+
+test('renderMasjidSheet uses iq-mc-workspace and Title Case headings while managing inert state', () => {
+  const { sb, els } = setupMasjid();
+  sb.window.renderMasjidSheet('map');
+  assert.ok(els.iqMasjidBody.innerHTML.includes('class="iq-mc-workspace"'), 'map view must wrap visual + form in iq-mc-workspace');
+  assert.ok(els.iqMasjidBody.innerHTML.includes('Check-in History'), 'history label must use Check-in History');
+  assert.ok(!els.iqMasjidBody.innerHTML.includes('>masjid check-ins<'), 'lowercase masjid check-ins must be removed');
+
+  sb.window.openMasjidCheckins('map');
+  assert.strictEqual(els.iqMasjidSheet.inert, false, 'open masjid sheet clears inert');
+  sb.window.closeMasjidCheckins();
+  assert.strictEqual(els.iqMasjidSheet.inert, true, 'closed masjid sheet sets inert');
+  assert.ok(els.iqMasjidBody.innerHTML.includes('iq-empty-svg'), 'empty history uses geometric SVG illustration');
+});

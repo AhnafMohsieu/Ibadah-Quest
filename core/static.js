@@ -256,6 +256,11 @@
     `;
   }
 
+  function _dhikrOrbHtml(cnt, d, pct) {
+    const r = 58, c = 364.42, off = (c - (pct / 100) * c).toFixed(2);
+    return `<div class="iq-tasbeeh-wrap"><svg class="iq-tasbeeh-ring" viewBox="0 0 132 132" width="132" height="132" aria-hidden="true"><circle class="iq-tasbeeh-track" cx="66" cy="66" r="${r}"/><circle class="iq-tasbeeh-fill" cx="66" cy="66" r="${r}" style="stroke:${d.color};stroke-dasharray:${c};stroke-dashoffset:${off}"/></svg><button class="dhikr-tap-btn iq-tasbeeh-orb" onclick="this.classList.add('tap');setTimeout(()=>this.classList.remove('tap'),400);App.tapDhikr();" aria-label="Count dhikr +1"><span class="iq-orb-plus">+1</span><span class="iq-orb-pct iq-tabular">${pct}%</span></button></div>`;
+  }
+
   function renderDhikrCounter() {
     const el = document.getElementById('dhikrCounterArea');
     if (!el) return;
@@ -272,12 +277,9 @@
         <div class="dhikr-counter-arabic" style="color:${d.color}">${d.arabic}</div>
         <div style="font-style:italic;color:var(--text2);font-size:0.85rem;margin-bottom:4px;">${d.transliteration}</div>
         <div style="font-size:0.8rem;color:var(--text2);margin-bottom:12px;">${d.english}</div>
-        <div class="dhikr-counter-num" style="color:${d.color}">${cnt}</div>
-        <div class="dhikr-counter-target">Target: ${d.target} ${cnt >= d.target ? iqIcon('check') : ''}</div>
-        <div style="background:rgba(0,0,0,0.3);border-radius:30px;height:8px;overflow:hidden;margin:8px 0 16px;">
-          <div style="height:100%;width:${pct}%;background:${d.color};border-radius:30px;transition:width 0.3s;"></div>
-        </div>
-        <button class="dhikr-tap-btn" onclick="this.classList.add('tap'); setTimeout(() => this.classList.remove('tap'), 400); App.tapDhikr();">+1</button>
+        <div class="dhikr-counter-num iq-tabular" style="color:${d.color}">${cnt}</div>
+        <div class="dhikr-counter-target iq-tabular">Target: ${d.target} ${cnt >= d.target ? iqIcon('check') : ''}</div>
+        ${_dhikrOrbHtml(cnt, d, pct)}
         <div style="margin-top:12px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
           <button class="dhikr-reset-btn" onclick="App.resetDhikr()">${iqIcon('refresh-cw')} Reset</button>
           <button class="dhikr-reset-btn" onclick="App.nextDhikr()">Next ▶</button>

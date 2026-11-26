@@ -111,22 +111,18 @@
     return group[0].id || 'today';
   }
 
+  function _syncNavButtons(catId, clickedBtn, selector) {
+    document.querySelectorAll(selector || '.bnav-btn, .iq-top-cat-btn').forEach(function(el) {
+      var isMatch = el.getAttribute('data-cat') === catId || (!!clickedBtn && el === clickedBtn);
+      el.classList.toggle('active', isMatch);
+      el.setAttribute('aria-selected', isMatch ? 'true' : 'false');
+    });
+  }
+
   function switchCategory(catId, btn) {
     try { renderDateLine(); } catch (e) {}
     document.querySelectorAll('.tab-panel').forEach(function(p) { p.classList.remove('active'); });
-    document.querySelectorAll('.bnav-btn').forEach(function(el) {
-      el.classList.remove('active');
-      el.setAttribute('aria-selected', 'false');
-    });
-    if (btn && btn.classList) {
-      btn.classList.add('active');
-      btn.setAttribute('aria-selected', 'true');
-    }
-    var bnavMatch = (function(cid){ try { return document.querySelector('.bnav-btn[data-cat="' + _escAttr(cid) + '"]'); } catch(e){ var els=document.querySelectorAll('.bnav-btn'); for(var i=0;i<els.length;i++) if(els[i].getAttribute('data-cat')===cid) return els[i]; return null; } })(catId);
-    if (bnavMatch) {
-      bnavMatch.classList.add('active');
-      bnavMatch.setAttribute('aria-selected', 'true');
-    }
+    _syncNavButtons(catId, btn, '.bnav-btn, .iq-top-cat-btn');
     if (window.S) { window.S.lastCat = catId; window.saveState(); }
     var group = window.TAB_GROUPS[catId] || [];
     var hasMultipleGroups = group.length > 1 && Array.isArray(group[0].tabs);
@@ -206,11 +202,7 @@
       currentCat = ownerCat;
       if (window.S) { window.S.lastCat = currentCat; window.saveState(); }
     }
-    document.querySelectorAll('.bnav-btn').forEach(function(el) {
-      var isMatch = el.getAttribute('data-cat') === currentCat;
-      el.classList.toggle('active', isMatch);
-      el.setAttribute('aria-selected', isMatch ? 'true' : 'false');
-    });
+    _syncNavButtons(currentCat);
     var catGroups = window.TAB_GROUPS[currentCat] || [];
     var activeGrp = null;
     if (Array.isArray(catGroups)) {

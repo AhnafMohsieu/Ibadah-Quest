@@ -1,7 +1,15 @@
 (function() {
-  function showDailySummary(onDone) {
+  function showDailySummary(onDone, force) {
     const t = today();
     if (S.lastDailySummary === t) {
+      if (typeof onDone === 'function') onDone();
+      return;
+    }
+    const hasActivity = Number(S.xp || 0) > 0
+      || Number(S.cs || 0) > 0
+      || Object.keys(S.log || {}).length > 0;
+    if (!force && !hasActivity) {
+      if (typeof window !== 'undefined') window._iqModalDone = null;
       if (typeof onDone === 'function') onDone();
       return;
     }

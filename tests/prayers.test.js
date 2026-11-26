@@ -254,3 +254,73 @@ test('activateTab releases the prayer timer when leaving the Timer tab', () => {
   assert.match(tabsSource, /stopPrayerTimer/);
   assert.match(tabsSource, /tabId !== 'timer'/);
 });
+
+test('computeNextPrayer identifies upcoming prayer and rolls over to Fajr next day after Isha', () => {
+  const sandbox = loadSandbox(['core/render-prayers.js'], {
+    S: { prayerSettings: { lat: 23.8103, lng: 90.4125, label: 'Dhaka', method: 1 } },
+    escapeHTML: (v) => String(v == null ? '' : v)
+  });
+  const sampleTimes = {
+    Fajr: { h: 5, m: 0 },
+    Dhuhr: { h: 12, m: 15 },
+    Asr: { h: 15, m: 45 },
+    Maghrib: { h: 17, m: 30 },
+    Isha: { h: 19, m: 0 }
+  };
+  const midDay = new Date(2026, 10, 26, 13, 0, 0);
+  const resMid = sandbox.computeNextPrayer(sampleTimes, midDay);
+  assert.strictEqual(resMid.name, 'Asr');
+  assert.strictEqual(resMid.timeLabel, '3:45 PM');
+  assert.strictEqual(resMid.isTomorrow, false);
+  assert.strictEqual(resMid.countdownText, '02:45:00');
+
+  const lateNight = new Date(2026, 10, 26, 22, 30, 0);
+  const resNight = sandbox.computeNextPrayer(sampleTimes, lateNight);
+  assert.strictEqual(resNight.name, 'Fajr');
+  assert.strictEqual(resNight.timeLabel, '5:00 AM');
+  assert.strictEqual(resNight.isTomorrow, true);
+  assert.strictEqual(resNight.countdownText, '06:30:00');
+});
+
+test('updatePrayerSettings validates coordinates, updates state, saves, and refreshes views', () => {
+  let saved = 0;
+  const state = { prayerSettings: { lat: 23.8103, lng: 90.4125, label: 'Dhaka', method: 1 } };
+  const sandbox = loadSandbox(['core/render-prayers.js'], {
+    S: state,
+    saveState: () => { saved++; },
+    escapeHTML: (v) => String(v == null ? '' : v)
+  });
+  const updated = sandbox.updatePrayerSettings({ lat: 21.4225, lng: 39.8262, label: 'Makkah', method: 4 });
+  assert.strictEqual(updated.label, 'Makkah');
+  assert.strictEqual(updated.method, 4);
+  assert.strictEqual(state.prayerSettings.lat, 21.4225);
+  assert.strictEqual(saved, 1);
+
+  const clamped = sandbox.updatePrayerSettings({ lat: 999, lng: -999, label: '   ', method: -5 });
+  assert.strictEqual(clamped.lat, 21.4225, 'invalid latitude must not overwrite valid value');
+  assert.strictEqual(clamped.label, 'Makkah', 'blank label falls back cleanly');
+});
+
+test('togglePrayerQada marks made-up state truthfully and preserves XP/streak totals cleanly', () => {
+  const s = setup();
+  s.togglePrayerQada('fajr');
+  assert.strictEqual(s.S.log[today()].p.fajr, 'qada');
+  assert.strictEqual(s.S.tp, 1);
+  assert.strictEqual(s.S.xp, 70);
+
+  // Toggling Qada off clears prayer and refunds once
+  s.togglePrayerQada('fajr');
+  assert.strictEqual(s.S.log[today()].p.fajr, false);
+  assert.strictEqual(s.S.tp, 0);
+  assert.strictEqual(s.S.xp, 0);
+});
+
+test('recalc preserves current streak when prayer tracking is paused (Streak Grace Mode)', () => {
+  const s = setup();
+  s.S.prayerSettings = { lat: 23.8, lng: 90.4, label: 'Dhaka', method: 1, paused: true };
+  s.S.cs = 7;
+  s.S.log = {};
+  s.recalc();
+  assert.strictEqual(s.S.cs, 7, 'paused prayer mode protects active streak across excused days');
+  assert.strictEqual(s.S.bs, 7);
+});

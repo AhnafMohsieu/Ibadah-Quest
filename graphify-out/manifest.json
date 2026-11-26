@@ -18,9 +18,9 @@
     "semantic_hash": ""
   },
   "core/actions.js": {
-    "mtime": 1795621865.9968846,
-    "seen": 1795621885.94061,
-    "ast_hash": "6f435546bbd14b698c801748cf89fb0e",
+    "mtime": 1795665923.9804842,
+    "seen": 1795666236.2189128,
+    "ast_hash": "03ad2420c3e15aa9b1acc3fbddb2c31e",
     "semantic_hash": ""
   },
   "core/audio.js": {
@@ -66,9 +66,9 @@
     "semantic_hash": ""
   },
   "core/dynamic.js": {
-    "mtime": 1795621119.846152,
-    "seen": 1795621628.6086934,
-    "ast_hash": "01d6c637f6dc5e3c113f3828b4875919",
+    "mtime": 1795666035.4892507,
+    "seen": 1795666236.2189612,
+    "ast_hash": "2d8d161d2b0748d4f47626fa71883c12",
     "semantic_hash": ""
   },
   "core/error-tap.js": {
@@ -90,9 +90,9 @@
     "semantic_hash": ""
   },
   "core/prayers.js": {
-    "mtime": 1795360281.603466,
-    "seen": 1795362392.6935332,
-    "ast_hash": "9bea323419f432615b11e46345881aad",
+    "mtime": 1795665711.8081686,
+    "seen": 1795666236.2189825,
+    "ast_hash": "1e5aed607d4d0242f5c2d091562e579d",
     "semantic_hash": ""
   },
   "core/precache-manifest.js": {
@@ -120,9 +120,9 @@
     "semantic_hash": ""
   },
   "core/render-prayers.js": {
-    "mtime": 1795360281.6061535,
-    "seen": 1795362392.6935499,
-    "ast_hash": "bdec4ace770cc8b136ca84a80cbcc63b",
+    "mtime": 1795666074.2708876,
+    "seen": 1795666236.2190084,
+    "ast_hash": "0e877015678d2e997c15a1ed7d7e49b1",
     "semantic_hash": ""
   },
   "core/render.js": {
@@ -144,9 +144,9 @@
     "semantic_hash": ""
   },
   "core/static.js": {
-    "mtime": 1795402989.463351,
-    "seen": 1795403272.0433314,
-    "ast_hash": "544a4cc8bc356e823d4f8726187c1d51",
+    "mtime": 1795666221.19032,
+    "seen": 1795666236.2190316,
+    "ast_hash": "64779b3e52a7dc6abfd7b7f4cd99fdc4",
     "semantic_hash": ""
   },
   "core/storage.js": {
@@ -156,9 +156,9 @@
     "semantic_hash": ""
   },
   "core/tabs.js": {
-    "mtime": 1795621863.9001112,
-    "seen": 1795621885.9407437,
-    "ast_hash": "cf5c3cd768c02db3f23463bb3933c3b2",
+    "mtime": 1795664153.1184266,
+    "seen": 1795664178.7587233,
+    "ast_hash": "efb1425d08e41b42513b6ddc5998bc2b",
     "semantic_hash": ""
   },
   "core/xp.js": {
@@ -702,9 +702,9 @@
     "semantic_hash": ""
   },
   "features/daily-summary.js": {
-    "mtime": 1787768643.356032,
-    "seen": 1795355635.9464703,
-    "ast_hash": "c6f3dea55796d94f84ed8c141b483f54",
+    "mtime": 1795664088.937862,
+    "seen": 1795664178.7589252,
+    "ast_hash": "77839eaf0e8384d298240f49aa5e6d7d",
     "semantic_hash": ""
   },
   "features/fab.js": {
@@ -1026,15 +1026,15 @@
     "semantic_hash": ""
   },
   "src/render/prayers.js": {
-    "mtime": 1788795481.3127582,
-    "seen": 1795355635.9467394,
-    "ast_hash": "aad67bd2573672ff1a09ef7c7fbe35e2",
+    "mtime": 1795666517.7901716,
+    "seen": 1795666560.9065354,
+    "ast_hash": "c43c3735b076cad7a70045932321e2e0",
     "semantic_hash": ""
   },
   "src/shell/layout.js": {
-    "mtime": 1788936457.185713,
-    "seen": 1795355635.946744,
-    "ast_hash": "973684db559a0a4353b4126c93a3c42e",
+    "mtime": 1795665718.9655256,
+    "seen": 1795666236.2199073,
+    "ast_hash": "0ce29f6c7945d71621d2db4ade8a8d9a",
     "semantic_hash": ""
   },
   "src/shell/tabs.js": {
@@ -1044,9 +1044,9 @@
     "semantic_hash": ""
   },
   "sw.js": {
-    "mtime": 1795627386.4619198,
-    "seen": 1795627437.1182575,
-    "ast_hash": "6a889fc7974e71590c2cd03a5599e791",
+    "mtime": 1795666667.845181,
+    "seen": 1795666825.775569,
+    "ast_hash": "c2b18afa6c923719c51c4863ad4f586f",
     "semantic_hash": ""
   },
   "tests/achievement-showcase.test.js": {
@@ -1128,9 +1128,9 @@
     "semantic_hash": ""
   },
   "tests/daily-summary.test.js": {
-    "mtime": 1787768643.509469,
-    "seen": 1795355635.9468203,
-    "ast_hash": "687bc4a12d12bdbf20aa3eadd0f95a0a",
+    "mtime": 1795663763.7428067,
+    "seen": 1795664078.978088,
+    "ast_hash": "cbb76a69a49e8a161e888c66261b8446",
     "semantic_hash": ""
   },
   "tests/date-keys.test.js": {
@@ -1224,9 +1224,9 @@
     "semantic_hash": ""
   },
   "tests/html.test.js": {
-    "mtime": 1795627328.7176998,
-    "seen": 1795627437.1183214,
-    "ast_hash": "6551fefae6eea5a1ec04c66687c2ffbb",
+    "mtime": 1795666777.3849185,
+    "seen": 1795666825.7757518,
+    "ast_hash": "8509159b19bca24cbf3086671775b641",
     "semantic_hash": ""
   },
   "tests/i18n.test.js": {
@@ -1320,9 +1320,9 @@
     "semantic_hash": ""
   },
   "tests/prayers.test.js": {
-    "mtime": 1789507159.233654,
-    "seen": 1795355635.9469695,
-    "ast_hash": "e50eef1d3fffc96deb77b059b48e615d",
+    "mtime": 1795665614.4718475,
+    "seen": 1795666236.2201984,
+    "ast_hash": "3c523b222449b158d275b72f7c856071",
     "semantic_hash": ""
   },
   "tests/quests.test.js": {
@@ -1446,9 +1446,9 @@
     "semantic_hash": ""
   },
   "tests/today-page.test.js": {
-    "mtime": 1788795510.9799833,
-    "seen": 1795355635.9470716,
-    "ast_hash": "739c9ef23f8a77b86093e06d8f8862b7",
+    "mtime": 1795665637.1844058,
+    "seen": 1795666236.2203178,
+    "ast_hash": "2e552f9918acf4d3c32f728d8739b50e",
     "semantic_hash": ""
   },
   "tests/trend-charts.test.js": {
@@ -1872,45 +1872,45 @@
     "semantic_hash": ""
   },
   "index.html": {
-    "mtime": 1795627381.477917,
-    "seen": 1795627437.118537,
-    "ast_hash": "76bb80ca452fb9410af5aa6752f79b84",
+    "mtime": 1795666663.2878916,
+    "seen": 1795666825.7764645,
+    "ast_hash": "c5e4ba8d179840eb29fd844c566f8f34",
     "semantic_hash": ""
   },
   "src/pages/ibadah/ibadah.html": {
-    "mtime": 1795621311.9203882,
-    "seen": 1795621628.6113484,
-    "ast_hash": "224a0b9904160b5ec5568002fe4b4759",
+    "mtime": 1795665330.5801902,
+    "seen": 1795666236.2207906,
+    "ast_hash": "c497c1093b711815fa948892ec7d29cc",
     "semantic_hash": ""
   },
   "src/pages/knowledge/knowledge.html": {
-    "mtime": 1795621311.9210012,
-    "seen": 1795621628.611352,
-    "ast_hash": "3a76a56df63e022554811c63515e0b1f",
+    "mtime": 1795665332.3513348,
+    "seen": 1795666236.2207954,
+    "ast_hash": "c06f704a8c1dd5f4424de34180c8777d",
     "semantic_hash": ""
   },
   "src/pages/library/library.html": {
-    "mtime": 1795621311.92151,
-    "seen": 1795621628.6113555,
-    "ast_hash": "c6b3270a47e92c48e43b8a151985248c",
+    "mtime": 1795665337.1381063,
+    "seen": 1795666236.2208002,
+    "ast_hash": "e0494bbff30480e9b524912efed8ad7a",
     "semantic_hash": ""
   },
   "src/pages/names/names.html": {
-    "mtime": 1795621311.9225051,
-    "seen": 1795621628.6113596,
-    "ast_hash": "d716d52e5d6d912a0ed2c66b358c8d89",
+    "mtime": 1795665334.8470669,
+    "seen": 1795666236.2208052,
+    "ast_hash": "d8492db67e0d7817b7fce7c49ddeebdb",
     "semantic_hash": ""
   },
   "src/pages/profile/profile.html": {
-    "mtime": 1795621311.9225051,
-    "seen": 1795621628.6113634,
-    "ast_hash": "bc165bf105061639be18aa8da89bf707",
+    "mtime": 1795665339.545784,
+    "seen": 1795666236.2208097,
+    "ast_hash": "ab22fb574ff55fa64b6bb114b10d796b",
     "semantic_hash": ""
   },
   "src/pages/today/today.html": {
-    "mtime": 1795621311.9235046,
-    "seen": 1795621628.611367,
-    "ast_hash": "6f7bb6fa680265a281d522b1853187c2",
+    "mtime": 1795665328.3486288,
+    "seen": 1795666236.2208152,
+    "ast_hash": "943f3dc1b9748dc924cd8ca52e0e51eb",
     "semantic_hash": ""
   },
   "assets/icons/emoji_u1f303.png": {
@@ -2585,12 +2585,6 @@
     "ast_hash": "d7ee731105202db42362b04dc44bbf39",
     "semantic_hash": ""
   },
-  "assets/icons/Logo.png": {
-    "mtime": 1795360281.593026,
-    "seen": 1795362392.6945326,
-    "ast_hash": "c960786245ab672ad4aeb3ff1853f5ff",
-    "semantic_hash": ""
-  },
   "assets/icons/app-icon-192.png": {
     "mtime": 1795360281.593888,
     "seen": 1795362392.6945357,
@@ -2609,46 +2603,10 @@
     "ast_hash": "50d37f0537c643219b7fbb4d2f3ecab4",
     "semantic_hash": ""
   },
-  "assets/icons/icon.png": {
-    "mtime": 1795360281.594398,
-    "seen": 1795362392.694898,
-    "ast_hash": "77c46de91e76699a21d0b617904d7aa1",
-    "semantic_hash": ""
-  },
-  "assets/icons/logo-mark-192.png": {
-    "mtime": 1795360281.594398,
-    "seen": 1795362392.694904,
-    "ast_hash": "6bb8857315379c7aea0b9f1f5ec55ae6",
-    "semantic_hash": ""
-  },
-  "assets/icons/logo-mark-64.png": {
-    "mtime": 1795360281.594398,
-    "seen": 1795362392.6949072,
-    "ast_hash": "b37345627bc9152952d84ba1878da87b",
-    "semantic_hash": ""
-  },
-  "assets/icons/logo-mark.png": {
-    "mtime": 1795360281.594398,
-    "seen": 1795362392.6949105,
-    "ast_hash": "72e92fff9f0aac59df0233119ecad376",
-    "semantic_hash": ""
-  },
-  "assets/icons/logo.svg": {
-    "mtime": 1795360281.594398,
-    "seen": 1795362392.6949134,
-    "ast_hash": "2809748e585901d9d47ddfbb0704eb86",
-    "semantic_hash": ""
-  },
   "docs/screenshots/desktop.png": {
     "mtime": 1795360281.5241764,
     "seen": 1795362392.6949172,
     "ast_hash": "f6ca48eaf8a0c94c6c0b2e14aee8568f",
-    "semantic_hash": ""
-  },
-  "docs/screenshots/mobile.png": {
-    "mtime": 1795360281.5241764,
-    "seen": 1795362392.6949205,
-    "ast_hash": "2a32b547eed4e334a21b3ba975ec9f33",
     "semantic_hash": ""
   },
   "tests/cross-tab-routing.test.js": {
@@ -2658,15 +2616,15 @@
     "semantic_hash": ""
   },
   "404.html": {
-    "mtime": 1795450926.8395514,
-    "seen": 1795451099.159769,
-    "ast_hash": "a3f414b626a1f68d038bfa232183dd53",
+    "mtime": 1795665363.243467,
+    "seen": 1795666236.2203865,
+    "ast_hash": "bfbacf2162c21871797867fe7a690e21",
     "semantic_hash": ""
   },
   "privacy.html": {
-    "mtime": 1795450926.8887033,
-    "seen": 1795451099.160149,
-    "ast_hash": "d8316959ff23c0fbb3635ee3f8ee38f6",
+    "mtime": 1795665364.890877,
+    "seen": 1795666236.2207782,
+    "ast_hash": "f4ecf1b28574a7256d164ee6e6e38180",
     "semantic_hash": ""
   },
   "robots.txt": {
@@ -2676,27 +2634,27 @@
     "semantic_hash": ""
   },
   "features/iq-shell.js": {
-    "mtime": 1795621563.603832,
-    "seen": 1795621628.6092155,
-    "ast_hash": "c519ce7321af1fdcaf975191a7985291",
+    "mtime": 1795666076.8515868,
+    "seen": 1795666236.2196193,
+    "ast_hash": "18fa11e34fbd088a791ab3f9f5d4ba08",
     "semantic_hash": ""
   },
   "features/masjid-checkins.js": {
-    "mtime": 1795619416.0207217,
-    "seen": 1795620074.64915,
-    "ast_hash": "636b94bcbb87699a820a3046fb92e1f2",
+    "mtime": 1795665716.3969247,
+    "seen": 1795666236.2196302,
+    "ast_hash": "bda8a060d3158a4eeea38fee4a21bb02",
     "semantic_hash": ""
   },
   "tests/iq-shell.test.js": {
-    "mtime": 1795620894.2970822,
-    "seen": 1795621628.6106484,
-    "ast_hash": "abd89591c71a5417e732a924c412880d",
+    "mtime": 1795665611.9224634,
+    "seen": 1795666236.220124,
+    "ast_hash": "9d49fb38b61220b0ee9d9d3d680e686a",
     "semantic_hash": ""
   },
   "tests/masjid-checkins.test.js": {
-    "mtime": 1795619000.1732662,
-    "seen": 1795620074.6495175,
-    "ast_hash": "fcef02d71e7cf54cf8ef5b4d47372e72",
+    "mtime": 1795665616.3209548,
+    "seen": 1795666236.2201512,
+    "ast_hash": "e62643a6190f1746b23316999aeef7fe",
     "semantic_hash": ""
   },
   "docs/superpowers/plans/2026-11-25-iq-modern-restructure.md": {
@@ -2715,6 +2673,42 @@
     "mtime": 1795626576.4545438,
     "seen": 1795626738.5708876,
     "ast_hash": "8794befd1380e027558ba98ab473e86f",
+    "semantic_hash": ""
+  },
+  "docs/superpowers/plans/2026-11-26-dashboard-nav-sheet-polish.md": {
+    "mtime": 1795663735.6469314,
+    "seen": 1795664078.9784112,
+    "ast_hash": "9a51e4123fdee0ab2ac2a28aa41c80bd",
+    "semantic_hash": ""
+  },
+  "docs/superpowers/specs/2026-11-26-dashboard-nav-sheet-polish-design.md": {
+    "mtime": 1795663395.308857,
+    "seen": 1795664078.978514,
+    "ast_hash": "3d9cf0ddb8549d4a9960ca8218620c81",
+    "semantic_hash": ""
+  },
+  "docs/superpowers/plans/2026-11-26-core-worship-upgrade.md": {
+    "mtime": 1795664334.123615,
+    "seen": 1795664618.3413918,
+    "ast_hash": "48a5f2370adf97c6a06f72b39948c2ca",
+    "semantic_hash": ""
+  },
+  "docs/superpowers/specs/2026-11-26-core-worship-upgrade-design.md": {
+    "mtime": 1795664332.6577463,
+    "seen": 1795664618.341495,
+    "ast_hash": "5df371ae9580939e9d65ff307cf777c2",
+    "semantic_hash": ""
+  },
+  "docs/superpowers/plans/2026-11-26-market-ui-upgrade.md": {
+    "mtime": 1795665570.578315,
+    "seen": 1795666236.2205753,
+    "ast_hash": "f0768b7a80fd75ebdcae81bb68614eff",
+    "semantic_hash": ""
+  },
+  "docs/superpowers/specs/2026-11-26-market-ui-upgrade-design.md": {
+    "mtime": 1795665568.0888884,
+    "seen": 1795666236.220761,
+    "ast_hash": "261cbe4c443b582d28bf73d4cc26205d",
     "semantic_hash": ""
   },
   ".opencode/package-lock.json": {

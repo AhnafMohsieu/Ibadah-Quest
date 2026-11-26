@@ -135,3 +135,36 @@ test('missing overlay element: cb fires and stored hook is cleared', () => {
   assert.strictEqual(fired, 1, 'advance without overlay element');
   assert.strictEqual(sandbox.window._iqModalDone, null, 'no stale hook left to fire late');
 });
+
+test('showDailySummary skips auto-popup on zero-activity first-run profile while still calling onDone', () => {
+  let opened = 0;
+  let doneCalled = 0;
+  const S = { log: {}, xp: 0, dq: [], cs: 0, lastDailySummary: null };
+  const sandbox = loadFile(path.join(__dirname, '..', 'features', 'daily-summary.js'), {
+    S,
+    today: () => '2026-11-26',
+    saveState: () => {},
+    openToastModal: () => { opened++; return null; },
+    document: { getElementById: () => null }
+  });
+
+  sandbox.window.showDailySummary(() => { doneCalled++; });
+  assert.strictEqual(opened, 0, 'must not open summary modal for zero-activity profile');
+  assert.strictEqual(doneCalled, 1, 'continuation callback still advances queue');
+  assert.strictEqual(S.lastDailySummary, null, 'must not stamp lastDailySummary when skipped');
+});
+
+test('showDailySummary opens on zero-activity profile when force === true', () => {
+  let opened = 0;
+  const S = { log: {}, xp: 0, dq: [], cs: 0, lastDailySummary: null };
+  const sandbox = loadFile(path.join(__dirname, '..', 'features', 'daily-summary.js'), {
+    S,
+    today: () => '2026-11-26',
+    saveState: () => {},
+    openToastModal: (html) => { opened++; return { innerHTML: html, style: {} }; },
+    document: { getElementById: () => null }
+  });
+
+  sandbox.window.showDailySummary(null, true);
+  assert.strictEqual(opened, 1, 'forced open still launches summary modal');
+});

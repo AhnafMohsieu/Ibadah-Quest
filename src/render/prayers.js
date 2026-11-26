@@ -12,12 +12,12 @@ export function renderToday(S, dayKey) {
   const items = PRAYERS.map((id) => {
     const done = Boolean(day.p && day.p[id]);
     const label = id.charAt(0).toUpperCase() + id.slice(1);
-    return `<button data-prayer="${id}" aria-pressed="${done}">${escapeHTML(label)}${done ? ' ✓' : ''}</button>`;
+    return `<button type="button" class="mpa-prayer-btn${done ? ' done' : ''}" data-prayer="${id}" aria-pressed="${done}">${escapeHTML(label)}${done ? ' ✓' : ''}</button>`;
   }).join('');
   const note = day.p && day.p.note ? `<p>${escapeHTML(day.p.note)}</p>` : '';
   const xp = Number(S.xp) || 0;
   const lv = Number(S.lv) || 1;
-  return `<section><h2>Today</h2><div>${items}</div>${note}<p>XP: ${xp} · Level ${lv}</p></section>`;
+  return `<section><h2>Today</h2><div class="mpa-prayer-row">${items}</div>${note}<p>XP: ${xp} · Level ${lv}</p></section>`;
 }
 
 export function togglePrayer(S, dayKey, id) {

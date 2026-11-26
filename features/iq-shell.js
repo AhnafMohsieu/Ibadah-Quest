@@ -57,7 +57,7 @@
 
     var quranGoal = Number(goals.quranMinutes) || 20;
     var quranTracked = Array.isArray(s.quranIdx) ? s.quranIdx.length : 0;
-    var quranToday = Math.min(quranGoal, quranTracked);
+    var quranToday = Math.max(0, Number(dayLog.q) || 0);
     var quranPct = Math.min(100, Math.round((quranToday / Math.max(1, quranGoal)) * 100));
 
     var volDone = Object.values(dayLog.v || {}).filter(Boolean).length;
@@ -101,30 +101,185 @@
     };
   }
 
+  function logQuranMinutes(mins) {
+    var m = Math.min(240, Math.max(1, Math.round(Number(mins) || 5)));
+    var s = (typeof S !== 'undefined' && S) ? S : null;
+    if (!s) return 0;
+    var dk = todayStr();
+    if (!s.log || typeof s.log !== 'object') s.log = {};
+    if (!s.log[dk] || typeof s.log[dk] !== 'object') s.log[dk] = { p: {}, v: {}, d: {}, q: 0 };
+    s.log[dk].q = (Number(s.log[dk].q) || 0) + m;
+    if (typeof grantDailyXp === 'function') grantDailyXp(10, 'quran_read|' + dk);
+    else if (typeof window !== 'undefined' && typeof window.grantDailyXp === 'function') window.grantDailyXp(10, 'quran_read|' + dk);
+    if (typeof saveState === 'function') saveState();
+    else if (typeof window !== 'undefined' && typeof window.saveState === 'function') window.saveState();
+    if (typeof window !== 'undefined' && typeof window.iqHaptic === 'function') window.iqHaptic(10);
+    if (typeof toast === 'function') toast(icon('book-open'), 'Logged +' + m + ' min Quran reading!');
+    if (typeof renderTopBar === 'function') renderTopBar();
+    if (typeof renderLv === 'function') renderLv();
+    renderIqFeed();
+    if (typeof document !== 'undefined') {
+      var sh = document.getElementById('iqChallengeSheet');
+      if (sh && sh.classList && sh.classList.contains('open')) renderChallengeDetailBody(_activeFocusId);
+    }
+    return s.log[dk].q;
+  }
+
+  function updateDailyChallengeGoals(opts) {
+    var input = opts && typeof opts === 'object' ? opts : {};
+    var s = (typeof S !== 'undefined' && S) ? S : null;
+    var prev = (s && s.dailyChallengeGoals && typeof s.dailyChallengeGoals === 'object')
+      ? s.dailyChallengeGoals
+      : { dhikr: 500, quranMinutes: 20, prayers: 5 };
+    var dhikrRaw = Number(input.dhikr);
+    var quranRaw = Number(input.quranMinutes);
+    var next = {
+      dhikr: Number.isFinite(dhikrRaw) && dhikrRaw > 0 ? Math.min(5000, Math.max(33, Math.round(dhikrRaw))) : (Number(prev.dhikr) || 500),
+      quranMinutes: Number.isFinite(quranRaw) && quranRaw > 0 ? Math.min(180, Math.max(5, Math.round(quranRaw))) : (Number(prev.quranMinutes) || 20),
+      prayers: Number(prev.prayers) || 5
+    };
+    if (s) s.dailyChallengeGoals = next;
+    if (typeof saveState === 'function') saveState();
+    else if (typeof window !== 'undefined' && typeof window.saveState === 'function') window.saveState();
+    renderIqFeed();
+    if (typeof document !== 'undefined') {
+      var sh = document.getElementById('iqChallengeSheet');
+      if (sh && sh.classList && sh.classList.contains('open')) renderChallengeDetailBody(_activeFocusId);
+    }
+    return next;
+  }
+
+  function saveGoalTargetsForm() {
+    if (typeof document === 'undefined') return;
+    var dEl = document.getElementById('iqGoalDhikrInput');
+    var qEl = document.getElementById('iqGoalQuranInput');
+    updateDailyChallengeGoals({
+      dhikr: dEl ? dEl.value : undefined,
+      quranMinutes: qEl ? qEl.value : undefined
+    });
+    if (typeof toast === 'function') toast(icon('sparkles'), 'Daily targets updated!');
+  }
+
+  function quickToggleSheetPrayer(id) {
+    if (typeof App !== 'undefined' && App && typeof App.toggleP === 'function') App.toggleP(id);
+    else if (typeof window !== 'undefined' && typeof window.toggleP === 'function') window.toggleP(id);
+    renderIqFeed();
+    renderChallengeDetailBody(_activeFocusId);
+  }
+
+  function _cachedNextPrayerSummary() {
+    try {
+      if (typeof window === 'undefined' || typeof window.getPrayerTimesFromCache !== 'function' || typeof window.computeNextPrayer !== 'function') return null;
+      var cached = window.getPrayerTimesFromCache();
+      return cached ? window.computeNextPrayer(cached) : null;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  function getTimeGreeting(dateObj) {
+    var d = (dateObj && typeof dateObj.getHours === 'function') ? dateObj : new Date();
+    var h = d.getHours();
+    if (h < 5) return 'Peaceful Night';
+    if (h < 12) return 'Good Morning';
+    if (h < 17) return 'Good Afternoon';
+    if (h < 21) return 'Good Evening';
+    return 'Blessed Night';
+  }
+
+  function _formatLocalDateKey(dt) {
+    var y = dt.getFullYear();
+    var m = String(dt.getMonth() + 1).padStart(2, '0');
+    var d = String(dt.getDate()).padStart(2, '0');
+    return y + '-' + m + '-' + d;
+  }
+
+  function computeWeeklyRhythm(stateObj, anchorDateKey) {
+    var s = stateObj || ((typeof S !== 'undefined' && S) ? S : {});
+    var logMap = (s && s.log) || {};
+    var anchorKey = anchorDateKey || todayStr();
+    var parts = String(anchorKey).split('-');
+    var base = parts.length === 3
+      ? new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2]), 12, 0, 0)
+      : new Date();
+    var dayInitials = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
+    var fardIds = ['fajr', 'dhuhr', 'asr', 'maghrib', 'isha'];
+    var out = [];
+    for (var offset = 6; offset >= 0; offset--) {
+      var dt = new Date(base.getTime());
+      dt.setDate(dt.getDate() - offset);
+      var dk = _formatLocalDateKey(dt);
+      var p = (logMap[dk] && logMap[dk].p) || {};
+      var count = fardIds.filter(function(id) { return !!p[id]; }).length;
+      out.push({
+        dk: dk,
+        label: dayInitials[dt.getDay()],
+        count: count,
+        complete: count >= 5,
+        partial: count > 0 && count < 5,
+        isToday: offset === 0
+      });
+    }
+    return out;
+  }
+
+  function renderConcentricRingsSvg(summary, sizePx) {
+    var s = summary || computeDailyChallenges();
+    var size = sizePx || 96;
+    var rings = [
+      { r: 44, pct: s.prayersPct || 0, cls: 'iq-ring-p', stroke: '#14b8a6' },
+      { r: 33, pct: s.dhikrPct || 0, cls: 'iq-ring-d', stroke: '#38bdf8' },
+      { r: 22, pct: s.quranPct || 0, cls: 'iq-ring-q', stroke: '#eab308' }
+    ];
+    var tracks = rings.map(function(rg) {
+      var c = 2 * Math.PI * rg.r;
+      var off = c - (Math.min(100, Math.max(0, rg.pct)) / 100) * c;
+      return '<circle class="iq-cr-track" cx="55" cy="55" r="' + rg.r + '"/>' +
+        '<circle class="iq-cr-fill ' + rg.cls + '" cx="55" cy="55" r="' + rg.r + '" stroke="' + rg.stroke + '" stroke-dasharray="' + c.toFixed(2) + '" stroke-dashoffset="' + off.toFixed(2) + '"/>';
+    }).join('');
+    return '<div class="iq-concentric-rings" style="width:' + size + 'px;height:' + size + 'px">' +
+      '<svg viewBox="0 0 110 110" width="' + size + '" height="' + size + '" aria-hidden="true">' + tracks + '</svg>' +
+      '<span class="iq-cr-center iq-tabular">' + (s.overallPct || 0) + '%</span>' +
+    '</div>';
+  }
+
   function renderIqFeed() {
     if (typeof document === 'undefined') return;
     var summary = computeDailyChallenges();
+    var nextP = _cachedNextPrayerSummary();
+    var greet = getTimeGreeting();
+    var rhythm = computeWeeklyRhythm();
 
     var heroEl = document.getElementById('iqHeroChallenge');
     if (heroEl) {
+      var focusMetaRight = nextP
+        ? ('Next: ' + esc(nextP.name) + ' &middot; ' + esc(nextP.shortRemaining))
+        : ('Overall ' + summary.overallPct + '% today');
+      var rhythmHtml = '<div class="iq-rhythm-strip" aria-label="7-day prayer consistency">' +
+        rhythm.map(function(day) {
+          var cls = 'iq-rhythm-day' + (day.complete ? ' complete' : (day.partial ? ' partial' : '')) + (day.isToday ? ' today' : '');
+          return '<div class="' + cls + '" title="' + esc(day.dk) + ': ' + day.count + '/5 prayers">' +
+            '<span class="iq-rhythm-dot"></span>' +
+            '<span class="iq-rhythm-lbl">' + esc(day.label) + '</span>' +
+          '</div>';
+        }).join('') +
+      '</div>';
       heroEl.innerHTML =
         '<div class="iq-hero-ch-top">' +
-          '<span class="iq-hero-ch-title">Daily challenges</span>' +
+          '<span class="iq-hero-ch-title">' + esc(greet) + ' &middot; Today\'s Focus</span>' +
           '<button type="button" class="iq-hero-ch-link" onclick="window.openChallengeDetail(\'dhikr\')">Details &rsaquo;</button>' +
         '</div>' +
-        '<div class="iq-hero-ch-card" role="button" tabindex="0" onclick="window.openChallengeDetail(\'dhikr\')">' +
-          '<div class="iq-hero-ch-row">' +
-            '<strong>Dhikr Counter</strong>' +
-            '<span>' + summary.dhikrToday + ' / ' + summary.dhikrGoal + '</span>' +
+        '<div class="iq-hero-ch-card iq-hero-upgraded" role="button" tabindex="0" onclick="window.openChallengeDetail(\'dhikr\')">' +
+          '<div class="iq-hero-ring-grid">' +
+            renderConcentricRingsSvg(summary, 94) +
+            '<div class="iq-hero-pillars">' +
+              '<div class="iq-pillar-row"><span class="iq-pillar-dot" style="background:#14b8a6"></span><span>Prayers</span><strong class="iq-tabular">' + summary.prayersDone + '/' + summary.prayersTotal + '</strong></div>' +
+              '<div class="iq-pillar-row"><span class="iq-pillar-dot" style="background:#38bdf8"></span><span>Dhikr</span><strong class="iq-tabular">' + summary.dhikrToday + '/' + summary.dhikrGoal + '</strong></div>' +
+              '<div class="iq-pillar-row"><span class="iq-pillar-dot" style="background:#eab308"></span><span>Quran</span><strong class="iq-tabular">' + summary.quranToday + '/' + summary.quranGoal + 'm</strong></div>' +
+              '<div class="iq-hero-ch-meta"><span>' + focusMetaRight + '</span></div>' +
+            '</div>' +
           '</div>' +
-          '<div class="iq-dual-bar">' +
-            '<div class="iq-dual-teal" style="width:' + summary.dhikrPct + '%"></div>' +
-            '<div class="iq-dual-gold" style="width:' + Math.min(100 - summary.dhikrPct, Math.round(summary.prayersPct * 0.35)) + '%"></div>' +
-          '</div>' +
-          '<div class="iq-hero-ch-meta">' +
-            '<span>' + summary.dhikrPct + '% Progress</span>' +
-            '<span>Prayers ' + summary.prayersDone + '/' + summary.prayersTotal + '</span>' +
-          '</div>' +
+          rhythmHtml +
         '</div>';
     }
 
@@ -145,7 +300,7 @@
           tone: 'gold',
           icon: 'book-open',
           title: 'Quran Reading Goal',
-          sub: summary.quranToday + ' / ' + summary.quranGoal + ' ayah milestones',
+          sub: summary.quranToday + ' / ' + summary.quranGoal + ' min read today',
           pct: summary.quranPct,
           onclick: "App.activateTab('quran')"
         },
@@ -237,9 +392,16 @@
       window.tapDhikr();
     } else if (type === 'dhikr33' && typeof window.tapDhikr === 'function') {
       for (var i = 0; i < 33; i++) window.tapDhikr();
+    } else if (type === 'quran5') {
+      logQuranMinutes(5);
+      return;
     } else if (type === 'quran' && typeof window.activateTab === 'function') {
       closeChallengeDetail();
       window.activateTab('quran');
+      return;
+    } else if (type === 'timer' && typeof window.activateTab === 'function') {
+      closeChallengeDetail();
+      window.activateTab('timer');
       return;
     } else if (type === 'quests' && typeof window.activateTab === 'function') {
       closeChallengeDetail();
@@ -266,44 +428,66 @@
     var bodyEl = document.getElementById('iqChallengeBody');
     if (!bodyEl) return;
     var summary = computeDailyChallenges();
+    var nextP = _cachedNextPrayerSummary();
+    var sObj = (typeof S !== 'undefined' && S) ? S : {};
+    var dayLog = (sObj.log && sObj.log[todayStr()]) || { p: {} };
+    var pMap = dayLog.p || {};
+    var prayerDefs = (typeof PRAYERS !== 'undefined' && Array.isArray(PRAYERS) && PRAYERS.length)
+      ? PRAYERS
+      : [{ id: 'fajr', name: 'Fajr' }, { id: 'dhuhr', name: 'Dhuhr' }, { id: 'asr', name: 'Asr' }, { id: 'maghrib', name: 'Maghrib' }, { id: 'isha', name: 'Isha' }];
 
-    var metricNum = summary.dhikrToday;
-    var metricPct = summary.dhikrPct;
-    var metricLabel = 'Dhikr Progress';
-    if (focusId === 'prayers') {
-      metricNum = summary.prayersDone + '/' + summary.prayersTotal;
-      metricPct = summary.prayersPct;
-      metricLabel = 'Prayers Today';
-    } else if (focusId === 'vol') {
-      metricNum = summary.volDone;
-      metricPct = Math.min(100, Math.round((summary.volDone / Math.max(1, summary.volTotal)) * 100));
-      metricLabel = 'Voluntary Acts';
-    } else if (focusId === 'deeds') {
-      metricNum = summary.deedsDone;
-      metricPct = Math.min(100, Math.round((summary.deedsDone / Math.max(1, summary.deedsTotal)) * 100));
-      metricLabel = 'Good Deeds';
-    }
+    var focusTitle = 'Daily Concentric Telemetry';
+    if (focusId === 'prayers') focusTitle = 'Prayers: ' + summary.prayersDone + '/' + summary.prayersTotal;
+    else if (focusId === 'vol') focusTitle = 'Voluntary: ' + summary.volDone + ' logged';
+    else if (focusId === 'deeds') focusTitle = 'Deeds: ' + summary.deedsDone + ' completed';
+    else focusTitle = 'Dhikr: ' + summary.dhikrToday + '/' + summary.dhikrGoal;
 
-    var radius = 45;
-    var circ = 2 * Math.PI * radius;
-    var offset = circ - (metricPct / 100) * circ;
+    var timerBannerHtml = nextP
+      ? '<div class="iq-notif-card" style="display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px;">' +
+          '<div><div class="iq-ch-title">Next Prayer: ' + esc(nextP.name) + '</div><div class="iq-ch-sub iq-tabular">' + esc(nextP.timeLabel) + ' &middot; ' + esc(nextP.shortRemaining) + '</div></div>' +
+          '<button type="button" class="iq-pill-btn" onclick="window.quickChallengeAction(\'timer\')">Times</button>' +
+        '</div>'
+      : '';
+
+    var prayerRowHtml = '<div class="iq-sheet-prayer-row">' +
+      prayerDefs.map(function(pr) {
+        var nm = pr.name || (pr.id ? pr.id.charAt(0).toUpperCase() + pr.id.slice(1) : 'Prayer');
+        var raw = pMap[pr.id];
+        var done = !!raw;
+        var isQada = raw === 'qada';
+        return '<button type="button" class="iq-sheet-prayer-btn' + (done ? ' done' : '') + (isQada ? ' qada' : '') + '" onclick="window.quickToggleSheetPrayer(\'' + esc(pr.id) + '\')">' +
+          (done ? (isQada ? '&#8634; ' : '&#10003; ') : '') + esc(nm) +
+        '</button>';
+      }).join('') +
+      '</div>';
 
     var rows = [
       { title: 'Dhikr Tap (+1)', sub: summary.dhikrToday + ' / ' + summary.dhikrGoal + ' completed', btn: 'Progress', act: 'dhikr1', icon: 'beads' },
       { title: 'Tasbih Cycle (+33)', sub: 'Complete a full 33-count dhikr set', btn: 'Start', act: 'dhikr33', icon: 'sparkles' },
-      { title: 'Quran Reading', sub: summary.quranToday + ' / ' + summary.quranGoal + ' daily milestones', btn: 'Open', act: 'quran', icon: 'book-open' },
+      { title: 'Quran Session (+5m)', sub: summary.quranToday + ' / ' + summary.quranGoal + ' min logged today', btn: '+5m Read', act: 'quran5', icon: 'book-open' },
+      { title: 'Quran Reader', sub: 'Read by Surah or Juz with audio', btn: 'Open', act: 'quran', icon: 'book-open' },
       { title: 'Masjid Check-ins', sub: summary.masjidTotal + ' visit(s) logged', btn: 'Map', act: 'masjid', icon: 'mosque' },
       { title: 'Voluntary & Deeds', sub: (summary.volDone + summary.deedsDone) + ' completed today', btn: 'Show All', act: 'vol', icon: 'heart' }
     ];
 
+    var goalsEditorHtml = '<div class="iq-goal-editor">' +
+      '<div class="iq-ch-title">Daily Goal Targets</div>' +
+      '<div class="iq-goal-editor-grid">' +
+        '<div class="iq-goal-field"><label for="iqGoalDhikrInput">Daily Dhikr Target</label><input id="iqGoalDhikrInput" type="number" min="33" max="5000" value="' + esc(summary.dhikrGoal) + '"></div>' +
+        '<div class="iq-goal-field"><label for="iqGoalQuranInput">Daily Quran (min)</label><input id="iqGoalQuranInput" type="number" min="5" max="180" value="' + esc(summary.quranGoal) + '"></div>' +
+      '</div>' +
+      '<button type="button" class="iq-gold-btn" onclick="window.saveGoalTargetsForm()">Save Daily Targets</button>' +
+    '</div>';
+
     bodyEl.innerHTML =
+      timerBannerHtml +
       '<div class="iq-ring-hero-card">' +
         '<div class="iq-ring-wrap">' +
-          '<svg class="iq-progress-ring" viewBox="0 0 110 110" width="110" height="110" aria-hidden="true">' +
-            '<circle class="iq-ring-track" cx="55" cy="55" r="' + radius + '"/>' +
-            '<circle class="iq-ring-fill" cx="55" cy="55" r="' + radius + '" stroke-dasharray="' + circ.toFixed(2) + '" stroke-dashoffset="' + offset.toFixed(2) + '"/>' +
-          '</svg>' +
-          '<div class="iq-ring-center"><strong>' + esc(metricNum) + '</strong><span>' + esc(metricLabel) + '</span></div>' +
+          renderConcentricRingsSvg(summary, 110) +
+          '<div class="iq-ring-legend">' +
+            '<span class="iq-ch-sub" style="font-weight:700;color:var(--text);">' + esc(focusTitle) + '</span>' +
+            '<span class="iq-ch-sub iq-tabular">Prayers ' + summary.prayersPct + '% &middot; Dhikr ' + summary.dhikrPct + '% &middot; Quran ' + summary.quranPct + '%</span>' +
+          '</div>' +
         '</div>' +
         '<div class="iq-timer-box">' +
           '<div class="iq-timer-val" id="iqChallengeStopwatch">' + formatStopwatch(_stopwatchSec) + '</div>' +
@@ -311,6 +495,7 @@
           '<button type="button" id="iqStopwatchBtn" class="iq-pill-btn" onclick="window.toggleChallengeStopwatch()">' + (_stopwatchRunning ? 'Pause' : 'Start') + '</button>' +
         '</div>' +
       '</div>' +
+      prayerRowHtml +
       '<div class="iq-feed-head"><span>Daily challenges</span><span>' + summary.overallPct + '% overall</span></div>' +
       '<div class="iq-feed-list">' +
       rows.map(function(r) {
@@ -320,18 +505,65 @@
           '<button type="button" class="iq-pill-btn" onclick="window.quickChallengeAction(\'' + r.act + '\')">' + esc(r.btn) + '</button>' +
         '</div>';
       }).join('') +
-      '</div>';
+      '</div>' +
+      goalsEditorHtml;
+  }
+
+  var _lastFocusedTrigger = null;
+  var _isTransitioning = false;
+
+  function _anyOverlayOpen() {
+    if (typeof document === 'undefined') return false;
+    var ids = ['iqDrawer', 'iqNotifDrawer', 'iqChallengeSheet', 'iqMasjidSheet'];
+    for (var i = 0; i < ids.length; i++) {
+      var el = document.getElementById(ids[i]);
+      if (el && el.classList && el.classList.contains('open')) return true;
+    }
+    return false;
+  }
+
+  function _captureTriggerFocus() {
+    if (typeof document === 'undefined') return;
+    if (!_anyOverlayOpen() && document.activeElement && document.activeElement !== document.body) {
+      _lastFocusedTrigger = document.activeElement;
+    }
+  }
+
+  function _restoreTriggerFocus() {
+    if (_isTransitioning || typeof document === 'undefined' || _anyOverlayOpen()) return;
+    var trig = _lastFocusedTrigger;
+    _lastFocusedTrigger = null;
+    if (trig && typeof trig.focus === 'function' && trig.isConnected !== false) {
+      try { trig.focus({ preventScroll: true }); } catch (e) { try { trig.focus(); } catch (_) {} }
+    }
+  }
+
+  function _focusInside(el) {
+    if (!el || typeof el.querySelector !== 'function') return;
+    var target = el.querySelector('button:not([disabled]), input:not([disabled]), select:not([disabled]), [tabindex="0"]');
+    if (target && typeof target.focus === 'function') {
+      try { target.focus({ preventScroll: true }); } catch (e) { try { target.focus(); } catch (_) {} }
+    }
+  }
+
+  function _setOverlayState(el, open) {
+    if (!el) return;
+    if (el.classList) el.classList.toggle('open', !!open);
+    if (typeof el.setAttribute === 'function') el.setAttribute('aria-hidden', open ? 'false' : 'true');
+    el.inert = !open;
   }
 
   function openChallengeDetail(focusId) {
-    closeActiveSheet();
+    _captureTriggerFocus();
+    _isTransitioning = true;
+    try { closeActiveSheet(); } finally { _isTransitioning = false; }
     _activeFocusId = focusId || 'dhikr';
     renderChallengeDetailBody(_activeFocusId);
     if (typeof document === 'undefined') return;
     var sheet = document.getElementById('iqChallengeSheet');
     if (sheet) {
-      sheet.classList.add('open');
-      sheet.setAttribute('aria-hidden', 'false');
+      _setOverlayState(sheet, true);
+      _focusInside(sheet);
     }
     if (document.body) document.body.classList.add('iq-sheet-open');
   }
@@ -340,11 +572,9 @@
     if (_stopwatchTimer) { clearInterval(_stopwatchTimer); _stopwatchTimer = null; _stopwatchRunning = false; }
     if (typeof document === 'undefined') return;
     var sheet = document.getElementById('iqChallengeSheet');
-    if (sheet) {
-      sheet.classList.remove('open');
-      sheet.setAttribute('aria-hidden', 'true');
-    }
+    _setOverlayState(sheet, false);
     if (document.body) document.body.classList.remove('iq-sheet-open');
+    _restoreTriggerFocus();
   }
 
   function drawerPoolCount(tab) {
@@ -516,7 +746,9 @@
   }
 
   function openIqDrawer(focusCatId) {
-    closeNotifDrawer();
+    _captureTriggerFocus();
+    _isTransitioning = true;
+    try { closeNotifDrawer(); } finally { _isTransitioning = false; }
     if (focusCatId) _drawerCat = focusCatId;
     else if (!_drawerCat && typeof S !== 'undefined' && S && S.lastCat) _drawerCat = S.lastCat;
     _drawerDirty = true;
@@ -524,7 +756,10 @@
     if (typeof document === 'undefined') return;
     var d = document.getElementById('iqDrawer');
     var bd = document.getElementById('iqDrawerBackdrop');
-    if (d) { d.classList.add('open'); d.setAttribute('aria-hidden', 'false'); }
+    if (d) {
+      _setOverlayState(d, true);
+      _focusInside(d);
+    }
     if (bd) bd.classList.add('show');
     if (document.body) document.body.classList.add('iq-drawer-open');
   }
@@ -534,11 +769,12 @@
     var d = document.getElementById('iqDrawer');
     var nr = document.getElementById('iqNotifDrawer');
     var bd = document.getElementById('iqDrawerBackdrop');
-    if (d) { d.classList.remove('open'); d.setAttribute('aria-hidden', 'true'); }
+    _setOverlayState(d, false);
     if (!nr || !nr.classList.contains('open')) {
       if (bd) bd.classList.remove('show');
       if (document.body) document.body.classList.remove('iq-drawer-open');
     }
+    _restoreTriggerFocus();
   }
 
   function renderNotifDrawerBody() {
@@ -567,12 +803,17 @@
   }
 
   function openNotifDrawer() {
-    closeIqDrawer();
+    _captureTriggerFocus();
+    _isTransitioning = true;
+    try { closeIqDrawer(); } finally { _isTransitioning = false; }
     renderNotifDrawerBody();
     if (typeof document === 'undefined') return;
     var d = document.getElementById('iqNotifDrawer');
     var bd = document.getElementById('iqDrawerBackdrop');
-    if (d) { d.classList.add('open'); d.setAttribute('aria-hidden', 'false'); }
+    if (d) {
+      _setOverlayState(d, true);
+      _focusInside(d);
+    }
     if (bd) bd.classList.add('show');
     if (document.body) document.body.classList.add('iq-drawer-open');
   }
@@ -582,11 +823,12 @@
     var d = document.getElementById('iqNotifDrawer');
     var dr = document.getElementById('iqDrawer');
     var bd = document.getElementById('iqDrawerBackdrop');
-    if (d) { d.classList.remove('open'); d.setAttribute('aria-hidden', 'true'); }
+    _setOverlayState(d, false);
     if (!dr || !dr.classList.contains('open')) {
       if (bd) bd.classList.remove('show');
       if (document.body) document.body.classList.remove('iq-drawer-open');
     }
+    _restoreTriggerFocus();
   }
 
   function closeActiveSheet() {
@@ -597,18 +839,24 @@
   }
 
   function drawerNavigate(target) {
-    closeIqDrawer();
+    _isTransitioning = (target === 'masjid' || target === 'challenge');
+    try { closeIqDrawer(); } finally { if (!_isTransitioning) {} }
     var groupsRoot = (typeof TAB_GROUPS !== 'undefined' ? TAB_GROUPS : (typeof window !== 'undefined' ? window.TAB_GROUPS : null)) || {};
     if (target === 'masjid' && typeof window.openMasjidCheckins === 'function') {
+      _isTransitioning = false;
       window.openMasjidCheckins('map');
     } else if (target === 'challenge') {
+      _isTransitioning = false;
       openChallengeDetail('dhikr');
-    } else if (target === 'names' && typeof window.switchCategory === 'function') {
-      window.switchCategory('names_main');
-    } else if (groupsRoot[target] && typeof window.switchCategory === 'function') {
-      window.switchCategory(target);
-    } else if (typeof window.activateTab === 'function') {
-      window.activateTab(target);
+    } else {
+      _isTransitioning = false;
+      if (target === 'names' && typeof window.switchCategory === 'function') {
+        window.switchCategory('names_main');
+      } else if (groupsRoot[target] && typeof window.switchCategory === 'function') {
+        window.switchCategory(target);
+      } else if (typeof window.activateTab === 'function') {
+        window.activateTab(target);
+      }
     }
   }
 
@@ -623,7 +871,22 @@
     }
   }
 
+  window.iqOverlayA11y = {
+    captureTrigger: _captureTriggerFocus,
+    restoreTrigger: _restoreTriggerFocus,
+    focusInside: _focusInside,
+    setOverlayState: _setOverlayState,
+    setTransitioning: function(v) { _isTransitioning = !!v; }
+  };
+
+  window.getTimeGreeting = getTimeGreeting;
+  window.computeWeeklyRhythm = computeWeeklyRhythm;
+  window.renderConcentricRingsSvg = renderConcentricRingsSvg;
   window.computeDailyChallenges = computeDailyChallenges;
+  window.logQuranMinutes = logQuranMinutes;
+  window.updateDailyChallengeGoals = updateDailyChallengeGoals;
+  window.saveGoalTargetsForm = saveGoalTargetsForm;
+  window.quickToggleSheetPrayer = quickToggleSheetPrayer;
   window.renderIqFeed = renderIqFeed;
   window.openChallengeDetail = openChallengeDetail;
   window.closeChallengeDetail = closeChallengeDetail;

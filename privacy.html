@@ -12,23 +12,14 @@
   <link rel="icon" href="assets/icons/favicon.png" type="image/png">
   <style>
     :root {
-      --bg: #f8f9fa;
+      --bg: #f2fbf8;
       --card-bg: #ffffff;
-      --card-border: #e9ecef;
-      --text: #1a1a2e;
-      --text2: #6b7280;
-      --accent: #c9a84c;
-      --accent-bg: rgba(201,168,76,0.08);
+      --card-border: rgba(11,122,117,0.14);
+      --text: #0b2528;
+      --text2: #4b6b6e;
+      --accent: #0b8a82;
+      --accent-bg: rgba(11,138,130,0.10);
       --font: 'Sora', system-ui, -apple-system, sans-serif;
-    }
-    [data-theme="emara"] {
-      --bg: #0f1a15;
-      --card-bg: #16241e;
-      --card-border: #23382f;
-      --text: #f0fdf4;
-      --text2: #94a3b8;
-      --accent: #d4af37;
-      --accent-bg: rgba(212,175,55,0.12);
     }
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
@@ -95,12 +86,6 @@
       font-size: 0.95rem;
     }
   </style>
-  <script>
-    try {
-      var t = localStorage.getItem('iqTheme');
-      if (t && t !== 'light') document.documentElement.setAttribute('data-theme', t);
-    } catch(e) {}
-  </script>
 </head>
 <body>
   <div class="container">

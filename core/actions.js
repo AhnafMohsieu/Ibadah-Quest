@@ -693,7 +693,7 @@ Object.keys(NEW_POOLS).forEach(k => {
       };
     }
     window.App = {
-      toggleP: window.toggleP, toggleV: window.toggleV, toggleD: window.toggleD, buy: window.buy,
+      toggleP: window.toggleP, togglePrayerQada: window.togglePrayerQada, togglePrayerPause: appAction('togglePrayerPause'), toggleV: window.toggleV, toggleD: window.toggleD, buy: window.buy,
       detail: (id) => toast(iqIcon('alert-triangle'), DETAILS[id]||'Voluntary Prayer', false, 4000),
       tip: (id) => toast(iqIcon('zap'), TIPS[id]||'A beautiful deed!', false, 4000),
       toggleQuest: window.toggleQuest, addGratitude: window.addGratitude, toggleFasting: window.toggleFasting, setCharityGoals: window.setCharityGoals,
@@ -710,7 +710,7 @@ Object.keys(NEW_POOLS).forEach(k => {
       manualRefresh: window.manualRefreshContent, ensureQuranLoaded: window.ensureQuranLoaded, ensureHadithLoaded: window.ensureHadithLoaded,
       claimBonus: window.claimBonus,
       recoverSalvage, recoverFresh, recoverImport,
-      setQuranView: window.setQuranView, quranSearchFilter: window.quranSearchFilter, openQuranSurah: window.openQuranSurah, quranBack: window.quranBack, openQuranJuz: window.openQuranJuz,
+      setQuranView: window.setQuranView, quranSearchFilter: window.quranSearchFilter, openQuranSurah: window.openQuranSurah, quranBack: window.quranBack, openQuranJuz: window.openQuranJuz, adjustQuranFont: appAction('adjustQuranFont'), setQuranTint: appAction('setQuranTint'),
       openHadithCollection: window.openHadithCollection, openHadithBook: window.openHadithBook, hadithBack: window.hadithBack,
       playQuranVerse: window.playQuranVerse, playSurah: window.playSurah, stopSurah: window.stopSurah, setQuranReciter: window.setQuranReciter, playJuz: window.playJuz, updateJuzButton: window.updateJuzButton,
       calPrevMonth: window.calPrevMonth, calNextMonth: window.calNextMonth, calGoToday: window.calGoToday, selectAvatar, selectTitle, selectFrame,
