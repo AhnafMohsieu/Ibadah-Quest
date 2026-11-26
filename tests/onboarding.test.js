@@ -64,7 +64,7 @@ test('startOnboarding resets state and renders the first step', () => {
   assert.strictEqual(state.onboarding.step, 0);
   assert.strictEqual(state.onboarding.complete, false);
   const html = overlayHtml(s);
-  assert.ok(html.includes('Welcome to Ibadah Quest'), 'first step must be the welcome screen');
+  assert.ok(html.includes('Choose Your Language'), 'first step must be language selection (BN/EN/AR)');
   assert.ok(html.includes('onboarding-card'), 'overlay must render the onboarding card');
   const ov = s.document.getElementById('onboardingOverlay');
   assert.strictEqual(ov.style.display, 'flex', 'overlay must be shown');
@@ -77,7 +77,7 @@ test('startOnboarding creates onboarding state when missing', () => {
   assert.ok(state.onboarding, 'onboarding state must be initialized');
   assert.strictEqual(state.onboarding.step, 0);
   assert.strictEqual(state.onboarding.complete, false);
-  assert.ok(overlayHtml(s).includes('Welcome to Ibadah Quest'));
+  assert.ok(overlayHtml(s).includes('Choose Your Language'));
 });
 
 test('startOnboarding persists state via saveState', () => {
@@ -93,24 +93,24 @@ test('nextOnboardingStep advances through the five steps', () => {
   const state = { onboarding: { step: 0, complete: false } };
   const s = loadSandbox(state);
   s.startOnboarding();
-  assert.ok(overlayHtml(s).includes('Welcome to Ibadah Quest'));
+  assert.ok(overlayHtml(s).includes('Choose Your Language'));
 
   s.nextOnboardingStep();
   assert.strictEqual(state.onboarding.step, 1);
-  assert.ok(overlayHtml(s).includes('Log Your First Prayer'), 'step 2 must be log first prayer');
+  assert.ok(overlayHtml(s).includes('Welcome to Ibadah Quest'), 'step 2 must be gentle comfort level selection');
   assert.ok(overlayHtml(s).includes('onboarding-dot', 'progress dots must render'));
 
   s.nextOnboardingStep();
   assert.strictEqual(state.onboarding.step, 2);
-  assert.ok(overlayHtml(s).includes('Daily Quests'), 'step 3 must be daily quests');
+  assert.ok(overlayHtml(s).includes('Set Your Location & Prayer Method'), 'step 3 must configure offline location & Asr school');
 
   s.nextOnboardingStep();
   assert.strictEqual(state.onboarding.step, 3);
-  assert.ok(overlayHtml(s).includes('Personalize'), 'step 4 must be personalize');
+  assert.ok(overlayHtml(s).includes('Gentle Reminders'), 'step 4 must offer opt-in calm notifications');
 
   s.nextOnboardingStep();
   assert.strictEqual(state.onboarding.step, 4);
-  assert.ok(overlayHtml(s).includes('Begin Your Journey'), 'step 5 must be the start screen');
+  assert.ok(overlayHtml(s).includes('Your First Worship Moment'), 'step 5 must be quick first worship action');
   assert.strictEqual(s.isOnboardingComplete(), false, 'not complete before final step');
 });
 

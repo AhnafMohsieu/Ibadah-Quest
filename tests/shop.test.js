@@ -124,42 +124,37 @@ function createSandbox(overrides) {
   return { sandbox, S };
 }
 
-test('mystery box gives random XP reward', () => {
-  const { sandbox, S } = createSandbox();
-  
-  // Set up mystery box item
-  sandbox.SHOP = [{ id:'r3', name:'Mystery Box', cost:350, t:'mystery' }];
-  
-  // Mock Math.random inside the sandbox to always pick XP reward
-  const origRandom = Math.random;
-  const mockMath = { random: () => 0.01, floor: Math.floor };
-  sandbox.Math = mockMath;
-  
-  // Buy mystery box
-  sandbox.App.buy('r3');
-  
-  // XP should be 1000 - 350 + random XP reward (100-2000)
-  // With Math.random = 0.01, roll = 0.01 * 100 = 1, which falls in XP range (0-60)
-  // Then amt = 100 + floor(0.01 * 1901) = 100 + 19 = 119
-  assert.ok(S.xp > 650, 'XP should include mystery box reward (not just cost deduction)');
-  assert.ok(S.ur.r3, 'Mystery box should be marked as owned');
-  
-  Math.random = origRandom;
+test('ethical shop contains zero RNG mystery loot boxes and rewards earned themes/titles/rerolls cleanly', () => {
+  const realShop = loadSandbox(['data/shop.js'], {});
+  assert.ok(Array.isArray(realShop.SHOP) && realShop.SHOP.length > 0);
+  assert.ok(!realShop.SHOP.some(item => item.t === 'mystery'), 'RNG loot box must be removed');
+  assert.ok(!realShop.SHOP.some(item => /Friend of Allah|Pure Soul|Ultimate Flex/i.test(item.name)), 'presumptuous/vanity titles must be removed');
 });
 
-test('mystery box handler exists for mystery type', () => {
-  const { sandbox, S } = createSandbox();
-  
-  // Set up mystery box item
-  sandbox.SHOP = [{ id:'r3', name:'Mystery Box', cost:350, t:'mystery' }];
-  
-  // Buy mystery box - should not throw
-  sandbox.App.buy('r3');
-  
-  // Ownership should be set
-  assert.ok(S.ur.r3, 'Mystery box should be marked as owned');
-  // XP should have changed from initial 1000
-  assert.notStrictEqual(S.xp, 1000, 'XP should change after buying mystery box');
+test('reroll reward regenerates daily quests safely without RNG traps', () => {
+  let dqGen = 0;
+  const S = { xp: 500, ur: {}, lv: 1, ownedTitles: [], ownedFrames: [] };
+  const sandbox = loadSandbox(['core/xp.js', 'core/random.js', 'core/shop.js'], {
+    S,
+    SHOP: [{ id: 'reroll1', name: 'New Daily Quests', cost: 250, t: 'reroll' }],
+    today: () => '2026-08-11',
+    toast: () => {},
+    saveState: () => {},
+    renderAll: () => {},
+    renderDynamic: () => {},
+    markDirty: () => {},
+    clearDirty: () => {},
+    checkA: () => {},
+    checkLevelUp: () => {},
+    lvFrom: () => 1,
+    iqIcon: () => '',
+    genDQ: () => { dqGen++; },
+    document: { querySelectorAll: () => [] },
+    setTimeout: (fn) => fn()
+  });
+  sandbox.window.buy('reroll1');
+  assert.strictEqual(S.xp, 250);
+  assert.strictEqual(dqGen, 1);
 });
 
 test('selectTitle sets active title', () => {
@@ -310,11 +305,11 @@ test('buy with not enough XP shows toast', () => {
   assert.ok(!S.ur.r1);
 });
 
-test('mystery box activates correctly', () => {
-  const S = { xp: 1000, ur: {}, lv: 1 };
+test('booster pack doubles daily worship XP fairly without RNG', () => {
+  const S = { xp: 500, ur: {}, lv: 1, ab: null };
   const sandbox = loadSandbox(['core/xp.js', 'core/random.js', 'core/shop.js'], {
     S,
-    SHOP: [{ id: 'r3', name: 'Mystery Box', cost: 350, t: 'mystery' }],
+    SHOP: [{ id: 'boost1', name: 'Sincere Momentum Boost', cost: 200, t: 'boost' }],
     today: () => '2026-08-11',
     toast: () => {},
     saveState: () => {},
@@ -330,13 +325,9 @@ test('mystery box activates correctly', () => {
     document: { querySelectorAll: () => [] },
     setTimeout: (fn) => fn()
   });
-  const origRandom = Math.random;
-  const mockMath = { random: () => 0.5, floor: Math.floor };
-  sandbox.Math = mockMath;
-  sandbox.window.buy('r3');
-  assert.ok(S.xp > 650, 'XP should include mystery box reward');
-  assert.ok(S.ur.r3);
-  Math.random = origRandom;
+  sandbox.window.buy('boost1');
+  assert.strictEqual(S.xp, 300);
+  assert.ok(S.ab && S.ab.exp >= '2026-08-11');
 });
 
 test('net-zero purchase does not trigger level-up toast', () => {
