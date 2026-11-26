@@ -1,273 +1,349 @@
-// data/i18n.js
-// UI-chrome translation layer. Languages: 'en' (default), 'ar' (romanized Arabic), 'bn' (Bengali).
-// Content pools remain English; this translates navigation chrome and settings.
+/* data/i18n.js — Full localization, RTL switching, numerals, Islamic glossary & 6-form Arabic pluralization.
+ * Supported languages ONLY: 'en' (English), 'bn' (Bangla), 'ar' (Arabic).
+ */
+(function() {
+  var LANG_KEY = 'iq_lang';
+  var NUM_KEY = 'iq_numerals';
+  var TERM_KEY = 'iq_bn_term_mode';
 
-const LANG_KEY = 'iq_lang';
+  var GLOSSARY_NAMAZ = {
+    'Daily Prayers': 'দৈনিক নামাজ',
+    'Prayer Times': 'নামাজের সময়',
+    'Prayer': 'নামাজ',
+    'Prayers': 'নামাজ',
+    'Prayer Guide': 'নামাজ গাইড',
+    'Salah': 'নামাজ',
+    'Fasting': 'রোজা',
+    'Sawm': 'রোজা',
+    'Suhoor': 'সেহরি',
+    'Iftar': 'ইফতার',
+    'Dhikr': 'যিকর',
+    'Remembrance': 'যিকর',
+    'Qada': 'ক্বাযা'
+  };
 
-const I18N = {
-  dict: {
-    // t1 nav buttons
-    'Daily': { ar: 'Yawmiyya', bn: 'দৈনিক' },
-    'Knowledge': { ar: 'Ilm', bn: 'জ্ঞান' },
-    'Names': { ar: 'Asmaa', bn: 'নাম' },
-    'Library': { ar: 'Maktaba', bn: 'লাইব্রেরি' },
-    'Profile': { ar: 'Malaf', bn: 'প্রোফাইল' },
+  var GLOSSARY_SALAT = {
+    'Daily Prayers': 'দৈনিক সালাত',
+    'Prayer Times': 'সালাতের সময়সূচি',
+    'Prayer': 'সালাত',
+    'Prayers': 'সালাত',
+    'Prayer Guide': 'সালাত নির্দেশিকা',
+    'Salah': 'সালাত',
+    'Fasting': 'সিয়াম',
+    'Sawm': 'সিয়াম',
+    'Suhoor': 'সাহরি',
+    'Iftar': 'ইফতার',
+    'Dhikr': 'জিকির',
+    'Remembrance': 'জিকির',
+    'Qada': 'কাজা'
+  };
 
-    // ibadah tabs
-    'Today': { ar: "al-Yawm", bn: 'আজ' },
-    'Prayer Times': { ar: 'Awqat al-Salah', bn: 'নামাজের সময়' },
-    'Quests': { ar: 'Mahammat', bn: 'কুয়েস্ট' },
-    'Journeys': { ar: 'Rihlat', bn: 'ভ্রমণপথ' },
-    'Morning': { ar: 'Sabah', bn: 'সকাল' },
-    'Evening': { ar: "Masa'", bn: 'সন্ধ্যা' },
-    'Remembrance': { ar: 'Dhikr', bn: 'যিকর' },
-    'Ablution': { ar: 'Wudu', bn: 'অজু' },
-    'Prayer Guide': { ar: 'Dalil al-Salah', bn: 'নামাজ গাইড' },
-    'Fasting': { ar: 'Siyam', bn: 'রোজা' },
-    'Health': { ar: 'Sihha', bn: 'স্বাস্থ্য' },
-    'Mood': { ar: 'Mizaj', bn: 'মেজাজ' },
+  var DICT = {
+    // Primary 5 destinations & core sections
+    'Daily': { ar: 'اليومية', bn: 'দৈনিক' },
+    'Today': { ar: 'اليوم', bn: 'আজ' },
+    'Quests': { ar: 'المهام', bn: 'কুয়েস্ট' },
+    'Quran': { ar: 'القرآن الكريم', bn: 'কুরআন' },
+    'Progress': { ar: 'التقدّم', bn: 'অগ্রগতি' },
+    'More': { ar: 'المزيد', bn: 'আরও' },
+    'Knowledge': { ar: 'العلم', bn: 'জ্ঞান' },
+    'Names': { ar: 'الأسماء', bn: 'নাম' },
+    'Library': { ar: 'المكتبة', bn: 'লাইব্রেরি' },
+    'Profile': { ar: 'الملف الشخصي', bn: 'প্রোফাইল' },
 
-    // knowledge categories
-    "Qur'an & Sunnah": { ar: "al-Qur'an wa al-Sunnah", bn: 'কুরআন ও সুন্নাহ' },
-    'Fiqh & Rulings': { ar: 'al-Fiqh wa al-Ahkam', bn: 'ফিকহ ও বিধান' },
-    'Arabic': { ar: "al-Arabiyya", bn: 'আরবি' },
-    'Heart & Soul': { ar: 'al-Qalb wa al-Ruh', bn: 'হৃদয় ও আত্মা' },
-    'Dealings & Society': { ar: 'al-Muamalat wa al-Mujtama', bn: 'লেনদেন ও সমাজ' },
-    'Life & Modern': { ar: 'al-Hayat wa al-Hadatha', bn: 'জীবন ও আধুনিক' },
-    'History & Seerah': { ar: 'al-Tarikh wa al-Seerah', bn: 'ইতিহাস ও সীরাত' },
-    'Hereafter': { ar: 'al-Akhirah', bn: 'আখিরাত' },
+    // Prayer times & Worship
+    'Daily Prayers': { ar: 'الصلوات اليومية', bn: 'দৈনিক নামাজ' },
+    'Prayer Times': { ar: 'أوقات الصلاة', bn: 'নামাজের সময়' },
+    'Prayer': { ar: 'الصلاة', bn: 'নামাজ' },
+    'Prayers': { ar: 'الصلوات', bn: 'নামাজ' },
+    'Qibla': { ar: 'القبلة', bn: 'কিবলা' },
+    'Qibla Direction': { ar: 'اتجاه القبلة', bn: 'কিবলার দিক' },
+    'Fajr': { ar: 'الفجر', bn: 'ফজর' },
+    'Sunrise': { ar: 'الشروق', bn: 'সূর্যোদয়' },
+    'Dhuhr': { ar: 'الظهر', bn: 'যোহর' },
+    'Jummah': { ar: 'الجمعة', bn: 'জুমা' },
+    'Asr': { ar: 'العصر', bn: 'আসর' },
+    'Maghrib': { ar: 'المغرب', bn: 'মাগরিব' },
+    'Isha': { ar: 'العشاء', bn: 'ইশা' },
+    'Next Prayer': { ar: 'الصلاة القادمة', bn: 'পরবর্তী নামাজ' },
+    'Next': { ar: 'التالي', bn: 'পরবর্তী' },
+    'UP NEXT': { ar: 'التالية', bn: 'আসন্ন' },
+    'Qada': { ar: 'قضاء', bn: 'ক্বাযা' },
+    'Grace Mode': { ar: 'وضع الراحة', bn: 'বিশ্রাম মোড' },
+    'Rest Mode Active': { ar: 'وضع الراحة مفعّل', bn: 'বিশ্রাম মোড চালু' },
+    'Streak Protected': { ar: 'المداومة محفوظة بلطف', bn: 'ধারাবাহিকতা সুরক্ষিত' },
 
-    // quran & sunnah
-    'Quran': { ar: 'al-Quran', bn: 'কুরআন' },
-    'Interpretation': { ar: 'al-Tafsir', bn: 'তাফসির' },
-    'Hadith': { ar: 'al-Hadith', bn: 'হাদিস' },
-    'Prophetic Ways': { ar: 'al-Sunan', bn: 'সুন্নাহ' },
-    'Memorization': { ar: 'al-Hifz', bn: 'হিফজ' },
+    // Navigation & Subtabs
+    'Journeys': { ar: 'الرحلات', bn: 'যাত্রাপথ' },
+    'Morning': { ar: 'أذكار الصباح', bn: 'সকাল' },
+    'Evening': { ar: 'أذكار المساء', bn: 'সন্ধ্যা' },
+    'Remembrance': { ar: 'الأذكار', bn: 'যিকর' },
+    'Ablution': { ar: 'الوضوء', bn: 'অজু' },
+    'Prayer Guide': { ar: 'دليل الصلاة', bn: 'নামাজ গাইড' },
+    'Fasting': { ar: 'الصيام', bn: 'রোজা' },
+    'Health': { ar: 'الصحة والعافية', bn: 'স্বাস্থ্য' },
+    "Qur'an & Sunnah": { ar: 'القرآن والسنة', bn: 'কুরআন ও সুন্নাহ' },
+    'Fiqh & Rulings': { ar: 'الفقه والأحكام', bn: 'ফিকহ ও বিধান' },
+    'Arabic': { ar: 'العربية', bn: 'আরবি' },
+    'Heart & Soul': { ar: 'تزكية النفس', bn: 'হৃদয় ও আত্মা' },
+    'Dealings & Society': { ar: 'المعاملات والمجتمع', bn: 'লেনদেন ও সমাজ' },
+    'Life & Modern': { ar: 'الحياة والمعاصرة', bn: 'জীবন ও আধুনিকতা' },
+    'History & Seerah': { ar: 'السيرة والتاريخ', bn: 'সীরাত ও ইতিহাস' },
+    'Hereafter': { ar: 'الآخرة', bn: 'আখিরাত' },
+    'Interpretation': { ar: 'التفسير', bn: 'তাফসির' },
+    'Hadith': { ar: 'الحديث الشريف', bn: 'হাদিস' },
+    'Prophetic Ways': { ar: 'السنن النبوية', bn: 'সুন্নাহ' },
+    'Memorization': { ar: 'الحفظ والمراجعة', bn: 'হিফজ ও পুনরাবৃত্তি' },
+    'Jurisprudence': { ar: 'الفقه', bn: 'ফিকহ' },
+    'Purification': { ar: 'الطهارة', bn: 'পবিত্রতা' },
+    'Salah': { ar: 'الصلاة', bn: 'নামাজ' },
+    'Zakat': { ar: 'الزكاة', bn: 'যাকাত' },
+    'Sawm': { ar: 'الصيام', bn: 'রোজা' },
+    'Hajj': { ar: 'الحج والعمرة', bn: 'হজ্জ ও ওমরাহ' },
+    'Worship Rulings': { ar: 'أحكام العبادات', bn: 'ইবাদতের বিধান' },
+    'Wealth & Oaths': { ar: 'الأموال والأيمان', bn: 'সম্পদ ও শপথ' },
+    'Virtues': { ar: 'الفضائل', bn: 'সদগুণ' },
+    'Vices & Repentance': { ar: 'التوبة والتزكية', bn: 'তওবা ও আত্মশুদ্ধি' },
+    'Character & Path': { ar: 'الأخلاق والسلوك', bn: 'চরিত্র ও পথ' },
+    'Family Life': { ar: 'الأسرة والبر', bn: 'পারিবারিক জীবন' },
+    'Community': { ar: 'المجتمع والإخاء', bn: 'সমাজ ও ভ্রাতৃত্ব' },
+    'Service & Care': { ar: 'الخدمة والرحمة', bn: 'সেবা ও যত্ন' },
+    'Work & Justice': { ar: 'العمل والعدل', bn: 'কর্ম ও ন্যায়বিচার' },
+    'Wellness': { ar: 'العافية', bn: 'সুস্থতা' },
+    'Earth & Living': { ar: 'الأرض والبيئة', bn: 'পৃথিবী ও জীবিকা' },
+    'Youth & Tech': { ar: 'الشباب والتقنية', bn: 'যুব ও প্রযুক্তি' },
+    'Ethics & Finance': { ar: 'الأخلاق والمال الحلال', bn: 'নৈতিকতা ও হালাল অর্থ' },
+    'Dynasties': { ar: 'الدول الإسلامية', bn: 'ইসলামি ইতিহাস' },
+    'Cities & Lands': { ar: 'المدن والبلدان', bn: 'নগর ও অঞ্চল' },
+    'Arts & Crafts': { ar: 'الفنون الإسلامية', bn: 'শিল্প ও স্থাপত্য' },
+    'Arabic Language': { ar: 'اللغة العربية', bn: 'আরবি ভাষা' },
+    'Holy Cities': { ar: 'المدن المقدسة', bn: 'পবিত্র নগরী' },
+    'Capitals': { ar: 'العواصم التاريخية', bn: 'ঐতিহাসিক রাজধানী' },
+    'Lands of the East': { ar: 'بلاد المشرق', bn: 'প্রাচ্যের জনপদ' },
+    'Pattern & Illumination': { ar: 'الزخرفة والخط', bn: 'ক্যালিগ্রাফি ও নকশা' },
+    'Sacred Space': { ar: 'العمارة المقدسة', bn: 'পবিত্র স্থাপত্য' },
+    'Crafts & Nasheeds': { ar: 'الحرف والأناشيد', bn: 'হস্তশিল্প ও নাশিদ' },
+    'Structure': { ar: 'بنية اللغة', bn: 'ভাষার গঠন' },
+    'Sound & Script': { ar: 'الأصوات والخطوط', bn: 'ধ্বনি ও লিপি' },
+    'Words & Poetry': { ar: 'المفردات والأدب', bn: 'শব্দভাণ্ডার ও সাহিত্য' },
+    '99 Names of Allah': { ar: 'أسماء الله الحسنى', bn: 'আল্লাহর ৯৯ নাম' },
+    '25 Prophets': { ar: 'الأنبياء والرسل', bn: 'নবী ও রাসূলগণ' },
+    'Scholars': { ar: 'العلماء', bn: 'আলেমগণ' },
+    'Trophies': { ar: 'الأوسمة', bn: 'সম্মাননা' },
+    'Analytics': { ar: 'الإحصائيات', bn: 'বিশ্লেষণ' },
+    'Rewards': { ar: 'المظاهر والألقاب', bn: 'থিম ও ফ্রেম' },
+    'Settings': { ar: 'الإعدادات', bn: 'সেটিংস' },
+    'Logout': { ar: 'قفل الملف', bn: 'লগআউট' },
+    'Switch user': { ar: 'تبديل الملف', bn: 'প্রোফাইল বদলান' },
 
-    // fiqh
-    'Jurisprudence': { ar: 'al-Fiqh', bn: 'ফিকহ' },
-    'Purification': { ar: 'al-Tahara', bn: 'পবিত্রতা' },
-    'Salah': { ar: 'al-Salah', bn: 'সালাত' },
-    'Zakat': { ar: 'al-Zakat', bn: 'যাকাত' },
-    'Sawm': { ar: 'al-Sawm', bn: 'সাওম' },
-    'Hajj': { ar: 'al-Hajj', bn: 'হজ্জ' },
-    'Trade': { ar: 'al-Tijara', bn: 'বাণিজ্য' },
-    'Inheritance': { ar: 'al-Mirath', bn: 'উত্তরাধিকার' },
-    'Oaths': { ar: 'al-Ayman', bn: 'শপথ' },
-    'Worship Rulings': { ar: 'Ahkam al-Ibadat', bn: 'ইবাদতের বিধান' },
-    'Wealth & Oaths': { ar: 'al-Amwal wa al-Ayman', bn: 'সম্পদ ও শপথ' },
+    // Greeting & Home UI
+    'Good Morning': { ar: 'صباح النور', bn: 'শুভ সকাল' },
+    'Good Afternoon': { ar: 'مساء الخير', bn: 'শুভ অপরাহ্ণ' },
+    'Good Evening': { ar: 'مساء النور', bn: 'শুভ সন্ধ্যা' },
+    'Blessed Night': { ar: 'ليلة مباركة', bn: 'বরকতময় রাত' },
+    'Peaceful Night': { ar: 'ليلة هادئة', bn: 'প্রশান্ত রাত' },
+    "Today's Focus": { ar: 'تركيز اليوم', bn: 'আজকের মনোযোগ' },
+    'Continue Reading': { ar: 'متابعة القراءة', bn: 'পড়া চালিয়ে যান' },
+    'Resume': { ar: 'متابعة', bn: 'চালিয়ে যান' },
+    'Details': { ar: 'التفاصيل', bn: 'বিস্তারিত' },
+    'Daily Reminder': { ar: 'تذكرة اليوم', bn: 'আজকের স্মরণ' },
+    'Daily challenges': { ar: 'عبادات اليوم', bn: 'আজকের আমল' },
+    'Show All': { ar: 'عرض الكل', bn: 'সব দেখুন' },
+    'Start': { ar: 'ابدأ', bn: 'শুরু করুন' },
+    'Pause': { ar: 'إيقاف مؤقت', bn: 'বিরতি' },
+    'Reset': { ar: 'إعادة ضبط', bn: 'রিসেট' },
+    'Offline Mode — All Worship Data Stored Locally': { ar: 'وضع عدم الاتصال — بياناتك محفوظة محليًا', bn: 'অফলাইন মোড — আপনার সব আমল ডিভাইসে সংরক্ষিত' },
 
-    // heart
-    'Heart Diseases': { ar: 'Amrad al-Qulub', bn: 'হৃদয়ের রোগ' },
-    'Sincerity': { ar: 'al-Ikhlas', bn: 'ইখলাস' },
-    'Reliance': { ar: 'al-Tawakkul', bn: 'তাওয়াক্কুল' },
-    'Manners': { ar: 'al-Adab', bn: 'আদব' },
-    'Patience & Gratitude': { ar: 'al-Sabr wa al-Shukr', bn: 'ধৈর্য ও কৃতজ্ঞতা' },
-    'Gratitude': { ar: 'al-Shukr', bn: 'কৃতজ্ঞতা' },
-    'Major Sins': { ar: 'al-Kabair', bn: 'কবিরা গুনাহ' },
-    'Repentance': { ar: 'al-Tawba', bn: 'তাওবা' },
-    'Asceticism': { ar: 'al-Zuhd', bn: 'যুহদ' },
-    'Inspirations': { ar: 'al-Mawaiz', bn: 'উপদেশ' },
-    'Sufism': { ar: 'al-Tasawwuf', bn: 'তাসাউফ' },
-    'Tazkiyah': { ar: 'al-Tazkiyah', bn: 'তাজকিয়া' },
-    'Fear of Allah': { ar: 'Khawf Allah', bn: 'আল্লাহর ভয়' },
-    'Hope': { ar: 'al-Raja', bn: 'আশা' },
-    'Love of Allah': { ar: 'Hubb Allah', bn: 'আল্লাহর ভালোবাসা' },
-    'Contentment': { ar: 'al-Rida', bn: 'সন্তুষ্টি' },
-    'Reflection': { ar: 'al-Tafakkur', bn: 'চিন্তা' },
-    'Virtues': { ar: 'al-Fadail', bn: 'সদগুণ' },
-    'Vices & Repentance': { ar: 'al-Radhail wa al-Tawba', bn: 'কুঅভ্যাস ও তওবা' },
-    'Character & Path': { ar: 'al-Akhlaq wa al-Tariq', bn: 'চরিত্র ও পথ' },
+    // Onboarding & Permissions
+    'Welcome to Ibadah Quest': { ar: 'مرحبًا بك في عبادة كويست', bn: 'ইবাদাহ কোয়েস্টে স্বাগতম' },
+    'Choose Your Language': { ar: 'اختر لغتك', bn: 'আপনার ভাষা বেছে নিন' },
+    'Set Your Location & Prayer Method': { ar: 'الموقع وطريقة الحساب', bn: 'অবস্থান ও নামাজের হিসাব পদ্ধতি' },
+    'Gentle Reminders': { ar: 'تذكيرات لطيفة', bn: 'স্নেহময় রিমাইন্ডার' },
+    'Your First Worship Moment': { ar: 'لحظة عبادة أولى', bn: 'আপনার প্রথম আমল' },
+    'Skip': { ar: 'تخطي', bn: 'এড়িয়ে যান' },
+    'Back': { ar: 'رجوع', bn: 'পিছনে' },
+    'Continue': { ar: 'متابعة', bn: 'এগিয়ে যান' },
+    'Begin': { ar: 'ابدأ الآن', bn: 'শুরু করুন' },
 
-    // society
-    'Family': { ar: 'al-Usra', bn: 'পরিবার' },
-    'Marriage': { ar: 'al-Zawaj', bn: 'বিবাহ' },
-    'Parenting': { ar: 'Tarbiyat al-Awlad', bn: 'সন্তান লালন' },
-    'Charity': { ar: 'al-Sadaqa', bn: 'সদকা' },
-    'Career': { ar: 'al-Mihna', bn: 'কর্মজীবন' },
-    'Neighbors': { ar: 'al-Jiran', bn: 'প্রতিবেশী' },
-    'Community': { ar: 'al-Mujtama', bn: 'সমাজ' },
-    'Global Nation': { ar: 'al-Ummah', bn: 'উম্মাহ' },
-    'Invitation': { ar: 'al-Dawa', bn: 'দাওয়াত' },
-    'Justice': { ar: 'al-Adl', bn: 'ন্যায়বিচার' },
-    'Brotherhood': { ar: 'al-Ukhuwwa', bn: 'ভ্রাতৃত্ব' },
-    'Sisterhood': { ar: 'al-Ukhuwwa al-Islamiyya', bn: 'ভগিনীত্ব' },
-    'Orphans': { ar: 'al-Aytam', bn: 'এতিম' },
-    'Elderly': { ar: 'Kibar al-Sinn', bn: 'বয়স্ক' },
-    'Disabled': { ar: 'Dhu al-Ihtiyajat', bn: 'প্রতিবন্ধী' },
-    'Anti-Racism': { ar: 'Mukafahat al-Unsuriyya', bn: 'বর্ণবাদ-বিরোধী' },
-    'Poverty': { ar: 'al-Faqr', bn: 'দারিদ্র্য' },
-    'Volunteering': { ar: 'al-Tatawwu', bn: 'স্বেচ্ছাসেবা' },
-    'Family Life': { ar: 'al-Hayat al-Usariyya', bn: 'পারিবারিক জীবন' },
-    'Service & Care': { ar: 'al-Khidma wa al-Riaya', bn: 'সেবা ও যত্ন' },
-    'Work & Justice': { ar: 'al-Amal wa al-Adl', bn: 'কর্ম ও ন্যায়বিচার' },
+    // Settings, Themes, Numerals, Backup & Safety
+    'Language': { ar: 'اللغة', bn: 'ভাষা' },
+    'Theme': { ar: 'المظهر', bn: 'থিম' },
+    'Light': { ar: 'فاتح', bn: 'লাইট' },
+    'Dark': { ar: 'داكن', bn: 'ডার্ক' },
+    'OLED Night': { ar: 'ليلي عميق (OLED)', bn: 'ওএলইডি নাইট' },
+    'System': { ar: 'النظام', bn: 'সিস্টেম' },
+    'Numerals': { ar: 'الأرقام', bn: 'সংখ্যার ধরন' },
+    'Auto': { ar: 'تلقائي', bn: 'স্বয়ংক্রিয়' },
+    'Seasonal Accent': { ar: 'لمسة المواسم الإسلامية', bn: 'মৌসুমি আবহ (রমজান/ঈদ)' },
+    'Sound Effects': { ar: 'المؤثرات الصوتية', bn: 'শব্দ (অপশনাল)' },
+    'Export Backup': { ar: 'تصدير نسخة احتياطية', bn: 'ব্যাকআপ সংরক্ষণ (JSON)' },
+    'Export CSV': { ar: 'تصدير جدول CSV', bn: 'সিএসভি ডাউনলোড' },
+    'Import Backup': { ar: 'استيراد نسخة احتياطية', bn: 'ব্যাকআপ পুনরুদ্ধার' },
+    'Reset All Data': { ar: 'حذف جميع البيانات', bn: 'সব ডেটা মুছে ফেলুন' },
+    'Notifications': { ar: 'الإشعارات', bn: 'নোটিফিকেশন' },
+    'Send Test Notification': { ar: 'إرسال إشعار تجريبي', bn: 'পরীক্ষামূলক নোটিফিকেশন পাঠান' },
+    'Component Gallery': { ar: 'معرض نظام التصميم', bn: 'ডিজাইন গ্যালারি' },
+    'Report Content Error': { ar: 'الإبلاغ عن خطأ في المحتوى', bn: 'তথ্যগত ভুল জানান' },
+    'Licenses & Credits': { ar: 'التراخيص والمصادر', bn: 'লাইসেন্স ও কৃতজ্ঞতা' }
+  };
 
-    // life
-    'Prophetic Medicine': { ar: 'al-Tibb al-Nabawi', bn: 'নববী চিকিৎসা' },
-    'Halal Food': { ar: 'al-Taam al-Halal', bn: 'হালাল খাবার' },
-    'Environment': { ar: 'al-Bia', bn: 'পরিবেশ' },
-    'Travel': { ar: 'al-Safar', bn: 'ভ্রমণ' },
-    'Youth': { ar: 'al-Shabab', bn: 'যুবসমাজ' },
-    'Tech & Islam': { ar: 'al-Taqniya wa al-Islam', bn: 'প্রযুক্তি ও ইসলাম' },
-    'Technology': { ar: 'al-Taqniya', bn: 'প্রযুক্তি' },
-    'Social Media': { ar: 'Wasaail al-Tawasul', bn: 'সোশ্যাল মিডিয়া' },
-    'Ethics': { ar: 'al-Akhlaq', bn: 'নৈতিকতা' },
-    'Bioethics': { ar: 'Akhlaqiyyat al-Hayat', bn: 'জৈব নীতিশাস্ত্র' },
-    'Mod. Finance': { ar: 'al-Tamwil al-Hadith', bn: 'আধুনিক অর্থায়ন' },
-    'Politics': { ar: 'al-Siyasa', bn: 'রাজনীতি' },
-    'Green Islam': { ar: 'al-Islam al-Akhdar', bn: 'সবুজ ইসলাম' },
-    'Mental Health': { ar: 'al-Sihha al-Nafsiyya', bn: 'মানসিক স্বাস্থ্য' },
-    'Education': { ar: 'al-Talim', bn: 'শিক্ষা' },
-    'Wellness': { ar: 'al-Afiya', bn: 'সুস্থতা' },
-    'Earth & Living': { ar: 'al-Ard wa al-Maisha', bn: 'পৃথিবী ও জীবিকা' },
-    'Youth & Tech': { ar: 'al-Shabab wa al-Tiqniyya', bn: 'যুব ও প্রযুক্তি' },
-    'Ethics & Finance': { ar: 'al-Akhlaq wa al-Mal', bn: 'নৈতিকতা ও অর্থ' },
-
-    // history
-    'Biography': { ar: 'al-Seerah', bn: 'সীরাত' },
-    'Companions': { ar: 'al-Sahaba', bn: 'সাহাবা' },
-    'Prophets': { ar: 'al-Anbiya', bn: 'নবীগণ' },
-    'Great Women': { ar: 'al-Nisa al-Khayrat', bn: 'মহীয়সী নারী' },
-    'Stories': { ar: 'al-Qisas', bn: 'গল্প' },
-    'Battles': { ar: 'al-Ghazawat', bn: 'যুদ্ধ' },
-    'Science': { ar: 'al-Ulum', bn: 'বিজ্ঞান' },
-
-    // hereafter
-    'Paradise': { ar: 'al-Jannah', bn: 'জান্নাত' },
-    'Hellfire': { ar: 'Jahannam', bn: 'জাহান্নাম' },
-    'The Grave': { ar: 'al-Qabr', bn: 'কবর' },
-    'Signs of Qiyamah': { ar: 'Ashrat al-Saa', bn: 'কিয়ামতের নিদর্শন' },
-    'Pilgrimage': { ar: 'al-Hajj', bn: 'হজ্জ' },
-    'Islamic Dreams': { ar: 'al-Ruya al-Islamiyya', bn: 'ইসলামি স্বপ্ন' },
-
-    // library categories
-    'Dynasties': { ar: 'al-Duwal', bn: 'রাজবংশ' },
-    'Cities & Lands': { ar: 'al-Mudun wa al-Buldan', bn: 'নগর ও দেশ' },
-    'Arts & Crafts': { ar: 'al-Funun wa al-Hiraf', bn: 'শিল্প ও কারুশিল্প' },
-    'Arabic Language': { ar: 'al-Lugha al-Arabiyya', bn: 'আরবি ভাষা' },
-    'Philosophy & Thought': { ar: 'al-Falsafa wa al-Fikr', bn: 'দর্শন ও চিন্তা' },
-
-    // dynasties
-    'Umayyads': { ar: 'al-Umawiyyun', bn: 'উমাইয়া' },
-    'Abbasids': { ar: 'al-Abbasiyyun', bn: 'আব্বাসীয়' },
-    'Andalus': { ar: 'al-Andalus', bn: 'আন্দালুস' },
-    'Ottomans': { ar: 'al-Uthmaniyyun', bn: 'উসমানীয়' },
-    'Mamluks': { ar: 'al-Mamalik', bn: 'মামলুক' },
-    'Seljuks': { ar: 'al-Salajiqa', bn: 'সেলজুক' },
-    'Fatimids': { ar: 'al-Fatimiyyun', bn: 'ফাতিমীয়' },
-    'Ayyubids': { ar: 'al-Ayyubiyyun', bn: 'আইয়ুবীয়' },
-    'Modern Hist.': { ar: 'al-Tarikh al-Hadith', bn: 'আধুনিক ইতিহাস' },
-    'Ancient': { ar: 'al-Qadim', bn: 'প্রাচীন' },
-
-    // cities
-    'Mecca': { ar: 'Makka', bn: 'মক্কা' },
-    'Medina': { ar: 'al-Madina', bn: 'মদিনা' },
-    'Jerusalem': { ar: 'al-Quds', bn: 'জেরুজালেম' },
-    'Damascus': { ar: 'Dimashq', bn: 'দামেস্ক' },
-    'Baghdad': { ar: 'Baghdad', bn: 'বাগদাদ' },
-    'Cairo': { ar: 'al-Qahira', bn: 'কায়রো' },
-    'Cordoba': { ar: 'Qurtuba', bn: 'কর্দোবা' },
-    'Istanbul': { ar: 'Istanbul', bn: 'ইস্তাম্বুল' },
-    'Bukhara': { ar: 'Bukhara', bn: 'বুখারা' },
-    'Samarkand': { ar: 'Samarqand', bn: 'সমরকন্দ' },
-    'Holy Cities': { ar: 'al-Mudun al-Muqaddasa', bn: 'পবিত্র শহর' },
-    'Capitals': { ar: 'al-Awasim', bn: 'রাজধানী' },
-    'Lands of the East': { ar: 'Bilad al-Mashriq', bn: 'প্রাচ্যের দেশ' },
-
-    // arts
-    'Calligraphy': { ar: 'al-Khatt', bn: 'চারুকলা' },
-    'Architecture': { ar: 'al-Imara', bn: 'স্থাপত্য' },
-    'Geometry': { ar: 'al-Handasa', bn: 'জ্যামিতি' },
-    'Poetry': { ar: 'al-Shir', bn: 'কবিতা' },
-    'Literature': { ar: 'al-Adab', bn: 'সাহিত্য' },
-    'Nasheeds': { ar: 'al-Anashid', bn: 'নাশিদ' },
-    'Illumination': { ar: 'al-Tadhhib', bn: 'আলোকচিত্র' },
-    'Textiles': { ar: 'al-Mansujat', bn: 'বস্ত্র' },
-    'Ceramics': { ar: 'al-Khazaf', bn: 'মৃৎশিল্প' },
-    'Woodwork': { ar: 'al-Amal al-Khashabiyya', bn: 'কাঠশিল্প' },
-    'Pattern & Illumination': { ar: 'al-Zakharfa wa al-Tadhhib', bn: 'নকশা ও অলংকরণ' },
-    'Sacred Space': { ar: 'al-Makan al-Muqaddas', bn: 'পবিত্র স্থান' },
-    'Crafts & Nasheeds': { ar: 'al-Hiraf wa al-Anashid', bn: 'হস্তশিল্প ও নাশিদ' },
-
-    // arabic language
-    'Grammar': { ar: 'al-Nahw', bn: 'ব্যাকরণ' },
-    'Vocab': { ar: 'al-Mufradat', bn: 'শব্দভাণ্ডার' },
-    'Rhetoric': { ar: 'al-Balagha', bn: 'অলংকারশাস্ত্র' },
-    'Morphology': { ar: 'al-Sarf', bn: 'রূপতত্ত্ব' },
-    'Tajweed': { ar: 'al-Tajwid', bn: 'তাজবীদ' },
-    'Proverbs': { ar: 'al-Amthal', bn: 'প্রবাদ' },
-    'Etymology': { ar: 'al-Ishtiqaq', bn: 'ব্যুৎপত্তি' },
-    'Dialects': { ar: 'al-Lahajat', bn: 'উপভাষা' },
-    'Scripts': { ar: 'al-Khutut', bn: 'লিপি' },
-    'Structure': { ar: 'Binyat al-Lugha', bn: 'ভাষার গঠন' },
-    'Sound & Script': { ar: 'al-Sawt wa al-Khatt', bn: 'ধ্বনি ও লিপি' },
-    'Words & Poetry': { ar: 'al-Kalimat wa al-Shir', bn: 'শব্দ ও কবিতা' },
-
-    // philosophy
-    'Epistemology': { ar: 'Nazariyyat al-Maarifa', bn: 'জ্ঞানতত্ত্ব' },
-    'Ontology': { ar: 'al-Wujudiyya', bn: 'অস্তিত্বতত্ত্ব' },
-    'Logic': { ar: 'al-Mantiq', bn: 'যুক্তি' },
-    'Kalam': { ar: 'Ilm al-Kalam', bn: 'কালাম' },
-    'Reason': { ar: 'al-Aql', bn: 'বুদ্ধি' },
-    'Free Will': { ar: 'al-Irada al-Hurra', bn: 'স্বাধীন ইচ্ছা' },
-    'Prob of Evil': { ar: 'Mushkilat al-Sharr', bn: 'মন্দের সমস্যা' },
-    'Prophethood': { ar: 'al-Nubuwwa', bn: 'নবুয়ত' },
-    'Existence': { ar: 'al-Wujud', bn: 'অস্তিত্ব' },
-    'Being': { ar: 'al-Wujud', bn: 'অস্তিত্ব' },
-    'Reason & Knowing': { ar: 'al-Aql wa al-Marifa', bn: 'যুক্তি ও জ্ঞান' },
-    'Will & Evil': { ar: 'al-Irada wa al-Sharr', bn: 'ইচ্ছা ও মন্দ' },
-
-    // names_main subtabs
-    '99 Names of Allah': { ar: 'Asma Allah al-Husna', bn: 'আল্লাহর ৯৯ নাম' },
-    '25 Prophets': { ar: 'al-Anbiya al-Ishrun wa Khamsa', bn: '২৫ নবী' },
-    'Scholars': { ar: 'al-Ulama', bn: 'আলেমগণ' },
-
-    // profile_main subtabs
-    'Trophies': { ar: 'al-Ku\'us', bn: 'ট্রফি' },
-    'Progress': { ar: 'al-Taqaddum', bn: 'অগ্রগতি' },
-    'Analytics': { ar: 'al-Tahlilat', bn: 'বিশ্লেষণ' },
-    'Rewards': { ar: 'al-Mukafaat', bn: 'পুরস্কার' },
-
-    // profile settings
-    'Settings': { ar: 'al-Iidarat', bn: 'সেটিংস' },
-    'Logout': { ar: 'Tasjil al-Khuruj', bn: 'লগআউট' },
-    'Switch user': { ar: 'Taghyir al-Mustakhdim', bn: 'ব্যবহারকারী পরিবর্তন' }
-  },
-  lang: 'en',
-  load() {
-    try { this.lang = localStorage.getItem(LANG_KEY) || 'en'; } catch (e) { this.lang = 'en'; }
-    if (!['en', 'ar', 'bn'].includes(this.lang)) this.lang = 'en';
-    return this.lang;
-  },
-  t(str) {
-    if (!str) return str;
-    const entry = this.dict[str];
-    if (!entry || !entry[this.lang]) return str;
-    return entry[this.lang];
+  function detectDefaultLang() {
+    try {
+      var saved = localStorage.getItem(LANG_KEY);
+      if (saved && ['en', 'ar', 'bn'].indexOf(saved) !== -1) return saved;
+      var navLang = (typeof navigator !== 'undefined' && (navigator.language || navigator.userLanguage || '')) || '';
+      var lc = String(navLang).toLowerCase();
+      if (lc.indexOf('bn') === 0) return 'bn';
+      if (lc.indexOf('ar') === 0) return 'ar';
+    } catch (e) {}
+    return 'en';
   }
-};
 
-I18N.load();
+  var I18N = {
+    dict: DICT,
+    lang: 'en',
+    numerals: 'auto',
+    bnTermMode: 'namaz',
+    load: function() {
+      this.lang = detectDefaultLang();
+      try {
+        var n = localStorage.getItem(NUM_KEY);
+        if (n && ['auto', 'western', 'bangla', 'arabic'].indexOf(n) !== -1) this.numerals = n;
+        var tm = localStorage.getItem(TERM_KEY);
+        if (tm === 'salat' || tm === 'namaz') this.bnTermMode = tm;
+      } catch (e) {}
+      applyDomLanguage(this.lang);
+      return this.lang;
+    },
+    t: function(str) {
+      if (!str) return str;
+      if (this.lang === 'bn') {
+        if (this.bnTermMode === 'salat' && GLOSSARY_SALAT[str]) return GLOSSARY_SALAT[str];
+        if (this.bnTermMode === 'namaz' && GLOSSARY_NAMAZ[str]) return GLOSSARY_NAMAZ[str];
+      }
+      var entry = this.dict[str];
+      if (!entry || !entry[this.lang]) return str;
+      return entry[this.lang];
+    }
+  };
 
-function t(str) { return I18N.t(str); }
-
-function iqSetLang(lang) {
-  if (!['en', 'ar', 'bn'].includes(lang)) lang = 'en';
-  I18N.lang = lang;
-  try { localStorage.setItem(LANG_KEY, lang); } catch (e) {}
-  document.querySelectorAll('.bnav-btn').forEach((b) => {
-    const labelEl = b.querySelector('.bnav-label');
-    if (labelEl) labelEl.textContent = t(b.getAttribute('data-i18n') || '');
-  });
-  const activeBtn = document.querySelector('.bnav-btn.active');
-  const activeCat = (activeBtn && activeBtn.getAttribute('data-cat')) || (window.S && window.S.lastCat) || 'ibadah';
-  if (window.syncIqDrawer) window.syncIqDrawer();
-  if (window.App && typeof window.App.switchCategory === 'function') {
-    window.App.switchCategory(activeCat, activeBtn);
+  function applyDomLanguage(lang) {
+    if (typeof document === 'undefined' || !document.documentElement) return;
+    var rtl = lang === 'ar';
+    try {
+      document.documentElement.lang = lang;
+      document.documentElement.dir = rtl ? 'rtl' : 'ltr';
+      if (document.body) {
+        document.body.setAttribute('data-lang', lang);
+        document.body.setAttribute('dir', rtl ? 'rtl' : 'ltr');
+      }
+    } catch (e) {}
   }
-  if (window.renderProfile) window.renderProfile();
-}
 
-window.t = t;
-window.iqSetLang = iqSetLang;
-window.I18N = I18N;
+  function resolveNumeralMode() {
+    var mode = I18N.numerals || 'auto';
+    if (typeof S !== 'undefined' && S && S.numerals) mode = S.numerals;
+    if (mode === 'auto') {
+      if (I18N.lang === 'bn') return 'bangla';
+      if (I18N.lang === 'ar') return 'arabic';
+      return 'western';
+    }
+    return mode;
+  }
+
+  function iqFormatNum(val) {
+    var s = String(val == null ? '' : val);
+    var mode = resolveNumeralMode();
+    if (mode === 'bangla') {
+      return s.replace(/[0-9]/g, function(d) { return '\u09E6\u09E7\u09E8\u09E9\u09EA\u09EB\u09EC\u09ED\u09EE\u09EF'[Number(d)]; });
+    }
+    if (mode === 'arabic') {
+      return s.replace(/[0-9]/g, function(d) { return '\u0660\u0661\u0662\u0663\u0664\u0665\u0666\u0667\u0668\u0669'[Number(d)]; });
+    }
+    return s;
+  }
+
+  // Arabic 6-plural category resolver + Bangla/English support
+  function iqPluralCategory(n, lang) {
+    var l = lang || I18N.lang || 'en';
+    var num = Math.abs(Number(n) || 0);
+    if (l === 'ar') {
+      if (num === 0) return 'zero';
+      if (num === 1) return 'one';
+      if (num === 2) return 'two';
+      var mod100 = num % 100;
+      if (mod100 >= 3 && mod100 <= 10) return 'few';
+      if (mod100 >= 11 && mod100 <= 99) return 'many';
+      return 'other';
+    }
+    return num === 1 ? 'one' : 'other';
+  }
+
+  function iqPlural(n, formsByLang) {
+    var l = I18N.lang || 'en';
+    var map = (formsByLang && formsByLang[l]) || (formsByLang && formsByLang.en) || {};
+    var cat = iqPluralCategory(n, l);
+    var tmpl = map[cat] || map.other || map.one || String(n);
+    return tmpl.replace('{n}', iqFormatNum(n));
+  }
+
+  function t(str) { return I18N.t(str); }
+
+  function iqSetLang(lang) {
+    if (['en', 'ar', 'bn'].indexOf(lang) === -1) lang = 'en';
+    I18N.lang = lang;
+    try { localStorage.setItem(LANG_KEY, lang); } catch (e) {}
+    if (typeof S !== 'undefined' && S) { S.lang = lang; if (typeof saveState === 'function') saveState(); }
+    applyDomLanguage(lang);
+    document.querySelectorAll('.bnav-btn').forEach(function(b) {
+      var labelEl = b.querySelector('.bnav-label');
+      if (labelEl) labelEl.textContent = t(b.getAttribute('data-i18n') || '');
+    });
+    document.querySelectorAll('[data-i18n-text]').forEach(function(el) {
+      el.textContent = t(el.getAttribute('data-i18n-text') || '');
+    });
+    var activeBtn = document.querySelector('.bnav-btn.active');
+    var activeCat = (activeBtn && activeBtn.getAttribute('data-cat')) || (typeof S !== 'undefined' && S && S.lastCat) || 'ibadah';
+    if (typeof window !== 'undefined') {
+      if (window.syncIqDrawer) window.syncIqDrawer();
+      if (window.renderDateLine) window.renderDateLine();
+      if (window.renderIqFeed) window.renderIqFeed();
+      if (window.renderPrayers) window.renderPrayers();
+      if (window.renderPrayerTimes) window.renderPrayerTimes();
+      if (window.renderDailyContent) window.renderDailyContent();
+      if (window.App && typeof window.App.switchCategory === 'function' && activeBtn) {
+        window.App.switchCategory(activeCat, activeBtn);
+      }
+      if (window.renderProfile) window.renderProfile();
+    }
+  }
+
+  function iqSetNumerals(mode) {
+    if (['auto', 'western', 'bangla', 'arabic'].indexOf(mode) === -1) mode = 'auto';
+    I18N.numerals = mode;
+    try { localStorage.setItem(NUM_KEY, mode); } catch (e) {}
+    if (typeof S !== 'undefined' && S) { S.numerals = mode; if (typeof saveState === 'function') saveState(); }
+    if (typeof window !== 'undefined') {
+      if (window.renderAll) window.renderAll();
+      if (window.renderIqFeed) window.renderIqFeed();
+    }
+  }
+
+  function iqSetBnTermMode(mode) {
+    I18N.bnTermMode = mode === 'salat' ? 'salat' : 'namaz';
+    try { localStorage.setItem(TERM_KEY, I18N.bnTermMode); } catch (e) {}
+    if (typeof S !== 'undefined' && S) { S.bnTermMode = I18N.bnTermMode; if (typeof saveState === 'function') saveState(); }
+    iqSetLang(I18N.lang);
+  }
+
+  I18N.load();
+
+  window.t = t;
+  window.iqSetLang = iqSetLang;
+  window.iqSetNumerals = iqSetNumerals;
+  window.iqSetBnTermMode = iqSetBnTermMode;
+  window.iqFormatNum = iqFormatNum;
+  window.iqPluralCategory = iqPluralCategory;
+  window.iqPlural = iqPlural;
+  window.I18N = I18N;
+})();

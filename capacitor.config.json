@@ -1,0 +1,19 @@
+{
+  "appId": "com.ibadahquest.app",
+  "appName": "Ibadah Quest",
+  "webDir": ".",
+  "bundledWebRuntime": false,
+  "server": {
+    "androidScheme": "https"
+  },
+  "plugins": {
+    "LocalNotifications": {
+      "smallIcon": "ic_stat_ibadah_quest",
+      "iconColor": "#07635D"
+    },
+    "SplashScreen": {
+      "launchAutoHide": true,
+      "backgroundColor": "#F2FBF8"
+    }
+  }
+}

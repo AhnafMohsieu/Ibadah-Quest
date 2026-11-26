@@ -1,3 +1,6 @@
+/* features/analytics/charts.js — Zero-dependency offline 2D Canvas chart suite
+ * Replaces external Chart.js CDN completely so Analytics works 100% offline with 0 KB external download.
+ */
 (function() {
   'use strict';
 
@@ -28,134 +31,236 @@
   }
 
   const COLORS = {
-    get primary() { return cssVar('--gold-dark', '#e11d48'); },
-    get secondary() { return cssVar('--gold', '#f43f5e'); },
-    get light() { return cssVar('--gold-light', '#fb7185'); },
-    get accent() { return cssVar('--gold', '#f43f5e'); },
-    get red() { return cssVar('--red', '#dc2626'); },
-    get bg() { try {const h=cssVar('--gold-light','#fb7185');const p=hexToRgb(h);if(p)return`rgba(${p.r},${p.g},${p.b},0.12)`;}catch(e){} return'rgba(251,113,133,0.15)'; },
-    get grid() { return cssVar('--border', 'rgba(31,41,55,0.08)'); },
-    get text() { return cssVar('--text2', '#6b7280'); },
-    get white() { return cssVar('--text', '#1f2937'); }
+    get primary() { return cssVar('--accent', '#07635d'); },
+    get secondary() { return cssVar('--accent-light', '#0a7a72'); },
+    get light() { return cssVar('--gold', '#8e6b1e'); },
+    get accent() { return cssVar('--accent', '#07635d'); },
+    get red() { return cssVar('--red', '#b42318'); },
+    get bg() { return cssVar('--accent-bg', '#e1f2ed'); },
+    get grid() { return cssVar('--border', '#c5dad2'); },
+    get text() { return cssVar('--text2', '#385752'); },
+    get white() { return cssVar('--text', '#0d2421'); }
   };
 
   const instances = {};
 
   function destroy(id) {
-    if (instances[id]) { if (instances[id].destroy) instances[id].destroy(); delete instances[id]; }
+    if (instances[id]) {
+      if (instances[id].destroy) instances[id].destroy();
+      delete instances[id];
+    }
   }
 
-  function baseOptions(title) {
-    return {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: {
-        legend: { display: false },
-        title: { display: !!title, text: title, color: COLORS.accent, font: { family: "'Sora', sans-serif", size: 14, weight: '600' } }
-      },
-      scales: {
-        x: { ticks: { color: COLORS.text, font: { size: 10 } }, grid: { color: COLORS.grid } },
-        y: { ticks: { color: COLORS.text, font: { size: 10 } }, grid: { color: COLORS.grid } }
-      }
-    };
-  }
-
-  function hasChartJS() {
-    return typeof Chart !== 'undefined';
-  }
-
-  function renderOfflineFallback(canvasId, title) {
+  function setupCanvas(canvasId) {
     const canvas = document.getElementById(canvasId);
-    if (!canvas || !canvas.getContext) return;
+    if (!canvas || typeof canvas.getContext !== 'function') return null;
+    const parent = canvas.parentElement;
+    const w = Math.max(240, (parent && parent.clientWidth ? parent.clientWidth - 16 : 320));
+    const h = Math.max(160, canvas.clientHeight || 190);
+    const dpr = (typeof window !== 'undefined' && window.devicePixelRatio) || 1;
+    canvas.width = w * dpr;
+    canvas.height = h * dpr;
+    canvas.style.width = w + 'px';
+    canvas.style.height = h + 'px';
     const ctx = canvas.getContext('2d');
-    const w = canvas.width || 300;
-    const h = canvas.height || 150;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     ctx.clearRect(0, 0, w, h);
-    ctx.fillStyle = COLORS.text || '#6b7280';
-    ctx.font = '12px Sora, sans-serif';
-    ctx.textAlign = 'center';
-    ctx.fillText((title ? title + ' ' : '') + '(Offline mode - chart summary active)', w / 2, h / 2);
+    return { canvas, ctx, w, h };
+  }
+
+  function drawTitle(ctx, title, w) {
+    if (!title) return 10;
+    ctx.fillStyle = COLORS.primary;
+    ctx.font = '600 13px "Hind Siliguri", system-ui, sans-serif';
+    ctx.textAlign = 'left';
+    ctx.textBaseline = 'top';
+    ctx.fillText(title, 12, 8, w - 24);
+    return 30;
   }
 
   function createLine(canvasId, labels, datasets, title) {
     destroy(canvasId);
-    const ctx = document.getElementById(canvasId);
-    if (!ctx) return;
-    if (!hasChartJS()) {
-      renderOfflineFallback(canvasId, title);
-      return null;
+    const env = setupCanvas(canvasId);
+    if (!env) return null;
+    const { ctx, w, h } = env;
+    const top = drawTitle(ctx, title, w);
+    const padL = 34, padR = 14, padB = 26;
+    const pw = Math.max(40, w - padL - padR);
+    const ph = Math.max(40, h - top - padB);
+    const flatVals = [];
+    (datasets || []).forEach(ds => (ds.data || []).forEach(v => flatVals.push(Number(v) || 0)));
+    const maxV = Math.max(1, Math.max.apply(null, flatVals.length ? flatVals : [1]));
+
+    ctx.strokeStyle = COLORS.grid;
+    ctx.lineWidth = 1;
+    for (let i = 0; i <= 3; i++) {
+      const y = top + (ph * i) / 3;
+      ctx.beginPath();
+      ctx.moveTo(padL, y);
+      ctx.lineTo(padL + pw, y);
+      ctx.stroke();
+      ctx.fillStyle = COLORS.text;
+      ctx.font = '10px system-ui, sans-serif';
+      ctx.textAlign = 'right';
+      ctx.textBaseline = 'middle';
+      const val = Math.round(maxV * (1 - i / 3));
+      ctx.fillText(String(val), padL - 6, y);
     }
-    instances[canvasId] = new Chart(ctx, {
-      type: 'line',
-      data: { labels, datasets: datasets.map(ds => ({ ...ds, borderWidth: 2, pointRadius: 2, tension: 0.3, fill: ds.fill !== false })) },
-      options: baseOptions(title)
+
+    (datasets || []).forEach((ds, di) => {
+      const pts = ds.data || [];
+      if (!pts.length) return;
+      const strokeCol = ds.borderColor || (di === 0 ? COLORS.primary : COLORS.light);
+      ctx.strokeStyle = strokeCol;
+      ctx.lineWidth = 2.2;
+      ctx.beginPath();
+      const coords = pts.map((v, idx) => {
+        const x = pts.length === 1 ? padL + pw / 2 : padL + (idx / (pts.length - 1)) * pw;
+        const y = top + ph - ((Number(v) || 0) / maxV) * ph;
+        return { x, y };
+      });
+      coords.forEach((p, idx) => (idx === 0 ? ctx.moveTo(p.x, p.y) : ctx.lineTo(p.x, p.y)));
+      ctx.stroke();
+      coords.forEach(p => {
+        ctx.fillStyle = strokeCol;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, 2.8, 0, Math.PI * 2);
+        ctx.fill();
+      });
     });
+
+    if (labels && labels.length) {
+      ctx.fillStyle = COLORS.text;
+      ctx.font = '10px system-ui, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'top';
+      const step = Math.max(1, Math.ceil(labels.length / 6));
+      labels.forEach((lbl, idx) => {
+        if (idx % step !== 0 && idx !== labels.length - 1) return;
+        const x = labels.length === 1 ? padL + pw / 2 : padL + (idx / (labels.length - 1)) * pw;
+        ctx.fillText(String(lbl), x, top + ph + 6);
+      });
+    }
+
+    instances[canvasId] = { type: 'line', labels, datasets };
     return instances[canvasId];
   }
 
   function createBar(canvasId, labels, data, color, title) {
     destroy(canvasId);
-    const ctx = document.getElementById(canvasId);
-    if (!ctx) return;
-    if (!hasChartJS()) {
-      renderOfflineFallback(canvasId, title);
-      return null;
-    }
-    instances[canvasId] = new Chart(ctx, {
-      type: 'bar',
-      data: { labels, datasets: [{ data, backgroundColor: color || COLORS.primary, borderRadius: 4 }] },
-      options: baseOptions(title)
+    const env = setupCanvas(canvasId);
+    if (!env) return null;
+    const { ctx, w, h } = env;
+    const top = drawTitle(ctx, title, w);
+    const padL = 32, padR = 12, padB = 26;
+    const pw = Math.max(40, w - padL - padR);
+    const ph = Math.max(40, h - top - padB);
+    const vals = (data || []).map(v => Number(v) || 0);
+    const maxV = Math.max(1, Math.max.apply(null, vals.length ? vals : [1]));
+    const count = Math.max(1, vals.length);
+    const slotW = pw / count;
+    const barW = Math.max(4, Math.min(28, slotW * 0.62));
+
+    ctx.strokeStyle = COLORS.grid;
+    ctx.beginPath();
+    ctx.moveTo(padL, top + ph);
+    ctx.lineTo(padL + pw, top + ph);
+    ctx.stroke();
+
+    vals.forEach((v, i) => {
+      const bh = (v / maxV) * ph;
+      const x = padL + i * slotW + (slotW - barW) / 2;
+      const y = top + ph - bh;
+      ctx.fillStyle = color || COLORS.primary;
+      ctx.fillRect(x, y, barW, Math.max(2, bh));
+      if (labels && labels[i]) {
+        ctx.fillStyle = COLORS.text;
+        ctx.font = '10px system-ui, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'top';
+        ctx.fillText(String(labels[i]).slice(0, 6), x + barW / 2, top + ph + 6);
+      }
     });
+
+    instances[canvasId] = { type: 'bar', labels, data };
     return instances[canvasId];
   }
 
   function createHorizontalBar(canvasId, labels, data, color, title) {
     destroy(canvasId);
-    const ctx = document.getElementById(canvasId);
-    if (!ctx) return;
-    if (!hasChartJS()) {
-      renderOfflineFallback(canvasId, title);
-      return null;
-    }
-    const opts = baseOptions(title);
-    const tmp = opts.scales.x;
-    opts.scales.x = opts.scales.y;
-    opts.scales.y = tmp;
-    instances[canvasId] = new Chart(ctx, {
-      type: 'bar',
-      data: { labels, datasets: [{ data, backgroundColor: color || COLORS.primary, borderRadius: 4 }] },
-      options: opts
+    const env = setupCanvas(canvasId);
+    if (!env) return null;
+    const { ctx, w, h } = env;
+    const top = drawTitle(ctx, title, w);
+    const padL = 78, padR = 24, padB = 10;
+    const pw = Math.max(40, w - padL - padR);
+    const ph = Math.max(40, h - top - padB);
+    const vals = (data || []).map(v => Number(v) || 0);
+    const maxV = Math.max(1, Math.max.apply(null, vals.length ? vals : [1]));
+    const count = Math.max(1, vals.length);
+    const rowH = ph / count;
+    const barH = Math.max(6, Math.min(18, rowH * 0.58));
+
+    vals.forEach((v, i) => {
+      const bw = (v / maxV) * pw;
+      const y = top + i * rowH + (rowH - barH) / 2;
+      ctx.fillStyle = COLORS.text;
+      ctx.font = '11px system-ui, sans-serif';
+      ctx.textAlign = 'right';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(String((labels && labels[i]) || '').slice(0, 12), padL - 8, y + barH / 2);
+      ctx.fillStyle = color || COLORS.primary;
+      ctx.fillRect(padL, y, Math.max(2, bw), barH);
     });
+
+    instances[canvasId] = { type: 'hbar', labels, data };
     return instances[canvasId];
   }
 
   function createDoughnut(canvasId, labels, data, colors, title) {
     destroy(canvasId);
-    const ctx = document.getElementById(canvasId);
-    if (!ctx) return;
-    if (!hasChartJS()) {
-      renderOfflineFallback(canvasId, title);
-      return null;
-    }
-    instances[canvasId] = new Chart(ctx, {
-      type: 'doughnut',
-      data: { labels, datasets: [{ data, backgroundColor: colors, borderWidth: 0 }] },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-          legend: { display: true, position: 'right', labels: { color: COLORS.text, font: { size: 11 }, padding: 8 } },
-          title: { display: !!title, text: title, color: COLORS.accent, font: { family: "'Sora', sans-serif", size: 14, weight: '600' } }
-        }
-      }
+    const env = setupCanvas(canvasId);
+    if (!env) return null;
+    const { ctx, w, h } = env;
+    const top = drawTitle(ctx, title, w);
+    const vals = (data || []).map(v => Math.max(0, Number(v) || 0));
+    const sum = vals.reduce((a, b) => a + b, 0) || 1;
+    const cx = Math.min(w * 0.34, 90);
+    const cy = top + (h - top) / 2;
+    const r = Math.max(24, Math.min(cx - 12, (h - top) * 0.38));
+
+    let angle = -Math.PI / 2;
+    const pal = colors && colors.length ? colors : [COLORS.primary, COLORS.light, COLORS.secondary, COLORS.grid];
+    vals.forEach((v, idx) => {
+      const slice = (v / sum) * Math.PI * 2;
+      ctx.strokeStyle = pal[idx % pal.length];
+      ctx.lineWidth = r * 0.38;
+      ctx.beginPath();
+      ctx.arc(cx, cy, r * 0.72, angle, angle + slice);
+      ctx.stroke();
+      angle += slice;
     });
+
+    const legX = cx + r + 16;
+    ctx.font = '11px system-ui, sans-serif';
+    ctx.textAlign = 'left';
+    ctx.textBaseline = 'middle';
+    (labels || []).slice(0, 5).forEach((lbl, idx) => {
+      const y = top + 16 + idx * 20;
+      ctx.fillStyle = pal[idx % pal.length];
+      ctx.fillRect(legX, y - 5, 10, 10);
+      ctx.fillStyle = COLORS.text;
+      ctx.fillText(String(lbl) + ' (' + (vals[idx] || 0) + ')', legX + 16, y, w - legX - 20);
+    });
+
+    instances[canvasId] = { type: 'doughnut', labels, data };
     return instances[canvasId];
   }
 
   function createHeatmap(canvasId, data, title) {
     destroy(canvasId);
     const canvas = document.getElementById(canvasId);
-    if (!canvas) return;
+    if (!canvas) return null;
 
     const map = {};
     data.forEach(d => { map[d.date] = d.value; });
@@ -201,8 +306,16 @@
     ctx.scale(dpr, dpr);
     ctx.clearRect(0, 0, totalWidth, totalHeight);
 
-    const iramp = [cssVar('--gold-dark','#e11d48'),cssVar('--gold','#f43f5e'),cssVar('--gold-light','#fb7185')];
-    const ramp = [mix(iramp[2],cssVar('--bg','#faf7f5'),0.12),mix(iramp[2],cssVar('--bg','#faf7f5'),0.28),mix(iramp[1],cssVar('--bg','#faf7f5'),0.46),mix(iramp[0],cssVar('--bg','#faf7f5'),0.66),iramp[1],iramp[0]];
+    const accent = cssVar('--accent', '#07635d');
+    const bgCanvas = cssVar('--bg', '#f2fbf8');
+    const ramp = [
+      mix(accent, bgCanvas, 0.12),
+      mix(accent, bgCanvas, 0.28),
+      mix(accent, bgCanvas, 0.48),
+      mix(accent, bgCanvas, 0.68),
+      mix(accent, bgCanvas, 0.85),
+      accent
+    ];
 
     const getColor = (val) => {
       if (val <= 0) return ramp[0];
@@ -229,25 +342,13 @@
         ctx.fillStyle = getColor(day.value);
         ctx.beginPath();
         const r = Math.floor(cellSize * 0.3);
-        if (ctx.roundRect) {
-          ctx.roundRect(x, y, cellSize, cellSize, r);
-        } else {
-          ctx.moveTo(x + r, y);
-          ctx.lineTo(x + cellSize - r, y);
-          ctx.quadraticCurveTo(x + cellSize, y, x + cellSize, y + r);
-          ctx.lineTo(x + cellSize, y + cellSize - r);
-          ctx.quadraticCurveTo(x + cellSize, y + cellSize, x + cellSize - r, y + cellSize);
-          ctx.lineTo(x + r, y + cellSize);
-          ctx.quadraticCurveTo(x, y + cellSize, x, y + cellSize - r);
-          ctx.lineTo(x, y + r);
-          ctx.quadraticCurveTo(x, y, x + r, y);
-          ctx.closePath();
-        }
+        if (ctx.roundRect) ctx.roundRect(x, y, cellSize, cellSize, r);
+        else ctx.rect(x, y, cellSize, cellSize);
         ctx.fill();
       });
     });
 
-    canvas.title = '';
+    canvas.title = title || '';
     canvas.onmousemove = (e) => {
       const rect = canvas.getBoundingClientRect();
       const mx = e.clientX - rect.left;

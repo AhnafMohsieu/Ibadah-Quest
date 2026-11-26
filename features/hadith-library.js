@@ -1,17 +1,41 @@
+/* features/hadith-library.js — On-demand Hadith loader & HTML-safe normalizer.
+ * Eliminates the legacy DOMContentLoaded auto-fetch of 38MB+ JSON payloads; collections load only on user demand.
+ */
 (function() {
   const CDN = 'https://cdn.jsdelivr.net/gh/fawazahmed0/hadith-api@1/editions/';
 
   const REMOTE_COLLECTIONS = [
-    { id:'abudawud', name: 'Sunan Abi Dawud', desc: 'One of the Kutub al-Sittah, compiled by Abu Dawud al-Sijistani (d. 889 CE)' },
-    { id:'tirmidhi', name: 'Jami at-Tirmidhi', desc: 'One of the Kutub al-Sittah, compiled by at-Tirmidhi (d. 892 CE)' },
-    { id:'nasai', name: "Sunan an-Nasa'i", desc: 'One of the Kutub al-Sittah, compiled by an-Nasa\u2019i (d. 915 CE)' },
-    { id:'ibnmajah', name: 'Sunan Ibn Majah', desc: 'One of the Kutub al-Sittah, compiled by Ibn Majah (d. 887 CE)' },
-    { id:'malik', name: 'Muwatta Imam Malik', desc: 'The earliest written collection of hadith, by Malik ibn Anas (d. 795 CE)' },
-    { id:'qudsi', name: 'Forty Hadith Qudsi', desc: 'Forty narrations in which the Prophet \uFDFA transmits meanings from Allah directly' }
+    { id:'abudawud', name: 'Sunan Abi Dawud', desc: 'Compiled by Abu Dawud al-Sijistani (d. 889 CE) · On-demand download (fawazahmed0/hadith-api, Unlicense)' },
+    { id:'tirmidhi', name: 'Jami at-Tirmidhi', desc: 'Compiled by Imam at-Tirmidhi (d. 892 CE) · On-demand download' },
+    { id:'nasai', name: "Sunan an-Nasa'i", desc: "Compiled by Imam an-Nasa'i (d. 915 CE) · On-demand download" },
+    { id:'ibnmajah', name: 'Sunan Ibn Majah', desc: 'Compiled by Ibn Majah (d. 887 CE) · On-demand download' },
+    { id:'malik', name: 'Muwatta Imam Malik', desc: 'Earliest compiled fiqh & hadith collection by Malik ibn Anas (d. 795 CE)' },
+    { id:'qudsi', name: 'Forty Hadith Qudsi', desc: 'Forty narrations transmitting sacred meanings conveyed by the Prophet \uFDFA' }
   ];
 
-  const BUNDLED_IDS = ['bukhari', 'muslim'];
+  const BUNDLED_IDS = ['bukhari', 'muslim', 'nawawi'];
   const _pending = {};
+
+  function sanitizePlainText(val) {
+    if (val == null) return '';
+    return String(val)
+      .replace(/<br\s*\/?>/gi, ' ')
+      .replace(/<[^>]*>/g, '')
+      .replace(/\s+/g, ' ')
+      .trim();
+  }
+
+  function sanitizeNormalizedCollection(col) {
+    if (!col || typeof col !== 'object') return col;
+    (col.books || []).forEach(function(bk) {
+      (bk.hadiths || []).forEach(function(h) {
+        if (!h) return;
+        if (h.t != null) h.t = sanitizePlainText(h.t);
+        if (h.a != null) h.a = sanitizePlainText(h.a);
+      });
+    });
+    return col;
+  }
 
   function fetchJSON(url) {
     var ctl = null, timer = null;
@@ -39,12 +63,12 @@
     if (!meta) return Promise.resolve(null);
     if (_pending[id]) return _pending[id];
     const p = _pending[id] = ContentCache.get('col-' + id).then(cached => {
-      if (cached) return cached;
+      if (cached) return sanitizeNormalizedCollection(cached);
       return Promise.all([
         fetchJSON(CDN + 'eng-' + id + '.min.json'),
         fetchJSON(CDN + 'ara-' + id + '.min.json').catch(() => null)
       ]).then(results => {
-        const col = HadithNormalize.normalizeRemoteEdition(results[0], results[1], meta);
+        const col = sanitizeNormalizedCollection(HadithNormalize.normalizeRemoteEdition(results[0], results[1], meta));
         return ContentCache.put('col-' + id, col).then(() => col);
       });
     });
@@ -66,7 +90,8 @@
       });
       (col.books || []).forEach(bk => {
         (bk.hadiths || []).forEach(h => {
-          h.a = map[h.b + ':' + h.h] != null ? map[h.b + ':' + h.h].replace(/<br\s*\/?>/gi, ' ').trim() : (map['a' + h.n] != null ? map['a' + h.n].replace(/<br\s*\/?>/gi, ' ').trim() : null);
+          var raw = map[h.b + ':' + h.h] != null ? map[h.b + ':' + h.h] : (map['a' + h.n] != null ? map['a' + h.n] : null);
+          h.a = raw != null ? sanitizePlainText(raw) : null;
         });
       });
       col._arabicBackfilled = true;
@@ -75,10 +100,9 @@
   }
 
   function preloadRemoteCollections() {
-    REMOTE_COLLECTIONS.forEach(function(c) { ensureHadithCollection(c.id); });
+    // Explicit user-invoked preload only (never fired automatically on boot)
+    return Promise.all(REMOTE_COLLECTIONS.map(function(c) { return ensureHadithCollection(c.id).catch(() => null); }));
   }
 
-  document.addEventListener('DOMContentLoaded', preloadRemoteCollections);
-
-  window.HadithLibrary = { REMOTE_COLLECTIONS, ensureHadithCollection, ensureBundledArabic, preloadRemoteCollections };
+  window.HadithLibrary = { REMOTE_COLLECTIONS, ensureHadithCollection, ensureBundledArabic, preloadRemoteCollections, sanitizePlainText };
 })();

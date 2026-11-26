@@ -1,19 +1,44 @@
 (function() {
   // -------------------------------------------------------
-  // HIJRI CALENDAR CONVERSION
+  // HIJRI CALENDAR CONVERSION WITH -2..+2 SIGHTING OFFSET
   // -------------------------------------------------------
 
   const HIJRI_MONTHS = ['Muharram','Safar','Rabi al-Awwal','Rabi al-Thani','Jumada al-Ula','Jumada al-Thani','Rajab','Sha\'ban','Ramadan','Shawwal','Dhul Qi\'dah','Dhul Hijjah'];
+  const HIJRI_MONTHS_BN = ['মহররম','সফর','রবিউল আউয়াল','রবিউস সানি','জুমাদাল উলা','জুমাদাস সানি','রজব','শাবান','রমজান','শাওয়াল','জিলকদ','জিলহজ'];
   const HIJRI_MONTHS_AR = ['المحرم','صفر','ربيع الأول','ربيع الثاني','جمادى الأولى','جمادى الآخرة','رجب','شعبان','رمضان','شوال','ذو القعدة','ذو الحجة'];
   const WEEKDAYS_EN = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  const WEEKDAYS_BN = ['রবি','সোম','মঙ্গল','বুধ','বৃহঃ','শুক্র','শনি'];
   const WEEKDAYS_AR = ['الأحد','الإثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
   const WEEKDAYS_ROM = ['Ahad','Ithnayn','Thulatha','Arbi\'a','Khamis','Jumu\'ah','Sabt'];
 
-  function gregorianToHijri(gY, gM, gD) {
-    const jd = Math.floor((1461 * (gY + 4800 + Math.floor((gM - 14) / 12))) / 4) +
-               Math.floor((367 * (gM - 2 - 12 * Math.floor((gM - 14) / 12))) / 12) -
-               Math.floor((3 * Math.floor((gY + 4900 + Math.floor((gM - 14) / 12)) / 100)) / 4) +
-               gD - 32075;
+  function getHijriOffset() {
+    var o = 0;
+    if (typeof S !== 'undefined' && S && S.hijriOffset != null) o = Number(S.hijriOffset) || 0;
+    return Math.max(-2, Math.min(2, Math.round(o)));
+  }
+
+  function setHijriOffset(val) {
+    var o = Math.max(-2, Math.min(2, Math.round(Number(val) || 0)));
+    if (typeof S !== 'undefined' && S) {
+      S.hijriOffset = o;
+      if (typeof saveState === 'function') saveState();
+    }
+    if (typeof window !== 'undefined') {
+      if (window.renderDateLine) window.renderDateLine();
+      if (window.renderProg) window.renderProg();
+      if (window.renderProfile) window.renderProfile();
+    }
+    return o;
+  }
+
+  function gregorianToHijri(gY, gM, gD, offsetOverride) {
+    var off = offsetOverride !== undefined ? Math.max(-2, Math.min(2, Math.round(Number(offsetOverride) || 0))) : 0;
+    var baseDate = new Date(gY, gM - 1, gD + off);
+    var adjY = baseDate.getFullYear(), adjM = baseDate.getMonth() + 1, adjD = baseDate.getDate();
+    const jd = Math.floor((1461 * (adjY + 4800 + Math.floor((adjM - 14) / 12))) / 4) +
+               Math.floor((367 * (adjM - 2 - 12 * Math.floor((adjM - 14) / 12))) / 12) -
+               Math.floor((3 * Math.floor((adjY + 4900 + Math.floor((adjM - 14) / 12)) / 100)) / 4) +
+               adjD - 32075;
     const l = jd - 1948440 + 10632;
     const n = Math.floor((l - 1) / 10631);
     const remainder = l - 10631 * n + 354;
@@ -25,6 +50,20 @@
     const hD = remainderJ - Math.floor((709 * hM) / 24);
     const hY = 30 * n + j - 30;
     return { year: hY, month: hM, day: hD };
+  }
+
+  function getAdjustedHijri(dateObj) {
+    var d = dateObj || new Date();
+    return gregorianToHijri(d.getFullYear(), d.getMonth() + 1, d.getDate(), getHijriOffset());
+  }
+
+  function formatHijriLabel(hd) {
+    if (!hd) return '';
+    var lang = (typeof I18N !== 'undefined' && I18N.lang) || 'en';
+    var months = lang === 'ar' ? HIJRI_MONTHS_AR : (lang === 'bn' ? HIJRI_MONTHS_BN : HIJRI_MONTHS);
+    var mName = months[(hd.month - 1) % 12] || '';
+    var fmt = typeof window !== 'undefined' && typeof window.iqFormatNum === 'function' ? window.iqFormatNum : function(x) { return String(x); };
+    return fmt(hd.day) + ' ' + mName + ' ' + fmt(hd.year);
   }
 
   function hijriToGregorian(hY, hM, hD) {
@@ -52,19 +91,13 @@
     return ((11 * hY + 14) % 30) < 11;
   }
 
-  function getHijriMonthDays(hY, hM) {
-    let total = 0;
-    for (let m = 1; m < hM; m++) total += getDaysInHijriMonth(hY, m);
-    return total;
-  }
-
   let calViewYear, calViewMonth, calViewHijriY, calViewHijriM;
 
   function initCalView() {
     const now = new Date();
     calViewYear = now.getFullYear();
     calViewMonth = now.getMonth();
-    const h = gregorianToHijri(calViewYear, calViewMonth + 1, 1);
+    const h = gregorianToHijri(calViewYear, calViewMonth + 1, 1, getHijriOffset());
     calViewHijriY = h.year;
     calViewHijriM = h.month;
   }
@@ -72,7 +105,7 @@
   function calPrevMonth() {
     calViewMonth--;
     if (calViewMonth < 0) { calViewMonth = 11; calViewYear--; }
-    const h = gregorianToHijri(calViewYear, calViewMonth + 1, 1);
+    const h = gregorianToHijri(calViewYear, calViewMonth + 1, 1, getHijriOffset());
     calViewHijriY = h.year;
     calViewHijriM = h.month;
     renderProg();
@@ -81,7 +114,7 @@
   function calNextMonth() {
     calViewMonth++;
     if (calViewMonth > 11) { calViewMonth = 0; calViewYear++; }
-    const h = gregorianToHijri(calViewYear, calViewMonth + 1, 1);
+    const h = gregorianToHijri(calViewYear, calViewMonth + 1, 1, getHijriOffset());
     calViewHijriY = h.year;
     calViewHijriM = h.month;
     renderProg();
@@ -91,7 +124,7 @@
     const now = new Date();
     calViewYear = now.getFullYear();
     calViewMonth = now.getMonth();
-    const h = gregorianToHijri(calViewYear, calViewMonth + 1, 1);
+    const h = gregorianToHijri(calViewYear, calViewMonth + 1, 1, getHijriOffset());
     calViewHijriY = h.year;
     calViewHijriM = h.month;
     renderProg();
@@ -103,12 +136,18 @@
   Object.defineProperty(window, 'calViewHijriM', { get: function() { return calViewHijriM; }, set: function(v) { calViewHijriM = v; }, configurable: true });
 
   window.HIJRI_MONTHS = HIJRI_MONTHS;
+  window.HIJRI_MONTHS_BN = HIJRI_MONTHS_BN;
   window.HIJRI_MONTHS_AR = HIJRI_MONTHS_AR;
   window.WEEKDAYS_EN = WEEKDAYS_EN;
+  window.WEEKDAYS_BN = WEEKDAYS_BN;
   window.WEEKDAYS_AR = WEEKDAYS_AR;
   window.WEEKDAYS_ROM = WEEKDAYS_ROM;
   window.gregorianToHijri = gregorianToHijri;
   window.hijriToGregorian = hijriToGregorian;
+  window.getHijriOffset = getHijriOffset;
+  window.setHijriOffset = setHijriOffset;
+  window.getAdjustedHijri = getAdjustedHijri;
+  window.formatHijriLabel = formatHijriLabel;
   window.initCalView = initCalView;
   window.calPrevMonth = calPrevMonth;
   window.calNextMonth = calNextMonth;
