@@ -35,4 +35,4 @@ Format inspired by [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Removed / Security & Content Fixes
 - Removed automatic 38.67 MB remote Hadith preload on `DOMContentLoaded` (`features/hadith-library.js`) and external Google Fonts & Chart.js CDNs (zero third-party requests on boot).
 - Replaced RNG "Mystery Box" loot-box and vanity/presumptuous level ranks (`data/levels.js`, `data/shop.js`), corrected factual/copywriting errors in `data/tips-details.js`, stripped BOM/duplicate Bismillah formatting in `data/pools/quran-verses.js`, and HTML-escaped Hadith rendering in `core/dynamic.js` & `features/hadith-library.js`.
-- Fixed broken widget manifest paths (`widgets/*.json` -> `features/widgets/*.json`) and bumped Service Worker precache manifest (`sw.js?v=66`, `MANIFEST_REV = 27`).
+- Fixed broken widget manifest paths (`widgets/*.json` -> `features/widgets/*.json`), added `features/analytics/*.js` to `core/precache-manifest.js` (`176` verified precache entries), bumped Service Worker `MANIFEST_REV = 28` (`sw.js?v=66`), and refreshed `README.md` stack/test metadata (`602` automated tests).
