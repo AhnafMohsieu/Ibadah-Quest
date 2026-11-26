@@ -24,7 +24,6 @@ const EXCLUDED = new Set([
   '.git',
   '.github',
   '.playwright-mcp',
-  '.opencode',
   '.worktrees',
   'dist'
 ]);

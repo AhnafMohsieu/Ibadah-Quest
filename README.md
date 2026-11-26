@@ -135,13 +135,6 @@ The app uses an IIFE-per-module pattern with `window.*` exports. No bundler — 
 - **Global error tap (`core/error-tap.js`)** — installed early in `<head>`; catches `window.onerror` + `unhandledrejection`, buffers the last 25, logs details, and shows a single non-intrusive toast per session.
 - **No-silent-stub enforcement** — `tests/app-registry.test.js` scans the `App` facade for `() => {}` / `function () {}` no-op stubs (now a real, matching scan).
 
-## Agent skills (`.opencode/skills/`)
-
-- **`caveman`** — terse, broken-English explanation voice for "explain it like what it is" requests.
-- **`ponytail`** — no-nonsense senior-engineer mode: read first, smallest correct change, prove it green.
-- **`superpower`** — the spec-first → executable-plan → subagent-implement workflow used by `docs/superpowers/`.
-- **`ibadah-quest-dev`** — repo conventions (tab wiring, state schema, cache discipline, testing).
-
 ## Development
 
 ### Adding a Feature
