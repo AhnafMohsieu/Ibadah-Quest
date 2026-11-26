@@ -46,7 +46,7 @@ export function freshState(todayKey) {
     onboarding:{complete:false,step:0},
     notificationsEnabled:false, notificationLog:{},
     notificationSettings:{quietStart:'22:30',quietEnd:'04:30',prayers:{fajr:true,dhuhr:true,asr:true,maghrib:true,isha:true},offsets:{fajr:0,dhuhr:0,asr:0,maghrib:0,isha:0},dailyCap:6},
-    prayerSettings:{lat:23.8103,lng:90.4125,label:'Dhaka',method:1,paused:false,asrSchool:'hanafi',highLat:'middle',offsets:{fajr:0,sunrise:0,dhuhr:0,asr:0,maghrib:0,isha:0},mosqueTimes:{}},
+    prayerSettings:{lat:23.8103,lng:90.4125,label:'Dhaka',method:1,paused:false,asrSchool:'hanafi',highLat:'middle',fajrAngle:18,ishaAngle:18,offsets:{fajr:0,sunrise:0,dhuhr:0,asr:0,maghrib:0,isha:0},mosqueTimes:{}},
     dhikrTapXpDay:{date:'',xp:0,cycles:0},
     personalGoals:[],
     seasonal:{active:null,ramadanQuests:[],hajjDays:0,eidRewards:[],arafahDone:false},

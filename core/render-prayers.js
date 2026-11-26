@@ -7,6 +7,7 @@
   const DEFAULT_PRAYER_SETTINGS = {
     lat: 23.8103, lng: 90.4125, label: 'Dhaka', method: 1,
     paused: false, asrSchool: 'hanafi', highLat: 'middle',
+    fajrAngle: 18, ishaAngle: 18,
     offsets: { fajr: 0, sunrise: 0, dhuhr: 0, asr: 0, maghrib: 0, isha: 0 },
     mosqueTimes: {}
   };
@@ -42,10 +43,12 @@
       lat: Number.isFinite(lat) && lat >= -90 && lat <= 90 ? lat : DEFAULT_PRAYER_SETTINGS.lat,
       lng: Number.isFinite(lng) && lng >= -180 && lng <= 180 ? lng : DEFAULT_PRAYER_SETTINGS.lng,
       label: typeof saved.label === 'string' && saved.label.trim() ? saved.label.trim() : DEFAULT_PRAYER_SETTINGS.label,
-      method: Number.isFinite(method) && method > 0 ? method : DEFAULT_PRAYER_SETTINGS.method,
+      method: Number.isFinite(method) && method >= 0 ? method : DEFAULT_PRAYER_SETTINGS.method,
       paused: !!saved.paused,
       asrSchool: asr,
       highLat: highLat,
+      fajrAngle: Number.isFinite(Number(saved.fajrAngle)) ? Math.max(10, Math.min(24, Number(saved.fajrAngle))) : 18,
+      ishaAngle: Number.isFinite(Number(saved.ishaAngle)) ? Math.max(10, Math.min(24, Number(saved.ishaAngle))) : 18,
       offsets: _cleanOffsets(saved.offsets),
       mosqueTimes: (saved.mosqueTimes && typeof saved.mosqueTimes === 'object') ? saved.mosqueTimes : {}
     };
@@ -53,12 +56,23 @@
 
   function prayerCacheKey() {
     const p = getPrayerSettings();
-    return PRAYER_CACHE_KEY + '_' + p.lat.toFixed(3) + '_' + p.lng.toFixed(3) + '_' + p.method + '_' + p.asrSchool + '_' + p.highLat;
+    return PRAYER_CACHE_KEY + '_' + p.lat.toFixed(3) + '_' + p.lng.toFixed(3) + '_' + p.method + '_' + p.asrSchool + '_' + p.highLat + '_' + p.fajrAngle + '_' + p.ishaAngle;
   }
 
-  function _resolveAdhanMethod(adhan, methodId) {
+  function _resolveAdhanMethod(adhan, methodId, st) {
     var CM = adhan.CalculationMethod;
     switch (Number(methodId)) {
+      case 0: {
+        var fa = (st && Number.isFinite(Number(st.fajrAngle))) ? Math.max(10, Math.min(24, Number(st.fajrAngle))) : 18;
+        var ia = (st && Number.isFinite(Number(st.ishaAngle))) ? Math.max(10, Math.min(24, Number(st.ishaAngle))) : 18;
+        if (typeof adhan.CalculationParameters === 'function') {
+          return new adhan.CalculationParameters('Other', fa, ia);
+        }
+        var cp = CM.Other();
+        cp.fajrAngle = fa;
+        cp.ishaAngle = ia;
+        return cp;
+      }
       case 1: return CM.Karachi();
       case 2: return CM.NorthAmerica();
       case 3: return CM.MuslimWorldLeague();
@@ -83,7 +97,7 @@
       var st = settings || getPrayerSettings();
       var dt = dateObj || new Date();
       var coords = new adhanLib.Coordinates(st.lat, st.lng);
-      var params = _resolveAdhanMethod(adhanLib, st.method);
+      var params = _resolveAdhanMethod(adhanLib, st.method, st);
       params.madhab = st.asrSchool === 'shafi' ? adhanLib.Madhab.Shafi : adhanLib.Madhab.Hanafi;
       if (st.highLat === 'seventh') params.highLatitudeRule = adhanLib.HighLatitudeRule.SeventhOfTheNight;
       else if (st.highLat === 'twilight') params.highLatitudeRule = adhanLib.HighLatitudeRule.TwilightAngle;
@@ -260,7 +274,8 @@
     { id: 2, name: 'ISNA (North America)' },
     { id: 15, name: 'Moonsighting Committee Worldwide' },
     { id: 13, name: 'Diyanet (Turkey)' },
-    { id: 11, name: 'MUIS (Singapore)' }
+    { id: 11, name: 'MUIS (Singapore)' },
+    { id: 0,  name: 'Custom Angles (Fajr / Isha °)' }
   ];
 
   function formatTime12(h, m) {
@@ -320,10 +335,12 @@
       lat: Number.isFinite(lat) && lat >= -90 && lat <= 90 ? lat : prev.lat,
       lng: Number.isFinite(lng) && lng >= -180 && lng <= 180 ? lng : prev.lng,
       label: labelStr,
-      method: Number.isFinite(method) && method > 0 ? Math.round(method) : prev.method,
+      method: Number.isFinite(method) && method >= 0 ? Math.round(method) : prev.method,
       paused: typeof input.paused === 'boolean' ? input.paused : !!prev.paused,
       asrSchool: input.asrSchool === 'shafi' || input.asrSchool === 'hanafi' ? input.asrSchool : prev.asrSchool,
       highLat: ['middle','seventh','twilight'].indexOf(input.highLat) !== -1 ? input.highLat : prev.highLat,
+      fajrAngle: Number.isFinite(Number(input.fajrAngle)) ? Math.max(10, Math.min(24, Number(input.fajrAngle))) : prev.fajrAngle,
+      ishaAngle: Number.isFinite(Number(input.ishaAngle)) ? Math.max(10, Math.min(24, Number(input.ishaAngle))) : prev.ishaAngle,
       offsets: input.offsets ? _cleanOffsets(Object.assign({}, prev.offsets, input.offsets)) : prev.offsets,
       mosqueTimes: input.mosqueTimes ? Object.assign({}, prev.mosqueTimes, input.mosqueTimes) : prev.mosqueTimes
     };
@@ -362,7 +379,7 @@
 
   function applyPrayerMethod(methodStr) {
     const m = parseInt(methodStr, 10);
-    if (!Number.isFinite(m) || m <= 0) return;
+    if (!Number.isFinite(m) || m < 0) return;
     updatePrayerSettings({ method: m });
     if (typeof toast === 'function') toast(iqIcon('clock'), 'Calculation method updated.');
   }
@@ -488,9 +505,15 @@
         ? '<button class="iq-pt-gps-btn" type="button" onclick="useCurrentPrayerLocation()">Use Device Location</button>'
         : '';
 
+      const customAnglesHtml = settings.method === 0
+        ? `<div class="iq-pt-ctrl-group"><label class="iq-pt-label" for="iqFajrAngleInp">Fajr Angle (°)</label><input id="iqFajrAngleInp" type="number" step="0.5" min="10" max="24" class="iq-pt-select" value="${settings.fajrAngle}" onchange="window.updatePrayerSettings({fajrAngle:this.value})"></div>` +
+          `<div class="iq-pt-ctrl-group"><label class="iq-pt-label" for="iqIshaAngleInp">Isha Angle (°)</label><input id="iqIshaAngleInp" type="number" step="0.5" min="10" max="24" class="iq-pt-select" value="${settings.ishaAngle}" onchange="window.updatePrayerSettings({ishaAngle:this.value})"></div>`
+        : '';
+
       const controlsHtml = `<div class="iq-pt-controls">` +
         `<div class="iq-pt-ctrl-group"><label class="iq-pt-label" for="iqPrayerCitySelect">City</label><select id="iqPrayerCitySelect" class="iq-pt-select" onchange="window.applyPrayerCityPreset(this.value)">${customCityOpt}${cityOptions}</select></div>` +
         `<div class="iq-pt-ctrl-group"><label class="iq-pt-label" for="iqPrayerMethodSelect">Method</label><select id="iqPrayerMethodSelect" class="iq-pt-select" onchange="window.applyPrayerMethod(this.value)">${methodOptions}</select></div>` +
+        customAnglesHtml +
         `<div class="iq-pt-ctrl-group"><label class="iq-pt-label" for="iqAsrSelect">Asr Madhhab</label><select id="iqAsrSelect" class="iq-pt-select" onchange="window.updatePrayerSettings({asrSchool:this.value})"><option value="hanafi"${settings.asrSchool==='hanafi'?' selected':''}>Hanafi (2x shadow)</option><option value="shafi"${settings.asrSchool==='shafi'?' selected':''}>Standard (Shafi'i/Maliki/Hanbali)</option></select></div>` +
         `<div class="iq-pt-ctrl-group"><label class="iq-pt-label" for="iqHighLatSelect">High Latitude Rule</label><select id="iqHighLatSelect" class="iq-pt-select" onchange="window.updatePrayerSettings({highLat:this.value})"><option value="middle"${settings.highLat==='middle'?' selected':''}>Middle of Night</option><option value="seventh"${settings.highLat==='seventh'?' selected':''}>Seventh of Night</option><option value="twilight"${settings.highLat==='twilight'?' selected':''}>Twilight Angle</option></select></div>` +
         `${locateButton}</div>`;
@@ -514,9 +537,9 @@
           <div class="pt-time iq-no-mirror">${safePrayerText(nfmt(formatTime12(t.h, t.m)))}</div>
           ${jam ? `<div class="pt-sub">Jama'at: ${safePrayerText(nfmt(formatTime12(jam.h, jam.m)))}</div>` : `<div class="pt-sub">${descs[name]}</div>`}
           <div style="display:flex;gap:6px;justify-content:center;align-items:center;margin-top:6px;">
-            <button type="button" class="iq-pill-btn" style="min-height:36px;min-width:36px;padding:4px 8px;" aria-label="Subtract 1 minute offset for ${name}" onclick="window.applyPrayerOffset('${name.toLowerCase()}',-1,false)">&minus;1m</button>
+            <button type="button" class="iq-pill-btn" style="min-height:44px;min-width:44px;padding:6px 10px;" aria-label="Subtract 1 minute offset for ${name}" onclick="window.applyPrayerOffset('${name.toLowerCase()}',-1,false)">&minus;1m</button>
             <span class="iq-tabular" style="font-size:0.75rem;color:var(--text2);">${offVal >= 0 ? '+' : ''}${nfmt(offVal)}m</span>
-            <button type="button" class="iq-pill-btn" style="min-height:36px;min-width:36px;padding:4px 8px;" aria-label="Add 1 minute offset for ${name}" onclick="window.applyPrayerOffset('${name.toLowerCase()}',1,false)">+1m</button>
+            <button type="button" class="iq-pill-btn" style="min-height:44px;min-width:44px;padding:6px 10px;" aria-label="Add 1 minute offset for ${name}" onclick="window.applyPrayerOffset('${name.toLowerCase()}',1,false)">+1m</button>
           </div>
         </div>`;
       }).join('') + '</div>';

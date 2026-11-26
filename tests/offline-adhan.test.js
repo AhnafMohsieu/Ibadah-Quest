@@ -94,3 +94,13 @@ test('Hijri calendar offset adjusts sighting cleanly from -2 to +2 across dates'
   assert.ok(hp.day !== h0.day || hp.month !== h0.month, '+2 offset shifts Hijri date');
   assert.ok(hm.day !== h0.day || hm.month !== h0.month, '-2 offset shifts Hijri date');
 });
+
+test('custom Fajr and Isha twilight angles (method 0) shift dawn/night timings predictably', () => {
+  const d = new Date(2026, 2, 21, 12, 0, 0);
+  const { sandbox } = loadPrayerEngine();
+  const deg15 = sandbox.computeOfflinePrayerTimes({ lat: 23.8103, lng: 90.4125, label: 'Dhaka', method: 0, fajrAngle: 15, ishaAngle: 15, asrSchool: 'hanafi' }, d);
+  const deg19 = sandbox.computeOfflinePrayerTimes({ lat: 23.8103, lng: 90.4125, label: 'Dhaka', method: 0, fajrAngle: 19.5, ishaAngle: 19, asrSchool: 'hanafi' }, d);
+  const toMin = (t) => t.h * 60 + t.m;
+  assert.ok(toMin(deg19.Fajr) < toMin(deg15.Fajr), 'Larger Fajr depression angle (19.5 deg) produces earlier Fajr than 15 deg');
+  assert.ok(toMin(deg19.Isha) > toMin(deg15.Isha), 'Larger Isha depression angle (19 deg) produces later Isha than 15 deg');
+});
