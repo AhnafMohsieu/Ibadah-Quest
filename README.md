@@ -1,5 +1,9 @@
 # Ibadah Quest
 
+[![Live site](https://img.shields.io/badge/live-view-0e5a6b?style=flat-square)](https://ahnafmohsieu.github.io/Ibadah-Quest/) [![License](https://img.shields.io/badge/license-all%20rights%20reserved-lightgrey?style=flat-square)](LICENSE)
+
+> ← [All projects](https://ahnafmohsieu.github.io/Portfolio/hub/)
+
 **Prayer · Deeds · Knowledge · Growth** — an offline-first Islamic worship tracker PWA.
 
 Track your five daily prayers, dhikr, Quran reading, voluntary acts, and more. Earn XP, level up, unlock achievements, and build lasting streaks on your spiritual journey.
