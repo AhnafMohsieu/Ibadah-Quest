@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <clipPath id="badgeClip">
+      <path d="M256 58 C320 58 386 78 416 96 C424 101 428 110 428 120 L424 246 C420 342 346 416 256 456 C166 416 92 342 88 246 L84 120 C84 110 88 101 96 96 C126 78 192 58 256 58 Z"/>
+    </clipPath>
+    <linearGradient id="gloss" x1="0.15" y1="0" x2="0.65" y2="0.85">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.28"/>
+      <stop offset="45%" stop-color="#FFFFFF" stop-opacity="0.06"/>
+      <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="rimDefault" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#FDE68A"/>
+      <stop offset="50%" stop-color="#D9A84E"/>
+      <stop offset="100%" stop-color="#9E6F1E"/>
+    </linearGradient>
+    
+        <linearGradient id="rimSilverBlue" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#E2E8F0"/><stop offset="100%" stop-color="#38BDF8"/></linearGradient>
+        <linearGradient id="bgNightSky" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#0F172A"/><stop offset="60%" stop-color="#1E3A8A"/><stop offset="100%" stop-color="#0F766E"/></linearGradient>
+      
+  </defs>
+  <!-- Soft grounded shadow -->
+  <g transform="translate(0, 12)" opacity="0.2">
+    <path d="M256 58 C320 58 386 78 416 96 C424 101 428 110 428 120 L424 246 C420 342 346 416 256 456 C166 416 92 342 88 246 L84 120 C84 110 88 101 96 96 C126 78 192 58 256 58 Z" fill="#0F172A" stroke="#0F172A" stroke-width="28" stroke-linejoin="round" stroke-linecap="round"/>
+    
+  </g>
+  <!-- Thick white sticker border -->
+  <g>
+    <path d="M256 58 C320 58 386 78 416 96 C424 101 428 110 428 120 L424 246 C420 342 346 416 256 456 C166 416 92 342 88 246 L84 120 C84 110 88 101 96 96 C126 78 192 58 256 58 Z" fill="#FFFFFF" stroke="#FFFFFF" stroke-width="28" stroke-linejoin="round" stroke-linecap="round"/>
+    
+  </g>
+  <!-- Colored / metallic rim -->
+  <path d="M256 58 C320 58 386 78 416 96 C424 101 428 110 428 120 L424 246 C420 342 346 416 256 456 C166 416 92 342 88 246 L84 120 C84 110 88 101 96 96 C126 78 192 58 256 58 Z" fill="url(#rimSilverBlue)"/>
+  <!-- Inner background clipped cleanly -->
+  <g clip-path="url(#badgeClip)">
+    <rect x="0" y="0" width="512" height="512" fill="url(#bgNightSky)"/>
+    <path d="M256 58 C320 58 386 78 416 96 C424 101 428 110 428 120 L424 246 C420 342 346 416 256 456 C166 416 92 342 88 246 L84 120 C84 110 88 101 96 96 C126 78 192 58 256 58 Z" fill="none" stroke="#FFFFFF" stroke-opacity="0.28" stroke-width="18" transform="translate(256,256) scale(0.915) translate(-256,-256)"/>
+    
+        <circle cx="232" cy="182" r="108" fill="#38BDF8" opacity="0.14"/>
+        <path d="M220.8 112.9 A66 66 0 1 0 272.0 200.7 A52.8 52.8 0 0 1 220.8 112.9 Z" fill="#FDE047" stroke="#F59E0B" stroke-width="3"/>
+        <path d="M318 124 Q320.464 143.536 340 146 Q320.464 148.464 318 168 Q315.536 148.464 296 146 Q315.536 143.536 318 124 Z" fill="#FEF08A" opacity="1"/>
+        <path d="M142 121 Q143.456 132.544 155 134 Q143.456 135.456 142 147 Q140.544 135.456 129 134 Q140.544 132.544 142 121 Z" fill="#BAE6FD" opacity="1"/>
+        <path d="M352 194 Q353.344 204.656 364 206 Q353.344 207.344 352 218 Q350.656 207.344 340 206 Q350.656 204.656 352 194 Z" fill="#BAE6FD" opacity="1"/>
+        <!-- Glowing Mosque Silhouette & Lit Lantern Window -->
+        <path d="M96 364 L132 364 L132 292 L152 254 L172 292 L172 346 L202 346 C206 286 242 264 256 248 C270 264 306 286 310 346 L340 346 L340 278 L360 236 L380 278 L380 364 L416 364 L416 456 L96 456 Z" fill="#0F172A"/>
+        <path d="M236 392 L236 332 Q236 310 256 310 Q276 310 276 332 L276 392 Z" fill="#FDE047"/>
+        <circle cx="360" cy="306" r="7" fill="#FDE047"/>
+        <circle cx="152" cy="316" r="6" fill="#FDE047"/>
+      
+    <!-- Top-left glossy highlight arc -->
+    <ellipse cx="195" cy="115" rx="170" ry="95" transform="rotate(-18 195 115)" fill="url(#gloss)"/>
+  </g>
+  <!-- Crisp inner bevel border -->
+  <path d="M256 58 C320 58 386 78 416 96 C424 101 428 110 428 120 L424 246 C420 342 346 416 256 456 C166 416 92 342 88 246 L84 120 C84 110 88 101 96 96 C126 78 192 58 256 58 Z" fill="none" stroke="url(#rimSilverBlue)" stroke-width="12"/>
+  <path d="M256 58 C320 58 386 78 416 96 C424 101 428 110 428 120 L424 246 C420 342 346 416 256 456 C166 416 92 342 88 246 L84 120 C84 110 88 101 96 96 C126 78 192 58 256 58 Z" fill="none" stroke="#FFFFFF" stroke-opacity="0.45" stroke-width="2.5" transform="translate(256,256) scale(0.955) translate(-256,-256)"/>
+</svg>

@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <clipPath id="badgeClip">
+      <path d="M256 60 A196 196 0 1 1 255.9 60 Z"/>
+    </clipPath>
+    <linearGradient id="gloss" x1="0.15" y1="0" x2="0.65" y2="0.85">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.28"/>
+      <stop offset="45%" stop-color="#FFFFFF" stop-opacity="0.06"/>
+      <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="rimDefault" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#FDE68A"/>
+      <stop offset="50%" stop-color="#D9A84E"/>
+      <stop offset="100%" stop-color="#9E6F1E"/>
+    </linearGradient>
+    
+        <linearGradient id="rimLavender" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#E0E7FF"/><stop offset="100%" stop-color="#6366F1"/></linearGradient>
+        <linearGradient id="bgSlumber" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1E1B4B"/><stop offset="65%" stop-color="#312E81"/><stop offset="100%" stop-color="#4338CA"/></linearGradient>
+      
+  </defs>
+  <!-- Soft grounded shadow -->
+  <g transform="translate(0, 12)" opacity="0.2">
+    <path d="M256 60 A196 196 0 1 1 255.9 60 Z" fill="#0F172A" stroke="#0F172A" stroke-width="28" stroke-linejoin="round" stroke-linecap="round"/>
+    
+  </g>
+  <!-- Thick white sticker border -->
+  <g>
+    <path d="M256 60 A196 196 0 1 1 255.9 60 Z" fill="#FFFFFF" stroke="#FFFFFF" stroke-width="28" stroke-linejoin="round" stroke-linecap="round"/>
+    
+  </g>
+  <!-- Colored / metallic rim -->
+  <path d="M256 60 A196 196 0 1 1 255.9 60 Z" fill="url(#rimLavender)"/>
+  <!-- Inner background clipped cleanly -->
+  <g clip-path="url(#badgeClip)">
+    <rect x="0" y="0" width="512" height="512" fill="url(#bgSlumber)"/>
+    <path d="M256 60 A196 196 0 1 1 255.9 60 Z" fill="none" stroke="#FFFFFF" stroke-opacity="0.28" stroke-width="18" transform="translate(256,256) scale(0.915) translate(-256,-256)"/>
+    
+        <!-- Golden Crescent -->
+        <path d="M264.8 130.3 A78 78 0 1 0 317.8 236.4 A62.4 62.4 0 0 1 264.8 130.3 Z" fill="#FDE047" stroke="#F59E0B" stroke-width="4"/>
+        <!-- Soft Pearl Clouds -->
+        <path d="M126 328 C108 328 96 312 98 294 C100 274 118 260 140 262 C154 236 188 228 216 244 C236 226 274 232 288 258 C312 252 340 268 344 294 C356 296 366 308 364 322 C362 336 350 344 334 344 L142 344 C132 344 126 336 126 328 Z" fill="#F8FAFC" stroke="#C7D2FE" stroke-width="4"/>
+        <path d="M336 138 Q338.016 153.984 354 156 Q338.016 158.016 336 174 Q333.984 158.016 318 156 Q333.984 153.984 336 138 Z" fill="#FEF08A" opacity="1"/>
+        <path d="M144 155 Q145.456 166.544 157 168 Q145.456 169.456 144 181 Q142.544 169.456 131 168 Q142.544 166.544 144 155 Z" fill="#C7D2FE" opacity="1"/>
+        <path d="M372 213 Q373.232 222.768 383 224 Q373.232 225.232 372 235 Q370.768 225.232 361 224 Q370.768 222.768 372 213 Z" fill="#E0E7FF" opacity="1"/>
+      
+    <!-- Top-left glossy highlight arc -->
+    <ellipse cx="195" cy="115" rx="170" ry="95" transform="rotate(-18 195 115)" fill="url(#gloss)"/>
+  </g>
+  <!-- Crisp inner bevel border -->
+  <path d="M256 60 A196 196 0 1 1 255.9 60 Z" fill="none" stroke="url(#rimLavender)" stroke-width="12"/>
+  <path d="M256 60 A196 196 0 1 1 255.9 60 Z" fill="none" stroke="#FFFFFF" stroke-opacity="0.45" stroke-width="2.5" transform="translate(256,256) scale(0.955) translate(-256,-256)"/>
+</svg>

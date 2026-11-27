@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <g transform="translate(0, 3)" opacity="0.18">
+    <path d="M28 16 L100 16 Q112 16 112 28 L112 100 Q112 112 100 112 L28 112 Q16 112 16 100 L16 28 Q16 16 28 16 Z" fill="#0F172A" stroke="#0F172A" stroke-width="10" stroke-linejoin="round"/>
+  </g>
+  <path d="M28 16 L100 16 Q112 16 112 28 L112 100 Q112 112 100 112 L28 112 Q16 112 16 100 L16 28 Q16 16 28 16 Z" fill="#FFFFFF" stroke="#FFFFFF" stroke-width="10" stroke-linejoin="round"/>
+  <path d="M28 16 L100 16 Q112 16 112 28 L112 100 Q112 112 100 112 L28 112 Q16 112 16 100 L16 28 Q16 16 28 16 Z" fill="#ECFDF5" stroke="#10B981" stroke-width="3.5"/>
+  
+        <rect x="40" y="34" width="48" height="62" rx="7" fill="#0D9488" stroke="#F59E0B" stroke-width="3"/>
+        <path d="M64 46 Q80 62 78 86 L50 86 Q48 62 64 46 Z" fill="#14B8A6" stroke="#FDE047" stroke-width="2"/>
+        <path d="M64.7 22.0 A8 8 0 1 0 71.6 32.4 A6.4 6.4 0 0 1 64.7 22.0 Z" fill="#F59E0B"/>
+      
+</svg>

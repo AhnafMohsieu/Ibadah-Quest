@@ -38,7 +38,7 @@ function resolveCurrentUser() {
       quranAudioReciter:7, hadithTTSLang:'ar', tafsirEdition:'ibnkathir', tafsirLookup:{surah:1,ayah:1},
       avatar:'', joinDate:null,
       healthLog:{}, financeLog:{},
-      growthSettings:{visible:['garden','lantern','keys','mosque','boat','heart','armor','ramadan','laylat']},
+      growthSettings:{visible:['garden','lantern','keys','mosque','boat','ramadan','laylat']},
       theme:'light', seasonalAccent:true, numerals:'auto', bnTermMode:'namaz',
       scriptScale:1, soundEnabled:false, adhanAudio:'off', hijriOffset:0,
       quranScript:'uthmani', quranTranslation:'both',

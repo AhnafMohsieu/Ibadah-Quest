@@ -31,6 +31,7 @@
     }
     saveSettings(settings);
     renderGrowthSettings();
+    if (typeof window.renderDeferred === 'function') window.renderDeferred();
   }
   
   function _sgT(s) { return (typeof window !== 'undefined' && typeof window.t === 'function') ? window.t(s) : s; }

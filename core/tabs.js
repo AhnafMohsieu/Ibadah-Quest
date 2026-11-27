@@ -292,11 +292,19 @@
     if (tabId === 'finance' && typeof window.renderFinanceTab === 'function') {
       try { window.renderFinanceTab(); } catch(e) { console.warn('Lazy render financeTab failed:', e.message); }
     }
-    // Journeys panel owns two areas: journeyArea (renderJourneys, deferred)
-    // plus boatArea (renderBoat, deferred). Both guards tolerate the
-    // not-yet-loaded case; the post-defer hook covers first paint.
-    if (tabId === 'journeys' && typeof window.renderBoat === 'function') {
-      try { window.renderBoat(); } catch(e) { console.warn('Lazy render boat failed:', e.message); }
+    // Each tab hosts at most one spiritual-growth widget; refresh it on activation.
+    var _tabGrowthWidget = {
+      today: 'renderGarden',
+      dhikr: 'renderLantern',
+      journeys: 'renderBoat',
+      fasting: 'renderRamadan',
+      evening: 'renderLaylat',
+      profile: 'renderMosque',
+      trophies: 'renderKeys'
+    };
+    var gwFn = _tabGrowthWidget[tabId];
+    if (gwFn && typeof window[gwFn] === 'function') {
+      try { window[gwFn](); } catch(e) { console.warn('Lazy render ' + gwFn + ' failed:', e.message); }
     }
     if (tabId === 'hadith' && typeof HADITH_COLLECTIONS_DATA === 'undefined') {
       if (typeof window.ensureHadithLoaded === 'function') {
@@ -341,11 +349,8 @@
       if (window.renderGarden) window.renderGarden();
       if (window.renderSpiritualGrowthTab) window.renderSpiritualGrowthTab();
       if (window.renderBoat) window.renderBoat();
-      if (window.renderArmor) window.renderArmor();
-      if (window.renderHeartRefinement) window.renderHeartRefinement();
     } else if (name === 'profile') {
       if (window.renderProfile) window.renderProfile();
-      if (window.renderKeys) window.renderKeys();
       if (window.renderMosque) window.renderMosque();
     }
     if (window.updateTopBar) window.updateTopBar();

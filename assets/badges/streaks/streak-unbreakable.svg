@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <clipPath id="badgeClip">
+      <path d="M232.7 76.8 Q256.0 52.0 279.3 76.8 L424.7 231.2 Q448.0 256.0 424.7 280.8 L279.3 435.2 Q256.0 460.0 232.7 435.2 L87.3 280.8 Q64.0 256.0 87.3 231.2 Z"/>
+    </clipPath>
+    <linearGradient id="gloss" x1="0.15" y1="0" x2="0.65" y2="0.85">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.28"/>
+      <stop offset="45%" stop-color="#FFFFFF" stop-opacity="0.06"/>
+      <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="rimDefault" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#FDE68A"/>
+      <stop offset="50%" stop-color="#D9A84E"/>
+      <stop offset="100%" stop-color="#9E6F1E"/>
+    </linearGradient>
+    
+        <linearGradient id="rimCrystal" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#E0F2FE"/><stop offset="50%" stop-color="#38BDF8"/><stop offset="100%" stop-color="#0284C7"/></linearGradient>
+        <radialGradient id="bgCrystalBlue" cx="0.5" cy="0.4" r="0.65"><stop offset="0%" stop-color="#0EA5E9"/><stop offset="60%" stop-color="#1E3A8A"/><stop offset="100%" stop-color="#0F172A"/></radialGradient>
+      
+  </defs>
+  <!-- Soft grounded shadow -->
+  <g transform="translate(0, 12)" opacity="0.2">
+    <path d="M232.7 76.8 Q256.0 52.0 279.3 76.8 L424.7 231.2 Q448.0 256.0 424.7 280.8 L279.3 435.2 Q256.0 460.0 232.7 435.2 L87.3 280.8 Q64.0 256.0 87.3 231.2 Z" fill="#0F172A" stroke="#0F172A" stroke-width="28" stroke-linejoin="round" stroke-linecap="round"/>
+    
+  </g>
+  <!-- Thick white sticker border -->
+  <g>
+    <path d="M232.7 76.8 Q256.0 52.0 279.3 76.8 L424.7 231.2 Q448.0 256.0 424.7 280.8 L279.3 435.2 Q256.0 460.0 232.7 435.2 L87.3 280.8 Q64.0 256.0 87.3 231.2 Z" fill="#FFFFFF" stroke="#FFFFFF" stroke-width="28" stroke-linejoin="round" stroke-linecap="round"/>
+    
+  </g>
+  <!-- Colored / metallic rim -->
+  <path d="M232.7 76.8 Q256.0 52.0 279.3 76.8 L424.7 231.2 Q448.0 256.0 424.7 280.8 L279.3 435.2 Q256.0 460.0 232.7 435.2 L87.3 280.8 Q64.0 256.0 87.3 231.2 Z" fill="url(#rimCrystal)"/>
+  <!-- Inner background clipped cleanly -->
+  <g clip-path="url(#badgeClip)">
+    <rect x="0" y="0" width="512" height="512" fill="url(#bgCrystalBlue)"/>
+    <path d="M232.7 76.8 Q256.0 52.0 279.3 76.8 L424.7 231.2 Q448.0 256.0 424.7 280.8 L279.3 435.2 Q256.0 460.0 232.7 435.2 L87.3 280.8 Q64.0 256.0 87.3 231.2 Z" fill="none" stroke="#FFFFFF" stroke-opacity="0.28" stroke-width="18" transform="translate(256,256) scale(0.915) translate(-256,-256)"/>
+    
+        <!-- Golden Crown Top -->
+        <path d="M204 156 L192 114 L230 136 L256 96 L282 136 L320 114 L308 156 Z" fill="#FDE047" stroke="#FFFBEB" stroke-width="3"/>
+        <!-- Crystalline Blue-White Flame -->
+        <path d="M256 164 C306 212 346 252 346 312 C346 366 306 402 256 402 C206 402 166 366 166 312 C166 252 206 212 256 164 Z" fill="#38BDF8" stroke="#E0F2FE" stroke-width="4.5"/>
+        <path d="M256 212 C286 246 312 276 312 318 C312 356 286 380 256 380 C226 380 200 356 200 318 C200 276 226 246 256 212 Z" fill="#BAE6FD"/>
+        <path d="M256 264 C272 286 286 306 286 328 C286 348 272 362 256 362 C240 362 226 348 226 328 C226 306 240 286 256 264 Z" fill="#FFFFFF"/>
+        <path d="M150 226 Q151.568 238.432 164 240 Q151.568 241.568 150 254 Q148.432 241.568 136 240 Q148.432 238.432 150 226 Z" fill="#BAE6FD" opacity="1"/>
+        <path d="M362 226 Q363.568 238.432 376 240 Q363.568 241.568 362 254 Q360.432 241.568 348 240 Q360.432 238.432 362 226 Z" fill="#BAE6FD" opacity="1"/>
+      
+    <!-- Top-left glossy highlight arc -->
+    <ellipse cx="195" cy="115" rx="170" ry="95" transform="rotate(-18 195 115)" fill="url(#gloss)"/>
+  </g>
+  <!-- Crisp inner bevel border -->
+  <path d="M232.7 76.8 Q256.0 52.0 279.3 76.8 L424.7 231.2 Q448.0 256.0 424.7 280.8 L279.3 435.2 Q256.0 460.0 232.7 435.2 L87.3 280.8 Q64.0 256.0 87.3 231.2 Z" fill="none" stroke="url(#rimCrystal)" stroke-width="12"/>
+  <path d="M232.7 76.8 Q256.0 52.0 279.3 76.8 L424.7 231.2 Q448.0 256.0 424.7 280.8 L279.3 435.2 Q256.0 460.0 232.7 435.2 L87.3 280.8 Q64.0 256.0 87.3 231.2 Z" fill="none" stroke="#FFFFFF" stroke-opacity="0.45" stroke-width="2.5" transform="translate(256,256) scale(0.955) translate(-256,-256)"/>
+</svg>

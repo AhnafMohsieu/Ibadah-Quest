@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <clipPath id="badgeClip">
+      <path d="M256 60 A196 196 0 1 1 255.9 60 Z"/>
+    </clipPath>
+    <linearGradient id="gloss" x1="0.15" y1="0" x2="0.65" y2="0.85">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.28"/>
+      <stop offset="45%" stop-color="#FFFFFF" stop-opacity="0.06"/>
+      <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="rimDefault" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#FDE68A"/>
+      <stop offset="50%" stop-color="#D9A84E"/>
+      <stop offset="100%" stop-color="#9E6F1E"/>
+    </linearGradient>
+    
+        <linearGradient id="rimYear" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#FEF08A"/><stop offset="100%" stop-color="#047857"/></linearGradient>
+        <radialGradient id="bgYearWheel" cx="0.5" cy="0.5" r="0.65"><stop offset="0%" stop-color="#0F766E"/><stop offset="100%" stop-color="#022C22"/></radialGradient>
+      
+  </defs>
+  <!-- Soft grounded shadow -->
+  <g transform="translate(0, 12)" opacity="0.2">
+    <path d="M256 60 A196 196 0 1 1 255.9 60 Z" fill="#0F172A" stroke="#0F172A" stroke-width="28" stroke-linejoin="round" stroke-linecap="round"/>
+    
+  </g>
+  <!-- Thick white sticker border -->
+  <g>
+    <path d="M256 60 A196 196 0 1 1 255.9 60 Z" fill="#FFFFFF" stroke="#FFFFFF" stroke-width="28" stroke-linejoin="round" stroke-linecap="round"/>
+    
+  </g>
+  <!-- Colored / metallic rim -->
+  <path d="M256 60 A196 196 0 1 1 255.9 60 Z" fill="url(#rimYear)"/>
+  <!-- Inner background clipped cleanly -->
+  <g clip-path="url(#badgeClip)">
+    <rect x="0" y="0" width="512" height="512" fill="url(#bgYearWheel)"/>
+    <path d="M256 60 A196 196 0 1 1 255.9 60 Z" fill="none" stroke="#FFFFFF" stroke-opacity="0.28" stroke-width="18" transform="translate(256,256) scale(0.915) translate(-256,-256)"/>
+    
+        <!-- 4 Seasonal Jewel Quadrants -->
+        <path d="M256 256 L256 112 A144 144 0 0 1 400 256 Z" fill="#10B981" stroke="#FEF08A" stroke-width="4"/>
+        <path d="M256 256 L400 256 A144 144 0 0 1 256 400 Z" fill="#F59E0B" stroke="#FEF08A" stroke-width="4"/>
+        <path d="M256 256 L256 400 A144 144 0 0 1 112 256 Z" fill="#0EA5E9" stroke="#FEF08A" stroke-width="4"/>
+        <path d="M256 256 L112 256 A144 144 0 0 1 256 112 Z" fill="#8B5CF6" stroke="#FEF08A" stroke-width="4"/>
+        <!-- Central Golden Astrolabe Medallion -->
+        <circle cx="256" cy="256" r="64" fill="#064E3B" stroke="#FEF08A" stroke-width="6"/>
+        <path d="M255.8 226.6 A30 30 0 1 0 277.9 267.0 A24.0 24.0 0 0 1 255.8 226.6 Z" fill="#FEF08A"/>
+        <path d="M282 228 Q283.344 238.656 294 240 Q283.344 241.344 282 252 Q280.656 241.344 270 240 Q280.656 238.656 282 228 Z" fill="#FFFFFF" opacity="1"/>
+      
+    <!-- Top-left glossy highlight arc -->
+    <ellipse cx="195" cy="115" rx="170" ry="95" transform="rotate(-18 195 115)" fill="url(#gloss)"/>
+  </g>
+  <!-- Crisp inner bevel border -->
+  <path d="M256 60 A196 196 0 1 1 255.9 60 Z" fill="none" stroke="url(#rimYear)" stroke-width="12"/>
+  <path d="M256 60 A196 196 0 1 1 255.9 60 Z" fill="none" stroke="#FFFFFF" stroke-opacity="0.45" stroke-width="2.5" transform="translate(256,256) scale(0.955) translate(-256,-256)"/>
+</svg>

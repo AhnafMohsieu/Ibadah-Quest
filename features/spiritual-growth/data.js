@@ -38,15 +38,6 @@ const FEATURE_STAGES = {
     { name: 'Paradise Island', icon: '🏝️', xp: 18000 },
     { name: 'Jannah', icon: '🌴', xp: 45000 }
   ],
-  armor: [
-    { name: 'Belt', icon: '🥋', xp: 0 },
-    { name: 'Boots', icon: '👢', xp: 450 },
-    { name: 'Helmet', icon: '⛑️', xp: 1400 },
-    { name: 'Shirt', icon: '👕', xp: 3800 },
-    { name: 'Shield', icon: '🛡️', xp: 10000 },
-    { name: 'Sword', icon: '⚔️', xp: 25000 },
-    { name: 'Full Set', icon: '🛡️', xp: 60000 }
-  ],
   keys: [
     { name: '1 Key', icon: '🗝️', xp: 0 },
     { name: '2 Keys', icon: '🗝️🗝️', xp: 550 },
@@ -55,33 +46,6 @@ const FEATURE_STAGES = {
     { name: '7 Keys', icon: '🔐', xp: 13000 },
     { name: '9 Keys', icon: '🔐', xp: 32000 },
     { name: '10 Keys', icon: '🚪', xp: 80000 }
-  ],
-  desert: [
-    { name: 'Sand', icon: '🏜️', xp: 0 },
-    { name: 'Pebbles', icon: '🪨', xp: 700 },
-    { name: 'Cactus', icon: '🌵', xp: 2200 },
-    { name: 'Bush', icon: '🌿', xp: 6000 },
-    { name: 'Trees', icon: '🌳', xp: 16000 },
-    { name: 'Flowers', icon: '🌸', xp: 40000 },
-    { name: 'Oasis', icon: '🏝️', xp: 100000 }
-  ],
-  mountain: [
-    { name: 'Base', icon: '⛰️', xp: 0 },
-    { name: 'Foothill', icon: '🏔️', xp: 350 },
-    { name: 'Trail', icon: '🥾', xp: 1000 },
-    { name: 'Cliff', icon: '🧗', xp: 2800 },
-    { name: 'Summit', icon: '🏔️', xp: 8000 },
-    { name: 'Cave', icon: '🕳️', xp: 20000 },
-    { name: 'Divine Light', icon: '✨', xp: 50000 }
-  ],
-  heart: [
-    { name: 'Stone', icon: '🪨', xp: 0 },
-    { name: 'Clay', icon: '🧱', xp: 400 },
-    { name: 'Copper', icon: '🔶', xp: 1200 },
-    { name: 'Iron', icon: '⬛', xp: 3200 },
-    { name: 'Silver', icon: '⚪', xp: 9000 },
-    { name: 'Gold', icon: '🟡', xp: 22000 },
-    { name: 'Light', icon: '✨', xp: 55000 }
   ],
   ramadan: [
     { name: 'Day 1', icon: '🌙', xp: 0 },
@@ -138,10 +102,6 @@ const FEATURE_ICONS = {
   keys: '🗝️',
   mosque: '🕌',
   boat: '⛵',
-  mountain: '🏔️',
-  heart: '❤️',
-  armor: '🛡️',
-  desert: '🌾',
   ramadan: '🌙',
   laylat: '✨'
 };
@@ -152,10 +112,6 @@ const FEATURE_LABELS = {
   keys: 'Paradise Keys',
   mosque: 'Mosque Builder',
   boat: 'Journey Boat',
-  mountain: 'Mount Nur Climber',
-  heart: 'Heart Refinement',
-  armor: 'Spiritual Armor',
-  desert: 'Desert Garden',
   ramadan: 'Ramadan Tracker',
   laylat: 'Laylat al-Qadr Meter'
 };

@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <clipPath id="badgeClip">
+      <path d="M228.3 70.0 Q256.0 54.0 283.7 70.0 L403.2 139.0 Q430.9 155.0 430.9 187.0 L430.9 325.0 Q430.9 357.0 403.2 373.0 L283.7 442.0 Q256.0 458.0 228.3 442.0 L108.8 373.0 Q81.1 357.0 81.1 325.0 L81.1 187.0 Q81.1 155.0 108.8 139.0 Z"/>
+    </clipPath>
+    <linearGradient id="gloss" x1="0.15" y1="0" x2="0.65" y2="0.85">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.28"/>
+      <stop offset="45%" stop-color="#FFFFFF" stop-opacity="0.06"/>
+      <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="rimDefault" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#FDE68A"/>
+      <stop offset="50%" stop-color="#D9A84E"/>
+      <stop offset="100%" stop-color="#9E6F1E"/>
+    </linearGradient>
+    
+        <linearGradient id="rimEnergy" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#FDE047"/><stop offset="100%" stop-color="#F97316"/></linearGradient>
+        <radialGradient id="bgEnergyTeal" cx="0.45" cy="0.4" r="0.65"><stop offset="0%" stop-color="#2DD4BF"/><stop offset="55%" stop-color="#0D9488"/><stop offset="100%" stop-color="#0F172A"/></radialGradient>
+      
+  </defs>
+  <!-- Soft grounded shadow -->
+  <g transform="translate(0, 12)" opacity="0.2">
+    <path d="M228.3 70.0 Q256.0 54.0 283.7 70.0 L403.2 139.0 Q430.9 155.0 430.9 187.0 L430.9 325.0 Q430.9 357.0 403.2 373.0 L283.7 442.0 Q256.0 458.0 228.3 442.0 L108.8 373.0 Q81.1 357.0 81.1 325.0 L81.1 187.0 Q81.1 155.0 108.8 139.0 Z" fill="#0F172A" stroke="#0F172A" stroke-width="28" stroke-linejoin="round" stroke-linecap="round"/>
+    
+  </g>
+  <!-- Thick white sticker border -->
+  <g>
+    <path d="M228.3 70.0 Q256.0 54.0 283.7 70.0 L403.2 139.0 Q430.9 155.0 430.9 187.0 L430.9 325.0 Q430.9 357.0 403.2 373.0 L283.7 442.0 Q256.0 458.0 228.3 442.0 L108.8 373.0 Q81.1 357.0 81.1 325.0 L81.1 187.0 Q81.1 155.0 108.8 139.0 Z" fill="#FFFFFF" stroke="#FFFFFF" stroke-width="28" stroke-linejoin="round" stroke-linecap="round"/>
+    
+  </g>
+  <!-- Colored / metallic rim -->
+  <path d="M228.3 70.0 Q256.0 54.0 283.7 70.0 L403.2 139.0 Q430.9 155.0 430.9 187.0 L430.9 325.0 Q430.9 357.0 403.2 373.0 L283.7 442.0 Q256.0 458.0 228.3 442.0 L108.8 373.0 Q81.1 357.0 81.1 325.0 L81.1 187.0 Q81.1 155.0 108.8 139.0 Z" fill="url(#rimEnergy)"/>
+  <!-- Inner background clipped cleanly -->
+  <g clip-path="url(#badgeClip)">
+    <rect x="0" y="0" width="512" height="512" fill="url(#bgEnergyTeal)"/>
+    <path d="M228.3 70.0 Q256.0 54.0 283.7 70.0 L403.2 139.0 Q430.9 155.0 430.9 187.0 L430.9 325.0 Q430.9 357.0 403.2 373.0 L283.7 442.0 Q256.0 458.0 228.3 442.0 L108.8 373.0 Q81.1 357.0 81.1 325.0 L81.1 187.0 Q81.1 155.0 108.8 139.0 Z" fill="none" stroke="#FFFFFF" stroke-opacity="0.28" stroke-width="18" transform="translate(256,256) scale(0.915) translate(-256,-256)"/>
+    
+        <!-- Dynamic Ascending Wings & Energy Star -->
+        <path d="M256 286 C192 276 134 232 114 166 C164 176 206 202 238 242 Z" fill="#FB923C" stroke="#FFF7ED" stroke-width="4"/>
+        <path d="M256 286 C320 276 378 232 398 166 C348 176 306 202 274 242 Z" fill="#FB923C" stroke="#FFF7ED" stroke-width="4"/>
+        <path d="M256 326 C206 318 162 288 144 240 C184 248 218 268 244 298 Z" fill="#FDE047"/>
+        <path d="M256 326 C306 318 350 288 368 240 C328 248 294 268 268 298 Z" fill="#FDE047"/>
+        <!-- Central Radiant Flame / Star Crest -->
+        <path d="M256.0 152.0 L268.0 185.2 L302.8 179.0 L280.0 206.0 L302.8 233.0 L268.0 226.8 L256.0 260.0 L244.0 226.8 L209.2 233.0 L232.0 206.0 L209.2 179.0 L244.0 185.2 Z" fill="#FEF08A" stroke="#EA580C" stroke-width="4"/>
+        <circle cx="256" cy="206" r="18" fill="#FFFFFF"/>
+      
+    <!-- Top-left glossy highlight arc -->
+    <ellipse cx="195" cy="115" rx="170" ry="95" transform="rotate(-18 195 115)" fill="url(#gloss)"/>
+  </g>
+  <!-- Crisp inner bevel border -->
+  <path d="M228.3 70.0 Q256.0 54.0 283.7 70.0 L403.2 139.0 Q430.9 155.0 430.9 187.0 L430.9 325.0 Q430.9 357.0 403.2 373.0 L283.7 442.0 Q256.0 458.0 228.3 442.0 L108.8 373.0 Q81.1 357.0 81.1 325.0 L81.1 187.0 Q81.1 155.0 108.8 139.0 Z" fill="none" stroke="url(#rimEnergy)" stroke-width="12"/>
+  <path d="M228.3 70.0 Q256.0 54.0 283.7 70.0 L403.2 139.0 Q430.9 155.0 430.9 187.0 L430.9 325.0 Q430.9 357.0 403.2 373.0 L283.7 442.0 Q256.0 458.0 228.3 442.0 L108.8 373.0 Q81.1 357.0 81.1 325.0 L81.1 187.0 Q81.1 155.0 108.8 139.0 Z" fill="none" stroke="#FFFFFF" stroke-opacity="0.45" stroke-width="2.5" transform="translate(256,256) scale(0.955) translate(-256,-256)"/>
+</svg>

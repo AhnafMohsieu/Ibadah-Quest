@@ -77,6 +77,7 @@
         ? SpiritualGrowth.isVisible('garden')
         : true;
       if (!el || !isGardenVisible) {
+        lastTree = null;
         if (el) el.innerHTML = '';
         return;
       }

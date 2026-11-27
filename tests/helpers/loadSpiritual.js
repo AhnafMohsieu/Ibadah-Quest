@@ -10,7 +10,7 @@ function loadSpiritual(filePath, overrides) {
     isVisible: () => true,
     FEATURE_ICONS: {
       garden: '', lantern: '', keys: '', mosque: '', boat: '',
-      heart: '', armor: '', ramadan: '', laylat: ''
+      ramadan: '', laylat: ''
     }
   };
   const sandbox = {

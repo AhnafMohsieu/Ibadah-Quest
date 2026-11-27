@@ -50,7 +50,7 @@ function createSandbox(overrides) {
     quranAudioReciter: 7,
     avatar: '', joinDate: null,
     healthLog: {}, financeLog: {},
-    growthSettings: { visible: ['garden', 'lantern', 'keys', 'mosque', 'boat', 'heart', 'armor', 'ramadan', 'laylat'] },
+    growthSettings: { visible: ['garden', 'lantern', 'keys', 'mosque', 'boat', 'ramadan', 'laylat'] },
     theme: 'light', lastTab: 'home', lastCat: null, lastSub: null, introSeen: false,
     notificationsEnabled: false
   }, overrides);

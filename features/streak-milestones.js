@@ -1,12 +1,12 @@
 (function() {
   const MILESTONES = [
-    { days:7, xp:200, badge:'🔥', label:'7-Day Warrior' },
-    { days:14, xp:400, badge:'⭐', label:'2-Week Champion' },
-    { days:30, xp:1000, badge:'🏆', label:'Monthly Master' },
-    { days:60, xp:2000, badge:'💎', label:'Diamond Devotee' },
-    { days:100, xp:5000, badge:'👑', label:'Century King' },
-    { days:200, xp:10000, badge:'🌙', label:'Lunar Legend' },
-    { days:365, xp:25000, badge:'☪️', label:'Annual Elite' }
+    { days:7, xp:200, badge:'🔥', iconKey:'flame', label:'7-Day Warrior' },
+    { days:14, xp:400, badge:'⭐', iconKey:'star', label:'2-Week Champion' },
+    { days:30, xp:1000, badge:'🏆', iconKey:'trophy', label:'Monthly Master' },
+    { days:60, xp:2000, badge:'💎', iconKey:'gem', label:'Diamond Devotee' },
+    { days:100, xp:5000, badge:'👑', iconKey:'crown', label:'Century King' },
+    { days:200, xp:10000, badge:'🌙', iconKey:'moon', label:'Lunar Legend' },
+    { days:365, xp:25000, badge:'☪️', iconKey:'crescent', label:'Annual Elite' }
   ];
 
   function _smT(s) { return (typeof window !== 'undefined' && typeof window.t === 'function') ? window.t(s) : s; }
@@ -20,7 +20,8 @@
       if (streak >= m.days && !S.milestones.includes(m.days)) {
         S.milestones.push(m.days);
         applyXpDelta(m.xp, { skipLevelToast: true });
-        toast(m.badge, `${_smT('Milestone Unlocked')}: ${_smT(m.label)}<br><bdi dir="ltr">+${_smN(m.xp)} XP!</bdi>`, true, 4000);
+        const icon = (typeof iqIcon === 'function' ? iqIcon(m.iconKey) : '') || m.badge;
+        toast(icon, `${_smT('Milestone Unlocked')}: ${_smT(m.label)}<br><bdi dir="ltr">+${_smN(m.xp)} XP!</bdi>`, true, 4000);
         newMilestone = true;
       }
     }

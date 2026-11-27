@@ -6,23 +6,6 @@ const { loadSpiritual } = require('./helpers/loadSpiritual');
 
 const feature = (name) => path.join(__dirname, '..', 'features', 'spiritual-growth', name + '.js');
 
-test('renderArmor renders a stage-gated SVG scene', () => {
-  const { sandbox, el } = loadSpiritual(feature('armor'));
-  sandbox.window.renderArmor();
-  assert.ok(el.innerHTML.includes('<svg'), 'armor SVG missing');
-  assert.ok(el.innerHTML.includes('Stage 3/7'), 'stage badge missing');
-  assert.ok(el.innerHTML.includes('spiritual-card'), 'card wrapper missing');
-});
-
-test('renderHeartRefinement renders a stage-gated SVG scene without clobbering renderHeart', () => {
-  const { sandbox, el } = loadSpiritual(feature('heart'));
-  assert.strictEqual(typeof sandbox.window.renderHeartRefinement, 'function', 'renderHeartRefinement not exported');
-  assert.strictEqual(sandbox.window.renderHeart, undefined, 'must not clobber knowledge-pool renderHeart');
-  sandbox.window.renderHeartRefinement();
-  assert.ok(el.innerHTML.includes('<svg'), 'heart SVG missing');
-  assert.ok(el.innerHTML.includes('Stage 3/7'), 'stage badge missing');
-});
-
 test('garden treeSVG renders a real scene', () => {
   const { sandbox, el } = loadSpiritual(path.join(__dirname, '..', 'features', 'garden.js'));
   sandbox.window.renderGarden();

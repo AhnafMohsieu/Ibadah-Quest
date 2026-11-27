@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <clipPath id="badgeClip">
+      <path d="M256 50 C294 50 320 74 334 114 L388 186 C398 200 398 218 390 234 L356 376 C350 402 330 422 302 432 L256 462 L210 432 C182 422 162 402 156 376 L122 234 C114 218 114 200 124 186 L178 114 C192 74 218 50 256 50 Z"/>
+    </clipPath>
+    <linearGradient id="gloss" x1="0.15" y1="0" x2="0.65" y2="0.85">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.28"/>
+      <stop offset="45%" stop-color="#FFFFFF" stop-opacity="0.06"/>
+      <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="rimDefault" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#FDE68A"/>
+      <stop offset="50%" stop-color="#D9A84E"/>
+      <stop offset="100%" stop-color="#9E6F1E"/>
+    </linearGradient>
+    
+        <linearGradient id="rimFanous" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#FEF08A"/><stop offset="100%" stop-color="#B45309"/></linearGradient>
+        <radialGradient id="bgFanous" cx="0.5" cy="0.48" r="0.65"><stop offset="0%" stop-color="#10B981"/><stop offset="60%" stop-color="#065F46"/><stop offset="100%" stop-color="#022C22"/></radialGradient>
+      
+  </defs>
+  <!-- Soft grounded shadow -->
+  <g transform="translate(0, 12)" opacity="0.2">
+    <path d="M256 50 C294 50 320 74 334 114 L388 186 C398 200 398 218 390 234 L356 376 C350 402 330 422 302 432 L256 462 L210 432 C182 422 162 402 156 376 L122 234 C114 218 114 200 124 186 L178 114 C192 74 218 50 256 50 Z" fill="#0F172A" stroke="#0F172A" stroke-width="28" stroke-linejoin="round" stroke-linecap="round"/>
+    
+  </g>
+  <!-- Thick white sticker border -->
+  <g>
+    <path d="M256 50 C294 50 320 74 334 114 L388 186 C398 200 398 218 390 234 L356 376 C350 402 330 422 302 432 L256 462 L210 432 C182 422 162 402 156 376 L122 234 C114 218 114 200 124 186 L178 114 C192 74 218 50 256 50 Z" fill="#FFFFFF" stroke="#FFFFFF" stroke-width="28" stroke-linejoin="round" stroke-linecap="round"/>
+    
+  </g>
+  <!-- Colored / metallic rim -->
+  <path d="M256 50 C294 50 320 74 334 114 L388 186 C398 200 398 218 390 234 L356 376 C350 402 330 422 302 432 L256 462 L210 432 C182 422 162 402 156 376 L122 234 C114 218 114 200 124 186 L178 114 C192 74 218 50 256 50 Z" fill="url(#rimFanous)"/>
+  <!-- Inner background clipped cleanly -->
+  <g clip-path="url(#badgeClip)">
+    <rect x="0" y="0" width="512" height="512" fill="url(#bgFanous)"/>
+    <path d="M256 50 C294 50 320 74 334 114 L388 186 C398 200 398 218 390 234 L356 376 C350 402 330 422 302 432 L256 462 L210 432 C182 422 162 402 156 376 L122 234 C114 218 114 200 124 186 L178 114 C192 74 218 50 256 50 Z" fill="none" stroke="#FFFFFF" stroke-opacity="0.28" stroke-width="18" transform="translate(256,256) scale(0.915) translate(-256,-256)"/>
+    
+        <circle cx="256" cy="252" r="108" fill="#FEF08A" opacity="0.24"/>
+        <!-- Hanging Ring & Dome Top -->
+        <circle cx="256" cy="96" r="12" fill="none" stroke="#FDE047" stroke-width="5"/>
+        <path d="M210 144 Q256 96 302 144 Z" fill="#F59E0B" stroke="#FEF08A" stroke-width="3.5"/>
+        <!-- Lantern Glass Body -->
+        <path d="M196 154 L316 154 L340 210 L306 346 L206 346 L172 210 Z" fill="#FDE047" stroke="#B45309" stroke-width="5"/>
+        <path d="M220 176 L292 176 L282 326 L230 326 Z" fill="#FFFBEB"/>
+        <path d="M260.3 218.3 A32 32 0 1 0 286.5 259.5 A25.6 25.6 0 0 1 260.3 218.3 Z" fill="#F59E0B"/>
+        <!-- Base -->
+        <path d="M196 346 L316 346 L296 382 L216 382 Z" fill="#D97706" stroke="#FEF08A" stroke-width="3"/>
+        <path d="M142 218 Q143.568 230.432 156 232 Q143.568 233.568 142 246 Q140.432 233.568 128 232 Q140.432 230.432 142 218 Z" fill="#FEF9C3" opacity="1"/>
+        <path d="M370 218 Q371.568 230.432 384 232 Q371.568 233.568 370 246 Q368.432 233.568 356 232 Q368.432 230.432 370 218 Z" fill="#FEF9C3" opacity="1"/>
+      
+    <!-- Top-left glossy highlight arc -->
+    <ellipse cx="195" cy="115" rx="170" ry="95" transform="rotate(-18 195 115)" fill="url(#gloss)"/>
+  </g>
+  <!-- Crisp inner bevel border -->
+  <path d="M256 50 C294 50 320 74 334 114 L388 186 C398 200 398 218 390 234 L356 376 C350 402 330 422 302 432 L256 462 L210 432 C182 422 162 402 156 376 L122 234 C114 218 114 200 124 186 L178 114 C192 74 218 50 256 50 Z" fill="none" stroke="url(#rimFanous)" stroke-width="12"/>
+  <path d="M256 50 C294 50 320 74 334 114 L388 186 C398 200 398 218 390 234 L356 376 C350 402 330 422 302 432 L256 462 L210 432 C182 422 162 402 156 376 L122 234 C114 218 114 200 124 186 L178 114 C192 74 218 50 256 50 Z" fill="none" stroke="#FFFFFF" stroke-opacity="0.45" stroke-width="2.5" transform="translate(256,256) scale(0.955) translate(-256,-256)"/>
+</svg>

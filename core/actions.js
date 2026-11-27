@@ -120,14 +120,18 @@
       playSound(conf ? 'chime' : 'pop');
       return;
     }
+    const isAchToast = typeof icon === 'string' && icon.indexOf('iq-badge') !== -1;
     window._modalTriggerEl = document.activeElement;
     if (ov.classList) {
       ov.classList.remove('iq-modal-open');
-      ov.classList.add('iq-toast-passive');
+      if (isAchToast) ov.classList.remove('iq-toast-passive');
+      else ov.classList.add('iq-toast-passive');
     }
-    ov.innerHTML=`<div class="toast-box" role="status" aria-live="polite"><span class="toast-ico" aria-hidden="true">${icon}</span><h3><bdi>${msg}</bdi></h3></div>`;
+    ov.innerHTML = isAchToast
+      ? `<div class="toast-box toast-box--achievement" role="status" aria-live="polite"><div class="toast-badge-slot">${icon}</div><div class="toast-ach-body">${msg}</div></div>`
+      : `<div class="toast-box" role="status" aria-live="polite"><span class="toast-ico" aria-hidden="true">${icon}</span><h3><bdi>${msg}</bdi></h3></div>`;
     ov.style.display='flex'; if (ov.classList) ov.classList.add('show'); playSound(conf ? 'chime' : 'pop');
-    ov.style.pointerEvents='none';
+    ov.style.pointerEvents = isAchToast ? 'auto' : 'none';
     if(ov._t) clearTimeout(ov._t);
     const hidePassive = ()=>{
       if (ov.classList && typeof ov.classList.contains === 'function' && ov.classList.contains('iq-modal-open')) return;
@@ -137,12 +141,13 @@
         const isShown = !!(ov.classList && typeof ov.classList.contains === 'function' && ov.classList.contains('show'));
         if (!stillModal && !isShown) {
           ov.style.display='none'; ov.innerHTML='';
+          ov.style.pointerEvents='none';
           if (ov.classList) ov.classList.remove('iq-toast-passive');
         }
       }, 260);
     };
     if(ms>0) ov._t=setTimeout(hidePassive, ms);
-    ov.onclick=()=>{ if (ov.classList && typeof ov.classList.contains === 'function' && ov.classList.contains('iq-toast-passive')) hidePassive(); };
+    ov.onclick=()=>{ if (isAchToast || (ov.classList && typeof ov.classList.contains === 'function' && ov.classList.contains('iq-toast-passive'))) hidePassive(); };
   }
   window.toast = toast;
 

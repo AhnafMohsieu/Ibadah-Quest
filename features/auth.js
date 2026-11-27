@@ -485,7 +485,7 @@
                 <div class="auth-profile-avatar">${ico ? ico(p === 'default' ? 'user' : 'sparkles') : (p === 'default' ? '👤' : '✨')}</div>
                 <div class="auth-profile-details">
                   <div class="auth-profile-name">${window.escapeHTML(label)} ${isAct ? `<span class="auth-cur-tag">(${_at('Current')})</span>` : ''}</div>
-                  <div class="auth-profile-status">${cred.hasPin ? ((ico ? ico('lock') + ' ' : '') + _at('PIN Protected')) : ((ico ? ico('unlock') + ' ' : '') + _at('Unlocked'))}</div>
+                  <div class="auth-profile-status">${cred.hasPin ? ((ico ? ico('lock') + ' ' : '') + _at('PIN Protected')) : ((ico ? ico('key') + ' ' : '') + _at('Unlocked'))}</div>
                 </div>
                 <button type="button" class="auth-profile-go" style="min-width:44px;min-height:44px;" aria-label="Switch to ${window.escapeHTML(label)}"><span class="iq-mirror-icon">&rarr;</span></button>
               </div>
@@ -569,11 +569,12 @@
       '🕯️', '📿', '🕋', '🌅', '🌌', '🌾', '🕊', '👑'
     ];
     const currentAvatar = (typeof S !== 'undefined' && S && S.avatar) ? S.avatar : '';
+    const ico = (typeof window !== 'undefined' && typeof window.iqIcon === 'function') ? window.iqIcon : null;
 
     let h = `
       <div class="auth-card" role="dialog" aria-modal="true" aria-labelledby="avatarTitle">
         <div class="auth-header">
-          <div class="auth-icon-crescent">🎨</div>
+          <div class="auth-icon-crescent">${ico ? ico('palette') : '🎨'}</div>
           <h2 id="avatarTitle" class="auth-title">Choose Your Avatar</h2>
           <p class="auth-sub">Select an icon that represents your spiritual journey</p>
         </div>
@@ -639,7 +640,8 @@
       }
       closeAuthOverlay();
       if (typeof window.toast === 'function') {
-        window.toast('✨', 'Welcome to Ibadah Quest!');
+        const ico = typeof window.iqIcon === 'function' ? window.iqIcon('sparkles') : '';
+        window.toast(ico || '✨', 'Welcome to Ibadah Quest!');
       }
       if (typeof window.renderAll === 'function') window.renderAll();
       if (typeof window.isOnboardingComplete === 'function' && !window.isOnboardingComplete()) {
@@ -690,7 +692,8 @@
       if (res.success) {
         closeAuthOverlay();
         if (typeof window.toast === 'function') {
-          window.toast('🔓', 'Welcome back, ' + (user === 'default' ? 'Guest' : user) + '!');
+          const ico = typeof window.iqIcon === 'function' ? window.iqIcon('key') : '';
+          window.toast(ico || '🔓', 'Welcome back, ' + (user === 'default' ? 'Guest' : user) + '!');
         }
         if (typeof window.renderAll === 'function') window.renderAll();
       } else {
@@ -720,7 +723,8 @@
           closeAuthOverlay();
           if (typeof window.initApp === 'function') window.initApp();
           if (typeof window.toast === 'function') {
-            window.toast('👤', 'Switched to ' + (user === 'default' ? 'Guest' : user));
+            const ico = typeof window.iqIcon === 'function' ? window.iqIcon('user') : '';
+            window.toast(ico || '👤', 'Switched to ' + (user === 'default' ? 'Guest' : user));
           }
         }
       }
@@ -781,7 +785,10 @@
         setTimeout(() => {
           closeAuthOverlay();
           if (typeof window.renderProfile === 'function') window.renderProfile();
-          if (typeof window.toast === 'function') window.toast('🔒', 'PIN security saved');
+          if (typeof window.toast === 'function') {
+            const ico = typeof window.iqIcon === 'function' ? window.iqIcon('lock') : '';
+            window.toast(ico || '🔒', 'PIN security saved');
+          }
         }, 900);
       } else {
         if (errMsg) {
@@ -798,7 +805,10 @@
         if (res.success) {
           closeAuthOverlay();
           if (typeof window.renderProfile === 'function') window.renderProfile();
-          if (typeof window.toast === 'function') window.toast('🔓', 'PIN protection removed.', false, 2200);
+          if (typeof window.toast === 'function') {
+            const ico = typeof window.iqIcon === 'function' ? window.iqIcon('key') : '';
+            window.toast(ico || '🔓', 'PIN protection removed.', false, 2200);
+          }
         } else {
           if (typeof window.iqAlertDialog === 'function') window.iqAlertDialog('PIN Removal', res.error || 'Incorrect PIN.');
           else if (typeof alert === 'function') alert(res.error || 'Incorrect PIN.');
@@ -820,7 +830,10 @@
         if (typeof window.renderProfile === 'function') window.renderProfile();
       }
       closeAuthOverlay();
-      if (typeof window.toast === 'function') window.toast('✨', 'Avatar updated');
+      if (typeof window.toast === 'function') {
+        const ico = typeof window.iqIcon === 'function' ? window.iqIcon('sparkles') : '';
+        window.toast(ico || '✨', 'Avatar updated');
+      }
     }
   };
 

@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <clipPath id="badgeClip">
+      <path d="M256 54 C312 84 402 152 406 246 L406 392 C406 426 380 448 346 448 L166 448 C132 448 106 426 106 392 L106 246 C110 152 200 84 256 54 Z"/>
+    </clipPath>
+    <linearGradient id="gloss" x1="0.15" y1="0" x2="0.65" y2="0.85">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.28"/>
+      <stop offset="45%" stop-color="#FFFFFF" stop-opacity="0.06"/>
+      <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="rimDefault" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#FDE68A"/>
+      <stop offset="50%" stop-color="#D9A84E"/>
+      <stop offset="100%" stop-color="#9E6F1E"/>
+    </linearGradient>
+    
+        <linearGradient id="rimJummah" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#FEF08A"/><stop offset="100%" stop-color="#CA8A04"/></linearGradient>
+        <radialGradient id="bgJummah" cx="0.5" cy="0.35" r="0.65"><stop offset="0%" stop-color="#5EEAD4"/><stop offset="55%" stop-color="#0F766E"/><stop offset="100%" stop-color="#042F2E"/></radialGradient>
+      
+  </defs>
+  <!-- Soft grounded shadow -->
+  <g transform="translate(0, 12)" opacity="0.2">
+    <path d="M256 54 C312 84 402 152 406 246 L406 392 C406 426 380 448 346 448 L166 448 C132 448 106 426 106 392 L106 246 C110 152 200 84 256 54 Z" fill="#0F172A" stroke="#0F172A" stroke-width="28" stroke-linejoin="round" stroke-linecap="round"/>
+    
+  </g>
+  <!-- Thick white sticker border -->
+  <g>
+    <path d="M256 54 C312 84 402 152 406 246 L406 392 C406 426 380 448 346 448 L166 448 C132 448 106 426 106 392 L106 246 C110 152 200 84 256 54 Z" fill="#FFFFFF" stroke="#FFFFFF" stroke-width="28" stroke-linejoin="round" stroke-linecap="round"/>
+    
+  </g>
+  <!-- Colored / metallic rim -->
+  <path d="M256 54 C312 84 402 152 406 246 L406 392 C406 426 380 448 346 448 L166 448 C132 448 106 426 106 392 L106 246 C110 152 200 84 256 54 Z" fill="url(#rimJummah)"/>
+  <!-- Inner background clipped cleanly -->
+  <g clip-path="url(#badgeClip)">
+    <rect x="0" y="0" width="512" height="512" fill="url(#bgJummah)"/>
+    <path d="M256 54 C312 84 402 152 406 246 L406 392 C406 426 380 448 346 448 L166 448 C132 448 106 426 106 392 L106 246 C110 152 200 84 256 54 Z" fill="none" stroke="#FFFFFF" stroke-opacity="0.28" stroke-width="18" transform="translate(256,256) scale(0.915) translate(-256,-256)"/>
+    
+        <circle cx="256" cy="230" r="126" fill="#FEF08A" opacity="0.18"/>
+        <!-- Minarets -->
+        <rect x="132" y="196" width="28" height="190" rx="6" fill="#F8FAFC" stroke="#0F766E" stroke-width="3"/>
+        <path d="M126 196 Q146 146 166 196 Z" fill="#F59E0B"/>
+        <rect x="352" y="196" width="28" height="190" rx="6" fill="#F8FAFC" stroke="#0F766E" stroke-width="3"/>
+        <path d="M346 196 Q366 146 386 196 Z" fill="#F59E0B"/>
+        <!-- Main Dome -->
+        <path d="M170 258 C170 176 218 144 256 112 C294 144 342 176 342 258 Z" fill="#14B8A6" stroke="#FDE047" stroke-width="5"/>
+        <path d="M200 258 C200 198 228 164 256 138 C272 176 280 218 280 258 Z" fill="#5EEAD4" opacity="0.45"/>
+        <line x1="256" y1="112" x2="256" y2="88" stroke="#FDE047" stroke-width="5" stroke-linecap="round"/>
+        <path d="M257.8 65.1 A13 13 0 1 0 268.2 82.5 A10.4 10.4 0 0 1 257.8 65.1 Z" fill="#FEF08A"/>
+        <!-- Mosque facade & golden arch -->
+        <rect x="158" y="256" width="196" height="136" rx="12" fill="#FFFFFF" stroke="#0F766E" stroke-width="4"/>
+        <path d="M216 392 L216 312 Q216 274 256 274 Q296 274 296 312 L296 392 Z" fill="#F59E0B" stroke="#B45309" stroke-width="4"/>
+        <path d="M230 392 L230 322 Q230 294 256 294 Q282 294 282 322 L282 392 Z" fill="#FEF08A"/>
+        <rect x="180" y="294" width="20" height="44" rx="10" fill="#0D9488"/>
+        <rect x="312" y="294" width="20" height="44" rx="10" fill="#0D9488"/>
+      
+    <!-- Top-left glossy highlight arc -->
+    <ellipse cx="195" cy="115" rx="170" ry="95" transform="rotate(-18 195 115)" fill="url(#gloss)"/>
+  </g>
+  <!-- Crisp inner bevel border -->
+  <path d="M256 54 C312 84 402 152 406 246 L406 392 C406 426 380 448 346 448 L166 448 C132 448 106 426 106 392 L106 246 C110 152 200 84 256 54 Z" fill="none" stroke="url(#rimJummah)" stroke-width="12"/>
+  <path d="M256 54 C312 84 402 152 406 246 L406 392 C406 426 380 448 346 448 L166 448 C132 448 106 426 106 392 L106 246 C110 152 200 84 256 54 Z" fill="none" stroke="#FFFFFF" stroke-opacity="0.45" stroke-width="2.5" transform="translate(256,256) scale(0.955) translate(-256,-256)"/>
+</svg>

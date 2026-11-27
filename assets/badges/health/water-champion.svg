@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <clipPath id="badgeClip">
+      <path d="M256 54 C308 134 422 222 422 316 C422 398 348 456 256 456 C164 456 90 398 90 316 C90 222 204 134 256 54 Z"/>
+    </clipPath>
+    <linearGradient id="gloss" x1="0.15" y1="0" x2="0.65" y2="0.85">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.28"/>
+      <stop offset="45%" stop-color="#FFFFFF" stop-opacity="0.06"/>
+      <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="rimDefault" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#FDE68A"/>
+      <stop offset="50%" stop-color="#D9A84E"/>
+      <stop offset="100%" stop-color="#9E6F1E"/>
+    </linearGradient>
+    
+        <linearGradient id="rimAqua" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#E0F2FE"/><stop offset="100%" stop-color="#0284C7"/></linearGradient>
+        <radialGradient id="bgAquaDeep" cx="0.4" cy="0.45" r="0.65"><stop offset="0%" stop-color="#67E8F9"/><stop offset="55%" stop-color="#0EA5E9"/><stop offset="100%" stop-color="#0369A1"/></radialGradient>
+      
+  </defs>
+  <!-- Soft grounded shadow -->
+  <g transform="translate(0, 12)" opacity="0.2">
+    <path d="M256 54 C308 134 422 222 422 316 C422 398 348 456 256 456 C164 456 90 398 90 316 C90 222 204 134 256 54 Z" fill="#0F172A" stroke="#0F172A" stroke-width="28" stroke-linejoin="round" stroke-linecap="round"/>
+    
+  </g>
+  <!-- Thick white sticker border -->
+  <g>
+    <path d="M256 54 C308 134 422 222 422 316 C422 398 348 456 256 456 C164 456 90 398 90 316 C90 222 204 134 256 54 Z" fill="#FFFFFF" stroke="#FFFFFF" stroke-width="28" stroke-linejoin="round" stroke-linecap="round"/>
+    
+  </g>
+  <!-- Colored / metallic rim -->
+  <path d="M256 54 C308 134 422 222 422 316 C422 398 348 456 256 456 C164 456 90 398 90 316 C90 222 204 134 256 54 Z" fill="url(#rimAqua)"/>
+  <!-- Inner background clipped cleanly -->
+  <g clip-path="url(#badgeClip)">
+    <rect x="0" y="0" width="512" height="512" fill="url(#bgAquaDeep)"/>
+    <path d="M256 54 C308 134 422 222 422 316 C422 398 348 456 256 456 C164 456 90 398 90 316 C90 222 204 134 256 54 Z" fill="none" stroke="#FFFFFF" stroke-opacity="0.28" stroke-width="18" transform="translate(256,256) scale(0.915) translate(-256,-256)"/>
+    
+        <!-- Inner faceted water wave & glossy drop highlight -->
+        <path d="M108 328 Q182 288 256 324 Q330 360 404 316 L404 456 L108 456 Z" fill="#0284C7" opacity="0.55"/>
+        <path d="M256 124 C296 184 358 242 358 308 A102 102 0 1 1 154 308 C154 242 216 184 256 124 Z" fill="#38BDF8" stroke="#E0F2FE" stroke-width="5"/>
+        <path d="M206 258 C188 282 184 318 202 344" fill="none" stroke="#FFFFFF" stroke-width="11" stroke-linecap="round" opacity="0.82"/>
+        <circle cx="222" cy="232" r="8" fill="#FFFFFF" opacity="0.85"/>
+        <path d="M334 171 Q335.68 184.32 349 186 Q335.68 187.68 334 201 Q332.32 187.68 319 186 Q332.32 184.32 334 171 Z" fill="#FFFFFF" opacity="1"/>
+      
+    <!-- Top-left glossy highlight arc -->
+    <ellipse cx="195" cy="115" rx="170" ry="95" transform="rotate(-18 195 115)" fill="url(#gloss)"/>
+  </g>
+  <!-- Crisp inner bevel border -->
+  <path d="M256 54 C308 134 422 222 422 316 C422 398 348 456 256 456 C164 456 90 398 90 316 C90 222 204 134 256 54 Z" fill="none" stroke="url(#rimAqua)" stroke-width="12"/>
+  <path d="M256 54 C308 134 422 222 422 316 C422 398 348 456 256 456 C164 456 90 398 90 316 C90 222 204 134 256 54 Z" fill="none" stroke="#FFFFFF" stroke-opacity="0.45" stroke-width="2.5" transform="translate(256,256) scale(0.955) translate(-256,-256)"/>
+</svg>

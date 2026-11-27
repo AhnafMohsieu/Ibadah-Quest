@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <clipPath id="badgeClip">
+      <path d="M256 50 C294 50 320 74 334 114 L388 186 C398 200 398 218 390 234 L356 376 C350 402 330 422 302 432 L256 462 L210 432 C182 422 162 402 156 376 L122 234 C114 218 114 200 124 186 L178 114 C192 74 218 50 256 50 Z"/>
+    </clipPath>
+    <linearGradient id="gloss" x1="0.15" y1="0" x2="0.65" y2="0.85">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.28"/>
+      <stop offset="45%" stop-color="#FFFFFF" stop-opacity="0.06"/>
+      <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="rimDefault" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#FDE68A"/>
+      <stop offset="50%" stop-color="#D9A84E"/>
+      <stop offset="100%" stop-color="#9E6F1E"/>
+    </linearGradient>
+    
+        <linearGradient id="rimVioletGold" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#FDE68A"/><stop offset="100%" stop-color="#6D28D9"/></linearGradient>
+        <linearGradient id="bgMidnightViolet" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1E1B4B"/><stop offset="60%" stop-color="#4C1D95"/><stop offset="100%" stop-color="#0F172A"/></linearGradient>
+      
+  </defs>
+  <!-- Soft grounded shadow -->
+  <g transform="translate(0, 12)" opacity="0.2">
+    <path d="M256 50 C294 50 320 74 334 114 L388 186 C398 200 398 218 390 234 L356 376 C350 402 330 422 302 432 L256 462 L210 432 C182 422 162 402 156 376 L122 234 C114 218 114 200 124 186 L178 114 C192 74 218 50 256 50 Z" fill="#0F172A" stroke="#0F172A" stroke-width="28" stroke-linejoin="round" stroke-linecap="round"/>
+    
+  </g>
+  <!-- Thick white sticker border -->
+  <g>
+    <path d="M256 50 C294 50 320 74 334 114 L388 186 C398 200 398 218 390 234 L356 376 C350 402 330 422 302 432 L256 462 L210 432 C182 422 162 402 156 376 L122 234 C114 218 114 200 124 186 L178 114 C192 74 218 50 256 50 Z" fill="#FFFFFF" stroke="#FFFFFF" stroke-width="28" stroke-linejoin="round" stroke-linecap="round"/>
+    
+  </g>
+  <!-- Colored / metallic rim -->
+  <path d="M256 50 C294 50 320 74 334 114 L388 186 C398 200 398 218 390 234 L356 376 C350 402 330 422 302 432 L256 462 L210 432 C182 422 162 402 156 376 L122 234 C114 218 114 200 124 186 L178 114 C192 74 218 50 256 50 Z" fill="url(#rimVioletGold)"/>
+  <!-- Inner background clipped cleanly -->
+  <g clip-path="url(#badgeClip)">
+    <rect x="0" y="0" width="512" height="512" fill="url(#bgMidnightViolet)"/>
+    <path d="M256 50 C294 50 320 74 334 114 L388 186 C398 200 398 218 390 234 L356 376 C350 402 330 422 302 432 L256 462 L210 432 C182 422 162 402 156 376 L122 234 C114 218 114 200 124 186 L178 114 C192 74 218 50 256 50 Z" fill="none" stroke="#FFFFFF" stroke-opacity="0.28" stroke-width="18" transform="translate(256,256) scale(0.915) translate(-256,-256)"/>
+    
+        <!-- Hanging Golden Lantern -->
+        <line x1="256" y1="54" x2="256" y2="144" stroke="#FDE047" stroke-width="5"/>
+        <circle cx="256" cy="222" r="76" fill="#FDE047" opacity="0.22"/>
+        <path d="M222 152 L290 152 L310 184 L202 184 Z" fill="#F59E0B" stroke="#FEF08A" stroke-width="3"/>
+        <path d="M206 184 L306 184 L292 276 L220 276 Z" fill="#FEF08A" stroke="#F59E0B" stroke-width="4"/>
+        <ellipse cx="256" cy="230" rx="22" ry="32" fill="#FFFFFF" opacity="0.75"/>
+        <path d="M220 276 L292 276 L256 302 Z" fill="#D97706"/>
+        <!-- Crescent & Stars -->
+        <path d="M162.3 150.4 A24 24 0 1 0 180.3 182.8 A19.2 19.2 0 0 1 162.3 150.4 Z" fill="#FEF08A"/>
+        <path d="M354 153 Q355.68 166.32 369 168 Q355.68 169.68 354 183 Q352.32 169.68 339 168 Q352.32 166.32 354 153 Z" fill="#DDD6FE" opacity="1"/>
+        
+    <!-- Tassels -->
+    <g stroke="#FDE047" stroke-width="5" stroke-linecap="round">
+      <line x1="208.5" y1="329" x2="208.5" y2="343"/><line x1="232.2" y1="329" x2="232.2" y2="343"/><line x1="256.0" y1="329" x2="256.0" y2="343"/><line x1="279.8" y1="329" x2="279.8" y2="343"/><line x1="303.5" y1="329" x2="303.5" y2="343"/>
+      <line x1="208.5" y1="409" x2="208.5" y2="423"/><line x1="232.2" y1="409" x2="232.2" y2="423"/><line x1="256.0" y1="409" x2="256.0" y2="423"/><line x1="279.8" y1="409" x2="279.8" y2="423"/><line x1="303.5" y1="409" x2="303.5" y2="423"/>
+    </g>
+    <!-- Mat shadow -->
+    <rect x="194" y="345" width="132" height="74" rx="14" fill="#042F2E" opacity="0.28"/>
+    <!-- Mat body -->
+    <rect x="190" y="339" width="132" height="74" rx="14" fill="#7C3AED" stroke="#FDE047" stroke-width="5"/>
+    <!-- Inner border -->
+    <rect x="202" y="351" width="108" height="50" rx="8" fill="#4C1D95" stroke="#FDE047" stroke-opacity="0.7" stroke-width="2.5"/>
+    <!-- Mihrab arch motif -->
+    <path d="M256 365 Q292.96 397 289 389 L223 389 Q219.04 397 256 365 Z" fill="#7C3AED" stroke="#FDE047" stroke-width="3"/>
+    <!-- Central diamond ornament -->
+    <polygon points="256,364 270,382 256,400 242,382" fill="#FDE047"/>
+  
+      
+    <!-- Top-left glossy highlight arc -->
+    <ellipse cx="195" cy="115" rx="170" ry="95" transform="rotate(-18 195 115)" fill="url(#gloss)"/>
+  </g>
+  <!-- Crisp inner bevel border -->
+  <path d="M256 50 C294 50 320 74 334 114 L388 186 C398 200 398 218 390 234 L356 376 C350 402 330 422 302 432 L256 462 L210 432 C182 422 162 402 156 376 L122 234 C114 218 114 200 124 186 L178 114 C192 74 218 50 256 50 Z" fill="none" stroke="url(#rimVioletGold)" stroke-width="12"/>
+  <path d="M256 50 C294 50 320 74 334 114 L388 186 C398 200 398 218 390 234 L356 376 C350 402 330 422 302 432 L256 462 L210 432 C182 422 162 402 156 376 L122 234 C114 218 114 200 124 186 L178 114 C192 74 218 50 256 50 Z" fill="none" stroke="#FFFFFF" stroke-opacity="0.45" stroke-width="2.5" transform="translate(256,256) scale(0.955) translate(-256,-256)"/>
+</svg>

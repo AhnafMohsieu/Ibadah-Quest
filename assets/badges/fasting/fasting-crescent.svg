@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <clipPath id="badgeClip">
+      <path d="M256 60 A196 196 0 1 1 255.9 60 Z"/>
+    </clipPath>
+    <linearGradient id="gloss" x1="0.15" y1="0" x2="0.65" y2="0.85">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.28"/>
+      <stop offset="45%" stop-color="#FFFFFF" stop-opacity="0.06"/>
+      <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="rimDefault" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#FDE68A"/>
+      <stop offset="50%" stop-color="#D9A84E"/>
+      <stop offset="100%" stop-color="#9E6F1E"/>
+    </linearGradient>
+    
+        <linearGradient id="rimWarmGold" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#FEF08A"/><stop offset="100%" stop-color="#D97706"/></linearGradient>
+        <radialGradient id="bgNightTeal" cx="0.5" cy="0.38" r="0.65"><stop offset="0%" stop-color="#0D9488"/><stop offset="60%" stop-color="#0F172A"/><stop offset="100%" stop-color="#020617"/></radialGradient>
+      
+  </defs>
+  <!-- Soft grounded shadow -->
+  <g transform="translate(0, 12)" opacity="0.2">
+    <path d="M256 60 A196 196 0 1 1 255.9 60 Z" fill="#0F172A" stroke="#0F172A" stroke-width="28" stroke-linejoin="round" stroke-linecap="round"/>
+    
+  </g>
+  <!-- Thick white sticker border -->
+  <g>
+    <path d="M256 60 A196 196 0 1 1 255.9 60 Z" fill="#FFFFFF" stroke="#FFFFFF" stroke-width="28" stroke-linejoin="round" stroke-linecap="round"/>
+    
+  </g>
+  <!-- Colored / metallic rim -->
+  <path d="M256 60 A196 196 0 1 1 255.9 60 Z" fill="url(#rimWarmGold)"/>
+  <!-- Inner background clipped cleanly -->
+  <g clip-path="url(#badgeClip)">
+    <rect x="0" y="0" width="512" height="512" fill="url(#bgNightTeal)"/>
+    <path d="M256 60 A196 196 0 1 1 255.9 60 Z" fill="none" stroke="#FFFFFF" stroke-opacity="0.28" stroke-width="18" transform="translate(256,256) scale(0.915) translate(-256,-256)"/>
+    
+        <!-- Crescent Moon -->
+        <path d="M223.9 112.9 A56 56 0 1 0 265.7 189.6 A44.8 44.8 0 0 1 223.9 112.9 Z" fill="#FDE047" stroke="#F59E0B" stroke-width="3"/>
+        <!-- Warm Lantern -->
+        <path d="M308 136 L346 136 L356 160 L298 160 Z" fill="#F59E0B"/>
+        <path d="M302 160 L352 160 L344 230 L310 230 Z" fill="#FEF08A" stroke="#F59E0B" stroke-width="4"/>
+        <!-- Bowl of Plump Dates + Water Drop -->
+        <path d="M138 308 Q256 322 374 308 Q352 368 256 368 Q160 368 138 308 Z" fill="#F59E0B" stroke="#FEF08A" stroke-width="4"/>
+        <ellipse cx="212" cy="296" rx="26" ry="15" transform="rotate(-14 212 296)" fill="#92400E" stroke="#FDE68A" stroke-width="2.5"/>
+        <ellipse cx="256" cy="290" rx="26" ry="15" fill="#78350F" stroke="#FDE68A" stroke-width="2.5"/>
+        <ellipse cx="300" cy="296" rx="26" ry="15" transform="rotate(14 300 296)" fill="#92400E" stroke="#FDE68A" stroke-width="2.5"/>
+        <!-- Sparkling Water Droplet -->
+        <path d="M148 228 C162 252 172 266 172 280 A24 24 0 1 1 124 280 C124 266 134 252 148 228 Z" fill="#38BDF8" stroke="#E0F2FE" stroke-width="3"/>
+        <path d="M314 97 Q315.456 108.544 327 110 Q315.456 111.456 314 123 Q312.544 111.456 301 110 Q312.544 108.544 314 97 Z" fill="#FEF9C3" opacity="1"/>
+      
+    <!-- Top-left glossy highlight arc -->
+    <ellipse cx="195" cy="115" rx="170" ry="95" transform="rotate(-18 195 115)" fill="url(#gloss)"/>
+  </g>
+  <!-- Crisp inner bevel border -->
+  <path d="M256 60 A196 196 0 1 1 255.9 60 Z" fill="none" stroke="url(#rimWarmGold)" stroke-width="12"/>
+  <path d="M256 60 A196 196 0 1 1 255.9 60 Z" fill="none" stroke="#FFFFFF" stroke-opacity="0.45" stroke-width="2.5" transform="translate(256,256) scale(0.955) translate(-256,-256)"/>
+</svg>

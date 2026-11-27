@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <clipPath id="badgeClip">
+      <path d="M228.3 70.0 Q256.0 54.0 283.7 70.0 L403.2 139.0 Q430.9 155.0 430.9 187.0 L430.9 325.0 Q430.9 357.0 403.2 373.0 L283.7 442.0 Q256.0 458.0 228.3 442.0 L108.8 373.0 Q81.1 357.0 81.1 325.0 L81.1 187.0 Q81.1 155.0 108.8 139.0 Z"/>
+    </clipPath>
+    <linearGradient id="gloss" x1="0.15" y1="0" x2="0.65" y2="0.85">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.28"/>
+      <stop offset="45%" stop-color="#FFFFFF" stop-opacity="0.06"/>
+      <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="rimDefault" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#FDE68A"/>
+      <stop offset="50%" stop-color="#D9A84E"/>
+      <stop offset="100%" stop-color="#9E6F1E"/>
+    </linearGradient>
+    
+        <linearGradient id="rimSapphireGold" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#FDE68A"/><stop offset="100%" stop-color="#0284C7"/></linearGradient>
+        <radialGradient id="bgSapphire" cx="0.5" cy="0.4" r="0.65"><stop offset="0%" stop-color="#38BDF8"/><stop offset="55%" stop-color="#0369A1"/><stop offset="100%" stop-color="#0F172A"/></radialGradient>
+      
+  </defs>
+  <!-- Soft grounded shadow -->
+  <g transform="translate(0, 12)" opacity="0.2">
+    <path d="M228.3 70.0 Q256.0 54.0 283.7 70.0 L403.2 139.0 Q430.9 155.0 430.9 187.0 L430.9 325.0 Q430.9 357.0 403.2 373.0 L283.7 442.0 Q256.0 458.0 228.3 442.0 L108.8 373.0 Q81.1 357.0 81.1 325.0 L81.1 187.0 Q81.1 155.0 108.8 139.0 Z" fill="#0F172A" stroke="#0F172A" stroke-width="28" stroke-linejoin="round" stroke-linecap="round"/>
+    
+  </g>
+  <!-- Thick white sticker border -->
+  <g>
+    <path d="M228.3 70.0 Q256.0 54.0 283.7 70.0 L403.2 139.0 Q430.9 155.0 430.9 187.0 L430.9 325.0 Q430.9 357.0 403.2 373.0 L283.7 442.0 Q256.0 458.0 228.3 442.0 L108.8 373.0 Q81.1 357.0 81.1 325.0 L81.1 187.0 Q81.1 155.0 108.8 139.0 Z" fill="#FFFFFF" stroke="#FFFFFF" stroke-width="28" stroke-linejoin="round" stroke-linecap="round"/>
+    
+  </g>
+  <!-- Colored / metallic rim -->
+  <path d="M228.3 70.0 Q256.0 54.0 283.7 70.0 L403.2 139.0 Q430.9 155.0 430.9 187.0 L430.9 325.0 Q430.9 357.0 403.2 373.0 L283.7 442.0 Q256.0 458.0 228.3 442.0 L108.8 373.0 Q81.1 357.0 81.1 325.0 L81.1 187.0 Q81.1 155.0 108.8 139.0 Z" fill="url(#rimSapphireGold)"/>
+  <!-- Inner background clipped cleanly -->
+  <g clip-path="url(#badgeClip)">
+    <rect x="0" y="0" width="512" height="512" fill="url(#bgSapphire)"/>
+    <path d="M228.3 70.0 Q256.0 54.0 283.7 70.0 L403.2 139.0 Q430.9 155.0 430.9 187.0 L430.9 325.0 Q430.9 357.0 403.2 373.0 L283.7 442.0 Q256.0 458.0 228.3 442.0 L108.8 373.0 Q81.1 357.0 81.1 325.0 L81.1 187.0 Q81.1 155.0 108.8 139.0 Z" fill="none" stroke="#FFFFFF" stroke-opacity="0.28" stroke-width="18" transform="translate(256,256) scale(0.915) translate(-256,-256)"/>
+    
+        <!-- Symmetrical golden laurel fronds -->
+        <path d="M138 326 Q104 260 144 190" fill="none" stroke="#FDE047" stroke-width="7" stroke-linecap="round"/>
+        <path d="M374 326 Q408 260 368 190" fill="none" stroke="#FDE047" stroke-width="7" stroke-linecap="round"/>
+        <ellipse cx="120" cy="290" rx="16" ry="9" transform="rotate(-35 120 290)" fill="#FBBF24"/><ellipse cx="126" cy="252" rx="16" ry="9" transform="rotate(-35 126 252)" fill="#FBBF24"/><ellipse cx="132" cy="214" rx="16" ry="9" transform="rotate(-35 132 214)" fill="#FBBF24"/>
+        <ellipse cx="392" cy="290" rx="16" ry="9" transform="rotate(35 392 290)" fill="#FBBF24"/><ellipse cx="386" cy="252" rx="16" ry="9" transform="rotate(35 386 252)" fill="#FBBF24"/><ellipse cx="380" cy="214" rx="16" ry="9" transform="rotate(35 380 214)" fill="#FBBF24"/>
+        <!-- Open Book at Base -->
+        <path d="M256 268 C218 248 164 248 130 264 L140 366 C174 352 222 356 256 376 Z" fill="#FFFBEB" stroke="#0284C7" stroke-width="3.5"/>
+        <path d="M256 268 C294 248 348 248 382 264 L372 366 C338 352 290 356 256 376 Z" fill="#E0F2FE" stroke="#0284C7" stroke-width="3.5"/>
+        <!-- Luminous Emerald Gem Hovering Above Book -->
+        <polygon points="256,126 308,176 256,238 204,176" fill="#34D399" stroke="#ECFDF5" stroke-width="4"/>
+        <polygon points="256,126 308,176 256,184" fill="#A7F3D0" opacity="0.7"/>
+        <polygon points="256,126 204,176 256,184" fill="#6EE7B7"/>
+        <path d="M256 83 Q257.68 96.32 271 98 Q257.68 99.68 256 113 Q254.32 99.68 241 98 Q254.32 96.32 256 83 Z" fill="#FEF9C3" opacity="1"/>
+      
+    <!-- Top-left glossy highlight arc -->
+    <ellipse cx="195" cy="115" rx="170" ry="95" transform="rotate(-18 195 115)" fill="url(#gloss)"/>
+  </g>
+  <!-- Crisp inner bevel border -->
+  <path d="M228.3 70.0 Q256.0 54.0 283.7 70.0 L403.2 139.0 Q430.9 155.0 430.9 187.0 L430.9 325.0 Q430.9 357.0 403.2 373.0 L283.7 442.0 Q256.0 458.0 228.3 442.0 L108.8 373.0 Q81.1 357.0 81.1 325.0 L81.1 187.0 Q81.1 155.0 108.8 139.0 Z" fill="none" stroke="url(#rimSapphireGold)" stroke-width="12"/>
+  <path d="M228.3 70.0 Q256.0 54.0 283.7 70.0 L403.2 139.0 Q430.9 155.0 430.9 187.0 L430.9 325.0 Q430.9 357.0 403.2 373.0 L283.7 442.0 Q256.0 458.0 228.3 442.0 L108.8 373.0 Q81.1 357.0 81.1 325.0 L81.1 187.0 Q81.1 155.0 108.8 139.0 Z" fill="none" stroke="#FFFFFF" stroke-opacity="0.45" stroke-width="2.5" transform="translate(256,256) scale(0.955) translate(-256,-256)"/>
+</svg>

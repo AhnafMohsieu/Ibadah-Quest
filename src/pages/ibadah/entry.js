@@ -52,20 +52,20 @@ const IBADAH_GROUPS = [
 
 // --- 4. Panel HTML per tab (DOM elements the renderers target) ---
 const PANEL_HTML = {
-  today: '<div id="wellArea"></div><div id="muhasabahEntry"></div><div id="prayerArea"></div><div id="gardenArea"></div><div class="section-title">Voluntary Prayers</div><div id="volArea"></div><div class="section-title">Extra Good Deeds</div><div id="deedArea"></div><div id="lanternArea"></div>',
+  today: '<div id="wellArea"></div><div id="muhasabahEntry"></div><div id="prayerArea"></div><div id="gardenArea"></div><div class="section-title">Voluntary Prayers</div><div id="volArea"></div><div class="section-title">Extra Good Deeds</div><div id="deedArea"></div>',
   timer: '<div class="section-title">Next Prayer Countdown</div><div id="timerArea" style="text-align:center;font-size:clamp(2rem,12vw,3rem);font-weight:bold;color:var(--accent);margin:30px 0;"></div><div id="prayerNamesArea" style="text-align:center;color:var(--text2);"></div><div class="section-title">Prayer Times</div><div id="prayerTimesArea"></div>',
   quests: '<div id="questArea"></div>',
   journeys: '<div id="journeyArea"></div><div id="boatArea"></div>',
   morning: '<div id="morningArea"></div>',
-  evening: '<div id="eveningArea"></div>',
-  dhikr: '<div id="dhikrCounterArea"></div><div id="dhikrArea"></div>',
+  evening: '<div id="eveningArea"></div><div id="laylatArea"></div>',
+  dhikr: '<div id="dhikrCounterArea"></div><div id="dhikrArea"></div><div id="lanternArea"></div>',
   situational: '<div id="situationalArea"></div>',
   wudu: '<div id="wuduArea"></div>',
   salah: '<div id="salahArea"></div>',
   sunnahs: '<div id="sunnahsArea"></div>',
   extradeeds: '<div id="extradeedsArea"></div>',
   volprayers: '<div id="volprayersArea"></div>',
-  fasting: '<div id="fastingArea"></div>',
+  fasting: '<div id="fastingArea"></div><div id="ramadanArea"></div>',
   healthlog: '<div id="healthlogArea"></div>',
   finance: '<div id="financeArea"></div>',
   memorization: '<div id="memorizationArea"></div>',
@@ -76,20 +76,20 @@ const PANEL_HTML = {
 
 // --- 5. Script URLs to lazy-load per tab (classic IIFEs that register window.* renderers) ---
 const TAB_SCRIPTS = {
-  today: ['/core/static.js', '/core/dynamic.js', '/features/garden.js', '/features/muhasabah.js', '/features/spiritual-growth/lantern.js'],
+  today: ['/core/static.js', '/core/dynamic.js', '/features/garden.js', '/features/muhasabah.js'],
   timer: ['/core/prayers.js'],
   quests: ['/core/dynamic.js', '/core/quests.js', '/core/achievements.js'],
   journeys: ['/data/journeys.js', '/features/journeys.js', '/features/spiritual-growth/boat.js'],
   morning: ['/core/static.js'],
-  evening: ['/core/static.js'],
-  dhikr: ['/core/static.js', '/features/widgets/dhikr-counter.js'],
+  evening: ['/core/static.js', '/features/spiritual-growth/laylat.js'],
+  dhikr: ['/core/static.js', '/features/widgets/dhikr-counter.js', '/features/spiritual-growth/lantern.js'],
   situational: ['/core/static.js'],
   wudu: ['/core/static.js'],
   salah: ['/core/static.js'],
   sunnahs: ['/core/static.js'],
   extradeeds: ['/core/static.js'],
   volprayers: ['/core/static.js'],
-  fasting: ['/core/static.js'],
+  fasting: ['/core/static.js', '/features/spiritual-growth/ramadan.js'],
   healthlog: ['/features/health.js'],
   finance: ['/features/finance.js'],
   memorization: ['/core/static.js'],
@@ -137,6 +137,18 @@ function fireRenderers(tabId) {
     case 'journeys':
       try { window.renderJourneys && window.renderJourneys(); } catch {}
       try { window.renderBoat && window.renderBoat(); } catch {}
+      break;
+    case 'dhikr':
+      try { window.renderDhikr && window.renderDhikr(); } catch {}
+      try { window.renderLantern && window.renderLantern(); } catch {}
+      break;
+    case 'evening':
+      try { window.renderEvening && window.renderEvening(); } catch {}
+      try { window.renderLaylat && window.renderLaylat(); } catch {}
+      break;
+    case 'fasting':
+      try { window.renderFasting && window.renderFasting(); } catch {}
+      try { window.renderRamadan && window.renderRamadan(); } catch {}
       break;
     default: {
       const fnName = {

@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <clipPath id="badgeClip">
+      <path d="M256 58 C320 58 386 78 416 96 C424 101 428 110 428 120 L424 246 C420 342 346 416 256 456 C166 416 92 342 88 246 L84 120 C84 110 88 101 96 96 C126 78 192 58 256 58 Z"/>
+    </clipPath>
+    <linearGradient id="gloss" x1="0.15" y1="0" x2="0.65" y2="0.85">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.28"/>
+      <stop offset="45%" stop-color="#FFFFFF" stop-opacity="0.06"/>
+      <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="rimDefault" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#FDE68A"/>
+      <stop offset="50%" stop-color="#D9A84E"/>
+      <stop offset="100%" stop-color="#9E6F1E"/>
+    </linearGradient>
+    
+        <linearGradient id="rimCoralGold" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#FDE68A"/><stop offset="100%" stop-color="#E11D48"/></linearGradient>
+        <radialGradient id="bgWarmRose" cx="0.45" cy="0.35" r="0.7"><stop offset="0%" stop-color="#FDA4AF"/><stop offset="50%" stop-color="#F43F5E"/><stop offset="100%" stop-color="#9F1239"/></radialGradient>
+      
+  </defs>
+  <!-- Soft grounded shadow -->
+  <g transform="translate(0, 12)" opacity="0.2">
+    <path d="M256 58 C320 58 386 78 416 96 C424 101 428 110 428 120 L424 246 C420 342 346 416 256 456 C166 416 92 342 88 246 L84 120 C84 110 88 101 96 96 C126 78 192 58 256 58 Z" fill="#0F172A" stroke="#0F172A" stroke-width="28" stroke-linejoin="round" stroke-linecap="round"/>
+    
+  </g>
+  <!-- Thick white sticker border -->
+  <g>
+    <path d="M256 58 C320 58 386 78 416 96 C424 101 428 110 428 120 L424 246 C420 342 346 416 256 456 C166 416 92 342 88 246 L84 120 C84 110 88 101 96 96 C126 78 192 58 256 58 Z" fill="#FFFFFF" stroke="#FFFFFF" stroke-width="28" stroke-linejoin="round" stroke-linecap="round"/>
+    
+  </g>
+  <!-- Colored / metallic rim -->
+  <path d="M256 58 C320 58 386 78 416 96 C424 101 428 110 428 120 L424 246 C420 342 346 416 256 456 C166 416 92 342 88 246 L84 120 C84 110 88 101 96 96 C126 78 192 58 256 58 Z" fill="url(#rimCoralGold)"/>
+  <!-- Inner background clipped cleanly -->
+  <g clip-path="url(#badgeClip)">
+    <rect x="0" y="0" width="512" height="512" fill="url(#bgWarmRose)"/>
+    <path d="M256 58 C320 58 386 78 416 96 C424 101 428 110 428 120 L424 246 C420 342 346 416 256 456 C166 416 92 342 88 246 L84 120 C84 110 88 101 96 96 C126 78 192 58 256 58 Z" fill="none" stroke="#FFFFFF" stroke-opacity="0.28" stroke-width="18" transform="translate(256,256) scale(0.915) translate(-256,-256)"/>
+    
+        <!-- Stylized cradling giving hands arcs -->
+        <path d="M126 300 C138 352 192 384 256 384 C320 384 374 352 386 300 C362 328 310 342 256 336 C202 342 150 328 126 300 Z" fill="#FDE047" stroke="#B45309" stroke-width="4"/>
+        <!-- Glossy Radiant Heart -->
+        <path d="M256 302 C180 254 142 208 142 166 C142 130 170 106 202 106 C226 106 246 120 256 140 C266 120 286 106 310 106 C342 106 370 130 370 166 C370 208 332 254 256 302 Z" fill="#FFFFFF" stroke="#FFE4E6" stroke-width="4"/>
+        <path d="M256 284 C194 244 162 204 162 168 C162 144 180 126 202 126 C224 126 244 142 256 164 C268 142 288 126 310 126 C332 126 350 144 350 168 C350 204 318 244 256 284 Z" fill="#10B981"/>
+        <!-- Heart highlight -->
+        <ellipse cx="196" cy="158" rx="16" ry="10" transform="rotate(-30 196 158)" fill="#FFFFFF" opacity="0.65"/>
+        <path d="M256 80 Q257.568 92.432 270 94 Q257.568 95.568 256 108 Q254.432 95.568 242 94 Q254.432 92.432 256 80 Z" fill="#FEF08A" opacity="1"/>
+        <path d="M134 228 Q135.344 238.656 146 240 Q135.344 241.344 134 252 Q132.656 241.344 122 240 Q132.656 238.656 134 228 Z" fill="#FEF08A" opacity="1"/>
+        <path d="M378 228 Q379.344 238.656 390 240 Q379.344 241.344 378 252 Q376.656 241.344 366 240 Q376.656 238.656 378 228 Z" fill="#FEF08A" opacity="1"/>
+      
+    <!-- Top-left glossy highlight arc -->
+    <ellipse cx="195" cy="115" rx="170" ry="95" transform="rotate(-18 195 115)" fill="url(#gloss)"/>
+  </g>
+  <!-- Crisp inner bevel border -->
+  <path d="M256 58 C320 58 386 78 416 96 C424 101 428 110 428 120 L424 246 C420 342 346 416 256 456 C166 416 92 342 88 246 L84 120 C84 110 88 101 96 96 C126 78 192 58 256 58 Z" fill="none" stroke="url(#rimCoralGold)" stroke-width="12"/>
+  <path d="M256 58 C320 58 386 78 416 96 C424 101 428 110 428 120 L424 246 C420 342 346 416 256 456 C166 416 92 342 88 246 L84 120 C84 110 88 101 96 96 C126 78 192 58 256 58 Z" fill="none" stroke="#FFFFFF" stroke-opacity="0.45" stroke-width="2.5" transform="translate(256,256) scale(0.955) translate(-256,-256)"/>
+</svg>

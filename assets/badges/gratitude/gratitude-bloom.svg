@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <clipPath id="badgeClip">
+      <path d="M256.0 70.0 Q297.7 46.1 327.2 84.2 Q352.3 111.8 387.5 124.5 Q433.9 137.1 427.8 184.8 Q426.1 222.2 442.0 256.0 Q465.9 297.7 427.8 327.2 Q400.2 352.3 387.5 387.5 Q374.9 433.9 327.2 427.8 Q289.8 426.1 256.0 442.0 Q214.3 465.9 184.8 427.8 Q159.7 400.2 124.5 387.5 Q78.1 374.9 84.2 327.2 Q85.9 289.8 70.0 256.0 Q46.1 214.3 84.2 184.8 Q111.8 159.7 124.5 124.5 Q137.1 78.1 184.8 84.2 Q222.2 85.9 256.0 70.0 Z"/>
+    </clipPath>
+    <linearGradient id="gloss" x1="0.15" y1="0" x2="0.65" y2="0.85">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.28"/>
+      <stop offset="45%" stop-color="#FFFFFF" stop-opacity="0.06"/>
+      <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="rimDefault" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#FDE68A"/>
+      <stop offset="50%" stop-color="#D9A84E"/>
+      <stop offset="100%" stop-color="#9E6F1E"/>
+    </linearGradient>
+    
+        <linearGradient id="rimPinkGold" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#FDE68A"/><stop offset="100%" stop-color="#DB2777"/></linearGradient>
+        <radialGradient id="bgBlossom" cx="0.5" cy="0.4" r="0.65"><stop offset="0%" stop-color="#FFF1F2"/><stop offset="55%" stop-color="#FBCFE8"/><stop offset="100%" stop-color="#F472B6"/></radialGradient>
+      
+  </defs>
+  <!-- Soft grounded shadow -->
+  <g transform="translate(0, 12)" opacity="0.2">
+    <path d="M256.0 70.0 Q297.7 46.1 327.2 84.2 Q352.3 111.8 387.5 124.5 Q433.9 137.1 427.8 184.8 Q426.1 222.2 442.0 256.0 Q465.9 297.7 427.8 327.2 Q400.2 352.3 387.5 387.5 Q374.9 433.9 327.2 427.8 Q289.8 426.1 256.0 442.0 Q214.3 465.9 184.8 427.8 Q159.7 400.2 124.5 387.5 Q78.1 374.9 84.2 327.2 Q85.9 289.8 70.0 256.0 Q46.1 214.3 84.2 184.8 Q111.8 159.7 124.5 124.5 Q137.1 78.1 184.8 84.2 Q222.2 85.9 256.0 70.0 Z" fill="#0F172A" stroke="#0F172A" stroke-width="28" stroke-linejoin="round" stroke-linecap="round"/>
+    
+  </g>
+  <!-- Thick white sticker border -->
+  <g>
+    <path d="M256.0 70.0 Q297.7 46.1 327.2 84.2 Q352.3 111.8 387.5 124.5 Q433.9 137.1 427.8 184.8 Q426.1 222.2 442.0 256.0 Q465.9 297.7 427.8 327.2 Q400.2 352.3 387.5 387.5 Q374.9 433.9 327.2 427.8 Q289.8 426.1 256.0 442.0 Q214.3 465.9 184.8 427.8 Q159.7 400.2 124.5 387.5 Q78.1 374.9 84.2 327.2 Q85.9 289.8 70.0 256.0 Q46.1 214.3 84.2 184.8 Q111.8 159.7 124.5 124.5 Q137.1 78.1 184.8 84.2 Q222.2 85.9 256.0 70.0 Z" fill="#FFFFFF" stroke="#FFFFFF" stroke-width="28" stroke-linejoin="round" stroke-linecap="round"/>
+    
+  </g>
+  <!-- Colored / metallic rim -->
+  <path d="M256.0 70.0 Q297.7 46.1 327.2 84.2 Q352.3 111.8 387.5 124.5 Q433.9 137.1 427.8 184.8 Q426.1 222.2 442.0 256.0 Q465.9 297.7 427.8 327.2 Q400.2 352.3 387.5 387.5 Q374.9 433.9 327.2 427.8 Q289.8 426.1 256.0 442.0 Q214.3 465.9 184.8 427.8 Q159.7 400.2 124.5 387.5 Q78.1 374.9 84.2 327.2 Q85.9 289.8 70.0 256.0 Q46.1 214.3 84.2 184.8 Q111.8 159.7 124.5 124.5 Q137.1 78.1 184.8 84.2 Q222.2 85.9 256.0 70.0 Z" fill="url(#rimPinkGold)"/>
+  <!-- Inner background clipped cleanly -->
+  <g clip-path="url(#badgeClip)">
+    <rect x="0" y="0" width="512" height="512" fill="url(#bgBlossom)"/>
+    <path d="M256.0 70.0 Q297.7 46.1 327.2 84.2 Q352.3 111.8 387.5 124.5 Q433.9 137.1 427.8 184.8 Q426.1 222.2 442.0 256.0 Q465.9 297.7 427.8 327.2 Q400.2 352.3 387.5 387.5 Q374.9 433.9 327.2 427.8 Q289.8 426.1 256.0 442.0 Q214.3 465.9 184.8 427.8 Q159.7 400.2 124.5 387.5 Q78.1 374.9 84.2 327.2 Q85.9 289.8 70.0 256.0 Q46.1 214.3 84.2 184.8 Q111.8 159.7 124.5 124.5 Q137.1 78.1 184.8 84.2 Q222.2 85.9 256.0 70.0 Z" fill="none" stroke="#FFFFFF" stroke-opacity="0.28" stroke-width="18" transform="translate(256,256) scale(0.915) translate(-256,-256)"/>
+    
+        <!-- Sunbeams -->
+        <circle cx="256" cy="244" r="118" fill="#FEF08A" opacity="0.45"/>
+        <!-- Green Leaves -->
+        <path d="M256 320 C196 320 144 352 132 384 C174 396 226 376 256 336 Z" fill="#10B981" stroke="#047857" stroke-width="3"/>
+        <path d="M256 320 C316 320 368 352 380 384 C338 396 286 376 256 336 Z" fill="#10B981" stroke="#047857" stroke-width="3"/>
+        <!-- Layered Lotus / Rose Petals -->
+        <path d="M256 120 C216 172 204 246 256 312 C308 246 296 172 256 120 Z" fill="#F43F5E" stroke="#FFF1F2" stroke-width="3.5"/>
+        <path d="M164 168 C162 232 202 288 256 312 C240 242 212 192 164 168 Z" fill="#FB7185" stroke="#FFF1F2" stroke-width="3.5"/>
+        <path d="M348 168 C350 232 310 288 256 312 C272 242 300 192 348 168 Z" fill="#FB7185" stroke="#FFF1F2" stroke-width="3.5"/>
+        <path d="M132 244 C158 294 206 318 256 312 C218 272 178 248 132 244 Z" fill="#FDA4AF" stroke="#FFF1F2" stroke-width="3"/>
+        <path d="M380 244 C354 294 306 318 256 312 C294 272 334 248 380 244 Z" fill="#FDA4AF" stroke="#FFF1F2" stroke-width="3"/>
+        <!-- Golden Center Glow -->
+        <circle cx="256" cy="240" r="24" fill="#FDE047" stroke="#FFFBEB" stroke-width="4"/>
+        <path d="M256 85 Q257.456 96.544 269 98 Q257.456 99.456 256 111 Q254.544 99.456 243 98 Q254.544 96.544 256 85 Z" fill="#F59E0B" opacity="1"/>
+      
+    <!-- Top-left glossy highlight arc -->
+    <ellipse cx="195" cy="115" rx="170" ry="95" transform="rotate(-18 195 115)" fill="url(#gloss)"/>
+  </g>
+  <!-- Crisp inner bevel border -->
+  <path d="M256.0 70.0 Q297.7 46.1 327.2 84.2 Q352.3 111.8 387.5 124.5 Q433.9 137.1 427.8 184.8 Q426.1 222.2 442.0 256.0 Q465.9 297.7 427.8 327.2 Q400.2 352.3 387.5 387.5 Q374.9 433.9 327.2 427.8 Q289.8 426.1 256.0 442.0 Q214.3 465.9 184.8 427.8 Q159.7 400.2 124.5 387.5 Q78.1 374.9 84.2 327.2 Q85.9 289.8 70.0 256.0 Q46.1 214.3 84.2 184.8 Q111.8 159.7 124.5 124.5 Q137.1 78.1 184.8 84.2 Q222.2 85.9 256.0 70.0 Z" fill="none" stroke="url(#rimPinkGold)" stroke-width="12"/>
+  <path d="M256.0 70.0 Q297.7 46.1 327.2 84.2 Q352.3 111.8 387.5 124.5 Q433.9 137.1 427.8 184.8 Q426.1 222.2 442.0 256.0 Q465.9 297.7 427.8 327.2 Q400.2 352.3 387.5 387.5 Q374.9 433.9 327.2 427.8 Q289.8 426.1 256.0 442.0 Q214.3 465.9 184.8 427.8 Q159.7 400.2 124.5 387.5 Q78.1 374.9 84.2 327.2 Q85.9 289.8 70.0 256.0 Q46.1 214.3 84.2 184.8 Q111.8 159.7 124.5 124.5 Q137.1 78.1 184.8 84.2 Q222.2 85.9 256.0 70.0 Z" fill="none" stroke="#FFFFFF" stroke-opacity="0.45" stroke-width="2.5" transform="translate(256,256) scale(0.955) translate(-256,-256)"/>
+</svg>

@@ -36,8 +36,6 @@
     achievementshowcase: () => window.renderAchievementShowcase && window.renderAchievementShowcase(),
     ramadan: () => window.renderRamadan && window.renderRamadan(),
     laylat: () => window.renderLaylat && window.renderLaylat(),
-    heartrefinement: () => window.renderHeartRefinement && window.renderHeartRefinement(),
-    armor: () => window.renderArmor && window.renderArmor(),
     growthtab: () => window.renderSpiritualGrowthTab && window.renderSpiritualGrowthTab(),
     combos: () => window.renderCombos && window.renderCombos(),
     autotrack: () => window.autoTrackJourneyProgress && window.autoTrackJourneyProgress(),
@@ -253,7 +251,7 @@ function renderAll() {
   // re-rendering them a second time is pure waste (boot double-render).
   const DEFERRED_PANELS = [
     'garden', 'lantern', 'muhasabah', 'journeys', 'boat', 'keys', 'mosque',
-    'achievementshowcase', 'ramadan', 'laylat', 'heartrefinement', 'armor',
+    'achievementshowcase', 'ramadan', 'laylat',
     'growthtab', 'combos', 'autotrack'
   ];
   function renderDeferred() {
@@ -287,7 +285,7 @@ function renderAll() {
   function renderStr() {
     const fire = document.getElementById('streakFire');
     if (fire) {
-      fire.innerHTML = '<svg class="iq-streak-svg" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2c.7 3.2 3.8 5.2 4.8 8.3a5.5 5.5 0 1 1-9.6 0C8.2 7.2 11.3 5.2 12 2Z"/><path d="M12 18a2.5 2.5 0 0 0 2.4-2.6c0-1.4-1.2-2.5-2.4-3.6-1.2 1.1-2.4 2.2-2.4 3.6A2.5 2.5 0 0 0 12 18Z"/></svg>';
+      fire.innerHTML = typeof iqIcon === 'function' ? iqIcon('flame') : '🔥';
     }
     const days = document.getElementById('strDays');
     const best = document.getElementById('bestStr');
@@ -355,34 +353,66 @@ function renderAll() {
   }
 
   // ── Achievements ──
+  let _achFilter = 'all';
+  function setAchFilter(f) {
+    _achFilter = f || 'all';
+    renderAch();
+  }
+  window.setAchFilter = setAchFilter;
+
   function renderAch() {
   const cnt = Object.keys(S.ua).length;
   const total = ACHS.length;
   const pct = total > 0 ? Math.round((cnt / total) * 100) : 0;
-  const unlockedAchs = ACHS.filter(a => !!S.ua[a.id]);
+  const hasArt = typeof window.renderAchievementBadge === 'function';
+  const hasIcon = typeof window.renderAchievementIcon === 'function';
 
   let h = '<div class="ach-header">';
-  h += `<div class="section-title">${iqIcon('trophy')} ${_escD(_tr('Trophy Cabinet', 'Trophy Cabinet'))}</div>`;
+  h += `<div class="section-title">${hasIcon ? window.renderAchievementIcon('achievements') : iqIcon('trophy')} ${_escD(_tr('Trophy Cabinet', 'Trophy Cabinet'))}</div>`;
   h += `<div class="ach-progress"><span class="ach-progress-bar" style="width:${pct}%"></span></div>`;
-  h += `<div class="ach-progress-text iq-tabular">${_fmtN(cnt)} / ${_fmtN(total)} ${_escD(_tr('Unlocked', 'Unlocked'))}</div>`;
+  h += `<div class="ach-progress-text iq-tabular">${_fmtN(cnt)} / ${_fmtN(total)} ${_escD(_tr('Unlocked', 'Unlocked'))} (${_fmtN(pct)}%)</div>`;
+  h += '<div class="ach-filters" role="group" aria-label="Filter trophies">';
+  const filters = [
+    { key: 'all', label: _tr('All', 'All') + ' (' + _fmtN(total) + ')' },
+    { key: 'unlocked', label: _tr('Unlocked', 'Unlocked') + ' (' + _fmtN(cnt) + ')' },
+    { key: 'locked', label: _tr('Locked', 'Locked') + ' (' + _fmtN(Math.max(0, total - cnt)) + ')' }
+  ];
+  filters.forEach(fl => {
+    h += `<button type="button" class="ach-filter-btn${_achFilter === fl.key ? ' active' : ''}" onclick="window.setAchFilter('${fl.key}')">${_escD(fl.label)}</button>`;
+  });
+  h += '</div>';
   h += '</div>';
 
-  h += '<div class="ach-grid">';
-  h += ACHS.map(a => {
+  const visibleAchs = ACHS.filter(a => {
     const u = !!S.ua[a.id];
-    const tierStars = a.tier === 'jannah' ? iqIcon('star').repeat(10) : a.tier === 'mythic' ? iqIcon('gem').repeat(6) : a.tier === 'legendary' ? iqIcon('award').repeat(3) : a.tier === 'diamond' || a.tier === 'platinum' ? iqIcon('gem').repeat(2) : iqIcon('star');
+    if (_achFilter === 'unlocked') return u;
+    if (_achFilter === 'locked') return !u;
+    return true;
+  });
+
+  h += '<div class="ach-grid">';
+  h += visibleAchs.map(a => {
+    const u = !!S.ua[a.id];
     const tierIcon = a.tier === 'jannah' ? iqIcon('kaaba') : a.tier === 'mythic' ? iqIcon('crown') : a.tier === 'legendary' ? iqIcon('award') : a.tier === 'diamond' ? iqIcon('gem') : a.tier === 'platinum' ? iqIcon('gem') : a.tier === 'gold' ? iqIcon('trophy') : a.tier === 'silver' ? iqIcon('medal') : iqIcon('star');
-    return `<div class="ach-card${u ? ' unlocked' : ' locked'} tier-${a.tier}" ${u ? `onclick="window.featureAchievement && window.featureAchievement('${a.id}')" role="button" tabindex="0" title="Tap to feature in showcase"` : ''}>
-      <div class="ach-tier">${tierStars}</div>
-      <div class="ach-icon">${u ? (iqIcon(a.icon || a.id || a.name) || tierIcon) : iqIcon('lock')}</div>
-      <div class="ach-name">${a.name}</div>
-      <div class="ach-desc">${a.desc}</div>
+    const badgeVisual = hasArt
+      ? window.renderAchievementBadge(a, { unlocked: u, size: 'md' })
+      : `<div class="ach-icon">${u ? (iqIcon(a.icon || a.id || a.name) || tierIcon) : iqIcon('lock')}</div>`;
+    return `<div class="ach-card${u ? ' unlocked' : ' locked'} tier-${_escD(a.tier)}" ${u ? `onclick="window.featureAchievement && window.featureAchievement('${_escD(a.id)}')" role="button" tabindex="0" title="${_escD(_tr('Tap to feature in showcase', 'Tap to feature in showcase'))}"` : ''}>
+      <div class="ach-badge-wrap">${badgeVisual}</div>
+      <div class="ach-name">${_escD(_tr(a.name, a.name))}</div>
+      <div class="ach-desc">${_escD(_tr(a.desc, a.desc))}</div>
+      <div class="ach-card-footer">
+        <span class="ach-rarity-tag tier-${_escD(a.tier)}">${_escD(_tr(a.tier, a.tier))}</span>
+        <span class="ach-status-tag">${_escD(u ? _tr('Unlocked', 'Unlocked') : _tr('Locked', 'Locked'))}</span>
+      </div>
     </div>`;
   }).join('');
   h += '</div>';
 
-  if (cnt === 0) {
+  if (cnt === 0 && _achFilter === 'unlocked') {
     h += `<div class="ach-empty">${_escD(_tr('No trophies yet. Start completing deeds to earn your first!', 'No trophies yet. Start completing deeds to earn your first!'))}</div>`;
+  } else if (visibleAchs.length === 0) {
+    h += `<div class="ach-empty">${_escD(_tr('All trophies in this view are complete!', 'All trophies in this view are complete!'))}</div>`;
   }
 
   var aEl = document.getElementById('achArea');
@@ -516,10 +546,11 @@ function renderAll() {
     h += `<div class="stat-card"><div class="stat-num iq-tabular">${_fmtN(S.xp)}</div><div class="stat-label">${esc(_tr('Total XP', 'Total XP'))}</div></div>`;
     h += `<div class="stat-card"><div class="stat-num iq-tabular">${_fmtN(S.tp)}</div><div class="stat-label">${esc(_tr('Prayers', 'Prayers'))}</div></div>`;
     h += `<div class="stat-card"><div class="stat-num iq-tabular">${_fmtN(S.cs)}</div><div class="stat-label">${esc(_tr('Streak', 'Streak'))}</div></div>`;
-    h += `<div class="stat-card"><div class="stat-icon">${iqIcon('trophy')}</div><div class="stat-num iq-tabular">${_fmtN(achCnt)}</div><div class="stat-label">${esc(_tr('Achievements', 'Achievements'))}</div></div>`;
+    const achIconHtml = typeof window.renderAchievementIcon === 'function' ? window.renderAchievementIcon('achievements') : iqIcon('trophy');
+    h += `<div class="stat-card"><div class="stat-icon">${achIconHtml}</div><div class="stat-num iq-tabular">${_fmtN(achCnt)}</div><div class="stat-label">${esc(_tr('Achievements', 'Achievements'))}</div></div>`;
     h += '</div>';
 
-    h += `<div class="profile-section"><h3>${esc(_tr('Achievement Showcase', 'Achievement Showcase'))}</h3><div id="achievementShowcase"></div></div>`;
+    h += `<div class="profile-section"><h3 class="showcase-heading">${achIconHtml} ${esc(_tr('Achievement Showcase', 'Achievement Showcase'))}</h3><div id="achievementShowcase"></div></div>`;
 
     h += `<div class="section-title">${iqIcon('settings')} ${esc(_tr('Settings & Preferences', 'Settings & Preferences'))}</div>`;
     h += '<div class="profile-settings">';
@@ -701,10 +732,12 @@ function renderAll() {
     if (lv) lv.textContent = `${_tr('Lv', 'Lv')} ${_fmtN(S.lv)}`;
     if (title) title.textContent = _tr(lvTitle(S.lv), lvTitle(S.lv));
     if (xp) {
-      xp.innerHTML = '<svg class="tb-stat-svg" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg><bdi dir="ltr">' + _fmtN(S.xp || 0) + ' XP</bdi>';
+      const zapImg = typeof iqIcon === 'function' ? iqIcon('zap') : '⚡';
+      xp.innerHTML = zapImg + '<bdi dir="ltr">' + _fmtN(S.xp || 0) + ' XP</bdi>';
     }
     if (streak) {
-      streak.innerHTML = '<svg class="tb-stat-svg" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2c.7 3.2 3.8 5.2 4.8 8.3a5.5 5.5 0 1 1-9.6 0C8.2 7.2 11.3 5.2 12 2Z"/></svg><span>' + _fmtN(S.cs || 0) + '</span>';
+      const flameImg = typeof iqIcon === 'function' ? iqIcon('flame') : '🔥';
+      streak.innerHTML = flameImg + '<span>' + _fmtN(S.cs || 0) + '</span>';
     }
     if (typeof window.renderIqFeed === 'function') {
       try { window.renderIqFeed(); } catch (e) {}

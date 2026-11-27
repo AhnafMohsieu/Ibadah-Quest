@@ -175,19 +175,12 @@ test('theme families have animation transitions in CSS', () => {
 });
 
 test('FEATURE_ICONS are populated with emoji strings for all features', () => {
-  for (const f of ['garden','lantern','keys','mosque','boat','heart','armor','ramadan','laylat']) {
+  for (const f of ['garden','lantern','keys','mosque','boat','ramadan','laylat']) {
     assert.ok(spiritual.includes(`${f}: `), `missing icon key for ${f}`);
     const iconBlock = spiritual.slice(spiritual.indexOf(`${f}: `), spiritual.indexOf(`${f}: `) + 40);
     assert.ok(!iconBlock.includes("iqIcon("), `FEATURE_ICONS should use emoji strings, not iqIcon() — ${f}`);
     assert.ok(!iconBlock.includes("''"), `icon must not be empty string — ${f}`);
   }
-});
-
-test('FEATURE_STAGES includes heart with 7 stages', () => {
-  assert.ok(spiritual.includes('heart: ['));
-  const heartBlock = spiritual.slice(spiritual.indexOf('heart: ['), spiritual.indexOf('ramadan: ['));
-  const names = (heartBlock.match(/name: '([^']+)'/g) || []);
-  assert.strictEqual(names.length, 7);
 });
 
 test('growth tab + settings render emoji icons, no mojibake separator', () => {
@@ -199,24 +192,42 @@ test('growth tab + settings render emoji icons, no mojibake separator', () => {
     'growth settings icon fallback must use FEATURE_ICONS or progress.icon');
 });
 
-test('index.html declares armor/heart growth areas and loads their scripts', () => {
-  assert.ok(html.includes('id="armorArea"'), 'armorArea missing');
+test('index.html declares knowledge heartArea without removed armor/heart growth scripts', () => {
+  assert.ok(!html.includes('id="armorArea"'), 'armorArea should be removed');
   assert.ok(html.includes('id="heartArea"'), 'knowledge heartArea missing');
-  assert.ok(html.includes('id="growthHeartArea"'), 'growthHeartArea missing');
+  assert.ok(!html.includes('id="growthHeartArea"'), 'growthHeartArea should be removed');
   assert.ok((html.match(/id="heartArea"/g) || []).length === 1, 'heartArea must appear exactly once');
-  assert.ok(html.includes('features/spiritual-growth/armor.js'), 'armor script missing');
-  assert.ok(html.includes('features/spiritual-growth/heart.js'), 'heart script missing');
+  assert.ok(!html.includes('features/spiritual-growth/armor.js'), 'armor script should be removed');
+  assert.ok(!html.includes('features/spiritual-growth/heart.js'), 'heart script should be removed');
+});
+
+test('spiritual growth keeps exactly 7 features spread across distinct panels with garden on today', () => {
+  const vm = require('node:vm');
+  const sb = { window: {} };
+  vm.runInNewContext(spiritual, sb);
+  const keys = Object.keys(sb.window.SpiritualGrowth.STAGES);
+  assert.deepStrictEqual(keys, ['garden', 'lantern', 'mosque', 'boat', 'keys', 'ramadan', 'laylat']);
+  const growthAreas = ['gardenArea', 'lanternArea', 'mosqueArea', 'boatArea', 'keysArea', 'ramadanArea', 'laylatArea'];
+  const panelForArea = {};
+  const panelRegex = /<div class="tab-panel[^"]*"[^>]*id="(panel-[^"]+)"[^>]*>([\s\S]*?)<\/div>\s*(?=<div class="tab-panel|<\/section)/g;
+  let m;
+  while ((m = panelRegex.exec(html)) !== null) {
+    const [, panelId, body] = m;
+    const found = growthAreas.filter((id) => body.includes(`id="${id}"`));
+    assert.ok(found.length <= 1, `${panelId} hosts multiple growth areas: ${found.join(', ')}`);
+    for (const id of found) panelForArea[id] = panelId;
+  }
+  assert.strictEqual(panelForArea.gardenArea, 'panel-today', 'gardenArea must stay in panel-today');
+  assert.strictEqual(Object.keys(panelForArea).length, 7, 'every growth area must belong to a distinct tab-panel');
 });
 
 test('growth renderers are wired into renderDynamic and tab render paths', () => {
-  for (const name of ['renderKeys','renderMosque','renderRamadan','renderLaylat','renderHeartRefinement','renderArmor']) {
+  for (const name of ['renderKeys','renderMosque','renderRamadan','renderLaylat']) {
     assert.ok(renderAll.includes(`window.${name}`), `renderDynamic must reference ${name}`);
   }
   for (const key of ["keys:'renderKeys'","mosque:'renderMosque'","ramadan:'renderRamadan'","laylat:'renderLaylat'"]) {
     assert.ok(actions.includes(key) || renderTabs.includes(key), `_lazyRender must map ${key}`);
   }
-  assert.ok(actions.indexOf('renderHeartRefinement') > -1 || renderTabs.indexOf('renderHeartRefinement') > -1, 'renderTab must call renderHeartRefinement');
-  assert.ok(actions.indexOf('renderArmor') > -1 || renderTabs.indexOf('renderArmor') > -1, 'renderTab must call renderArmor');
 });
 
 test('spiritual and garden cards get aligned grid sizing', () => {

@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ibadah Quest — Achievement Badge &amp; Icon Preview Gallery</title>
+  <link rel="stylesheet" href="../styles/tokens.css">
+  <link rel="stylesheet" href="../styles/main.css">
+  <style>
+    body {
+      background: #eaedf2;
+      color: var(--text, #0d2421);
+      font-family: var(--iq-font-ui, system-ui, -apple-system, sans-serif);
+      padding: 28px 20px 64px;
+      margin: 0;
+    }
+    html[data-theme="dark"] body,
+    html[data-theme="night"] body {
+      background: var(--bg);
+      color: var(--text);
+    }
+    .pg-wrap { max-width: 1180px; margin: 0 auto; }
+    .pg-header {
+      display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+      gap: 16px; margin-bottom: 24px; padding: 20px 24px;
+      background: var(--card-bg, #ffffff); border-radius: 18px; border: 1px solid var(--border, #d4dce3);
+      box-shadow: var(--shadow, 0 4px 16px rgba(15, 23, 42, 0.05));
+    }
+    .pg-title { font-size: 1.45rem; font-weight: 800; margin: 0 0 4px; }
+    .pg-sub { font-size: 0.88rem; color: var(--text2, #64748b); margin: 0; }
+    .pg-controls { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+    .pg-btn, .pg-select {
+      padding: 8px 14px; border-radius: 10px; border: 1px solid var(--border, #cbd5e1);
+      background: var(--surface-raised, #f8fafc); color: var(--text, #0f172a);
+      font-weight: 600; font-size: 0.85rem; cursor: pointer;
+    }
+    .pg-btn.active {
+      background: var(--accent, #07635d); color: var(--accent-contrast, #fff); border-color: var(--accent, #07635d);
+    }
+    .pg-stats {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; margin-bottom: 24px;
+    }
+    .pg-stat {
+      background: var(--card-bg, #ffffff); border: 1px solid var(--border, #dde2e8); border-radius: 14px; padding: 14px 16px;
+    }
+    .pg-stat-num { font-size: 1.5rem; font-weight: 800; color: var(--accent, #07635d); }
+    .pg-stat-lbl { font-size: 0.78rem; color: var(--text2, #64748b); font-weight: 600; }
+
+    .pg-section {
+      background: var(--card-bg, #ffffff); border: 1px solid var(--border, #dde2e8); border-radius: 18px;
+      padding: 22px; margin-bottom: 24px;
+      box-shadow: var(--shadow, 0 2px 10px rgba(15, 23, 42, 0.04));
+    }
+    .pg-section h2 { font-size: 1.1rem; font-weight: 700; margin: 0 0 6px; }
+    .pg-section p { font-size: 0.84rem; color: var(--text2, #64748b); margin: 0 0 18px; }
+
+    .pg-grid-badges { display: grid; grid-template-columns: repeat(auto-fill, minmax(176px, 1fr)); gap: 14px; }
+    .pg-grid-rarities { display: grid; grid-template-columns: repeat(auto-fill, minmax(128px, 1fr)); gap: 12px; }
+    .pg-grid-icons { display: grid; grid-template-columns: repeat(auto-fill, minmax(112px, 1fr)); gap: 12px; }
+    .pg-card {
+      background: var(--surface-subtle, #f5f7fa); border: 1px solid var(--border-subtle, #e2e8f0); border-radius: 14px;
+      padding: 14px 12px; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 8px;
+    }
+    .pg-sizes { display: flex; align-items: center; justify-content: center; gap: 12px; }
+    .pg-meta-title { font-size: 0.82rem; font-weight: 700; line-height: 1.25; }
+    .pg-meta-sub { font-size: 0.72rem; color: var(--text2, #64748b); }
+    .pg-pill {
+      display: inline-block; padding: 2px 8px; border-radius: 999px;
+      font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px;
+      background: var(--accent-bg, rgba(13, 148, 136, 0.12)); color: var(--accent-dark, #0f766e);
+    }
+    .pg-icon-preview { width: 56px; height: 56px; object-fit: contain; }
+    .pg-icon-preview-sm { width: 28px; height: 28px; object-fit: contain; }
+  </style>
+</head>
+<body>
+  <div class="pg-wrap">
+    <div class="pg-header">
+      <div>
+        <h1 class="pg-title">Ibadah Quest — Achievement Badge &amp; Icon Collection</h1>
+        <p class="pg-sub">Development preview gallery · 512×512 collectible sticker badges · Zero text inside artwork</p>
+      </div>
+      <div class="pg-controls" role="group" aria-label="Preview theme">
+        <button class="pg-btn active" type="button" data-theme-pick="light">Light (Neutral)</button>
+        <button class="pg-btn" type="button" data-theme-pick="dark">Slate Pine Dark</button>
+        <button class="pg-btn" type="button" data-theme-pick="night">OLED Night</button>
+      </div>
+    </div>
+
+    <div class="pg-stats" id="pgStats"></div>
+
+    <section class="pg-section">
+      <h2>1. Eight Rarity Treatments</h2>
+      <p>Distinct metallic, crystalline, and botanical-gold treatments preserved across bronze → jannah.</p>
+      <div class="pg-grid-rarities" id="pgRarities"></div>
+    </section>
+
+    <section class="pg-section">
+      <h2>2. States: Unlocked, Locked &amp; In-Progress</h2>
+      <p>Locked badges preserve the original silhouette in restrained grayscale with an external lock overlay.</p>
+      <div class="pg-grid-rarities" id="pgStates"></div>
+    </section>
+
+    <section class="pg-section">
+      <h2>3. All Unique Collectible Badge Illustrations (112px &amp; 48px)</h2>
+      <p>Distinct silhouettes across Prayer, Quran, Memorization, Dhikr, Charity, Gratitude, Voluntary Prayers, Fasting, Health, Finance, Journeys, Quests, Streaks &amp; Seasonal.</p>
+      <div class="pg-grid-badges" id="pgUnique"></div>
+    </section>
+
+    <section class="pg-section">
+      <h2>4. Matching Functional Icons (56px &amp; 28px)</h2>
+      <p>Simpler matching sticker-style UI icons in <code>assets/achievement-icons/</code>.</p>
+      <div class="pg-grid-icons" id="pgIcons"></div>
+    </section>
+
+    <section class="pg-section">
+      <h2>5. Full Catalogue Mapping (<span id="pgCatCount"></span> Achievements)</h2>
+      <p>Every ID from <code>ACHS</code> rendered with its assigned artwork and rarity treatment.</p>
+      <div class="pg-controls" style="margin-bottom: 14px;">
+        <select class="pg-select" id="filterCat"><option value="all">All Categories</option></select>
+        <select class="pg-select" id="filterTier"><option value="all">All Rarities</option></select>
+        <select class="pg-select" id="filterState">
+          <option value="unlocked">Preview Unlocked</option>
+          <option value="locked">Preview Locked</option>
+        </select>
+      </div>
+      <div class="ach-grid" id="pgCatalogue"></div>
+    </section>
+  </div>
+
+  <script src="../data/achievements.js"></script>
+  <script src="../data/achievement-art.js"></script>
+  <script>
+    (function () {
+      function resolveRel(p) { return '../' + p; }
+      const origArt = window.IQ_ACHIEVEMENT_ART;
+      const origIcons = window.IQ_ACHIEVEMENT_ICONS;
+      Object.keys(origArt).forEach(k => {
+        if (origArt[k] && origArt[k].src && !origArt[k].src.startsWith('../')) {
+          origArt[k].src = resolveRel(origArt[k].src);
+        }
+      });
+      Object.keys(origIcons).forEach(k => {
+        if (!origIcons[k].startsWith('../')) origIcons[k] = resolveRel(origIcons[k]);
+      });
+      if (window.IQ_BADGE_FALLBACK && !window.IQ_BADGE_FALLBACK.src.startsWith('../')) {
+        window.IQ_BADGE_FALLBACK.src = resolveRel(window.IQ_BADGE_FALLBACK.src);
+      }
+
+      document.querySelectorAll('[data-theme-pick]').forEach(btn => {
+        btn.addEventListener('click', function () {
+          document.querySelectorAll('[data-theme-pick]').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          const t = btn.getAttribute('data-theme-pick');
+          if (t === 'light') document.documentElement.removeAttribute('data-theme');
+          else document.documentElement.setAttribute('data-theme', t);
+        });
+      });
+
+      const uniqueMap = new Map();
+      Object.values(origArt).forEach(item => {
+        if (!uniqueMap.has(item.src)) uniqueMap.set(item.src, item);
+      });
+      const uniqueList = Array.from(uniqueMap.values());
+      const tiers = Object.keys(window.IQ_RARITY_META);
+      const icons = Object.entries(origIcons);
+
+      document.getElementById('pgStats').innerHTML = [
+        { n: ACHS.length, l: 'Total Achievements in ACHS' },
+        { n: uniqueList.length, l: 'Unique Badge Artworks' },
+        { n: icons.length, l: 'Functional UI Icons' },
+        { n: tiers.length, l: 'Rarity Treatments' }
+      ].map(s => `<div class="pg-stat"><div class="pg-stat-num">${s.n}</div><div class="pg-stat-lbl">${s.l}</div></div>`).join('');
+
+      document.getElementById('pgRarities').innerHTML = tiers.map(tier => {
+        const meta = window.IQ_RARITY_META[tier];
+        return `<div class="pg-card">
+          ${window.renderAchievementBadge({ id: 'a1', tier }, { unlocked: true, size: 'lg', tier })}
+          <div class="pg-meta-title">${meta.label}</div>
+          <span class="pg-pill">${tier}</span>
+        </div>`;
+      }).join('');
+
+      document.getElementById('pgStates').innerHTML = [
+        { label: 'Unlocked (Gold)', tier: 'gold', unlocked: true, prog: null, id: 'a2' },
+        { label: 'Locked (Gold)', tier: 'gold', unlocked: false, prog: null, id: 'a2' },
+        { label: 'Unlocked (Jannah)', tier: 'jannah', unlocked: true, prog: null, id: 'p1' },
+        { label: 'Locked (Jannah)', tier: 'jannah', unlocked: false, prog: null, id: 'p1' },
+        { label: 'In Progress (60%)', tier: 'diamond', unlocked: false, prog: { current: 6, target: 10 }, id: 'a238' }
+      ].map(st => `<div class="pg-card">
+        ${window.renderAchievementBadge({ id: st.id, tier: st.tier }, { unlocked: st.unlocked, size: 'lg', tier: st.tier, progress: st.prog })}
+        <div class="pg-meta-title">${st.label}</div>
+      </div>`).join('');
+
+      document.getElementById('pgUnique').innerHTML = uniqueList.map(u => {
+        const name = u.src.split('/').pop().replace('.svg', '').replace(/-/g, ' ');
+        return `<div class="pg-card">
+          <div class="pg-sizes">
+            <img src="${u.src}" alt="" style="width:112px;height:112px;object-fit:contain;">
+            <img src="${u.src}" alt="" style="width:48px;height:48px;object-fit:contain;">
+          </div>
+          <div class="pg-meta-title" style="text-transform:capitalize;">${name}</div>
+          <div class="pg-meta-sub">${u.category} · ${u.silhouette}</div>
+        </div>`;
+      }).join('');
+
+      document.getElementById('pgIcons').innerHTML = icons.map(([key, src]) => `
+        <div class="pg-card">
+          <div class="pg-sizes">
+            <img class="pg-icon-preview" src="${src}" alt="">
+            <img class="pg-icon-preview-sm" src="${src}" alt="">
+          </div>
+          <div class="pg-meta-title">${key}</div>
+        </div>
+      `).join('');
+
+      document.getElementById('pgCatCount').textContent = ACHS.length;
+      const cats = Array.from(new Set(uniqueList.map(u => u.category))).sort();
+      const catSel = document.getElementById('filterCat');
+      cats.forEach(c => { const o = document.createElement('option'); o.value = c; o.textContent = c; catSel.appendChild(o); });
+      const tierSel = document.getElementById('filterTier');
+      tiers.forEach(t => { const o = document.createElement('option'); o.value = t; o.textContent = t; tierSel.appendChild(o); });
+      const stateSel = document.getElementById('filterState');
+
+      function renderCatalogue() {
+        const fc = catSel.value, ft = tierSel.value, fs = stateSel.value;
+        const unlocked = fs === 'unlocked';
+        const filtered = ACHS.filter(a => {
+          const art = window.getAchievementArt(a);
+          if (fc !== 'all' && art.category !== fc) return false;
+          if (ft !== 'all' && a.tier !== ft) return false;
+          return true;
+        });
+        document.getElementById('pgCatalogue').innerHTML = filtered.map(a => `
+          <div class="ach-card${unlocked ? ' unlocked' : ' locked'} tier-${a.tier}">
+            <div class="ach-badge-wrap">${window.renderAchievementBadge(a, { unlocked, size: 'md' })}</div>
+            <div class="ach-name">${a.name}</div>
+            <div class="ach-desc">${a.desc}</div>
+            <div class="ach-card-footer">
+              <span class="ach-rarity-tag tier-${a.tier}">${a.tier}</span>
+            </div>
+          </div>
+        `).join('');
+      }
+
+      catSel.addEventListener('change', renderCatalogue);
+      tierSel.addEventListener('change', renderCatalogue);
+      stateSel.addEventListener('change', renderCatalogue);
+      renderCatalogue();
+    })();
+  </script>
+</body>
+</html>

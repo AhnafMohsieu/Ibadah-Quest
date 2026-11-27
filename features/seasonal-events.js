@@ -58,10 +58,12 @@
     if (!seasonalActive()) { area.innerHTML = ''; return; }
 
     const type = S.seasonal.active;
-    const icons = { ramadan: '🌙', eid_fitr: '🎉', eid_adha: '🐑', hajj: '🕋' };
+    const iconKeys = { ramadan: 'moon', eid_fitr: 'sparkles', eid_adha: 'crown', hajj: 'kaaba' };
+    const fallbacks = { ramadan: '🌙', eid_fitr: '🎉', eid_adha: '🐑', hajj: '🕋' };
+    const badgeIcon = (typeof iqIcon === 'function' ? iqIcon(iconKeys[type] || 'sparkles') : '') || fallbacks[type] || '✨';
 
     area.innerHTML = '<div class="seasonal-banner seasonal-' + type + '">' +
-      '<span>' + (icons[type] || '✨') + ' ' + type.replace('_', ' ').toUpperCase() + ' MODE</span>' +
+      '<span class="seasonal-banner-label">' + badgeIcon + ' ' + type.replace('_', ' ').toUpperCase() + ' MODE</span>' +
       '<span class="seasonal-multiplier">' + getSeasonalMultiplier() + 'x XP</span>' +
     '</div>';
   }

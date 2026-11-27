@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <clipPath id="badgeClip">
+      <path d="M256 102 C200 78 122 80 68 106 C56 112 50 124 52 138 L66 364 C68 380 82 390 98 386 C152 374 208 386 256 416 C304 386 360 374 414 386 C430 390 444 380 446 364 L460 138 C462 124 456 112 444 106 C390 80 312 78 256 102 Z"/>
+    </clipPath>
+    <linearGradient id="gloss" x1="0.15" y1="0" x2="0.65" y2="0.85">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.28"/>
+      <stop offset="45%" stop-color="#FFFFFF" stop-opacity="0.06"/>
+      <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="rimDefault" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#FDE68A"/>
+      <stop offset="50%" stop-color="#D9A84E"/>
+      <stop offset="100%" stop-color="#9E6F1E"/>
+    </linearGradient>
+    
+        <linearGradient id="rimBookGold" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#FDE68A"/><stop offset="100%" stop-color="#B45309"/></linearGradient>
+        <linearGradient id="bgBookTeal" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#14B8A6"/><stop offset="100%" stop-color="#064E3B"/></linearGradient>
+      
+  </defs>
+  <!-- Soft grounded shadow -->
+  <g transform="translate(0, 12)" opacity="0.2">
+    <path d="M256 102 C200 78 122 80 68 106 C56 112 50 124 52 138 L66 364 C68 380 82 390 98 386 C152 374 208 386 256 416 C304 386 360 374 414 386 C430 390 444 380 446 364 L460 138 C462 124 456 112 444 106 C390 80 312 78 256 102 Z" fill="#0F172A" stroke="#0F172A" stroke-width="28" stroke-linejoin="round" stroke-linecap="round"/>
+    
+  </g>
+  <!-- Thick white sticker border -->
+  <g>
+    <path d="M256 102 C200 78 122 80 68 106 C56 112 50 124 52 138 L66 364 C68 380 82 390 98 386 C152 374 208 386 256 416 C304 386 360 374 414 386 C430 390 444 380 446 364 L460 138 C462 124 456 112 444 106 C390 80 312 78 256 102 Z" fill="#FFFFFF" stroke="#FFFFFF" stroke-width="28" stroke-linejoin="round" stroke-linecap="round"/>
+    
+  </g>
+  <!-- Colored / metallic rim -->
+  <path d="M256 102 C200 78 122 80 68 106 C56 112 50 124 52 138 L66 364 C68 380 82 390 98 386 C152 374 208 386 256 416 C304 386 360 374 414 386 C430 390 444 380 446 364 L460 138 C462 124 456 112 444 106 C390 80 312 78 256 102 Z" fill="url(#rimBookGold)"/>
+  <!-- Inner background clipped cleanly -->
+  <g clip-path="url(#badgeClip)">
+    <rect x="0" y="0" width="512" height="512" fill="url(#bgBookTeal)"/>
+    <path d="M256 102 C200 78 122 80 68 106 C56 112 50 124 52 138 L66 364 C68 380 82 390 98 386 C152 374 208 386 256 416 C304 386 360 374 414 386 C430 390 444 380 446 364 L460 138 C462 124 456 112 444 106 C390 80 312 78 256 102 Z" fill="none" stroke="#FFFFFF" stroke-opacity="0.28" stroke-width="18" transform="translate(256,256) scale(0.915) translate(-256,-256)"/>
+    
+        <!-- Wooden Rahle Stand Legs -->
+        <path d="M138 356 L360 220 L376 238 L166 376 Z" fill="#92400E" stroke="#FDE68A" stroke-width="3"/>
+        <path d="M374 356 L152 220 L136 238 L346 376 Z" fill="#B45309" stroke="#FDE68A" stroke-width="3"/>
+        <!-- Open Mushaf Pages (pure geometric illumination, ZERO text) -->
+        <path d="M256 154 C216 132 146 130 100 148 L112 318 C156 302 216 308 256 332 Z" fill="#FFFBEB" stroke="#D97706" stroke-width="4"/>
+        <path d="M256 154 C296 132 366 130 412 148 L400 318 C356 302 296 308 256 332 Z" fill="#FEF3C7" stroke="#D97706" stroke-width="4"/>
+        <!-- Ornamental geometric inner page frames (NO text or wavy lines) -->
+        <path d="M236 168 C206 152 158 152 124 166 L132 294 C164 282 206 286 236 304 Z" fill="none" stroke="#10B981" stroke-width="3"/>
+        <path d="M276 168 C306 152 354 152 388 166 L380 294 C348 282 306 286 276 304 Z" fill="none" stroke="#10B981" stroke-width="3"/>
+        <!-- Pure floral/geometric medallions on each page -->
+        <path d="M180.0 200.0 L185.7 214.1 L199.8 208.2 L193.9 222.3 L208.0 228.0 L193.9 233.7 L199.8 247.8 L185.7 241.9 L180.0 256.0 L174.3 241.9 L160.2 247.8 L166.1 233.7 L152.0 228.0 L166.1 222.3 L160.2 208.2 L174.3 214.1 Z" fill="#10B981" opacity="0.24" stroke="#059669" stroke-width="2.5"/>
+        <circle cx="180" cy="228" r="10" fill="#F59E0B"/>
+        <path d="M332.0 200.0 L337.7 214.1 L351.8 208.2 L345.9 222.3 L360.0 228.0 L345.9 233.7 L351.8 247.8 L337.7 241.9 L332.0 256.0 L326.3 241.9 L312.2 247.8 L318.1 233.7 L304.0 228.0 L318.1 222.3 L312.2 208.2 L326.3 214.1 Z" fill="#10B981" opacity="0.24" stroke="#059669" stroke-width="2.5"/>
+        <circle cx="332" cy="228" r="10" fill="#F59E0B"/>
+        <!-- Emerald Bookmark Ribbon -->
+        <path d="M248 296 L264 296 L264 366 L256 354 L248 366 Z" fill="#10B981" stroke="#047857" stroke-width="2"/>
+        <path d="M256 93 Q257.68 106.32 271 108 Q257.68 109.68 256 123 Q254.32 109.68 241 108 Q254.32 106.32 256 93 Z" fill="#FEF9C3" opacity="1"/>
+      
+    <!-- Top-left glossy highlight arc -->
+    <ellipse cx="195" cy="115" rx="170" ry="95" transform="rotate(-18 195 115)" fill="url(#gloss)"/>
+  </g>
+  <!-- Crisp inner bevel border -->
+  <path d="M256 102 C200 78 122 80 68 106 C56 112 50 124 52 138 L66 364 C68 380 82 390 98 386 C152 374 208 386 256 416 C304 386 360 374 414 386 C430 390 444 380 446 364 L460 138 C462 124 456 112 444 106 C390 80 312 78 256 102 Z" fill="none" stroke="url(#rimBookGold)" stroke-width="12"/>
+  <path d="M256 102 C200 78 122 80 68 106 C56 112 50 124 52 138 L66 364 C68 380 82 390 98 386 C152 374 208 386 256 416 C304 386 360 374 414 386 C430 390 444 380 446 364 L460 138 C462 124 456 112 444 106 C390 80 312 78 256 102 Z" fill="none" stroke="#FFFFFF" stroke-opacity="0.45" stroke-width="2.5" transform="translate(256,256) scale(0.955) translate(-256,-256)"/>
+</svg>

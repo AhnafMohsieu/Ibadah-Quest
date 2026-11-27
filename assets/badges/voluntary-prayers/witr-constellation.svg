@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <clipPath id="badgeClip">
+      <path d="M232.7 76.8 Q256.0 52.0 279.3 76.8 L424.7 231.2 Q448.0 256.0 424.7 280.8 L279.3 435.2 Q256.0 460.0 232.7 435.2 L87.3 280.8 Q64.0 256.0 87.3 231.2 Z"/>
+    </clipPath>
+    <linearGradient id="gloss" x1="0.15" y1="0" x2="0.65" y2="0.85">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.28"/>
+      <stop offset="45%" stop-color="#FFFFFF" stop-opacity="0.06"/>
+      <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="rimDefault" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#FDE68A"/>
+      <stop offset="50%" stop-color="#D9A84E"/>
+      <stop offset="100%" stop-color="#9E6F1E"/>
+    </linearGradient>
+    
+        <linearGradient id="rimIndigoGold" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#FDE68A"/><stop offset="100%" stop-color="#4338CA"/></linearGradient>
+        <radialGradient id="bgTwilight" cx="0.5" cy="0.4" r="0.65"><stop offset="0%" stop-color="#3730A3"/><stop offset="65%" stop-color="#1E1B4B"/><stop offset="100%" stop-color="#090D1F"/></radialGradient>
+      
+  </defs>
+  <!-- Soft grounded shadow -->
+  <g transform="translate(0, 12)" opacity="0.2">
+    <path d="M232.7 76.8 Q256.0 52.0 279.3 76.8 L424.7 231.2 Q448.0 256.0 424.7 280.8 L279.3 435.2 Q256.0 460.0 232.7 435.2 L87.3 280.8 Q64.0 256.0 87.3 231.2 Z" fill="#0F172A" stroke="#0F172A" stroke-width="28" stroke-linejoin="round" stroke-linecap="round"/>
+    
+  </g>
+  <!-- Thick white sticker border -->
+  <g>
+    <path d="M232.7 76.8 Q256.0 52.0 279.3 76.8 L424.7 231.2 Q448.0 256.0 424.7 280.8 L279.3 435.2 Q256.0 460.0 232.7 435.2 L87.3 280.8 Q64.0 256.0 87.3 231.2 Z" fill="#FFFFFF" stroke="#FFFFFF" stroke-width="28" stroke-linejoin="round" stroke-linecap="round"/>
+    
+  </g>
+  <!-- Colored / metallic rim -->
+  <path d="M232.7 76.8 Q256.0 52.0 279.3 76.8 L424.7 231.2 Q448.0 256.0 424.7 280.8 L279.3 435.2 Q256.0 460.0 232.7 435.2 L87.3 280.8 Q64.0 256.0 87.3 231.2 Z" fill="url(#rimIndigoGold)"/>
+  <!-- Inner background clipped cleanly -->
+  <g clip-path="url(#badgeClip)">
+    <rect x="0" y="0" width="512" height="512" fill="url(#bgTwilight)"/>
+    <path d="M232.7 76.8 Q256.0 52.0 279.3 76.8 L424.7 231.2 Q448.0 256.0 424.7 280.8 L279.3 435.2 Q256.0 460.0 232.7 435.2 L87.3 280.8 Q64.0 256.0 87.3 231.2 Z" fill="none" stroke="#FFFFFF" stroke-opacity="0.28" stroke-width="18" transform="translate(256,256) scale(0.915) translate(-256,-256)"/>
+    
+        <!-- Crescent & Odd-numbered 3 Star Constellation -->
+        <path d="M272.7 179.9 A74 74 0 1 0 323.7 281.9 A59.2 59.2 0 0 1 272.7 179.9 Z" fill="#FDE047" stroke="#F59E0B" stroke-width="3"/>
+        <path d="M256.0 108.0 L263.1 126.3 L282.6 127.3 L267.4 139.7 L272.5 158.7 L256.0 148.0 L239.5 158.7 L244.6 139.7 L229.4 127.3 L248.9 126.3 Z" fill="#FFFFFF" stroke="#F59E0B" stroke-width="3"/>
+        <path d="M162.0 202.0 L167.9 215.9 L182.9 217.2 L171.5 227.1 L174.9 241.8 L162.0 234.0 L149.1 241.8 L152.5 227.1 L141.1 217.2 L156.1 215.9 Z" fill="#FEF08A" stroke="#F59E0B" stroke-width="2.5"/>
+        <path d="M342.0 226.0 L348.5 241.1 L364.8 242.6 L352.5 253.4 L356.1 269.4 L342.0 261.0 L327.9 269.4 L331.5 253.4 L319.2 242.6 L335.5 241.1 Z" fill="#FEF08A" stroke="#F59E0B" stroke-width="2.5"/>
+        <!-- Connecting constellation threads -->
+        <path d="M162 224 L256 136 L342 250" fill="none" stroke="#93C5FD" stroke-width="2.5" stroke-dasharray="6 6" opacity="0.7"/>
+        <path d="M256 351 Q257.68 364.32 271 366 Q257.68 367.68 256 381 Q254.32 367.68 241 366 Q254.32 364.32 256 351 Z" fill="#BAE6FD" opacity="1"/>
+      
+    <!-- Top-left glossy highlight arc -->
+    <ellipse cx="195" cy="115" rx="170" ry="95" transform="rotate(-18 195 115)" fill="url(#gloss)"/>
+  </g>
+  <!-- Crisp inner bevel border -->
+  <path d="M232.7 76.8 Q256.0 52.0 279.3 76.8 L424.7 231.2 Q448.0 256.0 424.7 280.8 L279.3 435.2 Q256.0 460.0 232.7 435.2 L87.3 280.8 Q64.0 256.0 87.3 231.2 Z" fill="none" stroke="url(#rimIndigoGold)" stroke-width="12"/>
+  <path d="M232.7 76.8 Q256.0 52.0 279.3 76.8 L424.7 231.2 Q448.0 256.0 424.7 280.8 L279.3 435.2 Q256.0 460.0 232.7 435.2 L87.3 280.8 Q64.0 256.0 87.3 231.2 Z" fill="none" stroke="#FFFFFF" stroke-opacity="0.45" stroke-width="2.5" transform="translate(256,256) scale(0.955) translate(-256,-256)"/>
+</svg>

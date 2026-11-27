@@ -7,7 +7,7 @@
 /* KEY → emoji character (plain-text contexts: confirm(), placeholders, confetti) */
 const IQ_EMOJI = {
   'alert-triangle':'⚠️', 'award':'🏅', 'baby':'👶', 'bar-chart-3':'📊',
-  'beads':'📿', 'book':'📕', 'book-open':'📖', 'bookmarks':'📑',
+  'beads':'📿', 'bell':'🔔', 'book':'📕', 'book-open':'📖', 'bookmarks':'📑',
   'brain':'🧠', 'briefcase':'💼', 'building':'🏢', 'calendar':'📅',
   'calendar-check':'📆', 'calendar-days':'🗓️', 'lightbulb':'💡',
   'map':'🗺️', 'castle':'🏯', 'check':'✅', 'clipboard':'📋',
@@ -40,7 +40,7 @@ const IQ_EMOJI = {
 /* KEY → uppercase hex codepoint used to build emoji_u{code}.png filename */
 const IQ_CODES = {
   'alert-triangle':'26A0', 'award':'1F3C5', 'baby':'1F476', 'bar-chart-3':'1F4CA',
-  'beads':'1F4FF', 'book':'1F4D5', 'book-open':'1F4D6', 'bookmarks':'1F4D1',
+  'beads':'1F4FF', 'bell':'1F514', 'book':'1F4D5', 'book-open':'1F4D6', 'bookmarks':'1F4D1',
   'brain':'1F9E0', 'briefcase':'1F4BC', 'building':'1F3E2', 'calendar':'1F4C5',
   'calendar-check':'1F4C6', 'calendar-days':'1F5D3', 'lightbulb':'1F4A1',
   'map':'1F5FA', 'castle':'1F3EF', 'check':'2705', 'clipboard':'1F4CB',
@@ -185,7 +185,7 @@ const IQ_IDS = {
   /* Compat aliases — keys used in code that previously resolved to '' (empty icon).
      Values reuse existing codepoints so the offline PNG set is unchanged. */
   'alert':'alert-triangle', 'arrow-left':'log-out',
-  'bell':'megaphone', 'bell-off':'x',
+  'bell-off':'x',
   'download':'save', 'upload':'refresh-cw',
   'snowflake':'snow',
   /* Category-id safety nets (generic renderers fall back to the id as icon key) */

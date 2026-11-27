@@ -18,8 +18,8 @@ const PROFILE_TABS = [
 ];
 
 const TAB_SCRIPTS = {
-  profile: ['/core/dynamic.js', '/core/achievements.js', '/features/spiritual-growth/keys.js', '/features/spiritual-growth/mosque.js'],
-  trophies: ['/core/dynamic.js', '/core/achievements.js', '/features/achievement-showcase.js'],
+  profile: ['/data/achievement-art.js', '/core/dynamic.js', '/core/achievements.js', '/features/spiritual-growth/mosque.js'],
+  trophies: ['/data/achievement-art.js', '/core/dynamic.js', '/core/achievements.js', '/features/achievement-showcase.js', '/features/spiritual-growth/keys.js'],
   progress: ['/core/dynamic.js'],
   stats: ['/features/analytics/dashboard.js', '/features/analytics/charts.js', '/features/analytics/trend-charts.js', '/features/analytics/weekly-compare.js', '/features/analytics/smart-insights.js'],
   rewards: ['/core/shop.js', '/core/xp.js'],
@@ -47,11 +47,11 @@ function fireRenderers(tabId) {
   switch (tabId) {
     case 'profile':
       try { window.renderProfile && window.renderProfile(); } catch {}
-      try { window.renderKeys && window.renderKeys(); } catch {}
       try { window.renderMosque && window.renderMosque(); } catch {}
       break;
     case 'trophies':
       try { window.renderAch && window.renderAch(); } catch {}
+      try { window.renderKeys && window.renderKeys(); } catch {}
       break;
     case 'progress':
       try { window.renderProg && window.renderProg(); } catch {}
@@ -72,7 +72,11 @@ function onTabActivate(tabId) {
     panel = document.createElement('div');
     panel.id = 'panel-' + tabId;
     panel.className = 'tab-panel';
-    panel.innerHTML = '<div id="' + tabId + 'Area"></div>';
+    panel.innerHTML = tabId === 'trophies'
+      ? '<div id="trophiesArea"></div><div id="keysArea"></div>'
+      : tabId === 'profile'
+        ? '<div id="profileArea"></div><div id="mosqueArea"></div>'
+        : '<div id="' + tabId + 'Area"></div>';
     panelsEl.appendChild(panel);
   }
   panel.style.display = 'block';

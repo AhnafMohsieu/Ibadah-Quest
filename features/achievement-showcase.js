@@ -50,40 +50,78 @@
     renderAchievementShowcase();
   }
 
+  function _escSc(str) {
+    return String(str == null ? '' : str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+
   function renderAchievementShowcase() {
-    const area = document.getElementById('achievementShowcase');
-    if (!area) return;
+    const areas = (typeof document.querySelectorAll === 'function')
+      ? Array.from(document.querySelectorAll('#achievementShowcase'))
+      : [];
+    if (areas.length === 0) {
+      const single = document.getElementById('achievementShowcase');
+      if (single) areas.push(single);
+    }
+    if (areas.length === 0) return;
 
     const featured = getFeaturedAchievements();
     const unlocked = getUnlockedAchievements();
     const _t = (s) => (typeof window !== 'undefined' && typeof window.t === 'function') ? window.t(s) : s;
+    const _n = (v) => (typeof window !== 'undefined' && typeof window.iqNum === 'function') ? window.iqNum(v) : String(v);
+    const hasArt = typeof window.renderAchievementBadge === 'function';
+    const hasIcon = typeof window.renderAchievementIcon === 'function';
 
-    let h = '<div class="showcase-grid">';
-    featured.forEach(a => {
-      const st = RARITY_STYLES[a.tier] || { border: 'var(--border)', bg: 'var(--accent)', fg: 'var(--accent-contrast, #ffffff)' };
-      h += `<div class="showcase-card" style="border-color:${st.border}">
-        <div class="showcase-rarity" style="background:${st.bg};color:${st.fg};font-weight:700;">${_t(a.tier)}</div>
-        <div class="showcase-name">${a.name}</div>
-        <div class="showcase-desc">${a.desc}</div>
-        <button type="button" class="showcase-remove" style="min-width:44px;min-height:44px;" onclick="unfeatureAchievement('${a.id}')" aria-label="Remove ${a.name} from showcase">✕</button>
+    let h = '';
+    if (featured.length === 0) {
+      h += `<div class="showcase-empty">
+        <div class="showcase-empty-icon">${hasIcon ? window.renderAchievementIcon('achievements') : iqIcon('trophy')}</div>
+        <div class="showcase-empty-title">${_escSc(_t('No Featured Badges Yet'))}</div>
+        <div class="showcase-empty-sub">${_escSc(unlocked.length > 0 ? _t('Pick up to 6 unlocked badges below to display in your showcase.') : _t('Unlock achievements to feature your favorite collectible badges here.'))}</div>
       </div>`;
-    });
-    h += '</div>';
-
-    if (unlocked.length > 0) {
-      h += `<div class="showcase-unlocked"><h4>${_t('Unlocked Achievements')}</h4>`;
-      unlocked.forEach(a => {
-        const st = RARITY_STYLES[a.tier] || { border: 'var(--border)' };
-        const isFeatured = featured.some(f => f.id === a.id);
-        h += `<div class="showcase-item ${isFeatured ? 'featured' : ''}" style="border-color:${st.border}">
-          <span class="showcase-item-name">${a.name}</span>
-          ${!isFeatured ? `<button type="button" class="iq-btn-secondary" style="min-width:44px;min-height:44px;padding:4px 10px;" onclick="featureAchievement('${a.id}')" aria-label="Feature ${a.name} in showcase">+</button>` : ''}
+    } else {
+      h += '<div class="showcase-grid">';
+      featured.forEach(a => {
+        const st = RARITY_STYLES[a.tier] || { border: 'var(--border)', bg: 'var(--accent)', fg: 'var(--accent-contrast, #ffffff)' };
+        const badgeHtml = hasArt ? window.renderAchievementBadge(a, { unlocked: true, size: 'md' }) : '';
+        h += `<div class="showcase-card tier-${_escSc(a.tier)}" style="border-color:${st.border}">
+          <button type="button" class="showcase-remove" style="min-width:44px;min-height:44px;" onclick="unfeatureAchievement('${_escSc(a.id)}')" aria-label="Remove ${_escSc(a.name)} from showcase">✕</button>
+          ${badgeHtml ? `<div class="showcase-badge-wrap">${badgeHtml}</div>` : ''}
+          <div class="showcase-rarity" style="background:${st.bg};color:${st.fg};font-weight:700;">${_escSc(_t(a.tier))}</div>
+          <div class="showcase-name">${_escSc(_t(a.name))}</div>
+          <div class="showcase-desc">${_escSc(_t(a.desc))}</div>
         </div>`;
       });
       h += '</div>';
     }
 
-    area.innerHTML = h;
+    if (unlocked.length > 0) {
+      h += `<div class="showcase-unlocked"><h4>${_escSc(_t('Unlocked Achievements'))} (<span class="iq-tabular">${_n(unlocked.length)}</span>)</h4><div class="showcase-unlocked-list">`;
+      unlocked.forEach(a => {
+        const st = RARITY_STYLES[a.tier] || { border: 'var(--border)' };
+        const isFeatured = featured.some(f => f.id === a.id);
+        const thumbHtml = hasArt ? window.renderAchievementBadge(a, { unlocked: true, size: 'sm', showPips: false }) : '';
+        h += `<div class="showcase-item ${isFeatured ? 'featured' : ''} tier-${_escSc(a.tier)}" style="border-inline-start-color:${st.border}">
+          <div class="showcase-item-left">
+            ${thumbHtml ? `<span class="showcase-item-thumb">${thumbHtml}</span>` : ''}
+            <span class="showcase-item-meta">
+              <span class="showcase-item-name">${_escSc(_t(a.name))}</span>
+              <span class="showcase-item-tier">${_escSc(_t(a.tier))}</span>
+            </span>
+          </div>
+          ${!isFeatured
+            ? `<button type="button" class="iq-btn-secondary" style="min-width:44px;min-height:44px;padding:4px 10px;" onclick="featureAchievement('${_escSc(a.id)}')" aria-label="Feature ${_escSc(a.name)} in showcase">+</button>`
+            : `<span class="showcase-featured-pill">${_escSc(_t('Featured'))}</span>`}
+        </div>`;
+      });
+      h += '</div></div>';
+    }
+
+    areas.forEach(el => { el.innerHTML = h; });
   }
 
   window.getUnlockedAchievements = getUnlockedAchievements;

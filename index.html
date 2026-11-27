@@ -114,12 +114,12 @@
 
 <!-- Offline indicator -->
 <div id="offlineBanner" class="offline-banner" style="display:none;">
-  <span>📡</span> You're offline — some features may be limited.
+  <img class="iq-icon" src="assets/icons/emoji_u1f310.png" alt="📡" width="18" height="18" decoding="async"> You're offline — some features may be limited.
 </div>
 
 <!-- Storage quota warning -->
 <div id="storageBanner" class="offline-banner storage-banner" style="display:none;" role="alert">
-  <span>⚠️ Storage is full — recent progress may not be saved. Export a backup from Profile.</span>
+  <span><img class="iq-icon" src="assets/icons/emoji_u26a0.png" alt="⚠️" width="18" height="18" decoding="async"> Storage is full — recent progress may not be saved. Export a backup from Profile.</span>
   <button id="storageBannerClose" aria-label="Dismiss">&times;</button>
 </div>
 
@@ -174,7 +174,7 @@
         <span class="tb-stat-sep" aria-hidden="true"></span>
         <span class="tb-stat" id="tbStreak" title="Consistency streak">0</span>
       </div>
-      <button type="button" class="iq-icon-btn" id="iqNotifBtn" onclick="window.openNotifDrawer && window.openNotifDrawer()" aria-label="Open notifications"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></button>
+      <button type="button" class="iq-icon-btn" id="iqNotifBtn" onclick="window.openNotifDrawer && window.openNotifDrawer()" aria-label="Open notifications"><img class="iq-icon iq-notif-icon" src="assets/icons/emoji_u1f514.png" alt="🔔" width="24" height="24" decoding="async"></button>
     </div>
   </header>
 
@@ -211,7 +211,7 @@
 
   <div id="dateLine" class="date-line" aria-live="off"></div>
   <div class="global-search-wrap">
-    <span class="global-search-icon" aria-hidden="true">&#128269;</span>
+    <span class="global-search-icon" aria-hidden="true"><img class="iq-icon iq-search-badge-icon" src="assets/icons/emoji_u1f50d.png" alt="" width="20" height="20" decoding="async"></span>
     <input class="global-search" placeholder="Search anything..." autocomplete="off" aria-label="Search anything">
     <button type="button" class="global-search-clear" aria-label="Clear search" style="display:none;">&times;</button>
     <div class="global-search-results" id="globalSearchResults"></div>
@@ -230,7 +230,7 @@
 
   <div id="segmentPageHeader" class="segment-page-header" style="display:none;">
     <div class="sph-content">
-      <span class="sph-icon" id="sphIcon" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></span>
+      <span class="sph-icon" id="sphIcon" aria-hidden="true"><img class="iq-icon" src="assets/icons/emoji_u1f4d6.png" alt="📖" width="22" height="22" decoding="async"></span>
       <div class="sph-text">
         <h2 class="sph-title" id="sphTitle">Islamic Knowledge</h2>
         <p class="sph-desc" id="sphDesc">Qur'an, Hadith, Fiqh &amp; Prophetic Traditions</p>
@@ -256,7 +256,6 @@
   <div class="section-title"> Extra Good Deeds</div>
   <div id="deedArea"></div>
 </details>
-<div id="lanternArea"></div>
 </div>
       <div class="tab-panel" role="tabpanel" id="panel-timer">
     <div class="section-title" data-i18n-text="Next Prayer">Next Prayer</div>
@@ -268,8 +267,8 @@
       <div class="tab-panel" role="tabpanel" id="panel-quests"><div id="questArea"></div></div>
       <div class="tab-panel" role="tabpanel" id="panel-journeys"><div id="journeyArea"></div><div id="boatArea"></div></div>
       <div class="tab-panel" role="tabpanel" id="panel-morning"><div id="morningArea"></div></div>
-      <div class="tab-panel" role="tabpanel" id="panel-evening"><div id="eveningArea"></div></div>
-      <div class="tab-panel" role="tabpanel" id="panel-dhikr"><div id="dhikrCounterArea"></div><div id="dhikrArea"></div></div>
+      <div class="tab-panel" role="tabpanel" id="panel-evening"><div id="eveningArea"></div><div id="laylatArea"></div></div>
+      <div class="tab-panel" role="tabpanel" id="panel-dhikr"><div id="dhikrCounterArea"></div><div id="dhikrArea"></div><div id="lanternArea"></div></div>
       <div class="tab-panel" role="tabpanel" id="panel-situational"><div id="situationalArea"></div></div>
       <div class="tab-panel" role="tabpanel" id="panel-duas"><div id="duaArea"></div></div>
       <div class="tab-panel" role="tabpanel" id="panel-wudu"><div id="wuduArea"></div></div>
@@ -277,14 +276,14 @@
       <div class="tab-panel" role="tabpanel" id="panel-salah"><div id="salahArea"></div></div>
       <div class="tab-panel" role="tabpanel" id="panel-extradeeds"><div id="extraDeedsArea"></div></div>
       <div class="tab-panel" role="tabpanel" id="panel-volprayers"><div id="volPrayersArea"></div></div>
-      <div class="tab-panel" role="tabpanel" id="panel-fasting"><div id="fastingArea"></div><div id="ramadanArea"></div><div id="laylatArea"></div></div>
+      <div class="tab-panel" role="tabpanel" id="panel-fasting"><div id="fastingArea"></div><div id="ramadanArea"></div></div>
       <div class="tab-panel" role="tabpanel" id="panel-healthlog"><div id="healthlogArea"></div></div>
       <div class="tab-panel" role="tabpanel" id="panel-finance"><div id="financeArea"></div></div>
       <div class="tab-panel" role="tabpanel" id="panel-zakatcalc"><div id="zakatcalcArea"></div></div>
       <div class="tab-panel" role="tabpanel" id="panel-memorization"><div id="memorizationArea"></div></div>
       <div class="tab-panel" role="tabpanel" id="panel-gratitude"><div id="gratitudeArea"></div></div>
       <div class="tab-panel" role="tabpanel" id="panel-charity"><div id="charityArea"></div></div>
-      <div class="tab-panel" role="tabpanel" id="panel-growth"><div id="growthStatArea"></div><div id="growthCalArea"></div><div id="growthArea"></div><div id="armorArea"></div><div id="growthHeartArea"></div><div id="growthSettingsArea"></div></div>
+      <div class="tab-panel" role="tabpanel" id="panel-growth"><div id="growthStatArea"></div><div id="growthCalArea"></div><div id="growthArea"></div><div id="growthSettingsArea"></div></div>
     </section>
 
     <!-- SECTION 2: KNOWLEDGE / ILM -->
@@ -360,11 +359,12 @@
 
     <!-- SECTION 5: PROFILE & ANALYTICS -->
     <section class="page-section" id="section-profile_main" data-section="profile_main" role="region" aria-label="User Profile & Growth">
-      <div class="tab-panel" role="tabpanel" id="panel-profile"><div id="profileArea"></div><div id="mosqueArea"></div><div id="keysArea"></div></div>
+      <div class="tab-panel" role="tabpanel" id="panel-profile"><div id="profileArea"></div><div id="mosqueArea"></div></div>
       <div class="tab-panel" role="tabpanel" id="panel-goals"><div id="goalsArea"></div></div>
       <div class="tab-panel" role="tabpanel" id="panel-trophies">
     <div id="achievementShowcase"></div>
     <div id="achArea"></div>
+    <div id="keysArea"></div>
   </div>
       <div class="tab-panel" role="tabpanel" id="panel-progress">
     <div id="statArea"></div>
@@ -401,6 +401,7 @@
 <script src="data/streak-msgs.js?v=3"></script>
 <script src="data/quests.js?v=4"></script>
 <script src="data/achievements.js?v=4"></script>
+<script src="data/achievement-art.js?v=1"></script>
 <script src="data/morning-evening.js?v=3"></script>
 <script src="data/hadith-normalize.js?v=1"></script>
 <script src="data/relatable-dhikr.js?v=1"></script>
@@ -526,8 +527,6 @@
 <script src="features/personal-goals.js?v=5" defer></script>
 <script src="features/spiritual-growth/data.js?v=2" defer></script>
 <script src="features/spiritual-growth/index.js?v=3" defer></script>
-<script src="features/spiritual-growth/armor.js?v=1" defer></script>
-<script src="features/spiritual-growth/heart.js?v=2" defer></script>
 <script src="features/spiritual-growth/lantern.js?v=1" defer></script>
 <script src="features/spiritual-growth/keys.js?v=1" defer></script>
 <script src="features/spiritual-growth/mosque.js?v=1" defer></script>
@@ -546,7 +545,7 @@
 <script src="features/daily-summary.js?v=4" defer></script>
 <script src="features/consistency-bonuses.js?v=1" defer></script>
 <script src="features/combo-streaks.js" defer></script>
-<script src="features/achievement-showcase.js?v=2" defer></script>
+<script src="features/achievement-showcase.js?v=3" defer></script>
 <script src="features/daily-content.js?v=4" defer></script>
 <script src="features/notifications.js?v=3" defer></script>
 
@@ -567,7 +566,7 @@
 <script src="core/xp.js?v=4"></script>
 <script src="core/prayers.js?v=6"></script>
 <script src="core/quests.js?v=5"></script>
-<script src="core/achievements.js?v=1"></script>
+<script src="core/achievements.js?v=2"></script>
 <script src="core/random.js?v=1"></script>
 <script src="core/shop.js?v=2"></script>
 <script src="core/dhikr.js?v=5"></script>
@@ -623,7 +622,7 @@
     <button type="button" class="iq-icon-btn" onclick="window.closeIqDrawer && window.closeIqDrawer()" aria-label="Close menu">&times;</button>
   </div>
   <div class="iq-drawer-search-wrap">
-    <span class="iq-drawer-search-icon" aria-hidden="true">&#128269;</span>
+    <span class="iq-drawer-search-icon" aria-hidden="true"><img class="iq-icon iq-search-badge-icon" src="assets/icons/emoji_u1f50d.png" alt="" width="18" height="18" decoding="async"></span>
     <input type="search" id="iqDrawerSearch" class="iq-drawer-search" placeholder="Filter sections &amp; topics..." autocomplete="off" aria-label="Filter sections and topics" oninput="window.filterDrawerTabs && window.filterDrawerTabs(this.value)">
     <button type="button" id="iqDrawerSearchClear" class="iq-drawer-search-clear" onclick="window.filterDrawerTabs && window.filterDrawerTabs('')" aria-label="Clear filter" style="display:none;">&times;</button>
   </div>
@@ -652,7 +651,7 @@
   <div class="iq-sheet-header">
     <button type="button" class="iq-icon-btn" onclick="window.closeChallengeDetail && window.closeChallengeDetail()" aria-label="Back">&lsaquo;</button>
     <h2 class="iq-sheet-title">Daily challenges</h2>
-    <button type="button" class="iq-icon-btn" onclick="window.openNotifDrawer && window.openNotifDrawer()" aria-label="Notifications">&#128276;</button>
+    <button type="button" class="iq-icon-btn" onclick="window.openNotifDrawer && window.openNotifDrawer()" aria-label="Notifications"><img class="iq-icon iq-notif-icon" src="assets/icons/emoji_u1f514.png" alt="🔔" width="22" height="22" decoding="async"></button>
   </div>
   <div id="iqChallengeBody" class="iq-sheet-body"></div>
 </div>
@@ -661,7 +660,7 @@
   <div class="iq-sheet-header">
     <button type="button" class="iq-icon-btn" onclick="window.closeMasjidCheckins && window.closeMasjidCheckins()" aria-label="Back">&lsaquo;</button>
     <h2 class="iq-sheet-title">Masjid Check-ins</h2>
-    <button type="button" class="iq-icon-btn" onclick="window.openNotifDrawer && window.openNotifDrawer()" aria-label="Notifications">&#128276;</button>
+    <button type="button" class="iq-icon-btn" onclick="window.openNotifDrawer && window.openNotifDrawer()" aria-label="Notifications"><img class="iq-icon iq-notif-icon" src="assets/icons/emoji_u1f514.png" alt="🔔" width="22" height="22" decoding="async"></button>
   </div>
   <div id="iqMasjidBody" class="iq-sheet-body"></div>
 </div>
@@ -670,7 +669,7 @@
 <nav class="bnav" id="bnav" aria-label="Main navigation">
   <button class="bnav-btn active" data-cat="ibadah" data-i18n="Daily" onclick="window.closeActiveSheet && window.closeActiveSheet();App.switchCategory('ibadah', this)" role="tab" aria-selected="true"><span class="bnav-icon"></span><span class="bnav-label">Home</span></button>
   <button class="bnav-btn" data-cat="knowledge" data-i18n="Knowledge" onclick="window.closeActiveSheet && window.closeActiveSheet();App.switchCategory('knowledge', this)" role="tab" aria-selected="false"><span class="bnav-icon"></span><span class="bnav-label">Knowledge</span></button>
-  <button type="button" class="bnav-center-fab" id="bnavCenterFab" onclick="window.openChallengeDetail && window.openChallengeDetail('dhikr')" aria-label="Daily challenges quick view"><span class="bnav-center-icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></span></button>
+  <button type="button" class="bnav-center-fab" id="bnavCenterFab" onclick="window.openChallengeDetail && window.openChallengeDetail('dhikr')" aria-label="Daily challenges quick view"><span class="bnav-center-icon"><img class="iq-icon bnav-center-badge" src="assets/icons/emoji_u1f31b.png" alt="🌙" width="32" height="32" decoding="async"></span></button>
   <button class="bnav-btn" data-cat="library" data-i18n="Library" onclick="window.closeActiveSheet && window.closeActiveSheet();App.switchCategory('library', this)" role="tab" aria-selected="false"><span class="bnav-icon"></span><span class="bnav-label">Library</span></button>
   <button class="bnav-btn" data-cat="profile_main" data-i18n="Profile" onclick="window.closeActiveSheet && window.closeActiveSheet();App.switchCategory('profile_main', this)" role="tab" aria-selected="false"><span class="bnav-icon"></span><span class="bnav-label">Profile</span></button>
 </nav>
@@ -683,7 +682,7 @@
     <button class="fab-action" onclick="App.activateTab('quests')" title="Quests"><span class="fab-action-icon"></span><span class="fab-action-label">Quests</span></button>
   </div>
   <button class="fab-main" id="fabMain" onclick="window.toggleFAB()" aria-label="Quick actions" aria-expanded="false">
-    <span class="fab-main-icon">✦</span>
+    <span class="fab-main-icon"><img class="iq-icon fab-main-badge" src="assets/icons/emoji_u2728.png" alt="✦" width="28" height="28" decoding="async"></span>
   </button>
 </div>
 
