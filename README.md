@@ -10,16 +10,9 @@ Track your five daily prayers, dhikr, Quran reading, voluntary acts, and more. E
 
 <p align="center">
   <a href="https://ahnafmohsieu.github.io/Ibadah-Quest/">
-    <img src="docs/screenshots/desktop.png" alt="Ibadah Quest dashboard with prayer tracking and XP progress" width="100%">
+    <img src="docs/screenshots/mobile.png" alt="Ibadah Quest mobile dashboard with prayer tracking and XP progress" width="340">
   </a>
 </p>
-
-<details>
-  <summary>Mobile view</summary>
-  <p align="center">
-    <img src="docs/screenshots/mobile.png" alt="Ibadah Quest on mobile" width="320">
-  </p>
-</details>
 
 ## Features
 
