@@ -377,6 +377,14 @@
       var icon = window.iqIcon(cat);
       if (icon) span.innerHTML = icon;
     });
+    document.querySelectorAll('.iq-rail-sub-btn[data-icon]').forEach(function(btn) {
+      var span = btn.querySelector('.iq-rail-sub-icon');
+      if (!span || span.childElementCount > 0) return;
+      var iconKey = btn.getAttribute('data-icon');
+      if (!iconKey) return;
+      var icon = window.iqIcon(iconKey);
+      if (icon) span.innerHTML = icon;
+    });
   }
 
   window._pushTabState = _pushTabState;

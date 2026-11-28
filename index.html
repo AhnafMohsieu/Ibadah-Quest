@@ -170,10 +170,15 @@
       <button type="button" class="iq-rail-btn" data-cat="profile_main" data-i18n="Profile" onclick="window.closeActiveSheet && window.closeActiveSheet();App.switchCategory('profile_main', this)" role="tab" aria-selected="false"><span class="iq-rail-icon"></span><span class="iq-rail-label">Profile</span></button>
     </div>
     <div class="iq-rail-quick-group">
+      <div class="iq-rail-group-title" data-i18n-text="Quick Access">Quick Access</div>
       <button type="button" class="iq-rail-cta" onclick="window.openChallengeDetail && window.openChallengeDetail('dhikr')"><span aria-hidden="true">&#9790;</span> <span data-i18n-text="Quick Log">Quick Log</span></button>
-      <button type="button" class="iq-rail-sub-btn" data-tab="quran" onclick="App.activateTab('quran')"><span data-i18n-text="Quran">Quran</span></button>
-      <button type="button" class="iq-rail-sub-btn" data-tab="timer" onclick="App.activateTab('timer')"><span data-i18n-text="Prayer & Qibla">Prayer &amp; Qibla</span></button>
-      <button type="button" class="iq-rail-sub-btn" onclick="window.openIqDrawer && window.openIqDrawer()"><span data-i18n-text="All Sections">All Sections</span></button>
+      <button type="button" class="iq-rail-sub-btn" data-tab="timer" data-icon="clock" onclick="App.activateTab('timer')"><span class="iq-rail-sub-icon" aria-hidden="true"></span><span data-i18n-text="Prayer & Qibla">Prayer &amp; Qibla</span></button>
+      <button type="button" class="iq-rail-sub-btn" data-tab="quran" data-icon="book-open" onclick="App.activateTab('quran')"><span class="iq-rail-sub-icon" aria-hidden="true"></span><span data-i18n-text="Quran">Quran</span></button>
+      <button type="button" class="iq-rail-sub-btn" data-tab="dhikr" data-icon="beads" onclick="App.activateTab('dhikr')"><span class="iq-rail-sub-icon" aria-hidden="true"></span><span data-i18n-text="Tasbih & Dhikr">Tasbih &amp; Dhikr</span></button>
+      <button type="button" class="iq-rail-sub-btn" data-tab="duas" data-icon="hand-heart" onclick="App.activateTab('duas')"><span class="iq-rail-sub-icon" aria-hidden="true"></span><span data-i18n-text="Daily Duas">Daily Duas</span></button>
+    </div>
+    <div class="iq-rail-footer">
+      <button type="button" class="iq-rail-browse-btn" onclick="window.openIqDrawer && window.openIqDrawer()"><svg class="iq-bento-svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/></svg><span data-i18n-text="All Sections">All Sections</span></button>
     </div>
     <div id="iqRailQuickSummary" class="iq-rail-summary"></div>
   </aside>
@@ -236,23 +241,36 @@
         </div>
         <div class="iq-bento-utility">
           <div id="dailyCarousel" class="daily-carousel"></div>
-          <div class="global-search-wrap">
-            <span class="global-search-icon" aria-hidden="true"><img class="iq-icon iq-search-badge-icon" src="assets/icons/emoji_u1f50d.png" alt="" width="20" height="20" decoding="async"></span>
-            <input class="global-search" placeholder="Search Duas, Fiqh, Prophetic Ways..." autocomplete="off" aria-label="Search anything">
-            <button type="button" class="global-search-clear" aria-label="Clear search" style="display:none;">&times;</button>
-            <div class="global-search-results" id="globalSearchResults"></div>
+          <div class="iq-bento-search-col">
+            <div class="global-search-wrap">
+              <span class="global-search-icon" aria-hidden="true"><img class="iq-icon iq-search-badge-icon" src="assets/icons/emoji_u1f50d.png" alt="" width="20" height="20" decoding="async"></span>
+              <input class="global-search" placeholder="Search Duas, Fiqh, Prophetic Ways..." autocomplete="off" aria-label="Search anything">
+              <button type="button" class="global-search-clear" aria-label="Clear search" style="display:none;">&times;</button>
+              <div class="global-search-results" id="globalSearchResults"></div>
+            </div>
+            <div id="muhasabahEntry"></div>
           </div>
         </div>
         <div id="iqFeedArea" class="iq-feed-area"></div>
         <div id="wellArea"></div>
         <div class="iq-bento-footer">
-          <div id="muhasabahEntry"></div>
           <details id="iqAllActsDetails" class="iq-all-acts-details">
-            <summary>All Voluntary Prayers &amp; Extra Good Deeds</summary>
-            <div class="section-title">Voluntary Prayers</div>
-            <div id="volArea"></div>
-            <div class="section-title">Extra Good Deeds</div>
-            <div id="deedArea"></div>
+            <summary class="iq-all-acts-summary">
+              <span class="iq-all-acts-head">
+                <span class="iq-all-acts-icon" aria-hidden="true"><img class="iq-icon" src="assets/icons/emoji_u2728.png" alt="" width="20" height="20" decoding="async"></span>
+                <span class="iq-all-acts-text">
+                  <strong data-i18n-text="All Voluntary Prayers & Extra Good Deeds">All Voluntary Prayers &amp; Extra Good Deeds</strong>
+                  <span class="iq-all-acts-sub" data-i18n-text="Tap to expand & log Sunnah prayers and good deeds">Tap to expand &amp; log Sunnah prayers and good deeds</span>
+                </span>
+              </span>
+              <svg class="iq-all-acts-chevron iq-mirror-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+            </summary>
+            <div class="iq-all-acts-body">
+              <div class="section-title" data-i18n-text="Voluntary Prayers">Voluntary Prayers</div>
+              <div id="volArea"></div>
+              <div class="section-title" data-i18n-text="Extra Good Deeds">Extra Good Deeds</div>
+              <div id="deedArea"></div>
+            </div>
           </details>
         </div>
       </div>
