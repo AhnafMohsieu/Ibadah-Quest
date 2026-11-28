@@ -56,6 +56,27 @@
     'Guide': { ar: 'الدليل', bn: 'নির্দেশিকা' },
     'Self-Tracking': { ar: 'المتابعة الذاتية', bn: 'আত্ম-অনুসরণ' },
     'Faith & Life': { ar: 'الإيمان والحياة', bn: 'ঈমান ও জীবন' },
+    'Home': { ar: 'الرئيسية', bn: 'হোম' },
+    'Worship': { ar: 'العبادات', bn: 'ইবাদত' },
+    'Giving & Zakat': { ar: 'الصدقة والزكاة', bn: 'দান ও যাকাত' },
+    'Health & Gratitude': { ar: 'الصحة والشكر', bn: 'স্বাস্থ্য ও কৃতজ্ঞতা' },
+    'Prayer & Qibla': { ar: 'الصلاة والقبلة', bn: 'নামাজ ও কিবলা' },
+    'Today & Worship': { ar: 'اليوم والعبادة', bn: 'আজ ও ইবাদত' },
+    'Worship & Habits': { ar: 'العبادة والعادات', bn: 'ইবাদত ও অভ্যাস' },
+    'Bookmarks': { ar: 'الإشارات المرجعية', bn: 'বুকমার্ক' },
+    'Bookmarked Verses': { ar: 'الآيات المحفوظة', bn: 'সংরক্ষিত আয়াতসমূহ' },
+    'Reciting': { ar: 'تلاوة', bn: 'তিলাওয়াত চলছে' },
+    'Paused': { ar: 'متوقف مؤقتًا', bn: 'বিরতি' },
+    'Quick Log': { ar: 'تسجيل سريع', bn: 'দ্রুত লগ' },
+    'Daily Worship Sanctuary': { ar: 'واحة العبادة اليومية', bn: 'দৈনিক ইবাদত প্রশান্তি' },
+    'Ramadan Day': { ar: 'يوم رمضان', bn: 'রমজান দিন' },
+    'Day of Arafah (Sunnah Fast)': { ar: 'يوم عرفة (صيام سنة)', bn: 'আরাফার দিন (সুন্নত রোজা)' },
+    'Ashura Sunnah Fast': { ar: 'صيام عاشوراء', bn: 'আশুরার সুন্নত রোজা' },
+    'White Days (Ayyam al-Bid)': { ar: 'الأيام البيض (١٣-١٥)', bn: 'আইয়্যামুল বীয (১৩-১৫ হিজরি)' },
+    'Monday Sunnah Fast': { ar: 'صيام الإثنين (سنة)', bn: 'সোমবারের সুন্নত রোজা' },
+    'Thursday Sunnah Fast': { ar: 'صيام الخميس (سنة)', bn: 'বৃহস্পতিবারের সুন্নত রোজা' },
+    'Shawwal 6 Days Recommended': { ar: 'ست من شوال', bn: 'শাওয়ালের ৬ রোজা' },
+    "Jumu'ah Mubarak": { ar: 'جمعة مباركة', bn: 'জুমুআহ মুবারক' },
     'Today': { ar: 'اليوم', bn: 'আজ' },
     'Quests': { ar: 'المهام', bn: 'কুয়েস্ট' },
     'Quran': { ar: 'القرآن الكريم', bn: 'কুরআন' },
@@ -474,8 +495,6 @@
     'pg/day': { ar: 'ص/يوم', bn: 'পৃ./দিন' },
     'd': { ar: 'ي', bn: 'দিন' },
     'D': { ar: 'ي', bn: 'দিন' },
-    'Best': { ar: 'الأفضل', bn: 'সর্বোচ্চ' },
-    'Lv': { ar: 'مستوى', bn: 'স্তর' },
     'Gentle Start': { ar: 'بداية هادئة', bn: 'শান্ত সূচনা' },
     'Seeker': { ar: 'طالب', bn: 'অন্বেষী' },
     'Traveler': { ar: 'مسافر', bn: 'পথিক' },
@@ -483,7 +502,6 @@
     'Worshipper': { ar: 'قانت', bn: 'ইবাদতকারী' },
     'Steadfast': { ar: 'ثابت', bn: 'অবিচল' },
     'Radiant': { ar: 'منير', bn: 'উজ্জ্বল' },
-    'Guide': { ar: 'مرشد', bn: 'দিশারি' },
     'Luminary': { ar: 'سراج', bn: 'আলোকবর্তিকা' },
     'Guardian': { ar: 'حافظ', bn: 'অভিভাবক' },
     'completion': { ar: 'إكمال', bn: 'সম্পন্ন' },
@@ -504,7 +522,6 @@
     'Duas': { ar: 'الأدعية', bn: 'দোয়া' },
     'Quran Verses': { ar: 'آيات القرآن', bn: 'কুরআনের আয়াত' },
     'Sunnah': { ar: 'السنن', bn: 'সুন্নাহ' },
-    'Dhikr': { ar: 'الذكر', bn: 'জিকির' },
     'Stories': { ar: 'القصص', bn: 'গল্প' },
     'Hadiths': { ar: 'الأحاديث', bn: 'হাদিস' },
     'Names of Allah': { ar: 'أسماء الله الحسنى', bn: 'আল্লাহর নামসমূহ' },
@@ -513,7 +530,6 @@
     'Tafsir': { ar: 'التفسير', bn: 'তাফসির' },
     'Manners': { ar: 'الآداب', bn: 'আদব-কায়দা' },
     'Prophets': { ar: 'الأنبياء', bn: 'নবী-রাসূল' },
-    'Scholars': { ar: 'العلماء', bn: 'আলেমগণ' },
     'Jannah': { ar: 'الجنة', bn: 'জান্নাত' },
     'worship': { ar: 'عبادة', bn: 'ইবাদত' },
     'character': { ar: 'أخلاق', bn: 'চরিত্র' },
@@ -537,7 +553,6 @@
     "Note: Pre-filled metal rates are editable estimates only; verify today's local gold/silver rate and consult a scholar for complex assets (retirement accounts, jewelry differing by madhab).": { ar: 'ملاحظة: الأسعار الافتراضية للمعادن تقديرية ويمكن تعديلها؛ يرجى التحقق من السعر المحلي اليوم واستشارة أهل العلم للأصول المركبة.', bn: 'দ্রষ্টব্য: প্রদর্শিত ধাতুর দাম আনুমানিক ও পরিবর্তনযোগ্য; অনুগ্রহ করে আজকের স্থানীয় বাজারদর যাচাই করুন এবং জটিল সম্পদের ক্ষেত্রে আলেমের পরামর্শ নিন।' },
     'Silver 612.36g': { ar: 'الفضة ٦١٢.٣٦ جم', bn: 'রূপা ৬১২.৩৬ গ্রাম' },
     'Gold 87.48g': { ar: 'الذهب ٨٧.৪৮ جم', bn: 'স্বর্ণ ৮৭.৪৮ গ্রাম' },
-    'Estimated Zakat (2.5%)': { ar: 'الزكاة المستحقة (٢.٥٪)', bn: 'আনুমানিক যাকাত (২.৫%)' },
     'Net wealth is below the selected nisab threshold — Zakat is not obligatory.': { ar: 'صافي المال دون النصاب المحدد — لا تجب فيه الزكاة.', bn: 'নিট সম্পদ নির্বাচিত নিসাবের নিচে — যাকাত ফরজ নয়।' },
     'Noor & Rhythm Design System Gallery': { ar: 'معرض نظام تصميم «نور وإيقاع»', bn: 'নূর ও রিদম ডিজাইন সিস্টেম গ্যালারি' },
     'Interactive Token & Script Preview': { ar: 'معاينة الألوان والخطوط التفاعلية', bn: 'ইন্টারেক্টিভ টোকেন ও লিপি প্রিভিউ' },
@@ -545,10 +560,6 @@
     'Multi-Script Typography & Harakat / Conjunct Safety': { ar: 'الخطوط متعددة اللغات وسلامة التشكيل', bn: 'বহুভাষিক টাইপোগ্রাফি ও যুক্তাক্ষর সুরক্ষা' },
     'Buttons, Toggles & Interactive States': { ar: 'الأزرار والمفاتيح وحالات التفاعل', bn: 'বাটন, টগল ও ইন্টারেক্টিভ অবস্থা' },
     'System States: Loading, Empty, Offline & Error': { ar: 'حالات النظام: التحميل والفراغ والانقطاع والخطأ', bn: 'সিস্টেম অবস্থা: লোডিং, খালি, অফলাইন ও ত্রুটি' },
-    'Light': { ar: 'فاتح', bn: 'লাইট' },
-    'Dark': { ar: 'داكن', bn: 'ডার্ক' },
-    'OLED Night': { ar: 'ليلي OLED', bn: 'OLED নাইট' },
-    'System': { ar: 'النظام', bn: 'সিস্টেম' },
     'Canvas': { ar: 'الخلفية', bn: 'ক্যানভাস' },
     'Surface': { ar: 'البطاقة', bn: 'সারফেস' },
     'Emerald': { ar: 'الزمردي', bn: 'এমেরাল্ড' },
@@ -682,8 +693,8 @@
 
   function _syncStaticLabels() {
     if (typeof document === 'undefined') return;
-    document.querySelectorAll('.bnav-btn').forEach(function(b) {
-      var labelEl = b.querySelector('.bnav-label');
+    document.querySelectorAll('.bnav-btn, .iq-rail-btn').forEach(function(b) {
+      var labelEl = b.querySelector('.bnav-label') || b.querySelector('.iq-rail-label');
       if (labelEl) labelEl.textContent = t(b.getAttribute('data-i18n') || '');
     });
     document.querySelectorAll('[data-i18n-text]').forEach(function(el) {

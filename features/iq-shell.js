@@ -10,11 +10,10 @@
   var _lastDrawerSig = '';
 
   var DRAWER_CATS = [
-    { id: 'ibadah', label: 'Daily', icon: 'ibadah' },
-    { id: 'knowledge', label: 'Knowledge', icon: 'knowledge' },
-    { id: 'names_main', label: 'Names', icon: 'names_main' },
-    { id: 'library', label: 'Library', icon: 'library' },
-    { id: 'profile_main', label: 'Profile', icon: 'profile_main' }
+    { id: 'ibadah', label: 'Home', icon: 'home' },
+    { id: 'worship', label: 'Worship', icon: 'beads' },
+    { id: 'knowledge', label: 'Knowledge', icon: 'book-open' },
+    { id: 'profile_main', label: 'Profile', icon: 'user' }
   ];
 
   function tLabel(k) {
@@ -251,18 +250,37 @@
     var nextP = _cachedNextPrayerSummary();
     var greet = getTimeGreeting();
     var rhythm = computeWeeklyRhythm();
+    var sObj = (typeof S !== 'undefined' && S) ? S : {};
+    var worshipCues = (typeof window !== 'undefined' && typeof window.getWorshipDayCues === 'function')
+      ? window.getWorshipDayCues(new Date())
+      : null;
+
+    var railSumEl = document.getElementById('iqRailQuickSummary');
+    if (railSumEl) {
+      railSumEl.innerHTML =
+        '<div class="iq-rail-stat"><span class="iq-rail-stat-lbl">' + esc(tLabel('Level')) + '</span><strong class="iq-tabular">' + fmtNum(sObj.lv || 1) + '</strong></div>' +
+        '<div class="iq-rail-stat"><span class="iq-rail-stat-lbl">' + esc(tLabel('Streak')) + '</span><strong class="iq-tabular">' + fmtNum(sObj.cs || 0) + esc(tLabel('d')) + '</strong></div>';
+    }
 
     var heroEl = document.getElementById('iqHeroChallenge');
     if (heroEl) {
+      var cueBadgeHtml = (worshipCues && worshipCues.fastCue)
+        ? '<button type="button" class="iq-cue-pill" onclick="App.activateTab(\'fasting\')">' + icon('moon') + ' <span>' + esc(worshipCues.fastCue) + '</span></button>'
+        : (worshipCues && worshipCues.isFriday
+          ? '<button type="button" class="iq-cue-pill" onclick="App.activateTab(\'jumuah\')">' + icon('mosque') + ' <span>' + esc(tLabel("Jumu'ah Mubarak")) + '</span></button>'
+          : '');
+      var hijriChipHtml = (worshipCues && worshipCues.hijriText)
+        ? '<span class="iq-hero-hijri iq-tabular">' + esc(worshipCues.hijriText) + '</span>'
+        : '';
       var nextPrayerHtml = nextP
-        ? '<div class="iq-hero-next-bar">' +
+        ? '<div class="iq-hero-next-bar iq-hero-sanctuary-prayer">' +
             '<span class="iq-hero-next-lbl">' +
-              (typeof window.iqIcon === 'function' ? window.iqIcon('clock') : '&#9200;') +
-              '<span>' + esc(tLabel('Next Prayer:')) + ' <strong>' + esc(tLabel(nextP.name)) + '</strong></span>' +
+              icon('clock') +
+              '<span>' + esc(tLabel('Next Prayer:')) + ' <strong>' + esc(tLabel(nextP.name)) + '</strong> &middot; <bdi dir="ltr">' + esc(nextP.timeLabel) + '</bdi></span>' +
             '</span>' +
             '<span class="iq-hero-next-eta iq-tabular">' + esc(nextP.shortRemaining) + '</span>' +
           '</div>'
-        : '<div class="iq-hero-next-bar">' +
+        : '<div class="iq-hero-next-bar iq-hero-sanctuary-prayer">' +
             '<span class="iq-hero-next-lbl">' + esc(tLabel('Overall')) + '</span>' +
             '<span class="iq-hero-next-eta iq-tabular">' + fmtNum(summary.overallPct) + '% ' + esc(tLabel('today')) + '</span>' +
           '</div>';
@@ -281,11 +299,15 @@
       var safeFocusLbl = String(focusLbl).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
       var detailsLbl = tLabel('Details');
       heroEl.innerHTML =
-        '<div class="iq-hero-ch-card iq-hero-upgraded">' +
+        '<div class="iq-hero-ch-card iq-hero-upgraded iq-sanctuary-card">' +
           '<div class="iq-hero-ch-top">' +
-            '<span class="iq-hero-ch-title">' + esc(tLabel(greet)) + ' &middot; ' + safeFocusLbl + '</span>' +
+            '<div>' +
+              '<span class="iq-hero-ch-title">' + esc(tLabel(greet)) + ' &middot; ' + safeFocusLbl + '</span>' +
+              (hijriChipHtml || cueBadgeHtml ? '<div class="iq-hero-cues-row">' + hijriChipHtml + cueBadgeHtml + '</div>' : '') +
+            '</div>' +
             '<button type="button" class="iq-hero-ch-link" onclick="window.openChallengeDetail(\'dhikr\')"><span>' + esc(detailsLbl) + '</span><svg class="iq-mirror-icon" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg></button>' +
           '</div>' +
+          nextPrayerHtml +
           '<div class="iq-hero-focus-body" role="button" tabindex="0" onclick="window.openChallengeDetail(\'dhikr\')" aria-label="' + esc(focusLbl) + ' ' + esc(detailsLbl) + '">' +
             '<div class="iq-hero-ring-grid">' +
               renderFocusRingSvg(summary, 86) +
@@ -295,11 +317,15 @@
                 '<div class="iq-pillar-row"><span class="iq-pillar-dot quran"></span><span class="iq-pillar-lbl">' + esc(tLabel('Quran')) + '</span><strong class="iq-tabular">' + fmtNum(summary.quranToday) + '/' + fmtNum(summary.quranGoal) + 'm</strong></div>' +
               '</div>' +
             '</div>' +
-            nextPrayerHtml +
             rhythmHtml +
           '</div>' +
         '</div>';
     }
+
+    var quranLast = sObj.quranLastRead && sObj.quranLastRead.surah ? sObj.quranLastRead : null;
+    var quranSub = quranLast
+      ? fmtNum(summary.quranToday) + '/' + fmtNum(summary.quranGoal) + 'm · ' + tLabel('Continue') + ' ' + fmtNum(quranLast.surah) + ':' + fmtNum(quranLast.ayah || 1)
+      : fmtNum(summary.quranToday) + ' / ' + fmtNum(summary.quranGoal) + ' ' + tLabel('min read today');
 
     var feedEl = document.getElementById('iqFeedArea');
     if (feedEl) {
@@ -318,9 +344,9 @@
           tone: 'gold',
           icon: 'book-open',
           title: tLabel('Quran Reading Goal'),
-          sub: fmtNum(summary.quranToday) + ' / ' + fmtNum(summary.quranGoal) + ' ' + tLabel('min read today'),
+          sub: quranSub,
           pct: summary.quranPct,
-          onclick: "App.activateTab('quran')"
+          onclick: quranLast ? ("App.activateTab('quran');App.openQuranSurah(" + quranLast.surah + ")") : "App.activateTab('quran')"
         },
         {
           id: 'masjid',
@@ -829,11 +855,6 @@
     var bonusClaimed = s.lbd === todayStr();
     var enabled = !!s.notificationsEnabled;
     el.innerHTML =
-      '<div class="iq-notif-card">' +
-        '<div class="iq-ch-title">' + esc(tLabel('Daily Bonus XP')) + '</div>' +
-        '<div class="iq-ch-sub">' + esc(tLabel(bonusClaimed ? 'Already claimed today — Alhamdulillah!' : 'Your daily streak bonus is ready to claim.')) + '</div>' +
-        (!bonusClaimed ? '<button type="button" class="iq-pill-btn" style="margin-top:8px;" onclick="App.claimBonus();window.renderNotifDrawerBody();">' + esc(tLabel('Claim Bonus')) + '</button>' : '') +
-      '</div>' +
       '<div class="iq-notif-card">' +
         '<div class="iq-ch-title">' + esc(tLabel('Daily Worship Status')) + '</div>' +
         '<div class="iq-ch-sub iq-tabular">' + esc(tLabel('Prayers')) + ': ' + fmtNum(summary.prayersDone) + '/' + fmtNum(summary.prayersTotal) + ' &middot; ' + esc(tLabel('Dhikr')) + ': ' + fmtNum(summary.dhikrToday) + '/' + fmtNum(summary.dhikrGoal) + '</div>' +

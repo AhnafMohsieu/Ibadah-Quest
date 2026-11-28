@@ -55,9 +55,9 @@ test('tab/category labels pass through the translate helper in 3-dot drawer', ()
 });
 
 test('bnav buttons carry data-i18n keys with .bnav-label spans', () => {
-  assert.ok(html.includes('data-i18n="Daily"'));
+  assert.ok(html.includes('data-i18n="Home"'));
+  assert.ok(html.includes('data-i18n="Worship"'));
   assert.ok(html.includes('data-i18n="Knowledge"'));
-  assert.ok(html.includes('data-i18n="Library"'));
   assert.ok(html.includes('data-i18n="Profile"'));
   assert.ok(html.includes('class="bnav-label"'));
 });

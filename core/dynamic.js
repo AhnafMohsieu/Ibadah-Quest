@@ -1,7 +1,7 @@
 (function() {
   // Pull all content renderers from window into local scope so renderStatic() and
   // renderToday() can call them as bare names without window. prefix.
-  const { renderSunnahs, renderDhikr, renderDhikrCounter, renderStories, renderNames, renderInspirations, renderGratitude, renderFasting, renderCharity, renderMemorization, renderMorning, renderEvening, renderSins, renderPunishments, renderRepentance, renderSahaba, renderSeerah, renderTafsir, renderManners, renderFamily, renderHealth, renderUmmah, renderHajj, renderAkhirah, renderProphets, renderWomen, renderHeart, renderMarriage, renderScience, renderWudu, renderScholars, renderPatience, renderWork, renderCommunity, renderEnvironment, renderTravel, renderFiqh, renderArabic, renderTawakkul, renderIkhlas, renderZuhd, renderDawah, renderAqeedah, renderKnowledge, renderCivilisation, renderJumuah, renderBattles, renderJannah, renderJahannam, renderGrave, renderSigns, renderDreams, renderParenting, renderFood, renderTibb, renderYouth, renderTech, renderNeighbors, renderArabicgrammar, renderVocab, renderRhetoric, renderMorphology, renderPronunciation, renderPoetry, renderProverbs, renderEtymology, renderDialects, renderScripts, renderBrotherhood, renderSisterhood, renderOrphans2, renderElderly, renderDisabled, renderAntiracism, renderPoverty, renderVolunteering, renderEpistemology, renderOntology, renderLogic, renderKalam, renderReason, renderFreewill, renderProblemofevil, renderProphethood, renderExistence, renderUmayyads, renderAbbasids, renderAndalus, renderOttomans, renderMamluks, renderSeljuks, renderFatimids, renderAyyubids, renderModernhist, renderAncientprophets, renderMecca, renderMedina, renderJerusalem, renderDamascus, renderBaghdad, renderCairo, renderCordoba, renderIstanbul, renderBukhara, renderSamarkand, renderCalligraphy, renderArchitecture, renderGeometry, renderPoetryart, renderLiterature, renderNasheeds, renderIllumination, renderTextiles, renderCeramics, renderWoodwork, renderPrayers, renderVol, renderDeeds, renderTimer, renderPrayerTimes, renderVirtues, renderVicesreturn, renderCharacterpath, renderWorshiprulings, renderWealthoaths, renderFamilylife, renderService, renderWorkjustice, renderWellness, renderEarthliving, renderYouthtech, renderEthicsfinance, renderHolycities, renderCapitals, renderEast, renderPattern, renderSacredspace, renderLivingcrafts, renderWord, renderStructure, renderSoundscript, renderWordspoetry, renderBeing, renderKnowing, renderWillevil } = window;
+  const { renderSunnahs, renderDhikr, renderDhikrCounter, renderStories, renderNames, renderInspirations, renderGratitude, renderFasting, renderCharity, renderMemorization, renderMorning, renderEvening, renderSins, renderRepentance, renderSahaba, renderSeerah, renderTafsir, renderManners, renderFamily, renderHealth, renderUmmah, renderHajj, renderAkhirah, renderProphets, renderWomen, renderHeart, renderMarriage, renderWudu, renderScholars, renderPatience, renderCommunity, renderFiqh, renderTawakkul, renderIkhlas, renderZuhd, renderAqeedah, renderKnowledge, renderJumuah, renderJannah, renderJahannam, renderGrave, renderSigns, renderParenting, renderTibb, renderNeighbors, renderPrayers, renderVol, renderDeeds, renderTimer, renderPrayerTimes, renderVirtues, renderVicesreturn, renderCharacterpath, renderWorshiprulings, renderWealthoaths, renderFamilylife, renderService, renderWellness } = window;
   // Lucide removed — no-op stub
   function refreshLucideIcons() {}
 
@@ -21,23 +21,14 @@
     quests: renderQ,
     achievements: renderAch,
     progress: renderProg,
-    shop: renderShop,
     profile: renderProfile,
     stats: renderStats,
     timer: renderTimer,
     prayertimes: renderPrayerTimes,
     garden: () => window.renderGarden && window.renderGarden(),
-    lantern: () => window.renderLantern && window.renderLantern(),
     muhasabah: () => window.renderMuhasabahEntry && window.renderMuhasabahEntry(),
     journeys: () => window.renderJourneys && window.renderJourneys(),
-    boat: () => window.renderBoat && window.renderBoat(),
-    keys: () => window.renderKeys && window.renderKeys(),
-    mosque: () => window.renderMosque && window.renderMosque(),
     achievementshowcase: () => window.renderAchievementShowcase && window.renderAchievementShowcase(),
-    ramadan: () => window.renderRamadan && window.renderRamadan(),
-    laylat: () => window.renderLaylat && window.renderLaylat(),
-    growthtab: () => window.renderSpiritualGrowthTab && window.renderSpiritualGrowthTab(),
-    combos: () => window.renderCombos && window.renderCombos(),
     autotrack: () => window.autoTrackJourneyProgress && window.autoTrackJourneyProgress(),
   };
 
@@ -64,113 +55,43 @@
   // Static renderers grouped by tab ID
   // Only the active tab's renderer fires on boot; _lazyRender in activateTab handles the rest.
   var TAB_STATIC_RENDERERS = {
-    today: function() { safe(renderQuran,'Quran'); safe(renderSunnahs,'Sunnahs'); safe(renderDhikr,'Dhikr'); safe(renderDhikrCounter,'DhikrCounter'); safe(renderStories,'Stories'); safe(renderHadith,'Hadith'); safe(renderNames,'Names'); safe(renderInspirations,'Inspirations'); safe(renderGratitude,'Gratitude'); safe(renderFasting,'Fasting'); safe(renderCharity,'Charity'); safe(renderMemorization,'Memorization'); },
+    today: function() {},
+    quran: function() { safe(renderQuran,'Quran'); },
     morning: function() { safe(renderMorning,'Morning'); },
     evening: function() { safe(renderEvening,'Evening'); },
     dhikr: function() { safe(renderDhikr,'Dhikr'); },
     situational: function() { safe(renderSituationalDhikr,'SituationalDhikr'); },
-    sins: function() { safe(renderSins,'Sins'); },
-    punishments: function() { safe(renderPunishments,'Punishments'); },
-    repentance: function() { safe(renderRepentance,'Repentance'); },
-    sahaba: function() { safe(renderSahaba,'Sahaba'); },
-    seerah: function() { safe(renderSeerah,'Seerah'); },
-    tafsir: function() { safe(renderTafsir,'Tafsir'); },
-    manners: function() { safe(renderManners,'Manners'); },
-    family: function() { safe(renderFamily,'Family'); },
-    health: function() { safe(renderHealth,'Health'); safe(function() { window.renderHealthLog && window.renderHealthLog(); },'HealthLog'); },
-    finance: function() { safe(renderFinance,'Finance'); safe(function() { window.renderFinanceTab && window.renderFinanceTab(); },'FinanceTab'); },
-    ummah: function() { safe(renderUmmah,'Ummah'); },
-    hajj: function() { safe(renderHajj,'Hajj'); },
-    akhirah: function() { safe(renderAkhirah,'Akhirah'); },
-    prophets: function() { safe(renderProphets,'Prophets'); },
-    women: function() { safe(renderWomen,'Women'); },
-    heart: function() { safe(renderHeart,'Heart'); },
-    marriage: function() { safe(renderMarriage,'Marriage'); },
-    science: function() { safe(renderScience,'Science'); },
+    duas: function() { safe(renderDuas,'Duas'); },
+    hadith: function() { safe(renderHadith,'Hadith'); },
+    sunnahs: function() { safe(renderSunnahs,'Sunnahs'); },
     wudu: function() { safe(renderWudu,'Wudu'); },
-    scholars: function() { safe(renderScholars,'Scholars'); },
-    patience: function() { safe(renderPatience,'Patience'); },
-    work: function() { safe(renderWork,'Work'); },
-    environment: function() { safe(renderEnvironment,'Environment'); },
-    travel: function() { safe(renderTravel,'Travel'); },
-    fiqh: function() { safe(renderFiqh,'Fiqh'); },
-    arabic: function() { safe(renderArabic,'Arabic'); },
-    tawakkul: function() { safe(renderTawakkul,'Tawakkul'); },
-    ikhlas: function() { safe(renderIkhlas,'Ikhlas'); },
-    zuhd: function() { safe(renderZuhd,'Zuhd'); },
-    dawah: function() { safe(renderDawah,'Dawah'); },
-    aqeedah: function() { safe(renderAqeedah,'Aqeedah'); },
-    knowledge: function() { safe(renderKnowledge,'Knowledge'); },
-    civilisation: function() { safe(renderCivilisation,'Civilisation'); },
     jumuah: function() { safe(renderJumuah,'Jumuah'); },
-    battles: function() { safe(renderBattles,'Battles'); },
+    fasting: function() { safe(renderFasting,'Fasting'); },
+    memorization: function() { safe(renderMemorization,'Memorization'); },
+    charity: function() {
+      safe(renderCharity,'Charity');
+      safe(function() { window.renderFinanceTab && window.renderFinanceTab(); },'FinanceTab');
+      safe(function() { window.renderZakatCalc && window.renderZakatCalc(); },'ZakatCalc');
+    },
+    healthlog: function() {
+      safe(function() { window.renderHealthLog && window.renderHealthLog(); },'HealthLog');
+      safe(renderGratitude,'Gratitude');
+    },
+    tafsir: function() { safe(renderTafsir,'Tafsir'); },
+    aqeedah: function() { safe(renderAqeedah,'Aqeedah'); },
+    fiqh: function() { safe(renderFiqh,'Fiqh'); },
+    seerah: function() { safe(renderSeerah,'Seerah'); },
+    stories: function() { safe(renderStories,'Stories'); },
+    akhirah: function() { safe(renderAkhirah,'Akhirah'); },
     jannah: function() { safe(renderJannah,'Jannah'); },
     jahannam: function() { safe(renderJahannam,'Jahannam'); },
     grave: function() { safe(renderGrave,'Grave'); },
     signs: function() { safe(renderSigns,'Signs'); },
-    dreams: function() { safe(renderDreams,'Dreams'); },
-    parenting: function() { safe(renderParenting,'Parenting'); },
-    food: function() { safe(renderFood,'Food'); },
-    tibb: function() { safe(renderTibb,'Tibb'); },
-    youth: function() { safe(renderYouth,'Youth'); },
-    tech: function() { safe(renderTech,'Tech'); },
-    neighbors: function() { safe(renderNeighbors,'Neighbors'); },
     allah_names: function() { safe(renderNames,'Names'); },
+    prophets: function() { safe(renderProphets,'Prophets'); },
+    sahaba: function() { safe(renderSahaba,'Sahaba'); },
+    women: function() { safe(renderWomen,'Women'); },
     scholars_names: function() { safe(renderScholars,'Scholars'); },
-    fasting: function() { safe(renderFasting,'Fasting'); },
-    charity: function() { safe(renderCharity,'Charity'); },
-    memorization: function() { safe(renderMemorization,'Memorization'); },
-    gratitude: function() { safe(renderGratitude,'Gratitude'); },
-    // Library tabs
-    umayyads: function() { safe(renderUmayyads,'Umayyads'); },
-    abbasids: function() { safe(renderAbbasids,'Abbasids'); },
-    andalus: function() { safe(renderAndalus,'Andalus'); },
-    ottomans: function() { safe(renderOttomans,'Ottomans'); },
-    mamluks: function() { safe(renderMamluks,'Mamluks'); },
-    seljuks: function() { safe(renderSeljuks,'Seljuks'); },
-    fatimids: function() { safe(renderFatimids,'Fatimids'); },
-    ayyubids: function() { safe(renderAyyubids,'Ayyubids'); },
-    modernhist: function() { safe(renderModernhist,'Modernhist'); },
-    ancientprophets: function() { safe(renderAncientprophets,'Ancientprophets'); },
-    mecca: function() { safe(renderMecca,'Mecca'); },
-    medina: function() { safe(renderMedina,'Medina'); },
-    jerusalem: function() { safe(renderJerusalem,'Jerusalem'); },
-    damascus: function() { safe(renderDamascus,'Damascus'); },
-    baghdad: function() { safe(renderBaghdad,'Baghdad'); },
-    cairo: function() { safe(renderCairo,'Cairo'); },
-    cordoba: function() { safe(renderCordoba,'Cordoba'); },
-    istanbul: function() { safe(renderIstanbul,'Istanbul'); },
-    bukhara: function() { safe(renderBukhara,'Bukhara'); },
-    samarkand: function() { safe(renderSamarkand,'Samarkand'); },
-    calligraphy: function() { safe(renderCalligraphy,'Calligraphy'); },
-    architecture: function() { safe(renderArchitecture,'Architecture'); },
-    geometry: function() { safe(renderGeometry,'Geometry'); },
-    poetryart: function() { safe(renderPoetryart,'Poetryart'); },
-    literature: function() { safe(renderLiterature,'Literature'); },
-    nasheeds: function() { safe(renderNasheeds,'Nasheeds'); },
-    illumination: function() { safe(renderIllumination,'Illumination'); },
-    textiles: function() { safe(renderTextiles,'Textiles'); },
-    ceramics: function() { safe(renderCeramics,'Ceramics'); },
-    woodwork: function() { safe(renderWoodwork,'Woodwork'); },
-    arabicgrammar: function() { safe(renderArabicgrammar,'Arabicgrammar'); },
-    vocab: function() { safe(renderVocab,'Vocab'); },
-    rhetoric: function() { safe(renderRhetoric,'Rhetoric'); },
-    morphology: function() { safe(renderMorphology,'Morphology'); },
-    pronunciation: function() { safe(renderPronunciation,'Pronunciation'); },
-    poetry: function() { safe(renderPoetry,'Poetry'); },
-    proverbs: function() { safe(renderProverbs,'Proverbs'); },
-    etymology: function() { safe(renderEtymology,'Etymology'); },
-    dialects: function() { safe(renderDialects,'Dialects'); },
-    scripts: function() { safe(renderScripts,'Scripts'); },
-    epistemology: function() { safe(renderEpistemology,'Epistemology'); },
-    ontology: function() { safe(renderOntology,'Ontology'); },
-    logic: function() { safe(renderLogic,'Logic'); },
-    kalam: function() { safe(renderKalam,'Kalam'); },
-    reason: function() { safe(renderReason,'Reason'); },
-    freewill: function() { safe(renderFreewill,'Freewill'); },
-    problemofevil: function() { safe(renderProblemofevil,'Problemofevil'); },
-    prophethood: function() { safe(renderProphethood,'Prophethood'); },
-    existence: function() { safe(renderExistence,'Existence'); },
     virtues: function() { safe(renderVirtues,'Virtues'); },
     'vices-return': function() { safe(renderVicesreturn,'Vicesreturn'); },
     'character-path': function() { safe(renderCharacterpath,'Characterpath'); },
@@ -179,24 +100,7 @@
     'family-life': function() { safe(renderFamilylife,'Familylife'); },
     community: function() { safe(renderCommunity,'Community'); },
     service: function() { safe(renderService,'Service'); },
-    'work-justice': function() { safe(renderWorkjustice,'Workjustice'); },
-    wellness: function() { safe(renderWellness,'Wellness'); },
-    'earth-living': function() { safe(renderEarthliving,'Earthliving'); },
-    'youth-tech': function() { safe(renderYouthtech,'Youthtech'); },
-    'ethics-finance': function() { safe(renderEthicsfinance,'Ethicsfinance'); },
-    'holy-cities': function() { safe(renderHolycities,'Holycities'); },
-    capitals: function() { safe(renderCapitals,'Capitals'); },
-    east: function() { safe(renderEast,'East'); },
-    pattern: function() { safe(renderPattern,'Pattern'); },
-    'sacred-space': function() { safe(renderSacredspace,'Sacredspace'); },
-    'living-crafts': function() { safe(renderLivingcrafts,'Livingcrafts'); },
-    word: function() { safe(renderWord,'Word'); },
-    structure: function() { safe(renderStructure,'Structure'); },
-    'sound-script': function() { safe(renderSoundscript,'Soundscript'); },
-    'words-poetry': function() { safe(renderWordspoetry,'Wordspoetry'); },
-    being: function() { safe(renderBeing,'Being'); },
-    knowing: function() { safe(renderKnowing,'Knowing'); },
-    'will-evil': function() { safe(renderWillevil,'Willevil'); }
+    wellness: function() { safe(renderWellness,'Wellness'); }
   };
 
   function renderDynamic() {
@@ -229,11 +133,6 @@
     var activeTab = (window.S && window.S.lastSub) || 'today';
     var fn = TAB_STATIC_RENDERERS[activeTab];
     if (fn) fn();
-    if (typeof NEW_POOLS !== 'undefined') Object.keys(NEW_POOLS).forEach(function(k) {
-      if (NEW_POOLS[k] && NEW_POOLS[k].length) {
-        safe(function() { if (typeof window.poolRender === 'function') window.poolRender(k + 'Area', iqIcon('book-open') + ' ' + k, NEW_POOLS[k], k + 'Idx'); }, k);
-      }
-    });
   }
 
 function renderAll() {
@@ -250,15 +149,13 @@ function renderAll() {
   // panels (topbar/lv/today/...) are already correct after init's renderAll() —
   // re-rendering them a second time is pure waste (boot double-render).
   const DEFERRED_PANELS = [
-    'garden', 'lantern', 'muhasabah', 'journeys', 'boat', 'keys', 'mosque',
-    'achievementshowcase', 'ramadan', 'laylat',
-    'growthtab', 'combos', 'autotrack'
+    'garden', 'muhasabah', 'journeys', 'achievementshowcase', 'autotrack'
   ];
   function renderDeferred() {
     for (const panel of DEFERRED_PANELS) dirtyPanels.add(panel);
     return renderDynamic();
   }
-  function renderToday() { const s=(fn,n)=>{try{fn();}catch(e){console.warn('Today render '+n+' failed:',e.message);}}; s(renderBonus,'bonus'); s(renderPrayers,'prayers'); s(renderVol,'vol'); s(renderDeeds,'deeds'); s(function(){ if (typeof window.renderIqFeed === 'function') window.renderIqFeed(); },'iqFeed'); }
+  function renderToday() { const s=(fn,n)=>{try{fn();}catch(e){console.warn('Today render '+n+' failed:',e.message);}}; s(renderPrayers,'prayers'); s(renderVol,'vol'); s(renderDeeds,'deeds'); s(function(){ if (typeof window.renderIqFeed === 'function') window.renderIqFeed(); },'iqFeed'); }
 
   function renderLv() {
     const cres = document.getElementById('headerCrescent');
@@ -302,10 +199,6 @@ function renderAll() {
     }
     const rawMsg = (STREAK_MSGS.find(x => curStreak >= x.m) || { t: 'Legendary!' }).t;
     msg.textContent = _tr(rawMsg, rawMsg);
-  }
-  function renderBonus() {
-    const el = document.getElementById('bonusArea');
-    if (el) el.innerHTML = S.lbd === today() ? '' : '<div class="daily-bonus" onclick="App.claimBonus()">' + _escD(_tr('Tap to claim your Daily Bonus!', 'Tap to claim your Daily Bonus!')) + '</div>';
   }
 
   // ── Quests ──
@@ -478,43 +371,10 @@ function renderAll() {
 
     document.getElementById('calArea').innerHTML = cal;
     document.getElementById('statArea').innerHTML = '';
-  }
-
-  // ── Shop ──
-  function renderShop() {
-    let h = '<div class="section-title">' + iqIcon('gift') + ' ' + _escD(_tr('Rewards Shop', 'Rewards Shop')) + '</div>';
-
-    h += `<div class="reward-xp-banner">${iqIcon('star')} <strong class="iq-tabular">${_fmtN(S.xp)}</strong> ${_escD(_tr('XP Available', 'XP Available'))}</div>`;
-
-    h += '<div class="reward-grid">';
-    h += SHOP.map(r => {
-      const owned = !!S.ur[r.id];
-      const canAfford = S.xp >= r.cost;
-      const cls = owned ? 'owned' : (canAfford ? '' : 'disabled');
-      return `<div class="reward-card ${cls}" role="button" tabindex="${owned ? '-1' : '0'}" onclick="${owned ? '' : 'App.buy(\'' + r.id + '\')'}">
-        <span class="reward-icon">${iqIcon(r.icon || r.id || r.name)}</span>
-        <div class="reward-info">
-          <div class="reward-name">${_escD(r.name)}</div>
-          <div class="reward-desc">${_escD(r.desc || '')}</div>
-        </div>
-        <div class="reward-badge iq-tabular">${owned ? iqIcon('check') + ' ' + _escD(_tr('Owned', 'Owned')) : iqIcon('star') + ' ' + _fmtN(r.cost) + ' XP'}</div>
-      </div>`;
-    }).join('');
-    h += '</div>';
-
-    document.getElementById('shopArea').innerHTML = h;
+    if (typeof window.renderGarden === 'function') window.renderGarden();
   }
 
   // ── Profile ──
-  function getFrameStyle(frameId) {
-    const frames = {
-      'r10': 'border: 3px solid #FFD700; border-radius: 50%;',
-      'r19': 'border: 3px solid #E5E4E2; border-radius: 50%;',
-      'r20': 'border: 3px solid #B9F2FF; border-radius: 50%;'
-    };
-    return frames[frameId] || '';
-  }
-
   function renderProfile() {
     const achCnt = Object.keys(S.ua || {}).length;
     const avatar = _escD(S.avatar || '');
@@ -532,12 +392,11 @@ function renderAll() {
 
     h += `<div class="profile-identity">
       <div class="profile-avatar-wrap" role="button" tabindex="0" aria-label="${esc(_tr('Change avatar', 'Change avatar'))}" onclick="App.toggleAvatarPicker()">
-        <span class="profile-avatar" style="${S.activeFrame ? getFrameStyle(S.activeFrame) : ''}">${avatar || iqIcon('user')}</span>
+        <span class="profile-avatar">${avatar || iqIcon('user')}</span>
       </div>
       <div class="profile-info">
         <h2 class="profile-name">${esc(currentUser === 'default' ? _tr('Guest', 'Guest') : currentUser)}</h2>
         <div class="profile-level iq-tabular">${esc(_tr('Level', 'Level'))} ${_fmtN(S.lv)} &middot; ${esc(_tr(lvTitle(S.lv), lvTitle(S.lv)))}</div>
-        ${S.activeTitle ? (() => { const t = (typeof SHOP !== 'undefined' ? SHOP : []).find(x => x.id === S.activeTitle); return t ? `<div class="profile-title" style="color:var(--accent-dark);font-weight:600;margin-top:2px;">${esc(t.name.replace('Title: ',''))}</div>` : ''; })() : ''}
         ${joinDate ? `<div class="profile-join">${esc(_tr('Member since', 'Member since'))} ${esc(joinDate)}</div>` : ''}
       </div>
     </div>`;
@@ -811,6 +670,7 @@ function renderAll() {
     const url = getQuranAudioUrl(reciterId, surah, verse);
     if (!url) return;
     quranAudio = new Audio(url);
+    if (typeof S === 'object' && S) { S.quranLastRead = { surah: surah, ayah: verse }; saveState(); }
     if (typeof window.grantDailyXp === 'function') window.grantDailyXp(1, 'quranverse|' + surah + '|' + verse);
     quranPlayingVerse = verse;
     quranPlayingSurah = surah;
@@ -818,6 +678,56 @@ function renderAll() {
     quranAudio.onended = () => { quranPlayingVerse = null; quranPlayingSurah = null; updateAudioButtons(); };
     updateAudioButtons();
   }
+
+  function _syncQuranAudioBar() {
+    if (typeof document === 'undefined' || !document.body) return;
+    let bar = document.getElementById('iqQuranAudioBar');
+    if (!quranPlayingSurah || !quranPlayingVerse) {
+      if (bar) { bar.style.display = 'none'; bar.classList.remove('active'); }
+      return;
+    }
+    if (!bar) {
+      bar = document.createElement('div');
+      bar.id = 'iqQuranAudioBar';
+      bar.className = 'iq-audio-bar';
+      bar.setAttribute('role', 'region');
+      bar.setAttribute('aria-label', 'Quran Recitation Player');
+      document.body.appendChild(bar);
+    }
+    const sMeta = (typeof QURAN_SURAHS !== 'undefined') ? QURAN_SURAHS.find(x => x.n === quranPlayingSurah) : null;
+    const sLabel = sMeta ? sMeta.en : ('Surah ' + quranPlayingSurah);
+    const isPlaying = !!(quranAudio && !quranAudio.paused);
+    const canNext = quranPlayMode !== 'none' && quranSurahIdx + 1 < quranSurahQueue.length;
+    bar.style.display = 'flex';
+    bar.classList.add('active');
+    bar.innerHTML =
+      '<div class="iq-audio-meta">' +
+        '<span class="iq-audio-ico" aria-hidden="true">' + iqIcon('book-open') + '</span>' +
+        '<div class="iq-audio-txt">' +
+          '<div class="iq-audio-title">' + window.escapeHTML(sLabel) + '</div>' +
+          '<div class="iq-audio-sub iq-tabular"><bdi dir="ltr">' + _fmtN(quranPlayingSurah) + ':' + _fmtN(quranPlayingVerse) + '</bdi> &middot; ' + window.escapeHTML(_tr(isPlaying ? 'Reciting' : 'Paused', isPlaying ? 'Reciting' : 'Paused')) + '</div>' +
+        '</div>' +
+      '</div>' +
+      '<div class="iq-audio-actions">' +
+        '<button type="button" class="iq-audio-btn" onclick="window._toggleAudioBarPlayback && window._toggleAudioBarPlayback()" aria-label="' + (isPlaying ? 'Pause recitation' : 'Resume recitation') + '">' + (isPlaying ? '⏸' : '▶') + '</button>' +
+        (canNext ? '<button type="button" class="iq-audio-btn" onclick="window._nextAudioQueue && window._nextAudioQueue()" aria-label="Next verse">&#9197;</button>' : '') +
+        '<button type="button" class="iq-audio-btn iq-audio-close" onclick="App.stopSurah()" aria-label="Close audio player">&#10005;</button>' +
+      '</div>';
+  }
+  window._toggleAudioBarPlayback = function() {
+    if (!quranAudio) return;
+    if (quranAudio.paused) { quranSurahPaused = false; quranAudio.play().catch(()=>{}); }
+    else { quranSurahPaused = true; quranAudio.pause(); }
+    updateAudioButtons();
+    updateSurahButton();
+    updateJuzButton();
+  };
+  window._nextAudioQueue = function() {
+    if (quranPlayMode !== 'none' && quranSurahIdx + 1 < quranSurahQueue.length) {
+      quranSurahIdx++;
+      _playQueueItem();
+    }
+  };
 
   function playSurah(surahNum) {
     if (typeof QURAN_POOL === 'undefined') {
@@ -994,7 +904,27 @@ function renderAll() {
         card.classList.remove('verse-playing');
       }
     });
+    _syncQuranAudioBar();
   }
+
+  window._toggleQuranVerseBookmark = function(surahNum, verseNum, btnEl) {
+    const bid = 'q:' + surahNum + ':' + verseNum;
+    if (typeof window.toggleBookmark === 'function') window.toggleBookmark(bid);
+    else if (window.App && typeof window.App.toggleBookmark === 'function') window.App.toggleBookmark(bid);
+    const active = (typeof window.isBookmarked === 'function' && window.isBookmarked(bid)) ||
+      (typeof S === 'object' && S && Array.isArray(S.bookmarks) && S.bookmarks.indexOf(bid) !== -1);
+    if (active && typeof S === 'object' && S) {
+      S.quranLastRead = { surah: surahNum, ayah: verseNum };
+      if (typeof saveState === 'function') saveState();
+    }
+    if (btnEl && btnEl.classList) {
+      btnEl.classList.toggle('active', active);
+      btnEl.setAttribute('aria-pressed', active ? 'true' : 'false');
+    }
+    if (quranViewMode === 'bookmarks' && quranCurrentSurah === null && quranCurrentJuz === null) {
+      renderQuran();
+    }
+  };
 
   var QURAN_PREFS_KEY = 'iq_quran_prefs';
   function _getQuranPrefs() {
@@ -1093,6 +1023,69 @@ function renderAll() {
     '</div>';
   }
 
+  function _toArabicDigits(n) {
+    return String(n == null ? '' : n).replace(/[0-9]/g, function(d) { return '\u0660\u0661\u0662\u0663\u0664\u0665\u0666\u0667\u0668\u0669'[Number(d)]; });
+  }
+
+  function _getBookmarkAyahs() {
+    const list = (typeof S === 'object' && S && Array.isArray(S.bookmarks)) ? S.bookmarks : [];
+    const out = [];
+    list.forEach(function(id) {
+      const m = /^q:(\d+):(\d+)$/.exec(String(id || ''));
+      if (m) out.push({ id: id, surah: parseInt(m[1], 10), ayah: parseInt(m[2], 10) });
+    });
+    return out;
+  }
+
+  function _renderBookmarkAyahsCardList(el, prefs) {
+    const saved = _getBookmarkAyahs();
+    const backBtn = '<button type="button" class="quran-back-btn" onclick="App.setQuranView(\'surah\')"><span class="iq-mirror-icon">◀</span> ' + window.escapeHTML(_tr('Back to Surahs', 'Back to Surahs')) + '</button>';
+    if (!saved.length) {
+      el.innerHTML = backBtn +
+        '<div class="empty-state">' +
+          '<div class="empty-state-icon">' + iqIcon('bookmark') + '</div>' +
+          '<div class="empty-state-title">' + window.escapeHTML(_tr('No bookmarked ayahs yet', 'No bookmarked ayahs yet')) + '</div>' +
+          '<div class="empty-state-desc">' + window.escapeHTML(_tr('Open any Surah and tap the bookmark button on any ayah to save it here.', 'Open any Surah and tap the bookmark button on any ayah to save it here.')) + '</div>' +
+          '<button type="button" class="empty-state-btn" onclick="App.setQuranView(\'surah\')">' + window.escapeHTML(_tr('Browse Surahs', 'Browse Surahs')) + '</button>' +
+        '</div>';
+      return;
+    }
+    if (typeof QURAN_POOL === 'undefined') {
+      el.innerHTML = '<div class="quran-loading">' + window.escapeHTML(_tr('Loading saved ayahs…', 'Loading saved ayahs…')) + '</div>';
+      window.App.ensureQuranLoaded().then(() => renderQuran()).catch(() => {});
+      return;
+    }
+    const qScript = (S && S.quranScript) || 'uthmani';
+    const qTr = (S && S.quranTranslation) || 'en';
+    let html = '<div class="quran-header"><h2>' + iqIcon('bookmark') + ' ' + window.escapeHTML(_tr('Bookmarked Verses', 'Bookmarked Verses')) + '</h2><div class="quran-sub iq-tabular">' + _fmtN(saved.length) + ' ' + window.escapeHTML(_tr('saved', 'saved')) + '</div></div>';
+    html += '<div class="tab-bar-quran" style="display:flex;justify-content:center;gap:6px;margin:0 auto 10px;">';
+    html += `<button type="button" onclick="App.setQuranView('surah')">${window.escapeHTML(_tr('Surahs', 'Surahs'))}</button>`;
+    html += `<button type="button" onclick="App.setQuranView('juz')">${window.escapeHTML(_tr('Juz', 'Juz'))}</button>`;
+    html += `<button type="button" class="active" onclick="App.setQuranView('bookmarks')">${iqIcon('bookmark')} ${window.escapeHTML(_tr('Bookmarks', 'Bookmarks'))} (${_fmtN(saved.length)})</button>`;
+    html += '</div>';
+    html += saved.map(function(item) {
+      const sMeta = QURAN_SURAHS.find(x => x.n === item.surah);
+      const refStr = item.surah + ':' + item.ayah;
+      const v = QURAN_POOL.find(x => x.source && x.source.indexOf(refStr) !== -1 && new RegExp('(?:^|\\D)' + item.surah + ':' + item.ayah + '(?:$|\\D)').test(x.source));
+      const gIdx = globalAyahOf(item.surah, item.ayah) - 1;
+      const arText = v ? ((qScript === 'indopak' && window.QURAN_INDOPAK_POOL && window.QURAN_INDOPAK_POOL[gIdx]) ? window.QURAN_INDOPAK_POOL[gIdx] : v.arabic) : '';
+      const bnText = (window.QURAN_BN_POOL && window.QURAN_BN_POOL[gIdx]) ? window.QURAN_BN_POOL[gIdx] : '';
+      return `<div class="verse-card quran-sanctuary-card">
+        <div class="verse-bmk-head">
+          <button type="button" class="iq-text-btn" onclick="App.openQuranSurah(${item.surah})">${window.escapeHTML(sMeta ? sMeta.en : ('Surah ' + item.surah))} &middot; <bdi dir="ltr">${_fmtN(item.surah)}:${_fmtN(item.ayah)}</bdi></button>
+        </div>
+        ${arText ? `<div class="verse-arabic" dir="rtl" data-script="quran">${arText} <span class="iq-ayah-end" dir="rtl">&#x06DD;${_toArabicDigits(item.ayah)}</span></div>` : ''}
+        ${v && (qTr === 'en' || qTr === 'both') ? `<div class="verse-english">${window.escapeHTML(v.english || '')}</div>` : ''}
+        ${v && (qTr === 'bn' || qTr === 'both') && bnText ? `<div class="verse-english iq-script-bn" lang="bn" style="margin-top:6px;">${window.escapeHTML(bnText)}</div>` : ''}
+        <div class="verse-actions">
+          <button type="button" class="iq-verse-bmk-btn active" aria-pressed="true" aria-label="Remove bookmark ${refStr}" onclick="window._toggleQuranVerseBookmark(${item.surah},${item.ayah},this)">${iqIcon('bookmark')}</button>
+          <button type="button" class="verse-play-btn" data-surah="${item.surah}" data-verse="${item.ayah}" onclick="App.playQuranVerse(${item.surah},${item.ayah})" aria-label="Play verse ${refStr}">▶</button>
+        </div>
+      </div>`;
+    }).join('');
+    el.innerHTML = html;
+  }
+
   function renderQuran() {
     const el = document.getElementById('quranArea');
     if (!el || typeof QURAN_SURAHS === 'undefined') return;
@@ -1107,22 +1100,32 @@ function renderAll() {
       renderQuranJuz(el, quranCurrentJuz);
       return;
     }
+    if (quranViewMode === 'bookmarks') {
+      _renderBookmarkAyahsCardList(el, prefs);
+      return;
+    }
 
-    let html = '<div class="quran-header"><h2>' + iqIcon('book-open') + ' ' + window.escapeHTML(_tr('The Noble Quran', 'The Noble Quran')) + '</h2><div class="quran-sub">' + _fmtN(114) + ' ' + window.escapeHTML(_tr('Surahs', 'Surahs')) + ' &middot; ' + window.escapeHTML(_tr('Tap a surah to enter reading sanctuary', 'Tap a surah to enter reading sanctuary')) + '</div></div>';
-    if (prefs.lastSurah) {
-      const lastS = QURAN_SURAHS.find(x => x.n === prefs.lastSurah);
+    const lastReadObj = (typeof S === 'object' && S && S.quranLastRead && S.quranLastRead.surah) ? S.quranLastRead : null;
+    const resumeSurahNum = (lastReadObj && lastReadObj.surah) || prefs.lastSurah;
+    const savedBookmarks = _getBookmarkAyahs();
+
+    let html = '<div class="quran-header iq-mushaf-plaque"><h2>' + iqIcon('book-open') + ' ' + window.escapeHTML(_tr('The Noble Quran', 'The Noble Quran')) + '</h2><div class="quran-sub">' + _fmtN(114) + ' ' + window.escapeHTML(_tr('Surahs', 'Surahs')) + ' &middot; ' + window.escapeHTML(_tr('Tap a surah to enter reading sanctuary', 'Tap a surah to enter reading sanctuary')) + '</div></div>';
+    if (resumeSurahNum) {
+      const lastS = QURAN_SURAHS.find(x => x.n === resumeSurahNum);
       if (lastS) {
+        const ayahPart = (lastReadObj && lastReadObj.ayah) ? (' · ' + window.escapeHTML(_tr('Ayah', 'Ayah')) + ' ' + _fmtN(lastReadObj.ayah)) : '';
         html += `<div class="iq-quran-continue-card" role="button" tabindex="0" onclick="App.openQuranSurah(${lastS.n})">
-          <div><div class="iq-qc-eyebrow">${window.escapeHTML(_tr('Continue Reading', 'Continue Reading'))}</div><div class="iq-qc-title"><span class="iq-tabular">${_fmtN(lastS.n)}</span>. ${lastS.en} &middot; <span class="iq-qc-ar">${lastS.ar}</span></div><div class="iq-qc-meta iq-tabular">${_fmtN(lastS.ay)} ${window.escapeHTML(_tr('verses', 'verses'))} &middot; ${window.escapeHTML(_tr(lastS.type, lastS.type))}</div></div>
+          <div><div class="iq-qc-eyebrow">${window.escapeHTML(_tr('Continue Reading', 'Continue Reading'))}</div><div class="iq-qc-title"><span class="iq-tabular">${_fmtN(lastS.n)}</span>. ${lastS.en} &middot; <span class="iq-qc-ar">${lastS.ar}</span></div><div class="iq-qc-meta iq-tabular">${_fmtN(lastS.ay)} ${window.escapeHTML(_tr('verses', 'verses'))}${ayahPart} &middot; ${window.escapeHTML(_tr(lastS.type, lastS.type))}</div></div>
           <span class="iq-pill-btn">${window.escapeHTML(_tr('Resume', 'Resume'))} <span class="iq-mirror-icon">&rsaquo;</span></span>
         </div>`;
       }
     }
     html += _renderKhatamCard();
     html += _renderQuranSanctuaryBar(prefs);
-    html += '<div class="tab-bar-quran" style="display:flex;justify-content:center;gap:6px;margin:0 auto 10px;">';
+    html += '<div class="tab-bar-quran" style="display:flex;justify-content:center;gap:6px;margin:0 auto 10px;flex-wrap:wrap;">';
     html += `<button type="button" class="${quranViewMode==='surah'?'active':''}" onclick="App.setQuranView('surah')">${window.escapeHTML(_tr('Surahs', 'Surahs'))}</button>`;
     html += `<button type="button" class="${quranViewMode==='juz'?'active':''}" onclick="App.setQuranView('juz')">${window.escapeHTML(_tr('Juz', 'Juz'))}</button>`;
+    html += `<button type="button" class="${quranViewMode==='bookmarks'?'active':''}" onclick="App.setQuranView('bookmarks')">${iqIcon('bookmark')} ${window.escapeHTML(_tr('Bookmarks', 'Bookmarks'))}${savedBookmarks.length ? ' (' + _fmtN(savedBookmarks.length) + ')' : ''}</button>`;
     html += '</div>';
     html += '<div style="display:flex;justify-content:center;width:100%;margin-bottom:10px;"><input class="quran-search" style="max-width:560px;" placeholder="' + window.escapeHTML(_tr('Search surah name...', 'Search surah name...')) + '" oninput="App.quranSearchFilter(this.value)"></div>';
 
@@ -1169,7 +1172,7 @@ function renderAll() {
     const qTr = (S && S.quranTranslation) || 'en';
     const isOffline = (typeof navigator !== 'undefined' && navigator.onLine === false);
     let html = '<button type="button" class="quran-back-btn" onclick="App.quranBack()"><span class="iq-mirror-icon">◀</span> ' + window.escapeHTML(_tr('Back to Surahs', 'Back to Surahs')) + '</button>';
-    html += `<div class="quran-header"><h2>${s.ar}</h2><div style="font-family:var(--iq-font-quran);font-size:1.3rem;color:var(--accent-dark);margin:4px 0;">${s.en}</div><div class="quran-sub iq-tabular">${_fmtN(s.ay)} ${window.escapeHTML(_tr('verses', 'verses'))} &middot; ${window.escapeHTML(_tr(s.type, s.type))}</div></div>`;
+    html += `<div class="quran-header iq-mushaf-plaque"><h2>${s.ar}</h2><div style="font-family:var(--iq-font-quran);font-size:1.3rem;color:var(--accent-dark);margin:4px 0;">${s.en}</div><div class="quran-sub iq-tabular">${_fmtN(s.ay)} ${window.escapeHTML(_tr('verses', 'verses'))} &middot; ${window.escapeHTML(_tr(s.type, s.type))}</div></div>`;
     html += _renderQuranSanctuaryBar(prefs);
     html += `<div style="display:flex;justify-content:center;align-items:center;gap:8px;flex-wrap:wrap;margin:8px 0 12px;"><button type="button" id="surahPlayBtn" class="surah-play-btn" style="min-height:44px;" onclick="App.playSurah(${surahNum})">&#9654; ${window.escapeHTML(_tr('Play Surah', 'Play Surah'))}</button><button type="button" class="surah-log-btn" style="min-height:44px;" onclick="window.logQuranMinutes && window.logQuranMinutes(5)"><bdi dir="ltr">+5m</bdi> ${window.escapeHTML(_tr('Read', 'Read'))}</button></div>`;
     if (isOffline) html += '<div class="iq-setting-sub" style="text-align:center;">Offline mode: complete Arabic &amp; translation text available offline; audio recitation requires internet connection.</div>';
@@ -1179,7 +1182,7 @@ function renderAll() {
       return m && parseInt(m[1]) === surahNum;
     });
     if (surahNum !== 1 && surahNum !== 9) {
-      html += `<div style="text-align:center;font-size:calc(1.6rem * var(--iq-quran-scale, 1));color:var(--accent-dark);font-family:var(--iq-font-quran);margin:16px 0;" dir="rtl">بِسْمِ ٱللَّهِ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ</div>`;
+      html += `<div class="iq-bismillah-banner" dir="rtl">بِسْمِ ٱللَّهِ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ</div>`;
     }
     if (verses.length === 0) {
       html += `<div class="quran-loading">No local verses available for this surah. ${s.ay} verses total.</div>`;
@@ -1190,18 +1193,25 @@ function renderAll() {
         const gIdx = globalAyahOf(surahNum, vNum) - 1;
         const arText = (qScript === 'indopak' && window.QURAN_INDOPAK_POOL && window.QURAN_INDOPAK_POOL[gIdx]) ? window.QURAN_INDOPAK_POOL[gIdx] : v.arabic;
         const bnText = (window.QURAN_BN_POOL && window.QURAN_BN_POOL[gIdx]) ? window.QURAN_BN_POOL[gIdx] : '';
+        const bmkId = 'q:' + surahNum + ':' + vNum;
+        const isSaved = (typeof S === 'object' && S && Array.isArray(S.bookmarks)) ? S.bookmarks.indexOf(bmkId) !== -1 : false;
         html += `<div class="verse-card quran-sanctuary-card">
           <div class="verse-num">${_fmtN(vNum)}</div>
-          <div class="verse-arabic" dir="rtl" data-script="quran">${arText}</div>
+          <div class="verse-arabic" dir="rtl" data-script="quran">${arText} <span class="iq-ayah-end" dir="rtl">&#x06DD;${_toArabicDigits(vNum)}</span></div>
           ${v.roman ? `<div style="font-size:0.85rem;color:var(--text2);font-style:italic;margin:6px 0;line-height:1.5;">${window.escapeHTML(v.roman)}</div>` : ''}
           ${(qTr === 'en' || qTr === 'both') ? `<div class="verse-english">${window.escapeHTML(v.english || '')}</div>` : ''}
           ${(qTr === 'bn' || qTr === 'both') && bnText ? `<div class="verse-english iq-script-bn" lang="bn" style="margin-top:6px;">${window.escapeHTML(bnText)}</div>` : ''}
-          <button class="verse-play-btn" data-surah="${surahNum}" data-verse="${vNum}" onclick="App.playQuranVerse(${surahNum},${vNum})" aria-label="Play verse ${vNum}">▶</button>
+          <div class="verse-actions">
+            <button type="button" class="iq-verse-bmk-btn${isSaved ? ' active' : ''}" aria-pressed="${isSaved ? 'true' : 'false'}" aria-label="Bookmark verse ${surahNum}:${vNum}" onclick="window._toggleQuranVerseBookmark(${surahNum},${vNum},this)">${iqIcon('bookmark')}</button>
+            <button type="button" class="verse-play-btn" data-surah="${surahNum}" data-verse="${vNum}" onclick="App.playQuranVerse(${surahNum},${vNum})" aria-label="Play verse ${vNum}">▶</button>
+          </div>
         </div>`;
       });
     }
     html += '<div class="iq-attribution-card" style="font-size:0.78rem;">Sources: Arabic Uthmani (Tanzil / KFGQPC), Indo-Pak (Quran.com), English (Saheeh International), Bangla (Taisirul Quran). <button type="button" class="iq-text-btn" style="padding:2px 6px;min-height:32px;" onclick="App.openContentErrorModal && App.openContentErrorModal(\'Surah ' + surahNum + '\')">Report text issue</button></div>';
     el.innerHTML = html;
+    updateAudioButtons();
+    updateSurahButton();
   }
 
   function renderQuranJuz(el, juzNum) {
@@ -1229,11 +1239,10 @@ function renderAll() {
     const verseCount = endG - startG + 1;
 
     let html = '<button type="button" class="quran-back-btn" onclick="App.quranBack()"><span class="iq-mirror-icon">◀</span> ' + window.escapeHTML(_tr('Back to Juzes', 'Back to Juzes')) + '</button>';
-    html += `<div class="quran-header"><h2>${window.escapeHTML(_tr('Juz', 'Juz'))} ${_fmtN(juzNum)} &middot; ${j ? j.name : ''}</h2><div style="font-family:var(--iq-font-quran);font-size:1.2rem;color:var(--accent-dark);margin:4px 0;">${startS.en} <span class="iq-mirror-icon">&rarr;</span> ${endS.en}</div><div class="quran-sub iq-tabular"><bdi dir="ltr">${_fmtN(startS.n)}:${_fmtN(firstLocal)}</bdi> &middot; <bdi dir="ltr">${_fmtN(endS.n)}:${_fmtN(lastLocal)}</bdi> &middot; ${_fmtN(verseCount)} ${window.escapeHTML(_tr('verses', 'verses'))}</div></div>`;
+    html += `<div class="quran-header iq-mushaf-plaque"><h2>${window.escapeHTML(_tr('Juz', 'Juz'))} ${_fmtN(juzNum)} &middot; ${j ? j.name : ''}</h2><div style="font-family:var(--iq-font-quran);font-size:1.2rem;color:var(--accent-dark);margin:4px 0;">${startS.en} <span class="iq-mirror-icon">&rarr;</span> ${endS.en}</div><div class="quran-sub iq-tabular"><bdi dir="ltr">${_fmtN(startS.n)}:${_fmtN(firstLocal)}</bdi> &middot; <bdi dir="ltr">${_fmtN(endS.n)}:${_fmtN(lastLocal)}</bdi> &middot; ${_fmtN(verseCount)} ${window.escapeHTML(_tr('verses', 'verses'))}</div></div>`;
     html += _renderQuranSanctuaryBar(prefs);
     html += `<div style="display:flex;justify-content:center;align-items:center;gap:8px;flex-wrap:wrap;margin:8px 0 12px;"><button type="button" id="juzPlayBtn" class="surah-play-btn" style="min-height:44px;" onclick="App.playJuz(${juzNum})">&#9654; ${window.escapeHTML(_tr('Play Juz', 'Play Juz'))}</button><button type="button" class="surah-log-btn" style="min-height:44px;" onclick="window.logQuranMinutes && window.logQuranMinutes(5)"><bdi dir="ltr">+5m</bdi> ${window.escapeHTML(_tr('Read', 'Read'))}</button></div>`;
-    if (startS.n !== 1) { html += `<div style="text-align:center;font-size:calc(1.6rem * var(--iq-quran-scale, 1));color:var(--accent-dark);font-family:var(--iq-font-quran);margin:16px 0;" dir="rtl">بِسْمِ ٱللَّهِ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ</div>`; }
-
+    if (startS.n !== 1) { html += `<div class="iq-bismillah-banner" dir="rtl">بِسْمِ ٱللَّهِ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ</div>`; }
 
     const verses = [];
     QURAN_POOL.forEach(v => {
@@ -1255,13 +1264,18 @@ function renderAll() {
         const gIdx = globalAyahOf(surah, ayah) - 1;
         const arText = (qScriptJ === 'indopak' && window.QURAN_INDOPAK_POOL && window.QURAN_INDOPAK_POOL[gIdx]) ? window.QURAN_INDOPAK_POOL[gIdx] : v.arabic;
         const bnText = (window.QURAN_BN_POOL && window.QURAN_BN_POOL[gIdx]) ? window.QURAN_BN_POOL[gIdx] : '';
+        const bmkId = 'q:' + surah + ':' + ayah;
+        const isSaved = (typeof S === 'object' && S && Array.isArray(S.bookmarks)) ? S.bookmarks.indexOf(bmkId) !== -1 : false;
         html += `<div class="verse-card quran-sanctuary-card">
           <div class="verse-num">${_fmtN(surah)}:${_fmtN(ayah)}</div>
-          <div class="verse-arabic" dir="rtl" data-script="quran">${arText}</div>
+          <div class="verse-arabic" dir="rtl" data-script="quran">${arText} <span class="iq-ayah-end" dir="rtl">&#x06DD;${_toArabicDigits(ayah)}</span></div>
           ${v.roman ? `<div style="font-size:0.85rem;color:var(--text2);font-style:italic;margin:6px 0;line-height:1.5;">${window.escapeHTML(v.roman)}</div>` : ''}
           ${(qTrJ === 'en' || qTrJ === 'both') ? `<div class="verse-english">${window.escapeHTML(v.english || '')}</div>` : ''}
           ${(qTrJ === 'bn' || qTrJ === 'both') && bnText ? `<div class="verse-english iq-script-bn" lang="bn" style="margin-top:6px;">${window.escapeHTML(bnText)}</div>` : ''}
-          <button class="verse-play-btn" data-surah="${surah}" data-verse="${ayah}" onclick="App.playQuranVerse(${surah},${ayah})" aria-label="Play verse ${surah}:${ayah}">▶</button>
+          <div class="verse-actions">
+            <button type="button" class="iq-verse-bmk-btn${isSaved ? ' active' : ''}" aria-pressed="${isSaved ? 'true' : 'false'}" aria-label="Bookmark verse ${surah}:${ayah}" onclick="window._toggleQuranVerseBookmark(${surah},${ayah},this)">${iqIcon('bookmark')}</button>
+            <button type="button" class="verse-play-btn" data-surah="${surah}" data-verse="${ayah}" onclick="App.playQuranVerse(${surah},${ayah})" aria-label="Play verse ${surah}:${ayah}">▶</button>
+          </div>
         </div>`;
       });
       html += '<div class="iq-attribution-card" style="font-size:0.78rem;">Sources: Arabic Uthmani (Tanzil / KFGQPC), Indo-Pak (Quran.com), English (Saheeh International), Bangla (Taisirul Quran). <button type="button" class="iq-text-btn" style="padding:2px 6px;min-height:32px;" onclick="App.openContentErrorModal && App.openContentErrorModal(\'Juz ' + juzNum + '\')">Report text issue</button></div>';
@@ -1287,7 +1301,13 @@ function renderAll() {
   function openQuranSurah(num) {
     quranCurrentSurah = num;
     quranCurrentJuz = null;
-    if (Number.isInteger(num) && num >= 1 && num <= 114) _saveQuranPrefs({ lastSurah: num });
+    if (Number.isInteger(num) && num >= 1 && num <= 114) {
+      _saveQuranPrefs({ lastSurah: num });
+      if (typeof S === 'object' && S) {
+        S.quranLastRead = { surah: num, ayah: (S.quranLastRead && S.quranLastRead.surah === num && S.quranLastRead.ayah) || 1 };
+        if (typeof saveState === 'function') saveState();
+      }
+    }
     renderQuran();
   }
   function quranBack() { quranCurrentSurah = null; quranCurrentJuz = null; renderQuran(); }
@@ -1514,12 +1534,10 @@ function renderAll() {
   window.renderToday = renderToday;
   window.renderLv = renderLv;
   window.renderStr = renderStr;
-  window.renderBonus = renderBonus;
   window.renderTopBar = renderTopBar;
   window.renderQ = renderQ;
   window.renderAch = renderAch;
   window.renderProg = renderProg;
-  window.renderShop = renderShop;
   window.renderProfile = renderProfile;
   window.renderStats = renderStats;
   window.renderQuran = renderQuran;

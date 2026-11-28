@@ -189,7 +189,7 @@ const IQ_IDS = {
   'download':'save', 'upload':'refresh-cw',
   'snowflake':'snow',
   /* Category-id safety nets (generic renderers fall back to the id as icon key) */
-  'core':'home', 'worship':'mosque', 'tracking':'bar-chart-3',
+  'core':'home', 'worship':'beads', 'tracking':'bar-chart-3',
   'names':'sparkles',
   'masjid':'mosque', 'compass':'target'
 };

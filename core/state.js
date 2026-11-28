@@ -38,11 +38,11 @@ function resolveCurrentUser() {
       quranAudioReciter:7, hadithTTSLang:'ar', tafsirEdition:'ibnkathir', tafsirLookup:{surah:1,ayah:1},
       avatar:'', joinDate:null,
       healthLog:{}, financeLog:{},
-      growthSettings:{visible:['garden','lantern','keys','mosque','boat','ramadan','laylat']},
+      growthSettings:{visible:['garden']},
       theme:'light', seasonalAccent:true, numerals:'auto', bnTermMode:'namaz',
       scriptScale:1, soundEnabled:false, adhanAudio:'off', hijriOffset:0,
       quranScript:'uthmani', quranTranslation:'both',
-      khatamGoal:{targetDays:30,pagesRead:0}, hifzSrs:[],
+      khatamGoal:{targetDays:30,pagesRead:0}, quranLastRead:null, hifzSrs:[],
       lastTab:'home', lastCat:null, lastSub:null, introSeen:false,
       onboarding:{complete:false,step:0},
       notificationsEnabled:false, notificationLog:{},
@@ -96,32 +96,18 @@ function resolveCurrentUser() {
       manners:'character-path', zuhd:'character-path', sufism:'character-path', tazkiyah:'character-path', inspirations:'character-path', reflection:'character-path',
       family:'family-life', marriage:'family-life', parenting:'family-life',
       neighbors:'community', brotherhood:'community', sisterhood:'community', ummah:'community', antiracism:'community',
-      orphans2:'service', elderly:'service', disabled:'service', poverty:'service', volunteering:'service', dawah:'service',
-      work:'work-justice', punishments:'work-justice',
+      orphans2:'service', elderly:'service', disabled:'service', poverty:'service', volunteering:'service',
       health:'wellness', tibb:'wellness', mentalhealth:'wellness',
-      food:'earth-living', environment:'earth-living', green:'earth-living', travel:'earth-living',
-      youth:'youth-tech', tech:'youth-tech', technology:'youth-tech', socialmedia:'youth-tech', education:'youth-tech',
-      ethics:'ethics-finance', bioethics:'ethics-finance', modfinance:'ethics-finance', politics:'ethics-finance',
-      mecca:'holy-cities', medina:'holy-cities', jerusalem:'holy-cities',
-      damascus:'capitals', baghdad:'capitals', cairo:'capitals', cordoba:'capitals', istanbul:'capitals',
-      bukhara:'east', samarkand:'east',
-      calligraphy:'pattern', illumination:'pattern',
-      architecture:'sacred-space', geometry:'sacred-space',
-      textiles:'living-crafts', ceramics:'living-crafts', woodwork:'living-crafts', nasheeds:'living-crafts',
-      literature:'word',
-      arabicgrammar:'structure', morphology:'structure', rhetoric:'structure', etymology:'structure',
-      pronunciation:'sound-script', scripts:'sound-script', dialects:'sound-script',
-      vocab:'words-poetry', proverbs:'words-poetry', poetry:'words-poetry', poetryart:'words-poetry',
-      ontology:'being', existence:'being', prophethood:'being',
-      epistemology:'knowing', logic:'knowing', reason:'knowing', kalam:'knowing',
-      freewill:'will-evil', problemofevil:'will-evil'
+      finance:'charity', zakatcalc:'charity', gratitude:'healthlog',
+      rewards:'profile', growth:'progress',
+      science:'seerah', civilisation:'seerah', battles:'seerah', dreams:'akhirah'
     };
     if (p.lastTab && TAB_REMAP[p.lastTab]) p.lastTab = TAB_REMAP[p.lastTab];
-    if (p.lastCat === 'creed') p.lastCat = 'arabic';
+    if (p.lastSub && TAB_REMAP[p.lastSub]) p.lastSub = TAB_REMAP[p.lastSub];
+    if (p.lastCat === 'creed' || p.lastCat === 'names_main' || p.lastCat === 'library') p.lastCat = 'knowledge';
+    if (p.lastCat === 'rewards' || p.lastCat === 'growth') p.lastCat = 'profile_main';
     if (p.growthSettings && Array.isArray(p.growthSettings.visible)) {
-      for (var f of d.growthSettings.visible) {
-        if (!p.growthSettings.visible.includes(f)) p.growthSettings.visible.push(f);
-      }
+      p.growthSettings.visible = ['garden'];
     }
     if (p.lastActiveDate && typeof p.lastActiveDate === 'string') {
       if (!p.lad || p.lastActiveDate > p.lad) p.lad = p.lastActiveDate;

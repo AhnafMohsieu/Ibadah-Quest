@@ -396,11 +396,13 @@
   function _renderNextPrayerPillHtml(cachedTimes) {
     const settings = getPrayerSettings();
     const nextInfo = cachedTimes ? computeNextPrayer(cachedTimes) : null;
+    const bearing = Math.round(computeQiblaBearing(settings.lat, settings.lng));
     const pill = nextInfo
       ? `<button type="button" id="iqNextPrayerPill" class="iq-next-prayer-pill" onclick="App.activateTab('timer')">${safePrayerText(tr('Next'))}: <strong>${safePrayerText(tr(nextInfo.name))}</strong> &middot; <span class="iq-no-mirror">${safePrayerText(nfmt(nextInfo.timeLabel))}</span> <span class="iq-pill-eta">${safePrayerText(nfmt(nextInfo.shortRemaining))}</span></button>`
       : `<button type="button" id="iqNextPrayerPill" class="iq-next-prayer-pill" onclick="App.activateTab('timer')">${safePrayerText(tr('Prayer Times'))} &middot; ${safePrayerText(settings.label)} &rsaquo;</button>`;
+    const qiblaBtn = `<button type="button" class="iq-qibla-mini-btn" onclick="App.activateTab('timer')" aria-label="Qibla ${bearing} degrees">${iqIcon('compass')} <span class="iq-tabular iq-no-mirror">${safePrayerText(nfmt(bearing))}&deg;</span></button>`;
     const pauseBtn = `<button type="button" class="iq-pause-btn${settings.paused ? ' active' : ''}" onclick="App.togglePrayerPause()" aria-pressed="${!!settings.paused}" title="Rest or travel grace pause (nothing personal is stored)">${safePrayerText(settings.paused ? tr('Rest Mode Active') : tr('Grace Mode'))}</button>`;
-    return `<div class="iq-prayer-header-actions">${pill}${pauseBtn}</div>`;
+    return `<div class="iq-prayer-header-actions">${pill}${qiblaBtn}${pauseBtn}</div>`;
   }
 
   function renderPrayers() {
@@ -544,13 +546,38 @@
         </div>`;
       }).join('') + '</div>';
 
-      const qiblaHtml = `<div class="content-card" style="margin-top:16px;text-align:center;align-items:center;">
-        <div style="font-weight:700;color:var(--accent-dark);margin-bottom:8px;">${iqIcon('compass')} ${safePrayerText(tr('Qibla Direction'))} &middot; ${safePrayerText(settings.label)}</div>
-        <div class="iq-no-mirror" style="position:relative;width:124px;height:124px;margin:8px auto;border-radius:50%;border:2px solid var(--accent);display:flex;align-items:center;justify-content:center;background:var(--surface-subtle);">
-          <span style="position:absolute;top:4px;font-size:0.7rem;font-weight:700;color:var(--text2);">N</span>
-          <div id="iqQiblaNeedle" style="width:4px;height:86px;background:linear-gradient(to bottom, var(--accent) 50%, var(--border) 50%);border-radius:4px;transform:rotate(${bearing.toFixed(1)}deg);transition:transform 0.25s ease;"></div>
+      const bearingDeg = bearing.toFixed(1);
+      const qiblaHtml = `<div class="content-card iq-qibla-card" style="margin-top:16px;text-align:center;align-items:center;">
+        <div class="iq-qibla-head">${iqIcon('compass')} <span>${safePrayerText(tr('Qibla Direction'))} &middot; ${safePrayerText(settings.label)}</span></div>
+        <div class="iq-qibla-dial-wrap iq-no-mirror" aria-label="Qibla compass bearing ${bearingDeg} degrees ${safePrayerText(cardinalDir(bearing))}">
+          <span class="iq-qibla-cardinal iq-qc-n" aria-hidden="true">N</span>
+          <span class="iq-qibla-cardinal iq-qc-e" aria-hidden="true">E</span>
+          <span class="iq-qibla-cardinal iq-qc-s" aria-hidden="true">S</span>
+          <span class="iq-qibla-cardinal iq-qc-w" aria-hidden="true">W</span>
+          <svg class="iq-qibla-dial-svg" viewBox="0 0 220 220" width="184" height="184" aria-hidden="true">
+            <circle cx="110" cy="110" r="98" fill="none" stroke="var(--border)" stroke-width="1.5"/>
+            <circle cx="110" cy="110" r="82" fill="var(--surface-subtle)" stroke="var(--accent-soft)" stroke-width="1.2" stroke-dasharray="3 4"/>
+            <circle cx="110" cy="110" r="56" fill="none" stroke="var(--border-light)" stroke-width="1"/>
+            <g stroke="var(--text3)" stroke-width="1.5" stroke-linecap="round">
+              <line x1="110" y1="12" x2="110" y2="24" stroke="var(--accent-dark)" stroke-width="2.5"/>
+              <line x1="208" y1="110" x2="196" y2="110"/>
+              <line x1="110" y1="208" x2="110" y2="196"/>
+              <line x1="12" y1="110" x2="24" y2="110"/>
+              <line x1="179" y1="41" x2="172" y2="48"/>
+              <line x1="179" y1="179" x2="172" y2="172"/>
+              <line x1="41" y1="179" x2="48" y2="172"/>
+              <line x1="41" y1="41" x2="48" y2="48"/>
+            </g>
+          </svg>
+          <svg id="iqQiblaNeedle" class="iq-qibla-needle-svg" viewBox="0 0 220 220" width="184" height="184" style="transform:rotate(${bearingDeg}deg);transition:transform 0.25s ease;" aria-hidden="true">
+            <polygon points="110,28 119,104 110,96 101,104" fill="var(--accent)" stroke="var(--accent-dark)" stroke-width="1.5" stroke-linejoin="round"/>
+            <rect x="103" y="34" width="14" height="14" rx="2.5" fill="var(--accent-dark)" stroke="var(--gold)" stroke-width="1.8"/>
+            <line x1="103" y1="39" x2="117" y2="39" stroke="var(--gold)" stroke-width="1.6"/>
+            <polygon points="110,188 116,116 110,122 104,116" fill="var(--border)" stroke="var(--text3)" stroke-width="1"/>
+            <circle cx="110" cy="110" r="7" fill="var(--surface)" stroke="var(--accent-dark)" stroke-width="2.5"/>
+          </svg>
         </div>
-        <div class="iq-tabular" style="font-weight:700;font-size:1rem;"><bdi dir="ltr">${nfmt(bearing.toFixed(1))}&deg; ${safePrayerText(cardinalDir(bearing))}</bdi></div>
+        <div class="iq-tabular iq-qibla-bearing"><bdi dir="ltr">${nfmt(bearingDeg)}&deg; ${safePrayerText(cardinalDir(bearing))}</bdi></div>
         <div id="iqQiblaSensorStatus" style="font-size:0.78rem;color:var(--text2);margin:6px 0;text-align:center;">${safePrayerText(tr('Measured clockwise from True North (offline great-circle bearing).'))}</div>
         <button type="button" class="iq-pill-btn" onclick="window.toggleQiblaCompass()">${safePrayerText(tr('Enable Live Compass'))}</button>
       </div>`;

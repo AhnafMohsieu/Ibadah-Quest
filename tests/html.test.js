@@ -15,8 +15,6 @@ const renderPrayers = fs.readFileSync(path.join(root, 'core', 'render-prayers.js
 const renderCalendar = fs.readFileSync(path.join(root, 'core', 'calendar.js'), 'utf8');
 const renderTabs = fs.readFileSync(path.join(root, 'core', 'tabs.js'), 'utf8');
 const renderAll = render + renderDynamic + renderStatic + renderPrayers + renderCalendar;
-const spiritual = fs.readFileSync(path.join(root, 'features', 'spiritual-growth', 'data.js'), 'utf8');
-const spiritualGrowth = fs.readFileSync(path.join(root, 'features', 'spiritual-growth', 'index.js'), 'utf8');
 const actions = fs.readFileSync(path.join(root, 'core', 'actions.js'), 'utf8');
 const dhikr = fs.readFileSync(path.join(root, 'core', 'dhikr.js'), 'utf8');
 const iqShell = fs.readFileSync(path.join(root, 'features', 'iq-shell.js'), 'utf8');
@@ -95,7 +93,7 @@ test('hadith/dhikr audio, offline fonts, and adhan modules wired cleanly', () =>
   assert.ok(html.includes('<script src="features/hadith-library.js?v=3" defer></script>'));
   assert.ok(html.includes('<script src="features/tafsir-library.js?v=3" defer></script>'));
   assert.ok(html.includes('styles/tokens.css?v=3'));
-  assert.ok(html.includes('styles/main.css?v=56'));
+  assert.ok(html.includes('styles/main.css?v=59'));
   assert.ok(html.includes('features/daily-content.js?v=4'));
   assert.ok(html.includes('features/notifications.js?v=3'));
   assert.ok(html.includes('assets/vendor/adhan.umd.min.js'));
@@ -123,7 +121,7 @@ test('shell surfaces use clean borders and rounded corners', () => {
 test('cards use clean borders and accent colors', () => {
   assert.ok(css.includes('.card-item:hover') || css.includes('.card-item'));
   assert.ok(css.includes('background: var(--card-bg)') || css.includes('.content-card'));
-  const cardClasses = ['.card-item', '.vol-card', '.deed-card', '.content-card', '.shop-card', '.prayer-card', '.spiritual-card'];
+  const cardClasses = ['.card-item', '.vol-card', '.deed-card', '.content-card', '.prayer-card', '.spiritual-card'];
   assert.ok(cardClasses.some((sel) => {
     const idx = css.indexOf(sel);
     return idx > -1 && css.slice(idx, idx + 400).includes('var(--card-border)');
@@ -174,59 +172,20 @@ test('theme families have animation transitions in CSS', () => {
   assert.ok(css.includes('var(--transition)') || css.includes('transition:'), 'transition token missing');
 });
 
-test('FEATURE_ICONS are populated with emoji strings for all features', () => {
-  for (const f of ['garden','lantern','keys','mosque','boat','ramadan','laylat']) {
-    assert.ok(spiritual.includes(`${f}: `), `missing icon key for ${f}`);
-    const iconBlock = spiritual.slice(spiritual.indexOf(`${f}: `), spiritual.indexOf(`${f}: `) + 40);
-    assert.ok(!iconBlock.includes("iqIcon("), `FEATURE_ICONS should use emoji strings, not iqIcon() — ${f}`);
-    assert.ok(!iconBlock.includes("''"), `icon must not be empty string — ${f}`);
-  }
-});
-
-test('growth tab + settings render emoji icons, no mojibake separator', () => {
-  assert.ok(spiritualGrowth.indexOf('progress.icon') > -1 || spiritualGrowth.indexOf('FEATURE_ICONS') > -1,
-    'growth tab stage emoji must use progress.icon or FEATURE_ICONS');
-  assert.ok(!spiritualGrowth.includes(' ? Stage'),
-    'growth tab stage label must not contain mojibake " ? "');
-  assert.ok(spiritualGrowth.indexOf('FEATURE_ICONS[f]') > -1 || spiritualGrowth.indexOf('progress.icon') > -1,
-    'growth settings icon fallback must use FEATURE_ICONS or progress.icon');
-});
-
 test('index.html declares knowledge heartArea without removed armor/heart growth scripts', () => {
   assert.ok(!html.includes('id="armorArea"'), 'armorArea should be removed');
   assert.ok(html.includes('id="heartArea"'), 'knowledge heartArea missing');
   assert.ok(!html.includes('id="growthHeartArea"'), 'growthHeartArea should be removed');
   assert.ok((html.match(/id="heartArea"/g) || []).length === 1, 'heartArea must appear exactly once');
-  assert.ok(!html.includes('features/spiritual-growth/armor.js'), 'armor script should be removed');
-  assert.ok(!html.includes('features/spiritual-growth/heart.js'), 'heart script should be removed');
+  assert.ok(!html.includes('features/spiritual-growth/'), 'spiritual-growth extra widgets removed');
 });
 
-test('spiritual growth keeps exactly 7 features spread across distinct panels with garden on today', () => {
-  const vm = require('node:vm');
-  const sb = { window: {} };
-  vm.runInNewContext(spiritual, sb);
-  const keys = Object.keys(sb.window.SpiritualGrowth.STAGES);
-  assert.deepStrictEqual(keys, ['garden', 'lantern', 'mosque', 'boat', 'keys', 'ramadan', 'laylat']);
-  const growthAreas = ['gardenArea', 'lanternArea', 'mosqueArea', 'boatArea', 'keysArea', 'ramadanArea', 'laylatArea'];
-  const panelForArea = {};
-  const panelRegex = /<div class="tab-panel[^"]*"[^>]*id="(panel-[^"]+)"[^>]*>([\s\S]*?)<\/div>\s*(?=<div class="tab-panel|<\/section)/g;
-  let m;
-  while ((m = panelRegex.exec(html)) !== null) {
-    const [, panelId, body] = m;
-    const found = growthAreas.filter((id) => body.includes(`id="${id}"`));
-    assert.ok(found.length <= 1, `${panelId} hosts multiple growth areas: ${found.join(', ')}`);
-    for (const id of found) panelForArea[id] = panelId;
-  }
-  assert.strictEqual(panelForArea.gardenArea, 'panel-today', 'gardenArea must stay in panel-today');
-  assert.strictEqual(Object.keys(panelForArea).length, 7, 'every growth area must belong to a distinct tab-panel');
-});
-
-test('growth renderers are wired into renderDynamic and tab render paths', () => {
-  for (const name of ['renderKeys','renderMosque','renderRamadan','renderLaylat']) {
-    assert.ok(renderAll.includes(`window.${name}`), `renderDynamic must reference ${name}`);
-  }
-  for (const key of ["keys:'renderKeys'","mosque:'renderMosque'","ramadan:'renderRamadan'","laylat:'renderLaylat'"]) {
-    assert.ok(actions.includes(key) || renderTabs.includes(key), `_lazyRender must map ${key}`);
+test('streamlined spiritual growth keeps one peaceful garden in panel-progress', () => {
+  assert.ok(html.includes('id="gardenArea"'), 'gardenArea missing');
+  assert.ok(html.slice(html.indexOf('id="panel-progress"'), html.indexOf('id="panel-stats"')).includes('id="gardenArea"'),
+    'gardenArea must live in panel-progress');
+  for (const retired of ['lanternArea', 'mosqueArea', 'boatArea', 'keysArea', 'ramadanArea', 'laylatArea']) {
+    assert.ok(!html.includes(`id="${retired}"`), `retired widget container ${retired} must be removed`);
   }
 });
 
@@ -323,12 +282,12 @@ test('top-bar: updateTopBar delegates to renderTopBar (single writer)', () => {
   assert.ok(!src.includes("getElementById('tbStreak')"), 'updateTopBar must not write streak directly');
 });
 
-test('hero header markup is restored with all ids', () => {
-  for (const id of ['headerCrescent','lvNum','lvTitle','xpBar','xpLabel','strDays','strMsg','bestStr','streakFire']) {
-    assert.ok(html.includes(`id="${id}"`), `missing hero id ${id}`);
+test('decluttered Home hero prioritizes daily worship cues while topbar keeps level/XP telemetry', () => {
+  for (const id of ['tbLevel','tbTitle','tbXP','tbStreak','iqHeroChallenge','prayerArea','iqFeedArea']) {
+    assert.ok(html.includes(`id="${id}"`), `missing hero/telemetry id ${id}`);
   }
-  assert.ok(html.includes('Ibadah Quest'), 'hero title must be present');
-  assert.ok(html.includes('Submission. Grow. Earn. Ascend.'), 'hero tagline must be present');
+  assert.ok(html.includes('Ibadah Quest'), 'app title must be present');
+  assert.ok(!html.includes('id="bonusArea"') && !html.includes('id="comboDisplay"'), 'clutter bonus/combo divs removed');
 });
 
 test('hero renderers are real and wired into renderDynamic', () => {
@@ -353,28 +312,28 @@ test('3-dot drawer removes multi-theme/dark-mode controls from drawer footer', (
   assert.ok(!actions.includes('toggleTheme') && !actions.includes('setTheme'), 'theme switcher actions removed from App facade');
 });
 
-test('hero header styles exist with clean design tokens', () => {
-  assert.ok(css.includes('.header-crescent') || css.includes('.header'), 'header style missing');
+test('sanctuary hero and desktop rail styles exist cleanly', () => {
+  assert.ok(css.includes('.iq-sanctuary-hero'), 'sanctuary hero style missing');
+  assert.ok(css.includes('.iq-left-rail'), 'desktop navigation rail style missing');
   assert.ok(css.includes('.xp-inner'), 'xp bar style missing');
-  assert.ok(css.includes('.streak-bar'), 'streak bar style missing');
   assert.ok(css.includes('.best-num'), 'best number style missing');
 });
 
-test('hero is wrapped in compact hero-strip and keeps all ids', () => {
+test('worship-first Home keeps hero-strip streamlined and sanctuary panels intact', () => {
   const stripIdx = html.indexOf('class="hero-strip"');
   assert.ok(stripIdx > -1, 'hero-strip wrapper missing');
-  const stripHtml = html.slice(stripIdx, stripIdx + 1600);
-  for (const id of ['headerCrescent','lvNum','lvTitle','xpBar','xpLabel','strDays','strMsg','bestStr','streakFire']) {
-    assert.ok(stripHtml.includes(`id="${id}"`), `hero-strip must contain ${id}`);
-  }
+  assert.ok(html.includes('id="dateLine"'), 'dateLine missing');
+  assert.ok(html.includes('id="iqHeroChallenge"') && html.includes('id="prayerArea"'), 'sanctuary hero panels missing');
+  assert.ok(html.includes('id="iqLeftRail"'), 'desktop navigation rail missing');
   assert.ok(css.includes('.hero-strip'), 'hero-strip styles missing');
 });
 
-test('bottom nav dock exists with main category slots and centered challenge button', () => {
+test('bottom nav dock exists with 4 main category slots and centered crescent button', () => {
   assert.ok(html.includes('id="bnav"'), 'bottom nav missing');
-  for (const c of ['ibadah','knowledge','library','profile_main']) {
+  for (const c of ['ibadah','worship','knowledge','profile_main']) {
     assert.ok(html.includes(`data-cat="${c}"`), `bottom nav missing ${c}`);
   }
+  assert.ok(!html.includes('data-cat="library"'), 'library must be removed from bottom dock');
   assert.ok(html.includes('id="bnavCenterFab"'), 'center challenge button missing');
   assert.ok(html.includes('class="bnav-btn'), 'bnav-btn class missing');
   assert.ok(css.includes('.bnav'), 'bnav styles missing');
@@ -515,8 +474,8 @@ test('small phones get compact stacked bnav labels and hero polish', () => {
   const b = css.slice(i, i + 900);
   assert.ok(b.includes('.bnav-label{font-size:var(--fs-2xs);}'),
     'bnav labels must shrink on small phones');
-  assert.ok(b.includes('.streak-bar{padding:10px 12px;}'),
-    'hero must tighten on small phones');
+  assert.ok(css.includes('.bnav-center-fab'),
+    'center crescent dock styles must exist for small phones');
 });
 
 test('calm rendering: no fade replay, finite shimmers, no layout transitions', () => {
@@ -684,13 +643,6 @@ test('interpretation tab mounts the tafsir browser', () => {
     'freshState must carry the lookup');
 });
 
-test('MPA track: all 5 pages reference module entries', () => {
-  for (const p of ['today', 'ibadah', 'knowledge', 'library', 'profile']) {
-    const page = fs.readFileSync(path.join(root, 'src', 'pages', p, p + '.html'), 'utf8');
-    assert.ok(page.includes('type="module"'), p + ' must load its entry as a module');
-  }
-});
-
 test('SP1: equal prayer cards, info hit area, FAB a11y', () => {
   const calGutter = '.cal-header .cal-nav:last-child{padding-right:64px}';
   assert.ok(!css.includes(calGutter), 'calendar header must stay symmetric without corner FAB gutter');
@@ -708,7 +660,7 @@ test('SP1: info buttons are labelled and keyboard-operable', () => {
   const labelledMatches = (renderPrayers + renderStatic).match(/aria-label="Details: /g) || [];
   assert.strictEqual(labelledMatches.length, 5, 'all five info-button templates must be labelled');
   assert.ok(renderPrayers.includes('<button type="button" class="card-info-btn"'), 'prayer info button uses semantic <button>');
-  assert.ok(actions.includes("'.card-item, .vol-card, .shop-card, .card-info-btn'"),
+  assert.ok(actions.includes("'.card-item, .vol-card, .card-info-btn'"),
     'keydown handler must cover info buttons');
 });
 
@@ -763,15 +715,16 @@ test('Option 3 shell & remodeled 2x2 Bento drawer tab section', () => {
   assert.ok(html.includes('id="iqChallengeSheet"'), 'challenge progress ring slide-over sheet missing');
   assert.ok(html.includes('id="iqMasjidSheet"'), 'masjid check-ins slide-over sheet missing');
   assert.ok(html.includes('id="bnavCenterFab"'), 'elevated center dock crescent button missing');
+  assert.ok(html.includes('id="iqLeftRail"'), 'desktop left navigation rail missing');
   assert.ok(html.includes('features/masjid-checkins.js?v=3'), 'masjid-checkins script v=3 missing');
-  assert.ok(html.includes('features/iq-shell.js?v=8'), 'iq-shell script v=8 missing');
-  assert.ok(html.includes('core/prayers.js?v=6'), 'core/prayers.js script v=6 missing');
+  assert.ok(html.includes('features/iq-shell.js?v=9'), 'iq-shell script v=9 missing');
+  assert.ok(html.includes('core/prayers.js?v=7'), 'core/prayers.js script v=7 missing');
   assert.ok(html.includes('core/render-prayers.js?v=9'), 'render-prayers.js script v=9 missing');
   assert.ok(html.includes('core/static.js?v=12'), 'core/static.js script v=12 missing');
-  assert.ok(html.includes('core/dynamic.js?v=20'), 'dynamic.js script v=20 missing');
+  assert.ok(html.includes('core/dynamic.js?v=21'), 'dynamic.js script v=21 missing');
   assert.ok(html.includes('core/tabs.js?v=18'), 'core/tabs.js script v=18 missing');
   assert.ok(html.includes('features/daily-summary.js?v=4'), 'daily-summary script v=4 missing');
-  assert.ok(html.includes('core/actions.js?v=29'), 'core/actions.js script v=29 missing');
+  assert.ok(html.includes('core/actions.js?v=30'), 'core/actions.js script v=30 missing');
   assert.ok(renderPrayers.includes('computeNextPrayer'), 'render-prayers.js must expose computeNextPrayer');
   assert.ok(renderPrayers.includes('updatePrayerSettings'), 'render-prayers.js must expose updatePrayerSettings');
   assert.ok(renderPrayers.includes('togglePrayerPause'), 'render-prayers.js must expose togglePrayerPause');
@@ -779,17 +732,21 @@ test('Option 3 shell & remodeled 2x2 Bento drawer tab section', () => {
   assert.ok(renderDynamic.includes('adjustQuranFont') && renderDynamic.includes('setQuranTint'), 'dynamic.js must offer Quran Sanctuary typography and tint controls');
   assert.ok(renderStatic.includes('iq-tasbeeh-orb'), 'static.js must render tactile Tasbeeh SVG orb');
   assert.ok(iqShell.includes('logQuranMinutes') && iqShell.includes('updateDailyChallengeGoals'), 'iq-shell.js must expose logQuranMinutes and updateDailyChallengeGoals');
-  assert.ok(renderTabs.includes("menuBtn.style.display = 'inline-flex'"), 'top-left 3-dot menu button must stay visible on all views');
+  assert.ok(renderTabs.includes("menuBtn.style.display = 'inline-flex'"), 'top-left 3-dot menu button must stay visible on mobile views');
   assert.ok(html.includes('<span class="iq-top-brand"><strong>IQ</strong></span>'), 'top-left brand must render uppercase IQ');
   const heroIdx = html.indexOf('class="hero-strip"');
+  const sanctIdx = html.indexOf('class="iq-sanctuary-hero"');
+  const prayerIdx = html.indexOf('id="prayerArea"');
+  const heroChallengeIdx = html.indexOf('id="iqHeroChallenge"');
   const carIdx = html.indexOf('id="dailyCarousel"');
   const dateIdx = html.indexOf('id="dateLine"');
   const heroCloseIdx = html.indexOf('<!-- /hero-strip -->');
-  assert.ok(heroIdx > -1 && carIdx > heroIdx && carIdx < heroCloseIdx, 'dailyCarousel must live inside top hero-strip');
-  assert.ok(dateIdx > heroIdx && dateIdx < heroCloseIdx, 'dateLine must live cleanly inside hero-strip');
+  assert.ok(heroIdx > -1 && dateIdx > heroIdx && dateIdx < heroCloseIdx, 'dateLine must live cleanly inside hero-strip');
+  assert.ok(sanctIdx > heroCloseIdx && heroChallengeIdx > sanctIdx && prayerIdx > heroChallengeIdx, 'Home Sanctuary hero leads with Focus & Daily Prayers');
+  assert.ok(carIdx > prayerIdx, 'Reflection carousel follows primary worship hero');
   assert.ok(!html.includes('id="topCatNav"'), 'desktop topBar center tabs removed in favor of All Sections');
   assert.ok(html.includes('id="iqMenuBtnLabel"'), 'desktop All Sections trigger label present');
-  assert.ok(renderTabs.includes("'.bnav-btn'"), 'core/tabs.js must sync bottom nav buttons');
+  assert.ok(renderTabs.includes('.bnav-btn') && renderTabs.includes('.iq-rail-btn'), 'core/tabs.js must sync bottom nav and desktop rail buttons');
   assert.ok(html.includes('<h2 class="iq-sheet-title">Masjid Check-ins</h2>'), 'masjid sheet title must use Title Case');
   for (const ov of ['id="iqDrawer"', 'id="iqNotifDrawer"', 'id="iqChallengeSheet"', 'id="iqMasjidSheet"']) {
     const start = html.indexOf(ov);

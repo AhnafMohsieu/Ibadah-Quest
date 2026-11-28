@@ -33,6 +33,7 @@ function createTabSandbox() {
       return null;
     },
     setAttribute: () => {},
+    removeAttribute: () => {},
     style: {},
     innerHTML: '',
     textContent: ''
@@ -76,28 +77,36 @@ function createTabSandbox() {
   return { sandbox, dom };
 }
 
-test('cross-category tab routing: switching to a knowledge tab auto-updates segment to knowledge', () => {
+test('cross-category tab routing: switching to quran routes to worship segment', () => {
   const { sandbox, dom } = createTabSandbox();
   sandbox.window.activateTab('quran');
-  assert.strictEqual(sandbox.S.lastCat, 'knowledge');
-  assert.strictEqual(dom.attributes['data-active-segment'], 'knowledge');
+  assert.strictEqual(sandbox.S.lastCat, 'worship');
+  assert.strictEqual(dom.attributes['data-active-segment'], 'worship');
   assert.strictEqual(dom.attributes['data-active-tab'], 'quran');
 });
 
-test('cross-category tab routing: switching to names tab auto-updates segment to names_main', () => {
+test('cross-category tab routing: switching to hadith or allah_names routes to knowledge segment', () => {
   const { sandbox, dom } = createTabSandbox();
+  sandbox.window.activateTab('hadith');
+  assert.strictEqual(sandbox.S.lastCat, 'knowledge');
+  assert.strictEqual(dom.attributes['data-active-segment'], 'knowledge');
   sandbox.window.activateTab('allah_names');
-  assert.strictEqual(sandbox.S.lastCat, 'names_main');
-  assert.strictEqual(dom.attributes['data-active-segment'], 'names_main');
+  assert.strictEqual(sandbox.S.lastCat, 'knowledge');
+  assert.strictEqual(dom.attributes['data-active-segment'], 'knowledge');
   assert.strictEqual(dom.attributes['data-active-tab'], 'allah_names');
 });
 
-test('cross-category tab routing: switching to library tab auto-updates segment to library', () => {
+test('legacy tab aliases redirect gracefully to consolidated tabs', () => {
   const { sandbox, dom } = createTabSandbox();
-  sandbox.window.activateTab('arabic');
-  assert.strictEqual(sandbox.S.lastCat, 'library');
-  assert.strictEqual(dom.attributes['data-active-segment'], 'library');
-  assert.strictEqual(dom.attributes['data-active-tab'], 'arabic');
+  sandbox.window.activateTab('zakatcalc');
+  assert.strictEqual(sandbox.S.lastSub, 'charity');
+  assert.strictEqual(sandbox.S.lastCat, 'worship');
+  sandbox.window.activateTab('gratitude');
+  assert.strictEqual(sandbox.S.lastSub, 'healthlog');
+  assert.strictEqual(dom.attributes['data-active-segment'], 'worship');
+  sandbox.window.activateTab('rewards');
+  assert.strictEqual(sandbox.S.lastSub, 'profile');
+  assert.strictEqual(sandbox.S.lastCat, 'profile_main');
 });
 
 test('cross-category tab routing: switching to profile tab auto-updates segment to profile_main', () => {
@@ -110,8 +119,8 @@ test('cross-category tab routing: switching to profile tab auto-updates segment 
 
 test('cross-category tab routing: switching back to today auto-updates segment to ibadah', () => {
   const { sandbox, dom } = createTabSandbox();
-  sandbox.window.activateTab('arabic');
-  assert.strictEqual(sandbox.S.lastCat, 'library');
+  sandbox.window.activateTab('hadith');
+  assert.strictEqual(sandbox.S.lastCat, 'knowledge');
   sandbox.window.activateTab('today');
   assert.strictEqual(sandbox.S.lastCat, 'ibadah');
   assert.strictEqual(dom.attributes['data-active-segment'], 'ibadah');

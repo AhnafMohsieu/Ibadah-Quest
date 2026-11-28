@@ -515,17 +515,11 @@
   function isBookmarked(id) { return S.bookmarks && S.bookmarks.indexOf(id) !== -1; }
   window.toggleBookmark = toggleBookmark;
   window.isBookmarked = isBookmarked;
-  function claimBonus() { const t=today(); if(S.lbd===t) return; const b=S.cs>=7?75:30; applyXpDelta(b); S.lbd=t; saveAndRenderDirty(); toast(iqIcon('gift'),'Daily Bonus: +'+b+' XP!'); }
-  window.claimBonus = claimBonus;
   function selectAvatar(emoji) {
     S.avatar = emoji;
     saveState();
     renderProfile();
   }
-  function selectTitle(id) { if(!S.ownedTitles||!S.ownedTitles.includes(id))return; S.activeTitle=id; saveState(); renderProfile(); }
-  window.selectTitle = selectTitle;
-  function selectFrame(id) { if(!S.ownedFrames||!S.ownedFrames.includes(id))return; S.activeFrame=id; saveState(); renderProfile(); }
-  window.selectFrame = selectFrame;
 
   const NEW_POOL_TITLES = {
   zakatrules:    iqIcon('wallet') + ' Zakat — Purifying Your Wealth',
@@ -534,78 +528,16 @@
   hajjrules:     iqIcon('mosque') + ' Hajj — The Sacred Pilgrimage',
   purification:  iqIcon('droplets') + ' Purification (Taharah)',
   trade:         iqIcon('handshake') + ' Islamic Trade & Commerce',
-  marriagelaws:  iqIcon('heart') + ' Marriage Laws in Islam',
   inheritance:   iqIcon('scroll') + ' Laws of Inheritance (Mirath)',
-  halaldiet:     iqIcon('utensils') + ' Halal Diet & Forbidden Foods',
   oaths:         iqIcon('hand-heart') + ' Oaths & Vows in Islam',
-  umayyads:      iqIcon('castle') + ' The Umayyad Caliphate',
-  abbasids:      iqIcon('scroll') + ' The Abbasid Golden Age',
-  andalus:       iqIcon('castle') + ' Islamic Spain (Al-Andalus)',
-  ottomans:      iqIcon('mosque') + ' The Ottoman Empire',
-  mamluks:       iqIcon('target') + ' The Mamluk Sultanate',
-  seljuks:       iqIcon('target') + ' The Seljuk Empire',
-  fatimids:      iqIcon('moon') + ' The Fatimid Caliphate',
-  ayyubids:      iqIcon('shield') + ' The Ayyubid Dynasty',
-  modernhist:    iqIcon('globe') + ' Modern Islamic History',
-  ancientprophets:iqIcon('clock') + ' Ancient Prophets & Nations',
   sufism:        iqIcon('heart') + ' Sufism & Spiritual Paths',
   tazkiyah:      iqIcon('sparkles') + ' Tazkiyah — Soul Purification',
-  asceticism:    iqIcon('leaf') + ' Asceticism (Zuhd)',
   fear:          iqIcon('alert-triangle') + ' Fear of Allah (Khawf)',
   hope:          iqIcon('heart') + ' Hope in Allah (Raja)',
   loveofallah:   iqIcon('heart') + ' Love of Allah',
   contentment:   iqIcon('heart') + ' Contentment (Qana\'ah)',
   reflection:    iqIcon('pencil') + ' Reflection & Contemplation',
-  technology:    iqIcon('zap') + ' Technology & Islam',
-  socialmedia:   iqIcon('globe') + ' Social Media & Islam',
-  ethics:        iqIcon('handshake') + ' Islamic Ethics',
-  bioethics:     iqIcon('dna') + ' Islamic Bioethics',
-  modfinance:    iqIcon('credit-card') + ' Modern Islamic Finance',
-  politics:      iqIcon('castle') + ' Islam & Politics',
-  green:         iqIcon('sprout') + ' Green Islam & Ecology',
   mentalhealth:  iqIcon('brain') + ' Mental Health in Islam',
-  youth:         iqIcon('user') + ' Youth & Islamic Identity',
-  education:     iqIcon('book-open') + ' Islamic Education',
-  mecca:         iqIcon('mosque') + ' Mecca — The Holy City',
-  medina:        iqIcon('mosque') + ' Medina — City of the Prophet',
-  jerusalem:     iqIcon('mosque') + ' Jerusalem — Al-Quds',
-  damascus:      iqIcon('castle') + ' Damascus — Ancient Capital',
-  baghdad:       iqIcon('scroll') + ' Baghdad — House of Wisdom',
-  cairo:         iqIcon('castle') + ' Cairo — Gateway of Egypt',
-  cordoba:       iqIcon('castle') + ' Cordoba — Light of the West',
-  istanbul:      iqIcon('mosque') + ' Istanbul — City of Empires',
-  bukhara:       iqIcon('mosque') + ' Bukhara — City of Knowledge',
-  samarkand:     iqIcon('globe') + ' Samarkand — Silk Road Jewel',
-  calligraphy:   iqIcon('pen-tool') + ' Islamic Calligraphy',
-  architecture:  iqIcon('castle') + ' Islamic Architecture',
-  geometry:      iqIcon('sparkles') + ' Islamic Geometric Art',
-  poetryart:     iqIcon('scroll') + ' Islamic Poetry',
-  literature:    iqIcon('book-open') + ' Islamic Literature',
-  nasheeds:      iqIcon('sparkles') + ' Nasheeds & Spiritual Music',
-  illumination:  iqIcon('sparkles') + ' Manuscript Illumination',
-  textiles:      iqIcon('sparkles') + ' Islamic Textiles',
-  ceramics:      iqIcon('sparkles') + ' Islamic Ceramics',
-  woodwork:      iqIcon('sparkles') + ' Islamic Woodwork',
-  abuhanifa:     iqIcon('brain') + ' Imam Abu Hanifa',
-  malik:         iqIcon('brain') + ' Imam Malik ibn Anas',
-  shafii:        iqIcon('brain') + ' Imam Al-Shafi\'i',
-  ahmad:         iqIcon('brain') + ' Imam Ahmad ibn Hanbal',
-  alghazali:     iqIcon('brain') + ' Al-Ghazali — Proof of Islam',
-  ibntaymiyyah:  iqIcon('brain') + ' Ibn Taymiyyah',
-  ibnkhaldun:    iqIcon('brain') + ' Ibn Khaldun — Father of Sociology',
-  ibnrushd:      iqIcon('brain') + ' Ibn Rushd (Averroes)',
-  ibnsina:       iqIcon('brain') + ' Ibn Sina (Avicenna)',
-  alkhwarizmi:   iqIcon('brain') + ' Al-Khwarizmi — Father of Algebra',
-  arabicgrammar: iqIcon('book-open') + ' Arabic Grammar (Nahw)',
-  vocab:         iqIcon('book-open') + ' Arabic Vocabulary',
-  rhetoric:      iqIcon('message-circle') + ' Arabic Rhetoric (Balagha)',
-  morphology:    iqIcon('sparkles') + ' Arabic Morphology (Sarf)',
-  pronunciation: iqIcon('sparkles') + ' Tajweed & Pronunciation',
-  poetry:        iqIcon('scroll') + ' Arabic Poetry',
-  proverbs:      iqIcon('zap') + ' Arabic Proverbs',
-  etymology:     iqIcon('search') + ' Arabic Etymology',
-  dialects:      iqIcon('globe') + ' Arabic Dialects',
-  scripts:       iqIcon('pencil') + ' Arabic Scripts',
   brotherhood:   iqIcon('handshake') + ' Brotherhood in Islam',
   sisterhood:    iqIcon('flower') + ' Sisterhood in Islam',
   orphans2:      iqIcon('heart') + ' Care for Orphans',
@@ -613,24 +545,21 @@
   disabled:      iqIcon('heart') + ' Inclusion & Disability',
   antiracism:    iqIcon('globe') + ' Anti-Racism in Islam',
   poverty:       iqIcon('heart') + ' Poverty & Social Justice',
-  volunteering:  iqIcon('heart') + ' Volunteering in Islam',
-  epistemology:  iqIcon('brain') + ' Islamic Epistemology',
-  ontology:      iqIcon('brain') + ' Islamic Ontology',
-  logic:         iqIcon('sparkles') + ' Logic in Islamic Thought',
-  kalam:         iqIcon('message-circle') + ' Ilm al-Kalam (Theology)',
-  reason:        iqIcon('zap') + ' Reason & Revelation',
-  freewill:      iqIcon('handshake') + ' Free Will & Qadar',
-  problemofevil: iqIcon('moon') + ' The Problem of Evil',
-  prophethood:   iqIcon('scroll') + ' Nubuwwah (Prophethood)',
-  existence:     iqIcon('sparkles') + ' Existence & Tawhid'
-};
-  window.NEW_POOLS = NEW_POOLS;
-Object.keys(NEW_POOLS).forEach(k => {
-  window['render' + k] = function() {
-    const title = NEW_POOL_TITLES[k] || (iqIcon('sparkles') + ' ' + k.charAt(0).toUpperCase() + k.slice(1));
-    if (typeof window.poolRender === 'function') window.poolRender(k + 'Area', title, NEW_POOLS[k], k + 'Idx');
+  volunteering:  iqIcon('heart') + ' Volunteering in Islam'
+  };
+  window.NEW_POOL_TITLES = NEW_POOL_TITLES;
+  function registerNewPoolRenderers() {
+    if (typeof NEW_POOLS === 'undefined' || !NEW_POOLS) return;
+    window.NEW_POOLS = NEW_POOLS;
+    Object.keys(NEW_POOLS).forEach(function(k) {
+      window['render' + k] = function() {
+        const title = NEW_POOL_TITLES[k] || (iqIcon('sparkles') + ' ' + k.charAt(0).toUpperCase() + k.slice(1));
+        if (typeof window.poolRender === 'function') window.poolRender(k + 'Area', title, NEW_POOLS[k], k + 'Idx');
+      };
+    });
   }
-});
+  window.registerNewPoolRenderers = registerNewPoolRenderers;
+  registerNewPoolRenderers();
 
   // Modal keyboard handlers (Escape to close, focus trap)
   window._modalTriggerEl = null;
@@ -778,13 +707,6 @@ Object.keys(NEW_POOLS).forEach(k => {
       if (S.ab && S.ab.exp < t) S.ab = null;
       if (typeof window.recalc === 'function') window.recalc();
       saveState();
-      // Mid-session boots (switch user / import / logout): deferred features are
-      // already loaded, so run consistency checks now instead of waiting for a
-      // DOMContentLoaded hook that already fired.
-      if (typeof window.checkConsistency === 'function') {
-        try { window.checkConsistency(); } catch(e) { console.warn('consistency check failed:', e); }
-        try { if (window.checkWeeklyConsistency) window.checkWeeklyConsistency(); } catch(e) {}
-      }
     }
     try { if (typeof window.syncSeason === 'function') window.syncSeason(t); } catch(e) { console.warn('seasonal sync failed:', e); }
     if (S.log && Object.keys(S.log).length > 400) compactLogs();
@@ -823,8 +745,10 @@ Object.keys(NEW_POOLS).forEach(k => {
     runNextModal();
     try {
       if (!_parseHashAndNavigate()) {
-        const savedCat = S ? S.lastCat : null;
-        const savedSub = S ? S.lastSub : null;
+        const LEGACY_CAT_MAP = { library: 'knowledge', names_main: 'knowledge', creed: 'knowledge', rewards: 'profile_main', growth: 'profile_main' };
+        const LEGACY_TAB_MAP = { finance: 'charity', zakatcalc: 'charity', gratitude: 'healthlog', rewards: 'profile', growth: 'progress' };
+        const savedCat = S ? (LEGACY_CAT_MAP[S.lastCat] || S.lastCat) : null;
+        const savedSub = S ? (LEGACY_TAB_MAP[S.lastSub] || S.lastSub) : null;
         const activeCat = (savedCat && window.TAB_GROUPS && window.TAB_GROUPS[savedCat]) ? savedCat : 'ibadah';
         window.switchCategory(activeCat, _findBnavByCat(activeCat));
         if (savedSub) {
@@ -1015,11 +939,8 @@ Object.keys(NEW_POOLS).forEach(k => {
         try { if (window.renderDeferred) window.renderDeferred(); } catch(e) { console.error('Post-defer re-render failed:', e); }
         try { if (window.renderIqFeed) window.renderIqFeed(); } catch(e) {}
         try { if (window.renderDailyContent) window.renderDailyContent(); } catch(e) {}
-        try { if (window.renderCombos) window.renderCombos(); } catch(e) {}
         try { if (window.renderAchievementShowcase) window.renderAchievementShowcase(); } catch(e) {}
         try { if (window.autoTrackJourneyProgress) window.autoTrackJourneyProgress(); } catch(e) { console.error('Post-defer journey tracking failed:', e); }
-        try { if (window.checkConsistency) window.checkConsistency(); } catch(e) { console.error('Post-defer consistency check failed:', e); }
-        try { if (window.checkWeeklyConsistency) window.checkWeeklyConsistency(); } catch(e) { console.error('Post-defer weekly consistency failed:', e); }
         try { if (typeof window.syncSeason === 'function') window.syncSeason(today()); } catch(e) { console.error('Post-defer seasonal sync failed:', e); }
       };
       if (document.readyState === 'loading') {
@@ -1031,7 +952,7 @@ Object.keys(NEW_POOLS).forEach(k => {
     } catch(e) { console.error('Step 10c post-defer re-render hook failed:', e); }
     try {
       document.addEventListener('keydown', (e) => {
-        if ((e.key === 'Enter' || e.key === ' ') && (e.target.matches('.card-item, .vol-card, .shop-card, .card-info-btn') || e.target.matches('.ach-card, .quest-row, .deed-card, [role="button"][tabindex="0"]'))) {
+        if ((e.key === 'Enter' || e.key === ' ') && (e.target.matches('.card-item, .vol-card, .card-info-btn') || e.target.matches('.ach-card, .quest-row, .deed-card, [role="button"][tabindex="0"]'))) {
           e.preventDefault();
           e.target.click();
         }
@@ -1046,7 +967,7 @@ Object.keys(NEW_POOLS).forEach(k => {
       };
     }
     window.App = {
-      toggleP: window.toggleP, togglePrayerQada: window.togglePrayerQada, togglePrayerPause: appAction('togglePrayerPause'), toggleV: window.toggleV, toggleD: window.toggleD, buy: window.buy,
+      toggleP: window.toggleP, togglePrayerQada: window.togglePrayerQada, togglePrayerPause: appAction('togglePrayerPause'), toggleV: window.toggleV, toggleD: window.toggleD,
       detail: (id) => toast(iqIcon('alert-triangle'), DETAILS[id]||'Voluntary Prayer', false, 4000),
       tip: (id) => toast(iqIcon('zap'), TIPS[id]||'A beautiful deed!', false, 4000),
       toggleQuest: window.toggleQuest, addGratitude: window.addGratitude, toggleFasting: window.toggleFasting, setCharityGoals: window.setCharityGoals,
@@ -1067,12 +988,11 @@ Object.keys(NEW_POOLS).forEach(k => {
       dismissMuhasabah: appAction('dismissMuhasabah'),
       joinJourney: appAction('joinJourney'),
       manualRefresh: window.manualRefreshContent, ensureQuranLoaded: window.ensureQuranLoaded, ensureHadithLoaded: window.ensureHadithLoaded,
-      claimBonus: window.claimBonus,
       recoverSalvage, recoverFresh, recoverImport,
       setQuranView: window.setQuranView, quranSearchFilter: window.quranSearchFilter, openQuranSurah: window.openQuranSurah, quranBack: window.quranBack, openQuranJuz: window.openQuranJuz, adjustQuranFont: appAction('adjustQuranFont'), setQuranTint: appAction('setQuranTint'),
       openHadithCollection: window.openHadithCollection, openHadithBook: window.openHadithBook, hadithBack: window.hadithBack,
       playQuranVerse: window.playQuranVerse, playSurah: window.playSurah, stopSurah: window.stopSurah, setQuranReciter: window.setQuranReciter, playJuz: window.playJuz, updateJuzButton: window.updateJuzButton,
-      calPrevMonth: window.calPrevMonth, calNextMonth: window.calNextMonth, calGoToday: window.calGoToday, selectAvatar, selectTitle, selectFrame,
+      calPrevMonth: window.calPrevMonth, calNextMonth: window.calNextMonth, calGoToday: window.calGoToday, selectAvatar,
       toggleNotifications: appAction('toggleNotifications'),
       switchCategory: appAction('switchCategory'),
       activateTab: appAction('activateTab'),

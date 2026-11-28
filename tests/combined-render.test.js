@@ -5,18 +5,17 @@ const path = require('path');
 const fs = require('fs');
 const { loadFile } = require('./helpers/load.js');
 
-const PAIRS = [['virtues','renderVirtues'],['vices-return','renderVicesreturn'],
-['character-path','renderCharacterpath'],['worship-rulings','renderWorshiprulings'],
-['wealth-oaths','renderWealthoaths'],['family-life','renderFamilylife'],
-['community','renderCommunity'],['service','renderService'],
-['work-justice','renderWorkjustice'],['wellness','renderWellness'],
-['earth-living','renderEarthliving'],['youth-tech','renderYouthtech'],
-['ethics-finance','renderEthicsfinance'],['holy-cities','renderHolycities'],
-['capitals','renderCapitals'],['east','renderEast'],['pattern','renderPattern'],
-['sacred-space','renderSacredspace'],['living-crafts','renderLivingcrafts'],
-['word','renderWord'],['structure','renderStructure'],
-['sound-script','renderSoundscript'],['words-poetry','renderWordspoetry'],
-['being','renderBeing'],['knowing','renderKnowing'],['will-evil','renderWillevil']];
+const PAIRS = [
+  ['virtues', 'renderVirtues'],
+  ['vices-return', 'renderVicesreturn'],
+  ['character-path', 'renderCharacterpath'],
+  ['worship-rulings', 'renderWorshiprulings'],
+  ['wealth-oaths', 'renderWealthoaths'],
+  ['family-life', 'renderFamilylife'],
+  ['community', 'renderCommunity'],
+  ['service', 'renderService'],
+  ['wellness', 'renderWellness']
+];
 
 test('every combined renderer is exported on window', () => {
   const sb = loadFile(path.join(__dirname, '..', 'core', 'static.js'), {});

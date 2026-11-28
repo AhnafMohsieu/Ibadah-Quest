@@ -132,6 +132,39 @@
     renderProg();
   }
 
+  function getWorshipDayCues(dateObj) {
+    var d = (dateObj && typeof dateObj.getDay === 'function') ? dateObj : new Date();
+    var hd = getAdjustedHijri(d);
+    var dow = d.getDay();
+    var isFriday = dow === 5;
+    var isRamadan = hd.month === 9;
+    var isArafah = hd.month === 12 && hd.day === 9;
+    var isAshura = hd.month === 1 && (hd.day === 9 || hd.day === 10);
+    var isAyyamAlBid = !isRamadan && hd.day >= 13 && hd.day <= 15;
+    var isMonThu = !isRamadan && (dow === 1 || dow === 4);
+    var isShawwalSix = hd.month === 10 && hd.day >= 2 && hd.day <= 29;
+    var tFn = (typeof window !== 'undefined' && typeof window.t === 'function') ? window.t : function(s) { return s; };
+    var fastCue = '';
+    if (isRamadan) fastCue = tFn('Ramadan Day') + ' ' + hd.day;
+    else if (isArafah) fastCue = tFn('Day of Arafah (Sunnah Fast)');
+    else if (isAshura) fastCue = tFn('Ashura Sunnah Fast');
+    else if (isAyyamAlBid) fastCue = tFn('White Days (Ayyam al-Bid)');
+    else if (isMonThu) fastCue = dow === 1 ? tFn('Monday Sunnah Fast') : tFn('Thursday Sunnah Fast');
+    else if (isShawwalSix) fastCue = tFn('Shawwal 6 Days Recommended');
+    return {
+      hijri: hd,
+      hijriText: formatHijriLabel(hd),
+      isFriday: isFriday,
+      isRamadan: isRamadan,
+      isArafah: isArafah,
+      isAshura: isAshura,
+      isAyyamAlBid: isAyyamAlBid,
+      isMonThu: isMonThu,
+      isShawwalSix: isShawwalSix,
+      fastCue: fastCue
+    };
+  }
+
   Object.defineProperty(window, 'calViewYear', { get: function() { return calViewYear; }, set: function(v) { calViewYear = v; }, configurable: true });
   Object.defineProperty(window, 'calViewMonth', { get: function() { return calViewMonth; }, set: function(v) { calViewMonth = v; }, configurable: true });
   Object.defineProperty(window, 'calViewHijriY', { get: function() { return calViewHijriY; }, set: function(v) { calViewHijriY = v; }, configurable: true });
@@ -150,6 +183,7 @@
   window.setHijriOffset = setHijriOffset;
   window.getAdjustedHijri = getAdjustedHijri;
   window.formatHijriLabel = formatHijriLabel;
+  window.getWorshipDayCues = getWorshipDayCues;
   window.initCalView = initCalView;
   window.calPrevMonth = calPrevMonth;
   window.calNextMonth = calNextMonth;

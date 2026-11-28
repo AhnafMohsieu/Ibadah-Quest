@@ -13,9 +13,32 @@
     'Steady, gentle progress is what Allah loves.',
     'Blooming in humility — all praise belongs to Allah.'
   ];
+  const GARDEN_STAGES = [
+    { name: 'Seed', icon: 'sprout', xp: 0 },
+    { name: 'Sprout', icon: 'sprout', xp: 150 },
+    { name: 'Sapling', icon: 'tree', xp: 500 },
+    { name: 'Young Tree', icon: 'tree', xp: 1500 },
+    { name: 'Mature Tree', icon: 'tree', xp: 4000 },
+    { name: 'Blooming Tree', icon: 'flower', xp: 10000 },
+    { name: 'Paradise Garden', icon: 'sparkles', xp: 25000 }
+  ];
   function gardenStage(xp, streak) {
-    const p = SpiritualGrowth.getProgress('garden');
-    return { stage: p.stage, name: p.name, icon: p.icon, next: p.stage < p.totalStages ? p.name : null, xpForNext: p.xpForNext, xpPct: Math.round(p.progress * 1000) / 1000 };
+    const combined = (Number(xp) || 0) + ((Number(streak) || 0) * 10);
+    let idx = 0;
+    for (let i = 0; i < GARDEN_STAGES.length; i++) {
+      if (combined >= GARDEN_STAGES[i].xp) idx = i;
+    }
+    const cur = GARDEN_STAGES[idx];
+    const next = GARDEN_STAGES[idx + 1] || null;
+    const pct = next ? Math.min(1, Math.max(0, (combined - cur.xp) / (next.xp - cur.xp))) : 1;
+    return {
+      stage: idx + 1,
+      name: cur.name,
+      icon: cur.icon,
+      next: next ? next.name : null,
+      xpForNext: next ? next.xp : null,
+      xpPct: Math.round(pct * 1000) / 1000
+    };
   }
   function flowerCount(streak) {
     if (streak < 30) return 0;
@@ -73,12 +96,8 @@
   function renderGarden() {
     try {
       const el = document.getElementById('gardenArea');
-      const isGardenVisible = (typeof SpiritualGrowth !== 'undefined' && typeof SpiritualGrowth.isVisible === 'function')
-        ? SpiritualGrowth.isVisible('garden')
-        : true;
-      if (!el || !isGardenVisible) {
+      if (!el) {
         lastTree = null;
-        if (el) el.innerHTML = '';
         return;
       }
       const _gt = (s) => (typeof window !== 'undefined' && typeof window.t === 'function') ? window.t(s) : s;

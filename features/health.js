@@ -2,8 +2,9 @@
   function safeText(value) {
     return window.escapeHTML(value);
   }
-  const WATER_TARGET = HEALTH_PROMPTS.find(p => p.id === 'water').target;
-  const SLEEP_TARGET = HEALTH_PROMPTS.find(p => p.id === 'sleep').target;
+  const _hPrompts = (typeof HEALTH_PROMPTS !== 'undefined' && Array.isArray(HEALTH_PROMPTS)) ? HEALTH_PROMPTS : [];
+  const WATER_TARGET = (_hPrompts.find(p => p.id === 'water') || { target: 8 }).target;
+  const SLEEP_TARGET = (_hPrompts.find(p => p.id === 'sleep') || { target: 8 }).target;
 
   function getTodayHealth() {
     const t = today();

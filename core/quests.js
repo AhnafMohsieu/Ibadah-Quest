@@ -11,10 +11,10 @@
     for(const q of S.mq){ const o=MQUESTS.find(x=>x.id===q.id); if(o&&!q.done&&o.c(S)){ q.done=true; gained+=q.xp; S.tq++; trackQuestXP('monthly',q.xp); u=true; } }
     for(const q of S.yq){ const o=YQUESTS.find(x=>x.id===q.id); if(o&&!q.done&&o.c(S)){ q.done=true; gained+=q.xp; S.tq++; trackQuestXP('yearly',q.xp); u=true; } }
     for(const q of S.lq){ const o=LQUESTS.find(x=>x.id===q.id); if(o&&!q.done&&o.c(S)){ q.done=true; gained+=q.xp; S.tq++; trackQuestXP('lifetime',q.xp); u=true; } }
-    if(u){ applyXpDelta(gained); checkA(); saveState(); if(typeof checkSurpriseReward==='function') checkSurpriseReward('quest'); }
+    if(u){ applyXpDelta(gained); checkA(); saveState(); }
   }
   function trackQuestXP(type, xp) { if (!S.questXP) S.questXP = {daily:0,weekly:0,monthly:0,yearly:0,lifetime:0}; S.questXP[type] = (S.questXP[type] || 0) + xp; S.questXP.lifetime = (S.questXP.lifetime || 0) + xp; }
-  function toggleQuest(id,type,xp){ let arr; if(type==='daily') arr=S.dq; else if(type==='weekly') arr=S.wq; else if(type==='monthly') arr=S.mq; else if(type==='yearly') arr=S.yq; else if(type==='lifetime') arr=S.lq; else return; const q=arr.find(x=>x.id===id); if(!q) return; q.done=!q.done; const xpVal=xp||q.xp; if(q.done){ applyXpDelta(xpVal); if (typeof window.iqHaptic === 'function') window.iqHaptic(10); S.tq++; trackQuestXP(type,xpVal); } else { spendXp(xpVal); S.tq=Math.max(0,S.tq-1); trackQuestXP(type,-xpVal); } saveState(); markDirty('quests'); markDirty('topbar'); markDirty('lv'); markDirty('progress'); renderDynamic(); if(q.done&&typeof checkSurpriseReward==='function') checkSurpriseReward('quest'); }
+  function toggleQuest(id,type,xp){ let arr; if(type==='daily') arr=S.dq; else if(type==='weekly') arr=S.wq; else if(type==='monthly') arr=S.mq; else if(type==='yearly') arr=S.yq; else if(type==='lifetime') arr=S.lq; else return; const q=arr.find(x=>x.id===id); if(!q) return; q.done=!q.done; const xpVal=xp||q.xp; if(q.done){ applyXpDelta(xpVal); if (typeof window.iqHaptic === 'function') window.iqHaptic(10); S.tq++; trackQuestXP(type,xpVal); } else { spendXp(xpVal); S.tq=Math.max(0,S.tq-1); trackQuestXP(type,-xpVal); } saveState(); markDirty('quests'); markDirty('topbar'); markDirty('lv'); markDirty('progress'); renderDynamic(); }
 
   window.genDQ = genDQ;
   window.genWQ = genWQ;

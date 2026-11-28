@@ -68,16 +68,14 @@ function setupShell() {
     DEEDS: [{ id: 'smile', name: 'Smile' }, { id: 'charity_daily', name: 'Charity' }, { id: 'visit_sick', name: 'Visit' }],
     TAB_GROUPS: {
       ibadah: [
-        { id: 'tracking', label: 'Daily Tracking', tabs: [{ id: 'today', label: 'Today', icon: 'today' }, { id: 'dhikr', label: 'Dhikr', icon: 'dhikr' }] }
+        { id: 'core', label: 'Core', tabs: [{ id: 'today', label: 'Today', icon: 'today' }, { id: 'timer', label: 'Prayer & Qibla', icon: 'clock' }] }
+      ],
+      worship: [
+        { id: 'quran_adhkar', label: "Qur'an & Adhkar", tabs: [{ id: 'quran', label: "Qur'an", icon: 'quran', desc: 'Surah library' }, { id: 'dhikr', label: 'Dhikr', icon: 'dhikr' }] }
       ],
       knowledge: [
-        { id: 'quran_hadith', label: "Qur'an & Hadith", grid: true, tabs: [{ id: 'quran', label: "Qur'an", icon: 'quran', desc: 'Surah library' }, { id: 'hadith', label: 'Hadith', icon: 'hadith' }] }
-      ],
-      names_main: [
-        { id: 'names_grp', label: 'Names', tabs: [{ id: 'allah_names', label: '99 Names', icon: 'allah_names' }] }
-      ],
-      library: [
-        { id: 'history', label: 'History', tabs: [{ id: 'prophets', label: 'Prophets', icon: 'prophets' }] }
+        { id: 'quran_sunnah', label: "Qur'an & Sunnah", grid: true, tabs: [{ id: 'hadith', label: 'Hadith', icon: 'hadith' }] },
+        { id: 'names', label: 'Names', tabs: [{ id: 'allah_names', label: '99 Names', icon: 'allah_names' }] }
       ],
       profile_main: [
         { id: 'profile_hub', label: 'Account', tabs: [{ id: 'profile', label: 'Profile', icon: 'profile' }] }
@@ -133,21 +131,21 @@ test('openChallengeDetail renders circular progress ring sheet and closeActiveSh
   assert.strictEqual(els.iqChallengeSheet.classList.contains('open'), false);
 });
 
-test('3-dot drawer renders all 5 TAB_GROUPS categories lazily on open and switches category tabs', () => {
+test('3-dot drawer renders all 4 TAB_GROUPS categories lazily on open and switches category tabs', () => {
   const { sb, els } = setupShell();
   assert.strictEqual(els.iqDrawerCatBar.innerHTML, '', 'drawer tabs must not build DOM before drawer opens');
   sb.window.openIqDrawer();
-  assert.ok(els.iqDrawerCatBar.innerHTML.includes('Daily'), 'drawer must list Daily category');
+  assert.ok(els.iqDrawerCatBar.innerHTML.includes('Home'), 'drawer must list Home category');
+  assert.ok(els.iqDrawerCatBar.innerHTML.includes('Worship'), 'drawer must list Worship category');
   assert.ok(els.iqDrawerCatBar.innerHTML.includes('Knowledge'), 'drawer must list Knowledge category');
-  assert.ok(els.iqDrawerCatBar.innerHTML.includes('Names'), 'drawer must list Names category');
-  assert.ok(els.iqDrawerCatBar.innerHTML.includes('Library'), 'drawer must list Library category');
   assert.ok(els.iqDrawerCatBar.innerHTML.includes('Profile'), 'drawer must list Profile category');
-  assert.ok(els.iqDrawerTabs.innerHTML.includes("data-tab=\"today\""), 'initial drawer view shows Daily subtabs');
+  assert.ok(!els.iqDrawerCatBar.innerHTML.includes('Library'), 'drawer must omit removed Library category');
+  assert.ok(els.iqDrawerTabs.innerHTML.includes("data-tab=\"today\""), 'initial drawer view shows Home subtabs');
   assert.ok(els.iqDrawerTabs.innerHTML.includes('iq-drawer-group-chevron'), 'category groups include expand/collapse chevron');
   assert.ok(els.iqDrawerTabs.innerHTML.includes('aria-expanded="true"') && els.iqDrawerTabs.innerHTML.includes('aria-controls='), 'category headings expose aria-expanded and aria-controls');
   assert.ok(els.iqDrawerTabs.innerHTML.includes('aria-current="page"'), 'active drawer tab sets aria-current="page"');
-  sb.window.selectDrawerCategory('knowledge');
-  assert.ok(els.iqDrawerTabs.innerHTML.includes("data-tab=\"quran\""), 'switching category renders Knowledge subtabs');
+  sb.window.selectDrawerCategory('worship');
+  assert.ok(els.iqDrawerTabs.innerHTML.includes("data-tab=\"quran\""), 'switching category renders Worship subtabs');
 });
 
 test('3-dot drawer search filters across categories and escapes HTML safely', () => {

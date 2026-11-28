@@ -11,12 +11,12 @@ function loadSections() {
   return loadFile(path.join(ROOT, 'data', 'panel-sections.js'), {}).window.PANEL_SECTIONS;
 }
 
-test('PANEL_SECTIONS covers every section incl. ones only activateTab knew about', () => {
+test('PANEL_SECTIONS covers every consolidated section', () => {
   const s = loadSections();
-  for (const key of ['home','quests','stats','growth','profile','knowledge_quran','knowledge_fiqh',
-                     'knowledge_creed','knowledge_heart',
-                     'knowledge_history','knowledge_hereafter','library_dynasties','library_cities',
-                     'library_arts','library_arabic','library_philosophy','names']) {
+  for (const key of [
+    'home', 'worship', 'quests', 'stats', 'growth', 'profile',
+    'knowledge_quran', 'knowledge_fiqh', 'knowledge_heart', 'knowledge_history', 'names'
+  ]) {
     assert.ok(Array.isArray(s[key]) && s[key].length > 0, 'missing section: ' + key);
   }
 });
@@ -40,19 +40,20 @@ test('tabs.js consumes PANEL_SECTIONS and no second literal map remains', () => 
   assert.ok(!/var sections = \{/.test(src), 'local sections literal must be deleted');
 });
 
-test('consolidated panels exist, retired panels gone', () => {
+test('consolidated panels & merged areas exist; retired shop/library/growth panels gone', () => {
   const html = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
-  for (const p of ['panel-virtues', 'panel-vices-return', 'panel-character-path',
-      'panel-worship-rulings', 'panel-wealth-oaths', 'panel-family-life',
-      'panel-community', 'panel-service', 'panel-work-justice', 'panel-wellness',
-      'panel-earth-living', 'panel-youth-tech', 'panel-ethics-finance',
-      'panel-holy-cities', 'panel-capitals', 'panel-east', 'panel-pattern',
-      'panel-sacred-space', 'panel-living-crafts', 'panel-word',
-      'panel-structure', 'panel-sound-script', 'panel-words-poetry',
-      'panel-being', 'panel-knowing', 'panel-will-evil']) {
+  for (const p of [
+    'panel-virtues', 'panel-vices-return', 'panel-character-path',
+    'panel-worship-rulings', 'panel-wealth-oaths', 'panel-family-life',
+    'panel-community', 'panel-service', 'panel-wellness',
+    'panel-charity', 'panel-healthlog', 'panel-progress'
+  ]) {
     assert.ok(html.includes(`id="${p}"`), 'missing ' + p);
   }
-  for (const p of ['panel-purification', 'panel-technology', 'panel-poetryart']) {
-    assert.ok(!html.includes(`id="${p}"`), 'retired ' + p + ' still present');
+  // Merged containers inside consolidated panels
+  assert.ok(html.includes('id="charityArea"') && html.includes('id="zakatcalcArea"') && html.includes('id="financeArea"'), 'charity/finance/zakat merged');
+  assert.ok(html.includes('id="healthlogArea"') && html.includes('id="gratitudeArea"'), 'healthlog/gratitude merged');
+  for (const retired of ['panel-rewards', 'panel-growth', 'section-library', 'panel-purification', 'panel-technology', 'panel-battles']) {
+    assert.ok(!html.includes(`id="${retired}"`), 'retired ' + retired + ' still present');
   }
 });

@@ -89,12 +89,16 @@
     dua: { icon:'hand-heart', title:'Daily Duas', desc:'Supplicate to Allah — He loves to be asked.', cta:'Learn Duas', tab:'duas' },
     heart: { icon:'heart', title:'Purify Your Heart', desc:'Indeed, in the remembrance of Allah do hearts find rest.', cta:'Explore', tab:'heart' },
     sins: { icon:'alert-triangle', title:'Stay Vigilant', desc:'Be mindful of Allah and He will protect you.', cta:'Review Sins', tab:'sins' },
-    charity: { icon:'hand-heart', title:'Give Charity', desc:'Charity does not decrease wealth. (Muslim)', cta:'Log Charity', tab:'finance' },
+    charity: { icon:'hand-heart', title:'Give Charity', desc:'Charity does not decrease wealth. (Muslim)', cta:'Log Charity', tab:'charity' },
     fasting: { icon:'moon', title:'Track Your Fast', desc:'Whoever fasts a day for Allah\'s sake, Allah will distance him from Hell.', cta:'Log Fast', tab:'fasting' },
-    family: { icon:'family', title:'Strengthen Family Ties', desc:'Whoever believes in Allah and the Last Day, let him maintain family ties.', cta:'Learn More', tab:'family' },
-    patience: { icon:'hourglass', title:'Practice Patience', desc:'Indeed, Allah is with the patient.', cta:'Learn', tab:'patience' },
+    family: { icon:'family', title:'Strengthen Family Ties', desc:'Whoever believes in Allah and the Last Day, let him maintain family ties.', cta:'Learn More', tab:'family-life' },
+    patience: { icon:'hourglass', title:'Practice Patience', desc:'Indeed, Allah is with the patient.', cta:'Learn', tab:'virtues' },
     stories: { icon:'book-open', title:'Read Inspiring Stories', desc:'Indeed, in their stories is a lesson for those of understanding.', cta:'Read Stories', tab:'stories' }
   };
+
+  // NOTE: update EMPTY_STATES.heart/sins safely below
+  EMPTY_STATES.heart.tab = 'vices-return';
+  EMPTY_STATES.sins.tab = 'vices-return';
 
   function renderSunnahs() {
     const el = document.getElementById('sunnahArea');
@@ -140,22 +144,21 @@
     }).join('') + '</div>';
     el.innerHTML = html;
   }
-  function renderSins() { poolRender('sinsArea', iqIcon('alert-triangle') + ' Major Sins to Avoid',SINS_POOL,'sinsIdx'); }
-  function renderPunishments() { poolRender('punishmentsArea', iqIcon('scales') + ' Islamic Justice',PUNISHMENTS_POOL,'punishmentsIdx'); }
-  function renderRepentance() { poolRender('repentanceArea', iqIcon('refresh-cw') + ' Repentance & Tawbah',REPENTANCE_POOL,'repentanceIdx'); }
-  function renderSeerah() { poolRender('seerahArea', iqIcon('book-open') + ' Life of the Prophet ﷺ',SEERAH_POOL,'seerahIdx',true); }
-  function renderTafsir() { poolRender('tafsirArea', iqIcon('book-open') + ' Quranic Tafsir',TAFSIR_POOL,'tafsirIdx'); var host = document.getElementById('tafsirArea'); if (!host) return; host.innerHTML += '<div id="tafsirBrowser"></div>'; if (typeof window.renderTafsirBrowser === 'function') window.renderTafsirBrowser(); }
-  function renderManners() { poolRender('mannersArea', iqIcon('handshake') + ' Islamic Manners (Adab)',MANNERS_POOL,'mannersIdx'); }
-  function renderAqeedah() { poolRender('aqeedahArea', iqIcon('mosque') + ' Islamic Aqeedah',AQEEDAH_POOL,'aqeedahIdx'); }
-  function renderFamily() { poolRender('familyArea', iqIcon('users') + ' Family & Kinship',FAMILY_POOL,'familyIdx'); }
-  function renderHealth() { poolRender('healthArea', iqIcon('heart') + ' Health & Well-being',HEALTH_POOL,'healthIdx'); }
-  function renderFinance() { poolRender('financeArea', iqIcon('wallet') + ' Halal Finance',FINANCE_POOL,'financeIdx'); }
-  function renderUmmah() { poolRender('ummahArea', iqIcon('globe') + ' The Muslim Ummah',UMMAH_POOL,'ummahIdx'); }
-  function renderHajj() { poolRender('hajjArea', iqIcon('kaaba') + ' Hajj & Umrah',HAJJ_POOL,'hajjIdx'); }
-  function renderAkhirah() { poolRender('akhirahArea', iqIcon('globe') + ' The Hereafter',AKHIRAH_POOL,'akhirahIdx'); }
+  function renderSins() { if (typeof SINS_POOL !== 'undefined') poolRender('sinsArea', iqIcon('alert-triangle') + ' Major Sins to Avoid',SINS_POOL,'sinsIdx'); }
+  function renderRepentance() { if (typeof REPENTANCE_POOL !== 'undefined') poolRender('repentanceArea', iqIcon('refresh-cw') + ' Repentance & Tawbah',REPENTANCE_POOL,'repentanceIdx'); }
+  function renderSeerah() { if (typeof SEERAH_POOL !== 'undefined') poolRender('seerahArea', iqIcon('book-open') + ' Life of the Prophet ﷺ',SEERAH_POOL,'seerahIdx',true); }
+  function renderTafsir() { if (typeof TAFSIR_POOL !== 'undefined') poolRender('tafsirArea', iqIcon('book-open') + ' Quranic Tafsir',TAFSIR_POOL,'tafsirIdx'); var host = document.getElementById('tafsirArea'); if (!host) return; host.innerHTML += '<div id="tafsirBrowser"></div>'; if (typeof window.renderTafsirBrowser === 'function') window.renderTafsirBrowser(); }
+  function renderManners() { if (typeof MANNERS_POOL !== 'undefined') poolRender('mannersArea', iqIcon('handshake') + ' Islamic Manners (Adab)',MANNERS_POOL,'mannersIdx'); }
+  function renderAqeedah() { if (typeof AQEEDAH_POOL !== 'undefined') poolRender('aqeedahArea', iqIcon('mosque') + ' Islamic Aqeedah',AQEEDAH_POOL,'aqeedahIdx'); }
+  function renderFamily() { if (typeof FAMILY_POOL !== 'undefined') poolRender('familyArea', iqIcon('users') + ' Family & Kinship',FAMILY_POOL,'familyIdx'); }
+  function renderHealth() { if (typeof HEALTH_POOL !== 'undefined') poolRender('healthArea', iqIcon('heart') + ' Health & Well-being',HEALTH_POOL,'healthIdx'); }
+  function renderFinance() { if (typeof FINANCE_POOL !== 'undefined') poolRender('financeArea', iqIcon('wallet') + ' Halal Finance',FINANCE_POOL,'financeIdx'); }
+  function renderUmmah() { if (typeof UMMAH_POOL !== 'undefined') poolRender('ummahArea', iqIcon('globe') + ' The Muslim Ummah',UMMAH_POOL,'ummahIdx'); }
+  function renderHajj() { if (typeof HAJJ_POOL !== 'undefined') poolRender('hajjArea', iqIcon('kaaba') + ' Hajj & Umrah',HAJJ_POOL,'hajjIdx'); }
+  function renderAkhirah() { if (typeof AKHIRAH_POOL !== 'undefined') poolRender('akhirahArea', iqIcon('globe') + ' The Hereafter',AKHIRAH_POOL,'akhirahIdx'); }
   function renderProphets() {
     const el = document.getElementById('prophetsArea');
-    if (!el) return;
+    if (!el || typeof PROPHETS_POOL === 'undefined' || !Array.isArray(PROPHETS_POOL)) return;
     let html = `<div class="section-title">${iqIcon('book-open')} ${escapeHTML(_t('Stories of the Prophets'))}</div><div class="iq-names-grid">`;
     html += PROPHETS_POOL.map((o, i) => {
       if (!o) return '';
@@ -168,21 +171,17 @@
     }).join('') + '</div>';
     el.innerHTML = html;
   }
-  function renderWomen() { poolRender('womenArea', iqIcon('user') + ' Great Muslim Women',WOMEN_POOL,'womenIdx',true); }
-  function renderKnowledge() { poolRender('knowledgeArea', iqIcon('book') + ' Seeking Knowledge',KNOWLEDGE_POOL,'knowledgeIdx'); }
-  function renderHeart() { poolRender('heartArea', iqIcon('heart') + ' Diseases of the Heart',HEART_POOL,'heartIdx'); }
-  function renderJumuah() { poolRender('jumuahArea', iqIcon('mosque') + ' Friday (Jumuah) Virtues',JUMUAH_POOL,'jumuahIdx', true); }
-  function renderMarriage() { poolRender('marriageArea', iqIcon('gem') + ' Marriage & Halal Love',MARRIAGE_POOL,'marriageIdx'); }
-  function renderScience() { poolRender('scienceArea', iqIcon('microscope') + ' Islam & Science',SCIENCE_POOL,'scienceIdx',true); }
-  function renderWudu() { poolRender('wuduArea', iqIcon('droplets') + ' Wudu & Taharah',WUDU_POOL,'wuduIdx', true); }
-  function renderScholars() { poolRender('scholarsArea', iqIcon('award') + ' Great Islamic Scholars',SCHOLARS_POOL,'scholarsIdx'); }
-  function renderPatience() { poolRender('patienceArea', iqIcon('gem') + ' Sabr & Shukr',PATIENCE_POOL,'patienceIdx'); }
-  function renderWork() { poolRender('workArea', iqIcon('briefcase') + ' Career & Work Ethics',WORK_POOL,'workIdx'); }
-  function renderEnvironment() { poolRender('environmentArea', iqIcon('leaf') + ' Nature & Environment',ENVIRONMENT_POOL,'environmentIdx'); }
-  function renderTravel() { poolRender('travelArea', iqIcon('plane') + ' Travel & Safar',TRAVEL_POOL,'travelIdx'); }
+  function renderWomen() { if (typeof WOMEN_POOL !== 'undefined') poolRender('womenArea', iqIcon('user') + ' Great Muslim Women',WOMEN_POOL,'womenIdx',true); }
+  function renderKnowledge() { if (typeof KNOWLEDGE_POOL !== 'undefined') poolRender('knowledgeArea', iqIcon('book') + ' Seeking Knowledge',KNOWLEDGE_POOL,'knowledgeIdx'); }
+  function renderHeart() { if (typeof HEART_POOL !== 'undefined') poolRender('heartArea', iqIcon('heart') + ' Diseases of the Heart',HEART_POOL,'heartIdx'); }
+  function renderJumuah() { if (typeof JUMUAH_POOL !== 'undefined') poolRender('jumuahArea', iqIcon('mosque') + ' Friday (Jumuah) Virtues',JUMUAH_POOL,'jumuahIdx', true); }
+  function renderMarriage() { if (typeof MARRIAGE_POOL !== 'undefined') poolRender('marriageArea', iqIcon('gem') + ' Marriage & Halal Love',MARRIAGE_POOL,'marriageIdx'); }
+  function renderWudu() { if (typeof WUDU_POOL !== 'undefined') poolRender('wuduArea', iqIcon('droplets') + ' Wudu & Taharah',WUDU_POOL,'wuduIdx', true); }
+  function renderScholars() { if (typeof SCHOLARS_POOL !== 'undefined') poolRender('scholarsArea', iqIcon('award') + ' Great Islamic Scholars',SCHOLARS_POOL,'scholarsIdx'); }
+  function renderPatience() { if (typeof PATIENCE_POOL !== 'undefined') poolRender('patienceArea', iqIcon('gem') + ' Sabr & Shukr',PATIENCE_POOL,'patienceIdx'); }
   function renderFiqh() {
     const el = document.getElementById('fiqhArea');
-    if (!el) return;
+    if (!el || typeof FIQH_POOL === 'undefined' || !Array.isArray(FIQH_POOL)) return;
     const cats = [...new Set(FIQH_POOL.map(s => s.cat).filter(Boolean))];
     const cur = (S._fiqhCat || cats[0]);
     let html = '<div class="section-title">' + iqIcon('book-open') + ' ' + escapeHTML(_t('Islamic Jurisprudence (Fiqh)')) + '</div>';
@@ -198,24 +197,16 @@
     }).join('');
     el.innerHTML = html;
   }
-  function renderArabic() { poolRender('arabicArea', iqIcon('book-open') + ' Arabic Alphabet',ARABIC_POOL.filter(function(o){return o.arabic && o.name;}),'arabicIdx',true); }
-  function renderTawakkul() { poolRender('tawakkulArea', iqIcon('handshake') + ' Tawakkul · Trust in Allah',TAWAKKUL_POOL,'tawakkulIdx'); }
-  function renderIkhlas() { poolRender('ikhlasArea', iqIcon('heart') + ' Ikhlas · Sincerity',IKHLAS_POOL,'ikhlasIdx'); }
-  function renderZuhd() { poolRender('zuhdArea', iqIcon('sparkles') + ' Zuhd · Asceticism',ZUHD_POOL,'zuhdIdx'); }
-  function renderDawah() { poolRender('dawahArea', iqIcon('megaphone') + " Da'wah · Inviting to Islam",DAWAH_POOL,'dawahIdx'); }
-  function renderCivilisation() { poolRender('civilisationArea', iqIcon('landmark') + ' Islamic Civilisation',CIVILISATION_POOL,'civilisationIdx'); }
-  function renderBattles() { poolRender('battlesArea', iqIcon('shield') + ' Battles of Islam',BATTLES_POOL,'battlesIdx',true); }
-  function renderJannah() { poolRender('jannahArea', iqIcon('flower') + ' Jannah · Paradise',JANNAH_POOL,'jannahIdx'); }
-  function renderJahannam() { poolRender('jahannamArea', iqIcon('flame') + ' Jahannam · Hellfire',JAHANNAM_POOL,'jahannamIdx'); }
-  function renderGrave() { poolRender('graveArea', iqIcon('coffin') + ' The Grave & Life After Death',GRAVE_POOL,'graveIdx'); }
-  function renderSigns() { poolRender('signsArea', iqIcon('hourglass') + ' Signs of Qiyamah',SIGNS_POOL,'signsIdx'); }
-  function renderDreams() { poolRender('dreamsArea', iqIcon('moon') + ' Islamic Dreams',DREAMS_POOL,'dreamsIdx'); }
-  function renderParenting() { poolRender('parentingArea', iqIcon('baby') + ' Islamic Parenting',PARENTING_POOL,'parentingIdx'); }
-  function renderFood() { poolRender('foodArea', iqIcon('utensils') + ' Halal & Haram Food',FOOD_POOL,'foodIdx'); }
-  function renderTibb() { poolRender('tibbArea', iqIcon('leaf') + ' Tibb Nabawi (Prophetic Medicine)',TIBB_POOL,'tibbIdx'); }
-  function renderYouth() { poolRender('youthArea', iqIcon('user') + ' Youth & Islam',YOUTH_POOL,'youthIdx'); }
-  function renderTech() { poolRender('techArea', iqIcon('monitor') + ' Technology & Islam',TECH_POOL,'techIdx'); }
-  function renderNeighbors() { poolRender('neighborsArea', iqIcon('home') + ' Rights of Neighbors',NEIGHBORS_POOL,'neighborsIdx'); }
+  function renderTawakkul() { if (typeof TAWAKKUL_POOL !== 'undefined') poolRender('tawakkulArea', iqIcon('handshake') + ' Tawakkul · Trust in Allah',TAWAKKUL_POOL,'tawakkulIdx'); }
+  function renderIkhlas() { if (typeof IKHLAS_POOL !== 'undefined') poolRender('ikhlasArea', iqIcon('heart') + ' Ikhlas · Sincerity',IKHLAS_POOL,'ikhlasIdx'); }
+  function renderZuhd() { if (typeof ZUHD_POOL !== 'undefined') poolRender('zuhdArea', iqIcon('sparkles') + ' Zuhd · Asceticism',ZUHD_POOL,'zuhdIdx'); }
+  function renderJannah() { if (typeof JANNAH_POOL !== 'undefined') poolRender('jannahArea', iqIcon('flower') + ' Jannah · Paradise',JANNAH_POOL,'jannahIdx'); }
+  function renderJahannam() { if (typeof JAHANNAM_POOL !== 'undefined') poolRender('jahannamArea', iqIcon('flame') + ' Jahannam · Hellfire',JAHANNAM_POOL,'jahannamIdx'); }
+  function renderGrave() { if (typeof GRAVE_POOL !== 'undefined') poolRender('graveArea', iqIcon('coffin') + ' The Grave & Life After Death',GRAVE_POOL,'graveIdx'); }
+  function renderSigns() { if (typeof SIGNS_POOL !== 'undefined') poolRender('signsArea', iqIcon('hourglass') + ' Signs of Qiyamah',SIGNS_POOL,'signsIdx'); }
+  function renderParenting() { if (typeof PARENTING_POOL !== 'undefined') poolRender('parentingArea', iqIcon('baby') + ' Islamic Parenting',PARENTING_POOL,'parentingIdx'); }
+  function renderTibb() { if (typeof TIBB_POOL !== 'undefined') poolRender('tibbArea', iqIcon('leaf') + ' Tibb Nabawi (Prophetic Medicine)',TIBB_POOL,'tibbIdx'); }
+  function renderNeighbors() { if (typeof NEIGHBORS_POOL !== 'undefined') poolRender('neighborsArea', iqIcon('home') + ' Rights of Neighbors',NEIGHBORS_POOL,'neighborsIdx'); }
   function renderSalah() {
     const el = document.getElementById('salahArea');
     if (!el) return;
@@ -326,12 +317,20 @@
   function addGratitude() { const inp=document.getElementById('gratInput'); if(!inp?.value.trim()) return; const dt=today(); if(!S.gratitudeLog[dt]) S.gratitudeLog[dt]=[]; S.gratitudeLog[dt].push(inp.value.trim()); inp.value=''; if (typeof window.grantCappedDailyXp === 'function') window.grantCappedDailyXp(3, 'gratitude', 3); saveState(); renderGratitude(); checkA(); }
   function renderFasting() {
     const dt = today(), fasted = !!S.fastingDays[dt];
+    const cues = (typeof window !== 'undefined' && typeof window.getWorshipDayCues === 'function') ? window.getWorshipDayCues(new Date()) : null;
     let h = '<div class="section-title">' + iqIcon('calendar') + ' ' + escapeHTML(_t('Fasting Tracker')) + '</div>';
+    if (cues && (cues.hijriText || cues.fastCue)) {
+      h += `<div class="content-card" style="border-color:var(--accent-soft);background:var(--accent-fill);">
+        <div class="iq-card-title">${iqIcon('moon')} ${escapeHTML(cues.hijriText || '')}</div>
+        ${cues.fastCue ? `<div class="content-english" style="color:var(--accent-dark);font-weight:600;margin-top:4px;">${escapeHTML(cues.fastCue)}</div>` : ''}
+      </div>`;
+    }
     h += `<label class="quest-row"><span style="flex:1">${escapeHTML(_t('Fasted today?'))}</span><input type="checkbox" class="quest-check" ${fasted?'checked':''} onchange="App.toggleFasting()"></label>`;
     const start=ms(), end=me(); let cnt=0;
     for (const dk in S.fastingDays) if (dk>=start && dk<=end && S.fastingDays[dk]) cnt++;
-    h += `<div class="content-card"><div class="content-english">${iqIcon('calendar')} <span class="iq-tabular">${_n(cnt)}</span> ${escapeHTML(_t('fasting days this month'))}</div><div class="content-english" style="font-size:0.85rem;color:var(--text2);">${escapeHTML(_t('Monday & Thursday are most recommended (Sunnah)'))}</div></div>`;
-    document.getElementById('fastingArea').innerHTML = h;
+    h += `<div class="content-card"><div class="content-english">${iqIcon('calendar')} <span class="iq-tabular">${_n(cnt)}</span> ${escapeHTML(_t('fasting days this month'))}</div><div class="content-english" style="font-size:0.85rem;color:var(--text2);">${escapeHTML(_t('Monday & Thursday & White Days (13-15 Hijri) are recommended Sunnah fasts'))}</div></div>`;
+    const el = document.getElementById('fastingArea');
+    if (el) el.innerHTML = h;
   }
   function toggleFasting() { const dt=today(); S.fastingDays[dt]=!S.fastingDays[dt]; if(S.fastingDays[dt]) { S.td.fasting=(S.td.fasting||0)+1; applyXpDelta(50); window.playSound('pop'); if (typeof window.iqHaptic === 'function') window.iqHaptic(10); } else { S.td.fasting=Math.max(0,(S.td.fasting||0)-1); spendXp(50); } saveState(); renderFasting(); if (typeof window !== 'undefined' && window.renderLv) window.renderLv(); if (typeof window !== 'undefined' && window.renderTopBar) window.renderTopBar(); }
   function renderCharity() {
@@ -579,7 +578,8 @@
   // members (titles identical to the generic loop in render/dynamic.js).
   function renderPoolMember(k) {
     if (typeof NEW_POOLS !== 'undefined' && NEW_POOLS[k] && NEW_POOLS[k].length) {
-      poolRender(k + 'Area', iqIcon('book-open') + ' ' + k, NEW_POOLS[k], k + 'Idx');
+      var title = (typeof window !== 'undefined' && window.NEW_POOL_TITLES && window.NEW_POOL_TITLES[k]) || (iqIcon('book-open') + ' ' + k);
+      poolRender(k + 'Area', title, NEW_POOLS[k], k + 'Idx');
     }
   }
   function renderVirtues() { renderIkhlas(); renderTawakkul(); renderPatience(); renderPoolMember('hope'); renderPoolMember('fear'); renderPoolMember('loveofallah'); renderPoolMember('contentment'); }
@@ -588,29 +588,13 @@
   function renderWorshiprulings() { renderPoolMember('purification'); renderPoolMember('salahrules'); renderPoolMember('sawmrules'); renderPoolMember('hajjrules'); renderHajj(); }
   function renderWealthoaths() { renderPoolMember('zakatrules'); renderPoolMember('trade'); renderPoolMember('inheritance'); renderPoolMember('oaths'); }
   function renderFamilylife() { renderFamily(); renderMarriage(); renderParenting(); }
-  // NOTE: combined renderCommunity overwrites the single-area renderer above.
-  // The original communityArea body is inlined (not a self-call) to avoid
-  // infinite recursion; title/pool/idxKey are identical to the original.
-  function renderCommunity() { renderNeighbors(); poolRender('communityArea', iqIcon('building') + ' Community & Society',COMMUNITY_POOL,'communityIdx'); renderPoolMember('brotherhood'); renderPoolMember('sisterhood'); renderUmmah(); renderPoolMember('antiracism'); }
-  function renderService() { renderPoolMember('orphans2'); renderPoolMember('elderly'); renderPoolMember('disabled'); renderPoolMember('poverty'); renderPoolMember('volunteering'); renderDawah(); }
-  function renderWorkjustice() { renderWork(); renderPunishments(); }
+  function renderCommunity() {
+    renderNeighbors();
+    if (typeof COMMUNITY_POOL !== 'undefined') poolRender('communityArea', iqIcon('building') + ' Community & Society', COMMUNITY_POOL, 'communityIdx');
+    renderPoolMember('brotherhood'); renderPoolMember('sisterhood'); renderUmmah(); renderPoolMember('antiracism');
+  }
+  function renderService() { renderPoolMember('orphans2'); renderPoolMember('elderly'); renderPoolMember('disabled'); renderPoolMember('poverty'); renderPoolMember('volunteering'); }
   function renderWellness() { renderHealth(); renderTibb(); renderPoolMember('mentalhealth'); }
-  function renderEarthliving() { renderFood(); renderEnvironment(); renderPoolMember('green'); renderTravel(); }
-  function renderYouthtech() { renderYouth(); renderTech(); renderPoolMember('technology'); renderPoolMember('socialmedia'); renderPoolMember('education'); }
-  function renderEthicsfinance() { renderPoolMember('ethics'); renderPoolMember('bioethics'); renderPoolMember('modfinance'); renderPoolMember('politics'); }
-  function renderHolycities() { renderPoolMember('mecca'); renderPoolMember('medina'); renderPoolMember('jerusalem'); }
-  function renderCapitals() { renderPoolMember('damascus'); renderPoolMember('baghdad'); renderPoolMember('cairo'); renderPoolMember('cordoba'); renderPoolMember('istanbul'); }
-  function renderEast() { renderPoolMember('bukhara'); renderPoolMember('samarkand'); }
-  function renderPattern() { renderPoolMember('calligraphy'); renderPoolMember('illumination'); }
-  function renderSacredspace() { renderPoolMember('architecture'); renderPoolMember('geometry'); }
-  function renderLivingcrafts() { renderPoolMember('textiles'); renderPoolMember('ceramics'); renderPoolMember('woodwork'); renderPoolMember('nasheeds'); }
-  function renderWord() { renderPoolMember('literature'); }
-  function renderStructure() { renderPoolMember('arabicgrammar'); renderPoolMember('morphology'); renderPoolMember('rhetoric'); renderPoolMember('etymology'); }
-  function renderSoundscript() { renderPoolMember('pronunciation'); renderPoolMember('scripts'); renderPoolMember('dialects'); }
-  function renderWordspoetry() { renderPoolMember('vocab'); renderPoolMember('proverbs'); renderPoolMember('poetry'); renderPoolMember('poetryart'); }
-  function renderBeing() { renderPoolMember('ontology'); renderPoolMember('existence'); renderPoolMember('prophethood'); }
-  function renderKnowing() { renderPoolMember('epistemology'); renderPoolMember('logic'); renderPoolMember('reason'); renderPoolMember('kalam'); }
-  function renderWillevil() { renderPoolMember('freewill'); renderPoolMember('problemofevil'); }
 
   window.getSourceLink = getSourceLink;
   window.poolRender = poolRender;
@@ -620,7 +604,6 @@
   window.renderStories = renderStories;
   window.renderNames = renderNames;
   window.renderSins = renderSins;
-  window.renderPunishments = renderPunishments;
   window.renderRepentance = renderRepentance;
   window.renderSeerah = renderSeerah;
   window.renderTafsir = renderTafsir;
@@ -638,32 +621,20 @@
   window.renderHeart = renderHeart;
   window.renderJumuah = renderJumuah;
   window.renderMarriage = renderMarriage;
-  window.renderScience = renderScience;
   window.renderWudu = renderWudu;
   window.renderScholars = renderScholars;
   window.renderPatience = renderPatience;
-  window.renderWork = renderWork;
   window.renderCommunity = renderCommunity;
-  window.renderEnvironment = renderEnvironment;
-  window.renderTravel = renderTravel;
   window.renderFiqh = renderFiqh;
-  window.renderArabic = renderArabic;
   window.renderTawakkul = renderTawakkul;
   window.renderIkhlas = renderIkhlas;
   window.renderZuhd = renderZuhd;
-  window.renderDawah = renderDawah;
-  window.renderCivilisation = renderCivilisation;
-  window.renderBattles = renderBattles;
   window.renderJannah = renderJannah;
   window.renderJahannam = renderJahannam;
   window.renderGrave = renderGrave;
   window.renderSigns = renderSigns;
-  window.renderDreams = renderDreams;
   window.renderParenting = renderParenting;
-  window.renderFood = renderFood;
   window.renderTibb = renderTibb;
-  window.renderYouth = renderYouth;
-  window.renderTech = renderTech;
   window.renderNeighbors = renderNeighbors;
   window.renderVirtues = renderVirtues;
   window.renderVicesreturn = renderVicesreturn;
@@ -672,24 +643,7 @@
   window.renderWealthoaths = renderWealthoaths;
   window.renderFamilylife = renderFamilylife;
   window.renderService = renderService;
-  window.renderWorkjustice = renderWorkjustice;
   window.renderWellness = renderWellness;
-  window.renderEarthliving = renderEarthliving;
-  window.renderYouthtech = renderYouthtech;
-  window.renderEthicsfinance = renderEthicsfinance;
-  window.renderHolycities = renderHolycities;
-  window.renderCapitals = renderCapitals;
-  window.renderEast = renderEast;
-  window.renderPattern = renderPattern;
-  window.renderSacredspace = renderSacredspace;
-  window.renderLivingcrafts = renderLivingcrafts;
-  window.renderWord = renderWord;
-  window.renderStructure = renderStructure;
-  window.renderSoundscript = renderSoundscript;
-  window.renderWordspoetry = renderWordspoetry;
-  window.renderBeing = renderBeing;
-  window.renderKnowing = renderKnowing;
-  window.renderWillevil = renderWillevil;
   window.renderSalah = renderSalah;
   window.renderDhikrCounter = renderDhikrCounter;
   window.renderInspirations = renderInspirations;

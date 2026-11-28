@@ -21,19 +21,25 @@
       if (isFri() && id === 'dhuhr') S.tj = (S.tj || 0) + 1;
       playSound('pop');
       if (typeof window.iqHaptic === 'function') window.iqHaptic(10);
-      if (typeof checkSurpriseReward === 'function') checkSurpriseReward('prayer');
     } else if (wasDone && !nextVal) {
       S.tp = Math.max(0, S.tp - 1);
       spendXp(xp);
       if (isFri() && id === 'dhuhr') S.tj = Math.max(0, (S.tj || 0) - 1);
     }
     recalc(); checkQ(); checkA(); saveAndRenderDirty();
-    if (typeof checkCombo === 'function') {
-      const prayedFajr = !!l.p.fajr;
-      const prayedAll = _countPrayers(l) >= 5;
-      if (prayedFajr) checkCombo('fajr', true);
-      if (prayedAll) checkCombo('adhkar', true);
-      if (typeof window.renderCombos === 'function') window.renderCombos();
+    if (nextVal) {
+      if (!S.combos) S.combos = {};
+      const dt = today();
+      const bump = function(type) {
+        const c = S.combos[type] || (S.combos[type] = { count: 0, lastDate: null, best: 0 });
+        if (c.lastDate === dt) return;
+        const diff = c.lastDate ? Math.round((new Date(dt + 'T00:00:00') - new Date(c.lastDate + 'T00:00:00')) / 86400000) : 0;
+        c.count = diff === 1 ? c.count + 1 : 1;
+        c.lastDate = dt;
+        if (c.count > (c.best || 0)) c.best = c.count;
+      };
+      if (l.p.fajr) bump('fajr');
+      if (_countPrayers(l) >= 5) bump('prayers');
     }
     if (typeof window.autoTrackJourneyProgress === 'function') window.autoTrackJourneyProgress();
   }
@@ -124,7 +130,6 @@
     if (tc) {
       const fullStreak = _countConsecutiveEndingOn(new Date());
       S.cs = isPaused ? Math.max(prevCs, fullStreak) : fullStreak;
-      if (typeof checkSurpriseReward === 'function') checkSurpriseReward('allPrayers');
     } else if (isPaused) {
       S.cs = prevCs;
     } else {

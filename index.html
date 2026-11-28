@@ -59,7 +59,7 @@
     .tab-panel{display:none}
     .tab-panel.active{display:block}
   </style>
-  <link rel="stylesheet" href="styles/main.css?v=56">
+  <link rel="stylesheet" href="styles/main.css?v=59">
   <script>
     window.__iqBootT0 = Date.now();
     window.__iqReload = function() { location.reload(); };
@@ -154,6 +154,29 @@
 <div id="muhasabahModal"></div>
 <!-- Screen reader announcement region -->
 <div id="srAnnounce" class="sr-only" aria-live="polite" aria-atomic="true"></div>
+<div class="iq-app-shell">
+  <aside class="iq-left-rail" id="iqLeftRail" aria-label="Primary navigation">
+    <div class="iq-rail-brand">
+      <span class="iq-rail-brand-mark" aria-hidden="true"><img class="iq-icon" src="assets/icons/emoji_u1f31b.png" alt="" width="28" height="28" decoding="async"></span>
+      <div class="iq-rail-brand-text">
+        <strong>Ibadah Quest</strong>
+        <span data-i18n-text="Daily Worship Sanctuary">Worship Sanctuary</span>
+      </div>
+    </div>
+    <div class="iq-rail-nav" role="tablist" aria-label="Sections">
+      <button type="button" class="iq-rail-btn active" data-cat="ibadah" data-i18n="Home" onclick="window.closeActiveSheet && window.closeActiveSheet();App.switchCategory('ibadah', this)" role="tab" aria-selected="true" aria-current="page"><span class="iq-rail-icon"></span><span class="iq-rail-label">Home</span></button>
+      <button type="button" class="iq-rail-btn" data-cat="worship" data-i18n="Worship" onclick="window.closeActiveSheet && window.closeActiveSheet();App.switchCategory('worship', this)" role="tab" aria-selected="false"><span class="iq-rail-icon"></span><span class="iq-rail-label">Worship</span></button>
+      <button type="button" class="iq-rail-btn" data-cat="knowledge" data-i18n="Knowledge" onclick="window.closeActiveSheet && window.closeActiveSheet();App.switchCategory('knowledge', this)" role="tab" aria-selected="false"><span class="iq-rail-icon"></span><span class="iq-rail-label">Knowledge</span></button>
+      <button type="button" class="iq-rail-btn" data-cat="profile_main" data-i18n="Profile" onclick="window.closeActiveSheet && window.closeActiveSheet();App.switchCategory('profile_main', this)" role="tab" aria-selected="false"><span class="iq-rail-icon"></span><span class="iq-rail-label">Profile</span></button>
+    </div>
+    <div class="iq-rail-quick-group">
+      <button type="button" class="iq-rail-cta" onclick="window.openChallengeDetail && window.openChallengeDetail('dhikr')"><span aria-hidden="true">&#9790;</span> <span data-i18n-text="Quick Log">Quick Log</span></button>
+      <button type="button" class="iq-rail-sub-btn" data-tab="quran" onclick="App.activateTab('quran')"><span data-i18n-text="Quran">Quran</span></button>
+      <button type="button" class="iq-rail-sub-btn" data-tab="timer" onclick="App.activateTab('timer')"><span data-i18n-text="Prayer & Qibla">Prayer &amp; Qibla</span></button>
+      <button type="button" class="iq-rail-sub-btn" onclick="window.openIqDrawer && window.openIqDrawer()"><span data-i18n-text="All Sections">All Sections</span></button>
+    </div>
+    <div id="iqRailQuickSummary" class="iq-rail-summary"></div>
+  </aside>
 <div class="app">
   <header class="top-bar iq-curved-header" id="topBar">
     <div class="geometric-bg" aria-hidden="true"></div>
@@ -178,44 +201,9 @@
     </div>
   </header>
 
-  <!-- ═══════════════ HERO HEADER ═══════════════ -->
+  <!-- ═══════════════ SERENE DATUM STRIP ═══════════════ -->
   <div class="hero-strip">
-  <div id="dailyCarousel" class="daily-carousel"></div>
-  <div id="iqHeroChallenge" class="iq-hero-challenge"></div>
-  <div class="header">
-    <div class="header-crescent" id="headerCrescent" aria-hidden="true"></div>
-    <h1>Ibadah Quest</h1>
-    <div class="header-deco" aria-hidden="true"><span id="decoLeft"></span>Submission. Grow. Earn. Ascend.<span id="decoRight"></span></div>
-  </div>
-
-  <div class="level-row">
-    <div class="xp-head">
-      <div class="level-badge">
-        <span class="lv-prefix" id="lvPrefix" data-i18n-text="Level">Level</span>
-        <span class="lv-num iq-tabular" id="lvNum" aria-live="polite">1</span>
-        <span class="lv-sep" aria-hidden="true">&middot;</span>
-        <span class="lv-title" id="lvTitle">New Seeker</span>
-      </div>
-      <div class="xp-label iq-tabular" id="xpLabel" aria-live="polite">0 / 100 XP</div>
-    </div>
-    <div class="xp-wrap" id="xpWrap">
-      <div class="xp-outer"><div class="xp-inner" id="xpBar" style="width:0%"></div></div>
-    </div>
-  </div>
-
-  <div class="streak-bar">
-    <span class="streak-fire" id="streakFire" aria-hidden="true"></span>
-    <div class="streak-info"><h3 id="strDays" aria-live="polite">0 Day Streak</h3><p id="strMsg">Start your journey!</p></div>
-    <div class="streak-best"><div class="best-num iq-tabular" id="bestStr">0</div><div class="best-label" data-i18n-text="Best">Best</div></div>
-  </div>
-
-  <div id="dateLine" class="date-line" aria-live="off"></div>
-  <div class="global-search-wrap">
-    <span class="global-search-icon" aria-hidden="true"><img class="iq-icon iq-search-badge-icon" src="assets/icons/emoji_u1f50d.png" alt="" width="20" height="20" decoding="async"></span>
-    <input class="global-search" placeholder="Search anything..." autocomplete="off" aria-label="Search anything">
-    <button type="button" class="global-search-clear" aria-label="Clear search" style="display:none;">&times;</button>
-    <div class="global-search-results" id="globalSearchResults"></div>
-  </div>
+    <div id="dateLine" class="date-line" aria-live="off"></div>
   </div><!-- /hero-strip -->
 
   <div id="seasonalBanner"></div>
@@ -225,8 +213,6 @@
     <div class="pull-refresh-spinner"></div>
     <div class="pull-refresh-text">Pull to refresh</div>
   </div>
-  <div id="bonusArea"></div>
-  <div id="comboDisplay"></div>
 
   <div id="segmentPageHeader" class="segment-page-header" style="display:none;">
     <div class="sph-content">
@@ -239,150 +225,123 @@
     <button type="button" id="sphDrawerBtn" class="sph-drawer-btn" onclick="window.openIqDrawer && window.openIqDrawer()" aria-label="Browse category sections"><svg class="iq-bento-svg" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/></svg><span data-i18n-text="All Sections">All Sections</span></button>
   </div>
 
-<!-- ═══════════════ MULTI-LAYER PAGE SECTIONS ═══════════════ -->
+<!-- ═══════════════ PAGE SECTIONS ═══════════════ -->
   <div class="page-sections-viewport" id="pageSectionsViewport">
-    <!-- SECTION 1: DAILY / IBADAH -->
-    <section class="page-section active" id="section-ibadah" data-section="ibadah" role="region" aria-label="Daily Ibadah">
+    <!-- SECTION 1: HOME / CORE -->
+    <section class="page-section active" id="section-ibadah" data-section="ibadah" role="region" aria-label="Home and Core">
       <div class="tab-panel active" role="tabpanel" id="panel-today">
-<div id="prayerArea"></div>
-<div id="wellArea"></div>
-<div id="iqFeedArea" class="iq-feed-area"></div>
-<div id="muhasabahEntry"></div>
-<div id="gardenArea"></div>
-<details id="iqAllActsDetails" class="iq-all-acts-details">
-  <summary>All Voluntary Prayers &amp; Extra Good Deeds</summary>
-  <div class="section-title"> Voluntary Prayers</div>
-  <div id="volArea"></div>
-  <div class="section-title"> Extra Good Deeds</div>
-  <div id="deedArea"></div>
-</details>
-</div>
+        <div class="iq-sanctuary-hero">
+          <div id="iqHeroChallenge" class="iq-hero-challenge"></div>
+          <div id="prayerArea"></div>
+        </div>
+        <div class="iq-sanctuary-grid">
+          <div class="iq-sanctuary-main">
+            <div id="iqFeedArea" class="iq-feed-area"></div>
+            <div id="muhasabahEntry"></div>
+          </div>
+          <aside class="iq-sanctuary-side" aria-label="Reflections and Search">
+            <div id="dailyCarousel" class="daily-carousel"></div>
+            <div class="global-search-wrap">
+              <span class="global-search-icon" aria-hidden="true"><img class="iq-icon iq-search-badge-icon" src="assets/icons/emoji_u1f50d.png" alt="" width="20" height="20" decoding="async"></span>
+              <input class="global-search" placeholder="Search Duas, Fiqh, Prophetic Ways..." autocomplete="off" aria-label="Search anything">
+              <button type="button" class="global-search-clear" aria-label="Clear search" style="display:none;">&times;</button>
+              <div class="global-search-results" id="globalSearchResults"></div>
+            </div>
+            <div id="wellArea"></div>
+          </aside>
+        </div>
+        <details id="iqAllActsDetails" class="iq-all-acts-details">
+          <summary>All Voluntary Prayers &amp; Extra Good Deeds</summary>
+          <div class="section-title">Voluntary Prayers</div>
+          <div id="volArea"></div>
+          <div class="section-title">Extra Good Deeds</div>
+          <div id="deedArea"></div>
+        </details>
+      </div>
       <div class="tab-panel" role="tabpanel" id="panel-timer">
-    <div class="section-title" data-i18n-text="Next Prayer">Next Prayer</div>
-    <div id="timerArea" class="iq-timer-display iq-tabular iq-no-mirror" style="font-size:clamp(2rem,12vw,3rem)"></div>
-    <div id="prayerNamesArea" class="iq-timer-sublabel"></div>
-    <div class="section-title" data-i18n-text="Prayer Times">Prayer Times</div>
-    <div id="prayerTimesArea"></div>
-  </div>
+        <div class="section-title" data-i18n-text="Next Prayer">Next Prayer</div>
+        <div id="timerArea" class="iq-timer-display iq-tabular iq-no-mirror" style="font-size:clamp(2rem,12vw,3rem)"></div>
+        <div id="prayerNamesArea" class="iq-timer-sublabel"></div>
+        <div class="section-title" data-i18n-text="Prayer Times">Prayer Times</div>
+        <div id="prayerTimesArea"></div>
+      </div>
       <div class="tab-panel" role="tabpanel" id="panel-quests"><div id="questArea"></div></div>
-      <div class="tab-panel" role="tabpanel" id="panel-journeys"><div id="journeyArea"></div><div id="boatArea"></div></div>
+      <div class="tab-panel" role="tabpanel" id="panel-journeys"><div id="journeyArea"></div></div>
+    </section>
+
+    <!-- SECTION 2: WORSHIP & DAILY HABITS -->
+    <section class="page-section" id="section-worship" data-section="worship" role="region" aria-label="Worship and Habits">
+      <div class="tab-panel" role="tabpanel" id="panel-quran"><div id="quranArea"></div></div>
+      <div class="tab-panel" role="tabpanel" id="panel-memorization"><div id="memorizationArea"></div></div>
       <div class="tab-panel" role="tabpanel" id="panel-morning"><div id="morningArea"></div></div>
-      <div class="tab-panel" role="tabpanel" id="panel-evening"><div id="eveningArea"></div><div id="laylatArea"></div></div>
-      <div class="tab-panel" role="tabpanel" id="panel-dhikr"><div id="dhikrCounterArea"></div><div id="dhikrArea"></div><div id="lanternArea"></div></div>
+      <div class="tab-panel" role="tabpanel" id="panel-evening"><div id="eveningArea"></div></div>
+      <div class="tab-panel" role="tabpanel" id="panel-dhikr"><div id="dhikrCounterArea"></div><div id="dhikrArea"></div></div>
       <div class="tab-panel" role="tabpanel" id="panel-situational"><div id="situationalArea"></div></div>
       <div class="tab-panel" role="tabpanel" id="panel-duas"><div id="duaArea"></div></div>
+      <div class="tab-panel" role="tabpanel" id="panel-fasting"><div id="fastingArea"></div></div>
+      <div class="tab-panel" role="tabpanel" id="panel-charity"><div id="charityArea"></div><div id="financeArea"></div><div id="zakatcalcArea"></div></div>
+      <div class="tab-panel" role="tabpanel" id="panel-healthlog"><div id="healthlogArea"></div><div id="gratitudeArea"></div></div>
       <div class="tab-panel" role="tabpanel" id="panel-wudu"><div id="wuduArea"></div></div>
       <div class="tab-panel" role="tabpanel" id="panel-jumuah"><div id="jumuahArea"></div></div>
       <div class="tab-panel" role="tabpanel" id="panel-salah"><div id="salahArea"></div></div>
       <div class="tab-panel" role="tabpanel" id="panel-extradeeds"><div id="extraDeedsArea"></div></div>
       <div class="tab-panel" role="tabpanel" id="panel-volprayers"><div id="volPrayersArea"></div></div>
-      <div class="tab-panel" role="tabpanel" id="panel-fasting"><div id="fastingArea"></div><div id="ramadanArea"></div></div>
-      <div class="tab-panel" role="tabpanel" id="panel-healthlog"><div id="healthlogArea"></div></div>
-      <div class="tab-panel" role="tabpanel" id="panel-finance"><div id="financeArea"></div></div>
-      <div class="tab-panel" role="tabpanel" id="panel-zakatcalc"><div id="zakatcalcArea"></div></div>
-      <div class="tab-panel" role="tabpanel" id="panel-memorization"><div id="memorizationArea"></div></div>
-      <div class="tab-panel" role="tabpanel" id="panel-gratitude"><div id="gratitudeArea"></div></div>
-      <div class="tab-panel" role="tabpanel" id="panel-charity"><div id="charityArea"></div></div>
-      <div class="tab-panel" role="tabpanel" id="panel-growth"><div id="growthStatArea"></div><div id="growthCalArea"></div><div id="growthArea"></div><div id="growthSettingsArea"></div></div>
     </section>
 
-    <!-- SECTION 2: KNOWLEDGE / ILM -->
+    <!-- SECTION 3: ISLAMIC KNOWLEDGE -->
     <section class="page-section" id="section-knowledge" data-section="knowledge" role="region" aria-label="Islamic Knowledge">
-      <div class="tab-panel" role="tabpanel" id="panel-quran"><div id="quranArea"></div></div>
       <div class="tab-panel" role="tabpanel" id="panel-tafsir"><div id="tafsirArea"></div></div>
-      <div class="tab-panel" role="tabpanel" id="panel-sunnahs"><div id="sunnahArea"></div></div>
       <div class="tab-panel" role="tabpanel" id="panel-hadith"><div id="hadithArea"></div></div>
-      <div class="tab-panel" role="tabpanel" id="panel-aqeedah"><div id="aqeedahArea"></div></div>
+      <div class="tab-panel" role="tabpanel" id="panel-sunnahs"><div id="sunnahArea"></div></div>
       <div class="tab-panel" role="tabpanel" id="panel-fiqh"><div id="fiqhArea"></div></div>
+      <div class="tab-panel" role="tabpanel" id="panel-worship-rulings"><div id="purificationArea"></div><div id="salahrulesArea"></div><div id="sawmrulesArea"></div><div id="hajjrulesArea"></div><div id="hajjArea"></div></div>
+      <div class="tab-panel" role="tabpanel" id="panel-wealth-oaths"><div id="zakatrulesArea"></div><div id="tradeArea"></div><div id="inheritanceArea"></div><div id="oathsArea"></div></div>
+      <div class="tab-panel" role="tabpanel" id="panel-aqeedah"><div id="aqeedahArea"></div></div>
       <div class="tab-panel" role="tabpanel" id="panel-virtues"><div id="ikhlasArea"></div><div id="tawakkulArea"></div><div id="patienceArea"></div><div id="hopeArea"></div><div id="fearArea"></div><div id="loveofallahArea"></div><div id="contentmentArea"></div></div>
       <div class="tab-panel" role="tabpanel" id="panel-vices-return"><div id="heartArea"></div><div id="sinsArea"></div><div id="repentanceArea"></div></div>
       <div class="tab-panel" role="tabpanel" id="panel-character-path"><div id="mannersArea"></div><div id="zuhdArea"></div><div id="sufismArea"></div><div id="tazkiyahArea"></div><div id="inspireArea"></div><div id="reflectionArea"></div></div>
       <div class="tab-panel" role="tabpanel" id="panel-family-life"><div id="familyArea"></div><div id="marriageArea"></div><div id="parentingArea"></div></div>
       <div class="tab-panel" role="tabpanel" id="panel-community"><div id="neighborsArea"></div><div id="communityArea"></div><div id="brotherhoodArea"></div><div id="sisterhoodArea"></div><div id="ummahArea"></div><div id="antiracismArea"></div></div>
-      <div class="tab-panel" role="tabpanel" id="panel-service"><div id="orphans2Area"></div><div id="elderlyArea"></div><div id="disabledArea"></div><div id="povertyArea"></div><div id="volunteeringArea"></div><div id="dawahArea"></div></div>
-      <div class="tab-panel" role="tabpanel" id="panel-work-justice"><div id="workArea"></div><div id="punishmentsArea"></div></div>
+      <div class="tab-panel" role="tabpanel" id="panel-service"><div id="orphans2Area"></div><div id="elderlyArea"></div><div id="disabledArea"></div><div id="povertyArea"></div><div id="volunteeringArea"></div></div>
+      <div class="tab-panel" role="tabpanel" id="panel-wellness"><div id="healthArea"></div><div id="tibbArea"></div><div id="mentalhealthArea"></div></div>
       <div class="tab-panel" role="tabpanel" id="panel-seerah"><div id="seerahArea"></div></div>
       <div class="tab-panel" role="tabpanel" id="panel-stories"><div id="storiesArea"></div></div>
-      <div class="tab-panel" role="tabpanel" id="panel-civilisation"><div id="civilisationArea"></div></div>
-      <div class="tab-panel" role="tabpanel" id="panel-science"><div id="scienceArea"></div></div>
-      <div class="tab-panel" role="tabpanel" id="panel-battles"><div id="battlesArea"></div></div>
       <div class="tab-panel" role="tabpanel" id="panel-akhirah"><div id="akhirahArea"></div></div>
       <div class="tab-panel" role="tabpanel" id="panel-jannah"><div id="jannahArea"></div></div>
       <div class="tab-panel" role="tabpanel" id="panel-jahannam"><div id="jahannamArea"></div></div>
       <div class="tab-panel" role="tabpanel" id="panel-grave"><div id="graveArea"></div></div>
       <div class="tab-panel" role="tabpanel" id="panel-signs"><div id="signsArea"></div></div>
-      <div class="tab-panel" role="tabpanel" id="panel-dreams"><div id="dreamsArea"></div></div>
-      <div class="tab-panel" role="tabpanel" id="panel-wellness"><div id="healthArea"></div><div id="tibbArea"></div><div id="mentalhealthArea"></div></div>
-      <div class="tab-panel" role="tabpanel" id="panel-earth-living"><div id="foodArea"></div><div id="environmentArea"></div><div id="greenArea"></div><div id="travelArea"></div></div>
-      <div class="tab-panel" role="tabpanel" id="panel-youth-tech"><div id="youthArea"></div><div id="techArea"></div><div id="technologyArea"></div><div id="socialmediaArea"></div><div id="educationArea"></div></div>
-      <div class="tab-panel" role="tabpanel" id="panel-ethics-finance"><div id="ethicsArea"></div><div id="bioethicsArea"></div><div id="modfinanceArea"></div><div id="politicsArea"></div></div>
-      <div class="tab-panel" role="tabpanel" id="panel-modernhist"><div id="modernhistArea"></div></div>
-      <div class="tab-panel" role="tabpanel" id="panel-ancientprophets"><div id="ancientprophetsArea"></div></div>
-      <div class="tab-panel" role="tabpanel" id="panel-worship-rulings"><div id="purificationArea"></div><div id="salahrulesArea"></div><div id="sawmrulesArea"></div><div id="hajjrulesArea"></div></div>
-      <div class="tab-panel" role="tabpanel" id="panel-wealth-oaths"><div id="zakatrulesArea"></div><div id="tradeArea"></div><div id="inheritanceArea"></div><div id="oathsArea"></div></div>
-    </section>
-
-    <!-- SECTION 3: SACRED NAMES & FIGURES -->
-    <section class="page-section" id="section-names_main" data-section="names_main" role="region" aria-label="Sacred Names & Figures">
       <div class="tab-panel" role="tabpanel" id="panel-allah_names"><div id="namesArea"></div></div>
-      <div class="tab-panel" role="tabpanel" id="panel-scholars_names"><div id="scholarsArea"></div></div>
-      <div class="tab-panel" role="tabpanel" id="panel-sahaba"><div id="sahabaArea"></div></div>
       <div class="tab-panel" role="tabpanel" id="panel-prophets"><div id="prophetsArea"></div></div>
+      <div class="tab-panel" role="tabpanel" id="panel-sahaba"><div id="sahabaArea"></div></div>
       <div class="tab-panel" role="tabpanel" id="panel-women"><div id="womenArea"></div></div>
+      <div class="tab-panel" role="tabpanel" id="panel-scholars_names"><div id="scholarsArea"></div></div>
     </section>
 
-    <!-- SECTION 4: ISLAMIC LIBRARY -->
-    <section class="page-section" id="section-library" data-section="library" role="region" aria-label="Islamic Library">
-      <div class="tab-panel" role="tabpanel" id="panel-arabic"><div id="arabicArea"></div></div>
-      <div class="tab-panel" role="tabpanel" id="panel-umayyads"><div id="umayyadsArea"></div></div>
-      <div class="tab-panel" role="tabpanel" id="panel-abbasids"><div id="abbasidsArea"></div></div>
-      <div class="tab-panel" role="tabpanel" id="panel-andalus"><div id="andalusArea"></div></div>
-      <div class="tab-panel" role="tabpanel" id="panel-ottomans"><div id="ottomansArea"></div></div>
-      <div class="tab-panel" role="tabpanel" id="panel-mamluks"><div id="mamluksArea"></div></div>
-      <div class="tab-panel" role="tabpanel" id="panel-seljuks"><div id="seljuksArea"></div></div>
-      <div class="tab-panel" role="tabpanel" id="panel-fatimids"><div id="fatimidsArea"></div></div>
-      <div class="tab-panel" role="tabpanel" id="panel-ayyubids"><div id="ayyubidsArea"></div></div>
-      <div class="tab-panel" role="tabpanel" id="panel-holy-cities"><div id="meccaArea"></div><div id="medinaArea"></div><div id="jerusalemArea"></div></div>
-      <div class="tab-panel" role="tabpanel" id="panel-capitals"><div id="damascusArea"></div><div id="baghdadArea"></div><div id="cairoArea"></div><div id="cordobaArea"></div><div id="istanbulArea"></div></div>
-      <div class="tab-panel" role="tabpanel" id="panel-east"><div id="bukharaArea"></div><div id="samarkandArea"></div></div>
-      <div class="tab-panel" role="tabpanel" id="panel-pattern"><div id="calligraphyArea"></div><div id="illuminationArea"></div></div>
-      <div class="tab-panel" role="tabpanel" id="panel-sacred-space"><div id="architectureArea"></div><div id="geometryArea"></div></div>
-      <div class="tab-panel" role="tabpanel" id="panel-living-crafts"><div id="textilesArea"></div><div id="ceramicsArea"></div><div id="woodworkArea"></div><div id="nasheedsArea"></div></div>
-      <div class="tab-panel" role="tabpanel" id="panel-word"><div id="literatureArea"></div></div>
-      <div class="tab-panel" role="tabpanel" id="panel-structure"><div id="arabicgrammarArea"></div><div id="morphologyArea"></div><div id="rhetoricArea"></div><div id="etymologyArea"></div></div>
-      <div class="tab-panel" role="tabpanel" id="panel-sound-script"><div id="pronunciationArea"></div><div id="scriptsArea"></div><div id="dialectsArea"></div></div>
-      <div class="tab-panel" role="tabpanel" id="panel-words-poetry"><div id="vocabArea"></div><div id="proverbsArea"></div><div id="poetryArea"></div><div id="poetryartArea"></div></div>
-      <div class="tab-panel" role="tabpanel" id="panel-being"><div id="ontologyArea"></div><div id="existenceArea"></div><div id="prophethoodArea"></div></div>
-      <div class="tab-panel" role="tabpanel" id="panel-knowing"><div id="epistemologyArea"></div><div id="logicArea"></div><div id="reasonArea"></div><div id="kalamArea"></div></div>
-      <div class="tab-panel" role="tabpanel" id="panel-will-evil"><div id="freewillArea"></div><div id="problemofevilArea"></div></div>
-    </section>
-
-    <!-- SECTION 5: PROFILE & ANALYTICS -->
-    <section class="page-section" id="section-profile_main" data-section="profile_main" role="region" aria-label="User Profile & Growth">
-      <div class="tab-panel" role="tabpanel" id="panel-profile"><div id="profileArea"></div><div id="mosqueArea"></div></div>
+    <!-- SECTION 4: PROFILE & PROGRESS -->
+    <section class="page-section" id="section-profile_main" data-section="profile_main" role="region" aria-label="User Profile & Progress">
+      <div class="tab-panel" role="tabpanel" id="panel-profile"><div id="profileArea"></div></div>
       <div class="tab-panel" role="tabpanel" id="panel-goals"><div id="goalsArea"></div></div>
       <div class="tab-panel" role="tabpanel" id="panel-trophies">
-    <div id="achievementShowcase"></div>
-    <div id="achArea"></div>
-    <div id="keysArea"></div>
-  </div>
+        <div id="achievementShowcase"></div>
+        <div id="achArea"></div>
+      </div>
       <div class="tab-panel" role="tabpanel" id="panel-progress">
-    <div id="statArea"></div>
-    <div id="calArea"></div>
-  </div>
+        <div id="gardenArea"></div>
+        <div id="statArea"></div>
+        <div id="calArea"></div>
+      </div>
       <div class="tab-panel" role="tabpanel" id="panel-stats">
-    <div class="section-title" data-i18n-text="Analytics">Analytics</div>
-    <div id="statsArea"></div>
-  </div>
-      <div class="tab-panel" role="tabpanel" id="panel-rewards">
-    <div class="shop-list" id="shopArea"></div>
-  </div>
+        <div class="section-title" data-i18n-text="Analytics">Analytics</div>
+        <div id="statsArea"></div>
+      </div>
       <div class="tab-panel" role="tabpanel" id="panel-gallery"><div id="galleryArea"></div></div>
     </section>
   </div>
     </main>
 
   <div class="copyright-footer">Copyright &copy; 2026 Md. Mahin Ahmed. All rights reserved.</div>
+</div>
 </div>
 
 <!-- Core Data Files (must load in dependency order) -->
@@ -396,7 +355,6 @@
 <script src="data/voluntary.js?v=4"></script>
 <script src="data/deeds.js?v=4"></script>
 <script src="data/tips-details.js?v=4"></script>
-<script src="data/shop.js?v=3"></script>
 <script src="data/levels.js?v=3"></script>
 <script src="data/streak-msgs.js?v=3"></script>
 <script src="data/quests.js?v=4"></script>
@@ -407,67 +365,18 @@
 <script src="data/relatable-dhikr.js?v=1"></script>
 <script src="data/extra-deeds.js?v=1"></script>
 <script src="data/vol-prayers.js?v=1"></script>
- <script src="data/tab-groups.js?v=11"></script>
- <script src="data/panel-sections.js?v=3"></script>
+<script src="data/tab-groups.js?v=12"></script>
+<script src="data/panel-sections.js?v=4"></script>
 
-<!-- Content Pools (extracted from content-pools.js) -->
+<!-- Core Eager Content Pools (remaining Knowledge pools lazy-loaded on demand) -->
 <script src="data/pools/quran-meta.js?v=3"></script>
 <script src="data/pools/helpers.js?v=4"></script>
 <script src="data/pools/dua.js?v=3"></script>
 <script src="data/pools/sunnah.js?v=3"></script>
 <script src="data/pools/dhikr.js?v=3"></script>
-<script src="data/pools/stories.js?v=3"></script>
-<script src="data/pools/inspirations.js?v=3"></script>
-<script src="data/pools/names.js?v=3"></script>
-<script src="data/pools/sins.js?v=3"></script>
-<script src="data/pools/punishments.js?v=3"></script>
-<script src="data/pools/repentance.js?v=3"></script>
-<script src="data/pools/sahaba.js?v=3"></script>
-<script src="data/pools/seerah.js?v=3"></script>
-<script src="data/pools/tafsir.js?v=3"></script>
-<script src="data/pools/manners.js?v=3"></script>
-<script src="data/pools/aqeedah.js?v=3"></script>
-<script src="data/pools/family.js?v=3"></script>
 <script src="data/pools/health.js?v=4"></script>
 <script src="data/pools/finance.js?v=4"></script>
-<script src="data/pools/ummah.js?v=3"></script>
-<script src="data/pools/hajj.js?v=3"></script>
-<script src="data/pools/akhirah.js?v=3"></script>
-<script src="data/pools/prophets.js?v=3"></script>
-<script src="data/pools/women.js?v=3"></script>
-<script src="data/pools/knowledge.js?v=3"></script>
-<script src="data/pools/heart.js?v=3"></script>
-<script src="data/pools/jumuah.js?v=3"></script>
-<script src="data/pools/marriage.js?v=3"></script>
-<script src="data/pools/science.js?v=3"></script>
-<script src="data/pools/wudu.js?v=3"></script>
-<script src="data/pools/scholars.js?v=3"></script>
-<script src="data/pools/patience.js?v=3"></script>
-<script src="data/pools/work.js?v=3"></script>
-<script src="data/pools/community.js?v=3"></script>
-<script src="data/pools/environment.js?v=3"></script>
-<script src="data/pools/travel.js?v=3"></script>
-<script src="data/pools/fiqh.js?v=3"></script>
-<script src="data/pools/arabic.js?v=3"></script>
-<script src="data/pools/tawakkul.js?v=3"></script>
-<script src="data/pools/ikhlas.js?v=3"></script>
-<script src="data/pools/zuhd.js?v=3"></script>
-<script src="data/pools/dawah.js?v=3"></script>
-<script src="data/pools/civilisation.js?v=3"></script>
-<script src="data/pools/battles.js?v=3"></script>
-<script src="data/pools/jannah.js?v=3"></script>
-<script src="data/pools/jahannam.js?v=3"></script>
-<script src="data/pools/grave.js?v=3"></script>
-<script src="data/pools/signs.js?v=3"></script>
-<script src="data/pools/dreams.js?v=3"></script>
-<script src="data/pools/parenting.js?v=3"></script>
-<script src="data/pools/food.js?v=3"></script>
-<script src="data/pools/tibb.js?v=3"></script>
-<script src="data/pools/youth.js?v=3"></script>
-<script src="data/pools/tech.js?v=3"></script>
-<script src="data/pools/neighbors.js?v=3"></script>
-<script src="data/pools/new-pools.js?v=1"></script>
-<script src="data/pools/expose.js?v=1"></script>
+<script src="data/pools/expose.js?v=2"></script>
 
 <!-- State -->
 <script src="core/storage.js?v=1"></script>
@@ -489,7 +398,7 @@
 <script src="features/native-bridge.js?v=1" defer></script>
 <script src="core/render-prayers.js?v=9"></script>
 <script src="core/static.js?v=12"></script>
-<script src="core/dynamic.js?v=20"></script>
+<script src="core/dynamic.js?v=21"></script>
 <script src="core/tabs.js?v=18"></script>
 
 <!-- Offline Analytics Dashboard (lazy loaded on first access) -->
@@ -525,15 +434,7 @@
 <script src="features/health.js?v=8" defer></script>
 <script src="features/finance.js?v=8" defer></script>
 <script src="features/personal-goals.js?v=5" defer></script>
-<script src="features/spiritual-growth/data.js?v=2" defer></script>
-<script src="features/spiritual-growth/index.js?v=3" defer></script>
-<script src="features/spiritual-growth/lantern.js?v=1" defer></script>
-<script src="features/spiritual-growth/keys.js?v=1" defer></script>
-<script src="features/spiritual-growth/mosque.js?v=1" defer></script>
-<script src="features/spiritual-growth/boat.js?v=1" defer></script>
-<script src="features/spiritual-growth/ramadan.js?v=1" defer></script>
-<script src="features/spiritual-growth/laylat.js?v=1" defer></script>
-<script src="features/search.js?v=5" defer></script>
+<script src="features/search.js?v=6" defer></script>
 <script src="features/hadith-library.js?v=3" defer></script>
 <script src="features/tafsir-library.js?v=3" defer></script>
 <script src="features/tafsir-browser.js?v=2" defer></script>
@@ -541,10 +442,7 @@
 <script src="features/streak-milestones.js?v=2" defer></script>
 <script src="features/pull-refresh.js?v=1" defer></script>
 <script src="features/swipe-nav.js?v=2" defer></script>
-<script src="features/surprise-rewards.js?v=1" defer></script>
 <script src="features/daily-summary.js?v=4" defer></script>
-<script src="features/consistency-bonuses.js?v=1" defer></script>
-<script src="features/combo-streaks.js" defer></script>
 <script src="features/achievement-showcase.js?v=3" defer></script>
 <script src="features/daily-content.js?v=4" defer></script>
 <script src="features/notifications.js?v=3" defer></script>
@@ -558,22 +456,21 @@
 <div id="onboardingOverlay" style="display:none"></div>
 <script src="features/onboarding.js?v=2" defer></script>
 <script src="features/masjid-checkins.js?v=3" defer></script>
-<script src="features/iq-shell.js?v=8"></script>
+<script src="features/iq-shell.js?v=9"></script>
 <script src="features/gallery.js?v=2" defer></script>
 
 <!-- Actions (core logic, navigation, init, window.App) -->
 <script src="features/auth.js?v=2"></script>
 <script src="core/xp.js?v=4"></script>
-<script src="core/prayers.js?v=6"></script>
-<script src="core/quests.js?v=5"></script>
+<script src="core/prayers.js?v=7"></script>
+<script src="core/quests.js?v=6"></script>
 <script src="core/achievements.js?v=2"></script>
 <script src="core/random.js?v=1"></script>
-<script src="core/shop.js?v=2"></script>
 <script src="core/dhikr.js?v=5"></script>
-<script src="core/content.js?v=1"></script>
+<script src="core/content.js?v=3"></script>
 <script src="core/backup.js?v=1"></script>
 <script src="data/i18n.js?v=6"></script>
-<script src="core/actions.js?v=29"></script>
+<script src="core/actions.js?v=30"></script>
 
 <!-- PWA: Service Worker registration + update banner -->
 <script>
@@ -665,12 +562,12 @@
   <div id="iqMasjidBody" class="iq-sheet-body"></div>
 </div>
 
-<!-- Mobile bottom navigation (5-slot floating dock with elevated center crescent button) -->
+<!-- Mobile bottom navigation (4+1 dock with elevated center crescent action) -->
 <nav class="bnav" id="bnav" aria-label="Main navigation">
-  <button class="bnav-btn active" data-cat="ibadah" data-i18n="Daily" onclick="window.closeActiveSheet && window.closeActiveSheet();App.switchCategory('ibadah', this)" role="tab" aria-selected="true"><span class="bnav-icon"></span><span class="bnav-label">Home</span></button>
+  <button class="bnav-btn active" data-cat="ibadah" data-i18n="Home" onclick="window.closeActiveSheet && window.closeActiveSheet();App.switchCategory('ibadah', this)" role="tab" aria-selected="true"><span class="bnav-icon"></span><span class="bnav-label">Home</span></button>
+  <button class="bnav-btn" data-cat="worship" data-i18n="Worship" onclick="window.closeActiveSheet && window.closeActiveSheet();App.switchCategory('worship', this)" role="tab" aria-selected="false"><span class="bnav-icon"></span><span class="bnav-label">Worship</span></button>
+  <button type="button" class="bnav-center-fab" id="bnavCenterFab" onclick="window.openChallengeDetail && window.openChallengeDetail('dhikr')" aria-label="Daily worship quick log"><span class="bnav-center-icon"><img class="iq-icon bnav-center-badge" src="assets/icons/emoji_u1f31b.png" alt="🌙" width="32" height="32" decoding="async"></span></button>
   <button class="bnav-btn" data-cat="knowledge" data-i18n="Knowledge" onclick="window.closeActiveSheet && window.closeActiveSheet();App.switchCategory('knowledge', this)" role="tab" aria-selected="false"><span class="bnav-icon"></span><span class="bnav-label">Knowledge</span></button>
-  <button type="button" class="bnav-center-fab" id="bnavCenterFab" onclick="window.openChallengeDetail && window.openChallengeDetail('dhikr')" aria-label="Daily challenges quick view"><span class="bnav-center-icon"><img class="iq-icon bnav-center-badge" src="assets/icons/emoji_u1f31b.png" alt="🌙" width="32" height="32" decoding="async"></span></button>
-  <button class="bnav-btn" data-cat="library" data-i18n="Library" onclick="window.closeActiveSheet && window.closeActiveSheet();App.switchCategory('library', this)" role="tab" aria-selected="false"><span class="bnav-icon"></span><span class="bnav-label">Library</span></button>
   <button class="bnav-btn" data-cat="profile_main" data-i18n="Profile" onclick="window.closeActiveSheet && window.closeActiveSheet();App.switchCategory('profile_main', this)" role="tab" aria-selected="false"><span class="bnav-icon"></span><span class="bnav-label">Profile</span></button>
 </nav>
 

@@ -24,10 +24,9 @@
     { var: 'HADITHS', cat: 'Hadith', tab: 'hadith', fields: ['text','desc','english','source'] },
     { var: 'INSPIRATIONS_POOL', cat: 'Inspirations', tab: 'character-path', fields: ['text','desc','english'] },
     { var: 'SINS_POOL', cat: 'Sins', tab: 'vices-return', fields: ['title','desc','text'] },
-    { var: 'FINANCE_POOL', cat: 'Finance', tab: 'finance', fields: ['title','desc'] },
+    { var: 'FINANCE_POOL', cat: 'Giving & Zakat', tab: 'charity', fields: ['title','desc'] },
     { var: 'FAMILY_POOL', cat: 'Family', tab: 'family-life', fields: ['title','desc','text'] },
     { var: 'HEART_POOL', cat: 'Heart', tab: 'vices-return', fields: ['title','desc','text','english'] },
-    { var: 'PUNISHMENTS_POOL', cat: 'Punishments', tab: 'work-justice', fields: ['title','desc','text'] },
     { var: 'REPENTANCE_POOL', cat: 'Repentance', tab: 'vices-return', fields: ['title','desc','text'] },
     { var: 'SAHABA_POOL', cat: 'Sahaba', tab: 'sahaba', fields: ['title','desc','name'] },
     { var: 'SEERAH_POOL', cat: 'Seerah', tab: 'seerah', fields: ['title','desc','text'] },
@@ -42,33 +41,21 @@
     { var: 'KNOWLEDGE_POOL', cat: 'Knowledge', tab: 'character-path', fields: ['title','desc','text'] },
     { var: 'JUMUAH_POOL', cat: "Jumu'ah", tab: 'jumuah', fields: ['title','desc','text'] },
     { var: 'MARRIAGE_POOL', cat: 'Marriage', tab: 'family-life', fields: ['title','desc','text'] },
-    { var: 'SCIENCE_POOL', cat: 'Science', tab: 'science', fields: ['title','desc','text'] },
     { var: 'WUDU_POOL', cat: 'Wudu', tab: 'wudu', fields: ['title','desc','text'] },
     { var: 'SCHOLARS_POOL', cat: 'Scholars', tab: 'scholars_names', fields: ['title','desc','name'] },
     { var: 'PATIENCE_POOL', cat: 'Patience', tab: 'virtues', fields: ['title','desc','text'] },
-    { var: 'WORK_POOL', cat: 'Work', tab: 'work-justice', fields: ['title','desc','text'] },
     { var: 'COMMUNITY_POOL', cat: 'Community', tab: 'community', fields: ['title','desc','text'] },
-    { var: 'ENVIRONMENT_POOL', cat: 'Environment', tab: 'earth-living', fields: ['title','desc','text'] },
-    { var: 'TRAVEL_POOL', cat: 'Travel', tab: 'earth-living', fields: ['title','desc','text'] },
     { var: 'FIQH_POOL', cat: 'Fiqh', tab: 'fiqh', fields: ['title','desc','text'] },
-    { var: 'ARABIC_POOL', cat: 'Arabic', tab: 'arabic', fields: ['title','desc','text'] },
     { var: 'TAWAKKUL_POOL', cat: 'Tawakkul', tab: 'virtues', fields: ['title','desc','text'] },
     { var: 'IKHLAS_POOL', cat: 'Ikhlas', tab: 'virtues', fields: ['title','desc','text'] },
     { var: 'ZUHD_POOL', cat: 'Zuhd', tab: 'character-path', fields: ['title','desc','text'] },
-    { var: 'DAWAH_POOL', cat: "Da'wah", tab: 'service', fields: ['title','desc','text'] },
-    { var: 'CIVILISATION_POOL', cat: 'Civilisation', tab: 'civilisation', fields: ['title','desc','text'] },
-    { var: 'BATTLES_POOL', cat: 'Battles', tab: 'battles', fields: ['title','desc','text'] },
     { var: 'JANNAH_POOL', cat: 'Jannah', tab: 'jannah', fields: ['title','desc','text'] },
     { var: 'JAHANNAM_POOL', cat: 'Jahannam', tab: 'jahannam', fields: ['title','desc','text'] },
     { var: 'GRAVE_POOL', cat: 'Grave', tab: 'grave', fields: ['title','desc','text'] },
     { var: 'SIGNS_POOL', cat: 'Signs', tab: 'signs', fields: ['title','desc','text'] },
-    { var: 'DREAMS_POOL', cat: 'Dreams', tab: 'dreams', fields: ['title','desc','text'] },
     { var: 'PARENTING_POOL', cat: 'Parenting', tab: 'family-life', fields: ['title','desc','text'] },
-    { var: 'FOOD_POOL', cat: 'Food', tab: 'earth-living', fields: ['title','desc','text'] },
     { var: 'TIBB_POOL', cat: 'Tibb', tab: 'wellness', fields: ['title','desc','text'] },
-    { var: 'YOUTH_POOL', cat: 'Youth', tab: 'youth-tech', fields: ['title','desc','text'] },
-    { var: 'TECH_POOL', cat: 'Technology', tab: 'youth-tech', fields: ['title','desc','text'] },
-    { var: 'NEIGHBORS_POOL', cat: 'Neighbors', tab: 'community', fields: ['title','desc','text'] },
+    { var: 'NEIGHBORS_POOL', cat: 'Neighbors', tab: 'community', fields: ['title','desc','text'] }
   ];
 
   function searchAll(term) {
@@ -149,8 +136,16 @@
     items.forEach((el, i) => el.classList.toggle('active', i === idx));
   }
 
+  let _searchPoolsLoaded = false;
   function showResults(term, box) {
     if (!term || term.length < 2) { box.classList.remove('show'); box.innerHTML = ''; return; }
+    if (!_searchPoolsLoaded && typeof window.ensureAllSearchPoolsLoaded === 'function') {
+      _searchPoolsLoaded = true;
+      window.ensureAllSearchPoolsLoaded().then(function() {
+        const inp = document.querySelector('.global-search');
+        if (inp && inp.value.trim().length >= 2) showResults(inp.value, box);
+      }).catch(function() {});
+    }
     const results = searchAll(term);
     if (!results.length) { box.innerHTML = `<div class="gs-item gs-empty">No results for "${escapeSearchText(term)}"</div>`; box.classList.add('show'); return; }
 

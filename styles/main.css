@@ -3126,6 +3126,8 @@ textarea:focus-visible {
 }
 @media (pointer:coarse) {
   button:not(.carousel-dot):not(.bnav-btn):not(.iq-quick-pill){min-height:44px;min-width:44px}
+  .card-grid .card-item .card-info-btn{min-height:24px;min-width:24px}
+  .carousel-nav-controls .carousel-nav-btn{min-height:28px;min-width:28px}
   input[type="text"],input[type="number"],input[type="date"],input[type="search"],select,textarea,.profile-input,.amount-custom-input,.quran-search{font-size:16px;min-height:44px}
 }
 @media (min-width: 768px) {
@@ -3191,6 +3193,8 @@ button,.t2-btn,.cat-chip{font-size:16px;}
   .card-grid{grid-template-columns:repeat(3,minmax(0,1fr));}
   .tab-content{overflow-x:clip;}
   button:not(.carousel-dot):not(.bnav-btn):not(.iq-quick-pill){min-height:44px;min-width:44px}
+  .card-grid .card-item .card-info-btn{min-height:24px;min-width:24px}
+  .carousel-nav-controls .carousel-nav-btn{min-height:28px;min-width:28px}
   .verify-btn{min-height:44px;padding:10px 16px}
   .surah-card{min-height:44px;padding:10px;}
   .quest-check{width:40px;height:40px}
@@ -3579,6 +3583,8 @@ button,.t2-btn,.cat-chip{font-size:16px;}
    ══════════════════════════════════════════════════════════════ */
 @media (pointer: coarse) {
   button:not(.carousel-dot):not(.bnav-btn):not(.iq-quick-pill) { min-height: 44px; min-width: 44px; }
+  .card-grid .card-item .card-info-btn { min-height: 24px; min-width: 24px; }
+  .carousel-nav-controls .carousel-nav-btn { min-height: 28px; min-width: 28px; }
   input[type="text"], input[type="number"], input[type="date"], input[type="search"],
   select, textarea, .profile-input, .amount-custom-input, .quran-search {
     font-size: 16px; min-height: 44px;
@@ -4224,17 +4230,14 @@ input:focus, textarea:focus, select:focus {
 /* ══════════════════════════════════════════════════════════════
    MULTI-PAGE SEGMENT TAB SECTIONS (App Page Architecture)
    ══════════════════════════════════════════════════════════════ */
+body[data-active-segment="worship"] .hero-strip,
 body[data-active-segment="knowledge"] .hero-strip,
-body[data-active-segment="names_main"] .hero-strip,
-body[data-active-segment="library"] .hero-strip,
 body[data-active-segment="profile_main"] .hero-strip,
+body[data-active-segment="worship"] .daily-carousel,
 body[data-active-segment="knowledge"] .daily-carousel,
-body[data-active-segment="names_main"] .daily-carousel,
-body[data-active-segment="library"] .daily-carousel,
 body[data-active-segment="profile_main"] .daily-carousel,
+body[data-active-segment="worship"] #seasonalBanner,
 body[data-active-segment="knowledge"] #seasonalBanner,
-body[data-active-segment="names_main"] #seasonalBanner,
-body[data-active-segment="library"] #seasonalBanner,
 body[data-active-segment="profile_main"] #seasonalBanner {
   display: none !important;
 }
@@ -4520,9 +4523,8 @@ body[data-active-tab]:not([data-active-tab="today"]) #bonusArea {
   width: 100%;
 }
 body[data-active-segment="ibadah"] #section-ibadah,
+body[data-active-segment="worship"] #section-worship,
 body[data-active-segment="knowledge"] #section-knowledge,
-body[data-active-segment="names_main"] #section-names_main,
-body[data-active-segment="library"] #section-library,
 body[data-active-segment="profile_main"] #section-profile_main,
 .page-section.active {
   display: block;
@@ -4558,7 +4560,6 @@ body:not([data-active-segment]) #section-ibadah {
 [dir="rtl"] .drill-back .drill-back-arrow,
 [dir="rtl"] .iq-mirror-icon {
   transform: scaleX(-1);
-  display: inline-block;
 }
 
 .quran-search {
@@ -5774,72 +5775,58 @@ body[data-active-tab="today"] .hero-strip .streak-bar {
    grids rather than a narrow centered phone strip.
    ══════════════════════════════════════════════════════════════ */
 @media (min-width: 768px) {
+  nav.bnav {
+    display: none !important;
+  }
+  .iq-app-shell {
+    display: flex;
+    width: 100%;
+    height: 100vh;
+    height: 100dvh;
+    overflow: hidden;
+  }
+  .iq-left-rail {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    width: 84px;
+    flex-shrink: 0;
+    height: 100%;
+    padding: 16px 10px;
+    background: var(--surface-raised, var(--card-bg));
+    border-inline-end: 1px solid var(--border-subtle, var(--border));
+    overflow-y: auto;
+    z-index: 110;
+  }
+  .iq-app-shell .app {
+    flex: 1;
+    min-width: 0;
+    height: 100%;
+    overflow-y: auto;
+    padding-bottom: 48px;
+  }
+  .iq-menu-trigger {
+    display: none !important;
+  }
   .fab-container {
     display: flex;
     bottom: 20px;
     inset-inline-end: 20px;
   }
-  .app {
-    padding-bottom: 84px;
-  }
-  body[data-active-tab="today"] .hero-strip .level-row,
-  body[data-active-tab="today"] .hero-strip .streak-bar {
-    display: flex;
-  }
   .hero-strip {
-    display: grid !important;
-    grid-template-columns: minmax(0, 1.38fr) minmax(250px, 0.82fr);
-    grid-template-rows: auto 1fr 1fr auto;
-    gap: 10px 16px;
-    align-items: stretch;
+    margin-bottom: 6px;
   }
-  .hero-strip .daily-carousel {
-    grid-column: 1 / -1;
-    grid-row: 1;
-    margin: 0;
+  .iq-sanctuary-hero {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 14px;
+    margin-bottom: 16px;
   }
-  .hero-strip .iq-hero-challenge {
-    grid-column: 1;
-    grid-row: 2 / span 3;
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-    align-self: stretch;
-  }
-  .hero-strip .iq-hero-ch-card {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-  }
-  .hero-strip .level-row {
-    grid-column: 2;
-    grid-row: 2;
-    margin: 0 !important;
-    max-width: none !important;
-    background: var(--card-bg);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 12px 16px;
-    box-shadow: var(--shadow-sm);
-    align-self: stretch;
-  }
-  .hero-strip .xp-wrap {
-    max-width: none;
-  }
-  .hero-strip .streak-bar {
-    grid-column: 2;
-    grid-row: 3;
-    margin: 0 !important;
-    box-shadow: var(--shadow-sm);
-    align-self: stretch;
-  }
-  .hero-strip .global-search-wrap {
-    grid-column: 2;
-    grid-row: 4;
-    max-width: 100%;
-    margin: 0 !important;
-    align-self: end;
+  .iq-sanctuary-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.35fr) minmax(260px, 0.9fr);
+    gap: 16px;
+    align-items: start;
   }
   #prayerArea .card-grid {
     display: grid;
@@ -5870,7 +5857,8 @@ body[data-active-tab="today"] .hero-strip .streak-bar {
     max-width: min(100%, 42rem) !important;
   }
   .global-search-wrap {
-    max-width: min(100%, 46rem);
+    max-width: 100%;
+    margin: 0 !important;
   }
   .segment-page-header {
     justify-content: space-between !important;
@@ -5886,6 +5874,29 @@ body[data-active-tab="today"] .hero-strip .streak-bar {
   .segment-page-header .sph-desc {
     justify-content: flex-start !important;
     text-align: start !important;
+  }
+}
+
+@media (min-width: 1024px) {
+  .iq-left-rail {
+    width: 224px;
+    padding: 18px 14px;
+  }
+  .iq-rail-brand-text,
+  .iq-rail-label,
+  .iq-rail-quick-group,
+  .iq-rail-summary {
+    display: flex;
+  }
+  .iq-sanctuary-hero {
+    grid-template-columns: minmax(320px, 0.92fr) minmax(0, 1.38fr);
+    align-items: stretch;
+  }
+  .iq-hero-ch-card {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
   }
 }
 
@@ -5936,7 +5947,7 @@ body[data-active-tab="today"] .hero-strip .streak-bar {
 
 @media (min-width: 1100px) {
   #iqFeedArea .iq-feed-list {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 14px;
   }
   #prayerArea .card-grid {
@@ -6917,5 +6928,510 @@ html[data-theme="night"] .top-bar.iq-curved-header {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   SACRED MINIMALISM OVERHAUL — RAIL, SANCTUARY HERO, QIBLA & QURAN
+   ══════════════════════════════════════════════════════════════ */
+.iq-left-rail { display: none; }
+.iq-rail-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 4px 6px 10px;
+  border-bottom: 1px solid var(--border-subtle);
+}
+.iq-rail-brand-mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: var(--accent-bg);
+  flex-shrink: 0;
+}
+.iq-rail-brand-text {
+  display: none;
+  flex-direction: column;
+  line-height: 1.2;
+  text-align: start;
+}
+.iq-rail-brand-text strong { font-size: 0.95rem; color: var(--text); }
+.iq-rail-brand-text span { font-size: 0.7rem; color: var(--text2); font-weight: 500; }
+.iq-rail-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.iq-rail-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 44px;
+  padding: 10px;
+  border-radius: var(--radius-sm);
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--text2);
+  font-family: var(--font);
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background var(--transition), color var(--transition), border-color var(--transition);
+}
+.iq-rail-btn:hover { background: var(--accent-bg); color: var(--accent-dark); }
+.iq-rail-btn.active {
+  background: var(--accent-bg);
+  color: var(--accent-dark);
+  border-color: var(--accent-border);
+  font-weight: 700;
+}
+.iq-rail-icon { display: inline-flex; width: 22px; height: 22px; align-items: center; justify-content: center; flex-shrink: 0; }
+.iq-rail-icon .iq-icon { width: 20px; height: 20px; }
+.iq-rail-label { display: none; text-align: start; flex: 1; }
+.iq-rail-quick-group {
+  display: none;
+  flex-direction: column;
+  gap: 8px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border-subtle);
+}
+.iq-rail-cta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  border: none;
+  background: var(--accent);
+  color: var(--accent-contrast, #ffffff);
+  font-family: var(--font);
+  font-size: 0.86rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background var(--transition);
+}
+.iq-rail-cta:hover { background: var(--accent-hover, var(--accent-dark)); }
+.iq-rail-sub-btn {
+  display: flex;
+  align-items: center;
+  min-height: 40px;
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-subtle);
+  background: var(--card-bg);
+  color: var(--text2);
+  font-family: var(--font);
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-align: start;
+  transition: border-color var(--transition), color var(--transition);
+}
+.iq-rail-sub-btn:hover,
+.iq-rail-sub-btn.active { border-color: var(--accent-border); color: var(--accent-dark); }
+.iq-rail-summary {
+  display: none;
+  margin-top: auto;
+  padding-top: 10px;
+  border-top: 1px solid var(--border-subtle);
+  gap: 8px;
+}
+.iq-rail-stat {
+  flex: 1;
+  background: var(--card-bg);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 8px;
+  text-align: center;
+}
+.iq-rail-stat-lbl { display: block; font-size: 0.68rem; color: var(--text2); }
+.iq-rail-stat strong { font-size: 0.92rem; color: var(--accent-dark); }
+@media (min-width: 1024px) {
+  .iq-rail-btn { justify-content: flex-start; padding: 10px 12px; }
+  .iq-rail-brand-text { display: flex; }
+  .iq-rail-label { display: inline; }
+  .iq-rail-quick-group { display: flex; }
+  .iq-rail-summary { display: flex; }
+}
+
+/* Sacred Minimalism Hairline Discipline */
+.content-card,
+.quest-row,
+.vol-card,
+.deed-card,
+.iq-challenge-card,
+.card-grid .card-item {
+  box-shadow: none;
+  border-color: var(--border-subtle, var(--card-border));
+}
+.content-card:hover,
+.iq-challenge-card:hover,
+.card-grid .card-item:hover {
+  border-color: var(--border-strong, var(--accent-border));
+}
+
+/* Prayer-First Sanctuary Hero */
+.iq-sanctuary-hero {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+  margin-bottom: 16px;
+}
+.iq-sanctuary-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+.iq-hero-ch-card.iq-sanctuary-card {
+  background: linear-gradient(155deg, #054944 0%, #07635d 68%, #0a7a72 100%);
+  color: #f4faf8;
+  border: 1px solid rgba(243, 220, 159, 0.34);
+  box-shadow: var(--shadow-sm);
+}
+.iq-sanctuary-card .iq-hero-ch-title,
+.iq-sanctuary-card .iq-hero-hijri,
+.iq-sanctuary-card .iq-pillar-lbl,
+.iq-sanctuary-card .iq-pillar-row strong,
+.iq-sanctuary-card .iq-fr-pct,
+.iq-sanctuary-card .iq-rhythm-lbl {
+  color: #f4faf8;
+}
+.iq-sanctuary-card .iq-fr-lbl { color: rgba(244, 250, 248, 0.78); }
+.iq-sanctuary-card .iq-fr-track { stroke: rgba(255, 255, 255, 0.2); }
+.iq-sanctuary-card .iq-fr-fill { stroke: #f3dc9f; }
+.iq-sanctuary-card .iq-hero-ch-link {
+  color: #f3dc9f;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: var(--radius-pill);
+  padding: 6px 12px;
+}
+.iq-hero-cues-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin-top: 6px;
+}
+.iq-hero-hijri {
+  font-size: 0.75rem;
+  font-weight: 600;
+  opacity: 0.9;
+}
+.iq-cue-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  min-height: 28px;
+  padding: 3px 10px;
+  border-radius: var(--radius-pill);
+  border: 1px solid rgba(243, 220, 159, 0.45);
+  background: rgba(243, 220, 159, 0.16);
+  color: #f8ecc7;
+  font-family: var(--font);
+  font-size: 0.72rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+.iq-cue-pill .iq-icon { width: 14px; height: 14px; }
+.iq-hero-sanctuary-prayer {
+  background: rgba(255, 255, 255, 0.13);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+  margin: 6px 0;
+  color: #ffffff;
+}
+.iq-sanctuary-card .iq-hero-next-lbl,
+.iq-sanctuary-card .iq-hero-next-lbl strong {
+  color: #ffffff;
+}
+.iq-sanctuary-card .iq-hero-next-lbl .iq-icon { color: #f3dc9f; }
+.iq-sanctuary-card .iq-hero-next-eta { color: #f3dc9f; font-weight: 800; }
+.iq-sanctuary-card .iq-rhythm-dot { border-color: rgba(255, 255, 255, 0.28); background: rgba(255, 255, 255, 0.08); color: #ffffff; }
+.iq-sanctuary-card .iq-rhythm-day.today .iq-rhythm-lbl { color: #f3dc9f; font-weight: 800; }
+.iq-sanctuary-card .iq-rhythm-day.today .iq-rhythm-dot { border-color: #f3dc9f; }
+.iq-sanctuary-card .iq-rhythm-day.complete .iq-rhythm-dot { background: #10b981; border-color: #34d399; color: #03261b; }
+
+html[data-theme="dark"] .iq-hero-ch-card.iq-sanctuary-card,
+html[data-theme="night"] .iq-hero-ch-card.iq-sanctuary-card {
+  background: linear-gradient(155deg, #0b2622 0%, #113a33 100%);
+  border-color: rgba(110, 231, 183, 0.25);
+}
+
+.iq-qibla-mini-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  min-height: 36px;
+  padding: 6px 10px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--border);
+  background: var(--card-bg);
+  color: var(--accent-dark);
+  font-family: var(--font);
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+.iq-qibla-mini-btn .iq-icon { width: 15px; height: 15px; }
+
+/* Calibrated SVG Qibla Compass Rose */
+.iq-qibla-head {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 700;
+  color: var(--accent-dark);
+  margin-bottom: 6px;
+}
+.iq-qibla-dial-wrap {
+  position: relative;
+  width: 204px;
+  height: 204px;
+  margin: 8px auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.iq-qibla-dial-svg,
+.iq-qibla-needle-svg {
+  position: absolute;
+  inset: 10px;
+  width: calc(100% - 20px);
+  height: calc(100% - 20px);
+  pointer-events: none;
+}
+.iq-qibla-cardinal {
+  position: absolute;
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: var(--text3);
+  line-height: 1;
+}
+.iq-qc-n { top: 0; left: 50%; transform: translateX(-50%); color: var(--accent-dark); }
+.iq-qc-s { bottom: 0; left: 50%; transform: translateX(-50%); }
+.iq-qc-e { right: 0; top: 50%; transform: translateY(-50%); }
+.iq-qc-w { left: 0; top: 50%; transform: translateY(-50%); }
+.iq-qibla-bearing { font-weight: 800; font-size: 1.05rem; color: var(--text); }
+
+/* Mushaf Ornamentation, Bookmarks & Sticky Audio Bar */
+.iq-mushaf-plaque {
+  border: 1px solid var(--accent-border);
+  outline: 3px solid var(--accent-bg);
+  border-radius: var(--radius-md);
+  background: linear-gradient(180deg, var(--surface-raised, var(--card-bg)) 0%, var(--accent-bg) 100%);
+  padding: 16px 20px;
+  margin: 6px auto 14px;
+  max-width: 72ch;
+}
+.iq-bismillah-banner {
+  text-align: center;
+  font-family: var(--iq-font-quran);
+  font-size: calc(1.65rem * var(--iq-quran-scale, 1));
+  color: var(--accent-dark);
+  margin: 16px auto;
+  max-width: 72ch;
+  line-height: 1.85;
+}
+.quran-sanctuary-card {
+  max-width: 72ch;
+  margin-inline: auto;
+  padding: 18px 20px;
+}
+.iq-ayah-end {
+  color: var(--gold);
+  font-size: 0.88em;
+  margin-inline-start: 6px;
+}
+.verse-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 10px;
+}
+.iq-verse-bmk-btn,
+.verse-actions .verse-play-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  min-height: 44px;
+  width: 44px;
+  height: 44px;
+  margin-top: 0;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--surface-subtle);
+  color: var(--text2);
+  cursor: pointer;
+  transition: background var(--transition), color var(--transition), border-color var(--transition);
+}
+.iq-verse-bmk-btn .iq-icon { width: 18px; height: 18px; }
+.iq-verse-bmk-btn.active {
+  background: var(--gold-bg, var(--accent-bg));
+  color: var(--gold-dark, var(--accent-dark));
+  border-color: var(--gold);
+}
+.verse-bmk-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+.iq-audio-bar {
+  position: fixed;
+  bottom: calc(78px + env(safe-area-inset-bottom, 0px));
+  inset-inline: 16px;
+  max-width: 540px;
+  margin-inline: auto;
+  z-index: 220;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 14px;
+  border-radius: var(--radius-md);
+  background: var(--card-bg);
+  color: var(--text);
+  border: 1px solid var(--accent-border);
+  box-shadow: var(--shadow-lg);
+}
+@media (min-width: 768px) {
+  .iq-audio-bar { bottom: 18px; }
+}
+.iq-audio-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  flex: 1;
+}
+.iq-audio-ico {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: var(--accent-bg);
+  color: var(--accent-dark);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.iq-audio-title {
+  font-size: 0.86rem;
+  font-weight: 700;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.iq-audio-sub { font-size: 0.74rem; color: var(--text2); }
+.iq-audio-actions { display: flex; align-items: center; gap: 6px; }
+.iq-audio-btn {
+  min-width: 44px;
+  min-height: 44px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--surface-subtle, var(--card-bg));
+  color: var(--accent-dark);
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+.iq-audio-btn.iq-audio-close { color: var(--text2); }
+
+/* Merged Studio Sections Spacing */
+#panel-charity > div + div,
+#panel-healthlog > div + div,
+#panel-progress > div + div {
+  margin-top: 22px;
+  padding-top: 18px;
+  border-top: 1px solid var(--border-subtle);
+}
+
+/* Tablet & Desktop Cascade Overrides (after base mobile rules) */
+@media (min-width: 768px) {
+  .iq-app-shell {
+    display: flex;
+    width: 100%;
+    height: 100vh;
+    height: 100dvh;
+    overflow: hidden;
+  }
+  .iq-left-rail {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    width: 84px;
+    flex-shrink: 0;
+    height: 100%;
+    padding: 16px 10px;
+    background: var(--surface-raised, var(--card-bg));
+    border-inline-end: 1px solid var(--border-subtle, var(--border));
+    overflow-y: auto;
+    z-index: 110;
+  }
+  .iq-app-shell .app {
+    flex: 1;
+    min-width: 0;
+    height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    background: var(--bg);
+    padding-bottom: 48px;
+  }
+  .iq-app-shell .tab-content {
+    max-width: 1120px;
+    margin-inline: auto;
+  }
+  .iq-menu-trigger { display: none !important; }
+  .iq-sanctuary-hero {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 14px;
+    margin-bottom: 16px;
+  }
+  .iq-sanctuary-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.35fr) minmax(260px, 0.9fr);
+    gap: 16px;
+    align-items: start;
+  }
+  #iqFeedArea .iq-feed-list {
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)) !important;
+    gap: 12px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .iq-left-rail {
+    width: 224px;
+    padding: 18px 14px;
+  }
+  .iq-rail-btn { justify-content: flex-start; padding: 10px 12px; }
+  .iq-rail-brand-text,
+  .iq-rail-quick-group,
+  .iq-rail-summary {
+    display: flex;
+  }
+  .iq-rail-label { display: inline; }
+  .iq-sanctuary-hero {
+    grid-template-columns: minmax(320px, 0.92fr) minmax(0, 1.38fr);
+    align-items: stretch;
+  }
+  .iq-hero-ch-card {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
   }
 }

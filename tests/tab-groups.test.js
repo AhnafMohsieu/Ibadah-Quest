@@ -2,6 +2,7 @@
 const { test } = require('node:test');
 const assert = require('node:assert');
 const path = require('path');
+const fs = require('fs');
 const { loadFile } = require('./helpers/load.js');
 
 function loadGroups() {
@@ -9,50 +10,53 @@ function loadGroups() {
   return sb.window.TAB_GROUPS;
 }
 
-test('profile_main group is declared in data with the five core entries in order', () => {
+test('4-pillar navigation structure declares ibadah, worship, knowledge, profile_main', () => {
+  const g = loadGroups();
+  assert.deepEqual(Object.keys(g), ['ibadah', 'worship', 'knowledge', 'profile_main']);
+  assert.ok(!g.library, 'library pillar removed');
+  assert.ok(!g.names_main, 'names folded into knowledge');
+});
+
+test('profile_main group is declared in data with the four core entries in order', () => {
   const g = loadGroups();
   assert.ok(Array.isArray(g.profile_main), 'profile_main must exist in data/tab-groups.js');
   assert.deepEqual(
     g.profile_main.map(t => t.id),
-    ['profile', 'trophies', 'progress', 'stats', 'rewards']
+    ['profile', 'trophies', 'progress', 'stats']
   );
   g.profile_main.forEach(t => {
     assert.ok(t.label && t.icon, 'each entry needs icon+label: ' + JSON.stringify(t));
   });
 });
 
-test('every profile_main tab id has a matching panel in index.html', () => {
-  const fs = require('fs');
+test('worship pillar groups cover Quran, Adhkar, merged Giving & Zakat, and Health & Gratitude', () => {
+  const g = loadGroups();
+  const qa = g.worship.find(gr => gr.id === 'quran_adhkar').tabs.map(t => t.id);
+  const dev = g.worship.find(gr => gr.id === 'devotions').tabs.map(t => t.id);
+  assert.deepEqual(qa, ['quran', 'memorization', 'morning', 'evening', 'dhikr', 'situational', 'duas']);
+  assert.deepEqual(dev, ['fasting', 'charity', 'healthlog', 'wudu', 'jumuah', 'salah', 'volprayers', 'extradeeds']);
+});
+
+test('every declared tab id in TAB_GROUPS has a matching panel in index.html', () => {
   const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
   const g = loadGroups();
-  g.profile_main.forEach(t => {
-    assert.ok(html.includes(`id="panel-${t.id}"`), `missing panel-${t.id}`);
-  });
+  for (const cat of Object.keys(g)) {
+    g[cat].forEach(item => {
+      if (Array.isArray(item.tabs)) {
+        item.tabs.forEach(t => assert.ok(html.includes(`id="panel-${t.id}"`), `missing panel-${t.id}`));
+      } else {
+        assert.ok(html.includes(`id="panel-${item.id}"`), `missing panel-${item.id}`);
+      }
+    });
+  }
 });
 
-test('knowledge groups match consolidated IA (31 subtabs)', () => {
+test('knowledge groups hold core sciences, character, Seerah & Hereafter, and Names & Figures', () => {
   const g = loadGroups();
   const tabs = id => g.knowledge.find(gr => gr.id === id).tabs.map(t => t.id);
-  assert.deepEqual(tabs('quran_sunnah'), ['quran', 'tafsir', 'hadith', 'sunnahs']);
-  assert.deepEqual(tabs('fiqh'), ['fiqh', 'worship-rulings', 'wealth-oaths']);
-  assert.ok(!('arabic' in Object.fromEntries(g.knowledge.map(gr => [gr.id, 1]))), 'arabic moved to library');
-  assert.ok(!('creed' in Object.fromEntries(g.knowledge.map(gr => [gr.id, 1]))), 'creed id gone');
-  assert.deepEqual(tabs('faith_life'), ['virtues', 'vices-return', 'character-path', 'family-life', 'community', 'service', 'work-justice', 'wellness', 'earth-living', 'youth-tech', 'ethics-finance']);
-  assert.ok(!('heart' in Object.fromEntries(g.knowledge.map(gr => [gr.id, 1]))), 'heart merged into faith_life');
-  assert.ok(!('society' in Object.fromEntries(g.knowledge.map(gr => [gr.id, 1]))), 'society merged into faith_life');
-  assert.ok(!('life' in Object.fromEntries(g.knowledge.map(gr => [gr.id, 1]))), 'life merged into faith_life');
-  assert.deepEqual(tabs('history'), ['seerah', 'stories', 'battles', 'science', 'modernhist', 'ancientprophets']);
-  assert.deepEqual(tabs('hereafter'), ['akhirah', 'jannah', 'jahannam', 'grave', 'signs', 'dreams']);
-});
-
-test('library groups match consolidated IA (18 subtabs) + names_main exists', () => {
-  const g = loadGroups();
-  const tabs = id => g.library.find(gr => gr.id === id).tabs.map(t => t.id);
-  assert.deepEqual(tabs('dynasties'), ['umayyads', 'abbasids', 'andalus', 'ottomans', 'mamluks', 'seljuks', 'fatimids', 'ayyubids']);
-  assert.deepEqual(tabs('cities'), ['holy-cities', 'capitals', 'east']);
-  assert.deepEqual(tabs('arts'), ['pattern', 'sacred-space', 'living-crafts', 'word']);
-  assert.deepEqual(tabs('arabic_lang'), ['arabic', 'structure', 'sound-script', 'words-poetry']);
-  assert.ok(Array.isArray(g.names_main), 'names_main group must exist');
-  assert.deepEqual(g.names_main[0].tabs.map(t => t.id),
-    ['allah_names', 'prophets', 'sahaba', 'women', 'scholars_names']);
+  assert.deepEqual(tabs('quran_sunnah'), ['tafsir', 'hadith', 'sunnahs']);
+  assert.deepEqual(tabs('fiqh'), ['fiqh', 'worship-rulings', 'wealth-oaths', 'aqeedah']);
+  assert.deepEqual(tabs('faith_life'), ['virtues', 'vices-return', 'character-path', 'family-life', 'community', 'service', 'wellness']);
+  assert.deepEqual(tabs('history'), ['seerah', 'stories', 'akhirah', 'jannah', 'jahannam', 'grave', 'signs']);
+  assert.deepEqual(tabs('names'), ['allah_names', 'prophets', 'sahaba', 'women', 'scholars_names']);
 });

@@ -63,7 +63,7 @@ test('saveState writes to both IDB and localStorage', () => {
   assert.deepStrictEqual(idbSaved, sb.S);
 });
 
-test('loadState merges new growthSettings.visible items into existing saves', () => {
+test('loadState preserves existing garden visibility and upgrades growthSettings cleanly', () => {
   const old = JSON.stringify({
     log: {}, xp: 100,
     growthSettings: { visible: ['garden', 'lantern'] }
@@ -71,9 +71,8 @@ test('loadState merges new growthSettings.visible items into existing saves', ()
   const { localStorage } = makeStore({ iq9_user_default: old });
   const sb = loadFile(path.join(__dirname, '..', 'core', 'state.js'), { localStorage });
   const p = sb.loadState();
-  assert.ok(p.growthSettings.visible.includes('garden'), 'keeps existing');
-  assert.ok(p.growthSettings.visible.includes('ramadan'), 'adds new ramadan');
-  assert.ok(p.growthSettings.visible.includes('laylat'), 'adds new laylat');
+  assert.strictEqual(p.growthSettings.visible.length, 1);
+  assert.strictEqual(p.growthSettings.visible[0], 'garden', 'normalizes simplified single spiritual garden');
 });
 
 test('loadStateAsync prefers IndexedDB when it has a saved state', async () => {
@@ -97,9 +96,6 @@ test('loadStateAsync prefers IndexedDB when it has a saved state', async () => {
 });
 
 test('normalizeState remaps retired tab ids to combined parents', () => {
-  // One retired member per combined group (retired -> combined parent).
-  // Keys verified against data/tab-groups.js: no key here is a live tab id
-  // ('community' is a live combined tab itself and is deliberately absent).
   const cases = [
     ['purification', 'worship-rulings'],
     ['zakatrules', 'wealth-oaths'],
@@ -109,24 +105,12 @@ test('normalizeState remaps retired tab ids to combined parents', () => {
     ['family', 'family-life'],
     ['neighbors', 'community'],
     ['orphans2', 'service'],
-    ['work', 'work-justice'],
     ['health', 'wellness'],
-    ['food', 'earth-living'],
-    ['tech', 'youth-tech'],
-    ['ethics', 'ethics-finance'],
-    ['mecca', 'holy-cities'],
-    ['damascus', 'capitals'],
-    ['bukhara', 'east'],
-    ['calligraphy', 'pattern'],
-    ['architecture', 'sacred-space'],
-    ['textiles', 'living-crafts'],
-    ['literature', 'word'],
-    ['arabicgrammar', 'structure'],
-    ['pronunciation', 'sound-script'],
-    ['vocab', 'words-poetry'],
-    ['ontology', 'being'],
-    ['epistemology', 'knowing'],
-    ['freewill', 'will-evil']
+    ['finance', 'charity'],
+    ['zakatcalc', 'charity'],
+    ['gratitude', 'healthlog'],
+    ['rewards', 'profile'],
+    ['growth', 'progress']
   ];
   for (const [oldId, expected] of cases) {
     const old = JSON.stringify({ log: {}, lastTab: oldId, lastCat: 'creed' });
@@ -134,11 +118,10 @@ test('normalizeState remaps retired tab ids to combined parents', () => {
     const sb = loadFile(path.join(__dirname, '..', 'core', 'state.js'), { localStorage });
     const p = sb.loadState();
     assert.strictEqual(p.lastTab, expected, oldId + ' should remap to ' + expected);
-    assert.strictEqual(p.lastCat, 'arabic', 'lastCat creed should remap to arabic');
+    assert.strictEqual(p.lastCat, 'knowledge', 'lastCat creed/library should remap to knowledge');
   }
-  // Still-live tab ids must never be rewritten.
-  for (const live of ['community', 'science', 'prophets', 'dreams', 'youth-tech']) {
-    const old = JSON.stringify({ log: {}, lastTab: live, lastCat: 'creed' });
+  for (const live of ['community', 'prophets', 'virtues', 'charity', 'healthlog']) {
+    const old = JSON.stringify({ log: {}, lastTab: live, lastCat: 'worship' });
     const { localStorage } = makeStore({ iq9_user_default: old });
     const sb = loadFile(path.join(__dirname, '..', 'core', 'state.js'), { localStorage });
     const p = sb.loadState();
