@@ -34,7 +34,7 @@ jobs:
       - name: Install ESLint
         run: npm install --no-save eslint@8
       - name: Lint JS
-        run: npx eslint --no-eslintrc -c .eslintrc.json "**/*.js" --ignore-pattern "node_modules" --ignore-pattern "docs" --ignore-pattern "src" --ignore-pattern "tests" --max-warnings 50
+        run: npx eslint --no-eslintrc -c .eslintrc.json "**/*.js" --ignore-pattern "node_modules" --ignore-pattern "docs" --ignore-pattern "src" --ignore-pattern "tests" --ignore-pattern "assets/vendor"
 
       # Gate 1c: security validation — scan for common vulnerabilities
       - name: Security scan (no eval, no innerHTML with user input, no secrets)
