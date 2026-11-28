@@ -3,6 +3,8 @@
     return Object.values((logEntry && logEntry.p) || {}).filter(function(v) { return !!v; }).length;
   }
 
+  var QADA_TARGETS = { qul: 3, istighfar: 100, kursi: 10 };
+
   function _setPrayerState(id, targetMode) {
     const pr = PRAYERS.find(x => x.id === id);
     if (!pr) return;
@@ -12,18 +14,36 @@
     const wasDone = !!prev;
     const nextVal = targetMode === 'qada' ? (prev === 'qada' ? false : 'qada') : !wasDone;
     l.p[id] = nextVal;
-    let xp = pr.xp;
-    if (isFri() && id === 'dhuhr' && pr.fri) xp = pr.fri.xp;
-    if (S.ab && S.ab.exp >= today()) xp *= 2;
-    if (!wasDone && nextVal) {
+    let fullXp = pr.xp;
+    if (isFri() && id === 'dhuhr' && pr.fri) fullXp = pr.fri.xp;
+    if (S.ab && S.ab.exp >= today()) fullXp *= 2;
+    const qadaXp = Math.floor(fullXp / 4);
+
+    if (!wasDone && nextVal === 'qada') {
       S.tp++;
-      applyXpDelta(xp);
+      applyXpDelta(qadaXp);
+      if (!l.qadaPenalty) l.qadaPenalty = {};
+      l.qadaPenalty[id] = { fullXp: fullXp, grantedXp: qadaXp, qul: 0, istighfar: 0, kursi: 0, completed: false };
       if (isFri() && id === 'dhuhr') S.tj = (S.tj || 0) + 1;
       playSound('pop');
       if (typeof window.iqHaptic === 'function') window.iqHaptic(10);
+    } else if (!wasDone && nextVal) {
+      S.tp++;
+      applyXpDelta(fullXp);
+      if (l.qadaPenalty && l.qadaPenalty[id]) delete l.qadaPenalty[id];
+      if (isFri() && id === 'dhuhr') S.tj = (S.tj || 0) + 1;
+      playSound('pop');
+      if (typeof window.iqHaptic === 'function') window.iqHaptic(10);
+    } else if (prev === true && nextVal === 'qada') {
+      const deduct = Math.max(0, fullXp - qadaXp);
+      if (deduct > 0) spendXp(deduct);
+      if (!l.qadaPenalty) l.qadaPenalty = {};
+      l.qadaPenalty[id] = { fullXp: fullXp, grantedXp: qadaXp, qul: 0, istighfar: 0, kursi: 0, completed: false };
     } else if (wasDone && !nextVal) {
       S.tp = Math.max(0, S.tp - 1);
-      spendXp(xp);
+      const pen = (prev === 'qada' && l.qadaPenalty && l.qadaPenalty[id]) ? l.qadaPenalty[id] : null;
+      spendXp(pen ? pen.grantedXp : fullXp);
+      if (l.qadaPenalty && l.qadaPenalty[id]) delete l.qadaPenalty[id];
       if (isFri() && id === 'dhuhr') S.tj = Math.max(0, (S.tj || 0) - 1);
     }
     recalc(); checkQ(); checkA(); saveAndRenderDirty();
@@ -42,6 +62,28 @@
       if (_countPrayers(l) >= 5) bump('prayers');
     }
     if (typeof window.autoTrackJourneyProgress === 'function') window.autoTrackJourneyProgress();
+  }
+
+  function advanceQadaPenalty(id, field, delta) {
+    const maxVal = QADA_TARGETS[field];
+    if (!maxVal) return;
+    const l = tlog();
+    if (!l.p || l.p[id] !== 'qada') return;
+    const pen = l.qadaPenalty && l.qadaPenalty[id];
+    if (!pen || pen.completed) return;
+    const step = Number(delta) || 1;
+    pen[field] = Math.min(maxVal, Math.max(0, (Number(pen[field]) || 0) + step));
+    if (pen.qul >= QADA_TARGETS.qul && pen.istighfar >= QADA_TARGETS.istighfar && pen.kursi >= QADA_TARGETS.kursi) {
+      pen.completed = true;
+      const remainingXp = Math.max(0, (Number(pen.fullXp) || 0) - (Number(pen.grantedXp) || 0));
+      pen.grantedXp = pen.fullXp;
+      if (remainingXp > 0) applyXpDelta(remainingXp);
+      if (typeof toast === 'function') {
+        const ico = typeof iqIcon === 'function' ? iqIcon('sparkles') : '✨';
+        toast(ico, 'Qada atonement complete — full prayer XP unlocked!', false, 3500);
+      }
+    }
+    recalc(); checkQ(); checkA(); saveAndRenderDirty();
   }
 
   function toggleP(id) { _setPrayerState(id, true); }
@@ -146,6 +188,7 @@
 
   window.toggleP = toggleP;
   window.togglePrayerQada = togglePrayerQada;
+  window.advanceQadaPenalty = advanceQadaPenalty;
   window.toggleV = toggleV;
   window.toggleD = toggleD;
   window.recalc = recalc;

@@ -967,7 +967,7 @@
       };
     }
     window.App = {
-      toggleP: window.toggleP, togglePrayerQada: window.togglePrayerQada, togglePrayerPause: appAction('togglePrayerPause'), toggleV: window.toggleV, toggleD: window.toggleD,
+      toggleP: window.toggleP, togglePrayerQada: window.togglePrayerQada, advanceQadaPenalty: appAction('advanceQadaPenalty'), togglePrayerPause: appAction('togglePrayerPause'), toggleV: window.toggleV, toggleD: window.toggleD,
       detail: (id) => toast(iqIcon('alert-triangle'), DETAILS[id]||'Voluntary Prayer', false, 4000),
       tip: (id) => toast(iqIcon('zap'), TIPS[id]||'A beautiful deed!', false, 4000),
       toggleQuest: window.toggleQuest, addGratitude: window.addGratitude, toggleFasting: window.toggleFasting, setCharityGoals: window.setCharityGoals,

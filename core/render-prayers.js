@@ -405,6 +405,49 @@
     return `<div class="iq-prayer-header-actions">${pill}${qiblaBtn}${pauseBtn}</div>`;
   }
 
+  function _renderQadaPenaltyHtml(l, f) {
+    const penMap = (l && l.qadaPenalty) || {};
+    const pending = PRAYERS.filter(p => l && l.p && l.p[p.id] === 'qada' && penMap[p.id] && !penMap[p.id].completed);
+    if (!pending.length) return '';
+    const itemsHtml = pending.map(p => {
+      const pen = penMap[p.id];
+      const baseNm = (f && p.id === 'dhuhr') ? p.fri.name : p.name;
+      const nm = tr(baseNm);
+      const qul = Number(pen.qul) || 0;
+      const ist = Number(pen.istighfar) || 0;
+      const kur = Number(pen.kursi) || 0;
+      const rem = Math.max(0, (Number(pen.fullXp) || 0) - (Number(pen.grantedXp) || 0));
+      return `<div class="iq-qada-penalty-card">` +
+        `<div class="iq-qada-penalty-head">` +
+          `<strong>${safePrayerText(nm)} (${safePrayerText(tr('Qada'))})</strong>` +
+          `<span class="iq-qada-penalty-xp iq-tabular">+${safePrayerText(nfmt(pen.grantedXp))} / ${safePrayerText(nfmt(pen.fullXp))} XP · +${safePrayerText(nfmt(rem))} XP ${safePrayerText(tr('locked'))}</span>` +
+        `</div>` +
+        `<div class="iq-qada-penalty-sub">${safePrayerText(tr('Recite 3 Qul, 100× Istighfar & 10× Ayatul Kursi to unlock full prayer XP (no extra deed XP).'))}</div>` +
+        `<div class="iq-qada-penalty-rows">` +
+          `<div class="iq-qada-row${qul >= 3 ? ' done' : ''}">` +
+            `<span>${safePrayerText(tr('3 Qul'))} <small class="iq-tabular">(${safePrayerText(nfmt(qul))}/3)</small></span>` +
+            `<div class="iq-qada-btns">` +
+              (qul < 3 ? `<button type="button" class="iq-qada-step" onclick="App.advanceQadaPenalty('${p.id}','qul',1)">+1</button><button type="button" class="iq-qada-step primary" onclick="App.advanceQadaPenalty('${p.id}','qul',3)">${safePrayerText(tr('Done'))}</button>` : `<span class="iq-qada-done">${iqIcon('check')}</span>`) +
+            `</div>` +
+          `</div>` +
+          `<div class="iq-qada-row${ist >= 100 ? ' done' : ''}">` +
+            `<span>${safePrayerText(tr('100× Istighfar'))} <small class="iq-tabular">(${safePrayerText(nfmt(ist))}/100)</small></span>` +
+            `<div class="iq-qada-btns">` +
+              (ist < 100 ? `<button type="button" class="iq-qada-step" onclick="App.advanceQadaPenalty('${p.id}','istighfar',1)">+1</button><button type="button" class="iq-qada-step" onclick="App.advanceQadaPenalty('${p.id}','istighfar',10)">+10</button><button type="button" class="iq-qada-step" onclick="App.advanceQadaPenalty('${p.id}','istighfar',33)">+33</button><button type="button" class="iq-qada-step primary" onclick="App.advanceQadaPenalty('${p.id}','istighfar',100)">${safePrayerText(tr('Done'))}</button>` : `<span class="iq-qada-done">${iqIcon('check')}</span>`) +
+            `</div>` +
+          `</div>` +
+          `<div class="iq-qada-row${kur >= 10 ? ' done' : ''}">` +
+            `<span>${safePrayerText(tr('10× Ayatul Kursi'))} <small class="iq-tabular">(${safePrayerText(nfmt(kur))}/10)</small></span>` +
+            `<div class="iq-qada-btns">` +
+              (kur < 10 ? `<button type="button" class="iq-qada-step" onclick="App.advanceQadaPenalty('${p.id}','kursi',1)">+1</button><button type="button" class="iq-qada-step" onclick="App.advanceQadaPenalty('${p.id}','kursi',5)">+5</button><button type="button" class="iq-qada-step primary" onclick="App.advanceQadaPenalty('${p.id}','kursi',10)">${safePrayerText(tr('Done'))}</button>` : `<span class="iq-qada-done">${iqIcon('check')}</span>`) +
+            `</div>` +
+          `</div>` +
+        `</div>` +
+      `</div>`;
+    }).join('');
+    return `<div class="iq-qada-penalty-panel">${itemsHtml}</div>`;
+  }
+
   function renderPrayers() {
     if (typeof document === 'undefined') return;
     const area = document.getElementById('prayerArea');
@@ -420,6 +463,8 @@
       if (f && p.id === 'dhuhr') { baseNm = p.fri.name; xp = p.fri.xp; }
       const nm = tr(baseNm);
       if (S.ab && S.ab.exp >= today()) xp *= 2;
+      const pen = isQada && l.qadaPenalty && l.qadaPenalty[p.id];
+      const shownXp = isQada ? (pen ? pen.grantedXp : Math.floor(xp / 4)) : xp;
       const capKey = p.id.charAt(0).toUpperCase() + p.id.slice(1);
       const cachedSlot = cached && cached[capKey];
       const liveTime = (cachedSlot && typeof cachedSlot.h === 'number') ? formatTime12(cachedSlot.h, cachedSlot.m) : p.time;
@@ -430,13 +475,14 @@
         `<div class="card-icon">${iqIcon(p.id)}</div>` +
         `<div class="card-name">${safePrayerText(nm)}</div>` +
         `<div class="card-sub iq-tabular iq-no-mirror">${safePrayerText(nfmt(liveTime))}</div>` +
-        `<div class="card-xp">+${safePrayerText(nfmt(xp))} XP</div>` +
+        `<div class="card-xp">+${safePrayerText(nfmt(shownXp))} XP</div>` +
         (d ? `<div class="card-check" title="${isQada ? 'Made up (Qada)' : 'Completed'}">${isQada ? 'Q' : iqIcon('check')}</div>` : '') +
         `<button type="button" class="card-qada-btn${isQada ? ' active' : ''}" aria-label="Mark ${safePrayerText(nm)} made up (Qada)" title="${safePrayerText(tr('Qada'))}" onclick="event.stopPropagation();App.togglePrayerQada('${p.id}')">${safePrayerText(tr('Qada'))}</button>` +
         `<button type="button" class="card-info-btn" aria-label="Details: ${safePrayerText(nm)}" onclick="event.stopPropagation();App.detail('${p.id}')">${iqIcon('info')}</button>` +
       `</div>`;
     }).join('');
-    area.innerHTML = `<div class="prayer-header-row"><div class="section-title" style="margin:0;">${safePrayerText(tr('Daily Prayers'))}</div>${_renderNextPrayerPillHtml(cached)}</div><div class="card-grid">${cards}</div>`;
+    const pendingQadaHtml = _renderQadaPenaltyHtml(l, f);
+    area.innerHTML = `<div class="prayer-header-row"><div class="section-title" style="margin:0;">${safePrayerText(tr('Daily Prayers'))}</div>${_renderNextPrayerPillHtml(cached)}</div><div class="card-grid">${cards}</div>${pendingQadaHtml}`;
     if (!cached) {
       fetchPrayerTimes().then(times => {
         if (!times) return;

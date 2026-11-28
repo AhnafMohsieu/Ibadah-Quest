@@ -124,6 +124,40 @@ test('toggleP: Friday bonus for Dhuhr', () => {
   assert.strictEqual(s.S.tj, 0);
 });
 
+test('togglePrayerQada: grants 1/4 integer XP (no fraction) and unlocks full XP after 3 Qul + 100 Istighfar + 10 Ayatul Kursi with no extra deed XP', () => {
+  const s = setup();
+  // Fajr = 70 XP -> 1/4 = Math.floor(70 / 4) = 17 XP
+  s.togglePrayerQada('fajr');
+  const l = s.S.log[today()];
+  assert.strictEqual(l.p.fajr, 'qada');
+  assert.strictEqual(s.S.tp, 1);
+  assert.strictEqual(s.S.xp, 17);
+  assert.strictEqual(l.qadaPenalty.fajr.completed, false);
+
+  // Partial completion does not unlock full XP
+  s.advanceQadaPenalty('fajr', 'qul', 3);
+  s.advanceQadaPenalty('fajr', 'istighfar', 50);
+  assert.strictEqual(s.S.xp, 17);
+  assert.strictEqual(l.qadaPenalty.fajr.completed, false);
+
+  // Completing remaining Istighfar (100) + Ayatul Kursi (10) unlocks full 70 XP and no extra
+  s.advanceQadaPenalty('fajr', 'istighfar', 50);
+  s.advanceQadaPenalty('fajr', 'kursi', 10);
+  assert.strictEqual(l.qadaPenalty.fajr.completed, true);
+  assert.strictEqual(s.S.xp, 70);
+});
+
+test('togglePrayerQada: switching on-time to Qada deducts 3/4 XP, and unchecking Qada refunds granted XP', () => {
+  const s = setup();
+  s.toggleP('asr'); // 40 XP
+  assert.strictEqual(s.S.xp, 40);
+  s.togglePrayerQada('asr'); // switches to qada -> 10 XP
+  assert.strictEqual(s.S.xp, 10);
+  s.togglePrayerQada('asr'); // unchecks -> 0 XP
+  assert.strictEqual(s.S.xp, 0);
+  assert.strictEqual(s.S.tp, 0);
+});
+
 test('toggleV: toggling voluntary prayer on/off', () => {
   const s = setup();
   s.toggleV('witr');
@@ -306,7 +340,7 @@ test('togglePrayerQada marks made-up state truthfully and preserves XP/streak to
   s.togglePrayerQada('fajr');
   assert.strictEqual(s.S.log[today()].p.fajr, 'qada');
   assert.strictEqual(s.S.tp, 1);
-  assert.strictEqual(s.S.xp, 70);
+  assert.strictEqual(s.S.xp, 17);
 
   // Toggling Qada off clears prayer and refunds once
   s.togglePrayerQada('fajr');

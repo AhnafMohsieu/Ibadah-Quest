@@ -337,7 +337,7 @@
           title: tLabel('Dhikr Counter'),
           sub: fmtNum(summary.dhikrToday) + ' / ' + fmtNum(summary.dhikrGoal) + ' ' + tLabel('today'),
           pct: summary.dhikrPct,
-          onclick: "window.openChallengeDetail('dhikr')"
+          onclick: "App.activateTab('dhikr')"
         },
         {
           id: 'quran',
@@ -373,7 +373,7 @@
           title: tLabel('Voluntary Prayers'),
           sub: fmtNum(summary.volDone) + ' / ' + fmtNum(summary.volTotal) + ' ' + tLabel('today'),
           pct: null,
-          onclick: "window.openChallengeDetail('vol')"
+          onclick: "App.activateTab('volprayers')"
         },
         {
           id: 'deeds',
@@ -382,7 +382,7 @@
           title: tLabel('Extra Good Deeds'),
           sub: fmtNum(summary.deedsDone) + ' / ' + fmtNum(summary.deedsTotal) + ' ' + tLabel('completed'),
           pct: null,
-          onclick: "window.openChallengeDetail('deeds')"
+          onclick: "App.activateTab('extradeeds')"
         }
       ];
 
