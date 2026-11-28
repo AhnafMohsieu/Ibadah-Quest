@@ -432,8 +432,8 @@
         `<div class="card-sub iq-tabular iq-no-mirror">${safePrayerText(nfmt(liveTime))}</div>` +
         `<div class="card-xp">+${safePrayerText(nfmt(xp))} XP</div>` +
         (d ? `<div class="card-check" title="${isQada ? 'Made up (Qada)' : 'Completed'}">${isQada ? 'Q' : iqIcon('check')}</div>` : '') +
-        `<button type="button" class="card-qada-btn${isQada ? ' active' : ''}" aria-label="Mark ${safePrayerText(nm)} made up (Qada)" title="${safePrayerText(tr('Qada'))}" onclick="event.stopPropagation();App.togglePrayerQada('${p.id}')">${isQada ? safePrayerText(tr('Qada')) : 'Q'}</button>` +
-        `<button type="button" class="card-info-btn" aria-label="Details: ${safePrayerText(nm)}" onclick="event.stopPropagation();App.detail('${p.id}')">ℹ</button>` +
+        `<button type="button" class="card-qada-btn${isQada ? ' active' : ''}" aria-label="Mark ${safePrayerText(nm)} made up (Qada)" title="${safePrayerText(tr('Qada'))}" onclick="event.stopPropagation();App.togglePrayerQada('${p.id}')">${safePrayerText(tr('Qada'))}</button>` +
+        `<button type="button" class="card-info-btn" aria-label="Details: ${safePrayerText(nm)}" onclick="event.stopPropagation();App.detail('${p.id}')">${iqIcon('info')}</button>` +
       `</div>`;
     }).join('');
     area.innerHTML = `<div class="prayer-header-row"><div class="section-title" style="margin:0;">${safePrayerText(tr('Daily Prayers'))}</div>${_renderNextPrayerPillHtml(cached)}</div><div class="card-grid">${cards}</div>`;

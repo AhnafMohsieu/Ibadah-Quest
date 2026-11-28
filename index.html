@@ -59,7 +59,7 @@
     .tab-panel{display:none}
     .tab-panel.active{display:block}
   </style>
-  <link rel="stylesheet" href="styles/main.css?v=59">
+  <link rel="stylesheet" href="styles/main.css?v=61">
   <script>
     window.__iqBootT0 = Date.now();
     window.__iqReload = function() { location.reload(); };
@@ -234,29 +234,27 @@
           <div id="iqHeroChallenge" class="iq-hero-challenge"></div>
           <div id="prayerArea"></div>
         </div>
-        <div class="iq-sanctuary-grid">
-          <div class="iq-sanctuary-main">
-            <div id="iqFeedArea" class="iq-feed-area"></div>
-            <div id="muhasabahEntry"></div>
+        <div class="iq-bento-utility">
+          <div id="dailyCarousel" class="daily-carousel"></div>
+          <div class="global-search-wrap">
+            <span class="global-search-icon" aria-hidden="true"><img class="iq-icon iq-search-badge-icon" src="assets/icons/emoji_u1f50d.png" alt="" width="20" height="20" decoding="async"></span>
+            <input class="global-search" placeholder="Search Duas, Fiqh, Prophetic Ways..." autocomplete="off" aria-label="Search anything">
+            <button type="button" class="global-search-clear" aria-label="Clear search" style="display:none;">&times;</button>
+            <div class="global-search-results" id="globalSearchResults"></div>
           </div>
-          <aside class="iq-sanctuary-side" aria-label="Reflections and Search">
-            <div id="dailyCarousel" class="daily-carousel"></div>
-            <div class="global-search-wrap">
-              <span class="global-search-icon" aria-hidden="true"><img class="iq-icon iq-search-badge-icon" src="assets/icons/emoji_u1f50d.png" alt="" width="20" height="20" decoding="async"></span>
-              <input class="global-search" placeholder="Search Duas, Fiqh, Prophetic Ways..." autocomplete="off" aria-label="Search anything">
-              <button type="button" class="global-search-clear" aria-label="Clear search" style="display:none;">&times;</button>
-              <div class="global-search-results" id="globalSearchResults"></div>
-            </div>
-            <div id="wellArea"></div>
-          </aside>
         </div>
-        <details id="iqAllActsDetails" class="iq-all-acts-details">
-          <summary>All Voluntary Prayers &amp; Extra Good Deeds</summary>
-          <div class="section-title">Voluntary Prayers</div>
-          <div id="volArea"></div>
-          <div class="section-title">Extra Good Deeds</div>
-          <div id="deedArea"></div>
-        </details>
+        <div id="iqFeedArea" class="iq-feed-area"></div>
+        <div id="wellArea"></div>
+        <div class="iq-bento-footer">
+          <div id="muhasabahEntry"></div>
+          <details id="iqAllActsDetails" class="iq-all-acts-details">
+            <summary>All Voluntary Prayers &amp; Extra Good Deeds</summary>
+            <div class="section-title">Voluntary Prayers</div>
+            <div id="volArea"></div>
+            <div class="section-title">Extra Good Deeds</div>
+            <div id="deedArea"></div>
+          </details>
+        </div>
       </div>
       <div class="tab-panel" role="tabpanel" id="panel-timer">
         <div class="section-title" data-i18n-text="Next Prayer">Next Prayer</div>
@@ -395,7 +393,7 @@
 <script src="core/calendar.js?v=1"></script>
 <script src="assets/vendor/adhan.umd.min.js"></script>
 <script src="features/native-bridge.js?v=1" defer></script>
-<script src="core/render-prayers.js?v=9"></script>
+<script src="core/render-prayers.js?v=10"></script>
 <script src="core/static.js?v=12"></script>
 <script src="core/dynamic.js?v=21"></script>
 <script src="core/tabs.js?v=18"></script>

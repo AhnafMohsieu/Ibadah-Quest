@@ -92,7 +92,7 @@ test('hadith/dhikr audio, offline fonts, and adhan modules wired cleanly', () =>
   assert.ok(html.includes('<script src="features/hadith-library.js?v=3" defer></script>'));
   assert.ok(html.includes('<script src="features/tafsir-library.js?v=3" defer></script>'));
   assert.ok(html.includes('styles/tokens.css?v=3'));
-  assert.ok(html.includes('styles/main.css?v=59'));
+  assert.ok(html.includes('styles/main.css?v=61'));
   assert.ok(html.includes('features/daily-content.js?v=4'));
   assert.ok(html.includes('features/notifications.js?v=3'));
   assert.ok(html.includes('assets/vendor/adhan.umd.min.js'));
@@ -718,7 +718,7 @@ test('Option 3 shell & remodeled 2x2 Bento drawer tab section', () => {
   assert.ok(html.includes('features/masjid-checkins.js?v=3'), 'masjid-checkins script v=3 missing');
   assert.ok(html.includes('features/iq-shell.js?v=9'), 'iq-shell script v=9 missing');
   assert.ok(html.includes('core/prayers.js?v=7'), 'core/prayers.js script v=7 missing');
-  assert.ok(html.includes('core/render-prayers.js?v=9'), 'render-prayers.js script v=9 missing');
+  assert.ok(html.includes('core/render-prayers.js?v=10'), 'render-prayers.js script v=10 missing');
   assert.ok(html.includes('core/static.js?v=12'), 'core/static.js script v=12 missing');
   assert.ok(html.includes('core/dynamic.js?v=21'), 'dynamic.js script v=21 missing');
   assert.ok(html.includes('core/tabs.js?v=18'), 'core/tabs.js script v=18 missing');
