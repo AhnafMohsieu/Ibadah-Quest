@@ -111,7 +111,7 @@
         }
       }
     } catch (e) {}
-    return Promise.all(reqs).then(() => { if (window.invalidateSearchIndex) window.invalidateSearchIndex(); });
+    return Promise.all(reqs);
   }
   function ensureQuranBanglaLoaded() {
     return loadScript('data/pools/quran-bn.js');
@@ -127,7 +127,6 @@
       if (typeof window !== 'undefined' && typeof window.exposePoolGlobals === 'function') {
         window.exposePoolGlobals();
       }
-      if (window.invalidateSearchIndex) window.invalidateSearchIndex();
     });
   }
   function _getNewPools() {

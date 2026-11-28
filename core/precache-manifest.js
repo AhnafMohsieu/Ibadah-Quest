@@ -47,7 +47,6 @@ self.__PRECACHE = [
   "data/i18n.js",
   "data/journeys.js",
   "data/pools/quran-meta.js",
-  "data/pools/helpers.js",
   "data/pools/dua.js",
   "data/pools/sunnah.js",
   "data/pools/dhikr.js",

@@ -62,9 +62,9 @@ const files = [
   'data/relatable-dhikr.js',
   'data/journeys.js','data/achievements.js','data/tab-groups.js','data/icons.js',
   'data/tips-details.js','data/hadith-collections.js','data/streak-msgs.js',
-  'data/pools/new-pools.js','data/pools/helpers.js',
+  'data/pools/new-pools.js',
   'core/state.js',
-  'core/calendar.js','core/render-prayers.js','core/static.js','core/dynamic.js','core/tabs.js','core/render.js',
+  'core/calendar.js','core/render-prayers.js','core/static.js','core/dynamic.js','core/tabs.js',
   'core/xp.js','core/prayers.js','core/quests.js','core/achievements.js','core/dhikr.js','core/content.js',
   'core/actions.js'
 ];
